@@ -1,81 +1,69 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_TradeRequestInactive : QuestPartActivable
 	{
-		
-		
+		public Settlement settlement;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-	
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.settlement != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.settlement;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (settlement != null)
+				{
+					yield return settlement;
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-		
-				IEnumerator<Faction> enumerator = null;
-				if (this.settlement.Faction != null)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return this.settlement.Faction;
+					yield return involvedFaction;
 				}
-				yield break;
-				yield break;
+				if (settlement.Faction != null)
+				{
+					yield return settlement.Faction;
+				}
 			}
 		}
 
-		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
-			if (this.settlement == null || !this.settlement.Spawned)
+			if (settlement == null || !settlement.Spawned)
 			{
-				base.Complete();
+				Complete();
 				return;
 			}
-			TradeRequestComp component = this.settlement.GetComponent<TradeRequestComp>();
+			TradeRequestComp component = settlement.GetComponent<TradeRequestComp>();
 			if (component == null || !component.ActiveRequest)
 			{
-				base.Complete(this.settlement.Named("SUBJECT"));
+				Complete(settlement.Named("SUBJECT"));
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Settlement>(ref this.settlement, "settlement", false);
+			Scribe_References.Look(ref settlement, "settlement");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.settlement = Find.WorldObjects.Settlements.FirstOrDefault<Settlement>();
+			settlement = Find.WorldObjects.Settlements.FirstOrDefault();
 		}
-
-		
-		public Settlement settlement;
 	}
 }

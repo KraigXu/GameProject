@@ -1,121 +1,74 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class MainTabWindow_PawnTable : MainTabWindow
 	{
-		
-		
-		protected virtual float ExtraBottomSpace
+		private PawnTable table;
+
+		protected virtual float ExtraBottomSpace => 53f;
+
+		protected virtual float ExtraTopSpace => 0f;
+
+		protected abstract PawnTableDef PawnTableDef
 		{
-			get
-			{
-				return 53f;
-			}
+			get;
 		}
 
-		
-		
-		protected virtual float ExtraTopSpace
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		protected override float Margin => 6f;
 
-		
-		
-		protected abstract PawnTableDef PawnTableDef { get; }
-
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 6f;
-			}
-		}
-
-		
-		
 		public override Vector2 RequestedTabSize
 		{
 			get
 			{
-				if (this.table == null)
+				if (table == null)
 				{
 					return Vector2.zero;
 				}
-				return new Vector2(this.table.Size.x + this.Margin * 2f, this.table.Size.y + this.ExtraBottomSpace + this.ExtraTopSpace + this.Margin * 2f);
+				return new Vector2(table.Size.x + Margin * 2f, table.Size.y + ExtraBottomSpace + ExtraTopSpace + Margin * 2f);
 			}
 		}
 
-		
-		
-		protected virtual IEnumerable<Pawn> Pawns
-		{
-			get
-			{
-				return Find.CurrentMap.mapPawns.FreeColonists;
-			}
-		}
+		protected virtual IEnumerable<Pawn> Pawns => Find.CurrentMap.mapPawns.FreeColonists;
 
-		
 		public override void PostOpen()
 		{
-			if (this.table == null)
+			if (table == null)
 			{
-				this.table = this.CreateTable();
+				table = CreateTable();
 			}
-			this.SetDirty();
+			SetDirty();
 		}
 
-		
 		public override void DoWindowContents(Rect rect)
 		{
 			base.DoWindowContents(rect);
-			this.table.PawnTableOnGUI(new Vector2(rect.x, rect.y + this.ExtraTopSpace));
+			table.PawnTableOnGUI(new Vector2(rect.x, rect.y + ExtraTopSpace));
 		}
 
-		
 		public void Notify_PawnsChanged()
 		{
-			this.SetDirty();
+			SetDirty();
 		}
 
-		
 		public override void Notify_ResolutionChanged()
 		{
-			this.table = this.CreateTable();
+			table = CreateTable();
 			base.Notify_ResolutionChanged();
 		}
 
-		
 		private PawnTable CreateTable()
 		{
-			return (PawnTable)Activator.CreateInstance(this.PawnTableDef.workerClass, new object[]
-			{
-				this.PawnTableDef,
-				new Func<IEnumerable<Pawn>>(() => this.Pawns),
-				UI.screenWidth - (int)(this.Margin * 2f),
-				(int)((float)(UI.screenHeight - 35) - this.ExtraBottomSpace - this.ExtraTopSpace - this.Margin * 2f)
-			});
+			return (PawnTable)Activator.CreateInstance(PawnTableDef.workerClass, PawnTableDef, (Func<IEnumerable<Pawn>>)(() => Pawns), UI.screenWidth - (int)(Margin * 2f), (int)((float)(UI.screenHeight - 35) - ExtraBottomSpace - ExtraTopSpace - Margin * 2f));
 		}
 
-		
 		protected void SetDirty()
 		{
-			this.table.SetDirty();
-			this.SetInitialSizeAndPosition();
+			table.SetDirty();
+			SetInitialSizeAndPosition();
 		}
-
-		
-		private PawnTable table;
 	}
 }

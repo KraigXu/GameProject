@@ -1,148 +1,114 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompCauseGameCondition_PsychicEmanation : CompCauseGameCondition
 	{
-		
-		
-		public new CompProperties_CausesGameCondition_PsychicEmanation Props
-		{
-			get
-			{
-				return (CompProperties_CausesGameCondition_PsychicEmanation)this.props;
-			}
-		}
+		public Gender gender;
 
-		
-		
-		public PsychicDroneLevel Level
-		{
-			get
-			{
-				return this.droneLevel;
-			}
-		}
+		private int ticksToIncreaseDroneLevel;
 
-		
-		
-		private bool DroneLevelIncreases
-		{
-			get
-			{
-				return this.Props.droneLevelIncreaseInterval != int.MinValue;
-			}
-		}
+		private PsychicDroneLevel droneLevel = PsychicDroneLevel.BadHigh;
 
-		
+		public new CompProperties_CausesGameCondition_PsychicEmanation Props => (CompProperties_CausesGameCondition_PsychicEmanation)props;
+
+		public PsychicDroneLevel Level => droneLevel;
+
+		private bool DroneLevelIncreases => Props.droneLevelIncreaseInterval != int.MinValue;
+
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.gender = Gender.Male;
-			this.droneLevel = this.Props.droneLevel;
+			gender = Gender.Male;
+			droneLevel = Props.droneLevel;
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			if (!respawningAfterLoad && this.DroneLevelIncreases)
+			if (!respawningAfterLoad && DroneLevelIncreases)
 			{
-				this.ticksToIncreaseDroneLevel = this.Props.droneLevelIncreaseInterval;
-				SoundDefOf.PsychicPulseGlobal.PlayOneShotOnCamera(this.parent.Map);
+				ticksToIncreaseDroneLevel = Props.droneLevelIncreaseInterval;
+				SoundDefOf.PsychicPulseGlobal.PlayOneShotOnCamera(parent.Map);
 			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (!this.parent.Spawned || !this.DroneLevelIncreases || !base.Active)
+			if (parent.Spawned && DroneLevelIncreases && base.Active)
 			{
-				return;
-			}
-			this.ticksToIncreaseDroneLevel--;
-			if (this.ticksToIncreaseDroneLevel <= 0)
-			{
-				this.IncreaseDroneLevel();
-				this.ticksToIncreaseDroneLevel = this.Props.droneLevelIncreaseInterval;
+				ticksToIncreaseDroneLevel--;
+				if (ticksToIncreaseDroneLevel <= 0)
+				{
+					IncreaseDroneLevel();
+					ticksToIncreaseDroneLevel = Props.droneLevelIncreaseInterval;
+				}
 			}
 		}
 
-		
 		private void IncreaseDroneLevel()
 		{
-			if (this.droneLevel == PsychicDroneLevel.BadExtreme)
+			if (droneLevel != PsychicDroneLevel.BadExtreme)
 			{
-				return;
+				droneLevel++;
+				TaggedString taggedString = "LetterPsychicDroneLevelIncreased".Translate();
+				Find.LetterStack.ReceiveLetter("LetterLabelPsychicDroneLevelIncreased".Translate(), taggedString, LetterDefOf.NegativeEvent);
+				SoundDefOf.PsychicPulseGlobal.PlayOneShotOnCamera(parent.Map);
+				ReSetupAllConditions();
 			}
-			this.droneLevel += 1;
-			TaggedString taggedString = "LetterPsychicDroneLevelIncreased".Translate();
-			Find.LetterStack.ReceiveLetter("LetterLabelPsychicDroneLevelIncreased".Translate(), taggedString, LetterDefOf.NegativeEvent, null);
-			SoundDefOf.PsychicPulseGlobal.PlayOneShotOnCamera(this.parent.Map);
-			base.ReSetupAllConditions();
 		}
 
-		
 		protected override void SetupCondition(GameCondition condition, Map map)
 		{
 			base.SetupCondition(condition, map);
-			GameCondition_PsychicEmanation gameCondition_PsychicEmanation = (GameCondition_PsychicEmanation)condition;
-			gameCondition_PsychicEmanation.gender = this.gender;
-			gameCondition_PsychicEmanation.level = this.Level;
+			GameCondition_PsychicEmanation obj = (GameCondition_PsychicEmanation)condition;
+			obj.gender = gender;
+			obj.level = Level;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
-			Scribe_Values.Look<int>(ref this.ticksToIncreaseDroneLevel, "ticksToIncreaseDroneLevel", 0, false);
-			Scribe_Values.Look<PsychicDroneLevel>(ref this.droneLevel, "droneLevel", PsychicDroneLevel.None, false);
+			Scribe_Values.Look(ref gender, "gender", Gender.None);
+			Scribe_Values.Look(ref ticksToIncreaseDroneLevel, "ticksToIncreaseDroneLevel", 0);
+			Scribe_Values.Look(ref droneLevel, "droneLevel", PsychicDroneLevel.None);
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				yield break;
-			}
-			yield return new Command_Action
-			{
-				defaultLabel = this.gender.GetLabel(false),
-				action = delegate
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = gender.GetLabel();
+				command_Action.action = delegate
 				{
-					if (this.gender == Gender.Female)
+					if (gender == Gender.Female)
 					{
-						this.gender = Gender.Male;
+						gender = Gender.Male;
 					}
 					else
 					{
-						this.gender = Gender.Female;
+						gender = Gender.Female;
 					}
-					base.ReSetupAllConditions();
-				},
-				hotKey = KeyBindingDefOf.Misc1
-			};
-			yield return new Command_Action
-			{
-				defaultLabel = this.droneLevel.GetLabel(),
-				action = delegate
+					ReSetupAllConditions();
+				};
+				command_Action.hotKey = KeyBindingDefOf.Misc1;
+				yield return command_Action;
+				Command_Action command_Action2 = new Command_Action();
+				command_Action2.defaultLabel = droneLevel.GetLabel();
+				command_Action2.action = delegate
 				{
-					this.IncreaseDroneLevel();
-					base.ReSetupAllConditions();
-				},
-				hotKey = KeyBindingDefOf.Misc2
-			};
-			yield break;
+					IncreaseDroneLevel();
+					ReSetupAllConditions();
+				};
+				command_Action2.hotKey = KeyBindingDefOf.Misc2;
+				yield return command_Action2;
+			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			string text = base.CompInspectStringExtra();
@@ -150,22 +116,12 @@ namespace RimWorld
 			{
 				text += "\n";
 			}
-			return text + ("AffectedGender".Translate() + ": " + this.gender.GetLabel(false).CapitalizeFirst() + "\n" + "PsychicDroneLevel".Translate(this.droneLevel.GetLabelCap()));
+			return text + ("AffectedGender".Translate() + ": " + gender.GetLabel().CapitalizeFirst() + "\n" + "PsychicDroneLevel".Translate(droneLevel.GetLabelCap()));
 		}
 
-		
 		public override void RandomizeSettings()
 		{
-			this.gender = (Rand.Bool ? Gender.Male : Gender.Female);
+			gender = (Rand.Bool ? Gender.Male : Gender.Female);
 		}
-
-		
-		public Gender gender;
-
-		
-		private int ticksToIncreaseDroneLevel;
-
-		
-		private PsychicDroneLevel droneLevel = PsychicDroneLevel.BadHigh;
 	}
 }

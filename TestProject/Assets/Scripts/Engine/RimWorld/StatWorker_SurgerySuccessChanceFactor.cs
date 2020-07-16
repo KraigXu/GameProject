@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatWorker_SurgerySuccessChanceFactor : StatWorker
 	{
-		
 		public override bool ShouldShowFor(StatRequest req)
 		{
 			if (!base.ShouldShowFor(req))
@@ -19,7 +16,11 @@ namespace RimWorld
 				return false;
 			}
 			ThingDef thingDef = def as ThingDef;
-			return typeof(Building_Bed).IsAssignableFrom(thingDef.thingClass);
+			if (typeof(Building_Bed).IsAssignableFrom(thingDef.thingClass))
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

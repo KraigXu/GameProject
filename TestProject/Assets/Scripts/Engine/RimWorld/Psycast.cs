@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,11 +6,18 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Psycast : Ability
 	{
-		
-		
+		private Mote moteCast;
+
+		private Sustainer soundCast;
+
+		private static float MoteCastFadeTime = 0.4f;
+
+		private static float MoteCastScale = 1f;
+
+		private static Vector3 MoteCastOffset = new Vector3(0f, 0f, 0.48f);
+
 		public override bool CanCast
 		{
 			get
@@ -20,94 +26,95 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (this.def.EntropyGain > 1.401298E-45f)
+				if (def.EntropyGain > float.Epsilon)
 				{
-					Hediff hediff = this.pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h) => h.def == HediffDefOf.PsychicAmplifier);
-					return ((hediff != null && hediff.Severity >= (float)this.def.level) || this.def.level <= 0) && !this.pawn.psychicEntropy.WouldOverflowEntropy(this.def.EntropyGain);
+					Hediff hediff = pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h) => h.def == HediffDefOf.PsychicAmplifier);
+					if ((hediff == null || hediff.Severity < (float)def.level) && def.level > 0)
+					{
+						return false;
+					}
+					return !pawn.psychicEntropy.WouldOverflowEntropy(def.EntropyGain);
 				}
-				return this.def.PsyfocusCost <= this.pawn.psychicEntropy.CurrentPsyfocus;
+				if (def.PsyfocusCost > pawn.psychicEntropy.CurrentPsyfocus)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		public Psycast(Pawn pawn) : base(pawn)
+		public Psycast(Pawn pawn)
+			: base(pawn)
 		{
 		}
 
-		
-		public Psycast(Pawn pawn, AbilityDef def) : base(pawn, def)
+		public Psycast(Pawn pawn, AbilityDef def)
+			: base(pawn, def)
 		{
 		}
 
-		
 		public override IEnumerable<Command> GetGizmos()
 		{
-			if (this.gizmo == null)
+			if (gizmo == null)
 			{
-				this.gizmo = new Command_Psycast(this);
+				gizmo = new Command_Psycast(this);
 			}
-			yield return this.gizmo;
-			yield break;
+			yield return gizmo;
 		}
 
-		
 		public override bool Activate(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			if (this.def.EntropyGain > 1.401298E-45f && !this.pawn.psychicEntropy.TryAddEntropy(this.def.EntropyGain, null, true, false))
+			if (def.EntropyGain > float.Epsilon && !pawn.psychicEntropy.TryAddEntropy(def.EntropyGain))
 			{
 				return false;
 			}
-			if (this.def.PsyfocusCost > 1.401298E-45f)
+			if (def.PsyfocusCost > float.Epsilon)
 			{
-				this.pawn.psychicEntropy.OffsetPsyfocusDirectly(-this.def.PsyfocusCost);
+				pawn.psychicEntropy.OffsetPsyfocusDirectly(0f - def.PsyfocusCost);
 			}
 			bool flag = base.EffectComps.Any((CompAbilityEffect c) => c.Props.psychic);
 			if (flag)
 			{
-				if (this.def.HasAreaOfEffect)
+				if (def.HasAreaOfEffect)
 				{
-					MoteMaker.MakeStaticMote(target.Cell, this.pawn.Map, ThingDefOf.Mote_PsycastAreaEffect, this.def.EffectRadius);
-					SoundDefOf.PsycastPsychicPulse.PlayOneShot(new TargetInfo(target.Cell, this.pawn.Map, false));
+					MoteMaker.MakeStaticMote(target.Cell, pawn.Map, ThingDefOf.Mote_PsycastAreaEffect, def.EffectRadius);
+					SoundDefOf.PsycastPsychicPulse.PlayOneShot(new TargetInfo(target.Cell, pawn.Map));
 				}
 				else
 				{
-					SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(target.Cell, this.pawn.Map, false));
+					SoundDefOf.PsycastPsychicEffect.PlayOneShot(new TargetInfo(target.Cell, pawn.Map));
 				}
 			}
-			else if (this.def.HasAreaOfEffect)
+			else if (def.HasAreaOfEffect)
 			{
-				SoundDefOf.PsycastSkipPulse.PlayOneShot(new TargetInfo(target.Cell, this.pawn.Map, false));
+				SoundDefOf.PsycastSkipPulse.PlayOneShot(new TargetInfo(target.Cell, pawn.Map));
 			}
 			else
 			{
-				SoundDefOf.PsycastSkipEffect.PlayOneShot(new TargetInfo(target.Cell, this.pawn.Map, false));
+				SoundDefOf.PsycastSkipEffect.PlayOneShot(new TargetInfo(target.Cell, pawn.Map));
 			}
-			if (target.Thing != this.pawn)
+			if (target.Thing != pawn)
 			{
-				MoteMaker.MakeConnectingLine(this.pawn.DrawPos, target.CenterVector3, flag ? ThingDefOf.Mote_PsycastPsychicLine : ThingDefOf.Mote_PsycastSkipLine, this.pawn.Map, 1f);
+				MoteMaker.MakeConnectingLine(pawn.DrawPos, target.CenterVector3, flag ? ThingDefOf.Mote_PsycastPsychicLine : ThingDefOf.Mote_PsycastSkipLine, pawn.Map);
 			}
 			return base.Activate(target, dest);
 		}
 
-		
 		protected override void ApplyEffects(IEnumerable<CompAbilityEffect> effects, LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			if (this.CanApplyPsycastTo(target))
+			if (CanApplyPsycastTo(target))
 			{
-				IEnumerator<CompAbilityEffect> enumerator = effects.GetEnumerator();
+				foreach (CompAbilityEffect effect in effects)
 				{
-					while (enumerator.MoveNext())
-					{
-						CompAbilityEffect compAbilityEffect = enumerator.Current;
-						compAbilityEffect.Apply(target, dest);
-					}
-					return;
+					effect.Apply(target, dest);
 				}
 			}
-			MoteMaker.ThrowText(target.CenterVector3, this.pawn.Map, "TextMote_Immune".Translate(), -1f);
+			else
+			{
+				MoteMaker.ThrowText(target.CenterVector3, pawn.Map, "TextMote_Immune".Translate());
+			}
 		}
 
-		
 		public bool CanApplyPsycastTo(LocalTargetInfo target)
 		{
 			if (!base.EffectComps.Any((CompAbilityEffect e) => e.Props.psychic))
@@ -117,95 +124,76 @@ namespace RimWorld
 			Pawn pawn = target.Pawn;
 			if (pawn != null)
 			{
-				if (pawn.GetStatValue(StatDefOf.PsychicSensitivity, true) < 1.401298E-45f)
+				if (pawn.GetStatValue(StatDefOf.PsychicSensitivity) < float.Epsilon)
 				{
 					return false;
 				}
-				if (pawn.Faction == Faction.OfMechanoids)
+				if (pawn.Faction == Faction.OfMechanoids && base.EffectComps.Any((CompAbilityEffect e) => !e.Props.applicableToMechs))
 				{
-					if (base.EffectComps.Any((CompAbilityEffect e) => !e.Props.applicableToMechs))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 			return true;
 		}
 
-		
 		public override bool GizmoDisabled(out string reason)
 		{
-			if (this.pawn.GetStatValue(StatDefOf.PsychicSensitivity, true) < 1.401298E-45f)
+			if (pawn.GetStatValue(StatDefOf.PsychicSensitivity) < float.Epsilon)
 			{
 				reason = "CommandPsycastZeroPsychicSensitivity".Translate();
 				return true;
 			}
-			Hediff firstHediffOfDef = this.pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.PsychicAmplifier, false);
-			if ((firstHediffOfDef == null || firstHediffOfDef.Severity < (float)this.def.level) && this.def.level > 0)
+			Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.PsychicAmplifier);
+			if ((firstHediffOfDef == null || firstHediffOfDef.Severity < (float)def.level) && def.level > 0)
 			{
-				reason = "CommandPsycastHigherLevelPsylinkRequired".Translate(this.def.level);
+				reason = "CommandPsycastHigherLevelPsylinkRequired".Translate(def.level);
 				return true;
 			}
-			if (this.def.level > this.pawn.psychicEntropy.MaxAbilityLevel)
+			if (def.level > pawn.psychicEntropy.MaxAbilityLevel)
 			{
-				reason = "CommandPsycastLowPsyfocus".Translate(Pawn_PsychicEntropyTracker.PsyfocusBandPercentages[this.def.RequiredPsyfocusBand].ToStringPercent());
+				reason = "CommandPsycastLowPsyfocus".Translate(Pawn_PsychicEntropyTracker.PsyfocusBandPercentages[def.RequiredPsyfocusBand].ToStringPercent());
 				return true;
 			}
-			if (this.def.PsyfocusCost > this.pawn.psychicEntropy.CurrentPsyfocus)
+			if (def.PsyfocusCost > pawn.psychicEntropy.CurrentPsyfocus)
 			{
-				reason = "CommandPsycastNotEnoughPsyfocus".Translate(this.def.PsyfocusCost.ToStringPercent(), this.pawn.psychicEntropy.CurrentPsyfocus.ToStringPercent(), this.def.label.Named("PSYCASTNAME"), this.pawn.Named("CASTERNAME"));
+				reason = "CommandPsycastNotEnoughPsyfocus".Translate(def.PsyfocusCost.ToStringPercent(), pawn.psychicEntropy.CurrentPsyfocus.ToStringPercent(), def.label.Named("PSYCASTNAME"), pawn.Named("CASTERNAME"));
 				return true;
 			}
-			if (this.def.EntropyGain > 1.401298E-45f && this.pawn.psychicEntropy.WouldOverflowEntropy(this.def.EntropyGain + PsycastUtility.TotalEntropyFromQueuedPsycasts(this.pawn)))
+			if (def.EntropyGain > float.Epsilon && pawn.psychicEntropy.WouldOverflowEntropy(def.EntropyGain + PsycastUtility.TotalEntropyFromQueuedPsycasts(pawn)))
 			{
-				reason = "CommandPsycastWouldExceedEntropy".Translate(this.def.label);
+				reason = "CommandPsycastWouldExceedEntropy".Translate(def.label);
 				return true;
 			}
 			return base.GizmoDisabled(out reason);
 		}
 
-		
 		public override void QueueCastingJob(LocalTargetInfo target, LocalTargetInfo destination)
 		{
 			base.QueueCastingJob(target, destination);
-			if (this.moteCast == null || this.moteCast.Destroyed)
+			if (moteCast == null || moteCast.Destroyed)
 			{
-				this.moteCast = MoteMaker.MakeAttachedOverlay(this.pawn, ThingDefOf.Mote_CastPsycast, Psycast.MoteCastOffset, Psycast.MoteCastScale, base.verb.verbProps.warmupTime - Psycast.MoteCastFadeTime);
+				moteCast = MoteMaker.MakeAttachedOverlay(pawn, ThingDefOf.Mote_CastPsycast, MoteCastOffset, MoteCastScale, base.verb.verbProps.warmupTime - MoteCastFadeTime);
 			}
 		}
 
-		
 		public override void AbilityTick()
 		{
 			base.AbilityTick();
-			if (this.moteCast != null && !this.moteCast.Destroyed && base.verb.WarmingUp)
+			if (moteCast != null && !moteCast.Destroyed && base.verb.WarmingUp)
 			{
-				this.moteCast.Maintain();
+				moteCast.Maintain();
 			}
 			if (base.verb.WarmingUp)
 			{
-				if (this.soundCast == null || this.soundCast.Ended)
+				if (soundCast == null || soundCast.Ended)
 				{
-					this.soundCast = SoundDefOf.PsycastCastLoop.TrySpawnSustainer(SoundInfo.InMap(new TargetInfo(this.pawn.Position, this.pawn.Map, false), MaintenanceType.PerTick));
-					return;
+					soundCast = SoundDefOf.PsycastCastLoop.TrySpawnSustainer(SoundInfo.InMap(new TargetInfo(pawn.Position, pawn.Map), MaintenanceType.PerTick));
 				}
-				this.soundCast.Maintain();
+				else
+				{
+					soundCast.Maintain();
+				}
 			}
 		}
-
-		
-		private Mote moteCast;
-
-		
-		private Sustainer soundCast;
-
-		
-		private static float MoteCastFadeTime = 0.4f;
-
-		
-		private static float MoteCastScale = 1f;
-
-		
-		private static Vector3 MoteCastOffset = new Vector3(0f, 0f, 0.48f);
 	}
 }

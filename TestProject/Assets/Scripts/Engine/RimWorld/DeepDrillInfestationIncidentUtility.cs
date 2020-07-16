@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DeepDrillInfestationIncidentUtility
 	{
-		
 		public static void GetUsableDeepDrills(Map map, List<Thing> outDrills)
 		{
 			outDrills.Clear();

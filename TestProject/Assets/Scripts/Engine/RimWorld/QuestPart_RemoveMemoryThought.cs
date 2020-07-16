@@ -1,109 +1,97 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_RemoveMemoryThought : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public ThoughtDef def;
+
+		public Pawn pawn;
+
+		public Pawn otherPawn;
+
+		public int? count;
+
+		public bool addToLookTargets = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.pawn != null && this.addToLookTargets)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.pawn;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (pawn != null && addToLookTargets)
+				{
+					yield return pawn;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.pawn != null && this.pawn.needs != null)
+			if (!(signal.tag == inSignal) || pawn == null || pawn.needs == null)
 			{
-				if (this.count != null)
+				return;
+			}
+			if (count.HasValue)
+			{
+				for (int i = 0; i < count.Value; i++)
 				{
-					for (int i = 0; i < this.count.Value; i++)
+					Thought_Memory thought_Memory = pawn.needs.mood.thoughts.memories.Memories.FirstOrDefault((Thought_Memory m) => def == m.def && (otherPawn == null || m.otherPawn == otherPawn));
+					if (thought_Memory != null)
 					{
-						Thought_Memory thought_Memory = this.pawn.needs.mood.thoughts.memories.Memories.FirstOrDefault((Thought_Memory m) => this.def == m.def && (this.otherPawn == null || m.otherPawn == this.otherPawn));
-						if (thought_Memory == null)
-						{
-							return;
-						}
-						this.pawn.needs.mood.thoughts.memories.RemoveMemory(thought_Memory);
+						pawn.needs.mood.thoughts.memories.RemoveMemory(thought_Memory);
+						continue;
 					}
-					return;
+					break;
 				}
-				if (this.otherPawn == null)
-				{
-					this.pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDef(this.def);
-					return;
-				}
-				this.pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefWhereOtherPawnIs(this.def, this.otherPawn);
+			}
+			else if (otherPawn == null)
+			{
+				pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDef(def);
+			}
+			else
+			{
+				pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefWhereOtherPawnIs(def, otherPawn);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<bool>(ref this.addToLookTargets, "addToLookTargets", false, false);
-			Scribe_Values.Look<int?>(ref this.count, "count", null, false);
-			Scribe_Defs.Look<ThoughtDef>(ref this.def, "def");
-			Scribe_References.Look<Pawn>(ref this.pawn, "pawn", false);
-			Scribe_References.Look<Pawn>(ref this.otherPawn, "otherPawn", false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref addToLookTargets, "addToLookTargets", defaultValue: false);
+			Scribe_Values.Look(ref count, "count");
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_References.Look(ref pawn, "pawn");
+			Scribe_References.Look(ref otherPawn, "otherPawn");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.def = (ThoughtDefOf.DecreeMet ?? ThoughtDefOf.DebugGood);
-			this.pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>();
+			def = (ThoughtDefOf.DecreeMet ?? ThoughtDefOf.DebugGood);
+			pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault();
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.pawn == replace)
+			if (pawn == replace)
 			{
-				this.pawn = with;
+				pawn = with;
 			}
-			if (this.otherPawn == replace)
+			if (otherPawn == replace)
 			{
-				this.otherPawn = with;
+				otherPawn = with;
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public ThoughtDef def;
-
-		
-		public Pawn pawn;
-
-		
-		public Pawn otherPawn;
-
-		
-		public int? count;
-
-		
-		public bool addToLookTargets = true;
 	}
 }

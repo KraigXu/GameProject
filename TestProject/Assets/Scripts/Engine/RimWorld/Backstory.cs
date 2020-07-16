@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,70 +5,137 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	[CaseInsensitiveXMLParsing]
 	public class Backstory
 	{
-		
-		
-		public RulePackDef NameMaker
-		{
-			get
-			{
-				return this.nameMakerResolved;
-			}
-		}
+		public string identifier;
 
-		
-		
+		public BackstorySlot slot;
+
+		public string title;
+
+		public string titleFemale;
+
+		public string titleShort;
+
+		public string titleShortFemale;
+
+		public string baseDesc;
+
+		private Dictionary<string, int> skillGains = new Dictionary<string, int>();
+
+		[Unsaved(false)]
+		public Dictionary<SkillDef, int> skillGainsResolved = new Dictionary<SkillDef, int>();
+
+		public WorkTags workDisables;
+
+		public WorkTags requiredWorkTags;
+
+		public List<string> spawnCategories = new List<string>();
+
+		[LoadAlias("bodyNameGlobal")]
+		private string bodyTypeGlobal;
+
+		[LoadAlias("bodyNameFemale")]
+		private string bodyTypeFemale;
+
+		[LoadAlias("bodyNameMale")]
+		private string bodyTypeMale;
+
+		[Unsaved(false)]
+		private BodyTypeDef bodyTypeGlobalResolved;
+
+		[Unsaved(false)]
+		private BodyTypeDef bodyTypeFemaleResolved;
+
+		[Unsaved(false)]
+		private BodyTypeDef bodyTypeMaleResolved;
+
+		public List<TraitEntry> forcedTraits;
+
+		public List<TraitEntry> disallowedTraits;
+
+		public List<string> hairTags;
+
+		private string nameMaker;
+
+		private RulePackDef nameMakerResolved;
+
+		public bool shuffleable = true;
+
+		[Unsaved(false)]
+		public string untranslatedTitle;
+
+		[Unsaved(false)]
+		public string untranslatedTitleFemale;
+
+		[Unsaved(false)]
+		public string untranslatedTitleShort;
+
+		[Unsaved(false)]
+		public string untranslatedTitleShortFemale;
+
+		[Unsaved(false)]
+		public string untranslatedDesc;
+
+		[Unsaved(false)]
+		public bool titleTranslated;
+
+		[Unsaved(false)]
+		public bool titleFemaleTranslated;
+
+		[Unsaved(false)]
+		public bool titleShortTranslated;
+
+		[Unsaved(false)]
+		public bool titleShortFemaleTranslated;
+
+		[Unsaved(false)]
+		public bool descTranslated;
+
+		private List<string> unlockedMeditationTypesTemp = new List<string>();
+
+		public RulePackDef NameMaker => nameMakerResolved;
+
 		public IEnumerable<WorkTypeDef> DisabledWorkTypes
 		{
 			get
 			{
 				List<WorkTypeDef> list = DefDatabase<WorkTypeDef>.AllDefsListForReading;
-				int num;
-				for (int i = 0; i < list.Count; i = num + 1)
+				for (int i = 0; i < list.Count; i++)
 				{
-					if (!this.AllowsWorkType(list[i]))
+					if (!AllowsWorkType(list[i]))
 					{
 						yield return list[i];
 					}
-					num = i;
 				}
-				yield break;
 			}
 		}
 
-		
-		
 		public IEnumerable<WorkGiverDef> DisabledWorkGivers
 		{
 			get
 			{
 				List<WorkGiverDef> list = DefDatabase<WorkGiverDef>.AllDefsListForReading;
-				int num;
-				for (int i = 0; i < list.Count; i = num + 1)
+				for (int i = 0; i < list.Count; i++)
 				{
-					if (!this.AllowsWorkGiver(list[i]))
+					if (!AllowsWorkGiver(list[i]))
 					{
 						yield return list[i];
 					}
-					num = i;
 				}
-				yield break;
 			}
 		}
 
-		
 		public bool DisallowsTrait(TraitDef def, int degree)
 		{
-			if (this.disallowedTraits == null)
+			if (disallowedTraits == null)
 			{
 				return false;
 			}
-			for (int i = 0; i < this.disallowedTraits.Count; i++)
+			for (int i = 0; i < disallowedTraits.Count; i++)
 			{
-				if (this.disallowedTraits[i].def == def && this.disallowedTraits[i].degree == degree)
+				if (disallowedTraits[i].def == def && disallowedTraits[i].degree == degree)
 				{
 					return true;
 				}
@@ -77,420 +143,268 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public string TitleFor(Gender g)
 		{
-			if (g != Gender.Female || this.titleFemale.NullOrEmpty())
+			if (g != Gender.Female || titleFemale.NullOrEmpty())
 			{
-				return this.title;
+				return title;
 			}
-			return this.titleFemale;
+			return titleFemale;
 		}
 
-		
 		public string TitleCapFor(Gender g)
 		{
-			return this.TitleFor(g).CapitalizeFirst();
+			return TitleFor(g).CapitalizeFirst();
 		}
 
-		
 		public string TitleShortFor(Gender g)
 		{
-			if (g == Gender.Female && !this.titleShortFemale.NullOrEmpty())
+			if (g == Gender.Female && !titleShortFemale.NullOrEmpty())
 			{
-				return this.titleShortFemale;
+				return titleShortFemale;
 			}
-			if (!this.titleShort.NullOrEmpty())
+			if (!titleShort.NullOrEmpty())
 			{
-				return this.titleShort;
+				return titleShort;
 			}
-			return this.TitleFor(g);
+			return TitleFor(g);
 		}
 
-		
 		public string TitleShortCapFor(Gender g)
 		{
-			return this.TitleShortFor(g).CapitalizeFirst();
+			return TitleShortFor(g).CapitalizeFirst();
 		}
 
-		
 		public BodyTypeDef BodyTypeFor(Gender g)
 		{
-			if (this.bodyTypeGlobalResolved != null || g == Gender.None)
+			if (bodyTypeGlobalResolved == null)
 			{
-				return this.bodyTypeGlobalResolved;
+				switch (g)
+				{
+				case Gender.None:
+					break;
+				case Gender.Female:
+					return bodyTypeFemaleResolved;
+				default:
+					return bodyTypeMaleResolved;
+				}
 			}
-			if (g == Gender.Female)
-			{
-				return this.bodyTypeFemaleResolved;
-			}
-			return this.bodyTypeMaleResolved;
+			return bodyTypeGlobalResolved;
 		}
 
-		
 		public TaggedString FullDescriptionFor(Pawn p)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append(this.baseDesc.Formatted(p.Named("PAWN")).AdjustedFor(p, "PAWN", true).Resolve());
+			stringBuilder.Append(baseDesc.Formatted(p.Named("PAWN")).AdjustedFor(p).Resolve());
 			stringBuilder.AppendLine();
 			stringBuilder.AppendLine();
 			List<SkillDef> allDefsListForReading = DefDatabase<SkillDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				SkillDef skillDef = allDefsListForReading[i];
-				if (this.skillGainsResolved.ContainsKey(skillDef))
+				if (skillGainsResolved.ContainsKey(skillDef))
 				{
-					stringBuilder.AppendLine(skillDef.skillLabel.CapitalizeFirst() + ":   " + this.skillGainsResolved[skillDef].ToString("+##;-##"));
+					stringBuilder.AppendLine(skillDef.skillLabel.CapitalizeFirst() + ":   " + skillGainsResolved[skillDef].ToString("+##;-##"));
 				}
 			}
 			stringBuilder.AppendLine();
-			foreach (WorkTypeDef workTypeDef in this.DisabledWorkTypes)
+			foreach (WorkTypeDef disabledWorkType in DisabledWorkTypes)
 			{
-				stringBuilder.AppendLine(workTypeDef.gerundLabel.CapitalizeFirst() + " " + "DisabledLower".Translate());
+				stringBuilder.AppendLine(disabledWorkType.gerundLabel.CapitalizeFirst() + " " + "DisabledLower".Translate());
 			}
-			foreach (WorkGiverDef workGiverDef in this.DisabledWorkGivers)
+			foreach (WorkGiverDef disabledWorkGiver in DisabledWorkGivers)
 			{
-				stringBuilder.AppendLine(workGiverDef.workType.gerundLabel.CapitalizeFirst() + ": " + workGiverDef.LabelCap + " " + "DisabledLower".Translate());
+				stringBuilder.AppendLine(disabledWorkGiver.workType.gerundLabel.CapitalizeFirst() + ": " + disabledWorkGiver.LabelCap + " " + "DisabledLower".Translate());
 			}
 			if (ModsConfig.RoyaltyActive)
 			{
-				this.unlockedMeditationTypesTemp.Clear();
-				foreach (MeditationFocusDef meditationFocusDef in DefDatabase<MeditationFocusDef>.AllDefs)
+				unlockedMeditationTypesTemp.Clear();
+				foreach (MeditationFocusDef allDef in DefDatabase<MeditationFocusDef>.AllDefs)
 				{
-					for (int j = 0; j < meditationFocusDef.requiredBackstoriesAny.Count; j++)
+					for (int j = 0; j < allDef.requiredBackstoriesAny.Count; j++)
 					{
-						BackstoryCategoryAndSlot backstoryCategoryAndSlot = meditationFocusDef.requiredBackstoriesAny[j];
-						if (this.spawnCategories.Contains(backstoryCategoryAndSlot.categoryName) && backstoryCategoryAndSlot.slot == this.slot)
+						BackstoryCategoryAndSlot backstoryCategoryAndSlot = allDef.requiredBackstoriesAny[j];
+						if (spawnCategories.Contains(backstoryCategoryAndSlot.categoryName) && backstoryCategoryAndSlot.slot == slot)
 						{
-							this.unlockedMeditationTypesTemp.Add(meditationFocusDef.LabelCap);
+							unlockedMeditationTypesTemp.Add(allDef.LabelCap);
 							break;
 						}
 					}
 				}
-				if (this.unlockedMeditationTypesTemp.Count > 0)
+				if (unlockedMeditationTypesTemp.Count > 0)
 				{
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("MeditationFocusesUnlocked".Translate() + ": ");
-					stringBuilder.AppendLine(this.unlockedMeditationTypesTemp.ToLineList("  - "));
+					stringBuilder.AppendLine(unlockedMeditationTypesTemp.ToLineList("  - "));
 				}
 			}
 			string str = stringBuilder.ToString().TrimEndNewlines();
 			return Find.ActiveLanguageWorker.PostProcessed(str);
 		}
 
-		
 		private bool AllowsWorkType(WorkTypeDef workType)
 		{
-			return (this.workDisables & workType.workTags) == WorkTags.None;
+			return (workDisables & workType.workTags) == 0;
 		}
 
-		
 		private bool AllowsWorkGiver(WorkGiverDef workGiver)
 		{
-			return (this.workDisables & workGiver.workTags) == WorkTags.None;
+			return (workDisables & workGiver.workTags) == 0;
 		}
 
-		
 		internal void AddForcedTrait(TraitDef traitDef, int degree = 0)
 		{
-			if (this.forcedTraits == null)
+			if (forcedTraits == null)
 			{
-				this.forcedTraits = new List<TraitEntry>();
+				forcedTraits = new List<TraitEntry>();
 			}
-			this.forcedTraits.Add(new TraitEntry(traitDef, degree));
+			forcedTraits.Add(new TraitEntry(traitDef, degree));
 		}
 
-		
 		internal void AddDisallowedTrait(TraitDef traitDef, int degree = 0)
 		{
-			if (this.disallowedTraits == null)
+			if (disallowedTraits == null)
 			{
-				this.disallowedTraits = new List<TraitEntry>();
+				disallowedTraits = new List<TraitEntry>();
 			}
-			this.disallowedTraits.Add(new TraitEntry(traitDef, degree));
+			disallowedTraits.Add(new TraitEntry(traitDef, degree));
 		}
 
-		
 		public void PostLoad()
 		{
-			this.untranslatedTitle = this.title;
-			this.untranslatedTitleFemale = this.titleFemale;
-			this.untranslatedTitleShort = this.titleShort;
-			this.untranslatedTitleShortFemale = this.titleShortFemale;
-			this.untranslatedDesc = this.baseDesc;
-			this.baseDesc = this.baseDesc.TrimEnd(Array.Empty<char>());
-			this.baseDesc = this.baseDesc.Replace("\r", "");
+			untranslatedTitle = title;
+			untranslatedTitleFemale = titleFemale;
+			untranslatedTitleShort = titleShort;
+			untranslatedTitleShortFemale = titleShortFemale;
+			untranslatedDesc = baseDesc;
+			baseDesc = baseDesc.TrimEnd();
+			baseDesc = baseDesc.Replace("\r", "");
 		}
 
-		
 		public void ResolveReferences()
 		{
-			int num = Mathf.Abs(GenText.StableStringHash(this.baseDesc) % 100);
-			string s = this.title.Replace('-', ' ');
+			int num = Mathf.Abs(GenText.StableStringHash(baseDesc) % 100);
+			string s = title.Replace('-', ' ');
 			s = GenText.CapitalizedNoSpaces(s);
-			this.identifier = GenText.RemoveNonAlphanumeric(s) + num.ToString();
-			foreach (KeyValuePair<string, int> keyValuePair in this.skillGains)
+			identifier = GenText.RemoveNonAlphanumeric(s) + num.ToString();
+			foreach (KeyValuePair<string, int> skillGain in skillGains)
 			{
-				this.skillGainsResolved.Add(DefDatabase<SkillDef>.GetNamed(keyValuePair.Key, true), keyValuePair.Value);
+				skillGainsResolved.Add(DefDatabase<SkillDef>.GetNamed(skillGain.Key), skillGain.Value);
 			}
-			this.skillGains = null;
-			if (!this.bodyTypeGlobal.NullOrEmpty())
+			skillGains = null;
+			if (!bodyTypeGlobal.NullOrEmpty())
 			{
-				this.bodyTypeGlobalResolved = DefDatabase<BodyTypeDef>.GetNamed(this.bodyTypeGlobal, true);
+				bodyTypeGlobalResolved = DefDatabase<BodyTypeDef>.GetNamed(bodyTypeGlobal);
 			}
-			if (!this.bodyTypeFemale.NullOrEmpty())
+			if (!bodyTypeFemale.NullOrEmpty())
 			{
-				this.bodyTypeFemaleResolved = DefDatabase<BodyTypeDef>.GetNamed(this.bodyTypeFemale, true);
+				bodyTypeFemaleResolved = DefDatabase<BodyTypeDef>.GetNamed(bodyTypeFemale);
 			}
-			if (!this.bodyTypeMale.NullOrEmpty())
+			if (!bodyTypeMale.NullOrEmpty())
 			{
-				this.bodyTypeMaleResolved = DefDatabase<BodyTypeDef>.GetNamed(this.bodyTypeMale, true);
+				bodyTypeMaleResolved = DefDatabase<BodyTypeDef>.GetNamed(bodyTypeMale);
 			}
-			if (!this.nameMaker.NullOrEmpty())
+			if (!nameMaker.NullOrEmpty())
 			{
-				this.nameMakerResolved = DefDatabase<RulePackDef>.GetNamed(this.nameMaker, true);
+				nameMakerResolved = DefDatabase<RulePackDef>.GetNamed(nameMaker);
 			}
-			if (this.slot == BackstorySlot.Adulthood && this.bodyTypeGlobalResolved == null)
+			if (slot == BackstorySlot.Adulthood && bodyTypeGlobalResolved == null)
 			{
-				if (this.bodyTypeMaleResolved == null)
+				if (bodyTypeMaleResolved == null)
 				{
-					Log.Error("Adulthood backstory " + this.title + " is missing male body type. Defaulting...", false);
-					this.bodyTypeMaleResolved = BodyTypeDefOf.Male;
+					Log.Error("Adulthood backstory " + title + " is missing male body type. Defaulting...");
+					bodyTypeMaleResolved = BodyTypeDefOf.Male;
 				}
-				if (this.bodyTypeFemaleResolved == null)
+				if (bodyTypeFemaleResolved == null)
 				{
-					Log.Error("Adulthood backstory " + this.title + " is missing female body type. Defaulting...", false);
-					this.bodyTypeFemaleResolved = BodyTypeDefOf.Female;
+					Log.Error("Adulthood backstory " + title + " is missing female body type. Defaulting...");
+					bodyTypeFemaleResolved = BodyTypeDefOf.Female;
 				}
 			}
 		}
 
-		
 		public IEnumerable<string> ConfigErrors(bool ignoreNoSpawnCategories)
 		{
-			if (this.title.NullOrEmpty())
+			if (title.NullOrEmpty())
 			{
-				yield return "null title, baseDesc is " + this.baseDesc;
+				yield return "null title, baseDesc is " + baseDesc;
 			}
-			if (this.titleShort.NullOrEmpty())
+			if (titleShort.NullOrEmpty())
 			{
-				yield return "null titleShort, baseDesc is " + this.baseDesc;
+				yield return "null titleShort, baseDesc is " + baseDesc;
 			}
-			if ((this.workDisables & WorkTags.Violent) != WorkTags.None && this.spawnCategories.Contains("Pirate"))
+			if ((workDisables & WorkTags.Violent) != 0 && spawnCategories.Contains("Pirate"))
 			{
 				yield return "cannot do Violent work but can spawn as a pirate";
 			}
-			if (this.spawnCategories.Count == 0 && !ignoreNoSpawnCategories)
+			if (spawnCategories.Count == 0 && !ignoreNoSpawnCategories)
 			{
 				yield return "no spawn categories";
 			}
-			if (!this.baseDesc.NullOrEmpty())
+			if (!baseDesc.NullOrEmpty())
 			{
-				if (char.IsWhiteSpace(this.baseDesc[0]))
+				if (char.IsWhiteSpace(baseDesc[0]))
 				{
 					yield return "baseDesc starts with whitepspace";
 				}
-				if (char.IsWhiteSpace(this.baseDesc[this.baseDesc.Length - 1]))
+				if (char.IsWhiteSpace(baseDesc[baseDesc.Length - 1]))
 				{
 					yield return "baseDesc ends with whitespace";
 				}
 			}
-			if (this.forcedTraits != null)
+			if (forcedTraits != null)
 			{
-				List<TraitEntry>.Enumerator enumerator = this.forcedTraits.GetEnumerator();
+				foreach (TraitEntry forcedTrait in forcedTraits)
 				{
-					while (enumerator.MoveNext())
+					if (!forcedTrait.def.degreeDatas.Any((TraitDegreeData d) => d.degree == forcedTrait.degree))
 					{
-						TraitEntry forcedTrait = enumerator.Current;
-						if (!forcedTrait.def.degreeDatas.Any((TraitDegreeData d) => d.degree == forcedTrait.degree))
-						{
-							yield return string.Concat(new object[]
-							{
-								"Backstory ",
-								this.title,
-								" has invalid trait ",
-								forcedTrait.def.defName,
-								" degree=",
-								forcedTrait.degree
-							});
-						}
+						yield return "Backstory " + title + " has invalid trait " + forcedTrait.def.defName + " degree=" + forcedTrait.degree;
 					}
 				}
-			
 			}
 			if (Prefs.DevMode)
 			{
-				foreach (KeyValuePair<SkillDef, int> keyValuePair in this.skillGainsResolved)
+				foreach (KeyValuePair<SkillDef, int> item in skillGainsResolved)
 				{
-					if (keyValuePair.Key.IsDisabled(this.workDisables, this.DisabledWorkTypes))
+					if (item.Key.IsDisabled(workDisables, DisabledWorkTypes))
 					{
-						yield return "modifies skill " + keyValuePair.Key + " but also disables this skill";
+						yield return "modifies skill " + item.Key + " but also disables this skill";
 					}
 				}
-				Dictionary<SkillDef, int>.Enumerator enumerator2 = default(Dictionary<SkillDef, int>.Enumerator);
-				foreach (KeyValuePair<string, Backstory> keyValuePair2 in BackstoryDatabase.allBackstories)
+				foreach (KeyValuePair<string, Backstory> allBackstory in BackstoryDatabase.allBackstories)
 				{
-					if (keyValuePair2.Value != this && keyValuePair2.Value.identifier == this.identifier)
+					if (allBackstory.Value != this && allBackstory.Value.identifier == identifier)
 					{
-						yield return "backstory identifier used more than once: " + this.identifier;
+						yield return "backstory identifier used more than once: " + identifier;
 					}
 				}
-				Dictionary<string, Backstory>.Enumerator enumerator3 = default(Dictionary<string, Backstory>.Enumerator);
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public void SetTitle(string newTitle, string newTitleFemale)
 		{
-			this.title = newTitle;
-			this.titleFemale = newTitleFemale;
+			title = newTitle;
+			titleFemale = newTitleFemale;
 		}
 
-		
 		public void SetTitleShort(string newTitleShort, string newTitleShortFemale)
 		{
-			this.titleShort = newTitleShort;
-			this.titleShortFemale = newTitleShortFemale;
+			titleShort = newTitleShort;
+			titleShortFemale = newTitleShortFemale;
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.title.NullOrEmpty())
+			if (title.NullOrEmpty())
 			{
 				return "(NullTitleBackstory)";
 			}
-			return "(" + this.title + ")";
+			return "(" + title + ")";
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return this.identifier.GetHashCode();
+			return identifier.GetHashCode();
 		}
-
-		
-		public string identifier;
-
-		
-		public BackstorySlot slot;
-
-		
-		public string title;
-
-		
-		public string titleFemale;
-
-		
-		public string titleShort;
-
-		
-		public string titleShortFemale;
-
-		
-		public string baseDesc;
-
-		
-		private Dictionary<string, int> skillGains = new Dictionary<string, int>();
-
-		
-		[Unsaved(false)]
-		public Dictionary<SkillDef, int> skillGainsResolved = new Dictionary<SkillDef, int>();
-
-		
-		public WorkTags workDisables;
-
-		
-		public WorkTags requiredWorkTags;
-
-		
-		public List<string> spawnCategories = new List<string>();
-
-		
-		[LoadAlias("bodyNameGlobal")]
-		private string bodyTypeGlobal;
-
-		
-		[LoadAlias("bodyNameFemale")]
-		private string bodyTypeFemale;
-
-		
-		[LoadAlias("bodyNameMale")]
-		private string bodyTypeMale;
-
-		
-		[Unsaved(false)]
-		private BodyTypeDef bodyTypeGlobalResolved;
-
-		
-		[Unsaved(false)]
-		private BodyTypeDef bodyTypeFemaleResolved;
-
-		
-		[Unsaved(false)]
-		private BodyTypeDef bodyTypeMaleResolved;
-
-		
-		public List<TraitEntry> forcedTraits;
-
-		
-		public List<TraitEntry> disallowedTraits;
-
-		
-		public List<string> hairTags;
-
-		
-		private string nameMaker;
-
-		
-		private RulePackDef nameMakerResolved;
-
-		
-		public bool shuffleable = true;
-
-		
-		[Unsaved(false)]
-		public string untranslatedTitle;
-
-		
-		[Unsaved(false)]
-		public string untranslatedTitleFemale;
-
-		
-		[Unsaved(false)]
-		public string untranslatedTitleShort;
-
-		
-		[Unsaved(false)]
-		public string untranslatedTitleShortFemale;
-
-		
-		[Unsaved(false)]
-		public string untranslatedDesc;
-
-		
-		[Unsaved(false)]
-		public bool titleTranslated;
-
-		
-		[Unsaved(false)]
-		public bool titleFemaleTranslated;
-
-		
-		[Unsaved(false)]
-		public bool titleShortTranslated;
-
-		
-		[Unsaved(false)]
-		public bool titleShortFemaleTranslated;
-
-		
-		[Unsaved(false)]
-		public bool descTranslated;
-
-		
-		private List<string> unlockedMeditationTypesTemp = new List<string>();
 	}
 }

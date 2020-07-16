@@ -1,106 +1,81 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public abstract class JobDriver_RemoveBuilding : JobDriver
 	{
-		
-		
-		protected Thing Target
+		private float workLeft;
+
+		private float totalNeededWork;
+
+		protected Thing Target => job.targetA.Thing;
+
+		protected Building Building => (Building)Target.GetInnerIfMinified();
+
+		protected abstract DesignationDef Designation
 		{
-			get
-			{
-				return this.job.targetA.Thing;
-			}
+			get;
 		}
 
-		
-		
-		protected Building Building
+		protected abstract float TotalNeededWork
 		{
-			get
-			{
-				return (Building)this.Target.GetInnerIfMinified();
-			}
+			get;
 		}
 
-		
-		
-		protected abstract DesignationDef Designation { get; }
-
-		
-		
-		protected abstract float TotalNeededWork { get; }
-
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.workLeft, "workLeft", 0f, false);
-			Scribe_Values.Look<float>(ref this.totalNeededWork, "totalNeededWork", 0f, false);
+			Scribe_Values.Look(ref workLeft, "workLeft", 0f);
+			Scribe_Values.Look(ref totalNeededWork, "totalNeededWork", 0f);
 		}
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.Target, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(Target, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			this.FailOnThingMissingDesignation(TargetIndex.A, this.Designation);
+			this.FailOnThingMissingDesignation(TargetIndex.A, Designation);
 			this.FailOnForbidden(TargetIndex.A);
-			yield return Toils_Goto.GotoThing(TargetIndex.A, (this.Target is Building_Trap) ? PathEndMode.OnCell : PathEndMode.Touch);
+			yield return Toils_Goto.GotoThing(TargetIndex.A, (Target is Building_Trap) ? PathEndMode.OnCell : PathEndMode.Touch);
 			Toil doWork = new Toil().FailOnDestroyedNullOrForbidden(TargetIndex.A).FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
 			doWork.initAction = delegate
 			{
-				this.totalNeededWork = this.TotalNeededWork;
-				this.workLeft = this.totalNeededWork;
+				totalNeededWork = TotalNeededWork;
+				workLeft = totalNeededWork;
 			};
 			doWork.tickAction = delegate
 			{
-				this.workLeft -= this.pawn.GetStatValue(StatDefOf.ConstructionSpeed, true) * 1.7f;
-				this.TickAction();
-				if (this.workLeft <= 0f)
+				workLeft -= pawn.GetStatValue(StatDefOf.ConstructionSpeed) * 1.7f;
+				TickAction();
+				if (workLeft <= 0f)
 				{
 					doWork.actor.jobs.curDriver.ReadyForNextToil();
 				}
 			};
 			doWork.defaultCompleteMode = ToilCompleteMode.Never;
-			doWork.WithProgressBar(TargetIndex.A, () => 1f - this.workLeft / this.totalNeededWork, false, -0.5f);
+			doWork.WithProgressBar(TargetIndex.A, () => 1f - workLeft / totalNeededWork);
 			doWork.activeSkill = (() => SkillDefOf.Construction);
 			yield return doWork;
-			yield return new Toil
+			Toil toil = new Toil();
+			toil.initAction = delegate
 			{
-				initAction = delegate
-				{
-					this.FinishedRemoving();
-					base.Map.designationManager.RemoveAllDesignationsOn(this.Target, false);
-				},
-				defaultCompleteMode = ToilCompleteMode.Instant
+				FinishedRemoving();
+				base.Map.designationManager.RemoveAllDesignationsOn(Target);
 			};
-			yield break;
+			toil.defaultCompleteMode = ToilCompleteMode.Instant;
+			yield return toil;
 		}
 
-		
 		protected virtual void FinishedRemoving()
 		{
 		}
 
-		
 		protected virtual void TickAction()
 		{
 		}
-
-		
-		private float workLeft;
-
-		
-		private float totalNeededWork;
 	}
 }

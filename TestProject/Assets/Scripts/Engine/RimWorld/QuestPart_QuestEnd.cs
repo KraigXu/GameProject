@@ -1,53 +1,45 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_QuestEnd : QuestPart
 	{
-		
+		public string inSignal;
+
+		public QuestEndOutcome? outcome;
+
+		public bool sendLetter;
+
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
-				QuestEndOutcome questEndOutcome;
-				if (this.outcome != null)
+				QuestEndOutcome arg;
+				if (outcome.HasValue)
 				{
-					questEndOutcome = this.outcome.Value;
+					arg = outcome.Value;
 				}
-				else if (!signal.args.TryGetArg<QuestEndOutcome>("OUTCOME", out questEndOutcome))
+				else if (!signal.args.TryGetArg("OUTCOME", out arg))
 				{
-					questEndOutcome = QuestEndOutcome.Unknown;
+					arg = QuestEndOutcome.Unknown;
 				}
-				this.quest.End(questEndOutcome, this.sendLetter);
+				quest.End(arg, sendLetter);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<QuestEndOutcome?>(ref this.outcome, "outcome", null, false);
-			Scribe_Values.Look<bool>(ref this.sendLetter, "sendLetter", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref outcome, "outcome");
+			Scribe_Values.Look(ref sendLetter, "sendLetter", defaultValue: false);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 		}
-
-		
-		public string inSignal;
-
-		
-		public QuestEndOutcome? outcome;
-
-		
-		public bool sendLetter;
 	}
 }

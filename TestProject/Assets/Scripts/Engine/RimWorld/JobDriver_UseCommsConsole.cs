@@ -1,20 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_UseCommsConsole : JobDriver
 	{
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -29,7 +25,6 @@ namespace RimWorld
 				}
 			};
 			yield return openComms;
-			yield break;
 		}
 	}
 }

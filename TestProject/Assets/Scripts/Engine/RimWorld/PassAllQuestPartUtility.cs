@@ -1,12 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace RimWorld
 {
-	
 	public static class PassAllQuestPartUtility
 	{
-		
 		public static bool AllReceived(List<string> inSignals, List<bool> signalsReceived)
 		{
 			if (inSignals.Count != signalsReceived.Count)

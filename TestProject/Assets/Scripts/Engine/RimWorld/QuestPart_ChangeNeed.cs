@@ -1,87 +1,74 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_ChangeNeed : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Pawn pawn;
+
+		public NeedDef need;
+
+		public float offset;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-		
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.pawn != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.pawn;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (pawn != null)
+				{
+					yield return pawn;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.pawn != null && this.pawn.needs != null)
+			if (signal.tag == inSignal && pawn != null && pawn.needs != null)
 			{
-				Need need = this.pawn.needs.TryGetNeed(this.need);
+				Need need = pawn.needs.TryGetNeed(this.need);
 				if (need != null)
 				{
-					need.CurLevel += this.offset;
+					need.CurLevel += offset;
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<Pawn>(ref this.pawn, "pawn", false);
-			Scribe_Defs.Look<NeedDef>(ref this.need, "need");
-			Scribe_Values.Look<float>(ref this.offset, "offset", 0f, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref pawn, "pawn");
+			Scribe_Defs.Look(ref need, "need");
+			Scribe_Values.Look(ref offset, "offset", 0f);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.need = NeedDefOf.Food;
-			this.offset = 0.5f;
+			need = NeedDefOf.Food;
+			offset = 0.5f;
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				Find.RandomPlayerHomeMap.mapPawns.FreeColonists.FirstOrDefault<Pawn>();
+				Find.RandomPlayerHomeMap.mapPawns.FreeColonists.FirstOrDefault();
 			}
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.pawn == replace)
+			if (pawn == replace)
 			{
-				this.pawn = with;
+				pawn = with;
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public Pawn pawn;
-
-		
-		public NeedDef need;
-
-		
-		public float offset;
 	}
 }

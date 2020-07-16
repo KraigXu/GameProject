@@ -1,113 +1,99 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class LayerSubMesh
 	{
-		
+		public bool finalized;
+
+		public bool disabled;
+
+		public Material material;
+
+		public Mesh mesh;
+
+		public List<Vector3> verts = new List<Vector3>();
+
+		public List<int> tris = new List<int>();
+
+		public List<Color32> colors = new List<Color32>();
+
+		public List<Vector3> uvs = new List<Vector3>();
+
 		public LayerSubMesh(Mesh mesh, Material material)
 		{
 			this.mesh = mesh;
 			this.material = material;
 		}
 
-		
 		public void Clear(MeshParts parts)
 		{
-			if ((parts & MeshParts.Verts) != MeshParts.None)
+			if ((parts & MeshParts.Verts) != 0)
 			{
-				this.verts.Clear();
+				verts.Clear();
 			}
-			if ((parts & MeshParts.Tris) != MeshParts.None)
+			if ((parts & MeshParts.Tris) != 0)
 			{
-				this.tris.Clear();
+				tris.Clear();
 			}
-			if ((parts & MeshParts.Colors) != MeshParts.None)
+			if ((parts & MeshParts.Colors) != 0)
 			{
-				this.colors.Clear();
+				colors.Clear();
 			}
-			if ((parts & MeshParts.UVs) != MeshParts.None)
+			if ((parts & MeshParts.UVs) != 0)
 			{
-				this.uvs.Clear();
+				uvs.Clear();
 			}
-			this.finalized = false;
+			finalized = false;
 		}
 
-		
 		public void FinalizeMesh(MeshParts parts)
 		{
-			if (this.finalized)
+			if (finalized)
 			{
-				Log.Warning("Finalizing mesh which is already finalized. Did you forget to call Clear()?", false);
+				Log.Warning("Finalizing mesh which is already finalized. Did you forget to call Clear()?");
 			}
-			if ((parts & MeshParts.Verts) != MeshParts.None || (parts & MeshParts.Tris) != MeshParts.None)
+			if ((parts & MeshParts.Verts) != 0 || (parts & MeshParts.Tris) != 0)
 			{
-				this.mesh.Clear();
+				mesh.Clear();
 			}
-			if ((parts & MeshParts.Verts) != MeshParts.None)
+			if ((parts & MeshParts.Verts) != 0)
 			{
-				if (this.verts.Count > 0)
+				if (verts.Count > 0)
 				{
-					this.mesh.SetVertices(this.verts);
+					mesh.SetVertices(verts);
 				}
 				else
 				{
-					Log.Error("Cannot cook Verts for " + this.material.ToString() + ": no ingredients data. If you want to not render this submesh, disable it.", false);
+					Log.Error("Cannot cook Verts for " + material.ToString() + ": no ingredients data. If you want to not render this submesh, disable it.");
 				}
 			}
-			if ((parts & MeshParts.Tris) != MeshParts.None)
+			if ((parts & MeshParts.Tris) != 0)
 			{
-				if (this.tris.Count > 0)
+				if (tris.Count > 0)
 				{
-					this.mesh.SetTriangles(this.tris, 0);
+					mesh.SetTriangles(tris, 0);
 				}
 				else
 				{
-					Log.Error("Cannot cook Tris for " + this.material.ToString() + ": no ingredients data.", false);
+					Log.Error("Cannot cook Tris for " + material.ToString() + ": no ingredients data.");
 				}
 			}
-			if ((parts & MeshParts.Colors) != MeshParts.None && this.colors.Count > 0)
+			if ((parts & MeshParts.Colors) != 0 && colors.Count > 0)
 			{
-				this.mesh.SetColors(this.colors);
+				mesh.SetColors(colors);
 			}
-			if ((parts & MeshParts.UVs) != MeshParts.None && this.uvs.Count > 0)
+			if ((parts & MeshParts.UVs) != 0 && uvs.Count > 0)
 			{
-				this.mesh.SetUVs(0, this.uvs);
+				mesh.SetUVs(0, uvs);
 			}
-			this.finalized = true;
+			finalized = true;
 		}
 
-		
 		public override string ToString()
 		{
-			return "LayerSubMesh(" + this.material.ToString() + ")";
+			return "LayerSubMesh(" + material.ToString() + ")";
 		}
-
-		
-		public bool finalized;
-
-		
-		public bool disabled;
-
-		
-		public Material material;
-
-		
-		public Mesh mesh;
-
-		
-		public List<Vector3> verts = new List<Vector3>();
-
-		
-		public List<int> tris = new List<int>();
-
-		
-		public List<Color32> colors = new List<Color32>();
-
-		
-		public List<Vector3> uvs = new List<Vector3>();
 	}
 }

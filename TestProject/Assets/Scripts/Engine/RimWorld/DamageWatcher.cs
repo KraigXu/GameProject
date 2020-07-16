@@ -1,38 +1,24 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class DamageWatcher : IExposable
 	{
-		
-		
-		public float DamageTakenEver
-		{
-			get
-			{
-				return this.everDamage;
-			}
-		}
+		private float everDamage;
 
-		
+		public float DamageTakenEver => everDamage;
+
 		public void Notify_DamageTaken(Thing damagee, float amount)
 		{
-			if (damagee.Faction != Faction.OfPlayer)
+			if (damagee.Faction == Faction.OfPlayer)
 			{
-				return;
+				everDamage += amount;
 			}
-			this.everDamage += amount;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<float>(ref this.everDamage, "everDamage", 0f, false);
+			Scribe_Values.Look(ref everDamage, "everDamage", 0f);
 		}
-
-		
-		private float everDamage;
 	}
 }

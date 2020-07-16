@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Pain : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			float painTotal = p.health.hediffSet.PainTotal;

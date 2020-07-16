@@ -1,38 +1,32 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SignalAction_Letter : SignalAction
 	{
-		
+		public Letter letter;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Deep.Look<Letter>(ref this.letter, "letter", Array.Empty<object>());
+			Scribe_Deep.Look(ref letter, "letter");
 		}
 
-		
 		protected override void DoAction(SignalArgs args)
 		{
-			Pawn pawn;
-			if (args.TryGetArg<Pawn>("SUBJECT", out pawn))
+			if (args.TryGetArg("SUBJECT", out Pawn arg))
 			{
-				ChoiceLetter choiceLetter = this.letter as ChoiceLetter;
+				ChoiceLetter choiceLetter = letter as ChoiceLetter;
 				if (choiceLetter != null)
 				{
-					choiceLetter.text = choiceLetter.text.Resolve().Formatted(pawn.LabelShort, pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true);
+					choiceLetter.text = choiceLetter.text.Resolve().Formatted(arg.LabelShort, arg.Named("PAWN")).AdjustedFor(arg);
 				}
-				if (!this.letter.lookTargets.IsValid())
+				if (!letter.lookTargets.IsValid())
 				{
-					this.letter.lookTargets = pawn;
+					letter.lookTargets = arg;
 				}
 			}
-			Find.LetterStack.ReceiveLetter(this.letter, null);
+			Find.LetterStack.ReceiveLetter(letter);
 		}
-
-		
-		public Letter letter;
 	}
 }

@@ -1,43 +1,23 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_VisitSickPawn : WorkGiver_Scanner
 	{
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.InteractionCell;
-			}
-		}
+		public override PathEndMode PathEndMode => PathEndMode.InteractionCell;
 
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForGroup(ThingRequestGroup.Pawn);
-			}
-		}
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.Pawn);
 
-		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
 			return pawn.Map.mapPawns.SpawnedPawnsInFaction(Faction.OfPlayer);
 		}
 
-		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
-			if (!InteractionUtility.CanInitiateInteraction(pawn, null))
+			if (!InteractionUtility.CanInitiateInteraction(pawn))
 			{
 				return true;
 			}
@@ -52,14 +32,16 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;
-			return pawn2 != null && SickPawnVisitUtility.CanVisit(pawn, pawn2, JoyCategory.VeryLow);
+			if (pawn2 == null)
+			{
+				return false;
+			}
+			return SickPawnVisitUtility.CanVisit(pawn, pawn2, JoyCategory.VeryLow);
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = (Pawn)t;

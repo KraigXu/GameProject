@@ -1,69 +1,58 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_FactionRelationKind : QuestPartActivable
 	{
-		
-		
+		public Faction faction1;
+
+		public Faction faction2;
+
+		public FactionRelationKind relationKind;
+
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-		
-				IEnumerator<Faction> enumerator = null;
-				if (this.faction1 != null)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return this.faction1;
+					yield return involvedFaction;
 				}
-				if (this.faction2 != null)
+				if (faction1 != null)
 				{
-					yield return this.faction2;
+					yield return faction1;
 				}
-				yield break;
-				yield break;
+				if (faction2 != null)
+				{
+					yield return faction2;
+				}
 			}
 		}
 
-		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
-			if (this.faction1 != null && this.faction2 != null && this.faction1.RelationKindWith(this.faction2) == this.relationKind)
+			if (faction1 != null && faction2 != null && faction1.RelationKindWith(faction2) == relationKind)
 			{
-				base.Complete(this.faction1.Named("SUBJECT"));
+				Complete(faction1.Named("SUBJECT"));
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Faction>(ref this.faction1, "faction1", false);
-			Scribe_References.Look<Faction>(ref this.faction2, "faction2", false);
-			Scribe_Values.Look<FactionRelationKind>(ref this.relationKind, "relationKind", FactionRelationKind.Hostile, false);
+			Scribe_References.Look(ref faction1, "faction1");
+			Scribe_References.Look(ref faction2, "faction2");
+			Scribe_Values.Look(ref relationKind, "relationKind", FactionRelationKind.Hostile);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.faction1 = Find.FactionManager.RandomEnemyFaction(false, false, true, TechLevel.Undefined);
-			this.faction2 = Faction.OfPlayer;
-			this.relationKind = FactionRelationKind.Neutral;
+			faction1 = Find.FactionManager.RandomEnemyFaction();
+			faction2 = Faction.OfPlayer;
+			relationKind = FactionRelationKind.Neutral;
 		}
-
-		
-		public Faction faction1;
-
-		
-		public Faction faction2;
-
-		
-		public FactionRelationKind relationKind;
 	}
 }

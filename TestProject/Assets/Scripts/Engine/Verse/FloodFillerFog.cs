@@ -1,15 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class FloodFillerFog
 	{
-		
+		private static bool testMode = false;
+
+		private static List<IntVec3> cellsToUnfog = new List<IntVec3>(1024);
+
+		private const int MaxNumTestUnfog = 500;
+
 		public static FloodUnfogResult FloodUnfog(IntVec3 root, Map map)
 		{
-			FloodFillerFog.cellsToUnfog.Clear();
+			cellsToUnfog.Clear();
 			FloodUnfogResult result = default(FloodUnfogResult);
 			bool[] fogGridDirect = map.fogGrid.fogGrid;
 			FogGrid fogGrid = map.fogGrid;
@@ -25,7 +29,11 @@ namespace Verse
 					return false;
 				}
 				Thing edifice = c.GetEdifice(map);
-				return (edifice == null || !edifice.def.MakeFog) && (!FloodFillerFog.testMode || expanding || numUnfogged <= 500);
+				if (edifice != null && edifice.def.MakeFog)
+				{
+					return false;
+				}
+				return (!testMode || expanding || numUnfogged <= 500) ? true : false;
 			};
 			Action<IntVec3> processor = delegate(IntVec3 c)
 			{
@@ -49,13 +57,13 @@ namespace Verse
 					result.allOnScreen = false;
 				}
 				result.cellsUnfogged++;
-				if (FloodFillerFog.testMode)
+				if (testMode)
 				{
 					numUnfogged++;
-					map.debugDrawer.FlashCell(c, (float)numUnfogged / 200f, numUnfogged.ToStringCached(), 50);
+					map.debugDrawer.FlashCell(c, (float)numUnfogged / 200f, numUnfogged.ToStringCached());
 				}
 			};
-			map.floodFiller.FloodFill(root, predicate, processor, int.MaxValue, false, null);
+			map.floodFiller.FloodFill(root, predicate, processor);
 			expanding = true;
 			for (int i = 0; i < newlyUnfoggedCells.Count; i++)
 			{
@@ -65,53 +73,42 @@ namespace Verse
 					IntVec3 intVec = a + GenAdj.AdjacentCells[j];
 					if (intVec.InBounds(map) && fogGrid.IsFogged(intVec) && !predicate(intVec))
 					{
-						FloodFillerFog.cellsToUnfog.Add(intVec);
+						cellsToUnfog.Add(intVec);
 					}
 				}
 			}
-			for (int k = 0; k < FloodFillerFog.cellsToUnfog.Count; k++)
+			for (int k = 0; k < cellsToUnfog.Count; k++)
 			{
-				fogGrid.Unfog(FloodFillerFog.cellsToUnfog[k]);
-				if (FloodFillerFog.testMode)
+				fogGrid.Unfog(cellsToUnfog[k]);
+				if (testMode)
 				{
-					map.debugDrawer.FlashCell(FloodFillerFog.cellsToUnfog[k], 0.3f, "x", 50);
+					map.debugDrawer.FlashCell(cellsToUnfog[k], 0.3f, "x");
 				}
 			}
-			FloodFillerFog.cellsToUnfog.Clear();
+			cellsToUnfog.Clear();
 			return result;
 		}
 
-		
 		public static void DebugFloodUnfog(IntVec3 root, Map map)
 		{
 			map.fogGrid.SetAllFogged();
-			foreach (IntVec3 loc in map.AllCells)
+			foreach (IntVec3 allCell in map.AllCells)
 			{
-				map.mapDrawer.MapMeshDirty(loc, MapMeshFlag.FogOfWar);
+				map.mapDrawer.MapMeshDirty(allCell, MapMeshFlag.FogOfWar);
 			}
-			FloodFillerFog.testMode = true;
-			FloodFillerFog.FloodUnfog(root, map);
-			FloodFillerFog.testMode = false;
+			testMode = true;
+			FloodUnfog(root, map);
+			testMode = false;
 		}
 
-		
 		public static void DebugRefogMap(Map map)
 		{
 			map.fogGrid.SetAllFogged();
-			foreach (IntVec3 loc in map.AllCells)
+			foreach (IntVec3 allCell in map.AllCells)
 			{
-				map.mapDrawer.MapMeshDirty(loc, MapMeshFlag.FogOfWar);
+				map.mapDrawer.MapMeshDirty(allCell, MapMeshFlag.FogOfWar);
 			}
-			FloodFillerFog.FloodUnfog(map.mapPawns.FreeColonistsSpawned.RandomElement<Pawn>().Position, map);
+			FloodUnfog(map.mapPawns.FreeColonistsSpawned.RandomElement().Position, map);
 		}
-
-		
-		private static bool testMode = false;
-
-		
-		private static List<IntVec3> cellsToUnfog = new List<IntVec3>(1024);
-
-		
-		private const int MaxNumTestUnfog = 500;
 	}
 }

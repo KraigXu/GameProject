@@ -1,64 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class GUIEventFilterForOSX
 	{
-		
+		private static List<Event> eventsThisFrame = new List<Event>();
+
+		private static int lastRecordedFrame = -1;
+
 		public static void CheckRejectGUIEvent()
 		{
-			if (UnityData.platform != RuntimePlatform.OSXPlayer)
+			if (UnityData.platform != RuntimePlatform.OSXPlayer || (Event.current.type != 0 && Event.current.type != EventType.MouseUp))
 			{
 				return;
 			}
-			if (Event.current.type != EventType.MouseDown && Event.current.type != EventType.MouseUp)
+			if (Time.frameCount != lastRecordedFrame)
 			{
-				return;
+				eventsThisFrame.Clear();
+				lastRecordedFrame = Time.frameCount;
 			}
-			if (Time.frameCount != GUIEventFilterForOSX.lastRecordedFrame)
+			for (int i = 0; i < eventsThisFrame.Count; i++)
 			{
-				GUIEventFilterForOSX.eventsThisFrame.Clear();
-				GUIEventFilterForOSX.lastRecordedFrame = Time.frameCount;
-			}
-			for (int i = 0; i < GUIEventFilterForOSX.eventsThisFrame.Count; i++)
-			{
-				if (GUIEventFilterForOSX.EventsAreEquivalent(GUIEventFilterForOSX.eventsThisFrame[i], Event.current))
+				if (EventsAreEquivalent(eventsThisFrame[i], Event.current))
 				{
-					GUIEventFilterForOSX.RejectEvent();
+					RejectEvent();
 				}
 			}
-			GUIEventFilterForOSX.eventsThisFrame.Add(Event.current);
+			eventsThisFrame.Add(Event.current);
 		}
 
-		
 		private static bool EventsAreEquivalent(Event A, Event B)
 		{
-			return A.button == B.button && A.keyCode == B.keyCode && A.type == B.type;
+			if (A.button == B.button && A.keyCode == B.keyCode)
+			{
+				return A.type == B.type;
+			}
+			return false;
 		}
 
-		
 		private static void RejectEvent()
 		{
 			if (DebugViewSettings.logInput)
 			{
-				Log.Message(string.Concat(new object[]
-				{
-					"Frame ",
-					Time.frameCount,
-					": REJECTED ",
-					Event.current.ToStringFull()
-				}), false);
+				Log.Message("Frame " + Time.frameCount + ": REJECTED " + Event.current.ToStringFull());
 			}
 			Event.current.Use();
 		}
-
-		
-		private static List<Event> eventsThisFrame = new List<Event>();
-
-		
-		private static int lastRecordedFrame = -1;
 	}
 }

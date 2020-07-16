@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,15 +5,26 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_RandomOption : ThingSetMaker
 	{
-		
+		public class Option
+		{
+			public ThingSetMaker thingSetMaker;
+
+			public float weight;
+
+			public float? weightIfPlayerHasNoItem;
+
+			public ThingDef weightIfPlayerHasNoItemItem;
+		}
+
+		public List<Option> options;
+
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
-			for (int i = 0; i < this.options.Count; i++)
+			for (int i = 0; i < options.Count; i++)
 			{
-				if (this.options[i].thingSetMaker.CanGenerate(parms) && this.GetSelectionWeight(this.options[i], parms) > 0f)
+				if (options[i].thingSetMaker.CanGenerate(parms) && GetSelectionWeight(options[i], parms) > 0f)
 				{
 					return true;
 				}
@@ -22,81 +32,49 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			ThingSetMaker_RandomOption.Option option;
-			if (!(from x in this.options
-			where x.thingSetMaker.CanGenerate(parms)
-			select x).TryRandomElementByWeight((ThingSetMaker_RandomOption.Option x) => this.GetSelectionWeight(x, parms), out option))
+			if (options.Where((Option x) => x.thingSetMaker.CanGenerate(parms)).TryRandomElementByWeight((Option x) => GetSelectionWeight(x, parms), out Option result))
 			{
-				return;
+				outThings.AddRange(result.thingSetMaker.Generate(parms));
 			}
-			outThings.AddRange(option.thingSetMaker.Generate(parms));
 		}
 
-		
-		private float GetSelectionWeight(ThingSetMaker_RandomOption.Option option, ThingSetMakerParams parms)
+		private float GetSelectionWeight(Option option, ThingSetMakerParams parms)
 		{
-			if (option.weightIfPlayerHasNoItem != null && !PlayerItemAccessibilityUtility.PlayerOrQuestRewardHas(option.weightIfPlayerHasNoItemItem, 1))
+			if (option.weightIfPlayerHasNoItem.HasValue && !PlayerItemAccessibilityUtility.PlayerOrQuestRewardHas(option.weightIfPlayerHasNoItemItem))
 			{
 				return option.weightIfPlayerHasNoItem.Value * option.thingSetMaker.ExtraSelectionWeightFactor(parms);
 			}
 			return option.weight * option.thingSetMaker.ExtraSelectionWeightFactor(parms);
 		}
 
-		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
-			for (int i = 0; i < this.options.Count; i++)
+			for (int i = 0; i < options.Count; i++)
 			{
-				this.options[i].thingSetMaker.ResolveReferences();
+				options[i].thingSetMaker.ResolveReferences();
 			}
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
-			int num2;
-			for (int i = 0; i < this.options.Count; i = num2 + 1)
+			for (int i = 0; i < options.Count; i++)
 			{
-				float num = this.options[i].weight;
-				if (this.options[i].weightIfPlayerHasNoItem != null)
+				float num = options[i].weight;
+				if (options[i].weightIfPlayerHasNoItem.HasValue)
 				{
-					num = Mathf.Max(num, this.options[i].weightIfPlayerHasNoItem.Value);
+					num = Mathf.Max(num, options[i].weightIfPlayerHasNoItem.Value);
 				}
-				if (num > 0f)
+				if (!(num <= 0f))
 				{
-					foreach (ThingDef thingDef in this.options[i].thingSetMaker.AllGeneratableThingsDebug(parms))
+					foreach (ThingDef item in options[i].thingSetMaker.AllGeneratableThingsDebug(parms))
 					{
-						yield return thingDef;
+						yield return item;
 					}
-					IEnumerator<ThingDef> enumerator = null;
 				}
-				num2 = i;
 			}
-			yield break;
-			yield break;
-		}
-
-		
-		public List<ThingSetMaker_RandomOption.Option> options;
-
-		
-		public class Option
-		{
-			
-			public ThingSetMaker thingSetMaker;
-
-			
-			public float weight;
-
-			
-			public float? weightIfPlayerHasNoItem;
-
-			
-			public ThingDef weightIfPlayerHasNoItemItem;
 		}
 	}
 }

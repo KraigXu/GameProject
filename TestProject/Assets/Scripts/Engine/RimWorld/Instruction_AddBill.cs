@@ -1,22 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Instruction_AddBill : Lesson_Instruction
 	{
-		
-		
 		protected override float ProgressPercent
 		{
 			get
 			{
-				int num = this.def.recipeTargetCount + 1;
+				int num = def.recipeTargetCount + 1;
 				int num2 = 0;
-				Bill_Production bill_Production = this.RelevantBill();
+				Bill_Production bill_Production = RelevantBill();
 				if (bill_Production != null)
 				{
 					num2++;
@@ -29,58 +25,50 @@ namespace RimWorld
 			}
 		}
 
-		
 		private Bill_Production RelevantBill()
 		{
-			if (Find.Selector.SingleSelectedThing != null && Find.Selector.SingleSelectedThing.def == this.def.thingDef)
+			if (Find.Selector.SingleSelectedThing != null && Find.Selector.SingleSelectedThing.def == def.thingDef)
 			{
 				IBillGiver billGiver = Find.Selector.SingleSelectedThing as IBillGiver;
 				if (billGiver != null)
 				{
-					return (Bill_Production)billGiver.BillStack.Bills.FirstOrDefault((Bill b) => b.recipe == this.def.recipeDef);
+					return (Bill_Production)billGiver.BillStack.Bills.FirstOrDefault((Bill b) => b.recipe == def.recipeDef);
 				}
 			}
 			return null;
 		}
 
-		
 		private IEnumerable<Thing> ThingsToSelect()
 		{
-			if (Find.Selector.SingleSelectedThing == null || Find.Selector.SingleSelectedThing.def != this.def.thingDef)
+			if (Find.Selector.SingleSelectedThing == null || Find.Selector.SingleSelectedThing.def != def.thingDef)
 			{
-				foreach (Building building in base.Map.listerBuildings.AllBuildingsColonistOfDef(this.def.thingDef))
+				foreach (Building item in base.Map.listerBuildings.AllBuildingsColonistOfDef(def.thingDef))
 				{
-					yield return building;
+					yield return item;
 				}
-				IEnumerator<Building> enumerator = null;
-				yield break;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public override void LessonOnGUI()
 		{
-			foreach (Thing t in this.ThingsToSelect())
+			foreach (Thing item in ThingsToSelect())
 			{
-				TutorUtility.DrawLabelOnThingOnGUI(t, this.def.onMapInstruction);
+				TutorUtility.DrawLabelOnThingOnGUI(item, def.onMapInstruction);
 			}
-			if (this.RelevantBill() == null)
+			if (RelevantBill() == null)
 			{
 				UIHighlighter.HighlightTag("AddBill");
 			}
 			base.LessonOnGUI();
 		}
 
-		
 		public override void LessonUpdate()
 		{
-			foreach (Thing thing in this.ThingsToSelect())
+			foreach (Thing item in ThingsToSelect())
 			{
-				GenDraw.DrawArrowPointingAt(thing.DrawPos, false);
+				GenDraw.DrawArrowPointingAt(item.DrawPos);
 			}
-			if (this.ProgressPercent > 0.999f)
+			if (ProgressPercent > 0.999f)
 			{
 				Find.ActiveLesson.Deactivate();
 			}

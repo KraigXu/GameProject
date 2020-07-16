@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,10 +5,16 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class InteractionWorker_RomanceAttempt : InteractionWorker
 	{
-		
+		private const float MinRomanceChanceForRomanceAttempt = 0.15f;
+
+		private const int MinOpinionForRomanceAttempt = 5;
+
+		private const float BaseSelectionWeight = 1.15f;
+
+		private const float BaseSuccessChance = 0.6f;
+
 		public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
 		{
 			if (TutorSystem.TutorialMode)
@@ -35,52 +40,32 @@ namespace RimWorld
 				return 0f;
 			}
 			float num3 = 1f;
-			Pawn pawn = LovePartnerRelationUtility.ExistingMostLikedLovePartner(initiator, false);
+			Pawn pawn = LovePartnerRelationUtility.ExistingMostLikedLovePartner(initiator, allowDead: false);
 			if (pawn != null)
 			{
-				float value = (float)initiator.relations.OpinionOf(pawn);
+				float value = initiator.relations.OpinionOf(pawn);
 				num3 = Mathf.InverseLerp(50f, -50f, value);
 			}
 			float num4 = initiator.story.traits.HasTrait(TraitDefOf.Gay) ? 1f : ((initiator.gender == Gender.Female) ? 0.15f : 1f);
 			float num5 = Mathf.InverseLerp(0.15f, 1f, num);
-			float num6 = Mathf.InverseLerp(5f, 100f, (float)num2);
-			float num7;
-			if (initiator.gender == recipient.gender)
-			{
-				if (initiator.story.traits.HasTrait(TraitDefOf.Gay) && recipient.story.traits.HasTrait(TraitDefOf.Gay))
-				{
-					num7 = 1f;
-				}
-				else
-				{
-					num7 = 0.15f;
-				}
-			}
-			else if (!initiator.story.traits.HasTrait(TraitDefOf.Gay) && !recipient.story.traits.HasTrait(TraitDefOf.Gay))
-			{
-				num7 = 1f;
-			}
-			else
-			{
-				num7 = 0.15f;
-			}
+			float num6 = Mathf.InverseLerp(5f, 100f, num2);
+			float num7 = (initiator.gender == recipient.gender) ? ((!initiator.story.traits.HasTrait(TraitDefOf.Gay) || !recipient.story.traits.HasTrait(TraitDefOf.Gay)) ? 0.15f : 1f) : ((initiator.story.traits.HasTrait(TraitDefOf.Gay) || recipient.story.traits.HasTrait(TraitDefOf.Gay)) ? 0.15f : 1f);
 			return 1.15f * num4 * num5 * num6 * num3 * num7;
 		}
 
-		
 		public float SuccessChance(Pawn initiator, Pawn recipient)
 		{
-			float num = 0.6f * recipient.relations.SecondaryRomanceChanceFactor(initiator) * Mathf.InverseLerp(5f, 100f, (float)recipient.relations.OpinionOf(initiator));
+			float num = 0.6f * recipient.relations.SecondaryRomanceChanceFactor(initiator) * Mathf.InverseLerp(5f, 100f, recipient.relations.OpinionOf(initiator));
 			float num2 = 1f;
 			Pawn pawn = null;
 			if (recipient.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Lover, (Pawn x) => !x.Dead) != null)
 			{
-				pawn = recipient.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Lover, null);
+				pawn = recipient.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Lover);
 				num2 = 0.6f;
 			}
 			else if (recipient.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance, (Pawn x) => !x.Dead) != null)
 			{
-				pawn = recipient.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance, null);
+				pawn = recipient.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance);
 				num2 = 0.1f;
 			}
 			else if (recipient.GetSpouse() != null && !recipient.GetSpouse().Dead)
@@ -90,36 +75,29 @@ namespace RimWorld
 			}
 			if (pawn != null)
 			{
-				num2 *= Mathf.InverseLerp(100f, 0f, (float)recipient.relations.OpinionOf(pawn));
+				num2 *= Mathf.InverseLerp(100f, 0f, recipient.relations.OpinionOf(pawn));
 				num2 *= Mathf.Clamp01(1f - recipient.relations.SecondaryRomanceChanceFactor(pawn));
 			}
 			return Mathf.Clamp01(num * num2);
 		}
 
-		
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
-			if (Rand.Value < this.SuccessChance(initiator, recipient))
+			if (Rand.Value < SuccessChance(initiator, recipient))
 			{
-				List<Pawn> list;
-				this.BreakLoverAndFianceRelations(initiator, out list);
-				List<Pawn> list2;
-				this.BreakLoverAndFianceRelations(recipient, out list2);
-				for (int i = 0; i < list.Count; i++)
+				BreakLoverAndFianceRelations(initiator, out List<Pawn> oldLoversAndFiances);
+				BreakLoverAndFianceRelations(recipient, out List<Pawn> oldLoversAndFiances2);
+				for (int i = 0; i < oldLoversAndFiances.Count; i++)
 				{
-					this.TryAddCheaterThought(list[i], initiator);
+					TryAddCheaterThought(oldLoversAndFiances[i], initiator);
 				}
-				for (int j = 0; j < list2.Count; j++)
+				for (int j = 0; j < oldLoversAndFiances2.Count; j++)
 				{
-					this.TryAddCheaterThought(list2[j], recipient);
+					TryAddCheaterThought(oldLoversAndFiances2[j], recipient);
 				}
 				initiator.relations.TryRemoveDirectRelation(PawnRelationDefOf.ExLover, recipient);
 				initiator.relations.AddDirectRelation(PawnRelationDefOf.Lover, recipient);
-				TaleRecorder.RecordTale(TaleDefOf.BecameLover, new object[]
-				{
-					initiator,
-					recipient
-				});
+				TaleRecorder.RecordTale(TaleDefOf.BecameLover, initiator, recipient);
 				if (initiator.needs.mood != null)
 				{
 					initiator.needs.mood.thoughts.memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.BrokeUpWithMe, recipient);
@@ -134,7 +112,7 @@ namespace RimWorld
 				}
 				if (PawnUtility.ShouldSendNotificationAbout(initiator) || PawnUtility.ShouldSendNotificationAbout(recipient))
 				{
-					this.GetNewLoversLetter(initiator, recipient, list, list2, out letterText, out letterLabel, out letterDef, out lookTargets);
+					GetNewLoversLetter(initiator, recipient, oldLoversAndFiances, oldLoversAndFiances2, out letterText, out letterLabel, out letterDef, out lookTargets);
 				}
 				else
 				{
@@ -145,65 +123,62 @@ namespace RimWorld
 				}
 				extraSentencePacks.Add(RulePackDefOf.Sentence_RomanceAttemptAccepted);
 				LovePartnerRelationUtility.TryToShareBed(initiator, recipient);
-				return;
 			}
-			if (initiator.needs.mood != null)
+			else
 			{
-				initiator.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.RebuffedMyRomanceAttempt, recipient);
+				if (initiator.needs.mood != null)
+				{
+					initiator.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.RebuffedMyRomanceAttempt, recipient);
+				}
+				if (recipient.needs.mood != null)
+				{
+					recipient.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.FailedRomanceAttemptOnMe, initiator);
+				}
+				if (recipient.needs.mood != null && recipient.relations.OpinionOf(initiator) <= 0)
+				{
+					recipient.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.FailedRomanceAttemptOnMeLowOpinionMood, initiator);
+				}
+				extraSentencePacks.Add(RulePackDefOf.Sentence_RomanceAttemptRejected);
+				letterText = null;
+				letterLabel = null;
+				letterDef = null;
+				lookTargets = null;
 			}
-			if (recipient.needs.mood != null)
-			{
-				recipient.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.FailedRomanceAttemptOnMe, initiator);
-			}
-			if (recipient.needs.mood != null && recipient.relations.OpinionOf(initiator) <= 0)
-			{
-				recipient.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.FailedRomanceAttemptOnMeLowOpinionMood, initiator);
-			}
-			extraSentencePacks.Add(RulePackDefOf.Sentence_RomanceAttemptRejected);
-			letterText = null;
-			letterLabel = null;
-			letterDef = null;
-			lookTargets = null;
 		}
 
-		
 		private void BreakLoverAndFianceRelations(Pawn pawn, out List<Pawn> oldLoversAndFiances)
 		{
 			oldLoversAndFiances = new List<Pawn>();
-			for (;;)
+			while (true)
 			{
-				Pawn firstDirectRelationPawn = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Lover, null);
+				Pawn firstDirectRelationPawn = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Lover);
 				if (firstDirectRelationPawn != null)
 				{
 					pawn.relations.RemoveDirectRelation(PawnRelationDefOf.Lover, firstDirectRelationPawn);
 					pawn.relations.AddDirectRelation(PawnRelationDefOf.ExLover, firstDirectRelationPawn);
 					oldLoversAndFiances.Add(firstDirectRelationPawn);
+					continue;
 				}
-				else
+				Pawn firstDirectRelationPawn2 = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance);
+				if (firstDirectRelationPawn2 != null)
 				{
-					Pawn firstDirectRelationPawn2 = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance, null);
-					if (firstDirectRelationPawn2 == null)
-					{
-						break;
-					}
 					pawn.relations.RemoveDirectRelation(PawnRelationDefOf.Fiance, firstDirectRelationPawn2);
 					pawn.relations.AddDirectRelation(PawnRelationDefOf.ExLover, firstDirectRelationPawn2);
 					oldLoversAndFiances.Add(firstDirectRelationPawn2);
+					continue;
 				}
+				break;
 			}
 		}
 
-		
 		private void TryAddCheaterThought(Pawn pawn, Pawn cheater)
 		{
-			if (pawn.Dead || pawn.needs.mood == null)
+			if (!pawn.Dead && pawn.needs.mood != null)
 			{
-				return;
+				pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.CheatedOnMe, cheater);
 			}
-			pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.CheatedOnMe, cheater);
 		}
 
-		
 		private void GetNewLoversLetter(Pawn initiator, Pawn recipient, List<Pawn> initiatorOldLoversAndFiances, List<Pawn> recipientOldLoversAndFiances, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
 			bool flag = false;
@@ -259,23 +234,7 @@ namespace RimWorld
 				}
 			}
 			letterText = stringBuilder.ToString().TrimEndNewlines();
-			lookTargets = new LookTargets(new TargetInfo[]
-			{
-				initiator,
-				recipient
-			});
+			lookTargets = new LookTargets(initiator, recipient);
 		}
-
-		
-		private const float MinRomanceChanceForRomanceAttempt = 0.15f;
-
-		
-		private const int MinOpinionForRomanceAttempt = 5;
-
-		
-		private const float BaseSelectionWeight = 1.15f;
-
-		
-		private const float BaseSuccessChance = 0.6f;
 	}
 }

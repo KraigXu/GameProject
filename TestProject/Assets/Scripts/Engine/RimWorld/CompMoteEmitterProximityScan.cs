@@ -1,101 +1,49 @@
-﻿using System;
 using UnityEngine;
-using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompMoteEmitterProximityScan : CompMoteEmitter
 	{
-		
-		
-		private CompProperties_MoteEmitterProximityScan Props
-		{
-			get
-			{
-				return (CompProperties_MoteEmitterProximityScan)this.props;
-			}
-		}
+		private CompSendSignalOnPawnProximity proximityCompCached;
 
-		
-		
-		private CompSendSignalOnPawnProximity ProximityComp
-		{
-			get
-			{
-				CompSendSignalOnPawnProximity result;
-				if ((result = this.proximityCompCached) == null)
-				{
-					result = (this.proximityCompCached = this.parent.GetComp<CompSendSignalOnPawnProximity>());
-				}
-				return result;
-			}
-		}
+		private CompProperties_MoteEmitterProximityScan Props => (CompProperties_MoteEmitterProximityScan)props;
 
-		
+		private CompSendSignalOnPawnProximity ProximityComp => proximityCompCached ?? (proximityCompCached = parent.GetComp<CompSendSignalOnPawnProximity>());
+
 		public override void CompTick()
 		{
-			if (this.ProximityComp == null || this.ProximityComp.Sent)
+			if (ProximityComp == null || ProximityComp.Sent)
 			{
 				return;
 			}
-			if (this.mote == null)
+			if (mote == null)
 			{
-				base.Emit();
+				Emit();
 			}
-			if (this.mote == null)
+			if (mote == null)
 			{
 				return;
 			}
-			Mote mote = this.mote;
-			if (mote != null)
+			mote?.Maintain();
+			float num = 1f;
+			if (!ProximityComp.Enabled)
 			{
-				mote.Maintain();
-			}
-			float a;
-			if (!this.ProximityComp.Enabled)
-			{
-				if (this.ticksSinceLastEmitted >= this.Props.emissionInterval)
+				if (ticksSinceLastEmitted >= Props.emissionInterval)
 				{
-					this.ticksSinceLastEmitted = 0;
+					ticksSinceLastEmitted = 0;
 				}
 				else
 				{
-					this.ticksSinceLastEmitted++;
+					ticksSinceLastEmitted++;
 				}
-				float num = (float)this.ticksSinceLastEmitted / 60f;
-				if (num <= this.Props.warmupPulseFadeInTime)
-				{
-					if (this.Props.warmupPulseFadeInTime > 0f)
-					{
-						a = num / this.Props.warmupPulseFadeInTime;
-					}
-					else
-					{
-						a = 1f;
-					}
-				}
-				else if (num <= this.Props.warmupPulseFadeInTime + this.Props.warmupPulseSolidTime)
-				{
-					a = 1f;
-				}
-				else if (this.Props.warmupPulseFadeOutTime > 0f)
-				{
-					a = 1f - Mathf.InverseLerp(this.Props.warmupPulseFadeInTime + this.Props.warmupPulseSolidTime, this.Props.warmupPulseFadeInTime + this.Props.warmupPulseSolidTime + this.Props.warmupPulseFadeOutTime, num);
-				}
-				else
-				{
-					a = 1f;
-				}
+				float num2 = (float)ticksSinceLastEmitted / 60f;
+				num = ((num2 <= Props.warmupPulseFadeInTime) ? ((!(Props.warmupPulseFadeInTime > 0f)) ? 1f : (num2 / Props.warmupPulseFadeInTime)) : ((num2 <= Props.warmupPulseFadeInTime + Props.warmupPulseSolidTime) ? 1f : ((!(Props.warmupPulseFadeOutTime > 0f)) ? 1f : (1f - Mathf.InverseLerp(Props.warmupPulseFadeInTime + Props.warmupPulseSolidTime, Props.warmupPulseFadeInTime + Props.warmupPulseSolidTime + Props.warmupPulseFadeOutTime, num2)))));
 			}
 			else
 			{
-				a = 1f;
+				num = 1f;
 			}
-			this.mote.instanceColor.a = a;
+			mote.instanceColor.a = num;
 		}
-
-		
-		private CompSendSignalOnPawnProximity proximityCompCached;
 	}
 }

@@ -1,22 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SpouseRelationUtility
 	{
-		
+		public const float NoNameChangeOnMarriageChance = 0.25f;
+
+		public const float WomansNameChangeOnMarriageChance = 0.05f;
+
+		public const float MansNameOnMarriageChance = 0.7f;
+
+		public const float ChanceForSpousesToHaveTheSameName = 0.75f;
+
 		public static Pawn GetSpouse(this Pawn pawn)
 		{
 			if (!pawn.RaceProps.IsFlesh)
 			{
 				return null;
 			}
-			return pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Spouse, null);
+			return pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Spouse);
 		}
 
-		
 		public static Pawn GetSpouseOppositeGender(this Pawn pawn)
 		{
 			Pawn spouse = pawn.GetSpouse();
@@ -31,7 +35,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static MarriageNameChange Roll_NameChangeOnMarriage()
 		{
 			float value = Rand.Value;
@@ -46,52 +49,50 @@ namespace RimWorld
 			return MarriageNameChange.MansName;
 		}
 
-		
 		public static bool Roll_BackToBirthNameAfterDivorce()
 		{
 			return Rand.Value < 0.6f;
 		}
 
-		
 		public static void DetermineManAndWomanSpouses(Pawn firstPawn, Pawn secondPawn, out Pawn man, out Pawn woman)
 		{
 			if (firstPawn.gender == secondPawn.gender)
 			{
 				man = firstPawn;
 				woman = secondPawn;
-				return;
 			}
-			man = ((firstPawn.gender == Gender.Male) ? firstPawn : secondPawn);
-			woman = ((firstPawn.gender == Gender.Female) ? firstPawn : secondPawn);
+			else
+			{
+				man = ((firstPawn.gender == Gender.Male) ? firstPawn : secondPawn);
+				woman = ((firstPawn.gender == Gender.Female) ? firstPawn : secondPawn);
+			}
 		}
 
-		
 		public static bool ChangeNameAfterMarriage(Pawn firstPawn, Pawn secondPawn, MarriageNameChange changeName)
 		{
-			if (changeName == MarriageNameChange.NoChange)
+			if (changeName != 0)
 			{
-				return false;
+				Pawn man = null;
+				Pawn woman = null;
+				DetermineManAndWomanSpouses(firstPawn, secondPawn, out man, out woman);
+				NameTriple nameTriple = man.Name as NameTriple;
+				NameTriple nameTriple2 = woman.Name as NameTriple;
+				if (nameTriple == null || nameTriple2 == null)
+				{
+					return false;
+				}
+				string last = (changeName == MarriageNameChange.MansName) ? nameTriple.Last : nameTriple2.Last;
+				man.Name = new NameTriple(nameTriple.First, nameTriple.Nick, last);
+				woman.Name = new NameTriple(nameTriple2.First, nameTriple2.Nick, last);
+				return true;
 			}
-			Pawn pawn = null;
-			Pawn pawn2 = null;
-			SpouseRelationUtility.DetermineManAndWomanSpouses(firstPawn, secondPawn, out pawn, out pawn2);
-			NameTriple nameTriple = pawn.Name as NameTriple;
-			NameTriple nameTriple2 = pawn2.Name as NameTriple;
-			if (nameTriple == null || nameTriple2 == null)
-			{
-				return false;
-			}
-			string last = (changeName == MarriageNameChange.MansName) ? nameTriple.Last : nameTriple2.Last;
-			pawn.Name = new NameTriple(nameTriple.First, nameTriple.Nick, last);
-			pawn2.Name = new NameTriple(nameTriple2.First, nameTriple2.Nick, last);
-			return true;
+			return false;
 		}
 
-		
 		public static bool ChangeNameAfterDivorce(Pawn pawn, float chance = -1f)
 		{
 			NameTriple nameTriple = pawn.Name as NameTriple;
-			if (nameTriple != null && pawn.story != null && pawn.story.birthLastName != null && nameTriple.Last != pawn.story.birthLastName && SpouseRelationUtility.Roll_BackToBirthNameAfterDivorce())
+			if (nameTriple != null && pawn.story != null && pawn.story.birthLastName != null && nameTriple.Last != pawn.story.birthLastName && Roll_BackToBirthNameAfterDivorce())
 			{
 				pawn.Name = new NameTriple(nameTriple.First, nameTriple.Nick, pawn.story.birthLastName);
 				return true;
@@ -99,12 +100,11 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static void Notify_PawnRegenerated(Pawn regenerated)
 		{
 			if (regenerated.relations != null)
 			{
-				Pawn firstDirectRelationPawn = regenerated.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Spouse, null);
+				Pawn firstDirectRelationPawn = regenerated.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Spouse);
 				if (firstDirectRelationPawn != null && regenerated.Name is NameTriple && firstDirectRelationPawn.Name is NameTriple)
 				{
 					NameTriple nameTriple = firstDirectRelationPawn.Name as NameTriple;
@@ -113,72 +113,54 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static string GetRandomBirthName(Pawn forPawn)
 		{
-			return (PawnBioAndNameGenerator.GeneratePawnName(forPawn, NameStyle.Full, null) as NameTriple).Last;
+			return (PawnBioAndNameGenerator.GeneratePawnName(forPawn) as NameTriple).Last;
 		}
 
-		
 		public static void ResolveNameForSpouseOnGeneration(ref PawnGenerationRequest request, Pawn generated)
 		{
 			if (request.FixedLastName != null)
 			{
 				return;
 			}
-			MarriageNameChange marriageNameChange = SpouseRelationUtility.Roll_NameChangeOnMarriage();
-			if (marriageNameChange != MarriageNameChange.NoChange)
+			MarriageNameChange marriageNameChange = Roll_NameChangeOnMarriage();
+			if (marriageNameChange == MarriageNameChange.NoChange)
 			{
-				Pawn spouse = generated.GetSpouse();
-				Pawn pawn;
-				Pawn pawn2;
-				SpouseRelationUtility.DetermineManAndWomanSpouses(generated, spouse, out pawn, out pawn2);
-				NameTriple nameTriple = pawn.Name as NameTriple;
-				NameTriple nameTriple2 = pawn2.Name as NameTriple;
-				if (generated == pawn2 && marriageNameChange == MarriageNameChange.WomansName)
+				return;
+			}
+			Pawn spouse = generated.GetSpouse();
+			DetermineManAndWomanSpouses(generated, spouse, out Pawn man, out Pawn woman);
+			NameTriple nameTriple = man.Name as NameTriple;
+			NameTriple nameTriple2 = woman.Name as NameTriple;
+			if (generated == woman && marriageNameChange == MarriageNameChange.WomansName)
+			{
+				man.Name = new NameTriple(nameTriple.First, nameTriple.Nick, nameTriple.Last);
+				if (man.story != null)
 				{
-					pawn.Name = new NameTriple(nameTriple.First, nameTriple.Nick, nameTriple.Last);
-					if (pawn.story != null)
-					{
-						pawn.story.birthLastName = SpouseRelationUtility.GetRandomBirthName(pawn);
-					}
-					request.SetFixedLastName(nameTriple.Last);
-					return;
+					man.story.birthLastName = GetRandomBirthName(man);
 				}
-				if (generated == pawn && marriageNameChange == MarriageNameChange.WomansName)
+				request.SetFixedLastName(nameTriple.Last);
+			}
+			else if (generated == man && marriageNameChange == MarriageNameChange.WomansName)
+			{
+				request.SetFixedLastName(nameTriple2.Last);
+				request.SetFixedBirthName(GetRandomBirthName(man));
+			}
+			else if (generated == woman && marriageNameChange == MarriageNameChange.MansName)
+			{
+				request.SetFixedLastName(nameTriple.Last);
+				request.SetFixedBirthName(GetRandomBirthName(woman));
+			}
+			else if (generated == man && marriageNameChange == MarriageNameChange.MansName)
+			{
+				woman.Name = new NameTriple(nameTriple2.First, nameTriple2.Nick, nameTriple2.Last);
+				if (woman.story != null)
 				{
-					request.SetFixedLastName(nameTriple2.Last);
-					request.SetFixedBirthName(SpouseRelationUtility.GetRandomBirthName(pawn));
-					return;
+					woman.story.birthLastName = GetRandomBirthName(man);
 				}
-				if (generated == pawn2 && marriageNameChange == MarriageNameChange.MansName)
-				{
-					request.SetFixedLastName(nameTriple.Last);
-					request.SetFixedBirthName(SpouseRelationUtility.GetRandomBirthName(pawn2));
-					return;
-				}
-				if (generated == pawn && marriageNameChange == MarriageNameChange.MansName)
-				{
-					pawn2.Name = new NameTriple(nameTriple2.First, nameTriple2.Nick, nameTriple2.Last);
-					if (pawn2.story != null)
-					{
-						pawn2.story.birthLastName = SpouseRelationUtility.GetRandomBirthName(pawn);
-					}
-					request.SetFixedLastName(nameTriple2.Last);
-				}
+				request.SetFixedLastName(nameTriple2.Last);
 			}
 		}
-
-		
-		public const float NoNameChangeOnMarriageChance = 0.25f;
-
-		
-		public const float WomansNameChangeOnMarriageChance = 0.05f;
-
-		
-		public const float MansNameOnMarriageChance = 0.7f;
-
-		
-		public const float ChanceForSpousesToHaveTheSameName = 0.75f;
 	}
 }

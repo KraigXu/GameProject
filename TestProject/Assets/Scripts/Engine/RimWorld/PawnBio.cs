@@ -1,24 +1,30 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[CaseInsensitiveXMLParsing]
 	public class PawnBio
 	{
-		
-		
+		public GenderPossibility gender;
+
+		public NameTriple name;
+
+		public Backstory childhood;
+
+		public Backstory adulthood;
+
+		public bool pirateKing;
+
 		public PawnBioType BioType
 		{
 			get
 			{
-				if (this.pirateKing)
+				if (pirateKing)
 				{
 					return PawnBioType.PirateKing;
 				}
-				if (this.adulthood != null)
+				if (adulthood != null)
 				{
 					return PawnBioType.BackstoryInGame;
 				}
@@ -26,92 +32,55 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void PostLoad()
 		{
-			if (this.childhood != null)
+			if (childhood != null)
 			{
-				this.childhood.PostLoad();
+				childhood.PostLoad();
 			}
-			if (this.adulthood != null)
+			if (adulthood != null)
 			{
-				this.adulthood.PostLoad();
+				adulthood.PostLoad();
 			}
 		}
 
-		
 		public void ResolveReferences()
 		{
-			if (this.adulthood.spawnCategories.Count == 1 && this.adulthood.spawnCategories[0] == "Trader")
+			if (adulthood.spawnCategories.Count == 1 && adulthood.spawnCategories[0] == "Trader")
 			{
-				this.adulthood.spawnCategories.Add("Civil");
+				adulthood.spawnCategories.Add("Civil");
 			}
-			if (this.childhood != null)
+			if (childhood != null)
 			{
-				this.childhood.ResolveReferences();
+				childhood.ResolveReferences();
 			}
-			if (this.adulthood != null)
+			if (adulthood != null)
 			{
-				this.adulthood.ResolveReferences();
+				adulthood.ResolveReferences();
 			}
 		}
 
-		
 		public IEnumerable<string> ConfigErrors()
 		{
-			if (this.childhood != null)
+			if (childhood != null)
 			{
-				foreach (string text in this.childhood.ConfigErrors(true))
+				foreach (string item in childhood.ConfigErrors(ignoreNoSpawnCategories: true))
 				{
-					yield return string.Concat(new object[]
-					{
-						this.name,
-						", ",
-						this.childhood.title,
-						": ",
-						text
-					});
+					yield return name + ", " + childhood.title + ": " + item;
 				}
-				IEnumerator<string> enumerator = null;
 			}
-			if (this.adulthood != null)
+			if (adulthood != null)
 			{
-				foreach (string text2 in this.adulthood.ConfigErrors(false))
+				foreach (string item2 in adulthood.ConfigErrors(ignoreNoSpawnCategories: false))
 				{
-					yield return string.Concat(new object[]
-					{
-						this.name,
-						", ",
-						this.adulthood.title,
-						": ",
-						text2
-					});
+					yield return name + ", " + adulthood.title + ": " + item2;
 				}
-				IEnumerator<string> enumerator = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public override string ToString()
 		{
-			return "PawnBio(" + this.name + ")";
+			return "PawnBio(" + name + ")";
 		}
-
-		
-		public GenderPossibility gender;
-
-		
-		public NameTriple name;
-
-		
-		public Backstory childhood;
-
-		
-		public Backstory adulthood;
-
-		
-		public bool pirateKing;
 	}
 }

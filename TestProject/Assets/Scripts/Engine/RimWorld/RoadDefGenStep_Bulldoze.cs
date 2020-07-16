@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoadDefGenStep_Bulldoze : RoadDefGenStep
 	{
-		
 		public override void Place(Map map, IntVec3 tile, TerrainDef rockDef, IntVec3 origin, GenStep_Roads.DistanceElement[,] distance)
 		{
 			while (tile.Impassable(map))
@@ -15,7 +12,7 @@ namespace RimWorld
 				{
 					if (thing.def.passability == Traversability.Impassable)
 					{
-						thing.Destroy(DestroyMode.Vanish);
+						thing.Destroy();
 						break;
 					}
 				}

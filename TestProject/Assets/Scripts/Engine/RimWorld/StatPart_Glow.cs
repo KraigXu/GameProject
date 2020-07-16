@@ -1,45 +1,42 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_Glow : StatPart
 	{
-		
+		private bool humanlikeOnly;
+
+		private SimpleCurve factorFromGlowCurve;
+
 		public override IEnumerable<string> ConfigErrors()
 		{
-			if (this.factorFromGlowCurve == null)
+			if (factorFromGlowCurve == null)
 			{
 				yield return "factorFromLightCurve is null.";
 			}
-			yield break;
 		}
 
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
-			if (req.HasThing && this.ActiveFor(req.Thing))
+			if (req.HasThing && ActiveFor(req.Thing))
 			{
-				val *= this.FactorFromGlow(req.Thing);
+				val *= FactorFromGlow(req.Thing);
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
-			if (req.HasThing && this.ActiveFor(req.Thing))
+			if (req.HasThing && ActiveFor(req.Thing))
 			{
-				return "StatsReport_LightMultiplier".Translate(this.GlowLevel(req.Thing).ToStringPercent()) + ": x" + this.FactorFromGlow(req.Thing).ToStringPercent();
+				return "StatsReport_LightMultiplier".Translate(GlowLevel(req.Thing).ToStringPercent()) + ": x" + FactorFromGlow(req.Thing).ToStringPercent();
 			}
 			return null;
 		}
 
-		
 		private bool ActiveFor(Thing t)
 		{
-			if (this.humanlikeOnly)
+			if (humanlikeOnly)
 			{
 				Pawn pawn = t as Pawn;
 				if (pawn != null && !pawn.RaceProps.Humanlike)
@@ -50,22 +47,14 @@ namespace RimWorld
 			return t.Spawned;
 		}
 
-		
 		private float GlowLevel(Thing t)
 		{
-			return t.Map.glowGrid.GameGlowAt(t.Position, false);
+			return t.Map.glowGrid.GameGlowAt(t.Position);
 		}
 
-		
 		private float FactorFromGlow(Thing t)
 		{
-			return this.factorFromGlowCurve.Evaluate(this.GlowLevel(t));
+			return factorFromGlowCurve.Evaluate(GlowLevel(t));
 		}
-
-		
-		private bool humanlikeOnly;
-
-		
-		private SimpleCurve factorFromGlowCurve;
 	}
 }

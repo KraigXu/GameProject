@@ -1,33 +1,30 @@
-﻿using System;
 using RimWorld;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class Stance_Warmup : Stance_Busy
 	{
-		
+		private Sustainer sustainer;
+
+		private bool targetStartedDowned;
+
 		public Stance_Warmup()
 		{
 		}
 
-		
-		public Stance_Warmup(int ticks, LocalTargetInfo focusTarg, Verb verb) : base(ticks, focusTarg, verb)
+		public Stance_Warmup(int ticks, LocalTargetInfo focusTarg, Verb verb)
+			: base(ticks, focusTarg, verb)
 		{
 			if (focusTarg.HasThing && focusTarg.Thing is Pawn)
 			{
 				Pawn pawn = (Pawn)focusTarg.Thing;
-				this.targetStartedDowned = pawn.Downed;
+				targetStartedDowned = pawn.Downed;
 				if (pawn.apparel != null)
 				{
 					for (int i = 0; i < pawn.apparel.WornApparelCount; i++)
 					{
-						ShieldBelt shieldBelt = pawn.apparel.WornApparel[i] as ShieldBelt;
-						if (shieldBelt != null)
-						{
-							shieldBelt.KeepDisplaying();
-						}
+						(pawn.apparel.WornApparel[i] as ShieldBelt)?.KeepDisplaying();
 					}
 				}
 			}
@@ -36,69 +33,58 @@ namespace Verse
 				SoundInfo info = SoundInfo.InMap(verb.caster, MaintenanceType.PerTick);
 				if (verb.CasterIsPawn)
 				{
-					info.pitchFactor = 1f / verb.CasterPawn.GetStatValue(StatDefOf.AimingDelayFactor, true);
+					info.pitchFactor = 1f / verb.CasterPawn.GetStatValue(StatDefOf.AimingDelayFactor);
 				}
-				this.sustainer = verb.verbProps.soundAiming.TrySpawnSustainer(info);
+				sustainer = verb.verbProps.soundAiming.TrySpawnSustainer(info);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.targetStartedDowned, "targetStartDowned", false, false);
+			Scribe_Values.Look(ref targetStartedDowned, "targetStartDowned", defaultValue: false);
 		}
 
-		
 		public override void StanceDraw()
 		{
-			if (Find.Selector.IsSelected(this.stanceTracker.pawn))
+			if (Find.Selector.IsSelected(stanceTracker.pawn))
 			{
-				GenDraw.DrawAimPie(this.stanceTracker.pawn, this.focusTarg, (int)((float)this.ticksLeft * this.pieSizeFactor), 0.2f);
+				GenDraw.DrawAimPie(stanceTracker.pawn, focusTarg, (int)((float)ticksLeft * pieSizeFactor), 0.2f);
 			}
 		}
 
-		
 		public override void StanceTick()
 		{
-			if (this.sustainer != null && !this.sustainer.Ended)
+			if (sustainer != null && !sustainer.Ended)
 			{
-				this.sustainer.Maintain();
+				sustainer.Maintain();
 			}
-			if (!this.targetStartedDowned && this.focusTarg.HasThing && this.focusTarg.Thing is Pawn && ((Pawn)this.focusTarg.Thing).Downed)
+			if (!targetStartedDowned && focusTarg.HasThing && focusTarg.Thing is Pawn && ((Pawn)focusTarg.Thing).Downed)
 			{
-				this.stanceTracker.SetStance(new Stance_Mobile());
+				stanceTracker.SetStance(new Stance_Mobile());
 				return;
 			}
-			if (this.focusTarg.HasThing && (!this.focusTarg.Thing.Spawned || this.verb == null || !this.verb.CanHitTargetFrom(base.Pawn.Position, this.focusTarg)))
+			if (focusTarg.HasThing && (!focusTarg.Thing.Spawned || verb == null || !verb.CanHitTargetFrom(base.Pawn.Position, focusTarg)))
 			{
-				this.stanceTracker.SetStance(new Stance_Mobile());
+				stanceTracker.SetStance(new Stance_Mobile());
 				return;
 			}
-			if (this.focusTarg == base.Pawn.mindState.enemyTarget)
+			if (focusTarg == base.Pawn.mindState.enemyTarget)
 			{
 				base.Pawn.mindState.Notify_EngagedTarget();
 			}
 			base.StanceTick();
 		}
 
-		
 		public void Interrupt()
 		{
 			base.Expire();
 		}
 
-		
 		protected override void Expire()
 		{
-			this.verb.WarmupComplete();
+			verb.WarmupComplete();
 			base.Expire();
 		}
-
-		
-		private Sustainer sustainer;
-
-		
-		private bool targetStartedDowned;
 	}
 }

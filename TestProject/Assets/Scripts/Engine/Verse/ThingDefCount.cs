@@ -1,126 +1,82 @@
-﻿using System;
 using RimWorld;
+using System;
 
 namespace Verse
 {
-	
 	public struct ThingDefCount : IEquatable<ThingDefCount>, IExposable
 	{
-		
-		
-		public ThingDef ThingDef
-		{
-			get
-			{
-				return this.thingDef;
-			}
-		}
+		private ThingDef thingDef;
 
-		
-		
-		public int Count
-		{
-			get
-			{
-				return this.count;
-			}
-		}
+		private int count;
 
-		
-		
-		public string Label
-		{
-			get
-			{
-				return GenLabel.ThingLabel(this.thingDef, null, this.count);
-			}
-		}
+		public ThingDef ThingDef => thingDef;
 
-		
-		
-		public string LabelCap
-		{
-			get
-			{
-				return this.Label.CapitalizeFirst(this.thingDef);
-			}
-		}
+		public int Count => count;
 
-		
+		public string Label => GenLabel.ThingLabel(thingDef, null, count);
+
+		public string LabelCap => Label.CapitalizeFirst(thingDef);
+
 		public ThingDefCount(ThingDef thingDef, int count)
 		{
 			if (count < 0)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Tried to set ThingDefCount count to ",
-					count,
-					". thingDef=",
-					thingDef
-				}), false);
+				Log.Warning("Tried to set ThingDefCount count to " + count + ". thingDef=" + thingDef);
 				count = 0;
 			}
 			this.thingDef = thingDef;
 			this.count = count;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<ThingDef>(ref this.thingDef, "thingDef");
-			Scribe_Values.Look<int>(ref this.count, "count", 1, false);
+			Scribe_Defs.Look(ref thingDef, "thingDef");
+			Scribe_Values.Look(ref count, "count", 1);
 		}
 
-		
 		public ThingDefCount WithCount(int newCount)
 		{
-			return new ThingDefCount(this.thingDef, newCount);
+			return new ThingDefCount(thingDef, newCount);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is ThingDefCount && this.Equals((ThingDefCount)obj);
+			if (!(obj is ThingDefCount))
+			{
+				return false;
+			}
+			return Equals((ThingDefCount)obj);
 		}
 
-		
 		public bool Equals(ThingDefCount other)
 		{
 			return this == other;
 		}
 
-		
 		public static bool operator ==(ThingDefCount a, ThingDefCount b)
 		{
-			return a.thingDef == b.thingDef && a.count == b.count;
+			if (a.thingDef == b.thingDef)
+			{
+				return a.count == b.count;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(ThingDefCount a, ThingDefCount b)
 		{
 			return !(a == b);
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombine<ThingDef>(this.count, this.thingDef);
+			return Gen.HashCombine(count, thingDef);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"(",
-				this.count,
-				"x ",
-				(this.thingDef != null) ? this.thingDef.defName : "null",
-				")"
-			});
+			return "(" + count + "x " + ((thingDef != null) ? thingDef.defName : "null") + ")";
 		}
 
-		
 		public static implicit operator ThingDefCount(ThingDefCountClass t)
 		{
 			if (t == null)
@@ -129,11 +85,5 @@ namespace Verse
 			}
 			return new ThingDefCount(t.thingDef, t.count);
 		}
-
-		
-		private ThingDef thingDef;
-
-		
-		private int count;
 	}
 }

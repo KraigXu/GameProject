@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,10 +5,8 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class Toils_Refuel
 	{
-		
 		public static Toil FinalizeRefueling(TargetIndex refuelableInd, TargetIndex fuelInd)
 		{
 			Toil toil = new Toil();
@@ -17,16 +14,17 @@ namespace RimWorld
 			{
 				Job curJob = toil.actor.CurJob;
 				Thing thing = curJob.GetTarget(refuelableInd).Thing;
-				if (toil.actor.CurJob.placedThings.NullOrEmpty<ThingCountClass>())
+				if (toil.actor.CurJob.placedThings.NullOrEmpty())
 				{
 					thing.TryGetComp<CompRefuelable>().Refuel(new List<Thing>
 					{
 						curJob.GetTarget(fuelInd).Thing
 					});
-					return;
 				}
-				thing.TryGetComp<CompRefuelable>().Refuel((from p in toil.actor.CurJob.placedThings
-				select p.thing).ToList<Thing>());
+				else
+				{
+					thing.TryGetComp<CompRefuelable>().Refuel(toil.actor.CurJob.placedThings.Select((ThingCountClass p) => p.thing).ToList());
+				}
 			};
 			toil.defaultCompleteMode = ToilCompleteMode.Instant;
 			return toil;

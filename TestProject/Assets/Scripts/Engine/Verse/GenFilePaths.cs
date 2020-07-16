@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,452 +6,53 @@ using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class GenFilePaths
 	{
-		
-		
-		public static string SaveDataFolderPath
-		{
-			get
-			{
-				if (GenFilePaths.saveDataPath == null)
-				{
-					string text;
-					if (GenCommandLine.TryGetCommandLineArg("savedatafolder", out text))
-					{
-						text.TrimEnd(new char[]
-						{
-							'\\',
-							'/'
-						});
-						if (text == "")
-						{
-							text = (Path.DirectorySeparatorChar.ToString() ?? "");
-						}
-						GenFilePaths.saveDataPath = text;
-						Log.Message("Save data folder overridden to " + GenFilePaths.saveDataPath, false);
-					}
-					else
-					{
-						DirectoryInfo directoryInfo = new DirectoryInfo(UnityData.dataPath);
-						if (UnityData.isEditor)
-						{
-							GenFilePaths.saveDataPath = Path.Combine(directoryInfo.Parent.ToString(), "SaveData");
-						}
-						else if (UnityData.platform == RuntimePlatform.OSXPlayer || UnityData.platform == RuntimePlatform.OSXEditor)
-						{
-							string path = Path.Combine(Directory.GetParent(UnityData.persistentDataPath).ToString(), "RimWorld");
-							if (!Directory.Exists(path))
-							{
-								Directory.CreateDirectory(path);
-							}
-							GenFilePaths.saveDataPath = path;
-						}
-						else
-						{
-							GenFilePaths.saveDataPath = Application.persistentDataPath;
-						}
-					}
-					DirectoryInfo directoryInfo2 = new DirectoryInfo(GenFilePaths.saveDataPath);
-					if (!directoryInfo2.Exists)
-					{
-						directoryInfo2.Create();
-					}
-				}
-				return GenFilePaths.saveDataPath;
-			}
-		}
-
-		
-		
-		public static string ScenarioPreviewImagePath
-		{
-			get
-			{
-				if (!UnityData.isEditor)
-				{
-					return Path.Combine(GenFilePaths.ExecutableDir.FullName, "ScenarioPreview.jpg");
-				}
-				return Path.Combine(Path.Combine(Path.Combine(GenFilePaths.ExecutableDir.FullName, "PlatformSpecific"), "All"), "ScenarioPreview.jpg");
-			}
-		}
-
-		
-		
-		private static DirectoryInfo ExecutableDir
-		{
-			get
-			{
-				return new DirectoryInfo(UnityData.dataPath).Parent;
-			}
-		}
-
-		
-		
-		public static string ModsFolderPath
-		{
-			get
-			{
-				if (GenFilePaths.modsFolderPath == null)
-				{
-					GenFilePaths.modsFolderPath = GenFilePaths.GetOrCreateModsFolder("Mods");
-				}
-				return GenFilePaths.modsFolderPath;
-			}
-		}
-
-		
-		
-		public static string OfficialModsFolderPath
-		{
-			get
-			{
-				if (GenFilePaths.officialModsFolderPath == null)
-				{
-					GenFilePaths.officialModsFolderPath = GenFilePaths.GetOrCreateModsFolder("Data");
-				}
-				return GenFilePaths.officialModsFolderPath;
-			}
-		}
-
-		
-		
-		public static string ConfigFolderPath
-		{
-			get
-			{
-				return GenFilePaths.FolderUnderSaveData("Config");
-			}
-		}
-
-		
-		
-		private static string SavedGamesFolderPath
-		{
-			get
-			{
-				return GenFilePaths.FolderUnderSaveData("Saves");
-			}
-		}
-
-		
-		
-		private static string ScenariosFolderPath
-		{
-			get
-			{
-				return GenFilePaths.FolderUnderSaveData("Scenarios");
-			}
-		}
-
-		
-		
-		private static string ExternalHistoryFolderPath
-		{
-			get
-			{
-				return GenFilePaths.FolderUnderSaveData("External");
-			}
-		}
-
-		
-		
-		public static string ScreenshotFolderPath
-		{
-			get
-			{
-				return GenFilePaths.FolderUnderSaveData("Screenshots");
-			}
-		}
-
-		
-		
-		public static string DevOutputFolderPath
-		{
-			get
-			{
-				return GenFilePaths.FolderUnderSaveData("DevOutput");
-			}
-		}
-
-		
-		
-		public static string ModsConfigFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.ConfigFolderPath, "ModsConfig.xml");
-			}
-		}
-
-		
-		
-		public static string ConceptKnowledgeFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.ConfigFolderPath, "Knowledge.xml");
-			}
-		}
-
-		
-		
-		public static string PrefsFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.ConfigFolderPath, "Prefs.xml");
-			}
-		}
-
-		
-		
-		public static string KeyPrefsFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.ConfigFolderPath, "KeyPrefs.xml");
-			}
-		}
-
-		
-		
-		public static string LastPlayedVersionFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.ConfigFolderPath, "LastPlayedVersion.txt");
-			}
-		}
-
-		
-		
-		public static string DevModePermanentlyDisabledFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.ConfigFolderPath, "DevModeDisabled");
-			}
-		}
-
-		
-		
-		public static string BackstoryOutputFilePath
-		{
-			get
-			{
-				return Path.Combine(GenFilePaths.DevOutputFolderPath, "Fresh_Backstories.xml");
-			}
-		}
-
-		
-		
-		public static string TempFolderPath
-		{
-			get
-			{
-				return Application.temporaryCachePath;
-			}
-		}
-
-		
-		
-		public static IEnumerable<FileInfo> AllSavedGameFiles
-		{
-			get
-			{
-				DirectoryInfo directoryInfo = new DirectoryInfo(GenFilePaths.SavedGamesFolderPath);
-				if (!directoryInfo.Exists)
-				{
-					directoryInfo.Create();
-				}
-				return from f in directoryInfo.GetFiles()
-				where f.Extension == ".rws"
-				orderby f.LastWriteTime descending
-				select f;
-			}
-		}
-
-		
-		
-		public static IEnumerable<FileInfo> AllCustomScenarioFiles
-		{
-			get
-			{
-				DirectoryInfo directoryInfo = new DirectoryInfo(GenFilePaths.ScenariosFolderPath);
-				if (!directoryInfo.Exists)
-				{
-					directoryInfo.Create();
-				}
-				return from f in directoryInfo.GetFiles()
-				where f.Extension == ".rsc"
-				orderby f.LastWriteTime descending
-				select f;
-			}
-		}
-
-		
-		
-		public static IEnumerable<FileInfo> AllExternalHistoryFiles
-		{
-			get
-			{
-				DirectoryInfo directoryInfo = new DirectoryInfo(GenFilePaths.ExternalHistoryFolderPath);
-				if (!directoryInfo.Exists)
-				{
-					directoryInfo.Create();
-				}
-				return from f in directoryInfo.GetFiles()
-				where f.Extension == ".rwh"
-				orderby f.LastWriteTime descending
-				select f;
-			}
-		}
-
-		
-		private static string FolderUnderSaveData(string folderName)
-		{
-			string text = Path.Combine(GenFilePaths.SaveDataFolderPath, folderName);
-			DirectoryInfo directoryInfo = new DirectoryInfo(text);
-			if (!directoryInfo.Exists)
-			{
-				directoryInfo.Create();
-			}
-			return text;
-		}
-
-		
-		public static string FilePathForSavedGame(string gameName)
-		{
-			return Path.Combine(GenFilePaths.SavedGamesFolderPath, gameName + ".rws");
-		}
-
-		
-		public static string AbsPathForScenario(string scenarioName)
-		{
-			return Path.Combine(GenFilePaths.ScenariosFolderPath, scenarioName + ".rsc");
-		}
-
-		
-		public static string ContentPath<T>()
-		{
-			if (typeof(T) == typeof(AudioClip))
-			{
-				return "Sounds/";
-			}
-			if (typeof(T) == typeof(Texture2D))
-			{
-				return "Textures/";
-			}
-			if (typeof(T) == typeof(string))
-			{
-				return "Strings/";
-			}
-			throw new ArgumentException();
-		}
-
-		
-		private static string GetOrCreateModsFolder(string folderName)
-		{
-			DirectoryInfo directoryInfo = new DirectoryInfo(UnityData.dataPath);
-			DirectoryInfo directoryInfo2;
-			if (UnityData.isEditor)
-			{
-				directoryInfo2 = directoryInfo;
-			}
-			else
-			{
-				directoryInfo2 = directoryInfo.Parent;
-			}
-			string text = Path.Combine(directoryInfo2.ToString(), folderName);
-			DirectoryInfo directoryInfo3 = new DirectoryInfo(text);
-			if (!directoryInfo3.Exists)
-			{
-				directoryInfo3.Create();
-			}
-			return text;
-		}
-
-		
-		public static string SafeURIForUnityWWWFromPath(string rawPath)
-		{
-			string text = rawPath;
-			for (int i = 0; i < GenFilePaths.FilePathRaw.Length; i++)
-			{
-				text = text.Replace(GenFilePaths.FilePathRaw[i], GenFilePaths.FilePathSafe[i]);
-			}
-			return "file:///" + text;
-		}
-
-		
 		private static string saveDataPath = null;
 
-		
 		private static string modsFolderPath = null;
 
-		
 		private static string officialModsFolderPath = null;
 
-		
 		public const string SoundsFolder = "Sounds/";
 
-		
 		public const string SoundsFolderName = "Sounds";
 
-		
 		public const string TexturesFolder = "Textures/";
 
-		
 		public const string TexturesFolderName = "Textures";
 
-		
 		public const string StringsFolder = "Strings/";
 
-		
 		public const string DefsFolder = "Defs/";
 
-		
 		public const string PatchesFolder = "Patches/";
 
-		
 		public const string AssetBundlesFolderName = "AssetBundles";
 
-		
 		public const string AssetsFolderName = "Assets";
 
-		
 		public const string ResourcesFolderName = "Resources";
 
-		
 		public const string ModsFolderName = "Mods";
 
-		
 		public const string AssembliesFolder = "Assemblies/";
 
-		
 		public const string OfficialModsFolderName = "Data";
 
-		
 		public const string CoreFolderName = "Core";
 
-		
 		public const string BackstoriesPath = "Backstories";
 
-		
 		public const string SavedGameExtension = ".rws";
 
-		
 		public const string ScenarioExtension = ".rsc";
 
-		
 		public const string ExternalHistoryFileExtension = ".rwh";
 
-		
 		private const string SaveDataFolderCommand = "savedatafolder";
 
-		
-		private static readonly string[] FilePathRaw = new string[]
+		private static readonly string[] FilePathRaw = new string[73]
 		{
 			"Ž",
 			"ž",
@@ -463,7 +64,7 @@ namespace Verse
 			"¥",
 			"¦",
 			"§",
-			"¨",
+			"\u00a8",
 			"©",
 			"ª",
 			"À",
@@ -528,8 +129,7 @@ namespace Verse
 			"ÿ"
 		};
 
-		
-		private static readonly string[] FilePathSafe = new string[]
+		private static readonly string[] FilePathSafe = new string[73]
 		{
 			"%8E",
 			"%9E",
@@ -605,5 +205,227 @@ namespace Verse
 			"%FE",
 			"%FF"
 		};
+
+		public static string SaveDataFolderPath
+		{
+			get
+			{
+				if (saveDataPath == null)
+				{
+					if (GenCommandLine.TryGetCommandLineArg("savedatafolder", out string value))
+					{
+						value.TrimEnd('\\', '/');
+						if (value == "")
+						{
+							value = (Path.DirectorySeparatorChar.ToString() ?? "");
+						}
+						saveDataPath = value;
+						Log.Message("Save data folder overridden to " + saveDataPath);
+					}
+					else
+					{
+						DirectoryInfo directoryInfo = new DirectoryInfo(UnityData.dataPath);
+						if (UnityData.isEditor)
+						{
+							saveDataPath = Path.Combine(directoryInfo.Parent.ToString(), "SaveData");
+						}
+						else if (UnityData.platform == RuntimePlatform.OSXPlayer || UnityData.platform == RuntimePlatform.OSXEditor)
+						{
+							string path = Path.Combine(Directory.GetParent(UnityData.persistentDataPath).ToString(), "RimWorld");
+							if (!Directory.Exists(path))
+							{
+								Directory.CreateDirectory(path);
+							}
+							saveDataPath = path;
+						}
+						else
+						{
+							saveDataPath = Application.persistentDataPath;
+						}
+					}
+					DirectoryInfo directoryInfo2 = new DirectoryInfo(saveDataPath);
+					if (!directoryInfo2.Exists)
+					{
+						directoryInfo2.Create();
+					}
+				}
+				return saveDataPath;
+			}
+		}
+
+		public static string ScenarioPreviewImagePath
+		{
+			get
+			{
+				if (!UnityData.isEditor)
+				{
+					return Path.Combine(ExecutableDir.FullName, "ScenarioPreview.jpg");
+				}
+				return Path.Combine(Path.Combine(Path.Combine(ExecutableDir.FullName, "PlatformSpecific"), "All"), "ScenarioPreview.jpg");
+			}
+		}
+
+		private static DirectoryInfo ExecutableDir => new DirectoryInfo(UnityData.dataPath).Parent;
+
+		public static string ModsFolderPath
+		{
+			get
+			{
+				if (modsFolderPath == null)
+				{
+					modsFolderPath = GetOrCreateModsFolder("Mods");
+				}
+				return modsFolderPath;
+			}
+		}
+
+		public static string OfficialModsFolderPath
+		{
+			get
+			{
+				if (officialModsFolderPath == null)
+				{
+					officialModsFolderPath = GetOrCreateModsFolder("Data");
+				}
+				return officialModsFolderPath;
+			}
+		}
+
+		public static string ConfigFolderPath => FolderUnderSaveData("Config");
+
+		private static string SavedGamesFolderPath => FolderUnderSaveData("Saves");
+
+		private static string ScenariosFolderPath => FolderUnderSaveData("Scenarios");
+
+		private static string ExternalHistoryFolderPath => FolderUnderSaveData("External");
+
+		public static string ScreenshotFolderPath => FolderUnderSaveData("Screenshots");
+
+		public static string DevOutputFolderPath => FolderUnderSaveData("DevOutput");
+
+		public static string ModsConfigFilePath => Path.Combine(ConfigFolderPath, "ModsConfig.xml");
+
+		public static string ConceptKnowledgeFilePath => Path.Combine(ConfigFolderPath, "Knowledge.xml");
+
+		public static string PrefsFilePath => Path.Combine(ConfigFolderPath, "Prefs.xml");
+
+		public static string KeyPrefsFilePath => Path.Combine(ConfigFolderPath, "KeyPrefs.xml");
+
+		public static string LastPlayedVersionFilePath => Path.Combine(ConfigFolderPath, "LastPlayedVersion.txt");
+
+		public static string DevModePermanentlyDisabledFilePath => Path.Combine(ConfigFolderPath, "DevModeDisabled");
+
+		public static string BackstoryOutputFilePath => Path.Combine(DevOutputFolderPath, "Fresh_Backstories.xml");
+
+		public static string TempFolderPath => Application.temporaryCachePath;
+
+		public static IEnumerable<FileInfo> AllSavedGameFiles
+		{
+			get
+			{
+				DirectoryInfo directoryInfo = new DirectoryInfo(SavedGamesFolderPath);
+				if (!directoryInfo.Exists)
+				{
+					directoryInfo.Create();
+				}
+				return from f in directoryInfo.GetFiles()
+					where f.Extension == ".rws"
+					orderby f.LastWriteTime descending
+					select f;
+			}
+		}
+
+		public static IEnumerable<FileInfo> AllCustomScenarioFiles
+		{
+			get
+			{
+				DirectoryInfo directoryInfo = new DirectoryInfo(ScenariosFolderPath);
+				if (!directoryInfo.Exists)
+				{
+					directoryInfo.Create();
+				}
+				return from f in directoryInfo.GetFiles()
+					where f.Extension == ".rsc"
+					orderby f.LastWriteTime descending
+					select f;
+			}
+		}
+
+		public static IEnumerable<FileInfo> AllExternalHistoryFiles
+		{
+			get
+			{
+				DirectoryInfo directoryInfo = new DirectoryInfo(ExternalHistoryFolderPath);
+				if (!directoryInfo.Exists)
+				{
+					directoryInfo.Create();
+				}
+				return from f in directoryInfo.GetFiles()
+					where f.Extension == ".rwh"
+					orderby f.LastWriteTime descending
+					select f;
+			}
+		}
+
+		private static string FolderUnderSaveData(string folderName)
+		{
+			string text = Path.Combine(SaveDataFolderPath, folderName);
+			DirectoryInfo directoryInfo = new DirectoryInfo(text);
+			if (!directoryInfo.Exists)
+			{
+				directoryInfo.Create();
+			}
+			return text;
+		}
+
+		public static string FilePathForSavedGame(string gameName)
+		{
+			return Path.Combine(SavedGamesFolderPath, gameName + ".rws");
+		}
+
+		public static string AbsPathForScenario(string scenarioName)
+		{
+			return Path.Combine(ScenariosFolderPath, scenarioName + ".rsc");
+		}
+
+		public static string ContentPath<T>()
+		{
+			if (typeof(T) == typeof(AudioClip))
+			{
+				return "Sounds/";
+			}
+			if (typeof(T) == typeof(Texture2D))
+			{
+				return "Textures/";
+			}
+			if (typeof(T) == typeof(string))
+			{
+				return "Strings/";
+			}
+			throw new ArgumentException();
+		}
+
+		private static string GetOrCreateModsFolder(string folderName)
+		{
+			DirectoryInfo directoryInfo = new DirectoryInfo(UnityData.dataPath);
+			DirectoryInfo directoryInfo2 = (!UnityData.isEditor) ? directoryInfo.Parent : directoryInfo;
+			string text = Path.Combine(directoryInfo2.ToString(), folderName);
+			DirectoryInfo directoryInfo3 = new DirectoryInfo(text);
+			if (!directoryInfo3.Exists)
+			{
+				directoryInfo3.Create();
+			}
+			return text;
+		}
+
+		public static string SafeURIForUnityWWWFromPath(string rawPath)
+		{
+			string text = rawPath;
+			for (int i = 0; i < FilePathRaw.Length; i++)
+			{
+				text = text.Replace(FilePathRaw[i], FilePathSafe[i]);
+			}
+			return "file:///" + text;
+		}
 	}
 }

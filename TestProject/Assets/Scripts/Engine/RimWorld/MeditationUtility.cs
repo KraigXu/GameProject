@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,32 +7,27 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class MeditationUtility
 	{
-		
+		public static float FocusObjectSearchRadius = 3.9f;
+
+		private static float WanderRadius = 10f;
+
+		private static Dictionary<MeditationFocusDef, string> focusObjectsPerTypeCache = new Dictionary<MeditationFocusDef, string>();
+
 		public static Job GetMeditationJob(Pawn pawn, bool forJoy = false)
 		{
-			MeditationSpotAndFocus meditationSpotAndFocus = MeditationUtility.FindMeditationSpot(pawn);
+			MeditationSpotAndFocus meditationSpotAndFocus = FindMeditationSpot(pawn);
 			if (meditationSpotAndFocus.IsValid)
 			{
 				Building_Throne t;
-				Job job;
-				if ((t = (meditationSpotAndFocus.focus.Thing as Building_Throne)) != null)
-				{
-					job = JobMaker.MakeJob(JobDefOf.Reign, t, null, t);
-				}
-				else
-				{
-					job = JobMaker.MakeJob(JobDefOf.Meditate, meditationSpotAndFocus.spot, null, meditationSpotAndFocus.focus);
-				}
+				Job job = ((t = (meditationSpotAndFocus.focus.Thing as Building_Throne)) == null) ? JobMaker.MakeJob(JobDefOf.Meditate, meditationSpotAndFocus.spot, null, meditationSpotAndFocus.focus) : JobMaker.MakeJob(JobDefOf.Reign, t, null, t);
 				job.ignoreJoyTimeAssignment = !forJoy;
 				return job;
 			}
 			return null;
 		}
 
-		
 		public static MeditationSpotAndFocus FindMeditationSpot(Pawn pawn)
 		{
 			float num = float.MinValue;
@@ -40,38 +35,38 @@ namespace RimWorld
 			LocalTargetInfo focus = LocalTargetInfo.Invalid;
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Psyfocus meditation is a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it.", 657324, false);
+				Log.ErrorOnce("Psyfocus meditation is a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it.", 657324);
 				return new MeditationSpotAndFocus(spot, focus);
 			}
 			Room ownedRoom = pawn.ownership.OwnedRoom;
-			foreach (LocalTargetInfo localTargetInfo in MeditationUtility.AllMeditationSpotCandidates(pawn, true))
+			foreach (LocalTargetInfo item in AllMeditationSpotCandidates(pawn))
 			{
-				if (MeditationUtility.SafeEnvironmentalConditions(pawn, localTargetInfo.Cell, pawn.Map))
+				if (SafeEnvironmentalConditions(pawn, item.Cell, pawn.Map))
 				{
-					LocalTargetInfo localTargetInfo2 = (localTargetInfo.Thing is Building_Throne) ? localTargetInfo.Thing : MeditationUtility.BestFocusAt(localTargetInfo, pawn);
-					float num2 = 1f / Mathf.Max((float)localTargetInfo.Cell.DistanceToSquared(pawn.Position), 0.1f);
-					if (pawn.HasPsylink && localTargetInfo2.IsValid)
+					LocalTargetInfo localTargetInfo = (item.Thing is Building_Throne) ? ((LocalTargetInfo)item.Thing) : BestFocusAt(item, pawn);
+					float num2 = 1f / Mathf.Max(item.Cell.DistanceToSquared(pawn.Position), 0.1f);
+					if (pawn.HasPsylink && localTargetInfo.IsValid)
 					{
-						num2 += localTargetInfo2.Thing.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn, true) * 100f;
+						num2 += localTargetInfo.Thing.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn) * 100f;
 					}
-					Room room = localTargetInfo.Cell.GetRoom(pawn.Map, RegionType.Set_Passable);
+					Room room = item.Cell.GetRoom(pawn.Map);
 					if (room != null && ownedRoom == room)
 					{
 						num2 += 1f;
 					}
 					Building building;
-					if (localTargetInfo.Thing != null && (building = (localTargetInfo.Thing as Building)) != null && building.GetAssignedPawn() == pawn)
+					if (item.Thing != null && (building = (item.Thing as Building)) != null && building.GetAssignedPawn() == pawn)
 					{
 						num2 = float.PositiveInfinity;
 					}
-					if (!localTargetInfo.Cell.Standable(pawn.Map))
+					if (!item.Cell.Standable(pawn.Map))
 					{
 						num2 = float.NegativeInfinity;
 					}
 					if (num2 > num)
 					{
-						spot = localTargetInfo;
-						focus = localTargetInfo2;
+						spot = item;
+						focus = localTargetInfo;
 						num = num2;
 					}
 				}
@@ -79,7 +74,6 @@ namespace RimWorld
 			return new MeditationSpotAndFocus(spot, focus);
 		}
 
-		
 		public static IEnumerable<LocalTargetInfo> AllMeditationSpotCandidates(Pawn pawn, bool allowFallbackSpots = true)
 		{
 			bool flag = false;
@@ -94,45 +88,37 @@ namespace RimWorld
 			}
 			if (!pawn.IsPrisonerOfColony)
 			{
-				IEnumerable<Building> source = pawn.Map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.MeditationSpot);
-				
-				Func<Building, bool> predicate;
-				if ((predicate=default ) == null)
+				foreach (Building item in pawn.Map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.MeditationSpot).Where(delegate(Building s)
 				{
-					predicate = ( delegate(Building s)
+					if (s.IsForbidden(pawn) || !s.Position.Standable(s.Map))
 					{
-						if (s.IsForbidden(pawn) || !s.Position.Standable(s.Map))
-						{
-							return false;
-						}
-						if (s.GetAssignedPawn() != null && s.GetAssignedPawn() != pawn)
-						{
-							return false;
-						}
-						Room room3 = s.GetRoom(RegionType.Set_Passable);
-						return (room3 == null || MeditationUtility.CanUseRoomToMeditate(room3, pawn)) && pawn.CanReserveAndReach(s, PathEndMode.OnCell, pawn.NormalMaxDanger(), 1, -1, null, false);
-					});
-				}
-				foreach (Building t in source.Where(predicate))
+						return false;
+					}
+					if (s.GetAssignedPawn() != null && s.GetAssignedPawn() != pawn)
+					{
+						return false;
+					}
+					Room room4 = s.GetRoom();
+					return (room4 == null || CanUseRoomToMeditate(room4, pawn)) && pawn.CanReserveAndReach(s, PathEndMode.OnCell, pawn.NormalMaxDanger());
+				}))
 				{
-					yield return t;
+					yield return item;
 					flag = true;
 				}
-				IEnumerator<Building> enumerator = null;
 			}
 			if (flag || !allowFallbackSpots)
 			{
 				yield break;
 			}
 			List<Thing> list = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.MeditationFocus);
-			foreach (Thing thing in list)
+			foreach (Thing item2 in list)
 			{
-				if (thing.def != ThingDefOf.Wall)
+				if (item2.def != ThingDefOf.Wall)
 				{
-					Room room = thing.GetRoom(RegionType.Set_Passable);
-					if ((room == null || MeditationUtility.CanUseRoomToMeditate(room, pawn)) && thing.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn, true) > 0f)
+					Room room = item2.GetRoom();
+					if ((room == null || CanUseRoomToMeditate(room, pawn)) && item2.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn) > 0f)
 					{
-						LocalTargetInfo localTargetInfo = MeditationUtility.MeditationSpotForFocus(thing, pawn, null);
+						LocalTargetInfo localTargetInfo = MeditationSpotForFocus(item2, pawn);
 						if (localTargetInfo.IsValid)
 						{
 							yield return localTargetInfo;
@@ -140,74 +126,88 @@ namespace RimWorld
 					}
 				}
 			}
-			List<Thing>.Enumerator enumerator2 = default(List<Thing>.Enumerator);
 			Building_Bed bed = pawn.ownership.OwnedBed;
-			Building_Bed building_Bed = bed;
-			Room room2 = (building_Bed != null) ? building_Bed.GetRoom(RegionType.Set_Passable) : null;
-			IntVec3 c2;
-			if (room2 != null && !room2.PsychologicallyOutdoors && pawn.CanReserveAndReach(bed, PathEndMode.OnCell, pawn.NormalMaxDanger(), 1, -1, null, false))
+			Room room2 = bed?.GetRoom();
+			if (room2 != null && !room2.PsychologicallyOutdoors && pawn.CanReserveAndReach(bed, PathEndMode.OnCell, pawn.NormalMaxDanger()))
 			{
-				foreach (LocalTargetInfo localTargetInfo2 in MeditationUtility.FocusSpotsInTheRoom(pawn, room2))
+				foreach (LocalTargetInfo item3 in FocusSpotsInTheRoom(pawn, room2))
 				{
-					yield return localTargetInfo2;
+					yield return item3;
 				}
-				IEnumerator<LocalTargetInfo> enumerator3 = null;
-				c2 = RCellFinder.RandomWanderDestFor(pawn, bed.Position, MeditationUtility.WanderRadius, (Pawn p, IntVec3 c, IntVec3 r) => c.Standable(p.Map) && c.GetDoor(p.Map) == null && WanderRoomUtility.IsValidWanderDest(p, c, r), pawn.NormalMaxDanger());
+				IntVec3 c2 = RCellFinder.RandomWanderDestFor(pawn, bed.Position, WanderRadius, (Pawn p, IntVec3 c, IntVec3 r) => c.Standable(p.Map) && c.GetDoor(p.Map) == null && WanderRoomUtility.IsValidWanderDest(p, c, r), pawn.NormalMaxDanger());
 				if (c2.IsValid)
 				{
 					yield return c2;
 				}
 			}
-			if (pawn.IsPrisonerOfColony)
+			if (!pawn.IsPrisonerOfColony)
 			{
-				yield break;
-			}
-			IntVec3 colonyWanderRoot = WanderUtility.GetColonyWanderRoot(pawn);
-			c2 = RCellFinder.RandomWanderDestFor(pawn, colonyWanderRoot, MeditationUtility.WanderRadius, delegate(Pawn p, IntVec3 c, IntVec3 r)
-			{
-				if (!c.Standable(p.Map) || c.GetDoor(p.Map) != null || !p.CanReserveAndReach(c, PathEndMode.OnCell, p.NormalMaxDanger(), 1, -1, null, false))
+				IntVec3 colonyWanderRoot = WanderUtility.GetColonyWanderRoot(pawn);
+				IntVec3 c2 = RCellFinder.RandomWanderDestFor(pawn, colonyWanderRoot, WanderRadius, delegate(Pawn p, IntVec3 c, IntVec3 r)
 				{
-					return false;
+					if (!c.Standable(p.Map) || c.GetDoor(p.Map) != null || !p.CanReserveAndReach(c, PathEndMode.OnCell, p.NormalMaxDanger()))
+					{
+						return false;
+					}
+					Room room3 = c.GetRoom(p.Map);
+					return (room3 == null || CanUseRoomToMeditate(room3, pawn)) ? true : false;
+				}, pawn.NormalMaxDanger());
+				if (c2.IsValid)
+				{
+					yield return c2;
 				}
-				Room room3 = c.GetRoom(p.Map, RegionType.Set_Passable);
-				return room3 == null || MeditationUtility.CanUseRoomToMeditate(room3, pawn);
-			}, pawn.NormalMaxDanger());
-			if (c2.IsValid)
-			{
-				yield return c2;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static bool SafeEnvironmentalConditions(Pawn pawn, IntVec3 cell, Map map)
 		{
-			return (!map.gameConditionManager.ConditionIsActive(GameConditionDefOf.ToxicFallout) || cell.Roofed(map)) && cell.GetDangerFor(pawn, map) == Danger.None;
+			if (map.gameConditionManager.ConditionIsActive(GameConditionDefOf.ToxicFallout) && !cell.Roofed(map))
+			{
+				return false;
+			}
+			if (cell.GetDangerFor(pawn, map) != Danger.None)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool CanMeditateNow(Pawn pawn)
 		{
-			return (pawn.needs.rest == null || pawn.needs.rest.CurCategory < RestCategory.VeryTired) && !pawn.needs.food.Starving && pawn.Awake() && pawn.health.hediffSet.BleedRateTotal <= 0f;
+			if (pawn.needs.rest != null && (int)pawn.needs.rest.CurCategory >= 2)
+			{
+				return false;
+			}
+			if (pawn.needs.food.Starving)
+			{
+				return false;
+			}
+			if (!pawn.Awake())
+			{
+				return false;
+			}
+			if (pawn.health.hediffSet.BleedRateTotal > 0f)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static LocalTargetInfo BestFocusAt(LocalTargetInfo spot, Pawn pawn)
 		{
 			float num = 0f;
 			LocalTargetInfo result = LocalTargetInfo.Invalid;
-			foreach (Thing thing in GenRadial.RadialDistinctThingsAround(spot.Cell, pawn.MapHeld, MeditationUtility.FocusObjectSearchRadius, false))
+			foreach (Thing item in GenRadial.RadialDistinctThingsAround(spot.Cell, pawn.MapHeld, FocusObjectSearchRadius, useCenter: false))
 			{
-				if (GenSight.LineOfSightToThing(spot.Cell, thing, pawn.Map, false, null) && !(thing is Building_Throne))
+				if (GenSight.LineOfSightToThing(spot.Cell, item, pawn.Map) && !(item is Building_Throne))
 				{
-					CompMeditationFocus compMeditationFocus = thing.TryGetComp<CompMeditationFocus>();
+					CompMeditationFocus compMeditationFocus = item.TryGetComp<CompMeditationFocus>();
 					if (compMeditationFocus != null && compMeditationFocus.CanPawnUse(pawn))
 					{
-						float statValueForPawn = thing.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn, true);
+						float statValueForPawn = item.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn);
 						if (statValueForPawn > num)
 						{
-							result = thing;
+							result = item;
 							num = statValueForPawn;
 						}
 					}
@@ -216,58 +216,45 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		public static IEnumerable<LocalTargetInfo> FocusSpotsInTheRoom(Pawn pawn, Room r)
 		{
-			foreach (Thing thing in r.ContainedAndAdjacentThings)
+			foreach (Thing containedAndAdjacentThing in r.ContainedAndAdjacentThings)
 			{
-				CompMeditationFocus compMeditationFocus = thing.TryGetComp<CompMeditationFocus>();
-				if (compMeditationFocus != null && compMeditationFocus.CanPawnUse(pawn) && !(thing is Building_Throne) && thing.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn, true) > 0f)
+				CompMeditationFocus compMeditationFocus = containedAndAdjacentThing.TryGetComp<CompMeditationFocus>();
+				if (compMeditationFocus != null && compMeditationFocus.CanPawnUse(pawn) && !(containedAndAdjacentThing is Building_Throne) && containedAndAdjacentThing.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn) > 0f)
 				{
-					LocalTargetInfo localTargetInfo = MeditationUtility.MeditationSpotForFocus(thing, pawn, new Func<IntVec3, bool>(r.ContainsCell));
+					LocalTargetInfo localTargetInfo = MeditationSpotForFocus(containedAndAdjacentThing, pawn, r.ContainsCell);
 					if (localTargetInfo.IsValid)
 					{
 						yield return localTargetInfo;
 					}
 				}
 			}
-			List<Thing>.Enumerator enumerator = default(List<Thing>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public static LocalTargetInfo MeditationSpotForFocus(Thing t, Pawn p, Func<IntVec3, bool> validator = null)
 		{
-			return (from cell in t.OccupiedRect().ExpandedBy(2).AdjacentCellsCardinal
-			where (validator == null || validator(cell)) && !cell.IsForbidden(p) && p.CanReserveAndReach(cell, PathEndMode.OnCell, p.NormalMaxDanger(), 1, -1, null, false) && cell.Standable(p.Map)
-			select cell).RandomElementWithFallback(IntVec3.Invalid);
+			return t.OccupiedRect().ExpandedBy(2).AdjacentCellsCardinal.Where((IntVec3 cell) => (validator == null || validator(cell)) && !cell.IsForbidden(p) && p.CanReserveAndReach(cell, PathEndMode.OnCell, p.NormalMaxDanger()) && cell.Standable(p.Map)).RandomElementWithFallback(IntVec3.Invalid);
 		}
 
-		
 		public static IEnumerable<MeditationFocusDef> FocusTypesAvailableForPawn(Pawn pawn)
 		{
-			int num;
-			for (int i = 0; i < DefDatabase<MeditationFocusDef>.AllDefsListForReading.Count; i = num + 1)
+			for (int i = 0; i < DefDatabase<MeditationFocusDef>.AllDefsListForReading.Count; i++)
 			{
 				MeditationFocusDef meditationFocusDef = DefDatabase<MeditationFocusDef>.AllDefsListForReading[i];
 				if (meditationFocusDef.CanPawnUse(pawn))
 				{
 					yield return meditationFocusDef;
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public static string FocusTypesAvailableForPawnString(Pawn pawn)
 		{
-			return (from f in MeditationUtility.FocusTypesAvailableForPawn(pawn)
-			select f.label).ToCommaList(false);
+			return (from f in FocusTypesAvailableForPawn(pawn)
+				select f.label).ToCommaList();
 		}
 
-		
 		public static string FocusTypeAvailableExplanation(Pawn pawn)
 		{
 			string text = "";
@@ -276,151 +263,129 @@ namespace RimWorld
 				MeditationFocusDef meditationFocusDef = DefDatabase<MeditationFocusDef>.AllDefsListForReading[i];
 				if (meditationFocusDef.CanPawnUse(pawn))
 				{
-					text = string.Concat(new string[]
-					{
-						text,
-						"MeditationFocusCanUse".Translate(meditationFocusDef.label).RawText,
-						":\n",
-						meditationFocusDef.EnablingThingsExplanation(pawn),
-						"\n\n"
-					});
-					if (!MeditationUtility.focusObjectsPerTypeCache.ContainsKey(meditationFocusDef))
+					text = text + "MeditationFocusCanUse".Translate(meditationFocusDef.label).RawText + ":\n" + meditationFocusDef.EnablingThingsExplanation(pawn) + "\n\n";
+					if (!focusObjectsPerTypeCache.ContainsKey(meditationFocusDef))
 					{
 						List<string> list = new List<string>();
-						foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefsListForReading)
+						foreach (ThingDef item in DefDatabase<ThingDef>.AllDefsListForReading)
 						{
-							CompProperties_MeditationFocus compProperties = thingDef.GetCompProperties<CompProperties_MeditationFocus>();
+							CompProperties_MeditationFocus compProperties = item.GetCompProperties<CompProperties_MeditationFocus>();
 							if (compProperties != null && compProperties.focusTypes.Contains(meditationFocusDef))
 							{
-								list.AddDistinct(thingDef.label);
+								list.AddDistinct(item.label);
 							}
 						}
-						MeditationUtility.focusObjectsPerTypeCache[meditationFocusDef] = list.ToLineList("  - ", true);
+						focusObjectsPerTypeCache[meditationFocusDef] = list.ToLineList("  - ", capitalizeItems: true);
 					}
-					text += "MeditationFocusObjects".Translate(meditationFocusDef.label).CapitalizeFirst() + ":\n" + MeditationUtility.focusObjectsPerTypeCache[meditationFocusDef] + "\n\n";
+					text += "MeditationFocusObjects".Translate(meditationFocusDef.label).CapitalizeFirst() + ":\n" + focusObjectsPerTypeCache[meditationFocusDef] + "\n\n";
 				}
 			}
 			return text;
 		}
 
-		
 		public static void DrawMeditationSpotOverlay(IntVec3 center, Map map)
 		{
-			GenDraw.DrawRadiusRing(center, MeditationUtility.FocusObjectSearchRadius);
-			foreach (Thing thing in GenRadial.RadialDistinctThingsAround(center, map, MeditationUtility.FocusObjectSearchRadius, false))
+			GenDraw.DrawRadiusRing(center, FocusObjectSearchRadius);
+			foreach (Thing item in GenRadial.RadialDistinctThingsAround(center, map, FocusObjectSearchRadius, useCenter: false))
 			{
-				if (!(thing is Building_Throne) && thing.def != ThingDefOf.Wall && thing.TryGetComp<CompMeditationFocus>() != null && GenSight.LineOfSight(center, thing.Position, map, false, null, 0, 0))
+				if (!(item is Building_Throne) && item.def != ThingDefOf.Wall && item.TryGetComp<CompMeditationFocus>() != null && GenSight.LineOfSight(center, item.Position, map))
 				{
-					GenDraw.DrawLineBetween(center.ToVector3() + new Vector3(0.5f, 0f, 0.5f), thing.TrueCenter(), SimpleColor.White);
+					GenDraw.DrawLineBetween(center.ToVector3() + new Vector3(0.5f, 0f, 0.5f), item.TrueCenter(), SimpleColor.White);
 				}
 			}
 		}
 
-		
 		public static bool CanUseRoomToMeditate(Room r, Pawn p)
 		{
-			return (r.Owners.EnumerableNullOrEmpty<Pawn>() || r.Owners.Contains(p)) && (!r.isPrisonCell || p.IsPrisoner);
+			if (!r.Owners.EnumerableNullOrEmpty() && !r.Owners.Contains(p))
+			{
+				return false;
+			}
+			if (r.isPrisonCell && !p.IsPrisoner)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static IEnumerable<Thing> GetMeditationFociAffectedByBuilding(Map map, ThingDef def, Faction faction, IntVec3 pos, Rot4 rotation)
 		{
-			if (!MeditationUtility.CountsAsArtificialBuilding(def, faction))
+			if (CountsAsArtificialBuilding(def, faction))
 			{
-				yield break;
-			}
-			foreach (Thing thing in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.MeditationFocus)))
-			{
-				CompMeditationFocus compMeditationFocus = thing.TryGetComp<CompMeditationFocus>();
-				if (compMeditationFocus != null && compMeditationFocus.WillBeAffectedBy(def, faction, pos, rotation))
+				foreach (Thing item in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.MeditationFocus)))
 				{
-					yield return thing;
+					CompMeditationFocus compMeditationFocus = item.TryGetComp<CompMeditationFocus>();
+					if (compMeditationFocus != null && compMeditationFocus.WillBeAffectedBy(def, faction, pos, rotation))
+					{
+						yield return item;
+					}
 				}
 			}
-			List<Thing>.Enumerator enumerator = default(List<Thing>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public static void DrawMeditationFociAffectedByBuildingOverlay(Map map, ThingDef def, Faction faction, IntVec3 pos, Rot4 rotation)
 		{
 			int num = 0;
-			foreach (Thing thing in MeditationUtility.GetMeditationFociAffectedByBuilding(map, def, faction, pos, rotation))
+			foreach (Thing item in GetMeditationFociAffectedByBuilding(map, def, faction, pos, rotation))
 			{
 				if (num++ > 10)
 				{
 					break;
 				}
-				CompToggleDrawAffectedMeditationFoci compToggleDrawAffectedMeditationFoci = thing.TryGetComp<CompToggleDrawAffectedMeditationFoci>();
+				CompToggleDrawAffectedMeditationFoci compToggleDrawAffectedMeditationFoci = item.TryGetComp<CompToggleDrawAffectedMeditationFoci>();
 				if (compToggleDrawAffectedMeditationFoci == null || compToggleDrawAffectedMeditationFoci.Enabled)
 				{
 					GenAdj.OccupiedRect(pos, rotation, def.size);
-					GenDraw.DrawLineBetween(GenThing.TrueCenter(pos, rotation, def.size, def.Altitude), thing.TrueCenter(), SimpleColor.Red);
+					GenDraw.DrawLineBetween(GenThing.TrueCenter(pos, rotation, def.size, def.Altitude), item.TrueCenter(), SimpleColor.Red);
 				}
 			}
 		}
 
-		
 		public static bool CountsAsArtificialBuilding(ThingDef def, Faction faction)
 		{
-			return typeof(Building).IsAssignableFrom(def.thingClass) && faction != null && def.building.artificialForMeditationPurposes;
+			if (typeof(Building).IsAssignableFrom(def.thingClass) && faction != null)
+			{
+				return def.building.artificialForMeditationPurposes;
+			}
+			return false;
 		}
 
-		
 		public static bool CountsAsArtificialBuilding(Thing t)
 		{
-			return MeditationUtility.CountsAsArtificialBuilding(t.def, t.Faction);
+			return CountsAsArtificialBuilding(t.def, t.Faction);
 		}
 
-		
 		public static void DrawArtificialBuildingOverlay(IntVec3 pos, ThingDef def, Map map, float radius)
 		{
 			GenDraw.DrawRadiusRing(pos, radius);
 			int num = 0;
-			foreach (Thing t in map.listerArtificialBuildingsForMeditation.GetForCell(pos, radius))
+			foreach (Thing item in map.listerArtificialBuildingsForMeditation.GetForCell(pos, radius))
 			{
 				if (num++ > 10)
 				{
 					break;
 				}
-				GenDraw.DrawLineBetween(GenThing.TrueCenter(pos, Rot4.North, def.size, def.Altitude), t.TrueCenter(), SimpleColor.Red);
+				GenDraw.DrawLineBetween(GenThing.TrueCenter(pos, Rot4.North, def.size, def.Altitude), item.TrueCenter(), SimpleColor.Red);
 			}
 		}
 
-		
 		public static float PsyfocusGainPerTick(Pawn pawn, Thing focus = null)
 		{
-			float num = pawn.GetStatValue(StatDefOf.MeditationFocusGain, true);
+			float num = pawn.GetStatValue(StatDefOf.MeditationFocusGain);
 			if (focus != null && !focus.Destroyed)
 			{
-				num += focus.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn, true);
+				num += focus.GetStatValueForPawn(StatDefOf.MeditationFocusStrength, pawn);
 			}
 			return num / 60000f;
 		}
 
-		
 		public static void CheckMeditationScheduleTeachOpportunity(Pawn pawn)
 		{
-			if (pawn.Dead || !pawn.Spawned || !pawn.HasPsylink)
+			if (!pawn.Dead && pawn.Spawned && pawn.HasPsylink && pawn.Faction == Faction.OfPlayer && !pawn.IsQuestLodger())
 			{
-				return;
+				LessonAutoActivator.TeachOpportunity(ConceptDefOf.MeditationSchedule, pawn, OpportunityType.GoodToKnow);
+				LessonAutoActivator.TeachOpportunity(ConceptDefOf.MeditationDesiredPsyfocus, pawn, OpportunityType.GoodToKnow);
 			}
-			if (pawn.Faction != Faction.OfPlayer || pawn.IsQuestLodger())
-			{
-				return;
-			}
-			LessonAutoActivator.TeachOpportunity(ConceptDefOf.MeditationSchedule, pawn, OpportunityType.GoodToKnow);
-			LessonAutoActivator.TeachOpportunity(ConceptDefOf.MeditationDesiredPsyfocus, pawn, OpportunityType.GoodToKnow);
 		}
-
-		
-		public static float FocusObjectSearchRadius = 3.9f;
-
-		
-		private static float WanderRadius = 10f;
-
-		
-		private static Dictionary<MeditationFocusDef, string> focusObjectsPerTypeCache = new Dictionary<MeditationFocusDef, string>();
 	}
 }

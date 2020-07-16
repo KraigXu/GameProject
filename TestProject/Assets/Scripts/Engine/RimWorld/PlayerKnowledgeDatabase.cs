@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
@@ -7,30 +7,41 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PlayerKnowledgeDatabase
 	{
-		
-		static PlayerKnowledgeDatabase()
+		private class ConceptKnowledge
 		{
-			PlayerKnowledgeDatabase.ReloadAndRebind();
-		}
+			public Dictionary<string, float> knowledge = new Dictionary<string, float>();
 
-		
-		public static void ReloadAndRebind()
-		{
-			PlayerKnowledgeDatabase.data = DirectXmlLoader.ItemFromXmlFile<PlayerKnowledgeDatabase.ConceptKnowledge>(GenFilePaths.ConceptKnowledgeFilePath, true);
-			foreach (ConceptDef conceptDef in DefDatabase<ConceptDef>.AllDefs)
+			public ConceptKnowledge()
 			{
-				if (!PlayerKnowledgeDatabase.data.knowledge.ContainsKey(conceptDef.defName))
+				foreach (ConceptDef allDef in DefDatabase<ConceptDef>.AllDefs)
 				{
-					Log.Warning("Knowledge data was missing key " + conceptDef + ". Adding it...", false);
-					PlayerKnowledgeDatabase.data.knowledge.Add(conceptDef.defName, 0f);
+					knowledge.Add(allDef.defName, 0f);
 				}
 			}
 		}
 
-		
+		private static ConceptKnowledge data;
+
+		static PlayerKnowledgeDatabase()
+		{
+			ReloadAndRebind();
+		}
+
+		public static void ReloadAndRebind()
+		{
+			data = DirectXmlLoader.ItemFromXmlFile<ConceptKnowledge>(GenFilePaths.ConceptKnowledgeFilePath);
+			foreach (ConceptDef allDef in DefDatabase<ConceptDef>.AllDefs)
+			{
+				if (!data.knowledge.ContainsKey(allDef.defName))
+				{
+					Log.Warning("Knowledge data was missing key " + allDef + ". Adding it...");
+					data.knowledge.Add(allDef.defName, 0f);
+				}
+			}
+		}
+
 		public static void ResetPersistent()
 		{
 			FileInfo fileInfo = new FileInfo(GenFilePaths.ConceptKnowledgeFilePath);
@@ -38,51 +49,46 @@ namespace RimWorld
 			{
 				fileInfo.Delete();
 			}
-			PlayerKnowledgeDatabase.data = new PlayerKnowledgeDatabase.ConceptKnowledge();
+			data = new ConceptKnowledge();
 		}
 
-		
 		public static void Save()
 		{
 			try
 			{
-				XDocument xdocument = new XDocument();
-				XElement content = DirectXmlSaver.XElementFromObject(PlayerKnowledgeDatabase.data, typeof(PlayerKnowledgeDatabase.ConceptKnowledge));
-				xdocument.Add(content);
-				xdocument.Save(GenFilePaths.ConceptKnowledgeFilePath);
+				XDocument xDocument = new XDocument();
+				XElement content = DirectXmlSaver.XElementFromObject(data, typeof(ConceptKnowledge));
+				xDocument.Add(content);
+				xDocument.Save(GenFilePaths.ConceptKnowledgeFilePath);
 			}
 			catch (Exception ex)
 			{
 				GenUI.ErrorDialog("ProblemSavingFile".Translate(GenFilePaths.ConceptKnowledgeFilePath, ex.ToString()));
-				Log.Error("Exception saving knowledge database: " + ex, false);
+				Log.Error("Exception saving knowledge database: " + ex);
 			}
 		}
 
-		
 		public static float GetKnowledge(ConceptDef def)
 		{
-			return PlayerKnowledgeDatabase.data.knowledge[def.defName];
+			return data.knowledge[def.defName];
 		}
 
-		
 		public static void SetKnowledge(ConceptDef def, float value)
 		{
-			float num = PlayerKnowledgeDatabase.data.knowledge[def.defName];
+			float num = data.knowledge[def.defName];
 			float num2 = Mathf.Clamp01(value);
-			PlayerKnowledgeDatabase.data.knowledge[def.defName] = num2;
+			data.knowledge[def.defName] = num2;
 			if (num < 0.999f && num2 >= 0.999f)
 			{
-				PlayerKnowledgeDatabase.NewlyLearned(def);
+				NewlyLearned(def);
 			}
 		}
 
-		
 		public static bool IsComplete(ConceptDef conc)
 		{
-			return PlayerKnowledgeDatabase.data.knowledge[conc.defName] > 0.999f;
+			return data.knowledge[conc.defName] > 0.999f;
 		}
 
-		
 		private static void NewlyLearned(ConceptDef conc)
 		{
 			TutorSystem.Notify_Event("ConceptLearned-" + conc.defName);
@@ -92,7 +98,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void KnowledgeDemonstrated(ConceptDef conc, KnowledgeAmount know)
 		{
 			float num;
@@ -125,35 +130,15 @@ namespace RimWorld
 			default:
 				throw new NotImplementedException();
 			}
-			if (num <= 0f)
+			if (!(num <= 0f))
 			{
-				return;
-			}
-			PlayerKnowledgeDatabase.SetKnowledge(conc, PlayerKnowledgeDatabase.GetKnowledge(conc) + num);
-			LessonAutoActivator.Notify_KnowledgeDemonstrated(conc);
-			if (Find.ActiveLesson != null)
-			{
-				Find.ActiveLesson.Notify_KnowledgeDemonstrated(conc);
-			}
-		}
-
-		
-		private static PlayerKnowledgeDatabase.ConceptKnowledge data;
-
-		
-		private class ConceptKnowledge
-		{
-			
-			public ConceptKnowledge()
-			{
-				foreach (ConceptDef conceptDef in DefDatabase<ConceptDef>.AllDefs)
+				SetKnowledge(conc, GetKnowledge(conc) + num);
+				LessonAutoActivator.Notify_KnowledgeDemonstrated(conc);
+				if (Find.ActiveLesson != null)
 				{
-					this.knowledge.Add(conceptDef.defName, 0f);
+					Find.ActiveLesson.Notify_KnowledgeDemonstrated(conc);
 				}
 			}
-
-			
-			public Dictionary<string, float> knowledge = new Dictionary<string, float>();
 		}
 	}
 }

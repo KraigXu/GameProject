@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class ThinkNode_ConditionalAnyColonistTryingToExitMap : ThinkNode_Conditional
 	{
-		
 		protected override bool Satisfied(Pawn pawn)
 		{
 			Map mapHeld = pawn.MapHeld;
@@ -15,9 +12,9 @@ namespace RimWorld
 			{
 				return false;
 			}
-			foreach (Pawn pawn2 in mapHeld.mapPawns.FreeColonistsSpawned)
+			foreach (Pawn item in mapHeld.mapPawns.FreeColonistsSpawned)
 			{
-				Job curJob = pawn2.CurJob;
+				Job curJob = item.CurJob;
 				if (curJob != null && curJob.exitMapOnArrival)
 				{
 					return true;

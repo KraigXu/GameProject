@@ -1,133 +1,64 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Verse
 {
-	
 	public class LanguageWorker_Korean : LanguageWorker
 	{
-		
-		public override string PostProcessed(string str)
+		private struct JosaPair
 		{
-			str = base.PostProcessed(str);
-			str = this.ReplaceJosa(str);
-			return str;
-		}
+			public readonly string josa1;
 
-		
-		public override string PostProcessedKeyedTranslation(string translation)
-		{
-			translation = base.PostProcessedKeyedTranslation(translation);
-			translation = this.ReplaceJosa(translation);
-			return translation;
-		}
+			public readonly string josa2;
 
-		
-		public string ReplaceJosa(string src)
-		{
-			LanguageWorker_Korean.tmpStringBuilder.Length = 0;
-			MatchCollection matchCollection = LanguageWorker_Korean.JosaPattern.Matches(src);
-			int num = 0;
-			for (int i = 0; i < matchCollection.Count; i++)
+			public JosaPair(string josa1, string josa2)
 			{
-				Match match = matchCollection[i];
-				LanguageWorker_Korean.JosaPair josaPair = LanguageWorker_Korean.JosaPatternPaired[match.Value];
-				LanguageWorker_Korean.tmpStringBuilder.Append(src, num, match.Index - num);
-				if (match.Index > 0)
-				{
-					char inChar = src[match.Index - 1];
-					if ((match.Value != "(으)로" && this.HasJong(inChar)) || (match.Value == "(으)로" && this.HasJongExceptRieul(inChar)))
-					{
-						LanguageWorker_Korean.tmpStringBuilder.Append(josaPair.josa1);
-					}
-					else
-					{
-						LanguageWorker_Korean.tmpStringBuilder.Append(josaPair.josa2);
-					}
-				}
-				else
-				{
-					LanguageWorker_Korean.tmpStringBuilder.Append(josaPair.josa1);
-				}
-				num = match.Index + match.Length;
+				this.josa1 = josa1;
+				this.josa2 = josa2;
 			}
-			LanguageWorker_Korean.tmpStringBuilder.Append(src, num, src.Length - num);
-			return LanguageWorker_Korean.tmpStringBuilder.ToString();
 		}
 
-		
-		private bool HasJong(char inChar)
-		{
-			if (!this.IsKorean(inChar))
-			{
-				return LanguageWorker_Korean.AlphabetEndPattern.Contains(inChar);
-			}
-			return (inChar - '가') % '\u001c' > '\0';
-		}
-
-		
-		private bool HasJongExceptRieul(char inChar)
-		{
-			if (!this.IsKorean(inChar))
-			{
-				return false;
-			}
-			int num = (int)((inChar - '가') % '\u001c');
-			return num != 8 && num != 0;
-		}
-
-		
-		private bool IsKorean(char inChar)
-		{
-			return inChar >= '가' && inChar <= '힣';
-		}
-
-		
 		private static StringBuilder tmpStringBuilder = new StringBuilder();
 
-		
 		private static readonly Regex JosaPattern = new Regex("\\(이\\)가|\\(와\\)과|\\(을\\)를|\\(은\\)는|\\(아\\)야|\\(이\\)여|\\(으\\)로|\\(이\\)라");
 
-		
-		private static readonly Dictionary<string, LanguageWorker_Korean.JosaPair> JosaPatternPaired = new Dictionary<string, LanguageWorker_Korean.JosaPair>
+		private static readonly Dictionary<string, JosaPair> JosaPatternPaired = new Dictionary<string, JosaPair>
 		{
 			{
 				"(이)가",
-				new LanguageWorker_Korean.JosaPair("이", "가")
+				new JosaPair("이", "가")
 			},
 			{
 				"(와)과",
-				new LanguageWorker_Korean.JosaPair("과", "와")
+				new JosaPair("과", "와")
 			},
 			{
 				"(을)를",
-				new LanguageWorker_Korean.JosaPair("을", "를")
+				new JosaPair("을", "를")
 			},
 			{
 				"(은)는",
-				new LanguageWorker_Korean.JosaPair("은", "는")
+				new JosaPair("은", "는")
 			},
 			{
 				"(아)야",
-				new LanguageWorker_Korean.JosaPair("아", "야")
+				new JosaPair("아", "야")
 			},
 			{
 				"(이)여",
-				new LanguageWorker_Korean.JosaPair("이여", "여")
+				new JosaPair("이여", "여")
 			},
 			{
 				"(으)로",
-				new LanguageWorker_Korean.JosaPair("으로", "로")
+				new JosaPair("으로", "로")
 			},
 			{
 				"(이)라",
-				new LanguageWorker_Korean.JosaPair("이라", "라")
+				new JosaPair("이라", "라")
 			}
 		};
 
-		
 		private static readonly List<char> AlphabetEndPattern = new List<char>
 		{
 			'b',
@@ -141,21 +72,82 @@ namespace Verse
 			't'
 		};
 
-		
-		private struct JosaPair
+		public override string PostProcessed(string str)
 		{
-			
-			public JosaPair(string josa1, string josa2)
+			str = base.PostProcessed(str);
+			str = ReplaceJosa(str);
+			return str;
+		}
+
+		public override string PostProcessedKeyedTranslation(string translation)
+		{
+			translation = base.PostProcessedKeyedTranslation(translation);
+			translation = ReplaceJosa(translation);
+			return translation;
+		}
+
+		public string ReplaceJosa(string src)
+		{
+			tmpStringBuilder.Length = 0;
+			MatchCollection matchCollection = JosaPattern.Matches(src);
+			int num = 0;
+			for (int i = 0; i < matchCollection.Count; i++)
 			{
-				this.josa1 = josa1;
-				this.josa2 = josa2;
+				Match match = matchCollection[i];
+				JosaPair josaPair = JosaPatternPaired[match.Value];
+				tmpStringBuilder.Append(src, num, match.Index - num);
+				if (match.Index > 0)
+				{
+					char inChar = src[match.Index - 1];
+					if ((match.Value != "(으)로" && HasJong(inChar)) || (match.Value == "(으)로" && HasJongExceptRieul(inChar)))
+					{
+						tmpStringBuilder.Append(josaPair.josa1);
+					}
+					else
+					{
+						tmpStringBuilder.Append(josaPair.josa2);
+					}
+				}
+				else
+				{
+					tmpStringBuilder.Append(josaPair.josa1);
+				}
+				num = match.Index + match.Length;
 			}
+			tmpStringBuilder.Append(src, num, src.Length - num);
+			return tmpStringBuilder.ToString();
+		}
 
-			
-			public readonly string josa1;
+		private bool HasJong(char inChar)
+		{
+			if (!IsKorean(inChar))
+			{
+				return AlphabetEndPattern.Contains(inChar);
+			}
+			return (inChar - 44032) % 28 > 0;
+		}
 
-			
-			public readonly string josa2;
+		private bool HasJongExceptRieul(char inChar)
+		{
+			if (!IsKorean(inChar))
+			{
+				return false;
+			}
+			int num = (inChar - 44032) % 28;
+			if (num != 8)
+			{
+				return num != 0;
+			}
+			return false;
+		}
+
+		private bool IsKorean(char inChar)
+		{
+			if (inChar >= '가')
+			{
+				return inChar <= '힣';
+			}
+			return false;
 		}
 	}
 }

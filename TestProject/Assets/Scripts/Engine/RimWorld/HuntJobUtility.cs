@@ -1,15 +1,12 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class HuntJobUtility
 	{
-		
 		public static bool WasKilledByHunter(Pawn pawn, DamageInfo? dinfo)
 		{
-			if (dinfo == null)
+			if (!dinfo.HasValue)
 			{
 				return false;
 			}
@@ -19,7 +16,11 @@ namespace RimWorld
 				return false;
 			}
 			JobDriver_Hunt jobDriver_Hunt = pawn2.jobs.curDriver as JobDriver_Hunt;
-			return jobDriver_Hunt != null && jobDriver_Hunt.Victim == pawn;
+			if (jobDriver_Hunt != null)
+			{
+				return jobDriver_Hunt.Victim == pawn;
+			}
+			return false;
 		}
 	}
 }

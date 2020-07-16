@@ -1,54 +1,40 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class CompPowerPlant : CompPowerTrader
 	{
-		
-		
-		protected virtual float DesiredPowerOutput
-		{
-			get
-			{
-				return -base.Props.basePowerConsumption;
-			}
-		}
+		protected CompRefuelable refuelableComp;
 
-		
+		protected CompBreakdownable breakdownableComp;
+
+		protected virtual float DesiredPowerOutput => 0f - base.Props.basePowerConsumption;
+
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			this.refuelableComp = this.parent.GetComp<CompRefuelable>();
-			this.breakdownableComp = this.parent.GetComp<CompBreakdownable>();
-			if (base.Props.basePowerConsumption < 0f && !this.parent.IsBrokenDown() && FlickUtility.WantsToBeOn(this.parent))
+			refuelableComp = parent.GetComp<CompRefuelable>();
+			breakdownableComp = parent.GetComp<CompBreakdownable>();
+			if (base.Props.basePowerConsumption < 0f && !parent.IsBrokenDown() && FlickUtility.WantsToBeOn(parent))
 			{
 				base.PowerOn = true;
 			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			this.UpdateDesiredPowerOutput();
+			UpdateDesiredPowerOutput();
 		}
 
-		
 		public void UpdateDesiredPowerOutput()
 		{
-			if ((this.breakdownableComp != null && this.breakdownableComp.BrokenDown) || (this.refuelableComp != null && !this.refuelableComp.HasFuel) || (this.flickableComp != null && !this.flickableComp.SwitchIsOn) || !base.PowerOn)
+			if ((breakdownableComp != null && breakdownableComp.BrokenDown) || (refuelableComp != null && !refuelableComp.HasFuel) || (flickableComp != null && !flickableComp.SwitchIsOn) || !base.PowerOn)
 			{
 				base.PowerOutput = 0f;
-				return;
 			}
-			base.PowerOutput = this.DesiredPowerOutput;
+			else
+			{
+				base.PowerOutput = DesiredPowerOutput;
+			}
 		}
-
-		
-		protected CompRefuelable refuelableComp;
-
-		
-		protected CompBreakdownable breakdownableComp;
 	}
 }

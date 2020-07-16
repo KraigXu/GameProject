@@ -1,68 +1,62 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class HediffComp_ChanceToRemove : HediffComp
 	{
-		
-		
-		public HediffCompProperties_ChanceToRemove Props
-		{
-			get
-			{
-				return (HediffCompProperties_ChanceToRemove)this.props;
-			}
-		}
+		public int currentInterval;
 
-		
-		
+		public bool removeNextInterval;
+
+		public HediffCompProperties_ChanceToRemove Props => (HediffCompProperties_ChanceToRemove)props;
+
 		public override bool CompShouldRemove
 		{
 			get
 			{
-				return base.CompShouldRemove || (this.removeNextInterval && this.currentInterval <= 0);
+				if (!base.CompShouldRemove)
+				{
+					if (removeNextInterval)
+					{
+						return currentInterval <= 0;
+					}
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
-			if (this.CompShouldRemove)
+			if (CompShouldRemove)
 			{
 				return;
 			}
-			if (this.currentInterval > 0)
+			if (currentInterval <= 0)
 			{
-				this.currentInterval--;
-				return;
+				if (Rand.Chance(Props.chance))
+				{
+					removeNextInterval = true;
+					currentInterval = Rand.Range(0, Props.intervalTicks);
+				}
+				else
+				{
+					currentInterval = Props.intervalTicks;
+				}
 			}
-			if (Rand.Chance(this.Props.chance))
+			else
 			{
-				this.removeNextInterval = true;
-				this.currentInterval = Rand.Range(0, this.Props.intervalTicks);
-				return;
+				currentInterval--;
 			}
-			this.currentInterval = this.Props.intervalTicks;
 		}
 
-		
 		public override void CompExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.currentInterval, "currentInterval", 0, false);
-			Scribe_Values.Look<bool>(ref this.removeNextInterval, "removeNextInterval", false, false);
+			Scribe_Values.Look(ref currentInterval, "currentInterval", 0);
+			Scribe_Values.Look(ref removeNextInterval, "removeNextInterval", defaultValue: false);
 		}
 
-		
 		public override string CompDebugString()
 		{
-			return string.Format("currentInterval: {0}\nremove: {1}", this.currentInterval, this.removeNextInterval);
+			return $"currentInterval: {currentInterval}\nremove: {removeNextInterval}";
 		}
-
-		
-		public int currentInterval;
-
-		
-		public bool removeNextInterval;
 	}
 }

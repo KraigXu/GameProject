@@ -1,82 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompCauseGameCondition_PsychicSuppression : CompCauseGameCondition
 	{
-		
+		public Gender gender;
+
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.gender = Gender.Male;
+			gender = Gender.Male;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
+			Scribe_Values.Look(ref gender, "gender", Gender.None);
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				yield break;
-			}
-			yield return new Command_Action
-			{
-				defaultLabel = this.gender.GetLabel(false),
-				action = delegate
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = gender.GetLabel();
+				command_Action.action = delegate
 				{
-					if (this.gender == Gender.Female)
+					if (gender == Gender.Female)
 					{
-						this.gender = Gender.Male;
+						gender = Gender.Male;
 					}
 					else
 					{
-						this.gender = Gender.Female;
+						gender = Gender.Female;
 					}
-					base.ReSetupAllConditions();
-				},
-				hotKey = KeyBindingDefOf.Misc1
-			};
-			yield break;
+					ReSetupAllConditions();
+				};
+				command_Action.hotKey = KeyBindingDefOf.Misc1;
+				yield return command_Action;
+			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (!base.Active || base.MyTile == -1)
+			if (base.Active && base.MyTile != -1)
 			{
-				return;
-			}
-			foreach (Caravan caravan in Find.World.worldObjects.Caravans)
-			{
-				if (Find.WorldGrid.ApproxDistanceInTiles(caravan.Tile, base.MyTile) < (float)base.Props.worldRange)
+				foreach (Caravan caravan in Find.World.worldObjects.Caravans)
 				{
-					foreach (Pawn pawn in caravan.pawns)
+					if (Find.WorldGrid.ApproxDistanceInTiles(caravan.Tile, base.MyTile) < (float)base.Props.worldRange)
 					{
-						GameCondition_PsychicSuppression.CheckPawn(pawn, this.gender);
+						foreach (Pawn pawn in caravan.pawns)
+						{
+							GameCondition_PsychicSuppression.CheckPawn(pawn, gender);
+						}
 					}
 				}
 			}
 		}
 
-		
 		protected override void SetupCondition(GameCondition condition, Map map)
 		{
 			base.SetupCondition(condition, map);
-			((GameCondition_PsychicSuppression)condition).gender = this.gender;
+			((GameCondition_PsychicSuppression)condition).gender = gender;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			string text = base.CompInspectStringExtra();
@@ -84,16 +74,12 @@ namespace RimWorld
 			{
 				text += "\n";
 			}
-			return text + ("AffectedGender".Translate() + ": " + this.gender.GetLabel(false).CapitalizeFirst());
+			return text + ("AffectedGender".Translate() + ": " + gender.GetLabel().CapitalizeFirst());
 		}
 
-		
 		public override void RandomizeSettings()
 		{
-			this.gender = (Rand.Bool ? Gender.Male : Gender.Female);
+			gender = (Rand.Bool ? Gender.Male : Gender.Female);
 		}
-
-		
-		public Gender gender;
 	}
 }

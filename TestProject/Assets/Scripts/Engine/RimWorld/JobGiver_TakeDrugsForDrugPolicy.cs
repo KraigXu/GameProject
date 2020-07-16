@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_TakeDrugsForDrugPolicy : ThinkNode_JobGiver
 	{
-		
 		public override float GetPriority(Pawn pawn)
 		{
 			DrugPolicy currentPolicy = pawn.drugs.CurrentPolicy;
@@ -21,7 +18,6 @@ namespace RimWorld
 			return 0f;
 		}
 
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			DrugPolicy currentPolicy = pawn.drugs.CurrentPolicy;
@@ -29,7 +25,7 @@ namespace RimWorld
 			{
 				if (pawn.drugs.ShouldTryToTakeScheduledNow(currentPolicy[i].drug))
 				{
-					Thing thing = this.FindDrugFor(pawn, currentPolicy[i].drug);
+					Thing thing = FindDrugFor(pawn, currentPolicy[i].drug);
 					if (thing != null)
 					{
 						return DrugAIUtility.IngestAndTakeToInventoryJob(thing, pawn, 1);
@@ -39,21 +35,19 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		private Thing FindDrugFor(Pawn pawn, ThingDef drugDef)
 		{
 			ThingOwner<Thing> innerContainer = pawn.inventory.innerContainer;
 			for (int i = 0; i < innerContainer.Count; i++)
 			{
-				if (innerContainer[i].def == drugDef && this.DrugValidator(pawn, innerContainer[i]))
+				if (innerContainer[i].def == drugDef && DrugValidator(pawn, innerContainer[i]))
 				{
 					return innerContainer[i];
 				}
 			}
-			return GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(drugDef), PathEndMode.ClosestTouch, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), 9999f, (Thing x) => this.DrugValidator(pawn, x), null, 0, -1, false, RegionType.Set_Passable, false);
+			return GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(drugDef), PathEndMode.ClosestTouch, TraverseParms.For(pawn), 9999f, (Thing x) => DrugValidator(pawn, x));
 		}
 
-		
 		private bool DrugValidator(Pawn pawn, Thing drug)
 		{
 			if (!drug.def.IsDrug)
@@ -66,7 +60,7 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (!pawn.CanReserve(drug, 10, 1, null, false))
+				if (!pawn.CanReserve(drug, 10, 1))
 				{
 					return false;
 				}

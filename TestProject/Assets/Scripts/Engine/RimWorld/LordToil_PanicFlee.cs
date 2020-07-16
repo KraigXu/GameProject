@@ -1,64 +1,51 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordToil_PanicFlee : LordToil
 	{
-		
-		
-		public override bool AllowSatisfyLongNeeds
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool AllowSatisfyLongNeeds => false;
 
-		
-		
-		public override bool AllowSelfTend
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool AllowSelfTend => false;
 
-		
 		public override void Init()
 		{
 			base.Init();
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn pawn = this.lord.ownedPawns[i];
-				if (!this.HasFleeingDuty(pawn) || pawn.mindState.duty.def == DutyDefOf.ExitMapRandom)
+				Pawn pawn = lord.ownedPawns[i];
+				if (!HasFleeingDuty(pawn) || pawn.mindState.duty.def == DutyDefOf.ExitMapRandom)
 				{
-					pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee, null, false, false, null, false);
+					pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.PanicFlee);
 				}
 			}
 		}
 
-		
 		public override void UpdateAllDuties()
 		{
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn pawn = this.lord.ownedPawns[i];
-				if (!this.HasFleeingDuty(pawn))
+				Pawn pawn = lord.ownedPawns[i];
+				if (!HasFleeingDuty(pawn))
 				{
 					pawn.mindState.duty = new PawnDuty(DutyDefOf.ExitMapRandom);
 				}
 			}
 		}
 
-		
 		private bool HasFleeingDuty(Pawn pawn)
 		{
-			return pawn.mindState.duty != null && (pawn.mindState.duty.def == DutyDefOf.ExitMapRandom || pawn.mindState.duty.def == DutyDefOf.Steal || pawn.mindState.duty.def == DutyDefOf.Kidnap);
+			if (pawn.mindState.duty == null)
+			{
+				return false;
+			}
+			if (pawn.mindState.duty.def == DutyDefOf.ExitMapRandom || pawn.mindState.duty.def == DutyDefOf.Steal || pawn.mindState.duty.def == DutyDefOf.Kidnap)
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

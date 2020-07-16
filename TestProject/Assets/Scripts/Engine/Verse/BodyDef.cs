@@ -1,70 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class BodyDef : Def
 	{
-		
-		
-		public List<BodyPartRecord> AllParts
-		{
-			get
-			{
-				return this.cachedAllParts;
-			}
-		}
+		public BodyPartRecord corePart;
 
-		
-		
-		public List<BodyPartRecord> AllPartsVulnerableToFrostbite
-		{
-			get
-			{
-				return this.cachedPartsVulnerableToFrostbite;
-			}
-		}
+		[Unsaved(false)]
+		private List<BodyPartRecord> cachedAllParts = new List<BodyPartRecord>();
 
-		
+		[Unsaved(false)]
+		private List<BodyPartRecord> cachedPartsVulnerableToFrostbite;
+
+		public List<BodyPartRecord> AllParts => cachedAllParts;
+
+		public List<BodyPartRecord> AllPartsVulnerableToFrostbite => cachedPartsVulnerableToFrostbite;
+
 		public IEnumerable<BodyPartRecord> GetPartsWithTag(BodyPartTagDef tag)
 		{
-			int num;
-			for (int i = 0; i < this.AllParts.Count; i = num + 1)
+			for (int i = 0; i < AllParts.Count; i++)
 			{
-				BodyPartRecord bodyPartRecord = this.AllParts[i];
+				BodyPartRecord bodyPartRecord = AllParts[i];
 				if (bodyPartRecord.def.tags.Contains(tag))
 				{
 					yield return bodyPartRecord;
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public IEnumerable<BodyPartRecord> GetPartsWithDef(BodyPartDef def)
 		{
-			int num;
-			for (int i = 0; i < this.AllParts.Count; i = num + 1)
+			for (int i = 0; i < AllParts.Count; i++)
 			{
-				BodyPartRecord bodyPartRecord = this.AllParts[i];
+				BodyPartRecord bodyPartRecord = AllParts[i];
 				if (bodyPartRecord.def == def)
 				{
 					yield return bodyPartRecord;
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public bool HasPartWithTag(BodyPartTagDef tag)
 		{
-			for (int i = 0; i < this.AllParts.Count; i++)
+			for (int i = 0; i < AllParts.Count; i++)
 			{
-				if (this.AllParts[i].def.tags.Contains(tag))
+				if (AllParts[i].def.tags.Contains(tag))
 				{
 					return true;
 				}
@@ -72,22 +53,20 @@ namespace Verse
 			return false;
 		}
 
-		
 		public BodyPartRecord GetPartAtIndex(int index)
 		{
-			if (index < 0 || index >= this.cachedAllParts.Count)
+			if (index < 0 || index >= cachedAllParts.Count)
 			{
 				return null;
 			}
-			return this.cachedAllParts[index];
+			return cachedAllParts[index];
 		}
 
-		
 		public int GetIndexOfPart(BodyPartRecord rec)
 		{
-			for (int i = 0; i < this.cachedAllParts.Count; i++)
+			for (int i = 0; i < cachedAllParts.Count; i++)
 			{
-				if (this.cachedAllParts[i] == rec)
+				if (cachedAllParts[i] == rec)
 				{
 					return i;
 				}
@@ -95,72 +74,59 @@ namespace Verse
 			return -1;
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
-			IEnumerator<string> enumerator = null;
-			if (this.cachedPartsVulnerableToFrostbite.NullOrEmpty<BodyPartRecord>())
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (cachedPartsVulnerableToFrostbite.NullOrEmpty())
 			{
 				yield return "no parts vulnerable to frostbite";
 			}
-			foreach (BodyPartRecord bodyPartRecord in this.AllParts)
+			foreach (BodyPartRecord allPart in AllParts)
 			{
-				if (bodyPartRecord.def.conceptual && bodyPartRecord.coverageAbs != 0f)
+				if (allPart.def.conceptual && allPart.coverageAbs != 0f)
 				{
-					yield return string.Format("part {0} is tagged conceptual, but has nonzero coverage", bodyPartRecord);
+					yield return $"part {allPart} is tagged conceptual, but has nonzero coverage";
 				}
-				else if (Prefs.DevMode && !bodyPartRecord.def.conceptual)
+				else if (Prefs.DevMode && !allPart.def.conceptual)
 				{
 					float num = 0f;
-					foreach (BodyPartRecord bodyPartRecord2 in bodyPartRecord.parts)
+					foreach (BodyPartRecord part in allPart.parts)
 					{
-						num += bodyPartRecord2.coverage;
+						num += part.coverage;
 					}
 					if (num >= 1f)
 					{
-						Log.Warning(string.Concat(new string[]
-						{
-							"BodyDef ",
-							this.defName,
-							" has BodyPartRecord of ",
-							bodyPartRecord.def.defName,
-							" whose children have more or equal coverage than 100% (",
-							(num * 100f).ToString("0.00"),
-							"%)"
-						}), false);
+						Log.Warning("BodyDef " + defName + " has BodyPartRecord of " + allPart.def.defName + " whose children have more or equal coverage than 100% (" + (num * 100f).ToString("0.00") + "%)");
 					}
 				}
 			}
-			List<BodyPartRecord>.Enumerator enumerator2 = default(List<BodyPartRecord>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public override void ResolveReferences()
 		{
-			if (this.corePart != null)
+			if (corePart != null)
 			{
-				this.CacheDataRecursive(this.corePart);
+				CacheDataRecursive(corePart);
 			}
-			this.cachedPartsVulnerableToFrostbite = new List<BodyPartRecord>();
-			List<BodyPartRecord> allParts = this.AllParts;
+			cachedPartsVulnerableToFrostbite = new List<BodyPartRecord>();
+			List<BodyPartRecord> allParts = AllParts;
 			for (int i = 0; i < allParts.Count; i++)
 			{
 				if (allParts[i].def.frostbiteVulnerability > 0f)
 				{
-					this.cachedPartsVulnerableToFrostbite.Add(allParts[i]);
+					cachedPartsVulnerableToFrostbite.Add(allParts[i]);
 				}
 			}
 		}
 
-		
 		private void CacheDataRecursive(BodyPartRecord node)
 		{
 			if (node.def == null)
 			{
-				Log.Error("BodyPartRecord with null def. body=" + this, false);
+				Log.Error("BodyPartRecord with null def. body=" + this);
 				return;
 			}
 			node.body = this;
@@ -209,22 +175,11 @@ namespace Verse
 					node.parts[k].depth = node.depth;
 				}
 			}
-			this.cachedAllParts.Add(node);
+			cachedAllParts.Add(node);
 			for (int l = 0; l < node.parts.Count; l++)
 			{
-				this.CacheDataRecursive(node.parts[l]);
+				CacheDataRecursive(node.parts[l]);
 			}
 		}
-
-		
-		public BodyPartRecord corePart;
-
-		
-		[Unsaved(false)]
-		private List<BodyPartRecord> cachedAllParts = new List<BodyPartRecord>();
-
-		
-		[Unsaved(false)]
-		private List<BodyPartRecord> cachedPartsVulnerableToFrostbite;
 	}
 }

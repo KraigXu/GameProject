@@ -1,56 +1,41 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public struct ThingStuffPair : IEquatable<ThingStuffPair>
 	{
-		
-		
-		public float Price
-		{
-			get
-			{
-				return this.cachedPrice;
-			}
-		}
+		public ThingDef thing;
 
-		
-		
-		public float InsulationCold
-		{
-			get
-			{
-				return this.cachedInsulationCold;
-			}
-		}
+		public ThingDef stuff;
 
-		
-		
-		public float InsulationHeat
-		{
-			get
-			{
-				return this.cachedInsulationHeat;
-			}
-		}
+		public float commonalityMultiplier;
 
-		
-		
+		private float cachedPrice;
+
+		private float cachedInsulationCold;
+
+		private float cachedInsulationHeat;
+
+		public float Price => cachedPrice;
+
+		public float InsulationCold => cachedInsulationCold;
+
+		public float InsulationHeat => cachedInsulationHeat;
+
 		public float Commonality
 		{
 			get
 			{
-				float num = this.commonalityMultiplier;
-				num *= this.thing.generateCommonality;
-				if (this.stuff != null)
+				float num = commonalityMultiplier;
+				num *= thing.generateCommonality;
+				if (stuff != null)
 				{
-					num *= this.stuff.stuffProps.commonality;
+					num *= stuff.stuffProps.commonality;
 				}
-				if (PawnWeaponGenerator.IsDerpWeapon(this.thing, this.stuff) || PawnApparelGenerator.IsDerpApparel(this.thing, this.stuff))
+				if (PawnWeaponGenerator.IsDerpWeapon(thing, stuff) || PawnApparelGenerator.IsDerpApparel(thing, stuff))
 				{
 					num *= 0.01f;
 				}
@@ -58,7 +43,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public ThingStuffPair(ThingDef thing, ThingDef stuff, float commonalityMultiplier = 1f)
 		{
 			this.thing = thing;
@@ -66,22 +50,14 @@ namespace RimWorld
 			this.commonalityMultiplier = commonalityMultiplier;
 			if (stuff != null && !thing.MadeFromStuff)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Created ThingStuffPairWithQuality with stuff ",
-					stuff,
-					" but ",
-					thing,
-					" is not made from stuff."
-				}), false);
+				Log.Warning("Created ThingStuffPairWithQuality with stuff " + stuff + " but " + thing + " is not made from stuff.");
 				stuff = null;
 			}
-			this.cachedPrice = thing.GetStatValueAbstract(StatDefOf.MarketValue, stuff);
-			this.cachedInsulationCold = thing.GetStatValueAbstract(StatDefOf.Insulation_Cold, stuff);
-			this.cachedInsulationHeat = thing.GetStatValueAbstract(StatDefOf.Insulation_Heat, stuff);
+			cachedPrice = thing.GetStatValueAbstract(StatDefOf.MarketValue, stuff);
+			cachedInsulationCold = thing.GetStatValueAbstract(StatDefOf.Insulation_Cold, stuff);
+			cachedInsulationHeat = thing.GetStatValueAbstract(StatDefOf.Insulation_Heat, stuff);
 		}
 
-		
 		public static List<ThingStuffPair> AllWith(Predicate<ThingDef> thingValidator)
 		{
 			List<ThingStuffPair> list = new List<ThingStuffPair>();
@@ -93,106 +69,68 @@ namespace RimWorld
 				{
 					if (!thingDef.MadeFromStuff)
 					{
-						list.Add(new ThingStuffPair(thingDef, null, 1f));
+						list.Add(new ThingStuffPair(thingDef, null));
+						continue;
 					}
-					else
+					IEnumerable<ThingDef> enumerable = DefDatabase<ThingDef>.AllDefs.Where((ThingDef st) => st.IsStuff && st.stuffProps.CanMake(thingDef));
+					int num = enumerable.Count();
+					float num2 = enumerable.Average((ThingDef st) => st.stuffProps.commonality);
+					float num3 = 1f / (float)num / num2;
+					foreach (ThingDef item in enumerable)
 					{
-						IEnumerable<ThingDef> enumerable = from st in DefDatabase<ThingDef>.AllDefs
-						where st.IsStuff && st.stuffProps.CanMake(thingDef)
-						select st;
-						int num = enumerable.Count<ThingDef>();
-						float num2 = enumerable.Average((ThingDef st) => st.stuffProps.commonality);
-						float num3 = 1f / (float)num / num2;
-						foreach (ThingDef thingDef2 in enumerable)
-						{
-							list.Add(new ThingStuffPair(thingDef, thingDef2, num3));
-						}
+						list.Add(new ThingStuffPair(thingDef, item, num3));
 					}
 				}
 			}
-			return (from p in list
-			orderby p.Price descending
-			select p).ToList<ThingStuffPair>();
+			return list.OrderByDescending((ThingStuffPair p) => p.Price).ToList();
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.thing == null)
+			if (thing == null)
 			{
 				return "(null)";
 			}
-			string text;
-			if (this.stuff == null)
-			{
-				text = this.thing.label;
-			}
-			else
-			{
-				text = this.thing.label + " " + this.stuff.LabelAsStuff;
-			}
-			return string.Concat(new string[]
-			{
-				text,
-				" $",
-				this.Price.ToString("F0"),
-				" c=",
-				this.Commonality.ToString("F4")
-			});
+			string text = (stuff != null) ? (thing.label + " " + stuff.LabelAsStuff) : thing.label;
+			return text + " $" + Price.ToString("F0") + " c=" + Commonality.ToString("F4");
 		}
 
-		
 		public static bool operator ==(ThingStuffPair a, ThingStuffPair b)
 		{
-			return a.thing == b.thing && a.stuff == b.stuff && a.commonalityMultiplier == b.commonalityMultiplier;
+			if (a.thing == b.thing && a.stuff == b.stuff)
+			{
+				return a.commonalityMultiplier == b.commonalityMultiplier;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(ThingStuffPair a, ThingStuffPair b)
 		{
 			return !(a == b);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is ThingStuffPair && this.Equals((ThingStuffPair)obj);
+			if (!(obj is ThingStuffPair))
+			{
+				return false;
+			}
+			return Equals((ThingStuffPair)obj);
 		}
 
-		
 		public bool Equals(ThingStuffPair other)
 		{
 			return this == other;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombineStruct<float>(Gen.HashCombine<ThingDef>(Gen.HashCombine<ThingDef>(0, this.thing), this.stuff), this.commonalityMultiplier);
+			return Gen.HashCombineStruct(Gen.HashCombine(Gen.HashCombine(0, thing), stuff), commonalityMultiplier);
 		}
 
-		
 		public static explicit operator ThingStuffPair(ThingStuffPairWithQuality p)
 		{
-			return new ThingStuffPair(p.thing, p.stuff, 1f);
+			return new ThingStuffPair(p.thing, p.stuff);
 		}
-
-		
-		public ThingDef thing;
-
-		
-		public ThingDef stuff;
-
-		
-		public float commonalityMultiplier;
-
-		
-		private float cachedPrice;
-
-		
-		private float cachedInsulationCold;
-
-		
-		private float cachedInsulationHeat;
 	}
 }

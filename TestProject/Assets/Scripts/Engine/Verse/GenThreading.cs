@@ -1,36 +1,38 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class GenThreading
 	{
-		
-		
-		public static int ProcessorCount
+		public struct Slice
 		{
-			get
+			public readonly int fromInclusive;
+
+			public readonly int toExclusive;
+
+			public Slice(int fromInclusive, int toExclusive)
 			{
-				return Environment.ProcessorCount;
+				this.fromInclusive = fromInclusive;
+				this.toExclusive = toExclusive;
 			}
 		}
 
-		
+		public static int ProcessorCount => Environment.ProcessorCount;
+
 		private static void GetMaxDegreeOfParallelism(ref int maxDegreeOfParallelism)
 		{
 			if (maxDegreeOfParallelism == -1)
 			{
-				maxDegreeOfParallelism = GenThreading.ProcessorCount;
+				maxDegreeOfParallelism = ProcessorCount;
 			}
 		}
 
-		
-		public static List<GenThreading.Slice> SliceWork(int fromInclusive, int toExclusive, int maxBatches)
+		public static List<Slice> SliceWork(int fromInclusive, int toExclusive, int maxBatches)
 		{
-			List<GenThreading.Slice> list = new List<GenThreading.Slice>(maxBatches);
+			List<Slice> list = new List<Slice>(maxBatches);
 			int num = toExclusive - fromInclusive;
 			if (num <= 0)
 			{
@@ -49,7 +51,7 @@ namespace Verse
 						num5++;
 						num2--;
 					}
-					list.Add(new GenThreading.Slice(num4, num4 + num5));
+					list.Add(new Slice(num4, num4 + num5));
 					num4 += num5;
 				}
 			}
@@ -57,20 +59,19 @@ namespace Verse
 			{
 				for (int j = 0; j < num2; j++)
 				{
-					list.Add(new GenThreading.Slice(j, j + 1));
+					list.Add(new Slice(j, j + 1));
 				}
 			}
 			return list;
 		}
 
-		
 		public static List<List<T>> SliceWork<T>(List<T> list, int maxBatches)
 		{
 			List<List<T>> list2 = new List<List<T>>(maxBatches);
-			foreach (GenThreading.Slice slice in GenThreading.SliceWork(0, list.Count, maxBatches))
+			foreach (Slice item in SliceWork(0, list.Count, maxBatches))
 			{
-				List<T> list3 = new List<T>(slice.toExclusive - slice.fromInclusive);
-				for (int i = slice.fromInclusive; i < slice.toExclusive; i++)
+				List<T> list3 = new List<T>(item.toExclusive - item.fromInclusive);
+				for (int i = item.fromInclusive; i < item.toExclusive; i++)
 				{
 					list3.Add(list[i]);
 				}
@@ -79,105 +80,68 @@ namespace Verse
 			return list2;
 		}
 
-		
 		public static void ParallelForEach<T>(List<T> list, Action<T> callback, int maxDegreeOfParallelism = -1)
 		{
-			GenThreading.GetMaxDegreeOfParallelism(ref maxDegreeOfParallelism);
+			GetMaxDegreeOfParallelism(ref maxDegreeOfParallelism);
 			int count = list.Count;
 			long tasksDone = 0L;
-			AutoResetEvent taskDoneEvent = new AutoResetEvent(false);
-			List<List<T>>.Enumerator enumerator = GenThreading.SliceWork<T>(list, maxDegreeOfParallelism).GetEnumerator();
+			AutoResetEvent taskDoneEvent = new AutoResetEvent(initialState: false);
+			foreach (List<T> item in SliceWork(list, maxDegreeOfParallelism))
 			{
-				while (enumerator.MoveNext())
+				List<T> localBatch = (List<T>)(object)item;
+				ThreadPool.QueueUserWorkItem(delegate
 				{
-					List<T> localBatch2 = enumerator.Current;
-					List<T> localBatch = localBatch2;
-					ThreadPool.QueueUserWorkItem(delegate(object _)
+					foreach (T item2 in (List<T>)(object)localBatch)
 					{
-						foreach (T obj in localBatch)
+						try
 						{
-							try
-							{
-								callback(obj);
-							}
-							catch (Exception exception)
-							{
-								Debug.LogException(exception);
-							}
+							callback(item2);
 						}
-						Interlocked.Add(ref tasksDone, (long)localBatch.Count);
-						taskDoneEvent.Set();
-					});
-				}
-				goto IL_8F;
+						catch (Exception exception)
+						{
+							Debug.LogException(exception);
+						}
+					}
+					Interlocked.Add(ref tasksDone, ((List<T>)(object)localBatch).Count);
+					taskDoneEvent.Set();
+				});
 			}
-			IL_83:
-			taskDoneEvent.WaitOne();
-			IL_8F:
-			if (Interlocked.Read(ref tasksDone) >= (long)count)
+			while (Interlocked.Read(ref tasksDone) < count)
 			{
-				return;
+				taskDoneEvent.WaitOne();
 			}
-			goto IL_83;
 		}
 
-		
 		public static void ParallelFor(int fromInclusive, int toExclusive, Action<int> callback, int maxDegreeOfParallelism = -1)
 		{
-			GenThreading.GetMaxDegreeOfParallelism(ref maxDegreeOfParallelism);
+			GetMaxDegreeOfParallelism(ref maxDegreeOfParallelism);
 			int num = toExclusive - fromInclusive;
 			long tasksDone = 0L;
-			AutoResetEvent taskDoneEvent = new AutoResetEvent(false);
-			List<GenThreading.Slice>.Enumerator enumerator = GenThreading.SliceWork(fromInclusive, toExclusive, maxDegreeOfParallelism).GetEnumerator();
+			AutoResetEvent taskDoneEvent = new AutoResetEvent(initialState: false);
+			foreach (Slice item in SliceWork(fromInclusive, toExclusive, maxDegreeOfParallelism))
 			{
-				while (enumerator.MoveNext())
+				Slice localBatch = item;
+				ThreadPool.QueueUserWorkItem(delegate
 				{
-					GenThreading.Slice localBatch2 = enumerator.Current;
-					GenThreading.Slice localBatch = localBatch2;
-					ThreadPool.QueueUserWorkItem(delegate(object _)
+					for (int i = localBatch.fromInclusive; i < localBatch.toExclusive; i++)
 					{
-						for (int i = localBatch.fromInclusive; i < localBatch.toExclusive; i++)
+						try
 						{
-							try
-							{
-								callback(i);
-							}
-							catch (Exception exception)
-							{
-								Debug.LogException(exception);
-							}
+							callback(i);
 						}
-						Interlocked.Add(ref tasksDone, (long)(localBatch.toExclusive - localBatch.fromInclusive));
-						taskDoneEvent.Set();
-					});
-				}
-				goto IL_8D;
+						catch (Exception exception)
+						{
+							Debug.LogException(exception);
+						}
+					}
+					Interlocked.Add(ref tasksDone, localBatch.toExclusive - localBatch.fromInclusive);
+					taskDoneEvent.Set();
+				});
 			}
-			IL_81:
-			taskDoneEvent.WaitOne();
-			IL_8D:
-			if (Interlocked.Read(ref tasksDone) >= (long)num)
+			while (Interlocked.Read(ref tasksDone) < num)
 			{
-				return;
+				taskDoneEvent.WaitOne();
 			}
-			goto IL_81;
-		}
-
-		
-		public struct Slice
-		{
-			
-			public Slice(int fromInclusive, int toExclusive)
-			{
-				this.fromInclusive = fromInclusive;
-				this.toExclusive = toExclusive;
-			}
-
-			
-			public readonly int fromInclusive;
-
-			
-			public readonly int toExclusive;
 		}
 	}
 }

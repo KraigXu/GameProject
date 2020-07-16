@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,67 +6,55 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Bill_Medical : Bill
 	{
-		
-		
-		public override bool CheckIngredientsIfSociallyProper
-		{
-			get
-			{
-				return false;
-			}
-		}
+		private BodyPartRecord part;
 
-		
-		
-		protected override bool CanCopy
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public ThingDef consumedInitialMedicineDef;
 
-		
-		
+		public int temp_partIndexToSetLater;
+
+		public override bool CheckIngredientsIfSociallyProper => false;
+
+		protected override bool CanCopy => false;
+
 		public override bool CompletableEver
 		{
 			get
 			{
-				return !this.recipe.targetsBodyPart || this.recipe.Worker.GetPartsToApplyOn(this.GiverPawn, this.recipe).Contains(this.part);
+				if (recipe.targetsBodyPart && !recipe.Worker.GetPartsToApplyOn(GiverPawn, recipe).Contains(part))
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		
 		public BodyPartRecord Part
 		{
 			get
 			{
-				return this.part;
+				return part;
 			}
 			set
 			{
-				if (this.billStack == null && this.part != null)
+				if (billStack == null && part != null)
 				{
-					Log.Error("Can only set Bill_Medical.Part after the bill has been added to a pawn's bill stack.", false);
-					return;
+					Log.Error("Can only set Bill_Medical.Part after the bill has been added to a pawn's bill stack.");
 				}
-				this.part = value;
+				else
+				{
+					part = value;
+				}
 			}
 		}
 
-		
-		
 		public Pawn GiverPawn
 		{
 			get
 			{
-				Pawn pawn = this.billStack.billGiver as Pawn;
-				Corpse corpse = this.billStack.billGiver as Corpse;
+				Pawn pawn = billStack.billGiver as Pawn;
+				Corpse corpse = billStack.billGiver as Corpse;
 				if (corpse != null)
 				{
 					pawn = corpse.InnerPawn;
@@ -79,113 +67,100 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override string Label
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append(this.recipe.Worker.GetLabelWhenUsedOn(this.GiverPawn, this.part));
-				if (this.Part != null && !this.recipe.hideBodyPartNames)
+				stringBuilder.Append(recipe.Worker.GetLabelWhenUsedOn(GiverPawn, part));
+				if (Part != null && !recipe.hideBodyPartNames)
 				{
-					stringBuilder.Append(" (" + this.Part.Label + ")");
+					stringBuilder.Append(" (" + Part.Label + ")");
 				}
 				return stringBuilder.ToString();
 			}
 		}
 
-		
 		public Bill_Medical()
 		{
 		}
 
-		
-		public Bill_Medical(RecipeDef recipe) : base(recipe)
+		public Bill_Medical(RecipeDef recipe)
+			: base(recipe)
 		{
 		}
 
-		
 		public override bool ShouldDoNow()
 		{
-			return !this.suspended;
+			if (suspended)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
 		{
 			base.Notify_IterationCompleted(billDoer, ingredients);
-			if (this.CompletableEver)
+			if (CompletableEver)
 			{
-				Pawn giverPawn = this.GiverPawn;
-				this.recipe.Worker.ApplyOnPawn(giverPawn, this.Part, billDoer, ingredients, this);
+				Pawn giverPawn = GiverPawn;
+				recipe.Worker.ApplyOnPawn(giverPawn, Part, billDoer, ingredients, this);
 				if (giverPawn.RaceProps.IsFlesh)
 				{
 					giverPawn.records.Increment(RecordDefOf.OperationsReceived);
 					billDoer.records.Increment(RecordDefOf.OperationsPerformed);
 				}
 			}
-			this.billStack.Delete(this);
+			billStack.Delete(this);
 		}
 
-		
 		public override void Notify_DoBillStarted(Pawn billDoer)
 		{
 			base.Notify_DoBillStarted(billDoer);
-			this.consumedInitialMedicineDef = null;
-			if (!this.GiverPawn.Dead && this.recipe.anesthetize && HealthUtility.TryAnesthetize(this.GiverPawn))
+			consumedInitialMedicineDef = null;
+			if (GiverPawn.Dead || !recipe.anesthetize || !HealthUtility.TryAnesthetize(GiverPawn))
 			{
-				List<ThingCountClass> placedThings = billDoer.CurJob.placedThings;
-				int i = 0;
-				while (i < placedThings.Count)
+				return;
+			}
+			List<ThingCountClass> placedThings = billDoer.CurJob.placedThings;
+			int num = 0;
+			while (true)
+			{
+				if (num < placedThings.Count)
 				{
-					if (placedThings[i].thing is Medicine)
+					if (placedThings[num].thing is Medicine)
 					{
-						this.recipe.Worker.ConsumeIngredient(placedThings[i].thing.SplitOff(1), this.recipe, billDoer.MapHeld);
-						ThingCountClass thingCountClass = placedThings[i];
-						int count = thingCountClass.Count;
-						thingCountClass.Count = count - 1;
-						this.consumedInitialMedicineDef = placedThings[i].thing.def;
-						if (placedThings[i].thing.Destroyed || placedThings[i].Count <= 0)
-						{
-							placedThings.RemoveAt(i);
-							return;
-						}
 						break;
 					}
-					else
-					{
-						i++;
-					}
+					num++;
+					continue;
 				}
+				return;
+			}
+			recipe.Worker.ConsumeIngredient(placedThings[num].thing.SplitOff(1), recipe, billDoer.MapHeld);
+			placedThings[num].Count--;
+			consumedInitialMedicineDef = placedThings[num].thing.def;
+			if (placedThings[num].thing.Destroyed || placedThings[num].Count <= 0)
+			{
+				placedThings.RemoveAt(num);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_BodyParts.Look(ref this.part, "part", null);
-			Scribe_Defs.Look<ThingDef>(ref this.consumedInitialMedicineDef, "consumedInitialMedicineDef");
+			Scribe_BodyParts.Look(ref part, "part");
+			Scribe_Defs.Look(ref consumedInitialMedicineDef, "consumedInitialMedicineDef");
 			BackCompatibility.PostExposeData(this);
 		}
 
-		
 		public override Bill Clone()
 		{
-			Bill_Medical bill_Medical = (Bill_Medical)base.Clone();
-			bill_Medical.part = this.part;
-			bill_Medical.consumedInitialMedicineDef = this.consumedInitialMedicineDef;
-			return bill_Medical;
+			Bill_Medical obj = (Bill_Medical)base.Clone();
+			obj.part = part;
+			obj.consumedInitialMedicineDef = consumedInitialMedicineDef;
+			return obj;
 		}
-
-		
-		private BodyPartRecord part;
-
-		
-		public ThingDef consumedInitialMedicineDef;
-
-		
-		public int temp_partIndexToSetLater;
 	}
 }

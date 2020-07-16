@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,38 +5,43 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class TaleData_Thing : TaleData
 	{
-		
+		public int thingID;
+
+		public ThingDef thingDef;
+
+		public ThingDef stuff;
+
+		public string title;
+
+		public QualityCategory quality;
+
 		public override void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.thingID, "thingID", 0, false);
-			Scribe_Defs.Look<ThingDef>(ref this.thingDef, "thingDef");
-			Scribe_Defs.Look<ThingDef>(ref this.stuff, "stuff");
-			Scribe_Values.Look<string>(ref this.title, "title", null, false);
-			Scribe_Values.Look<QualityCategory>(ref this.quality, "quality", QualityCategory.Awful, false);
+			Scribe_Values.Look(ref thingID, "thingID", 0);
+			Scribe_Defs.Look(ref thingDef, "thingDef");
+			Scribe_Defs.Look(ref stuff, "stuff");
+			Scribe_Values.Look(ref title, "title");
+			Scribe_Values.Look(ref quality, "quality", QualityCategory.Awful);
 		}
 
-		
 		public override IEnumerable<Rule> GetRules(string prefix)
 		{
-			yield return new Rule_String(prefix + "_label", this.thingDef.label);
-			yield return new Rule_String(prefix + "_definite", Find.ActiveLanguageWorker.WithDefiniteArticle(this.thingDef.label, false, false));
-			yield return new Rule_String(prefix + "_indefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(this.thingDef.label, false, false));
-			if (this.stuff != null)
+			yield return new Rule_String(prefix + "_label", thingDef.label);
+			yield return new Rule_String(prefix + "_definite", Find.ActiveLanguageWorker.WithDefiniteArticle(thingDef.label));
+			yield return new Rule_String(prefix + "_indefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(thingDef.label));
+			if (stuff != null)
 			{
-				yield return new Rule_String(prefix + "_stuffLabel", this.stuff.label);
+				yield return new Rule_String(prefix + "_stuffLabel", stuff.label);
 			}
-			if (this.title != null)
+			if (title != null)
 			{
-				yield return new Rule_String(prefix + "_title", this.title);
+				yield return new Rule_String(prefix + "_title", title);
 			}
-			yield return new Rule_String(prefix + "_quality", this.quality.GetLabel());
-			yield break;
+			yield return new Rule_String(prefix + "_quality", quality.GetLabel());
 		}
 
-		
 		public static TaleData_Thing GenerateFrom(Thing t)
 		{
 			TaleData_Thing taleData_Thing = new TaleData_Thing();
@@ -53,42 +57,19 @@ namespace RimWorld
 			return taleData_Thing;
 		}
 
-		
 		public static TaleData_Thing GenerateRandom()
 		{
-			ThingDef thingDef = DefDatabase<ThingDef>.AllDefs.Where(delegate(ThingDef d)
-			{
-				if (d.comps != null)
-				{
-					return d.comps.Any((CompProperties cp) => cp.compClass == typeof(CompArt));
-				}
-				return false;
-			}).RandomElement<ThingDef>();
-			ThingDef thingDef2 = GenStuff.RandomStuffFor(thingDef);
-			Thing thing = ThingMaker.MakeThing(thingDef, thingDef2);
+			ThingDef obj = DefDatabase<ThingDef>.AllDefs.Where((ThingDef d) => d.comps != null && d.comps.Any((CompProperties cp) => cp.compClass == typeof(CompArt))).RandomElement();
+			ThingDef thingDef = GenStuff.RandomStuffFor(obj);
+			Thing thing = ThingMaker.MakeThing(obj, thingDef);
 			ArtGenerationContext source = (Rand.Value < 0.5f) ? ArtGenerationContext.Colony : ArtGenerationContext.Outsider;
 			CompQuality compQuality = thing.TryGetComp<CompQuality>();
-			if (compQuality != null && compQuality.Quality < thing.TryGetComp<CompArt>().Props.minQualityForArtistic)
+			if (compQuality != null && (int)compQuality.Quality < (int)thing.TryGetComp<CompArt>().Props.minQualityForArtistic)
 			{
 				compQuality.SetQuality(thing.TryGetComp<CompArt>().Props.minQualityForArtistic, source);
 			}
 			thing.TryGetComp<CompArt>().InitializeArt(source);
-			return TaleData_Thing.GenerateFrom(thing);
+			return GenerateFrom(thing);
 		}
-
-		
-		public int thingID;
-
-		
-		public ThingDef thingDef;
-
-		
-		public ThingDef stuff;
-
-		
-		public string title;
-
-		
-		public QualityCategory quality;
 	}
 }

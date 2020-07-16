@@ -1,66 +1,27 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class MoteCounter
 	{
-		
-		
-		public int MoteCount
-		{
-			get
-			{
-				return this.moteCount;
-			}
-		}
-
-		
-		
-		public float Saturation
-		{
-			get
-			{
-				return (float)this.moteCount / 250f;
-			}
-		}
-
-		
-		
-		public bool Saturated
-		{
-			get
-			{
-				return this.Saturation > 1f;
-			}
-		}
-
-		
-		
-		public bool SaturatedLowPriority
-		{
-			get
-			{
-				return this.Saturation > 0.8f;
-			}
-		}
-
-		
-		public void Notify_MoteSpawned()
-		{
-			this.moteCount++;
-		}
-
-		
-		public void Notify_MoteDespawned()
-		{
-			this.moteCount--;
-		}
-
-		
 		private int moteCount;
 
-		
 		private const int SaturatedCount = 250;
+
+		public int MoteCount => moteCount;
+
+		public float Saturation => (float)moteCount / 250f;
+
+		public bool Saturated => Saturation > 1f;
+
+		public bool SaturatedLowPriority => Saturation > 0.8f;
+
+		public void Notify_MoteSpawned()
+		{
+			moteCount++;
+		}
+
+		public void Notify_MoteDespawned()
+		{
+			moteCount--;
+		}
 	}
 }

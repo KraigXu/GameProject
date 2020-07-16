@@ -1,173 +1,112 @@
-﻿using System;
+using System;
 using System.Globalization;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct FloatRange : IEquatable<FloatRange>
 	{
-		
-		
-		public static FloatRange Zero
-		{
-			get
-			{
-				return new FloatRange(0f, 0f);
-			}
-		}
+		public float min;
 
-		
-		
-		public static FloatRange One
-		{
-			get
-			{
-				return new FloatRange(1f, 1f);
-			}
-		}
+		public float max;
 
-		
-		
-		public static FloatRange ZeroToOne
-		{
-			get
-			{
-				return new FloatRange(0f, 1f);
-			}
-		}
+		public static FloatRange Zero => new FloatRange(0f, 0f);
 
-		
-		
-		public float Average
-		{
-			get
-			{
-				return (this.min + this.max) / 2f;
-			}
-		}
+		public static FloatRange One => new FloatRange(1f, 1f);
 
-		
-		
-		public float RandomInRange
-		{
-			get
-			{
-				return Rand.Range(this.min, this.max);
-			}
-		}
+		public static FloatRange ZeroToOne => new FloatRange(0f, 1f);
 
-		
-		
-		public float TrueMin
-		{
-			get
-			{
-				return Mathf.Min(this.min, this.max);
-			}
-		}
+		public float Average => (min + max) / 2f;
 
-		
-		
-		public float TrueMax
-		{
-			get
-			{
-				return Mathf.Max(this.min, this.max);
-			}
-		}
+		public float RandomInRange => Rand.Range(min, max);
 
-		
-		
-		public float Span
-		{
-			get
-			{
-				return this.TrueMax - this.TrueMin;
-			}
-		}
+		public float TrueMin => Mathf.Min(min, max);
 
-		
+		public float TrueMax => Mathf.Max(min, max);
+
+		public float Span => TrueMax - TrueMin;
+
 		public FloatRange(float min, float max)
 		{
 			this.min = min;
 			this.max = max;
 		}
 
-		
 		public float ClampToRange(float value)
 		{
-			return Mathf.Clamp(value, this.min, this.max);
+			return Mathf.Clamp(value, min, max);
 		}
 
-		
 		public float RandomInRangeSeeded(int seed)
 		{
-			return Rand.RangeSeeded(this.min, this.max, seed);
+			return Rand.RangeSeeded(min, max, seed);
 		}
 
-		
 		public float LerpThroughRange(float lerpPct)
 		{
-			return Mathf.Lerp(this.min, this.max, lerpPct);
+			return Mathf.Lerp(min, max, lerpPct);
 		}
 
-		
 		public float InverseLerpThroughRange(float f)
 		{
-			return Mathf.InverseLerp(this.min, this.max, f);
+			return Mathf.InverseLerp(min, max, f);
 		}
 
-		
 		public bool Includes(float f)
 		{
-			return f >= this.min && f <= this.max;
+			if (f >= min)
+			{
+				return f <= max;
+			}
+			return false;
 		}
 
-		
 		public bool IncludesEpsilon(float f)
 		{
-			return f >= this.min - 1E-05f && f <= this.max + 1E-05f;
+			if (f >= min - 1E-05f)
+			{
+				return f <= max + 1E-05f;
+			}
+			return false;
 		}
 
-		
 		public FloatRange ExpandedBy(float f)
 		{
-			return new FloatRange(this.min - f, this.max + f);
+			return new FloatRange(min - f, max + f);
 		}
 
-		
 		public static bool operator ==(FloatRange a, FloatRange b)
 		{
-			return a.min == b.min && a.max == b.max;
+			if (a.min == b.min)
+			{
+				return a.max == b.max;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(FloatRange a, FloatRange b)
 		{
-			return a.min != b.min || a.max != b.max;
+			if (a.min == b.min)
+			{
+				return a.max != b.max;
+			}
+			return true;
 		}
 
-		
 		public static FloatRange operator *(FloatRange r, float val)
 		{
 			return new FloatRange(r.min * val, r.max * val);
 		}
 
-		
 		public static FloatRange operator *(float val, FloatRange r)
 		{
 			return new FloatRange(r.min * val, r.max * val);
 		}
 
-		
 		public static FloatRange FromString(string s)
 		{
 			CultureInfo invariantCulture = CultureInfo.InvariantCulture;
-			string[] array = s.Split(new char[]
-			{
-				'~'
-			});
+			string[] array = s.Split('~');
 			if (array.Length == 1)
 			{
 				float num = Convert.ToSingle(array[0], invariantCulture);
@@ -176,34 +115,32 @@ namespace Verse
 			return new FloatRange(Convert.ToSingle(array[0], invariantCulture), Convert.ToSingle(array[1], invariantCulture));
 		}
 
-		
 		public override string ToString()
 		{
-			return this.min + "~" + this.max;
+			return min + "~" + max;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombineStruct<float>(this.min.GetHashCode(), this.max);
+			return Gen.HashCombineStruct(min.GetHashCode(), max);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is FloatRange && this.Equals((FloatRange)obj);
+			if (!(obj is FloatRange))
+			{
+				return false;
+			}
+			return Equals((FloatRange)obj);
 		}
 
-		
 		public bool Equals(FloatRange other)
 		{
-			return other.min == this.min && other.max == this.max;
+			if (other.min == min)
+			{
+				return other.max == max;
+			}
+			return false;
 		}
-
-		
-		public float min;
-
-		
-		public float max;
 	}
 }

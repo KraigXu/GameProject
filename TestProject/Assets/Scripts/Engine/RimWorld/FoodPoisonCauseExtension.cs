@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FoodPoisonCauseExtension
 	{
-		
 		public static string ToStringHuman(this FoodPoisonCause cause)
 		{
 			switch (cause)

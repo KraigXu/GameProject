@@ -1,35 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_WorldObjectTimeout : QuestPart_Delay
 	{
-		
-		
+		public WorldObject worldObject;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.worldObject != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.worldObject;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (worldObject != null)
+				{
+					yield return worldObject;
+				}
 			}
 		}
 
-		
 		public override string ExtraInspectString(ISelectable target)
 		{
-			if (target == this.worldObject)
+			if (target == worldObject)
 			{
 				Site site = target as Site;
 				if (site != null)
@@ -42,42 +38,37 @@ namespace RimWorld
 						}
 					}
 				}
-				return "WorldObjectTimeout".Translate(base.TicksLeft.ToStringTicksToPeriod(true, false, true, true));
+				return "WorldObjectTimeout".Translate(base.TicksLeft.ToStringTicksToPeriod());
 			}
 			return null;
 		}
 
-		
 		protected override void DelayFinished()
 		{
-			QuestPart_DestroyWorldObject.TryRemove(this.worldObject);
-			if (this.worldObject != null)
+			QuestPart_DestroyWorldObject.TryRemove(worldObject);
+			if (worldObject != null)
 			{
-				base.Complete(this.worldObject.Named("SUBJECT"));
-				return;
+				Complete(worldObject.Named("SUBJECT"));
 			}
-			base.Complete();
+			else
+			{
+				Complete();
+			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<WorldObject>(ref this.worldObject, "worldObject", false);
+			Scribe_References.Look(ref worldObject, "worldObject");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			int tile;
-			if (TileFinder.TryFindNewSiteTile(out tile, 7, 27, false, true, -1))
+			if (TileFinder.TryFindNewSiteTile(out int tile))
 			{
-				this.worldObject = SiteMaker.MakeSiteNormal(null, tile, null, true, null);
+				worldObject = SiteMaker.MakeSite((SitePartDef)null, tile, (Faction)null, ifHostileThenMustRemainHostile: true, (float?)null);
 			}
 		}
-
-		
-		public WorldObject worldObject;
 	}
 }

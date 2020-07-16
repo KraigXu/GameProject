@@ -1,57 +1,45 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class CompLifespan : ThingComp
 	{
-		
-		
-		public CompProperties_Lifespan Props
-		{
-			get
-			{
-				return (CompProperties_Lifespan)this.props;
-			}
-		}
+		public int age = -1;
 
-		
+		public CompProperties_Lifespan Props => (CompProperties_Lifespan)props;
+
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.age, "age", 0, false);
+			Scribe_Values.Look(ref age, "age", 0);
 		}
 
-		
 		public override void CompTick()
 		{
-			this.age++;
-			if (this.age >= this.Props.lifespanTicks)
+			age++;
+			if (age >= Props.lifespanTicks)
 			{
-				this.parent.Destroy(DestroyMode.Vanish);
+				parent.Destroy();
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
-			this.age += 250;
-			if (this.age >= this.Props.lifespanTicks)
+			age += 250;
+			if (age >= Props.lifespanTicks)
 			{
-				this.parent.Destroy(DestroyMode.Vanish);
+				parent.Destroy();
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			string text = base.CompInspectStringExtra();
 			string result = "";
-			int num = this.Props.lifespanTicks - this.age;
+			int num = Props.lifespanTicks - age;
 			if (num > 0)
 			{
-				result = "LifespanExpiry".Translate() + " " + num.ToStringTicksToPeriod(true, false, true, true);
+				result = "LifespanExpiry".Translate() + " " + num.ToStringTicksToPeriod();
 				if (!text.NullOrEmpty())
 				{
 					result = "\n" + text;
@@ -59,8 +47,5 @@ namespace Verse
 			}
 			return result;
 		}
-
-		
-		public int age = -1;
 	}
 }

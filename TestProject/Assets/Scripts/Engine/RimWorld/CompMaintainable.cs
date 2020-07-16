@@ -1,32 +1,22 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompMaintainable : ThingComp
 	{
-		
-		
-		public CompProperties_Maintainable Props
-		{
-			get
-			{
-				return (CompProperties_Maintainable)this.props;
-			}
-		}
+		public int ticksSinceMaintain;
 
-		
-		
+		public CompProperties_Maintainable Props => (CompProperties_Maintainable)props;
+
 		public MaintainableStage CurStage
 		{
 			get
 			{
-				if (this.ticksSinceMaintain < this.Props.ticksHealthy)
+				if (ticksSinceMaintain < Props.ticksHealthy)
 				{
 					return MaintainableStage.Healthy;
 				}
-				if (this.ticksSinceMaintain < this.Props.ticksHealthy + this.Props.ticksNeedsMaintenance)
+				if (ticksSinceMaintain < Props.ticksHealthy + Props.ticksNeedsMaintenance)
 				{
 					return MaintainableStage.NeedsMaintenance;
 				}
@@ -34,81 +24,60 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		private bool Active
-		{
-			get
-			{
-				Hive hive = this.parent as Hive;
-				return hive == null || hive.CompDormant.Awake;
-			}
-		}
+		private bool Active => (parent as Hive)?.CompDormant.Awake ?? true;
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ticksSinceMaintain, "ticksSinceMaintain", 0, false);
+			Scribe_Values.Look(ref ticksSinceMaintain, "ticksSinceMaintain", 0);
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (!this.Active)
+			if (Active)
 			{
-				return;
-			}
-			this.ticksSinceMaintain++;
-			if (Find.TickManager.TicksGame % 250 == 0)
-			{
-				this.CheckTakeDamage();
+				ticksSinceMaintain++;
+				if (Find.TickManager.TicksGame % 250 == 0)
+				{
+					CheckTakeDamage();
+				}
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
-			if (!this.Active)
+			if (Active)
 			{
-				return;
+				ticksSinceMaintain += 250;
+				CheckTakeDamage();
 			}
-			this.ticksSinceMaintain += 250;
-			this.CheckTakeDamage();
 		}
 
-		
 		private void CheckTakeDamage()
 		{
-			if (this.CurStage == MaintainableStage.Damaging)
+			if (CurStage == MaintainableStage.Damaging)
 			{
-				this.parent.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)this.Props.damagePerTickRare, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+				parent.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, Props.damagePerTickRare));
 			}
 		}
 
-		
 		public void Maintained()
 		{
-			this.ticksSinceMaintain = 0;
+			ticksSinceMaintain = 0;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			MaintainableStage curStage = this.CurStage;
-			if (curStage == MaintainableStage.NeedsMaintenance)
+			switch (CurStage)
 			{
+			case MaintainableStage.NeedsMaintenance:
 				return "DueForMaintenance".Translate();
-			}
-			if (curStage != MaintainableStage.Damaging)
-			{
+			case MaintainableStage.Damaging:
+				return "DeterioratingDueToLackOfMaintenance".Translate();
+			default:
 				return null;
 			}
-			return "DeterioratingDueToLackOfMaintenance".Translate();
 		}
-
-		
-		public int ticksSinceMaintain;
 	}
 }

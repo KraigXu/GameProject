@@ -1,21 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JoyGiver_BuildSnowman : JoyGiver
 	{
-		
+		private const float MinSnowmanDepth = 0.5f;
+
+		private const float MinDistBetweenSnowmen = 12f;
+
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.WorkTypeIsDisabled(WorkTypeDefOf.Construction))
 			{
 				return null;
 			}
-			if (!JoyUtility.EnjoyableOutsideNow(pawn, null))
+			if (!JoyUtility.EnjoyableOutsideNow(pawn))
 			{
 				return null;
 			}
@@ -23,19 +24,17 @@ namespace RimWorld
 			{
 				return null;
 			}
-			IntVec3 c = JoyGiver_BuildSnowman.TryFindSnowmanBuildCell(pawn);
+			IntVec3 c = TryFindSnowmanBuildCell(pawn);
 			if (!c.IsValid)
 			{
 				return null;
 			}
-			return JobMaker.MakeJob(this.def.jobDef, c);
+			return JobMaker.MakeJob(def.jobDef, c);
 		}
 
-		
 		private static IntVec3 TryFindSnowmanBuildCell(Pawn pawn)
 		{
-			Region rootReg;
-			if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(RegionType.Set_Passable), TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), (Region r) => r.Room.PsychologicallyOutdoors, 100, out rootReg, RegionType.Set_Passable))
+			if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(), TraverseParms.For(pawn), (Region r) => r.Room.PsychologicallyOutdoors, 100, out Region rootReg))
 			{
 				return IntVec3.Invalid;
 			}
@@ -45,18 +44,17 @@ namespace RimWorld
 				for (int i = 0; i < 5; i++)
 				{
 					IntVec3 randomCell = r.RandomCell;
-					if (JoyGiver_BuildSnowman.IsGoodSnowmanCell(randomCell, pawn))
+					if (IsGoodSnowmanCell(randomCell, pawn))
 					{
 						result = randomCell;
 						return true;
 					}
 				}
 				return false;
-			}, 30, RegionType.Set_Passable);
+			}, 30);
 			return result;
 		}
 
-		
 		private static bool IsGoodSnowmanCell(IntVec3 c, Pawn pawn)
 		{
 			if (pawn.Map.snowGrid.GetDepth(c) < 0.5f)
@@ -97,11 +95,5 @@ namespace RimWorld
 			}
 			return true;
 		}
-
-		
-		private const float MinSnowmanDepth = 0.5f;
-
-		
-		private const float MinDistBetweenSnowmen = 12f;
 	}
 }

@@ -1,26 +1,37 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class Mouse
 	{
-		
-		
 		public static bool IsInputBlockedNow
 		{
 			get
 			{
 				WindowStack windowStack = Find.WindowStack;
-				return (Widgets.mouseOverScrollViewStack.Count > 0 && !Widgets.mouseOverScrollViewStack.Peek()) || windowStack.MouseObscuredNow || !windowStack.CurrentWindowGetsInput;
+				if (Widgets.mouseOverScrollViewStack.Count > 0 && !Widgets.mouseOverScrollViewStack.Peek())
+				{
+					return true;
+				}
+				if (windowStack.MouseObscuredNow)
+				{
+					return true;
+				}
+				if (!windowStack.CurrentWindowGetsInput)
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public static bool IsOver(Rect rect)
 		{
-			return rect.Contains(Event.current.mousePosition) && !Mouse.IsInputBlockedNow;
+			if (rect.Contains(Event.current.mousePosition) && !IsInputBlockedNow)
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

@@ -1,73 +1,55 @@
-﻿using System;
 using System.Diagnostics;
 using System.Text;
 
 namespace Verse
 {
-	
 	public static class PerfLogger
 	{
-		
+		public static StringBuilder currentLog = new StringBuilder();
+
+		private static long start;
+
+		private static long current;
+
+		private static int indent;
+
 		public static void Reset()
 		{
-			PerfLogger.currentLog = null;
-			PerfLogger.start = Stopwatch.GetTimestamp();
-			PerfLogger.current = PerfLogger.start;
+			currentLog = null;
+			start = Stopwatch.GetTimestamp();
+			current = start;
 		}
 
-		
 		public static void Flush()
 		{
-			Log.Message((PerfLogger.currentLog != null) ? PerfLogger.currentLog.ToString() : "", false);
-			PerfLogger.Reset();
+			Log.Message((currentLog != null) ? currentLog.ToString() : "");
+			Reset();
 		}
 
-		
 		public static void Record(string label)
 		{
 			long timestamp = Stopwatch.GetTimestamp();
-			if (PerfLogger.currentLog == null)
+			if (currentLog == null)
 			{
-				PerfLogger.currentLog = new StringBuilder();
+				currentLog = new StringBuilder();
 			}
-			PerfLogger.currentLog.AppendLine(string.Format("{0}: {3}{1} ({2})", new object[]
-			{
-				(timestamp - PerfLogger.start) * 1000L / Stopwatch.Frequency,
-				label,
-				(timestamp - PerfLogger.current) * 1000L / Stopwatch.Frequency,
-				new string(' ', PerfLogger.indent * 2)
-			}));
-			PerfLogger.current = timestamp;
+			currentLog.AppendLine(string.Format("{0}: {3}{1} ({2})", (timestamp - start) * 1000 / Stopwatch.Frequency, label, (timestamp - current) * 1000 / Stopwatch.Frequency, new string(' ', indent * 2)));
+			current = timestamp;
 		}
 
-		
 		public static void Indent()
 		{
-			PerfLogger.indent++;
+			indent++;
 		}
 
-		
 		public static void Outdent()
 		{
-			PerfLogger.indent--;
+			indent--;
 		}
 
-		
 		public static float Duration()
 		{
-			return (float)(Stopwatch.GetTimestamp() - PerfLogger.start) / (float)Stopwatch.Frequency;
+			return (float)(Stopwatch.GetTimestamp() - start) / (float)Stopwatch.Frequency;
 		}
-
-		
-		public static StringBuilder currentLog = new StringBuilder();
-
-		
-		private static long start;
-
-		
-		private static long current;
-
-		
-		private static int indent;
 	}
 }

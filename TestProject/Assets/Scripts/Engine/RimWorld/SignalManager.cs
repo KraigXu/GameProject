@@ -1,83 +1,70 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SignalManager
 	{
-		
+		private int signalsThisFrame;
+
+		private const int MaxSignalsPerFrame = 3000;
+
+		public List<ISignalReceiver> receivers = new List<ISignalReceiver>();
+
 		public void RegisterReceiver(ISignalReceiver receiver)
 		{
 			if (receiver == null)
 			{
-				Log.Error("Tried to register a null reciever.", false);
-				return;
+				Log.Error("Tried to register a null reciever.");
 			}
-			if (this.receivers.Contains(receiver))
+			else if (receivers.Contains(receiver))
 			{
-				Log.Error("Tried to register the same receiver twice: " + receiver.ToStringSafe<ISignalReceiver>(), false);
-				return;
+				Log.Error("Tried to register the same receiver twice: " + receiver.ToStringSafe());
 			}
-			this.receivers.Add(receiver);
+			else
+			{
+				receivers.Add(receiver);
+			}
 		}
 
-		
 		public void DeregisterReceiver(ISignalReceiver receiver)
 		{
-			this.receivers.Remove(receiver);
+			receivers.Remove(receiver);
 		}
 
-		
 		public void SendSignal(Signal signal)
 		{
-			if (this.signalsThisFrame >= 3000)
+			if (signalsThisFrame >= 3000)
 			{
-				if (this.signalsThisFrame == 3000)
+				if (signalsThisFrame == 3000)
 				{
-					Log.Error("Reached max signals per frame (" + 3000 + "). Ignoring further signals.", false);
+					Log.Error("Reached max signals per frame (" + 3000 + "). Ignoring further signals.");
 				}
-				this.signalsThisFrame++;
+				signalsThisFrame++;
 				return;
 			}
-			this.signalsThisFrame++;
+			signalsThisFrame++;
 			if (DebugViewSettings.logSignals)
 			{
-				Log.Message("Signal: tag=" + signal.tag.ToStringSafe<string>() + " args=" + signal.args.Args.ToStringSafeEnumerable(), false);
+				Log.Message("Signal: tag=" + signal.tag.ToStringSafe() + " args=" + signal.args.Args.ToStringSafeEnumerable());
 			}
-			for (int i = 0; i < this.receivers.Count; i++)
+			for (int i = 0; i < receivers.Count; i++)
 			{
 				try
 				{
-					this.receivers[i].Notify_SignalReceived(signal);
+					receivers[i].Notify_SignalReceived(signal);
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Error while sending signal to ",
-						this.receivers[i].ToStringSafe<ISignalReceiver>(),
-						": ",
-						ex
-					}), false);
+					Log.Error("Error while sending signal to " + receivers[i].ToStringSafe() + ": " + ex);
 				}
 			}
 		}
 
-		
 		public void SignalManagerUpdate()
 		{
-			this.signalsThisFrame = 0;
+			signalsThisFrame = 0;
 		}
-
-		
-		private int signalsThisFrame;
-
-		
-		private const int MaxSignalsPerFrame = 3000;
-
-		
-		public List<ISignalReceiver> receivers = new List<ISignalReceiver>();
 	}
 }

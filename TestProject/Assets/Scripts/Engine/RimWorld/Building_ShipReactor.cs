@@ -1,44 +1,37 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Building_ShipReactor : Building
 	{
-		
+		public bool charlonsReactor;
+
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
-			if (this.charlonsReactor)
+			if (charlonsReactor)
 			{
 				QuestUtility.SendQuestTargetSignals(base.Map.Parent.questTags, "ReactorDestroyed");
 			}
 			base.Destroy(mode);
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			foreach (Gizmo gizmo2 in ShipUtility.ShipStartupGizmos(this))
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				yield return gizmo2;
+				yield return gizmo;
 			}
-			enumerator = null;
-			yield break;
-			yield break;
+			foreach (Gizmo item in ShipUtility.ShipStartupGizmos(this))
+			{
+				yield return item;
+			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.charlonsReactor, "charlonsReactor", false, false);
+			Scribe_Values.Look(ref charlonsReactor, "charlonsReactor", defaultValue: false);
 		}
-
-		
-		public bool charlonsReactor;
 	}
 }

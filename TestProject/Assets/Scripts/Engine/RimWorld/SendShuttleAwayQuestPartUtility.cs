@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SendShuttleAwayQuestPartUtility
 	{
-		
 		public static void SendAway(Thing shuttle, bool dropEverything)
 		{
 			CompShuttle compShuttle = shuttle.TryGetComp<CompShuttle>();
@@ -19,12 +16,11 @@ namespace RimWorld
 				}
 				if (!compTransporter.LoadingInProgressOrReadyToLaunch)
 				{
-					TransporterUtility.InitiateLoading(Gen.YieldSingle<CompTransporter>(compTransporter));
+					TransporterUtility.InitiateLoading(Gen.YieldSingle(compTransporter));
 				}
 				compShuttle.Send();
-				return;
 			}
-			if (shuttle.ParentHolder is Thing && ((Thing)shuttle.ParentHolder).def == ThingDefOf.ShuttleIncoming)
+			else if (shuttle.ParentHolder is Thing && ((Thing)shuttle.ParentHolder).def == ThingDefOf.ShuttleIncoming)
 			{
 				compShuttle.leaveASAP = true;
 			}

@@ -1,131 +1,120 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompForbiddable : ThingComp
 	{
-		
-		
-		
+		private bool forbiddenInt;
+
 		public bool Forbidden
 		{
 			get
 			{
-				return this.forbiddenInt;
+				return forbiddenInt;
 			}
 			set
 			{
-				if (value == this.forbiddenInt)
+				if (value == forbiddenInt)
 				{
 					return;
 				}
-				this.forbiddenInt = value;
-				if (this.parent.Spawned)
+				forbiddenInt = value;
+				if (parent.Spawned)
 				{
-					if (this.forbiddenInt)
+					if (forbiddenInt)
 					{
-						this.parent.Map.listerHaulables.Notify_Forbidden(this.parent);
-						this.parent.Map.listerMergeables.Notify_Forbidden(this.parent);
+						parent.Map.listerHaulables.Notify_Forbidden(parent);
+						parent.Map.listerMergeables.Notify_Forbidden(parent);
 					}
 					else
 					{
-						this.parent.Map.listerHaulables.Notify_Unforbidden(this.parent);
-						this.parent.Map.listerMergeables.Notify_Unforbidden(this.parent);
+						parent.Map.listerHaulables.Notify_Unforbidden(parent);
+						parent.Map.listerMergeables.Notify_Unforbidden(parent);
 					}
-					if (this.parent is Building_Door)
+					if (parent is Building_Door)
 					{
-						this.parent.Map.reachability.ClearCache();
+						parent.Map.reachability.ClearCache();
 					}
 				}
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<bool>(ref this.forbiddenInt, "forbidden", false, false);
+			Scribe_Values.Look(ref forbiddenInt, "forbidden", defaultValue: false);
 		}
 
-		
 		public override void PostDraw()
 		{
-			if (this.forbiddenInt)
+			if (!forbiddenInt)
 			{
-				if (this.parent is Blueprint || this.parent is Frame)
+				return;
+			}
+			if (parent is Blueprint || parent is Frame)
+			{
+				if (parent.def.size.x > 1 || parent.def.size.z > 1)
 				{
-					if (this.parent.def.size.x > 1 || this.parent.def.size.z > 1)
-					{
-						this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.ForbiddenBig);
-						return;
-					}
-					this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.Forbidden);
-					return;
+					parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.ForbiddenBig);
 				}
 				else
 				{
-					if (this.parent.def.category == ThingCategory.Building)
-					{
-						this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.ForbiddenBig);
-						return;
-					}
-					this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.Forbidden);
+					parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.Forbidden);
 				}
 			}
+			else if (parent.def.category == ThingCategory.Building)
+			{
+				parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.ForbiddenBig);
+			}
+			else
+			{
+				parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.Forbidden);
+			}
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
-			piece.SetForbidden(this.forbiddenInt, true);
+			piece.SetForbidden(forbiddenInt);
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (this.parent is Building && this.parent.Faction != Faction.OfPlayer)
+			if (!(parent is Building) || parent.Faction == Faction.OfPlayer)
 			{
-				yield break;
-			}
-			Command_Toggle command_Toggle = new Command_Toggle();
-			command_Toggle.hotKey = KeyBindingDefOf.Command_ItemForbid;
-			command_Toggle.icon = TexCommand.ForbidOff;
-			command_Toggle.isActive = (() => !this.Forbidden);
-			command_Toggle.defaultLabel = "CommandAllow".TranslateWithBackup("DesignatorUnforbid");
-			command_Toggle.activateIfAmbiguous = false;
-			if (this.forbiddenInt)
-			{
-				command_Toggle.defaultDesc = "CommandForbiddenDesc".TranslateWithBackup("DesignatorUnforbidDesc");
-			}
-			else
-			{
-				command_Toggle.defaultDesc = "CommandNotForbiddenDesc".TranslateWithBackup("DesignatorForbidDesc");
-			}
-			if (this.parent.def.IsDoor)
-			{
-				command_Toggle.tutorTag = "ToggleForbidden-Door";
-				command_Toggle.toggleAction = delegate
+				Command_Toggle command_Toggle = new Command_Toggle();
+				command_Toggle.hotKey = KeyBindingDefOf.Command_ItemForbid;
+				command_Toggle.icon = TexCommand.ForbidOff;
+				command_Toggle.isActive = (() => !Forbidden);
+				command_Toggle.defaultLabel = "CommandAllow".TranslateWithBackup("DesignatorUnforbid");
+				command_Toggle.activateIfAmbiguous = false;
+				if (forbiddenInt)
 				{
-					this.Forbidden = !this.Forbidden;
-					PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.ForbiddingDoors, KnowledgeAmount.SpecificInteraction);
-				};
-			}
-			else
-			{
-				command_Toggle.tutorTag = "ToggleForbidden";
-				command_Toggle.toggleAction = delegate
+					command_Toggle.defaultDesc = "CommandForbiddenDesc".TranslateWithBackup("DesignatorUnforbidDesc");
+				}
+				else
 				{
-					this.Forbidden = !this.Forbidden;
-					PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Forbidding, KnowledgeAmount.SpecificInteraction);
-				};
+					command_Toggle.defaultDesc = "CommandNotForbiddenDesc".TranslateWithBackup("DesignatorForbidDesc");
+				}
+				if (parent.def.IsDoor)
+				{
+					command_Toggle.tutorTag = "ToggleForbidden-Door";
+					command_Toggle.toggleAction = delegate
+					{
+						Forbidden = !Forbidden;
+						PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.ForbiddingDoors, KnowledgeAmount.SpecificInteraction);
+					};
+				}
+				else
+				{
+					command_Toggle.tutorTag = "ToggleForbidden";
+					command_Toggle.toggleAction = delegate
+					{
+						Forbidden = !Forbidden;
+						PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Forbidding, KnowledgeAmount.SpecificInteraction);
+					};
+				}
+				yield return command_Toggle;
 			}
-			yield return command_Toggle;
-			yield break;
 		}
-
-		
-		private bool forbiddenInt;
 	}
 }

@@ -1,79 +1,67 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Instruction_BuildAtRoom : Lesson_Instruction
 	{
-		
-		
-		protected abstract CellRect BuildableRect { get; }
+		protected abstract CellRect BuildableRect
+		{
+			get;
+		}
 
-		
-		
 		protected override float ProgressPercent
 		{
 			get
 			{
-				if (this.def.targetCount <= 1)
+				if (def.targetCount <= 1)
 				{
 					return -1f;
 				}
-				return (float)this.NumPlaced() / (float)this.def.targetCount;
+				return (float)NumPlaced() / (float)def.targetCount;
 			}
 		}
 
-		
 		protected int NumPlaced()
 		{
 			int num = 0;
-			CellRect.Enumerator enumerator = this.BuildableRect.GetEnumerator();
+			foreach (IntVec3 item in BuildableRect)
 			{
-				while (enumerator.MoveNext())
+				if (TutorUtility.BuildingOrBlueprintOrFrameCenterExists(item, base.Map, def.thingDef))
 				{
-					if (TutorUtility.BuildingOrBlueprintOrFrameCenterExists(enumerator.Current, base.Map, this.def.thingDef))
-					{
-						num++;
-					}
+					num++;
 				}
 			}
 			return num;
 		}
 
-		
 		public override void LessonOnGUI()
 		{
-			TutorUtility.DrawCellRectOnGUI(this.BuildableRect.ContractedBy(1), this.def.onMapInstruction);
+			TutorUtility.DrawCellRectOnGUI(BuildableRect.ContractedBy(1), def.onMapInstruction);
 			base.LessonOnGUI();
 		}
 
-		
 		public override void LessonUpdate()
 		{
-			GenDraw.DrawArrowPointingAt(this.BuildableRect.CenterVector3, true);
+			GenDraw.DrawArrowPointingAt(BuildableRect.CenterVector3, offscreenOnly: true);
 		}
 
-		
 		public override AcceptanceReport AllowAction(EventPack ep)
 		{
-			if (ep.Tag == "Designate-" + this.def.thingDef.defName)
+			if (ep.Tag == "Designate-" + def.thingDef.defName)
 			{
-				return this.AllowBuildAt(ep.Cell);
+				return AllowBuildAt(ep.Cell);
 			}
 			return base.AllowAction(ep);
 		}
 
-		
 		protected virtual bool AllowBuildAt(IntVec3 c)
 		{
-			return this.BuildableRect.Contains(c);
+			return BuildableRect.Contains(c);
 		}
 
-		
 		public override void Notify_Event(EventPack ep)
 		{
-			if (this.NumPlaced() >= this.def.targetCount)
+			if (NumPlaced() >= def.targetCount)
 			{
 				Find.ActiveLesson.Deactivate();
 			}

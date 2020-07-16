@@ -1,65 +1,59 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_MapGen_AncientPodContents : ThingSetMaker
 	{
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			PodContentsType podContentsType = parms.podContentsType ?? Gen.RandomEnumValue<PodContentsType>(true);
+			PodContentsType podContentsType = parms.podContentsType ?? Gen.RandomEnumValue<PodContentsType>(disallowFirstValue: true);
 			switch (podContentsType)
 			{
 			case PodContentsType.Empty:
 				break;
 			case PodContentsType.AncientFriendly:
-				outThings.Add(this.GenerateFriendlyAncient());
-				return;
+				outThings.Add(GenerateFriendlyAncient());
+				break;
 			case PodContentsType.AncientIncapped:
-				outThings.Add(this.GenerateIncappedAncient());
-				return;
-			case PodContentsType.AncientHalfEaten:
-				outThings.Add(this.GenerateHalfEatenAncient());
-				outThings.AddRange(this.GenerateScarabs());
-				return;
+				outThings.Add(GenerateIncappedAncient());
+				break;
 			case PodContentsType.AncientHostile:
-				outThings.Add(this.GenerateAngryAncient());
-				return;
+				outThings.Add(GenerateAngryAncient());
+				break;
 			case PodContentsType.Slave:
-				outThings.Add(this.GenerateSlave());
-				return;
+				outThings.Add(GenerateSlave());
+				break;
+			case PodContentsType.AncientHalfEaten:
+				outThings.Add(GenerateHalfEatenAncient());
+				outThings.AddRange(GenerateScarabs());
+				break;
 			default:
-				Log.Error("Pod contents type not handled: " + podContentsType, false);
+				Log.Error("Pod contents type not handled: " + podContentsType);
 				break;
 			}
 		}
 
-		
 		private Pawn GenerateFriendlyAncient()
 		{
-			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, true, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-			this.GiveRandomLootInventoryForTombPawn(pawn);
+			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 1f, forceAddFreeWarmLayerIfNeeded: false, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: true));
+			GiveRandomLootInventoryForTombPawn(pawn);
 			return pawn;
 		}
 
-		
 		private Pawn GenerateIncappedAncient()
 		{
-			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, true, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-			HealthUtility.DamageUntilDowned(pawn, true);
-			this.GiveRandomLootInventoryForTombPawn(pawn);
+			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 1f, forceAddFreeWarmLayerIfNeeded: false, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: true));
+			HealthUtility.DamageUntilDowned(pawn);
+			GiveRandomLootInventoryForTombPawn(pawn);
 			return pawn;
 		}
 
-		
 		private Pawn GenerateSlave()
 		{
-			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Slave, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, true, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-			HealthUtility.DamageUntilDowned(pawn, true);
-			this.GiveRandomLootInventoryForTombPawn(pawn);
+			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Slave, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 1f, forceAddFreeWarmLayerIfNeeded: false, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: true));
+			HealthUtility.DamageUntilDowned(pawn);
+			GiveRandomLootInventoryForTombPawn(pawn);
 			if (Rand.Value < 0.5f)
 			{
 				HealthUtility.DamageUntilDead(pawn);
@@ -67,73 +61,68 @@ namespace RimWorld
 			return pawn;
 		}
 
-		
 		private Pawn GenerateAngryAncient()
 		{
-			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncientsHostile, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, true, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-			this.GiveRandomLootInventoryForTombPawn(pawn);
+			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncientsHostile, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 1f, forceAddFreeWarmLayerIfNeeded: false, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: true));
+			GiveRandomLootInventoryForTombPawn(pawn);
 			return pawn;
 		}
 
-		
 		private Pawn GenerateHalfEatenAncient()
 		{
-			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, true, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
+			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.AncientSoldier, Faction.OfAncients, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 1f, forceAddFreeWarmLayerIfNeeded: false, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: true));
 			int num = Rand.Range(6, 10);
 			for (int i = 0; i < num; i++)
 			{
-				pawn.TakeDamage(new DamageInfo(DamageDefOf.Bite, (float)Rand.Range(3, 8), 0f, -1f, pawn, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+				pawn.TakeDamage(new DamageInfo(DamageDefOf.Bite, Rand.Range(3, 8), 0f, -1f, pawn));
 			}
-			this.GiveRandomLootInventoryForTombPawn(pawn);
+			GiveRandomLootInventoryForTombPawn(pawn);
 			return pawn;
 		}
 
-		
 		private List<Thing> GenerateScarabs()
 		{
 			List<Thing> list = new List<Thing>();
 			int num = Rand.Range(3, 6);
 			for (int i = 0; i < num; i++)
 			{
-				Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Megascarab, null);
-				pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Manhunter, null, false, false, null, false);
+				Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Megascarab);
+				pawn.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Manhunter);
 				list.Add(pawn);
 			}
 			return list;
 		}
 
-		
 		private void GiveRandomLootInventoryForTombPawn(Pawn p)
 		{
 			if (Rand.Value < 0.65f)
 			{
-				this.MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.Gold, Rand.Range(10, 50));
+				MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.Gold, Rand.Range(10, 50));
 			}
 			else
 			{
-				this.MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.Plasteel, Rand.Range(10, 50));
+				MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.Plasteel, Rand.Range(10, 50));
 			}
 			if (Rand.Value < 0.7f)
 			{
-				this.MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.ComponentIndustrial, Rand.Range(-2, 4));
-				return;
+				MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.ComponentIndustrial, Rand.Range(-2, 4));
 			}
-			this.MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.ComponentSpacer, Rand.Range(-2, 4));
+			else
+			{
+				MakeIntoContainer(p.inventory.innerContainer, ThingDefOf.ComponentSpacer, Rand.Range(-2, 4));
+			}
 		}
 
-		
 		private void MakeIntoContainer(ThingOwner container, ThingDef def, int count)
 		{
-			if (count <= 0)
+			if (count > 0)
 			{
-				return;
+				Thing thing = ThingMaker.MakeThing(def);
+				thing.stackCount = count;
+				container.TryAdd(thing);
 			}
-			Thing thing = ThingMaker.MakeThing(def, null);
-			thing.stackCount = count;
-			container.TryAdd(thing, true);
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			yield return PawnKindDefOf.AncientSoldier.race;
@@ -143,7 +132,6 @@ namespace RimWorld
 			yield return ThingDefOf.Plasteel;
 			yield return ThingDefOf.ComponentIndustrial;
 			yield return ThingDefOf.ComponentSpacer;
-			yield break;
 		}
 	}
 }

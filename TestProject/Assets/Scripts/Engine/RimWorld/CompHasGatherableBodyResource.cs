@@ -1,111 +1,105 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class CompHasGatherableBodyResource : ThingComp
 	{
-		
-		
-		protected abstract int GatherResourcesIntervalDays { get; }
+		protected float fullness;
 
-		
-		
-		protected abstract int ResourceAmount { get; }
-
-		
-		
-		protected abstract ThingDef ResourceDef { get; }
-
-		
-		
-		protected abstract string SaveKey { get; }
-
-		
-		
-		public float Fullness
+		protected abstract int GatherResourcesIntervalDays
 		{
-			get
-			{
-				return this.fullness;
-			}
+			get;
 		}
 
-		
-		
+		protected abstract int ResourceAmount
+		{
+			get;
+		}
+
+		protected abstract ThingDef ResourceDef
+		{
+			get;
+		}
+
+		protected abstract string SaveKey
+		{
+			get;
+		}
+
+		public float Fullness => fullness;
+
 		protected virtual bool Active
 		{
 			get
 			{
-				return this.parent.Faction != null;
+				if (parent.Faction == null)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public bool ActiveAndFull
 		{
 			get
 			{
-				return this.Active && this.fullness >= 1f;
+				if (!Active)
+				{
+					return false;
+				}
+				return fullness >= 1f;
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.fullness, this.SaveKey, 0f, false);
+			Scribe_Values.Look(ref fullness, SaveKey, 0f);
 		}
 
-		
 		public override void CompTick()
 		{
-			if (this.Active)
+			if (Active)
 			{
-				float num = 1f / (float)(this.GatherResourcesIntervalDays * 60000);
-				Pawn pawn = this.parent as Pawn;
+				float num = 1f / (float)(GatherResourcesIntervalDays * 60000);
+				Pawn pawn = parent as Pawn;
 				if (pawn != null)
 				{
 					num *= PawnUtility.BodyResourceGrowthSpeed(pawn);
 				}
-				this.fullness += num;
-				if (this.fullness > 1f)
+				fullness += num;
+				if (fullness > 1f)
 				{
-					this.fullness = 1f;
+					fullness = 1f;
 				}
 			}
 		}
 
-		
 		public void Gathered(Pawn doer)
 		{
-			if (!this.Active)
+			if (!Active)
 			{
-				Log.Error(doer + " gathered body resources while not Active: " + this.parent, false);
+				Log.Error(doer + " gathered body resources while not Active: " + parent);
 			}
-			if (!Rand.Chance(doer.GetStatValue(StatDefOf.AnimalGatherYield, true)))
+			if (!Rand.Chance(doer.GetStatValue(StatDefOf.AnimalGatherYield)))
 			{
-				MoteMaker.ThrowText((doer.DrawPos + this.parent.DrawPos) / 2f, this.parent.Map, "TextMote_ProductWasted".Translate(), 3.65f);
+				MoteMaker.ThrowText((doer.DrawPos + parent.DrawPos) / 2f, parent.Map, "TextMote_ProductWasted".Translate(), 3.65f);
 			}
 			else
 			{
-				int i = GenMath.RoundRandom((float)this.ResourceAmount * this.fullness);
-				while (i > 0)
+				int num = GenMath.RoundRandom((float)ResourceAmount * fullness);
+				while (num > 0)
 				{
-					int num = Mathf.Clamp(i, 1, this.ResourceDef.stackLimit);
-					i -= num;
-					Thing thing = ThingMaker.MakeThing(this.ResourceDef, null);
-					thing.stackCount = num;
-					GenPlace.TryPlaceThing(thing, doer.Position, doer.Map, ThingPlaceMode.Near, null, null, default(Rot4));
+					int num2 = Mathf.Clamp(num, 1, ResourceDef.stackLimit);
+					num -= num2;
+					Thing thing = ThingMaker.MakeThing(ResourceDef);
+					thing.stackCount = num2;
+					GenPlace.TryPlaceThing(thing, doer.Position, doer.Map, ThingPlaceMode.Near);
 				}
 			}
-			this.fullness = 0f;
+			fullness = 0f;
 		}
-
-		
-		protected float fullness;
 	}
 }

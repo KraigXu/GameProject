@@ -1,62 +1,41 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompSpawner : ThingComp
 	{
-		
-		
-		public CompProperties_Spawner PropsSpawner
-		{
-			get
-			{
-				return (CompProperties_Spawner)this.props;
-			}
-		}
+		private int ticksUntilSpawn;
 
-		
-		
-		private bool PowerOn
-		{
-			get
-			{
-				CompPowerTrader comp = this.parent.GetComp<CompPowerTrader>();
-				return comp != null && comp.PowerOn;
-			}
-		}
+		public CompProperties_Spawner PropsSpawner => (CompProperties_Spawner)props;
 
-		
+		private bool PowerOn => parent.GetComp<CompPowerTrader>()?.PowerOn ?? false;
+
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			if (!respawningAfterLoad)
 			{
-				this.ResetCountdown();
+				ResetCountdown();
 			}
 		}
 
-		
 		public override void CompTick()
 		{
-			this.TickInterval(1);
+			TickInterval(1);
 		}
 
-		
 		public override void CompTickRare()
 		{
-			this.TickInterval(250);
+			TickInterval(250);
 		}
 
-		
 		private void TickInterval(int interval)
 		{
-			if (!this.parent.Spawned)
+			if (!parent.Spawned)
 			{
 				return;
 			}
-			CompCanBeDormant comp = this.parent.GetComp<CompCanBeDormant>();
+			CompCanBeDormant comp = parent.GetComp<CompCanBeDormant>();
 			if (comp != null)
 			{
 				if (!comp.Awake)
@@ -64,101 +43,96 @@ namespace RimWorld
 					return;
 				}
 			}
-			else if (this.parent.Position.Fogged(this.parent.Map))
+			else if (parent.Position.Fogged(parent.Map))
 			{
 				return;
 			}
-			if (this.PropsSpawner.requiresPower && !this.PowerOn)
+			if (!PropsSpawner.requiresPower || PowerOn)
 			{
-				return;
+				ticksUntilSpawn -= interval;
+				CheckShouldSpawn();
 			}
-			this.ticksUntilSpawn -= interval;
-			this.CheckShouldSpawn();
 		}
 
-		
 		private void CheckShouldSpawn()
 		{
-			if (this.ticksUntilSpawn <= 0)
+			if (ticksUntilSpawn <= 0)
 			{
-				this.TryDoSpawn();
-				this.ResetCountdown();
+				TryDoSpawn();
+				ResetCountdown();
 			}
 		}
 
-		
 		public bool TryDoSpawn()
 		{
-			if (!this.parent.Spawned)
+			if (!parent.Spawned)
 			{
 				return false;
 			}
-			if (this.PropsSpawner.spawnMaxAdjacent >= 0)
+			if (PropsSpawner.spawnMaxAdjacent >= 0)
 			{
 				int num = 0;
 				for (int i = 0; i < 9; i++)
 				{
-					IntVec3 c = this.parent.Position + GenAdj.AdjacentCellsAndInside[i];
-					if (c.InBounds(this.parent.Map))
+					IntVec3 c = parent.Position + GenAdj.AdjacentCellsAndInside[i];
+					if (!c.InBounds(parent.Map))
 					{
-						List<Thing> thingList = c.GetThingList(this.parent.Map);
-						for (int j = 0; j < thingList.Count; j++)
+						continue;
+					}
+					List<Thing> thingList = c.GetThingList(parent.Map);
+					for (int j = 0; j < thingList.Count; j++)
+					{
+						if (thingList[j].def == PropsSpawner.thingToSpawn)
 						{
-							if (thingList[j].def == this.PropsSpawner.thingToSpawn)
+							num += thingList[j].stackCount;
+							if (num >= PropsSpawner.spawnMaxAdjacent)
 							{
-								num += thingList[j].stackCount;
-								if (num >= this.PropsSpawner.spawnMaxAdjacent)
-								{
-									return false;
-								}
+								return false;
 							}
 						}
 					}
 				}
 			}
-			IntVec3 center;
-			if (CompSpawner.TryFindSpawnCell(this.parent, this.PropsSpawner.thingToSpawn, this.PropsSpawner.spawnCount, out center))
+			if (TryFindSpawnCell(parent, PropsSpawner.thingToSpawn, PropsSpawner.spawnCount, out IntVec3 result))
 			{
-				Thing thing = ThingMaker.MakeThing(this.PropsSpawner.thingToSpawn, null);
-				thing.stackCount = this.PropsSpawner.spawnCount;
+				Thing thing = ThingMaker.MakeThing(PropsSpawner.thingToSpawn);
+				thing.stackCount = PropsSpawner.spawnCount;
 				if (thing == null)
 				{
-					Log.Error("Could not spawn anything for " + this.parent, false);
+					Log.Error("Could not spawn anything for " + parent);
 				}
-				if (this.PropsSpawner.inheritFaction && thing.Faction != this.parent.Faction)
+				if (PropsSpawner.inheritFaction && thing.Faction != parent.Faction)
 				{
-					thing.SetFaction(this.parent.Faction, null);
+					thing.SetFaction(parent.Faction);
 				}
-				Thing t;
-				GenPlace.TryPlaceThing(thing, center, this.parent.Map, ThingPlaceMode.Direct, out t, null, null, default(Rot4));
-				if (this.PropsSpawner.spawnForbidden)
+				GenPlace.TryPlaceThing(thing, result, parent.Map, ThingPlaceMode.Direct, out Thing lastResultingThing);
+				if (PropsSpawner.spawnForbidden)
 				{
-					t.SetForbidden(true, true);
+					lastResultingThing.SetForbidden(value: true);
 				}
-				if (this.PropsSpawner.showMessageIfOwned && this.parent.Faction == Faction.OfPlayer)
+				if (PropsSpawner.showMessageIfOwned && parent.Faction == Faction.OfPlayer)
 				{
-					Messages.Message("MessageCompSpawnerSpawnedItem".Translate(this.PropsSpawner.thingToSpawn.LabelCap), thing, MessageTypeDefOf.PositiveEvent, true);
+					Messages.Message("MessageCompSpawnerSpawnedItem".Translate(PropsSpawner.thingToSpawn.LabelCap), thing, MessageTypeDefOf.PositiveEvent);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public static bool TryFindSpawnCell(Thing parent, ThingDef thingToSpawn, int spawnCount, out IntVec3 result)
 		{
-			foreach (IntVec3 intVec in GenAdj.CellsAdjacent8Way(parent).InRandomOrder(null))
+			foreach (IntVec3 item in GenAdj.CellsAdjacent8Way(parent).InRandomOrder())
 			{
-				if (intVec.Walkable(parent.Map))
+				if (item.Walkable(parent.Map))
 				{
-					Building edifice = intVec.GetEdifice(parent.Map);
+					Building edifice = item.GetEdifice(parent.Map);
 					if (edifice == null || !thingToSpawn.IsEdifice())
 					{
 						Building_Door building_Door = edifice as Building_Door;
-						if ((building_Door == null || building_Door.FreePassage) && (parent.def.passability == Traversability.Impassable || GenSight.LineOfSight(parent.Position, intVec, parent.Map, false, null, 0, 0)))
+						if ((building_Door == null || building_Door.FreePassage) && (parent.def.passability == Traversability.Impassable || GenSight.LineOfSight(parent.Position, item, parent.Map)))
 						{
 							bool flag = false;
-							List<Thing> thingList = intVec.GetThingList(parent.Map);
+							List<Thing> thingList = item.GetThingList(parent.Map);
 							for (int i = 0; i < thingList.Count; i++)
 							{
 								Thing thing = thingList[i];
@@ -170,7 +144,7 @@ namespace RimWorld
 							}
 							if (!flag)
 							{
-								result = intVec;
+								result = item;
 								return true;
 							}
 						}
@@ -181,49 +155,40 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private void ResetCountdown()
 		{
-			this.ticksUntilSpawn = this.PropsSpawner.spawnIntervalRange.RandomInRange;
+			ticksUntilSpawn = PropsSpawner.spawnIntervalRange.RandomInRange;
 		}
 
-		
 		public override void PostExposeData()
 		{
-			string str = this.PropsSpawner.saveKeysPrefix.NullOrEmpty() ? null : (this.PropsSpawner.saveKeysPrefix + "_");
-			Scribe_Values.Look<int>(ref this.ticksUntilSpawn, str + "ticksUntilSpawn", 0, false);
+			string str = PropsSpawner.saveKeysPrefix.NullOrEmpty() ? null : (PropsSpawner.saveKeysPrefix + "_");
+			Scribe_Values.Look(ref ticksUntilSpawn, str + "ticksUntilSpawn", 0);
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (Prefs.DevMode)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEBUG: Spawn " + PropsSpawner.thingToSpawn.label;
+				command_Action.icon = TexCommand.DesirePower;
+				command_Action.action = delegate
 				{
-					defaultLabel = "DEBUG: Spawn " + this.PropsSpawner.thingToSpawn.label,
-					icon = TexCommand.DesirePower,
-					action = delegate
-					{
-						this.TryDoSpawn();
-						this.ResetCountdown();
-					}
+					TryDoSpawn();
+					ResetCountdown();
 				};
+				yield return command_Action;
 			}
-			yield break;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.PropsSpawner.writeTimeLeftToSpawn && (!this.PropsSpawner.requiresPower || this.PowerOn))
+			if (PropsSpawner.writeTimeLeftToSpawn && (!PropsSpawner.requiresPower || PowerOn))
 			{
-				return "NextSpawnedItemIn".Translate(GenLabel.ThingLabel(this.PropsSpawner.thingToSpawn, null, this.PropsSpawner.spawnCount)) + ": " + this.ticksUntilSpawn.ToStringTicksToPeriod(true, false, true, true);
+				return "NextSpawnedItemIn".Translate(GenLabel.ThingLabel(PropsSpawner.thingToSpawn, null, PropsSpawner.spawnCount)) + ": " + ticksUntilSpawn.ToStringTicksToPeriod();
 			}
 			return null;
 		}
-
-		
-		private int ticksUntilSpawn;
 	}
 }

@@ -1,59 +1,56 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class IncidentWorker_NeutralGroup : IncidentWorker_PawnsArrive
 	{
-		
-		
-		protected virtual PawnGroupKindDef PawnGroupKindDef
-		{
-			get
-			{
-				return PawnGroupKindDefOf.Peaceful;
-			}
-		}
+		protected virtual PawnGroupKindDef PawnGroupKindDef => PawnGroupKindDefOf.Peaceful;
 
-		
 		protected override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
 		{
-			return base.FactionCanBeGroupSource(f, map, desperate) && !f.def.hidden && !f.HostileTo(Faction.OfPlayer) && f.def.pawnGroupMakers != null && f.def.pawnGroupMakers.Any((PawnGroupMaker x) => x.kindDef == this.PawnGroupKindDef) && !NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, f);
+			if (base.FactionCanBeGroupSource(f, map, desperate) && !f.def.hidden && !f.HostileTo(Faction.OfPlayer) && f.def.pawnGroupMakers != null && f.def.pawnGroupMakers.Any((PawnGroupMaker x) => x.kindDef == PawnGroupKindDef))
+			{
+				return !NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, f);
+			}
+			return false;
 		}
 
-		
 		protected bool TryResolveParms(IncidentParms parms)
 		{
-			if (!this.TryResolveParmsGeneral(parms))
+			if (!TryResolveParmsGeneral(parms))
 			{
 				return false;
 			}
-			this.ResolveParmsPoints(parms);
+			ResolveParmsPoints(parms);
 			return true;
 		}
 
-		
 		protected virtual bool TryResolveParmsGeneral(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			return (parms.spawnCenter.IsValid || RCellFinder.TryFindRandomPawnEntryCell(out parms.spawnCenter, map, CellFinder.EdgeRoadChance_Neutral, false, null)) && (parms.faction != null || base.CandidateFactions(map, false).TryRandomElement(out parms.faction) || base.CandidateFactions(map, true).TryRandomElement(out parms.faction));
+			if (!parms.spawnCenter.IsValid && !RCellFinder.TryFindRandomPawnEntryCell(out parms.spawnCenter, map, CellFinder.EdgeRoadChance_Neutral))
+			{
+				return false;
+			}
+			if (parms.faction == null && !CandidateFactions(map).TryRandomElement(out parms.faction) && !CandidateFactions(map, desperate: true).TryRandomElement(out parms.faction))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected abstract void ResolveParmsPoints(IncidentParms parms);
 
-		
 		protected List<Pawn> SpawnPawns(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			List<Pawn> list = PawnGroupMakerUtility.GeneratePawns(IncidentParmsUtility.GetDefaultPawnGroupMakerParms(this.PawnGroupKindDef, parms, true), false).ToList<Pawn>();
-			foreach (Thing newThing in list)
+			List<Pawn> list = PawnGroupMakerUtility.GeneratePawns(IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDef, parms, ensureCanGenerateAtLeastOnePawn: true), warnOnZeroResults: false).ToList();
+			foreach (Pawn item in list)
 			{
-				IntVec3 loc = CellFinder.RandomClosewalkCellNear(parms.spawnCenter, map, 5, null);
-				GenSpawn.Spawn(newThing, loc, map, WipeMode.Vanish);
+				IntVec3 loc = CellFinder.RandomClosewalkCellNear(parms.spawnCenter, map, 5);
+				GenSpawn.Spawn(item, loc, map);
 			}
 			return list;
 		}

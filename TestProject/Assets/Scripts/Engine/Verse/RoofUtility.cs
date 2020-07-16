@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class RoofUtility
 	{
-		
 		public static Thing FirstBlockingThing(IntVec3 pos, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(pos);
@@ -22,30 +19,34 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static bool IsAnyCellUnderRoof(Thing thing)
 		{
 			CellRect cellRect = thing.OccupiedRect();
 			bool result = false;
 			RoofGrid roofGrid = thing.Map.roofGrid;
-			foreach (IntVec3 c in cellRect)
+			foreach (IntVec3 item in cellRect)
 			{
-				if (roofGrid.Roofed(c))
+				if (roofGrid.Roofed(item))
 				{
-					result = true;
-					break;
+					return true;
 				}
 			}
 			return result;
 		}
 
-		
 		public static bool CanHandleBlockingThing(Thing blocker, Pawn worker, bool forced = false)
 		{
-			return blocker == null || (blocker.def.category == ThingCategory.Plant && worker.CanReserveAndReach(blocker, PathEndMode.ClosestTouch, worker.NormalMaxDanger(), 1, -1, null, forced));
+			if (blocker == null)
+			{
+				return true;
+			}
+			if (blocker.def.category == ThingCategory.Plant && worker.CanReserveAndReach(blocker, PathEndMode.ClosestTouch, worker.NormalMaxDanger(), 1, -1, null, forced))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static Job HandleBlockingThingJob(Thing blocker, Pawn worker, bool forced = false)
 		{
 			if (blocker == null)

@@ -1,15 +1,91 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class PortraitsCache
 	{
-		
+		private struct CachedPortrait
+		{
+			private const float CacheDuration = 1f;
+
+			public RenderTexture RenderTexture
+			{
+				get;
+				private set;
+			}
+
+			public bool Dirty
+			{
+				get;
+				private set;
+			}
+
+			public float LastUseTime
+			{
+				get;
+				private set;
+			}
+
+			public bool Expired => Time.time - LastUseTime > 1f;
+
+			public CachedPortrait(RenderTexture renderTexture, bool dirty, float lastUseTime)
+			{
+				this = default(CachedPortrait);
+				RenderTexture = renderTexture;
+				Dirty = dirty;
+				LastUseTime = lastUseTime;
+			}
+		}
+
+		private struct CachedPortraitsWithParams
+		{
+			public Dictionary<Pawn, CachedPortrait> CachedPortraits
+			{
+				get;
+				private set;
+			}
+
+			public Vector2 Size
+			{
+				get;
+				private set;
+			}
+
+			public Vector3 CameraOffset
+			{
+				get;
+				private set;
+			}
+
+			public float CameraZoom
+			{
+				get;
+				private set;
+			}
+
+			public CachedPortraitsWithParams(Vector2 size, Vector3 cameraOffset, float cameraZoom)
+			{
+				this = default(CachedPortraitsWithParams);
+				CachedPortraits = new Dictionary<Pawn, CachedPortrait>();
+				Size = size;
+				CameraOffset = cameraOffset;
+				CameraZoom = cameraZoom;
+			}
+		}
+
+		private static List<RenderTexture> renderTexturesPool = new List<RenderTexture>();
+
+		private static List<CachedPortraitsWithParams> cachedPortraits = new List<CachedPortraitsWithParams>();
+
+		private const float SupersampleScale = 1.25f;
+
+		private static List<Pawn> toRemove = new List<Pawn>();
+
+		private static List<Pawn> toSetDirty = new List<Pawn>();
+
 		public static RenderTexture Get(Pawn pawn, Vector2 size, Vector3 cameraOffset = default(Vector3), float cameraZoom = 1f, bool supersample = true, bool compensateForUIScale = true)
 		{
 			if (supersample)
@@ -20,146 +96,136 @@ namespace RimWorld
 			{
 				size *= Prefs.UIScale;
 			}
-			Dictionary<Pawn, PortraitsCache.CachedPortrait> dictionary = PortraitsCache.GetOrCreateCachedPortraitsWithParams(size, cameraOffset, cameraZoom).CachedPortraits;
-			PortraitsCache.CachedPortrait cachedPortrait;
-			if (dictionary.TryGetValue(pawn, out cachedPortrait))
+			Dictionary<Pawn, CachedPortrait> dictionary = GetOrCreateCachedPortraitsWithParams(size, cameraOffset, cameraZoom).CachedPortraits;
+			if (dictionary.TryGetValue(pawn, out CachedPortrait value))
 			{
-				if (!cachedPortrait.RenderTexture.IsCreated())
+				if (!value.RenderTexture.IsCreated())
 				{
-					cachedPortrait.RenderTexture.Create();
-					PortraitsCache.RenderPortrait(pawn, cachedPortrait.RenderTexture, cameraOffset, cameraZoom);
+					value.RenderTexture.Create();
+					RenderPortrait(pawn, value.RenderTexture, cameraOffset, cameraZoom);
 				}
-				else if (cachedPortrait.Dirty)
+				else if (value.Dirty)
 				{
-					PortraitsCache.RenderPortrait(pawn, cachedPortrait.RenderTexture, cameraOffset, cameraZoom);
+					RenderPortrait(pawn, value.RenderTexture, cameraOffset, cameraZoom);
 				}
 				dictionary.Remove(pawn);
-				dictionary.Add(pawn, new PortraitsCache.CachedPortrait(cachedPortrait.RenderTexture, false, Time.time));
-				return cachedPortrait.RenderTexture;
+				dictionary.Add(pawn, new CachedPortrait(value.RenderTexture, dirty: false, Time.time));
+				return value.RenderTexture;
 			}
-			RenderTexture renderTexture = PortraitsCache.NewRenderTexture(size);
-			PortraitsCache.RenderPortrait(pawn, renderTexture, cameraOffset, cameraZoom);
-			dictionary.Add(pawn, new PortraitsCache.CachedPortrait(renderTexture, false, Time.time));
+			RenderTexture renderTexture = NewRenderTexture(size);
+			RenderPortrait(pawn, renderTexture, cameraOffset, cameraZoom);
+			dictionary.Add(pawn, new CachedPortrait(renderTexture, dirty: false, Time.time));
 			return renderTexture;
 		}
 
-		
 		public static void SetDirty(Pawn pawn)
 		{
-			for (int i = 0; i < PortraitsCache.cachedPortraits.Count; i++)
+			for (int i = 0; i < cachedPortraits.Count; i++)
 			{
-				Dictionary<Pawn, PortraitsCache.CachedPortrait> dictionary = PortraitsCache.cachedPortraits[i].CachedPortraits;
-				PortraitsCache.CachedPortrait cachedPortrait;
-				if (dictionary.TryGetValue(pawn, out cachedPortrait) && !cachedPortrait.Dirty)
+				Dictionary<Pawn, CachedPortrait> dictionary = cachedPortraits[i].CachedPortraits;
+				if (dictionary.TryGetValue(pawn, out CachedPortrait value) && !value.Dirty)
 				{
 					dictionary.Remove(pawn);
-					dictionary.Add(pawn, new PortraitsCache.CachedPortrait(cachedPortrait.RenderTexture, true, cachedPortrait.LastUseTime));
+					dictionary.Add(pawn, new CachedPortrait(value.RenderTexture, dirty: true, value.LastUseTime));
 				}
 			}
 		}
 
-		
 		public static void PortraitsCacheUpdate()
 		{
-			PortraitsCache.RemoveExpiredCachedPortraits();
-			PortraitsCache.SetAnimatedPortraitsDirty();
+			RemoveExpiredCachedPortraits();
+			SetAnimatedPortraitsDirty();
 		}
 
-		
 		public static void Clear()
 		{
-			for (int i = 0; i < PortraitsCache.cachedPortraits.Count; i++)
+			for (int i = 0; i < cachedPortraits.Count; i++)
 			{
-				foreach (KeyValuePair<Pawn, PortraitsCache.CachedPortrait> keyValuePair in PortraitsCache.cachedPortraits[i].CachedPortraits)
+				foreach (KeyValuePair<Pawn, CachedPortrait> cachedPortrait in cachedPortraits[i].CachedPortraits)
 				{
-					PortraitsCache.DestroyRenderTexture(keyValuePair.Value.RenderTexture);
+					DestroyRenderTexture(cachedPortrait.Value.RenderTexture);
 				}
 			}
-			PortraitsCache.cachedPortraits.Clear();
-			for (int j = 0; j < PortraitsCache.renderTexturesPool.Count; j++)
+			cachedPortraits.Clear();
+			for (int j = 0; j < renderTexturesPool.Count; j++)
 			{
-				PortraitsCache.DestroyRenderTexture(PortraitsCache.renderTexturesPool[j]);
+				DestroyRenderTexture(renderTexturesPool[j]);
 			}
-			PortraitsCache.renderTexturesPool.Clear();
+			renderTexturesPool.Clear();
 		}
 
-		
-		private static PortraitsCache.CachedPortraitsWithParams GetOrCreateCachedPortraitsWithParams(Vector2 size, Vector3 cameraOffset, float cameraZoom)
+		private static CachedPortraitsWithParams GetOrCreateCachedPortraitsWithParams(Vector2 size, Vector3 cameraOffset, float cameraZoom)
 		{
-			for (int i = 0; i < PortraitsCache.cachedPortraits.Count; i++)
+			for (int i = 0; i < cachedPortraits.Count; i++)
 			{
-				if (PortraitsCache.cachedPortraits[i].Size == size && PortraitsCache.cachedPortraits[i].CameraOffset == cameraOffset && PortraitsCache.cachedPortraits[i].CameraZoom == cameraZoom)
+				if (cachedPortraits[i].Size == size && cachedPortraits[i].CameraOffset == cameraOffset && cachedPortraits[i].CameraZoom == cameraZoom)
 				{
-					return PortraitsCache.cachedPortraits[i];
+					return cachedPortraits[i];
 				}
 			}
-			PortraitsCache.CachedPortraitsWithParams cachedPortraitsWithParams = new PortraitsCache.CachedPortraitsWithParams(size, cameraOffset, cameraZoom);
-			PortraitsCache.cachedPortraits.Add(cachedPortraitsWithParams);
+			CachedPortraitsWithParams cachedPortraitsWithParams = new CachedPortraitsWithParams(size, cameraOffset, cameraZoom);
+			cachedPortraits.Add(cachedPortraitsWithParams);
 			return cachedPortraitsWithParams;
 		}
 
-		
 		private static void DestroyRenderTexture(RenderTexture rt)
 		{
 			rt.DiscardContents();
-			UnityEngine.Object.Destroy(rt);
+			Object.Destroy(rt);
 		}
 
-		
 		private static void RemoveExpiredCachedPortraits()
 		{
-			for (int i = 0; i < PortraitsCache.cachedPortraits.Count; i++)
+			for (int i = 0; i < cachedPortraits.Count; i++)
 			{
-				Dictionary<Pawn, PortraitsCache.CachedPortrait> dictionary = PortraitsCache.cachedPortraits[i].CachedPortraits;
-				PortraitsCache.toRemove.Clear();
-				foreach (KeyValuePair<Pawn, PortraitsCache.CachedPortrait> keyValuePair in dictionary)
+				Dictionary<Pawn, CachedPortrait> dictionary = cachedPortraits[i].CachedPortraits;
+				toRemove.Clear();
+				foreach (KeyValuePair<Pawn, CachedPortrait> item in dictionary)
 				{
-					if (keyValuePair.Value.Expired)
+					if (item.Value.Expired)
 					{
-						PortraitsCache.toRemove.Add(keyValuePair.Key);
-						PortraitsCache.renderTexturesPool.Add(keyValuePair.Value.RenderTexture);
+						toRemove.Add(item.Key);
+						renderTexturesPool.Add(item.Value.RenderTexture);
 					}
 				}
-				for (int j = 0; j < PortraitsCache.toRemove.Count; j++)
+				for (int j = 0; j < toRemove.Count; j++)
 				{
-					dictionary.Remove(PortraitsCache.toRemove[j]);
+					dictionary.Remove(toRemove[j]);
 				}
-				PortraitsCache.toRemove.Clear();
+				toRemove.Clear();
 			}
 		}
 
-		
 		private static void SetAnimatedPortraitsDirty()
 		{
-			for (int i = 0; i < PortraitsCache.cachedPortraits.Count; i++)
+			for (int i = 0; i < cachedPortraits.Count; i++)
 			{
-				Dictionary<Pawn, PortraitsCache.CachedPortrait> dictionary = PortraitsCache.cachedPortraits[i].CachedPortraits;
-				PortraitsCache.toSetDirty.Clear();
-				foreach (KeyValuePair<Pawn, PortraitsCache.CachedPortrait> keyValuePair in dictionary)
+				Dictionary<Pawn, CachedPortrait> dictionary = cachedPortraits[i].CachedPortraits;
+				toSetDirty.Clear();
+				foreach (KeyValuePair<Pawn, CachedPortrait> item in dictionary)
 				{
-					if (PortraitsCache.IsAnimated(keyValuePair.Key) && !keyValuePair.Value.Dirty)
+					if (IsAnimated(item.Key) && !item.Value.Dirty)
 					{
-						PortraitsCache.toSetDirty.Add(keyValuePair.Key);
+						toSetDirty.Add(item.Key);
 					}
 				}
-				for (int j = 0; j < PortraitsCache.toSetDirty.Count; j++)
+				for (int j = 0; j < toSetDirty.Count; j++)
 				{
-					PortraitsCache.CachedPortrait cachedPortrait = dictionary[PortraitsCache.toSetDirty[j]];
-					dictionary.Remove(PortraitsCache.toSetDirty[j]);
-					dictionary.Add(PortraitsCache.toSetDirty[j], new PortraitsCache.CachedPortrait(cachedPortrait.RenderTexture, true, cachedPortrait.LastUseTime));
+					CachedPortrait cachedPortrait = dictionary[toSetDirty[j]];
+					dictionary.Remove(toSetDirty[j]);
+					dictionary.Add(toSetDirty[j], new CachedPortrait(cachedPortrait.RenderTexture, dirty: true, cachedPortrait.LastUseTime));
 				}
-				PortraitsCache.toSetDirty.Clear();
+				toSetDirty.Clear();
 			}
 		}
 
-		
 		private static RenderTexture NewRenderTexture(Vector2 size)
 		{
-			int num = PortraitsCache.renderTexturesPool.FindLastIndex((RenderTexture x) => x.width == (int)size.x && x.height == (int)size.y);
+			int num = renderTexturesPool.FindLastIndex((RenderTexture x) => x.width == (int)size.x && x.height == (int)size.y);
 			if (num != -1)
 			{
-				RenderTexture result = PortraitsCache.renderTexturesPool[num];
-				PortraitsCache.renderTexturesPool.RemoveAt(num);
+				RenderTexture result = renderTexturesPool[num];
+				renderTexturesPool.RemoveAt(num);
 				return result;
 			}
 			return new RenderTexture((int)size.x, (int)size.y, 24)
@@ -168,106 +234,18 @@ namespace RimWorld
 			};
 		}
 
-		
 		private static void RenderPortrait(Pawn pawn, RenderTexture renderTexture, Vector3 cameraOffset, float cameraZoom)
 		{
 			Find.PortraitRenderer.RenderPortrait(pawn, renderTexture, cameraOffset, cameraZoom);
 		}
 
-		
 		private static bool IsAnimated(Pawn pawn)
 		{
-			return Current.ProgramState == ProgramState.Playing && pawn.Drawer.renderer.graphics.flasher.FlashingNowOrRecently;
-		}
-
-		
-		private static List<RenderTexture> renderTexturesPool = new List<RenderTexture>();
-
-		
-		private static List<PortraitsCache.CachedPortraitsWithParams> cachedPortraits = new List<PortraitsCache.CachedPortraitsWithParams>();
-
-		
-		private const float SupersampleScale = 1.25f;
-
-		
-		private static List<Pawn> toRemove = new List<Pawn>();
-
-		
-		private static List<Pawn> toSetDirty = new List<Pawn>();
-
-		
-		private struct CachedPortrait
-		{
-			
-			
-			
-			public RenderTexture RenderTexture { get; private set; }
-
-			
-			
-			
-			public bool Dirty { get; private set; }
-
-			
-			
-			
-			public float LastUseTime { get; private set; }
-
-			
-			
-			public bool Expired
+			if (Current.ProgramState == ProgramState.Playing && pawn.Drawer.renderer.graphics.flasher.FlashingNowOrRecently)
 			{
-				get
-				{
-					return Time.time - this.LastUseTime > 1f;
-				}
+				return true;
 			}
-
-			
-			public CachedPortrait(RenderTexture renderTexture, bool dirty, float lastUseTime)
-			{
-				this = default(PortraitsCache.CachedPortrait);
-				this.RenderTexture = renderTexture;
-				this.Dirty = dirty;
-				this.LastUseTime = lastUseTime;
-			}
-
-			
-			private const float CacheDuration = 1f;
-		}
-
-		
-		private struct CachedPortraitsWithParams
-		{
-			
-			
-			
-			public Dictionary<Pawn, PortraitsCache.CachedPortrait> CachedPortraits { get; private set; }
-
-			
-			
-			
-			public Vector2 Size { get; private set; }
-
-			
-			
-			
-			public Vector3 CameraOffset { get; private set; }
-
-			
-			
-			
-			public float CameraZoom { get; private set; }
-
-			
-			public CachedPortraitsWithParams(Vector2 size, Vector3 cameraOffset, float cameraZoom)
-			{
-				this = default(PortraitsCache.CachedPortraitsWithParams);
-				this.CachedPortraits = new Dictionary<Pawn, PortraitsCache.CachedPortrait>();
-				this.Size = size;
-				this.CameraOffset = cameraOffset;
-				this.CameraZoom = cameraZoom;
-			}
+			return false;
 		}
 	}
 }

@@ -1,89 +1,55 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public struct EventPack
 	{
-		
-		
-		public string Tag
-		{
-			get
-			{
-				return this.tagInt;
-			}
-		}
+		private string tagInt;
 
-		
-		
-		public IntVec3 Cell
-		{
-			get
-			{
-				return this.cellInt;
-			}
-		}
+		private IntVec3 cellInt;
 
-		
-		
-		public IEnumerable<IntVec3> Cells
-		{
-			get
-			{
-				return this.cellsInt;
-			}
-		}
+		private IEnumerable<IntVec3> cellsInt;
 
-		
+		public string Tag => tagInt;
+
+		public IntVec3 Cell => cellInt;
+
+		public IEnumerable<IntVec3> Cells => cellsInt;
+
 		public EventPack(string tag)
 		{
-			this.tagInt = tag;
-			this.cellInt = IntVec3.Invalid;
-			this.cellsInt = null;
+			tagInt = tag;
+			cellInt = IntVec3.Invalid;
+			cellsInt = null;
 		}
 
-		
 		public EventPack(string tag, IntVec3 cell)
 		{
-			this.tagInt = tag;
-			this.cellInt = cell;
-			this.cellsInt = null;
+			tagInt = tag;
+			cellInt = cell;
+			cellsInt = null;
 		}
 
-		
 		public EventPack(string tag, IEnumerable<IntVec3> cells)
 		{
-			this.tagInt = tag;
-			this.cellInt = IntVec3.Invalid;
-			this.cellsInt = cells;
+			tagInt = tag;
+			cellInt = IntVec3.Invalid;
+			cellsInt = cells;
 		}
 
-		
 		public static implicit operator EventPack(string s)
 		{
 			return new EventPack(s);
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.Cell.IsValid)
+			if (Cell.IsValid)
 			{
-				return this.Tag + "-" + this.Cell;
+				return Tag + "-" + Cell;
 			}
-			return this.Tag;
+			return Tag;
 		}
-
-		
-		private string tagInt;
-
-		
-		private IntVec3 cellInt;
-
-		
-		private IEnumerable<IntVec3> cellsInt;
 	}
 }

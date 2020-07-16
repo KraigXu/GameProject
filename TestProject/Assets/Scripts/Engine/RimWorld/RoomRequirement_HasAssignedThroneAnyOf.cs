@@ -1,21 +1,18 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRequirement_HasAssignedThroneAnyOf : RoomRequirement_ThingAnyOf
 	{
-		
 		public override bool Met(Room r, Pawn p = null)
 		{
 			if (p == null)
 			{
 				return false;
 			}
-			foreach (Thing thing in r.ContainedAndAdjacentThings)
+			foreach (Thing containedAndAdjacentThing in r.ContainedAndAdjacentThings)
 			{
-				if (this.things.Contains(thing.def) && p.ownership.AssignedThrone == thing)
+				if (things.Contains(containedAndAdjacentThing.def) && p.ownership.AssignedThrone == containedAndAdjacentThing)
 				{
 					return true;
 				}

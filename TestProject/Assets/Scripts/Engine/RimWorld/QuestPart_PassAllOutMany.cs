@@ -1,74 +1,60 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_PassAllOutMany : QuestPart
 	{
-		
-		
-		private bool AllSignalsReceived
-		{
-			get
-			{
-				return PassAllQuestPartUtility.AllReceived(this.inSignals, this.signalsReceived);
-			}
-		}
+		public List<string> inSignals = new List<string>();
 
-		
+		public List<string> outSignals = new List<string>();
+
+		private List<bool> signalsReceived = new List<bool>();
+
+		private bool AllSignalsReceived => PassAllQuestPartUtility.AllReceived(inSignals, signalsReceived);
+
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
-			if (!this.AllSignalsReceived)
+			if (AllSignalsReceived)
 			{
-				int num = this.inSignals.IndexOf(signal.tag);
-				if (num >= 0)
+				return;
+			}
+			int num = inSignals.IndexOf(signal.tag);
+			if (num < 0)
+			{
+				return;
+			}
+			while (signalsReceived.Count <= num)
+			{
+				signalsReceived.Add(item: false);
+			}
+			signalsReceived[num] = true;
+			if (AllSignalsReceived)
+			{
+				for (int i = 0; i < outSignals.Count; i++)
 				{
-					while (this.signalsReceived.Count <= num)
-					{
-						this.signalsReceived.Add(false);
-					}
-					this.signalsReceived[num] = true;
-					if (this.AllSignalsReceived)
-					{
-						for (int i = 0; i < this.outSignals.Count; i++)
-						{
-							Find.SignalManager.SendSignal(new Signal(this.outSignals[i]));
-						}
-					}
+					Find.SignalManager.SendSignal(new Signal(outSignals[i]));
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<string>(ref this.inSignals, "inSignals", LookMode.Value, Array.Empty<object>());
-			Scribe_Collections.Look<string>(ref this.outSignals, "outSignals", LookMode.Value, Array.Empty<object>());
-			Scribe_Collections.Look<bool>(ref this.signalsReceived, "signalsReceived", LookMode.Value, Array.Empty<object>());
+			Scribe_Collections.Look(ref inSignals, "inSignals", LookMode.Value);
+			Scribe_Collections.Look(ref outSignals, "outSignals", LookMode.Value);
+			Scribe_Collections.Look(ref signalsReceived, "signalsReceived", LookMode.Value);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignals.Clear();
+			inSignals.Clear();
 			for (int i = 0; i < 3; i++)
 			{
-				this.inSignals.Add("DebugSignal" + Rand.Int);
-				this.outSignals.Add("DebugSignal" + Rand.Int);
+				inSignals.Add("DebugSignal" + Rand.Int);
+				outSignals.Add("DebugSignal" + Rand.Int);
 			}
 		}
-
-		
-		public List<string> inSignals = new List<string>();
-
-		
-		public List<string> outSignals = new List<string>();
-
-		
-		private List<bool> signalsReceived = new List<bool>();
 	}
 }

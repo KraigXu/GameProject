@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Spark : Projectile
 	{
-		
 		protected override void Impact(Thing hitThing)
 		{
 			Map map = base.Map;

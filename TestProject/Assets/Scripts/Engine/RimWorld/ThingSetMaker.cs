@@ -1,126 +1,113 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class ThingSetMaker
 	{
-		
-		public List<Thing> Generate()
+		public ThingSetMakerParams fixedParams;
+
+		public static List<List<Thing>> thingsBeingGeneratedNow;
+
+		static ThingSetMaker()
 		{
-			return this.Generate(default(ThingSetMakerParams));
+			thingsBeingGeneratedNow = new List<List<Thing>>();
 		}
 
-		
+		public List<Thing> Generate()
+		{
+			return Generate(default(ThingSetMakerParams));
+		}
+
 		public List<Thing> Generate(ThingSetMakerParams parms)
 		{
 			List<Thing> list = new List<Thing>();
-			ThingSetMaker.thingsBeingGeneratedNow.Add(list);
+			thingsBeingGeneratedNow.Add(list);
 			try
 			{
-				ThingSetMakerParams parms2 = this.ApplyFixedParams(parms);
-				this.Generate(parms2, list);
-				this.PostProcess(list);
+				ThingSetMakerParams parms2 = ApplyFixedParams(parms);
+				Generate(parms2, list);
+				PostProcess(list);
+				return list;
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Exception while generating thing set: " + arg, false);
-				for (int i = list.Count - 1; i >= 0; i--)
+				Log.Error("Exception while generating thing set: " + arg);
+				for (int num = list.Count - 1; num >= 0; num--)
 				{
-					list[i].Destroy(DestroyMode.Vanish);
-					list.RemoveAt(i);
+					list[num].Destroy();
+					list.RemoveAt(num);
 				}
+				return list;
 			}
 			finally
 			{
-				ThingSetMaker.thingsBeingGeneratedNow.Remove(list);
+				thingsBeingGeneratedNow.Remove(list);
 			}
-			return list;
 		}
 
-		
 		public bool CanGenerate(ThingSetMakerParams parms)
 		{
-			ThingSetMakerParams parms2 = this.ApplyFixedParams(parms);
-			return this.CanGenerateSub(parms2);
+			ThingSetMakerParams parms2 = ApplyFixedParams(parms);
+			return CanGenerateSub(parms2);
 		}
 
-		
 		protected virtual bool CanGenerateSub(ThingSetMakerParams parms)
 		{
 			return true;
 		}
 
-		
 		protected abstract void Generate(ThingSetMakerParams parms, List<Thing> outThings);
 
-		
 		public IEnumerable<ThingDef> AllGeneratableThingsDebug()
 		{
-			return this.AllGeneratableThingsDebug(default(ThingSetMakerParams));
+			return AllGeneratableThingsDebug(default(ThingSetMakerParams));
 		}
 
-		
 		public IEnumerable<ThingDef> AllGeneratableThingsDebug(ThingSetMakerParams parms)
 		{
-			if (!this.CanGenerate(parms))
+			if (CanGenerate(parms))
 			{
-				yield break;
+				ThingSetMakerParams parms2 = ApplyFixedParams(parms);
+				foreach (ThingDef item in AllGeneratableThingsDebugSub(parms2).Distinct())
+				{
+					yield return item;
+				}
 			}
-			ThingSetMakerParams parms2 = this.ApplyFixedParams(parms);
-			foreach (ThingDef thingDef in this.AllGeneratableThingsDebugSub(parms2).Distinct<ThingDef>())
-			{
-				yield return thingDef;
-			}
-			IEnumerator<ThingDef> enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public virtual float ExtraSelectionWeightFactor(ThingSetMakerParams parms)
 		{
 			return 1f;
 		}
 
-		
 		protected abstract IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms);
 
-		
 		private void PostProcess(List<Thing> things)
 		{
 			if (things.RemoveAll((Thing x) => x == null) != 0)
 			{
-				Log.Error(base.GetType() + " generated null things.", false);
+				Log.Error(GetType() + " generated null things.");
 			}
-			this.ChangeDeadPawnsToTheirCorpses(things);
-			for (int i = things.Count - 1; i >= 0; i--)
+			ChangeDeadPawnsToTheirCorpses(things);
+			for (int num = things.Count - 1; num >= 0; num--)
 			{
-				if (things[i].Destroyed)
+				if (things[num].Destroyed)
 				{
-					Log.Error(base.GetType() + " generated destroyed thing " + things[i].ToStringSafe<Thing>(), false);
-					things.RemoveAt(i);
+					Log.Error(GetType() + " generated destroyed thing " + things[num].ToStringSafe());
+					things.RemoveAt(num);
 				}
-				else if (things[i].stackCount <= 0)
+				else if (things[num].stackCount <= 0)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						base.GetType(),
-						" generated ",
-						things[i].ToStringSafe<Thing>(),
-						" with stackCount=",
-						things[i].stackCount
-					}), false);
-					things.RemoveAt(i);
+					Log.Error(GetType() + " generated " + things[num].ToStringSafe() + " with stackCount=" + things[num].stackCount);
+					things.RemoveAt(num);
 				}
 			}
-			this.Minify(things);
+			Minify(things);
 		}
 
-		
 		private void Minify(List<Thing> things)
 		{
 			for (int i = 0; i < things.Count; i++)
@@ -136,7 +123,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		private void ChangeDeadPawnsToTheirCorpses(List<Thing> things)
 		{
 			for (int i = 0; i < things.Count; i++)
@@ -148,27 +134,19 @@ namespace RimWorld
 			}
 		}
 
-		
 		private ThingSetMakerParams ApplyFixedParams(ThingSetMakerParams parms)
 		{
-			ThingSetMakerParams result = this.fixedParams;
-			Gen.ReplaceNullFields<ThingSetMakerParams>(ref result, parms);
-			return result;
+			ThingSetMakerParams replaceIn = fixedParams;
+			Gen.ReplaceNullFields(ref replaceIn, parms);
+			return replaceIn;
 		}
 
-		
 		public virtual void ResolveReferences()
 		{
-			if (this.fixedParams.filter != null)
+			if (fixedParams.filter != null)
 			{
-				this.fixedParams.filter.ResolveReferences();
+				fixedParams.filter.ResolveReferences();
 			}
 		}
-
-		
-		public ThingSetMakerParams fixedParams;
-
-		
-		public static List<List<Thing>> thingsBeingGeneratedNow = new List<List<Thing>>();
 	}
 }

@@ -1,12 +1,9 @@
-﻿using System;
 using RimWorld.Planet;
 
 namespace RimWorld
 {
-	
 	public class BiomeWorker_BorealForest : BiomeWorker
 	{
-		
 		public override float GetScore(Tile tile, int tileID)
 		{
 			if (tile.WaterCovered)

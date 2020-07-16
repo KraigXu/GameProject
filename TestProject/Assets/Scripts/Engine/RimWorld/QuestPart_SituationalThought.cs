@@ -1,69 +1,57 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_SituationalThought : QuestPartActivable
 	{
-		
-		
+		public ThoughtDef def;
+
+		public Pawn pawn;
+
+		public int stage;
+
+		public int delayTicks;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.pawn != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.pawn;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (pawn != null)
+				{
+					yield return pawn;
+				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<ThoughtDef>(ref this.def, "def");
-			Scribe_References.Look<Pawn>(ref this.pawn, "pawn", false);
-			Scribe_Values.Look<int>(ref this.stage, "stage", 0, false);
-			Scribe_Values.Look<int>(ref this.delayTicks, "delayTicks", 0, false);
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_References.Look(ref pawn, "pawn");
+			Scribe_Values.Look(ref stage, "stage", 0);
+			Scribe_Values.Look(ref delayTicks, "delayTicks", 0);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.def = ThoughtDefOf.DecreeUnmet;
-			this.pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>();
+			def = ThoughtDefOf.DecreeUnmet;
+			pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault();
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.pawn == replace)
+			if (pawn == replace)
 			{
-				this.pawn = with;
+				pawn = with;
 			}
 		}
-
-		
-		public ThoughtDef def;
-
-		
-		public Pawn pawn;
-
-		
-		public int stage;
-
-		
-		public int delayTicks;
 	}
 }

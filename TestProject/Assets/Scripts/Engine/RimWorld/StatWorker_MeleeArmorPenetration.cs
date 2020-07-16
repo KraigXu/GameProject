@@ -1,35 +1,37 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatWorker_MeleeArmorPenetration : StatWorker
 	{
-		
 		public override bool IsDisabledFor(Thing thing)
 		{
-			return base.IsDisabledFor(thing) || StatDefOf.MeleeHitChance.Worker.IsDisabledFor(thing);
+			if (!base.IsDisabledFor(thing))
+			{
+				return StatDefOf.MeleeHitChance.Worker.IsDisabledFor(thing);
+			}
+			return true;
 		}
 
-		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			if (req.Thing == null)
 			{
-				Log.Error("Getting MeleeArmorPenetration stat for " + req.Def + " without concrete pawn. This always returns 0.", false);
+				Log.Error("Getting MeleeArmorPenetration stat for " + req.Def + " without concrete pawn. This always returns 0.");
 			}
-			return this.GetArmorPenetration(req, applyPostProcess);
+			return GetArmorPenetration(req, applyPostProcess);
 		}
 
-		
 		public override bool ShouldShowFor(StatRequest req)
 		{
-			return base.ShouldShowFor(req) && req.Thing is Pawn;
+			if (base.ShouldShowFor(req))
+			{
+				return req.Thing is Pawn;
+			}
+			return false;
 		}
 
-		
 		private float GetArmorPenetration(StatRequest req, bool applyPostProcess = true)
 		{
 			Pawn pawn = req.Thing as Pawn;
@@ -37,7 +39,7 @@ namespace RimWorld
 			{
 				return 0f;
 			}
-			List<VerbEntry> updatedAvailableVerbsList = pawn.meleeVerbs.GetUpdatedAvailableVerbsList(false);
+			List<VerbEntry> updatedAvailableVerbsList = pawn.meleeVerbs.GetUpdatedAvailableVerbsList(terrainTools: false);
 			if (updatedAvailableVerbsList.Count == 0)
 			{
 				return 0f;

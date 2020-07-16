@@ -1,19 +1,17 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_BilliardsTableOnWall : Alert
 	{
-		
-		
+		private List<Thing> badTablesResult = new List<Thing>();
+
 		private List<Thing> BadTables
 		{
 			get
 			{
-				this.badTablesResult.Clear();
+				badTablesResult.Clear();
 				List<Map> maps = Find.Maps;
 				Faction ofPlayer = Faction.OfPlayer;
 				for (int i = 0; i < maps.Count; i++)
@@ -23,28 +21,23 @@ namespace RimWorld
 					{
 						if (list[j].Faction == ofPlayer && !JoyGiver_PlayBilliards.ThingHasStandableSpaceOnAllSides(list[j]))
 						{
-							this.badTablesResult.Add(list[j]);
+							badTablesResult.Add(list[j]);
 						}
 					}
 				}
-				return this.badTablesResult;
+				return badTablesResult;
 			}
 		}
 
-		
 		public Alert_BilliardsTableOnWall()
 		{
-			this.defaultLabel = "BilliardsNeedsSpace".Translate();
-			this.defaultExplanation = "BilliardsNeedsSpaceDesc".Translate();
+			defaultLabel = "BilliardsNeedsSpace".Translate();
+			defaultExplanation = "BilliardsNeedsSpaceDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.BadTables);
+			return AlertReport.CulpritsAre(BadTables);
 		}
-
-		
-		private List<Thing> badTablesResult = new List<Thing>();
 	}
 }

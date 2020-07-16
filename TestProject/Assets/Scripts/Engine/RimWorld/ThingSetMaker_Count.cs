@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,37 +5,29 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_Count : ThingSetMaker
 	{
-		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
-			if (!this.AllowedThingDefs(parms).Any<ThingDef>())
+			if (!AllowedThingDefs(parms).Any())
 			{
 				return false;
 			}
-			if (parms.countRange != null && parms.countRange.Value.max <= 0)
+			if (parms.countRange.HasValue && parms.countRange.Value.max <= 0)
 			{
 				return false;
 			}
-			if (parms.maxTotalMass != null)
+			if (parms.maxTotalMass.HasValue && parms.maxTotalMass != float.MaxValue && !ThingSetMakerUtility.PossibleToWeighNoMoreThan(AllowedThingDefs(parms), parms.techLevel ?? TechLevel.Undefined, parms.maxTotalMass.Value, (!parms.countRange.HasValue) ? 1 : parms.countRange.Value.max))
 			{
-				float? maxTotalMass = parms.maxTotalMass;
-				float maxValue = float.MaxValue;
-				if (!(maxTotalMass.GetValueOrDefault() == maxValue & maxTotalMass != null) && !ThingSetMakerUtility.PossibleToWeighNoMoreThan(this.AllowedThingDefs(parms), parms.techLevel ?? TechLevel.Undefined, parms.maxTotalMass.Value, (parms.countRange != null) ? parms.countRange.Value.max : 1))
-				{
-					return false;
-				}
+				return false;
 			}
 			return true;
 		}
 
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			IEnumerable<ThingDef> enumerable = this.AllowedThingDefs(parms);
-			if (!enumerable.Any<ThingDef>())
+			IEnumerable<ThingDef> enumerable = AllowedThingDefs(parms);
+			if (!enumerable.Any())
 			{
 				return;
 			}
@@ -45,52 +36,37 @@ namespace RimWorld
 			float num = parms.maxTotalMass ?? float.MaxValue;
 			int num2 = Mathf.Max(intRange.RandomInRange, 1);
 			float num3 = 0f;
-			int num4 = 0;
-			ThingStuffPair thingStuffPair;
-			while (num4 < num2 && ThingSetMakerUtility.TryGetRandomThingWhichCanWeighNoMoreThan(enumerable, stuffTechLevel, (num == 3.40282347E+38f) ? 3.40282347E+38f : (num - num3), parms.qualityGenerator, out thingStuffPair))
+			for (int i = 0; i < num2; i++)
 			{
+				if (!ThingSetMakerUtility.TryGetRandomThingWhichCanWeighNoMoreThan(enumerable, stuffTechLevel, (num == float.MaxValue) ? float.MaxValue : (num - num3), parms.qualityGenerator, out ThingStuffPair thingStuffPair))
+				{
+					break;
+				}
 				Thing thing = ThingMaker.MakeThing(thingStuffPair.thing, thingStuffPair.stuff);
 				ThingSetMakerUtility.AssignQuality(thing, parms.qualityGenerator);
 				outThings.Add(thing);
 				if (!(thing is Pawn))
 				{
-					num3 += thing.GetStatValue(StatDefOf.Mass, true) * (float)thing.stackCount;
+					num3 += thing.GetStatValue(StatDefOf.Mass) * (float)thing.stackCount;
 				}
-				num4++;
 			}
 		}
 
-		
 		protected virtual IEnumerable<ThingDef> AllowedThingDefs(ThingSetMakerParams parms)
 		{
 			return ThingSetMakerUtility.GetAllowedThingDefs(parms);
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
-			foreach (ThingDef thingDef in this.AllowedThingDefs(parms))
+			foreach (ThingDef item in AllowedThingDefs(parms))
 			{
-				if (parms.maxTotalMass != null)
+				if (!parms.maxTotalMass.HasValue || parms.maxTotalMass == float.MaxValue || !(ThingSetMakerUtility.GetMinMass(item, techLevel) > parms.maxTotalMass))
 				{
-					float? maxTotalMass = parms.maxTotalMass;
-					float maxValue = float.MaxValue;
-					if (!(maxTotalMass.GetValueOrDefault() == maxValue & maxTotalMass != null))
-					{
-						float minMass = ThingSetMakerUtility.GetMinMass(thingDef, techLevel);
-						maxTotalMass = parms.maxTotalMass;
-						if (minMass > maxTotalMass.GetValueOrDefault() & maxTotalMass != null)
-						{
-							continue;
-						}
-					}
+					yield return item;
 				}
-				yield return thingDef;
 			}
-			IEnumerator<ThingDef> enumerator = null;
-			yield break;
-			yield break;
 		}
 	}
 }

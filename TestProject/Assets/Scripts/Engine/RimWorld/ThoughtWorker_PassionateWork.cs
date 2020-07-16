@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_PassionateWork : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			JobDriver curDriver = p.jobs.curDriver;

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Verse
 {
-
 	public class IngredientValueGetter_Volume : IngredientValueGetter
 	{
 		public override float ValuePerUnitOf(ThingDef t)
@@ -25,16 +22,9 @@ namespace Verse
 			return "BillRequires".Translate(ing.GetBaseCount() * 10f, ing.filter.Summary);
 		}
 
-		
 		public override string ExtraDescriptionLine(RecipeDef r)
 		{
-			if (r.ingredients.Any(delegate(IngredientCount ing)
-			{
-				IEnumerable<ThingDef> allowedThingDefs = ing.filter.AllowedThingDefs;
-				Func<ThingDef, bool> predicate = ((ThingDef td) => td.smallVolume && !r.GetPremultipliedSmallIngredients().Contains(td));
-
-				return allowedThingDefs.Any(predicate);
-			}))
+			if (r.ingredients.Any((IngredientCount ing) => ing.filter.AllowedThingDefs.Any((ThingDef td) => td.smallVolume && !r.GetPremultipliedSmallIngredients().Contains(td))))
 			{
 				return "BillRequiresMayVary".Translate(10.ToStringCached());
 			}

@@ -1,17 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class PowerNetGraphics
 	{
-		
+		private const AltitudeLayer WireAltitude = AltitudeLayer.SmallWire;
+
+		private static readonly Material WireMat = MaterialPool.MatFrom("Things/Special/Power/Wire");
+
 		public static void PrintWirePieceConnecting(SectionLayer layer, Thing A, Thing B, bool forPowerOverlay)
 		{
-			Material mat = PowerNetGraphics.WireMat;
+			Material mat = WireMat;
 			float y = AltitudeLayer.SmallWire.AltitudeFor();
 			if (forPowerOverlay)
 			{
@@ -23,10 +24,9 @@ namespace RimWorld
 			Vector3 v = B.TrueCenter() - A.TrueCenter();
 			Vector2 size = new Vector2(1f, v.MagnitudeHorizontal());
 			float rot = v.AngleFlat();
-			Printer_Plane.PrintPlane(layer, center, size, mat, rot, false, null, null, 0.01f, 0f);
+			Printer_Plane.PrintPlane(layer, center, size, mat, rot);
 		}
 
-		
 		public static void RenderAnticipatedWirePieceConnecting(IntVec3 userPos, Rot4 rotation, IntVec2 thingSize, Thing transmitter)
 		{
 			Vector3 vector = GenThing.TrueCenter(userPos, rotation, thingSize, AltitudeLayer.MapDataOverlay.AltitudeFor());
@@ -44,18 +44,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void PrintOverlayConnectorBaseFor(SectionLayer layer, Thing t)
 		{
 			Vector3 center = t.TrueCenter();
 			center.y = AltitudeLayer.MapDataOverlay.AltitudeFor();
-			Printer_Plane.PrintPlane(layer, center, new Vector2(1f, 1f), PowerOverlayMats.MatConnectorBase, 0f, false, null, null, 0.01f, 0f);
+			Printer_Plane.PrintPlane(layer, center, new Vector2(1f, 1f), PowerOverlayMats.MatConnectorBase);
 		}
-
-		
-		private const AltitudeLayer WireAltitude = AltitudeLayer.SmallWire;
-
-		
-		private static readonly Material WireMat = MaterialPool.MatFrom("Things/Special/Power/Wire");
 	}
 }

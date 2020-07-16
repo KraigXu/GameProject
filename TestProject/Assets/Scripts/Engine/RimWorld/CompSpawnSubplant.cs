@@ -1,152 +1,128 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompSpawnSubplant : ThingComp
 	{
-		
-		
-		public CompProperties_SpawnSubplant Props
-		{
-			get
-			{
-				return (CompProperties_SpawnSubplant)this.props;
-			}
-		}
+		private float progressToNextSubplant;
 
-		
-		
+		private List<Thing> subplants = new List<Thing>();
+
+		public Action onGrassGrown;
+
+		public CompProperties_SpawnSubplant Props => (CompProperties_SpawnSubplant)props;
+
 		public List<Thing> SubplantsForReading
 		{
 			get
 			{
-				this.Cleanup();
-				return this.subplants;
+				Cleanup();
+				return subplants;
 			}
 		}
 
-		
 		public void AddProgress(float progress)
 		{
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Subplant spawners are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 43254, false);
+				Log.ErrorOnce("Subplant spawners are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 43254);
 				return;
 			}
-			this.progressToNextSubplant += progress;
-			this.TryGrowSubplants();
+			progressToNextSubplant += progress;
+			TryGrowSubplants();
 		}
 
-		
 		public void Cleanup()
 		{
-			this.subplants.RemoveAll((Thing p) => !p.Spawned);
+			subplants.RemoveAll((Thing p) => !p.Spawned);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			return this.Props.subplant.LabelCap + ": " + this.SubplantsForReading.Count + "\n" + "ProgressToNextSubplant".Translate(this.Props.subplant.label, this.progressToNextSubplant.ToStringPercent());
+			return (string)(Props.subplant.LabelCap + ": ") + SubplantsForReading.Count + "\n" + "ProgressToNextSubplant".Translate(Props.subplant.label, progressToNextSubplant.ToStringPercent());
 		}
 
-		
 		private void TryGrowSubplants()
 		{
-			while (this.progressToNextSubplant >= 1f)
+			while (progressToNextSubplant >= 1f)
 			{
-				this.DoGrowSubplant();
-				this.progressToNextSubplant -= 1f;
+				DoGrowSubplant();
+				progressToNextSubplant -= 1f;
 			}
 		}
 
-		
 		private void DoGrowSubplant()
 		{
-			IntVec3 position = this.parent.Position;
-			for (int i = 0; i < 1000; i++)
+			IntVec3 position = parent.Position;
+			int num = 0;
+			IntVec3 intVec;
+			List<Thing> thingList;
+			while (true)
 			{
-				IntVec3 intVec = position + GenRadial.RadialPattern[i];
-				if (intVec.InBounds(this.parent.Map))
+				if (num >= 1000)
+				{
+					return;
+				}
+				intVec = position + GenRadial.RadialPattern[num];
+				if (intVec.InBounds(parent.Map))
 				{
 					bool flag = false;
-					List<Thing> thingList = intVec.GetThingList(this.parent.Map);
-					List<Thing>.Enumerator enumerator = thingList.GetEnumerator();
+					thingList = intVec.GetThingList(parent.Map);
+					foreach (Thing item in thingList)
 					{
-						while (enumerator.MoveNext())
+						if (item.def == Props.subplant)
 						{
-							if (enumerator.Current.def == this.Props.subplant)
-							{
-								flag = true;
-								break;
-							}
+							flag = true;
+							break;
 						}
 					}
-					if (!flag && this.Props.subplant.CanEverPlantAt_NewTemp(intVec, this.parent.Map, true))
+					if (!flag && Props.subplant.CanEverPlantAt_NewTemp(intVec, parent.Map, canWipePlantsExceptTree: true))
 					{
-						for (int j = thingList.Count - 1; j >= 0; j--)
-						{
-							if (thingList[j].def.category == ThingCategory.Plant)
-							{
-								thingList[j].Destroy(DestroyMode.Vanish);
-							}
-						}
-						this.subplants.Add(GenSpawn.Spawn(this.Props.subplant, intVec, this.parent.Map, WipeMode.Vanish));
-						if (this.Props.spawnSound != null)
-						{
-							this.Props.spawnSound.PlayOneShot(new TargetInfo(this.parent));
-						}
-						Action action = this.onGrassGrown;
-						if (action == null)
-						{
-							return;
-						}
-						action();
-						return;
+						break;
 					}
 				}
+				num++;
 			}
+			for (int num2 = thingList.Count - 1; num2 >= 0; num2--)
+			{
+				if (thingList[num2].def.category == ThingCategory.Plant)
+				{
+					thingList[num2].Destroy();
+				}
+			}
+			subplants.Add(GenSpawn.Spawn(Props.subplant, intVec, parent.Map));
+			if (Props.spawnSound != null)
+			{
+				Props.spawnSound.PlayOneShot(new TargetInfo(parent));
+			}
+			onGrassGrown?.Invoke();
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				yield break;
-			}
-			yield return new Command_Action
-			{
-				defaultLabel = "DEV: Add 100% progress",
-				action = delegate
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEV: Add 100% progress";
+				command_Action.action = delegate
 				{
-					this.AddProgress(1f);
-				}
-			};
-			yield break;
+					AddProgress(1f);
+				};
+				yield return command_Action;
+			}
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<float>(ref this.progressToNextSubplant, "progressToNextSubplant", 0f, false);
-			Scribe_Collections.Look<Thing>(ref this.subplants, "subplants", LookMode.Reference, Array.Empty<object>());
+			Scribe_Values.Look(ref progressToNextSubplant, "progressToNextSubplant", 0f);
+			Scribe_Collections.Look(ref subplants, "subplants", LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.subplants.RemoveAll((Thing x) => x == null);
+				subplants.RemoveAll((Thing x) => x == null);
 			}
 		}
-
-		
-		private float progressToNextSubplant;
-
-		
-		private List<Thing> subplants = new List<Thing>();
-
-		
-		public Action onGrassGrown;
 	}
 }

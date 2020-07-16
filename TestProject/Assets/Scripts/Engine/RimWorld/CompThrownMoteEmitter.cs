@@ -1,124 +1,96 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompThrownMoteEmitter : ThingComp
 	{
-		
-		
-		private CompProperties_ThrownMoteEmitter Props
-		{
-			get
-			{
-				return (CompProperties_ThrownMoteEmitter)this.props;
-			}
-		}
+		public bool emittedBefore;
 
-		
-		
-		private Vector3 EmissionOffset
-		{
-			get
-			{
-				return new Vector3(Rand.Range(this.Props.offsetMin.x, this.Props.offsetMax.x), Rand.Range(this.Props.offsetMin.y, this.Props.offsetMax.y), Rand.Range(this.Props.offsetMin.z, this.Props.offsetMax.z));
-			}
-		}
+		public int ticksSinceLastEmitted;
 
-		
-		
-		private Color EmissionColor
-		{
-			get
-			{
-				return Color.Lerp(this.Props.colorA, this.Props.colorB, Rand.Value);
-			}
-		}
+		private CompProperties_ThrownMoteEmitter Props => (CompProperties_ThrownMoteEmitter)props;
 
-		
-		
+		private Vector3 EmissionOffset => new Vector3(Rand.Range(Props.offsetMin.x, Props.offsetMax.x), Rand.Range(Props.offsetMin.y, Props.offsetMax.y), Rand.Range(Props.offsetMin.z, Props.offsetMax.z));
+
+		private Color EmissionColor => Color.Lerp(Props.colorA, Props.colorB, Rand.Value);
+
 		private bool IsOn
 		{
 			get
 			{
-				if (!this.parent.Spawned)
+				if (!parent.Spawned)
 				{
 					return false;
 				}
-				CompPowerTrader comp = this.parent.GetComp<CompPowerTrader>();
+				CompPowerTrader comp = parent.GetComp<CompPowerTrader>();
 				if (comp != null && !comp.PowerOn)
 				{
 					return false;
 				}
-				CompSendSignalOnCountdown comp2 = this.parent.GetComp<CompSendSignalOnCountdown>();
+				CompSendSignalOnCountdown comp2 = parent.GetComp<CompSendSignalOnCountdown>();
 				if (comp2 != null && comp2.ticksLeft <= 0)
 				{
 					return false;
 				}
-				Building_MusicalInstrument building_MusicalInstrument = this.parent as Building_MusicalInstrument;
+				Building_MusicalInstrument building_MusicalInstrument = parent as Building_MusicalInstrument;
 				if (building_MusicalInstrument != null && !building_MusicalInstrument.IsBeingPlayed)
 				{
 					return false;
 				}
-				CompInitiatable comp3 = this.parent.GetComp<CompInitiatable>();
-				return comp3 == null || comp3.Initiated;
+				CompInitiatable comp3 = parent.GetComp<CompInitiatable>();
+				if (comp3 != null && !comp3.Initiated)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
 		public override void CompTick()
 		{
-			if (!this.IsOn)
+			if (!IsOn)
 			{
 				return;
 			}
-			if (this.Props.emissionInterval == -1)
+			if (Props.emissionInterval != -1)
 			{
-				if (!this.emittedBefore)
+				if (ticksSinceLastEmitted >= Props.emissionInterval)
 				{
-					this.Emit();
-					this.emittedBefore = true;
+					Emit();
+					ticksSinceLastEmitted = 0;
 				}
-				return;
+				else
+				{
+					ticksSinceLastEmitted++;
+				}
 			}
-			if (this.ticksSinceLastEmitted >= this.Props.emissionInterval)
+			else if (!emittedBefore)
 			{
-				this.Emit();
-				this.ticksSinceLastEmitted = 0;
-				return;
+				Emit();
+				emittedBefore = true;
 			}
-			this.ticksSinceLastEmitted++;
 		}
 
-		
 		private void Emit()
 		{
-			for (int i = 0; i < this.Props.burstCount; i++)
+			for (int i = 0; i < Props.burstCount; i++)
 			{
-				MoteThrown moteThrown = (MoteThrown)ThingMaker.MakeThing(this.Props.mote, null);
-				moteThrown.Scale = this.Props.scale.RandomInRange;
-				moteThrown.rotationRate = this.Props.rotationRate.RandomInRange;
-				moteThrown.exactPosition = this.parent.DrawPos + this.EmissionOffset;
-				moteThrown.instanceColor = this.EmissionColor;
-				moteThrown.SetVelocity(this.Props.velocityX.RandomInRange, this.Props.velocityY.RandomInRange);
-				GenSpawn.Spawn(moteThrown, moteThrown.exactPosition.ToIntVec3(), this.parent.Map, WipeMode.Vanish);
+				MoteThrown moteThrown = (MoteThrown)ThingMaker.MakeThing(Props.mote);
+				moteThrown.Scale = Props.scale.RandomInRange;
+				moteThrown.rotationRate = Props.rotationRate.RandomInRange;
+				moteThrown.exactPosition = parent.DrawPos + EmissionOffset;
+				moteThrown.instanceColor = EmissionColor;
+				moteThrown.SetVelocity(Props.velocityX.RandomInRange, Props.velocityY.RandomInRange);
+				GenSpawn.Spawn(moteThrown, moteThrown.exactPosition.ToIntVec3(), parent.Map);
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.ticksSinceLastEmitted, "ticksSinceLastEmitted", 0, false);
-			Scribe_Values.Look<bool>(ref this.emittedBefore, "emittedBefore", false, false);
+			Scribe_Values.Look(ref ticksSinceLastEmitted, "ticksSinceLastEmitted", 0);
+			Scribe_Values.Look(ref emittedBefore, "emittedBefore", defaultValue: false);
 		}
-
-		
-		public bool emittedBefore;
-
-		
-		public int ticksSinceLastEmitted;
 	}
 }

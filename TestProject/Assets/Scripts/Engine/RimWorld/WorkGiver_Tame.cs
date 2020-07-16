@@ -1,32 +1,24 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_Tame : WorkGiver_InteractAnimal
 	{
-		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
-			foreach (Designation designation in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.Tame))
+			foreach (Designation item in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.Tame))
 			{
-				yield return designation.target.Thing;
+				yield return item.target.Thing;
 			}
-			IEnumerator<Designation> enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			return !pawn.Map.designationManager.AnySpawnedDesignationOfDef(DesignationDefOf.Tame);
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;
@@ -40,19 +32,19 @@ namespace RimWorld
 			}
 			if (TameUtility.TriedToTameTooRecently(pawn2))
 			{
-				JobFailReason.Is(WorkGiver_InteractAnimal.AnimalInteractedTooRecentlyTrans, null);
+				JobFailReason.Is(WorkGiver_InteractAnimal.AnimalInteractedTooRecentlyTrans);
 				return null;
 			}
-			if (!this.CanInteractWithAnimal(pawn, pawn2, forced))
+			if (!CanInteractWithAnimal(pawn, pawn2, forced))
 			{
 				return null;
 			}
-			if (pawn2.RaceProps.EatsFood && !base.HasFoodToInteractAnimal(pawn, pawn2))
+			if (pawn2.RaceProps.EatsFood && !HasFoodToInteractAnimal(pawn, pawn2))
 			{
-				Job job = base.TakeFoodForAnimalInteractJob(pawn, pawn2);
+				Job job = TakeFoodForAnimalInteractJob(pawn, pawn2);
 				if (job == null)
 				{
-					JobFailReason.Is(WorkGiver_InteractAnimal.NoUsableFoodTrans, null);
+					JobFailReason.Is(WorkGiver_InteractAnimal.NoUsableFoodTrans);
 				}
 				return job;
 			}

@@ -1,15 +1,16 @@
-﻿using System;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class StorytellerUI
 	{
-		
+		private static Vector2 scrollPosition = default(Vector2);
+
+		private static readonly Texture2D StorytellerHighlightTex = ContentFinder<Texture2D>.Get("UI/HeroArt/Storytellers/Highlight");
+
 		public static void DrawStorytellerSelectionInterface(Rect rect, ref StorytellerDef chosenStoryteller, ref DifficultyDef difficulty, Listing_Standard infoListing)
 		{
 			GUI.BeginGroup(rect);
@@ -19,23 +20,20 @@ namespace RimWorld
 				Widgets.DrawLineHorizontal(0f, rect.height, rect.width);
 			}
 			Rect outRect = new Rect(0f, 0f, Storyteller.PortraitSizeTiny.x + 16f, rect.height);
-			Rect viewRect = new Rect(0f, 0f, Storyteller.PortraitSizeTiny.x, (float)DefDatabase<StorytellerDef>.AllDefs.Count<StorytellerDef>() * (Storyteller.PortraitSizeTiny.y + 10f));
-			Widgets.BeginScrollView(outRect, ref StorytellerUI.scrollPosition, viewRect, true);
+			Widgets.BeginScrollView(viewRect: new Rect(0f, 0f, Storyteller.PortraitSizeTiny.x, (float)DefDatabase<StorytellerDef>.AllDefs.Count() * (Storyteller.PortraitSizeTiny.y + 10f)), outRect: outRect, scrollPosition: ref scrollPosition);
 			Rect rect2 = new Rect(0f, 0f, Storyteller.PortraitSizeTiny.x, Storyteller.PortraitSizeTiny.y);
-			foreach (StorytellerDef storytellerDef in from tel in DefDatabase<StorytellerDef>.AllDefs
-			orderby tel.listOrder
-			select tel)
+			foreach (StorytellerDef item in DefDatabase<StorytellerDef>.AllDefs.OrderBy((StorytellerDef tel) => tel.listOrder))
 			{
-				if (storytellerDef.listVisible)
+				if (item.listVisible)
 				{
-					if (Widgets.ButtonImage(rect2, storytellerDef.portraitTinyTex, true))
+					if (Widgets.ButtonImage(rect2, item.portraitTinyTex))
 					{
 						TutorSystem.Notify_Event("ChooseStoryteller");
-						chosenStoryteller = storytellerDef;
+						chosenStoryteller = item;
 					}
-					if (chosenStoryteller == storytellerDef)
+					if (chosenStoryteller == item)
 					{
-						GUI.DrawTexture(rect2, StorytellerUI.StorytellerHighlightTex);
+						GUI.DrawTexture(rect2, StorytellerHighlightTex);
 					}
 					rect2.y += rect2.height + 8f;
 				}
@@ -52,16 +50,16 @@ namespace RimWorld
 				Text.Anchor = TextAnchor.UpperLeft;
 				Text.Font = GameFont.Small;
 				infoListing.Begin(rect3);
-				infoListing.Label(chosenStoryteller.description, 160f, null);
+				infoListing.Label(chosenStoryteller.description, 160f);
 				infoListing.Gap(6f);
-				foreach (DifficultyDef difficultyDef in DefDatabase<DifficultyDef>.AllDefs)
+				foreach (DifficultyDef allDef in DefDatabase<DifficultyDef>.AllDefs)
 				{
-					if (!difficultyDef.isExtreme || Prefs.ExtremeDifficultyUnlocked)
+					if (!allDef.isExtreme || Prefs.ExtremeDifficultyUnlocked)
 					{
-						GUI.color = difficultyDef.drawColor;
-						if (infoListing.RadioButton_NewTemp(difficultyDef.LabelCap, difficulty == difficultyDef, 0f, difficultyDef.description, new float?(0f)))
+						GUI.color = allDef.drawColor;
+						if (infoListing.RadioButton_NewTemp(allDef.LabelCap, difficulty == allDef, 0f, allDef.description, 0f))
 						{
-							difficulty = difficultyDef;
+							difficulty = allDef;
 						}
 						infoListing.Gap(3f);
 					}
@@ -88,11 +86,5 @@ namespace RimWorld
 			}
 			GUI.EndGroup();
 		}
-
-		
-		private static Vector2 scrollPosition = default(Vector2);
-
-		
-		private static readonly Texture2D StorytellerHighlightTex = ContentFinder<Texture2D>.Get("UI/HeroArt/Storytellers/Highlight", true);
 	}
 }

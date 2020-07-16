@@ -1,53 +1,44 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class MapCellsInRandomOrder
 	{
-		
+		private Map map;
+
+		private List<IntVec3> randomizedCells;
+
 		public MapCellsInRandomOrder(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public List<IntVec3> GetAll()
 		{
-			this.CreateListIfShould();
-			return this.randomizedCells;
+			CreateListIfShould();
+			return randomizedCells;
 		}
 
-		
 		public IntVec3 Get(int index)
 		{
-			this.CreateListIfShould();
-			return this.randomizedCells[index];
+			CreateListIfShould();
+			return randomizedCells[index];
 		}
 
-		
 		private void CreateListIfShould()
 		{
-			if (this.randomizedCells != null)
+			if (randomizedCells == null)
 			{
-				return;
+				randomizedCells = new List<IntVec3>(map.Area);
+				foreach (IntVec3 allCell in map.AllCells)
+				{
+					randomizedCells.Add(allCell);
+				}
+				Rand.PushState();
+				Rand.Seed = (Find.World.info.Seed ^ map.Tile);
+				randomizedCells.Shuffle();
+				Rand.PopState();
 			}
-			this.randomizedCells = new List<IntVec3>(this.map.Area);
-			foreach (IntVec3 item in this.map.AllCells)
-			{
-				this.randomizedCells.Add(item);
-			}
-			Rand.PushState();
-			Rand.Seed = (Find.World.info.Seed ^ this.map.Tile);
-			this.randomizedCells.Shuffle<IntVec3>();
-			Rand.PopState();
 		}
-
-		
-		private Map map;
-
-		
-		private List<IntVec3> randomizedCells;
 	}
 }

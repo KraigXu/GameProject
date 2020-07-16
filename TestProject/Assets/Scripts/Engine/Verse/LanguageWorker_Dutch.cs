@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class LanguageWorker_Dutch : LanguageWorker
 	{
-		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -19,7 +15,6 @@ namespace Verse
 			return "een " + str;
 		}
 
-		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)

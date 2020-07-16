@@ -1,15 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class MapInterface
 	{
-		
+		public ThingOverlays thingOverlays = new ThingOverlays();
+
+		public Selector selector = new Selector();
+
+		public Targeter targeter = new Targeter();
+
+		public DesignatorManager designatorManager = new DesignatorManager();
+
+		public ReverseDesignatorDatabase reverseDesignatorDatabase = new ReverseDesignatorDatabase();
+
+		private MouseoverReadout mouseoverReadout = new MouseoverReadout();
+
+		public GlobalControls globalControls = new GlobalControls();
+
+		protected ResourceReadout resourceReadout = new ResourceReadout();
+
+		public ColonistBar colonistBar = new ColonistBar();
+
 		public void MapInterfaceOnGUI_BeforeMainTabs()
 		{
 			if (Find.CurrentMap == null)
@@ -19,16 +34,16 @@ namespace RimWorld
 			if (!WorldRendererUtility.WorldRenderedNow)
 			{
 				ScreenshotModeHandler screenshotMode = Find.UIRoot.screenshotMode;
-				this.thingOverlays.ThingOverlaysOnGUI();
+				thingOverlays.ThingOverlaysOnGUI();
 				MapComponentUtility.MapComponentOnGUI(Find.CurrentMap);
 				BeautyDrawer.BeautyDrawerOnGUI();
 				if (!screenshotMode.FiltersCurrentEvent)
 				{
-					this.colonistBar.ColonistBarOnGUI();
+					colonistBar.ColonistBarOnGUI();
 				}
-				this.selector.dragBox.DragBoxOnGUI();
-				this.designatorManager.DesignationManagerOnGUI();
-				this.targeter.TargeterOnGUI();
+				selector.dragBox.DragBoxOnGUI();
+				designatorManager.DesignationManagerOnGUI();
+				targeter.TargeterOnGUI();
 				Find.CurrentMap.tooltipGiverList.DispenseAllThingTooltips();
 				if (DebugViewSettings.drawFoodSearchFromMouse)
 				{
@@ -40,73 +55,52 @@ namespace RimWorld
 				}
 				if (!screenshotMode.FiltersCurrentEvent)
 				{
-					this.mouseoverReadout.MouseoverReadoutOnGUI();
-					this.globalControls.GlobalControlsOnGUI();
-					this.resourceReadout.ResourceReadoutOnGUI();
-					return;
+					mouseoverReadout.MouseoverReadoutOnGUI();
+					globalControls.GlobalControlsOnGUI();
+					resourceReadout.ResourceReadoutOnGUI();
 				}
 			}
 			else
 			{
-				this.targeter.StopTargeting();
+				targeter.StopTargeting();
 			}
 		}
 
-		
 		public void MapInterfaceOnGUI_AfterMainTabs()
 		{
-			if (Find.CurrentMap == null)
-			{
-				return;
-			}
-			if (!WorldRendererUtility.WorldRenderedNow && !Find.UIRoot.screenshotMode.FiltersCurrentEvent)
+			if (Find.CurrentMap != null && !WorldRendererUtility.WorldRenderedNow && !Find.UIRoot.screenshotMode.FiltersCurrentEvent)
 			{
 				EnvironmentStatsDrawer.EnvironmentStatsOnGUI();
 				Find.CurrentMap.debugDrawer.DebugDrawerOnGUI();
 			}
 		}
 
-		
 		public void HandleMapClicks()
 		{
-			if (Find.CurrentMap == null)
+			if (Find.CurrentMap != null && !WorldRendererUtility.WorldRenderedNow)
 			{
-				return;
-			}
-			if (!WorldRendererUtility.WorldRenderedNow)
-			{
-				this.designatorManager.ProcessInputEvents();
-				this.targeter.ProcessInputEvents();
+				designatorManager.ProcessInputEvents();
+				targeter.ProcessInputEvents();
 			}
 		}
 
-		
 		public void HandleLowPriorityInput()
 		{
-			if (Find.CurrentMap == null)
+			if (Find.CurrentMap != null && !WorldRendererUtility.WorldRenderedNow)
 			{
-				return;
-			}
-			if (!WorldRendererUtility.WorldRenderedNow)
-			{
-				this.selector.SelectorOnGUI();
+				selector.SelectorOnGUI();
 				Find.CurrentMap.lordManager.LordManagerOnGUI();
 			}
 		}
 
-		
 		public void MapInterfaceUpdate()
 		{
-			if (Find.CurrentMap == null)
+			if (Find.CurrentMap != null && !WorldRendererUtility.WorldRenderedNow)
 			{
-				return;
-			}
-			if (!WorldRendererUtility.WorldRenderedNow)
-			{
-				this.targeter.TargeterUpdate();
+				targeter.TargeterUpdate();
 				SelectionDrawer.DrawSelectionOverlays();
 				EnvironmentStatsDrawer.DrawRoomOverlays();
-				this.designatorManager.DesignatorManagerUpdate();
+				designatorManager.DesignatorManagerUpdate();
 				Find.CurrentMap.roofGrid.RoofGridUpdate();
 				Find.CurrentMap.fertilityGrid.FertilityGridUpdate();
 				Find.CurrentMap.terrainGrid.TerrainGridUpdate();
@@ -146,14 +140,13 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void Notify_SwitchedMap()
 		{
-			this.designatorManager.Deselect();
-			this.reverseDesignatorDatabase.Reinit();
-			this.selector.ClearSelection();
-			this.selector.dragBox.active = false;
-			this.targeter.StopTargeting();
+			designatorManager.Deselect();
+			reverseDesignatorDatabase.Reinit();
+			selector.ClearSelection();
+			selector.dragBox.active = false;
+			targeter.StopTargeting();
 			MainButtonDef openTab = Find.MainTabsRoot.OpenTab;
 			List<MainButtonDef> allDefsListForReading = DefDatabase<MainButtonDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
@@ -162,7 +155,7 @@ namespace RimWorld
 			}
 			if (openTab != null && openTab != MainButtonDefOf.Inspect)
 			{
-				Find.MainTabsRoot.SetCurrentTab(openTab, false);
+				Find.MainTabsRoot.SetCurrentTab(openTab, playSound: false);
 			}
 			if (Find.CurrentMap != null)
 			{
@@ -170,32 +163,5 @@ namespace RimWorld
 				Find.CameraDriver.SetRootPosAndSize(rememberedCameraPos.rootPos, rememberedCameraPos.rootSize);
 			}
 		}
-
-		
-		public ThingOverlays thingOverlays = new ThingOverlays();
-
-		
-		public Selector selector = new Selector();
-
-		
-		public Targeter targeter = new Targeter();
-
-		
-		public DesignatorManager designatorManager = new DesignatorManager();
-
-		
-		public ReverseDesignatorDatabase reverseDesignatorDatabase = new ReverseDesignatorDatabase();
-
-		
-		private MouseoverReadout mouseoverReadout = new MouseoverReadout();
-
-		
-		public GlobalControls globalControls = new GlobalControls();
-
-		
-		protected ResourceReadout resourceReadout = new ResourceReadout();
-
-		
-		public ColonistBar colonistBar = new ColonistBar();
 	}
 }

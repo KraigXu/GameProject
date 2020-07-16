@@ -1,17 +1,12 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class HediffCompProperties_KillAfterDays : HediffCompProperties
 	{
-		
+		public int days;
+
 		public HediffCompProperties_KillAfterDays()
 		{
-			this.compClass = typeof(HediffComp_KillAfterDays);
+			compClass = typeof(HediffComp_KillAfterDays);
 		}
-
-		
-		public int days;
 	}
 }

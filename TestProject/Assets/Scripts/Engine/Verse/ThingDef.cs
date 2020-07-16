@@ -1,10 +1,9 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using Verse;
 using Verse.AI;
 
 namespace Verse
@@ -491,12 +490,12 @@ namespace Verse
 				}
 				switch (category)
 				{
-					case ThingCategory.Pawn:
-						return true;
-					case ThingCategory.Building:
-						return true;
-					default:
-						return false;
+				case ThingCategory.Pawn:
+					return true;
+				case ThingCategory.Building:
+					return true;
+				default:
+					return false;
 				}
 			}
 		}
@@ -1093,15 +1092,7 @@ namespace Verse
 					PawnKindDef anyPawnKind = race.AnyPawnKind;
 					if (anyPawnKind != null)
 					{
-
-						//Material material = anyPawnKind.lifeStages.Last().bodyGraphicData.Graphic.MatAt(Rot4.East);
-						Material material = null;
-						if (material == null)
-                        {
-							material = Resources.Load<Material>("Default_Mat");
-
-						}
-
+						Material material = anyPawnKind.lifeStages.Last().bodyGraphicData.Graphic.MatAt(Rot4.East);
 						uiIcon = (Texture2D)material.mainTexture;
 						uiIconColor = material.color;
 					}
@@ -1519,7 +1510,7 @@ namespace Verse
 				yield return new StatDrawEntry(StatCategoryDefOf.Basics, "SkillRequiredToBuild".Translate(SkillDefOf.Artistic.LabelCap), artisticSkillPrerequisite.ToString(), "SkillRequiredToBuildExplanation".Translate(SkillDefOf.Artistic.LabelCap), 1100);
 			}
 			string[] array = (from u in DefDatabase<RecipeDef>.AllDefsListForReading.Where((RecipeDef r) => r.recipeUsers != null && r.products.Count == 1 && r.products.Any((ThingDefCountClass p) => p.thingDef == this) && !r.IsSurgery).SelectMany((RecipeDef r) => r.recipeUsers)
-							  select u.label).ToArray();
+				select u.label).ToArray();
 			if (array.Any())
 			{
 				string valueString = array.ToCommaList().CapitalizeFirst();
@@ -1704,7 +1695,7 @@ namespace Verse
 				{
 					yield return new StatDrawEntry(StatCategoryDefOf.BasicsImportant, "Stat_MineableThing_Name".Translate(), building.mineableThing.LabelCap, "Stat_MineableThing_Desc".Translate(), 2200, null, new Dialog_InfoCard.Hyperlink[1]
 					{
-					new Dialog_InfoCard.Hyperlink(building.mineableThing)
+						new Dialog_InfoCard.Hyperlink(building.mineableThing)
 					});
 				}
 				if (building.IsTurret)
@@ -1712,7 +1703,7 @@ namespace Verse
 					ThingDef turret = building.turretGunDef;
 					yield return new StatDrawEntry(StatCategoryDefOf.BasicsImportant, "Stat_Weapon_Name".Translate(), turret.LabelCap, "Stat_Weapon_Desc".Translate(), 5389, null, new Dialog_InfoCard.Hyperlink[1]
 					{
-					new Dialog_InfoCard.Hyperlink(turret)
+						new Dialog_InfoCard.Hyperlink(turret)
 					});
 					StatRequest request = StatRequest.For(turret, null);
 					foreach (StatDrawEntry item9 in turret.SpecialDisplayStats(request))

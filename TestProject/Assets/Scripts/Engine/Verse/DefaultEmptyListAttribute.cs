@@ -1,34 +1,36 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Verse;
 
-[AttributeUsage(AttributeTargets.Field)]
-public class DefaultEmptyListAttribute : DefaultValueAttribute
+namespace Verse
 {
-	public DefaultEmptyListAttribute(Type type)
-		: base(type)
+	[AttributeUsage(AttributeTargets.Field)]
+	public class DefaultEmptyListAttribute : DefaultValueAttribute
 	{
-	}
+		public DefaultEmptyListAttribute(Type type)
+			: base(type)
+		{
+		}
 
-	public override bool ObjIsDefault(object obj)
-	{
-		if (obj == null)
+		public override bool ObjIsDefault(object obj)
 		{
-			return false;
+			if (obj == null)
+			{
+				return false;
+			}
+			if (obj.GetType().GetGenericTypeDefinition() != typeof(List<>))
+			{
+				return false;
+			}
+			Type[] genericArguments = obj.GetType().GetGenericArguments();
+			if (genericArguments.Length != 1 || genericArguments[0] != (Type)value)
+			{
+				return false;
+			}
+			if ((int)obj.GetType().GetProperty("Count").GetValue(obj, null) != 0)
+			{
+				return false;
+			}
+			return true;
 		}
-		if (obj.GetType().GetGenericTypeDefinition() != typeof(List<>))
-		{
-			return false;
-		}
-		Type[] genericArguments = obj.GetType().GetGenericArguments();
-		if (genericArguments.Length != 1 || genericArguments[0] != (Type)value)
-		{
-			return false;
-		}
-		if ((int)obj.GetType().GetProperty("Count").GetValue(obj, null) != 0)
-		{
-			return false;
-		}
-		return true;
 	}
 }

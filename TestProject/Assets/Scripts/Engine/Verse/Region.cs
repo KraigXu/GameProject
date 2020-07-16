@@ -1,300 +1,296 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public sealed class Region
 	{
-		
-		
+		public RegionType type = RegionType.Normal;
+
+		public int id = -1;
+
+		public sbyte mapIndex = -1;
+
+		private Room roomInt;
+
+		public List<RegionLink> links = new List<RegionLink>();
+
+		public CellRect extentsClose;
+
+		public CellRect extentsLimit;
+
+		public Building_Door door;
+
+		private int precalculatedHashCode;
+
+		public bool touchesMapEdge;
+
+		private int cachedCellCount = -1;
+
+		public bool valid = true;
+
+		private ListerThings listerThings = new ListerThings(ListerThingsUse.Region);
+
+		public uint[] closedIndex = new uint[RegionTraverser.NumWorkers];
+
+		public uint reachedIndex;
+
+		public int newRegionGroupIndex = -1;
+
+		private Dictionary<Area, AreaOverlap> cachedAreaOverlaps;
+
+		public int mark;
+
+		private List<KeyValuePair<Pawn, Danger>> cachedDangers = new List<KeyValuePair<Pawn, Danger>>();
+
+		private int cachedDangersForFrame;
+
+		private float cachedBaseDesiredPlantsCount;
+
+		private int cachedBaseDesiredPlantsCountForTick = -999999;
+
+		private static Dictionary<Pawn, FloatRange> cachedSafeTemperatureRanges = new Dictionary<Pawn, FloatRange>();
+
+		private static int cachedSafeTemperatureRangesForFrame;
+
+		private int debug_makeTick = -1000;
+
+		private int debug_lastTraverseTick = -1000;
+
+		private static int nextId = 1;
+
+		public const int GridSize = 12;
+
 		public Map Map
 		{
 			get
 			{
-				if (this.mapIndex >= 0)
+				if (mapIndex >= 0)
 				{
-					return Find.Maps[(int)this.mapIndex];
+					return Find.Maps[mapIndex];
 				}
 				return null;
 			}
 		}
 
-		
-		
 		public IEnumerable<IntVec3> Cells
 		{
 			get
 			{
-				RegionGrid regions = this.Map.regionGrid;
-				int num;
-				for (int z = this.extentsClose.minZ; z <= this.extentsClose.maxZ; z = num + 1)
+				RegionGrid regions = Map.regionGrid;
+				for (int z = extentsClose.minZ; z <= extentsClose.maxZ; z++)
 				{
-					for (int x = this.extentsClose.minX; x <= this.extentsClose.maxX; x = num + 1)
+					for (int x = extentsClose.minX; x <= extentsClose.maxX; x++)
 					{
 						IntVec3 intVec = new IntVec3(x, 0, z);
 						if (regions.GetRegionAt_NoRebuild_InvalidAllowed(intVec) == this)
 						{
 							yield return intVec;
 						}
-						num = x;
 					}
-					num = z;
 				}
-				yield break;
 			}
 		}
 
-		
-		
 		public int CellCount
 		{
 			get
 			{
-				if (this.cachedCellCount == -1)
+				if (cachedCellCount == -1)
 				{
-					this.cachedCellCount = 0;
-					RegionGrid regionGrid = this.Map.regionGrid;
-					for (int i = this.extentsClose.minZ; i <= this.extentsClose.maxZ; i++)
+					cachedCellCount = 0;
+					RegionGrid regionGrid = Map.regionGrid;
+					for (int i = extentsClose.minZ; i <= extentsClose.maxZ; i++)
 					{
-						for (int j = this.extentsClose.minX; j <= this.extentsClose.maxX; j++)
+						for (int j = extentsClose.minX; j <= extentsClose.maxX; j++)
 						{
 							IntVec3 c = new IntVec3(j, 0, i);
 							if (regionGrid.GetRegionAt_NoRebuild_InvalidAllowed(c) == this)
 							{
-								this.cachedCellCount++;
+								cachedCellCount++;
 							}
 						}
 					}
 				}
-				return this.cachedCellCount;
+				return cachedCellCount;
 			}
 		}
 
-		
-		
 		public IEnumerable<Region> Neighbors
 		{
 			get
 			{
-				int num;
-				for (int li = 0; li < this.links.Count; li = num + 1)
+				for (int li = 0; li < links.Count; li++)
 				{
-					RegionLink link = this.links[li];
-					for (int ri = 0; ri < 2; ri = num + 1)
+					RegionLink link = links[li];
+					for (int ri = 0; ri < 2; ri++)
 					{
 						if (link.regions[ri] != null && link.regions[ri] != this && link.regions[ri].valid)
 						{
 							yield return link.regions[ri];
 						}
-						num = ri;
 					}
-					link = null;
-					num = li;
 				}
-				yield break;
 			}
 		}
 
-		
-		
 		public IEnumerable<Region> NeighborsOfSameType
 		{
 			get
 			{
-				int num;
-				for (int li = 0; li < this.links.Count; li = num + 1)
+				for (int li = 0; li < links.Count; li++)
 				{
-					RegionLink link = this.links[li];
-					for (int ri = 0; ri < 2; ri = num + 1)
+					RegionLink link = links[li];
+					for (int ri = 0; ri < 2; ri++)
 					{
-						if (link.regions[ri] != null && link.regions[ri] != this && link.regions[ri].type == this.type && link.regions[ri].valid)
+						if (link.regions[ri] != null && link.regions[ri] != this && link.regions[ri].type == type && link.regions[ri].valid)
 						{
 							yield return link.regions[ri];
 						}
-						num = ri;
 					}
-					link = null;
-					num = li;
 				}
-				yield break;
 			}
 		}
 
-		
-		
-		
 		public Room Room
 		{
 			get
 			{
-				return this.roomInt;
+				return roomInt;
 			}
 			set
 			{
-				if (value == this.roomInt)
+				if (value != roomInt)
 				{
-					return;
-				}
-				if (this.roomInt != null)
-				{
-					this.roomInt.RemoveRegion(this);
-				}
-				this.roomInt = value;
-				if (this.roomInt != null)
-				{
-					this.roomInt.AddRegion(this);
+					if (roomInt != null)
+					{
+						roomInt.RemoveRegion(this);
+					}
+					roomInt = value;
+					if (roomInt != null)
+					{
+						roomInt.AddRegion(this);
+					}
 				}
 			}
 		}
 
-		
-		
 		public IntVec3 RandomCell
 		{
 			get
 			{
-				Map map = this.Map;
+				Map map = Map;
 				CellIndices cellIndices = map.cellIndices;
 				Region[] directGrid = map.regionGrid.DirectGrid;
 				for (int i = 0; i < 1000; i++)
 				{
-					IntVec3 randomCell = this.extentsClose.RandomCell;
+					IntVec3 randomCell = extentsClose.RandomCell;
 					if (directGrid[cellIndices.CellToIndex(randomCell)] == this)
 					{
 						return randomCell;
 					}
 				}
-				return this.AnyCell;
+				return AnyCell;
 			}
 		}
 
-		
-		
 		public IntVec3 AnyCell
 		{
 			get
 			{
-				Map map = this.Map;
+				Map map = Map;
 				CellIndices cellIndices = map.cellIndices;
 				Region[] directGrid = map.regionGrid.DirectGrid;
-				foreach (IntVec3 intVec in this.extentsClose)
+				foreach (IntVec3 item in extentsClose)
 				{
-					if (directGrid[cellIndices.CellToIndex(intVec)] == this)
+					if (directGrid[cellIndices.CellToIndex(item)] == this)
 					{
-						return intVec;
+						return item;
 					}
 				}
-				Log.Error("Couldn't find any cell in region " + this.ToString(), false);
-				return this.extentsClose.RandomCell;
+				Log.Error("Couldn't find any cell in region " + ToString());
+				return extentsClose.RandomCell;
 			}
 		}
 
-		
-		
 		public string DebugString
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.AppendLine("id: " + this.id);
-				stringBuilder.AppendLine("mapIndex: " + this.mapIndex);
-				stringBuilder.AppendLine("links count: " + this.links.Count);
-				foreach (RegionLink regionLink in this.links)
+				stringBuilder.AppendLine("id: " + id);
+				stringBuilder.AppendLine("mapIndex: " + mapIndex);
+				stringBuilder.AppendLine("links count: " + links.Count);
+				foreach (RegionLink link in links)
 				{
-					stringBuilder.AppendLine("  --" + regionLink.ToString());
+					stringBuilder.AppendLine("  --" + link.ToString());
 				}
-				stringBuilder.AppendLine("valid: " + this.valid.ToString());
-				stringBuilder.AppendLine("makeTick: " + this.debug_makeTick);
-				stringBuilder.AppendLine("roomID: " + ((this.Room != null) ? this.Room.ID.ToString() : "null room!"));
-				stringBuilder.AppendLine("extentsClose: " + this.extentsClose);
-				stringBuilder.AppendLine("extentsLimit: " + this.extentsLimit);
+				stringBuilder.AppendLine("valid: " + valid.ToString());
+				stringBuilder.AppendLine("makeTick: " + debug_makeTick);
+				stringBuilder.AppendLine("roomID: " + ((Room != null) ? Room.ID.ToString() : "null room!"));
+				stringBuilder.AppendLine("extentsClose: " + extentsClose);
+				stringBuilder.AppendLine("extentsLimit: " + extentsLimit);
 				stringBuilder.AppendLine("ListerThings:");
-				if (this.listerThings.AllThings != null)
+				if (listerThings.AllThings != null)
 				{
-					for (int i = 0; i < this.listerThings.AllThings.Count; i++)
+					for (int i = 0; i < listerThings.AllThings.Count; i++)
 					{
-						stringBuilder.AppendLine("  --" + this.listerThings.AllThings[i]);
+						stringBuilder.AppendLine("  --" + listerThings.AllThings[i]);
 					}
 				}
 				return stringBuilder.ToString();
 			}
 		}
 
-		
-		
-		public bool DebugIsNew
-		{
-			get
-			{
-				return this.debug_makeTick > Find.TickManager.TicksGame - 60;
-			}
-		}
+		public bool DebugIsNew => debug_makeTick > Find.TickManager.TicksGame - 60;
 
-		
-		
-		public ListerThings ListerThings
-		{
-			get
-			{
-				return this.listerThings;
-			}
-		}
+		public ListerThings ListerThings => listerThings;
 
-		
-		
-		public bool IsDoorway
-		{
-			get
-			{
-				return this.door != null;
-			}
-		}
+		public bool IsDoorway => door != null;
 
-		
 		private Region()
 		{
 		}
 
-		
 		public static Region MakeNewUnfilled(IntVec3 root, Map map)
 		{
-			Region region = new Region();
-			region.debug_makeTick = Find.TickManager.TicksGame;
-			region.id = Region.nextId;
-			Region.nextId++;
-			region.mapIndex = (sbyte)map.Index;
-			region.precalculatedHashCode = Gen.HashCombineInt(region.id, 1295813358);
-			region.extentsClose.minX = root.x;
-			region.extentsClose.maxX = root.x;
-			region.extentsClose.minZ = root.z;
-			region.extentsClose.maxZ = root.z;
-			region.extentsLimit.minX = root.x - root.x % 12;
-			region.extentsLimit.maxX = root.x + 12 - (root.x + 12) % 12 - 1;
-			region.extentsLimit.minZ = root.z - root.z % 12;
-			region.extentsLimit.maxZ = root.z + 12 - (root.z + 12) % 12 - 1;
-			region.extentsLimit.ClipInsideMap(map);
-			return region;
+			Region obj = new Region
+			{
+				debug_makeTick = Find.TickManager.TicksGame,
+				id = nextId
+			};
+			nextId++;
+			obj.mapIndex = (sbyte)map.Index;
+			obj.precalculatedHashCode = Gen.HashCombineInt(obj.id, 1295813358);
+			obj.extentsClose.minX = root.x;
+			obj.extentsClose.maxX = root.x;
+			obj.extentsClose.minZ = root.z;
+			obj.extentsClose.maxZ = root.z;
+			obj.extentsLimit.minX = root.x - root.x % 12;
+			obj.extentsLimit.maxX = root.x + 12 - (root.x + 12) % 12 - 1;
+			obj.extentsLimit.minZ = root.z - root.z % 12;
+			obj.extentsLimit.maxZ = root.z + 12 - (root.z + 12) % 12 - 1;
+			obj.extentsLimit.ClipInsideMap(map);
+			return obj;
 		}
 
-		
 		public bool Allows(TraverseParms tp, bool isDestination)
 		{
-			if (tp.mode != TraverseMode.PassAllDestroyableThings && tp.mode != TraverseMode.PassAllDestroyableThingsNotWater && !this.type.Passable())
+			if (tp.mode != TraverseMode.PassAllDestroyableThings && tp.mode != TraverseMode.PassAllDestroyableThingsNotWater && !type.Passable())
 			{
 				return false;
 			}
-			if (tp.maxDanger < Danger.Deadly && tp.pawn != null)
+			if ((int)tp.maxDanger < 3 && tp.pawn != null)
 			{
-				Danger danger = this.DangerFor(tp.pawn);
+				Danger danger = DangerFor(tp.pawn);
 				if (isDestination || danger == Danger.Deadly)
 				{
 					Region region = tp.pawn.GetRegion(RegionType.Set_All);
-					if ((region == null || danger > region.DangerFor(tp.pawn)) && danger > tp.maxDanger)
+					if ((region == null || (int)danger > (int)region.DangerFor(tp.pawn)) && (int)danger > (int)tp.maxDanger)
 					{
 						return false;
 					}
@@ -303,30 +299,44 @@ namespace Verse
 			switch (tp.mode)
 			{
 			case TraverseMode.ByPawn:
-			{
-				if (this.door == null)
+				if (door != null)
 				{
-					return true;
-				}
-				ByteGrid avoidGrid = tp.pawn.GetAvoidGrid(true);
-				if (avoidGrid != null && avoidGrid[this.door.Position] == 255)
-				{
+					ByteGrid avoidGrid = tp.pawn.GetAvoidGrid();
+					if (avoidGrid != null && avoidGrid[door.Position] == byte.MaxValue)
+					{
+						return false;
+					}
+					if (tp.pawn.HostileTo(door))
+					{
+						if (!door.CanPhysicallyPass(tp.pawn))
+						{
+							return tp.canBash;
+						}
+						return true;
+					}
+					if (door.CanPhysicallyPass(tp.pawn))
+					{
+						return !door.IsForbiddenToPass(tp.pawn);
+					}
 					return false;
 				}
-				if (tp.pawn.HostileTo(this.door))
-				{
-					return this.door.CanPhysicallyPass(tp.pawn) || tp.canBash;
-				}
-				return this.door.CanPhysicallyPass(tp.pawn) && !this.door.IsForbiddenToPass(tp.pawn);
-			}
-			case TraverseMode.PassDoors:
 				return true;
 			case TraverseMode.NoPassClosedDoors:
-				return this.door == null || this.door.FreePassage;
+				if (door != null)
+				{
+					return door.FreePassage;
+				}
+				return true;
+			case TraverseMode.PassDoors:
+				return true;
 			case TraverseMode.PassAllDestroyableThings:
 				return true;
 			case TraverseMode.NoPassClosedDoorsOrWater:
-				return this.door == null || this.door.FreePassage;
+				if (door != null)
+				{
+					return door.FreePassage;
+				}
+				return true;
 			case TraverseMode.PassAllDestroyableThingsNotWater:
 				return true;
 			default:
@@ -334,271 +344,191 @@ namespace Verse
 			}
 		}
 
-		
 		public Danger DangerFor(Pawn p)
 		{
 			if (Current.ProgramState == ProgramState.Playing)
 			{
-				if (this.cachedDangersForFrame != Time.frameCount)
+				if (cachedDangersForFrame != Time.frameCount)
 				{
-					this.cachedDangers.Clear();
-					this.cachedDangersForFrame = Time.frameCount;
+					cachedDangers.Clear();
+					cachedDangersForFrame = Time.frameCount;
 				}
 				else
 				{
-					for (int i = 0; i < this.cachedDangers.Count; i++)
+					for (int i = 0; i < cachedDangers.Count; i++)
 					{
-						if (this.cachedDangers[i].Key == p)
+						if (cachedDangers[i].Key == p)
 						{
-							return this.cachedDangers[i].Value;
+							return cachedDangers[i].Value;
 						}
 					}
 				}
 			}
-			float temperature = this.Room.Temperature;
+			float temperature = Room.Temperature;
 			FloatRange value;
 			if (Current.ProgramState == ProgramState.Playing)
 			{
-				if (Region.cachedSafeTemperatureRangesForFrame != Time.frameCount)
+				if (cachedSafeTemperatureRangesForFrame != Time.frameCount)
 				{
-					Region.cachedSafeTemperatureRanges.Clear();
-					Region.cachedSafeTemperatureRangesForFrame = Time.frameCount;
+					cachedSafeTemperatureRanges.Clear();
+					cachedSafeTemperatureRangesForFrame = Time.frameCount;
 				}
-				if (!Region.cachedSafeTemperatureRanges.TryGetValue(p, out value))
+				if (!cachedSafeTemperatureRanges.TryGetValue(p, out value))
 				{
 					value = p.SafeTemperatureRange();
-					Region.cachedSafeTemperatureRanges.Add(p, value);
+					cachedSafeTemperatureRanges.Add(p, value);
 				}
 			}
 			else
 			{
 				value = p.SafeTemperatureRange();
 			}
-			Danger danger;
-			if (value.Includes(temperature))
-			{
-				danger = Danger.None;
-			}
-			else if (value.ExpandedBy(80f).Includes(temperature))
-			{
-				danger = Danger.Some;
-			}
-			else
-			{
-				danger = Danger.Deadly;
-			}
+			Danger danger = value.Includes(temperature) ? Danger.None : ((!value.ExpandedBy(80f).Includes(temperature)) ? Danger.Deadly : Danger.Some);
 			if (Current.ProgramState == ProgramState.Playing)
 			{
-				this.cachedDangers.Add(new KeyValuePair<Pawn, Danger>(p, danger));
+				cachedDangers.Add(new KeyValuePair<Pawn, Danger>(p, danger));
 			}
 			return danger;
 		}
 
-		
 		public float GetBaseDesiredPlantsCount(bool allowCache = true)
 		{
 			int ticksGame = Find.TickManager.TicksGame;
-			if (allowCache && ticksGame - this.cachedBaseDesiredPlantsCountForTick < 2500)
+			if (allowCache && ticksGame - cachedBaseDesiredPlantsCountForTick < 2500)
 			{
-				return this.cachedBaseDesiredPlantsCount;
+				return cachedBaseDesiredPlantsCount;
 			}
-			this.cachedBaseDesiredPlantsCount = 0f;
-			Map map = this.Map;
-			foreach (IntVec3 c in this.Cells)
+			cachedBaseDesiredPlantsCount = 0f;
+			Map map = Map;
+			foreach (IntVec3 cell in Cells)
 			{
-				this.cachedBaseDesiredPlantsCount += map.wildPlantSpawner.GetBaseDesiredPlantsCountAt(c);
+				cachedBaseDesiredPlantsCount += map.wildPlantSpawner.GetBaseDesiredPlantsCountAt(cell);
 			}
-			this.cachedBaseDesiredPlantsCountForTick = ticksGame;
-			return this.cachedBaseDesiredPlantsCount;
+			cachedBaseDesiredPlantsCountForTick = ticksGame;
+			return cachedBaseDesiredPlantsCount;
 		}
 
-		
 		public AreaOverlap OverlapWith(Area a)
 		{
 			if (a.TrueCount == 0)
 			{
 				return AreaOverlap.None;
 			}
-			if (this.Map != a.Map)
+			if (Map != a.Map)
 			{
 				return AreaOverlap.None;
 			}
-			if (this.cachedAreaOverlaps == null)
+			if (cachedAreaOverlaps == null)
 			{
-				this.cachedAreaOverlaps = new Dictionary<Area, AreaOverlap>();
+				cachedAreaOverlaps = new Dictionary<Area, AreaOverlap>();
 			}
-			AreaOverlap areaOverlap;
-			if (!this.cachedAreaOverlaps.TryGetValue(a, out areaOverlap))
+			if (!cachedAreaOverlaps.TryGetValue(a, out AreaOverlap value))
 			{
 				int num = 0;
 				int num2 = 0;
-				foreach (IntVec3 c in this.Cells)
+				foreach (IntVec3 cell in Cells)
 				{
 					num2++;
-					if (a[c])
+					if (a[cell])
 					{
 						num++;
 					}
 				}
-				if (num == 0)
-				{
-					areaOverlap = AreaOverlap.None;
-				}
-				else if (num == num2)
-				{
-					areaOverlap = AreaOverlap.Entire;
-				}
-				else
-				{
-					areaOverlap = AreaOverlap.Partial;
-				}
-				this.cachedAreaOverlaps.Add(a, areaOverlap);
+				value = ((num != 0) ? ((num == num2) ? AreaOverlap.Entire : AreaOverlap.Partial) : AreaOverlap.None);
+				cachedAreaOverlaps.Add(a, value);
 			}
-			return areaOverlap;
+			return value;
 		}
 
-		
 		public void Notify_AreaChanged(Area a)
 		{
-			if (this.cachedAreaOverlaps == null)
+			if (cachedAreaOverlaps != null && cachedAreaOverlaps.ContainsKey(a))
 			{
-				return;
-			}
-			if (this.cachedAreaOverlaps.ContainsKey(a))
-			{
-				this.cachedAreaOverlaps.Remove(a);
+				cachedAreaOverlaps.Remove(a);
 			}
 		}
 
-		
 		public void DecrementMapIndex()
 		{
-			if (this.mapIndex <= 0)
+			if (mapIndex <= 0)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Tried to decrement map index for region ",
-					this.id,
-					", but mapIndex=",
-					this.mapIndex
-				}), false);
-				return;
-			}
-			this.mapIndex -= 1;
-		}
-
-		
-		public void Notify_MyMapRemoved()
-		{
-			this.listerThings.Clear();
-			this.mapIndex = -1;
-		}
-
-		
-		public static void ClearStaticData()
-		{
-			Region.cachedSafeTemperatureRanges.Clear();
-		}
-
-		
-		public override string ToString()
-		{
-			string str;
-			if (this.door != null)
-			{
-				str = this.door.ToString();
+				Log.Warning("Tried to decrement map index for region " + id + ", but mapIndex=" + mapIndex);
 			}
 			else
 			{
-				str = "null";
+				mapIndex--;
 			}
-			return string.Concat(new object[]
-			{
-				"Region(id=",
-				this.id,
-				", mapIndex=",
-				this.mapIndex,
-				", center=",
-				this.extentsClose.CenterCell,
-				", links=",
-				this.links.Count,
-				", cells=",
-				this.CellCount,
-				(this.door != null) ? (", portal=" + str) : null,
-				")"
-			});
 		}
 
-		
+		public void Notify_MyMapRemoved()
+		{
+			listerThings.Clear();
+			mapIndex = -1;
+		}
+
+		public static void ClearStaticData()
+		{
+			cachedSafeTemperatureRanges.Clear();
+		}
+
+		public override string ToString()
+		{
+			string str = (door == null) ? "null" : door.ToString();
+			return "Region(id=" + id + ", mapIndex=" + mapIndex + ", center=" + extentsClose.CenterCell + ", links=" + links.Count + ", cells=" + CellCount + ((door != null) ? (", portal=" + str) : null) + ")";
+		}
+
 		public void DebugDraw()
 		{
-			if (DebugViewSettings.drawRegionTraversal && Find.TickManager.TicksGame < this.debug_lastTraverseTick + 60)
+			if (DebugViewSettings.drawRegionTraversal && Find.TickManager.TicksGame < debug_lastTraverseTick + 60)
 			{
-				float a = 1f - (float)(Find.TickManager.TicksGame - this.debug_lastTraverseTick) / 60f;
-				GenDraw.DrawFieldEdges(this.Cells.ToList<IntVec3>(), new Color(0f, 0f, 1f, a));
+				float a = 1f - (float)(Find.TickManager.TicksGame - debug_lastTraverseTick) / 60f;
+				GenDraw.DrawFieldEdges(Cells.ToList(), new Color(0f, 0f, 1f, a));
 			}
 		}
 
-		
 		public void DebugDrawMouseover()
 		{
 			int num = Mathf.RoundToInt(Time.realtimeSinceStartup * 2f) % 2;
 			if (DebugViewSettings.drawRegions)
 			{
-				Color color;
-				if (!this.valid)
+				GenDraw.DrawFieldEdges(color: (!valid) ? Color.red : ((!DebugIsNew) ? Color.green : Color.yellow), cells: Cells.ToList());
+				foreach (Region neighbor in Neighbors)
 				{
-					color = Color.red;
-				}
-				else if (this.DebugIsNew)
-				{
-					color = Color.yellow;
-				}
-				else
-				{
-					color = Color.green;
-				}
-				GenDraw.DrawFieldEdges(this.Cells.ToList<IntVec3>(), color);
-				foreach (Region region in this.Neighbors)
-				{
-					GenDraw.DrawFieldEdges(region.Cells.ToList<IntVec3>(), Color.grey);
+					GenDraw.DrawFieldEdges(neighbor.Cells.ToList(), Color.grey);
 				}
 			}
 			if (DebugViewSettings.drawRegionLinks)
 			{
-				foreach (RegionLink regionLink in this.links)
+				foreach (RegionLink link in links)
 				{
 					if (num == 1)
 					{
-						foreach (IntVec3 c in regionLink.span.Cells)
+						foreach (IntVec3 cell in link.span.Cells)
 						{
-							CellRenderer.RenderCell(c, DebugSolidColorMats.MaterialOf(Color.magenta));
+							CellRenderer.RenderCell(cell, DebugSolidColorMats.MaterialOf(Color.magenta));
 						}
 					}
 				}
 			}
 			if (DebugViewSettings.drawRegionThings)
 			{
-				foreach (Thing thing in this.listerThings.AllThings)
+				foreach (Thing allThing in listerThings.AllThings)
 				{
-					CellRenderer.RenderSpot(thing.TrueCenter(), (float)(thing.thingIDNumber % 256) / 256f);
+					CellRenderer.RenderSpot(allThing.TrueCenter(), (float)(allThing.thingIDNumber % 256) / 256f);
 				}
 			}
 		}
 
-		
 		public void Debug_Notify_Traversed()
 		{
-			this.debug_lastTraverseTick = Find.TickManager.TicksGame;
+			debug_lastTraverseTick = Find.TickManager.TicksGame;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return this.precalculatedHashCode;
+			return precalculatedHashCode;
 		}
 
-		
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
@@ -606,91 +536,11 @@ namespace Verse
 				return false;
 			}
 			Region region = obj as Region;
-			return region != null && region.id == this.id;
+			if (region == null)
+			{
+				return false;
+			}
+			return region.id == id;
 		}
-
-		
-		public RegionType type = RegionType.Normal;
-
-		
-		public int id = -1;
-
-		
-		public sbyte mapIndex = -1;
-
-		
-		private Room roomInt;
-
-		
-		public List<RegionLink> links = new List<RegionLink>();
-
-		
-		public CellRect extentsClose;
-
-		
-		public CellRect extentsLimit;
-
-		
-		public Building_Door door;
-
-		
-		private int precalculatedHashCode;
-
-		
-		public bool touchesMapEdge;
-
-		
-		private int cachedCellCount = -1;
-
-		
-		public bool valid = true;
-
-		
-		private ListerThings listerThings = new ListerThings(ListerThingsUse.Region);
-
-		
-		public uint[] closedIndex = new uint[RegionTraverser.NumWorkers];
-
-		
-		public uint reachedIndex;
-
-		
-		public int newRegionGroupIndex = -1;
-
-		
-		private Dictionary<Area, AreaOverlap> cachedAreaOverlaps;
-
-		
-		public int mark;
-
-		
-		private List<KeyValuePair<Pawn, Danger>> cachedDangers = new List<KeyValuePair<Pawn, Danger>>();
-
-		
-		private int cachedDangersForFrame;
-
-		
-		private float cachedBaseDesiredPlantsCount;
-
-		
-		private int cachedBaseDesiredPlantsCountForTick = -999999;
-
-		
-		private static Dictionary<Pawn, FloatRange> cachedSafeTemperatureRanges = new Dictionary<Pawn, FloatRange>();
-
-		
-		private static int cachedSafeTemperatureRangesForFrame;
-
-		
-		private int debug_makeTick = -1000;
-
-		
-		private int debug_lastTraverseTick = -1000;
-
-		
-		private static int nextId = 1;
-
-		
-		public const int GridSize = 12;
 	}
 }

@@ -1,13 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_ExtinguishSelf : ThinkNode_JobGiver
 	{
-		
+		private const float ActivateChance = 0.1f;
+
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (Rand.Value < 0.1f)
@@ -20,8 +19,5 @@ namespace RimWorld
 			}
 			return null;
 		}
-
-		
-		private const float ActivateChance = 0.1f;
 	}
 }

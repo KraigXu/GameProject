@@ -1,44 +1,35 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_Miner : WorkGiver_Scanner
 	{
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.Touch;
-			}
-		}
+		private static string NoPathTrans;
 
-		
+		private const int MiningJobTicks = 20000;
+
+		public override PathEndMode PathEndMode => PathEndMode.Touch;
+
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		
 		public static void ResetStaticData()
 		{
-			WorkGiver_Miner.NoPathTrans = "NoPath".Translate();
+			NoPathTrans = "NoPath".Translate();
 		}
 
-		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
-			foreach (Designation designation in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.Mine))
+			foreach (Designation item in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.Mine))
 			{
 				bool flag = false;
 				for (int i = 0; i < 8; i++)
 				{
-					IntVec3 c = designation.target.Cell + GenAdj.AdjacentCells[i];
+					IntVec3 c = item.target.Cell + GenAdj.AdjacentCells[i];
 					if (c.InBounds(pawn.Map) && c.Walkable(pawn.Map))
 					{
 						flag = true;
@@ -47,25 +38,20 @@ namespace RimWorld
 				}
 				if (flag)
 				{
-					Mineable firstMineable = designation.target.Cell.GetFirstMineable(pawn.Map);
+					Mineable firstMineable = item.target.Cell.GetFirstMineable(pawn.Map);
 					if (firstMineable != null)
 					{
 						yield return firstMineable;
 					}
 				}
 			}
-			IEnumerator<Designation> enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			return !pawn.Map.designationManager.AnySpawnedDesignationOfDef(DesignationDefOf.Mine);
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (!t.def.mineable)
@@ -95,40 +81,35 @@ namespace RimWorld
 				for (int j = 0; j < 8; j++)
 				{
 					IntVec3 intVec2 = t.Position + GenAdj.AdjacentCells[j];
-					if (intVec2.InBounds(t.Map) && ReachabilityImmediate.CanReachImmediate(intVec2, t, pawn.Map, PathEndMode.Touch, pawn) && intVec2.Walkable(t.Map) && !intVec2.Standable(t.Map))
+					if (!intVec2.InBounds(t.Map) || !ReachabilityImmediate.CanReachImmediate(intVec2, t, pawn.Map, PathEndMode.Touch, pawn) || !intVec2.Walkable(t.Map) || intVec2.Standable(t.Map))
 					{
-						Thing thing = null;
-						List<Thing> thingList = intVec2.GetThingList(t.Map);
-						for (int k = 0; k < thingList.Count; k++)
+						continue;
+					}
+					Thing thing = null;
+					List<Thing> thingList = intVec2.GetThingList(t.Map);
+					for (int k = 0; k < thingList.Count; k++)
+					{
+						if (thingList[k].def.designateHaulable && thingList[k].def.passability == Traversability.PassThroughOnly)
 						{
-							if (thingList[k].def.designateHaulable && thingList[k].def.passability == Traversability.PassThroughOnly)
-							{
-								thing = thingList[k];
-								break;
-							}
-						}
-						if (thing != null)
-						{
-							Job job = HaulAIUtility.HaulAsideJobFor(pawn, thing);
-							if (job != null)
-							{
-								return job;
-							}
-							JobFailReason.Is(WorkGiver_Miner.NoPathTrans, null);
-							return null;
+							thing = thingList[k];
+							break;
 						}
 					}
+					if (thing != null)
+					{
+						Job job = HaulAIUtility.HaulAsideJobFor(pawn, thing);
+						if (job != null)
+						{
+							return job;
+						}
+						JobFailReason.Is(NoPathTrans);
+						return null;
+					}
 				}
-				JobFailReason.Is(WorkGiver_Miner.NoPathTrans, null);
+				JobFailReason.Is(NoPathTrans);
 				return null;
 			}
-			return JobMaker.MakeJob(JobDefOf.Mine, t, 20000, true);
+			return JobMaker.MakeJob(JobDefOf.Mine, t, 20000, checkOverrideOnExpiry: true);
 		}
-
-		
-		private static string NoPathTrans;
-
-		
-		private const int MiningJobTicks = 20000;
 	}
 }

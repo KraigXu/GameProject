@@ -1,50 +1,41 @@
-﻿using System;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class LatitudeSectionUtility
 	{
-		
+		private const float LerpDistance = 5f;
+
 		public static LatitudeSection GetReportedLatitudeSection(float latitude)
 		{
-			float num;
-			float num2;
-			float num3;
-			LatitudeSectionUtility.GetLatitudeSection(latitude, out num, out num2, out num3);
-			if (num == 0f && num2 == 0f && num3 == 0f)
+			GetLatitudeSection(latitude, out float equatorial, out float seasonal, out float polar);
+			if (equatorial == 0f && seasonal == 0f && polar == 0f)
 			{
 				return LatitudeSection.Undefined;
 			}
-			if (num == 1f)
+			if (equatorial == 1f)
 			{
 				return LatitudeSection.Equatorial;
 			}
-			if (num3 == 1f)
+			if (polar == 1f)
 			{
 				return LatitudeSection.Polar;
 			}
 			return LatitudeSection.Seasonal;
 		}
 
-		
 		public static LatitudeSection GetDominantLatitudeSection(float latitude)
 		{
-			float num;
-			float num2;
-			float num3;
-			LatitudeSectionUtility.GetLatitudeSection(latitude, out num, out num2, out num3);
-			if (num == 0f && num2 == 0f && num3 == 0f)
+			GetLatitudeSection(latitude, out float equatorial, out float seasonal, out float polar);
+			if (equatorial == 0f && seasonal == 0f && polar == 0f)
 			{
 				return LatitudeSection.Undefined;
 			}
-			return GenMath.MaxBy<LatitudeSection>(LatitudeSection.Equatorial, num, LatitudeSection.Seasonal, num2, LatitudeSection.Polar, num3);
+			return GenMath.MaxBy(LatitudeSection.Equatorial, equatorial, LatitudeSection.Seasonal, seasonal, LatitudeSection.Polar, polar);
 		}
 
-		
 		public static void GetLatitudeSection(float latitude, out float equatorial, out float seasonal, out float polar)
 		{
 			float num = Mathf.Abs(latitude);
@@ -56,9 +47,8 @@ namespace RimWorld
 				equatorial = 1f;
 				seasonal = 0f;
 				polar = 0f;
-				return;
 			}
-			if (num <= maxLatitude2)
+			else if (num <= maxLatitude2)
 			{
 				equatorial = Mathf.InverseLerp(maxLatitude + 5f, maxLatitude, num);
 				float a = 1f - equatorial;
@@ -66,21 +56,21 @@ namespace RimWorld
 				float b = 1f - polar;
 				seasonal = Mathf.Min(a, b);
 				GenMath.NormalizeToSum1(ref equatorial, ref seasonal, ref polar);
-				return;
 			}
-			if (num <= maxLatitude3)
+			else if (num <= maxLatitude3)
 			{
 				equatorial = 0f;
 				seasonal = 0f;
 				polar = 1f;
-				return;
 			}
-			equatorial = 0f;
-			seasonal = 0f;
-			polar = 0f;
+			else
+			{
+				equatorial = 0f;
+				seasonal = 0f;
+				polar = 0f;
+			}
 		}
 
-		
 		public static float GetMaxLatitude(this LatitudeSection latitudeSection)
 		{
 			switch (Find.World.info.overallTemperature)
@@ -165,8 +155,5 @@ namespace RimWorld
 			}
 			return -1f;
 		}
-
-		
-		private const float LerpDistance = 5f;
 	}
 }

@@ -1,50 +1,99 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class InteractionUtility
 	{
-		
+		public const float MaxInteractRange = 6f;
+
 		public static bool CanInitiateInteraction(Pawn pawn, InteractionDef interactionDef = null)
 		{
-			return pawn.interactions != null && pawn.health.capacities.CapableOf(PawnCapacityDefOf.Talking) && pawn.Awake() && !pawn.IsBurning() && !pawn.IsInteractionBlocked(interactionDef, true, false);
+			if (pawn.interactions == null)
+			{
+				return false;
+			}
+			if (!pawn.health.capacities.CapableOf(PawnCapacityDefOf.Talking))
+			{
+				return false;
+			}
+			if (!pawn.Awake())
+			{
+				return false;
+			}
+			if (pawn.IsBurning())
+			{
+				return false;
+			}
+			if (pawn.IsInteractionBlocked(interactionDef, isInitiator: true, isRandom: false))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool CanReceiveInteraction(Pawn pawn, InteractionDef interactionDef = null)
 		{
-			return pawn.Awake() && !pawn.IsBurning() && !pawn.IsInteractionBlocked(interactionDef, false, false);
+			if (!pawn.Awake())
+			{
+				return false;
+			}
+			if (pawn.IsBurning())
+			{
+				return false;
+			}
+			if (pawn.IsInteractionBlocked(interactionDef, isInitiator: false, isRandom: false))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool CanInitiateRandomInteraction(Pawn p)
 		{
-			return InteractionUtility.CanInitiateInteraction(p, null) && p.RaceProps.Humanlike && !p.Downed && !p.InAggroMentalState && !p.IsInteractionBlocked(null, true, true) && p.Faction != null;
+			if (!CanInitiateInteraction(p))
+			{
+				return false;
+			}
+			if (!p.RaceProps.Humanlike || p.Downed || p.InAggroMentalState || p.IsInteractionBlocked(null, isInitiator: true, isRandom: true))
+			{
+				return false;
+			}
+			if (p.Faction == null)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool CanReceiveRandomInteraction(Pawn p)
 		{
-			return InteractionUtility.CanReceiveInteraction(p, null) && p.RaceProps.Humanlike && !p.Downed && !p.InAggroMentalState;
+			if (!CanReceiveInteraction(p))
+			{
+				return false;
+			}
+			if (!p.RaceProps.Humanlike || p.Downed || p.InAggroMentalState)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool IsGoodPositionForInteraction(Pawn p, Pawn recipient)
 		{
-			return InteractionUtility.IsGoodPositionForInteraction(p.Position, recipient.Position, p.Map);
+			return IsGoodPositionForInteraction(p.Position, recipient.Position, p.Map);
 		}
 
-		
 		public static bool IsGoodPositionForInteraction(IntVec3 cell, IntVec3 recipientCell, Map map)
 		{
-			return cell.InHorDistOf(recipientCell, 6f) && GenSight.LineOfSight(cell, recipientCell, map, true, null, 0, 0);
+			if (cell.InHorDistOf(recipientCell, 6f))
+			{
+				return GenSight.LineOfSight(cell, recipientCell, map, skipFirstCell: true);
+			}
+			return false;
 		}
 
-		
 		public static bool HasAnyVerbForSocialFight(Pawn p)
 		{
 			if (p.Dead)
@@ -62,7 +111,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static bool TryGetRandomVerbForSocialFight(Pawn p, out Verb verb)
 		{
 			if (p.Dead)
@@ -70,12 +118,7 @@ namespace RimWorld
 				verb = null;
 				return false;
 			}
-			return (from x in p.verbTracker.AllVerbs
-			where x.IsMeleeAttack && x.IsStillUsableBy(p)
-			select x).TryRandomElementByWeight((Verb x) => x.verbProps.AdjustedMeleeDamageAmount(x, p), out verb);
+			return p.verbTracker.AllVerbs.Where((Verb x) => x.IsMeleeAttack && x.IsStillUsableBy(p)).TryRandomElementByWeight((Verb x) => x.verbProps.AdjustedMeleeDamageAmount(x, p), out verb);
 		}
-
-		
-		public const float MaxInteractRange = 6f;
 	}
 }

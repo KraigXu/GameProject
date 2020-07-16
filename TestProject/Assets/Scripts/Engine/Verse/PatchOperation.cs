@@ -1,83 +1,70 @@
-﻿using System;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperation
 	{
-		
+		private enum Success
+		{
+			Normal,
+			Invert,
+			Always,
+			Never
+		}
+
+		public string sourceFile;
+
+		private bool neverSucceeded = true;
+
+		private Success success;
+
 		public bool Apply(XmlDocument xml)
 		{
 			if (DeepProfiler.enabled)
 			{
-				DeepProfiler.Start(base.GetType().FullName + " Worker");
+				DeepProfiler.Start(GetType().FullName + " Worker");
 			}
-			bool flag = this.ApplyWorker(xml);
+			bool flag = ApplyWorker(xml);
 			if (DeepProfiler.enabled)
 			{
 				DeepProfiler.End();
 			}
-			if (this.success == PatchOperation.Success.Always)
+			if (success == Success.Always)
 			{
 				flag = true;
 			}
-			else if (this.success == PatchOperation.Success.Never)
+			else if (success == Success.Never)
 			{
 				flag = false;
 			}
-			else if (this.success == PatchOperation.Success.Invert)
+			else if (success == Success.Invert)
 			{
 				flag = !flag;
 			}
 			if (flag)
 			{
-				this.neverSucceeded = false;
+				neverSucceeded = false;
 			}
 			return flag;
 		}
 
-		
 		protected virtual bool ApplyWorker(XmlDocument xml)
 		{
-			Log.Error("Attempted to use PatchOperation directly; patch will always fail", false);
+			Log.Error("Attempted to use PatchOperation directly; patch will always fail");
 			return false;
 		}
 
-		
 		public virtual void Complete(string modIdentifier)
 		{
-			if (this.neverSucceeded)
+			if (neverSucceeded)
 			{
-				string text = string.Format("[{0}] Patch operation {1} failed", modIdentifier, this);
-				if (!string.IsNullOrEmpty(this.sourceFile))
+				string text = $"[{modIdentifier}] Patch operation {this} failed";
+				if (!string.IsNullOrEmpty(sourceFile))
 				{
-					text = text + "\nfile: " + this.sourceFile;
+					text = text + "\nfile: " + sourceFile;
 				}
-				Log.Error(text, false);
+				Log.Error(text);
 			}
-		}
-
-		
-		public string sourceFile;
-
-		
-		private bool neverSucceeded = true;
-
-		
-		private PatchOperation.Success success;
-
-		
-		private enum Success
-		{
-			
-			Normal,
-			
-			Invert,
-			
-			Always,
-			
-			Never
 		}
 	}
 }

@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class Graphic_Collection : Graphic
 	{
 		protected Graphic[] subGraphics;
 
 		public override void Init(GraphicRequest req)
 		{
-			this.data = req.graphicData;
+			data = req.graphicData;
 			if (req.path.NullOrEmpty())
 			{
 				throw new ArgumentNullException("folderPath");
@@ -21,32 +20,29 @@ namespace Verse
 			{
 				throw new ArgumentNullException("shader");
 			}
-			this.path = req.path;
-			this.color = req.color;
-			this.colorTwo = req.colorTwo;
-			this.drawSize = req.drawSize;
+			base.path = req.path;
+			color = req.color;
+			colorTwo = req.colorTwo;
+			drawSize = req.drawSize;
 			List<Texture2D> list = (from x in ContentFinder<Texture2D>.GetAllInFolder(req.path)
-			where !x.name.EndsWith(Graphic_Single.MaskSuffix)
-			orderby x.name
-			select x).ToList<Texture2D>();
-			if (list.NullOrEmpty<Texture2D>())
+				where !x.name.EndsWith(Graphic_Single.MaskSuffix)
+				orderby x.name
+				select x).ToList();
+			if (list.NullOrEmpty())
 			{
-				Log.Error("Collection cannot init: No textures found at path " + req.path, false);
-				this.subGraphics = new Graphic[]
+				Log.Error("Collection cannot init: No textures found at path " + req.path);
+				subGraphics = new Graphic[1]
 				{
 					BaseContent.BadGraphic
 				};
 				return;
 			}
-			this.subGraphics = new Graphic[list.Count];
+			subGraphics = new Graphic[list.Count];
 			for (int i = 0; i < list.Count; i++)
 			{
 				string path = req.path + "/" + list[i].name;
-				this.subGraphics[i] = GraphicDatabase.Get(typeof(Graphic_Single), path, req.shader, this.drawSize, this.color, this.colorTwo, null, req.shaderParameters);
+				subGraphics[i] = GraphicDatabase.Get(typeof(Graphic_Single), path, req.shader, drawSize, color, colorTwo, null, req.shaderParameters);
 			}
 		}
-
-		
-		
 	}
 }

@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JoyGiver_WatchBuilding : JoyGiver_InteractBuilding
 	{
-		
 		protected override bool CanInteractWith(Pawn pawn, Thing t, bool inBed)
 		{
 			if (!base.CanInteractWith(pawn, t, inBed))
@@ -22,16 +19,13 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected override Job TryGivePlayJob(Pawn pawn, Thing t)
 		{
-			IntVec3 c;
-			Building t2;
-			if (!WatchBuildingUtility.TryFindBestWatchCell(t, pawn, this.def.desireSit, out c, out t2))
+			if (!WatchBuildingUtility.TryFindBestWatchCell(t, pawn, def.desireSit, out IntVec3 result, out Building chair))
 			{
 				return null;
 			}
-			return JobMaker.MakeJob(this.def.jobDef, t, c, t2);
+			return JobMaker.MakeJob(def.jobDef, t, result, chair);
 		}
 	}
 }

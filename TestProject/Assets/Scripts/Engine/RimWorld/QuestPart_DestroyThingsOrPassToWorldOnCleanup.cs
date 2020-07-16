@@ -1,55 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DestroyThingsOrPassToWorldOnCleanup : QuestPart
 	{
-		
-		
+		public List<Thing> things = new List<Thing>();
+
+		public bool questLookTargets = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				if (this.questLookTargets)
+				if (questLookTargets)
 				{
-					int num;
-					for (int i = 0; i < this.things.Count; i = num + 1)
+					for (int i = 0; i < things.Count; i++)
 					{
-						yield return this.things[i];
-						num = i;
+						yield return things[i];
 					}
 				}
-				yield break;
 			}
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			QuestPart_DestroyThingsOrPassToWorld.Destroy(this.things);
+			QuestPart_DestroyThingsOrPassToWorld.Destroy(things);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<Thing>(ref this.things, "things", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.questLookTargets, "questLookTargets", true, false);
+			Scribe_Collections.Look(ref things, "things", LookMode.Reference);
+			Scribe_Values.Look(ref questLookTargets, "questLookTargets", defaultValue: true);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.things.RemoveAll((Thing x) => x == null);
+				things.RemoveAll((Thing x) => x == null);
 			}
 		}
-
-		
-		public List<Thing> things = new List<Thing>();
-
-		
-		public bool questLookTargets = true;
 	}
 }

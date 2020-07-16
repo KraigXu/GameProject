@@ -1,4 +1,3 @@
-﻿using System;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -6,11 +5,8 @@ using Verse.Steam;
 
 namespace Verse
 {
-	
 	public class UIRoot_Entry : UIRoot
 	{
-		
-		
 		private bool ShouldDoMainMenu
 		{
 			get
@@ -21,7 +17,7 @@ namespace Verse
 				}
 				for (int i = 0; i < Find.WindowStack.Count; i++)
 				{
-					if (this.windows[i].layer == WindowLayer.Dialog && !Find.WindowStack[i].IsDebug)
+					if (windows[i].layer == WindowLayer.Dialog && !Find.WindowStack[i].IsDebug)
 					{
 						return false;
 					}
@@ -30,7 +26,6 @@ namespace Verse
 			}
 		}
 
-		
 		public override void Init()
 		{
 			base.Init();
@@ -40,15 +35,14 @@ namespace Verse
 			VersionUpdateDialogMaker.CreateVersionUpdateDialogIfNecessary();
 			if (!SteamManager.Initialized)
 			{
-				Dialog_MessageBox window = new Dialog_MessageBox("SteamClientMissing".Translate(), "Quit".Translate(), delegate
+				Dialog_MessageBox window = new Dialog_MessageBox((string)"SteamClientMissing".Translate(), "Quit".Translate(), delegate
 				{
 					Application.Quit();
-				}, "Ignore".Translate(), null, null, false, null, null);
+				}, "Ignore".Translate());
 				Find.WindowStack.Add(window);
 			}
 		}
 
-		
 		public override void UIRootOnGUI()
 		{
 			base.UIRootOnGUI();
@@ -56,13 +50,13 @@ namespace Verse
 			{
 				Find.World.UI.WorldInterfaceOnGUI();
 			}
-			this.DoMainMenu();
+			DoMainMenu();
 			if (Current.Game != null)
 			{
 				Find.Tutor.TutorOnGUI();
 			}
 			ReorderableWidget.ReorderableWidgetOnGUI_BeforeWindowStack();
-			this.windows.WindowStackOnGUI();
+			windows.WindowStackOnGUI();
 			ReorderableWidget.ReorderableWidgetOnGUI_AfterWindowStack();
 			Widgets.WidgetsOnGUI();
 			if (Find.World != null)
@@ -71,7 +65,6 @@ namespace Verse
 			}
 		}
 
-		
 		public override void UIRootUpdate()
 		{
 			base.UIRootUpdate();
@@ -86,13 +79,12 @@ namespace Verse
 			}
 		}
 
-		
 		private void DoMainMenu()
 		{
 			if (!WorldRendererUtility.WorldRenderedNow)
 			{
 				UIMenuBackgroundManager.background.BackgroundOnGUI();
-				if (this.ShouldDoMainMenu)
+				if (ShouldDoMainMenu)
 				{
 					Current.Game = null;
 					MainMenuDrawer.MainMenuOnGUI();

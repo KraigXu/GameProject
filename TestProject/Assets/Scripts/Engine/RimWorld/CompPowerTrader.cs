@@ -1,264 +1,220 @@
-﻿using System;
+using System;
 using System.Text;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompPowerTrader : CompPower
 	{
-		
-		
-		
+		public Action powerStartedAction;
+
+		public Action powerStoppedAction;
+
+		private bool powerOnInt;
+
+		public float powerOutputInt;
+
+		private bool powerLastOutputted;
+
+		private Sustainer sustainerPowered;
+
+		protected CompFlickable flickableComp;
+
+		public const string PowerTurnedOnSignal = "PowerTurnedOn";
+
+		public const string PowerTurnedOffSignal = "PowerTurnedOff";
+
 		public float PowerOutput
 		{
 			get
 			{
-				return this.powerOutputInt;
+				return powerOutputInt;
 			}
 			set
 			{
-				this.powerOutputInt = value;
-				if (this.powerOutputInt > 0f)
+				powerOutputInt = value;
+				if (powerOutputInt > 0f)
 				{
-					this.powerLastOutputted = true;
+					powerLastOutputted = true;
 				}
-				if (this.powerOutputInt < 0f)
+				if (powerOutputInt < 0f)
 				{
-					this.powerLastOutputted = false;
+					powerLastOutputted = false;
 				}
 			}
 		}
 
-		
-		
-		public float EnergyOutputPerTick
-		{
-			get
-			{
-				return this.PowerOutput * CompPower.WattsToWattDaysPerTick;
-			}
-		}
+		public float EnergyOutputPerTick => PowerOutput * CompPower.WattsToWattDaysPerTick;
 
-		
-		
-		
 		public bool PowerOn
 		{
 			get
 			{
-				return this.powerOnInt;
+				return powerOnInt;
 			}
 			set
 			{
-				if (this.powerOnInt == value)
+				if (powerOnInt == value)
 				{
 					return;
 				}
-				this.powerOnInt = value;
-				if (!this.powerOnInt)
+				powerOnInt = value;
+				if (powerOnInt)
 				{
-					if (this.powerStoppedAction != null)
+					if (!FlickUtility.WantsToBeOn(parent))
 					{
-						this.powerStoppedAction();
+						Log.Warning("Tried to power on " + parent + " which did not desire it.");
+						return;
 					}
-					this.parent.BroadcastCompSignal("PowerTurnedOff");
-					SoundDef soundDef = ((CompProperties_Power)this.parent.def.CompDefForAssignableFrom<CompPowerTrader>()).soundPowerOff;
+					if (parent.IsBrokenDown())
+					{
+						Log.Warning("Tried to power on " + parent + " which is broken down.");
+						return;
+					}
+					if (powerStartedAction != null)
+					{
+						powerStartedAction();
+					}
+					parent.BroadcastCompSignal("PowerTurnedOn");
+					SoundDef soundDef = ((CompProperties_Power)parent.def.CompDefForAssignableFrom<CompPowerTrader>()).soundPowerOn;
 					if (soundDef.NullOrUndefined())
 					{
-						soundDef = SoundDefOf.Power_OffSmall;
+						soundDef = SoundDefOf.Power_OnSmall;
 					}
-					if (this.parent.Spawned)
+					soundDef.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
+					StartSustainerPoweredIfInactive();
+				}
+				else
+				{
+					if (powerStoppedAction != null)
 					{
-						soundDef.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
+						powerStoppedAction();
 					}
-					this.EndSustainerPoweredIfActive();
-					return;
+					parent.BroadcastCompSignal("PowerTurnedOff");
+					SoundDef soundDef2 = ((CompProperties_Power)parent.def.CompDefForAssignableFrom<CompPowerTrader>()).soundPowerOff;
+					if (soundDef2.NullOrUndefined())
+					{
+						soundDef2 = SoundDefOf.Power_OffSmall;
+					}
+					if (parent.Spawned)
+					{
+						soundDef2.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
+					}
+					EndSustainerPoweredIfActive();
 				}
-				if (!FlickUtility.WantsToBeOn(this.parent))
-				{
-					Log.Warning("Tried to power on " + this.parent + " which did not desire it.", false);
-					return;
-				}
-				if (this.parent.IsBrokenDown())
-				{
-					Log.Warning("Tried to power on " + this.parent + " which is broken down.", false);
-					return;
-				}
-				if (this.powerStartedAction != null)
-				{
-					this.powerStartedAction();
-				}
-				this.parent.BroadcastCompSignal("PowerTurnedOn");
-				SoundDef soundDef2 = ((CompProperties_Power)this.parent.def.CompDefForAssignableFrom<CompPowerTrader>()).soundPowerOn;
-				if (soundDef2.NullOrUndefined())
-				{
-					soundDef2 = SoundDefOf.Power_OnSmall;
-				}
-				soundDef2.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
-				this.StartSustainerPoweredIfInactive();
 			}
 		}
 
-		
-		
 		public string DebugString
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.AppendLine(this.parent.LabelCap + " CompPower:");
-				stringBuilder.AppendLine("   PowerOn: " + this.PowerOn.ToString());
-				stringBuilder.AppendLine("   energyProduction: " + this.PowerOutput);
+				stringBuilder.AppendLine(parent.LabelCap + " CompPower:");
+				stringBuilder.AppendLine("   PowerOn: " + PowerOn.ToString());
+				stringBuilder.AppendLine("   energyProduction: " + PowerOutput);
 				return stringBuilder.ToString();
 			}
 		}
 
-		
 		public override void ReceiveCompSignal(string signal)
 		{
 			if (signal == "FlickedOff" || signal == "ScheduledOff" || signal == "Breakdown")
 			{
-				this.PowerOn = false;
+				PowerOn = false;
 			}
-			if (signal == "RanOutOfFuel" && this.powerLastOutputted)
+			if (signal == "RanOutOfFuel" && powerLastOutputted)
 			{
-				this.PowerOn = false;
+				PowerOn = false;
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			this.flickableComp = this.parent.GetComp<CompFlickable>();
+			flickableComp = parent.GetComp<CompFlickable>();
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
-			this.EndSustainerPoweredIfActive();
-			this.powerOutputInt = 0f;
+			EndSustainerPoweredIfActive();
+			powerOutputInt = 0f;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<bool>(ref this.powerOnInt, "powerOn", true, false);
+			Scribe_Values.Look(ref powerOnInt, "powerOn", defaultValue: true);
 		}
 
-		
 		public override void PostDraw()
 		{
 			base.PostDraw();
-			if (!this.parent.IsBrokenDown())
+			if (!parent.IsBrokenDown())
 			{
-				if (this.flickableComp != null && !this.flickableComp.SwitchIsOn)
+				if (flickableComp != null && !flickableComp.SwitchIsOn)
 				{
-					this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.PowerOff);
-					return;
+					parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.PowerOff);
 				}
-				if (FlickUtility.WantsToBeOn(this.parent) && !this.PowerOn)
+				else if (FlickUtility.WantsToBeOn(parent) && !PowerOn)
 				{
-					this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.NeedsPower);
+					parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.NeedsPower);
 				}
 			}
 		}
 
-		
 		public override void SetUpPowerVars()
 		{
 			base.SetUpPowerVars();
 			CompProperties_Power props = base.Props;
-			this.PowerOutput = -1f * props.basePowerConsumption;
-			this.powerLastOutputted = (props.basePowerConsumption <= 0f);
+			PowerOutput = -1f * props.basePowerConsumption;
+			powerLastOutputted = (props.basePowerConsumption <= 0f);
 		}
 
-		
 		public override void ResetPowerVars()
 		{
 			base.ResetPowerVars();
-			this.powerOnInt = false;
-			this.powerOutputInt = 0f;
-			this.powerLastOutputted = false;
-			this.sustainerPowered = null;
-			if (this.flickableComp != null)
+			powerOnInt = false;
+			powerOutputInt = 0f;
+			powerLastOutputted = false;
+			sustainerPowered = null;
+			if (flickableComp != null)
 			{
-				this.flickableComp.ResetToOn();
+				flickableComp.ResetToOn();
 			}
 		}
 
-		
 		public override void LostConnectParent()
 		{
 			base.LostConnectParent();
-			this.PowerOn = false;
+			PowerOn = false;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			string str;
-			if (this.powerLastOutputted)
-			{
-				str = "PowerOutput".Translate() + ": " + this.PowerOutput.ToString("#####0") + " W";
-			}
-			else
-			{
-				str = "PowerNeeded".Translate() + ": " + (-this.PowerOutput).ToString("#####0") + " W";
-			}
+			string str = (!powerLastOutputted) ? ((string)("PowerNeeded".Translate() + ": " + (0f - PowerOutput).ToString("#####0") + " W")) : ((string)("PowerOutput".Translate() + ": " + PowerOutput.ToString("#####0") + " W"));
 			return str + "\n" + base.CompInspectStringExtra();
 		}
 
-		
 		private void StartSustainerPoweredIfInactive()
 		{
 			CompProperties_Power props = base.Props;
-			if (!props.soundAmbientPowered.NullOrUndefined() && this.sustainerPowered == null)
+			if (!props.soundAmbientPowered.NullOrUndefined() && sustainerPowered == null)
 			{
-				SoundInfo info = SoundInfo.InMap(this.parent, MaintenanceType.None);
-				this.sustainerPowered = props.soundAmbientPowered.TrySpawnSustainer(info);
+				SoundInfo info = SoundInfo.InMap(parent);
+				sustainerPowered = props.soundAmbientPowered.TrySpawnSustainer(info);
 			}
 		}
 
-		
 		private void EndSustainerPoweredIfActive()
 		{
-			if (this.sustainerPowered != null)
+			if (sustainerPowered != null)
 			{
-				this.sustainerPowered.End();
-				this.sustainerPowered = null;
+				sustainerPowered.End();
+				sustainerPowered = null;
 			}
 		}
-
-		
-		public Action powerStartedAction;
-
-		
-		public Action powerStoppedAction;
-
-		
-		private bool powerOnInt;
-
-		
-		public float powerOutputInt;
-
-		
-		private bool powerLastOutputted;
-
-		
-		private Sustainer sustainerPowered;
-
-		
-		protected CompFlickable flickableComp;
-
-		
-		public const string PowerTurnedOnSignal = "PowerTurnedOn";
-
-		
-		public const string PowerTurnedOffSignal = "PowerTurnedOff";
 	}
 }

@@ -1,57 +1,46 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DestroyThingsOrPassToWorld : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public List<Thing> things = new List<Thing>();
+
+		public bool questLookTargets = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				if (this.questLookTargets)
+				if (questLookTargets)
 				{
-					int num;
-					for (int i = 0; i < this.things.Count; i = num + 1)
+					for (int i = 0; i < things.Count; i++)
 					{
-						yield return this.things[i];
-						num = i;
+						yield return things[i];
 					}
 				}
-				yield break;
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
-				QuestPart_DestroyThingsOrPassToWorld.Destroy(this.things);
+				Destroy(things);
 			}
 		}
 
-		
 		public static void Destroy(List<Thing> things)
 		{
 			for (int i = 0; i < things.Count; i++)
 			{
-				Thing thing;
-				if (things[i].ParentHolder is MinifiedThing)
-				{
-					thing = (Thing)things[i].ParentHolder;
-				}
-				else
-				{
-					thing = things[i];
-				}
+				Thing thing = (!(things[i].ParentHolder is MinifiedThing)) ? things[i] : ((Thing)things[i].ParentHolder);
 				if (!thing.Destroyed)
 				{
 					thing.DestroyOrPassToWorld(DestroyMode.QuestLogic);
@@ -59,39 +48,28 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Collections.Look<Thing>(ref this.things, "things", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.questLookTargets, "questLookTargets", true, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Collections.Look(ref things, "things", LookMode.Reference);
+			Scribe_Values.Look(ref questLookTargets, "questLookTargets", defaultValue: true);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.things.RemoveAll((Thing x) => x == null);
+				things.RemoveAll((Thing x) => x == null);
 			}
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
 				List<Thing> source = Find.RandomPlayerHomeMap.listerThings.ThingsInGroup(ThingRequestGroup.Plant);
-				this.things.Clear();
-				this.things.Add(source.FirstOrDefault<Thing>());
+				things.Clear();
+				things.Add(source.FirstOrDefault());
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public List<Thing> things = new List<Thing>();
-
-		
-		public bool questLookTargets = true;
 	}
 }

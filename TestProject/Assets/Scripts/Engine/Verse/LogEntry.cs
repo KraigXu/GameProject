@@ -1,213 +1,150 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.Grammar;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public abstract class LogEntry : IExposable, ILoadReferenceable
 	{
-		
-		
-		public int Age
-		{
-			get
-			{
-				return Find.TickManager.TicksAbs - this.ticksAbs;
-			}
-		}
+		protected int logID;
 
-		
-		
-		public int Tick
-		{
-			get
-			{
-				return this.ticksAbs;
-			}
-		}
+		protected int ticksAbs = -1;
 
-		
-		
-		public int LogID
-		{
-			get
-			{
-				return this.logID;
-			}
-		}
+		public LogEntryDef def;
 
-		
-		
-		public int Timestamp
-		{
-			get
-			{
-				return this.ticksAbs;
-			}
-		}
+		private WeakReference<Thing> cachedStringPov;
 
-		
+		private string cachedString;
+
+		private float cachedHeightWidth;
+
+		private float cachedHeight;
+
+		public static readonly Texture2D Blood = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/Blood");
+
+		public static readonly Texture2D BloodTarget = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/BloodTarget");
+
+		public static readonly Texture2D Downed = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/Downed");
+
+		public static readonly Texture2D DownedTarget = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/DownedTarget");
+
+		public static readonly Texture2D Skull = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/Skull");
+
+		public static readonly Texture2D SkullTarget = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/SkullTarget");
+
+		public int Age => Find.TickManager.TicksAbs - ticksAbs;
+
+		public int Tick => ticksAbs;
+
+		public int LogID => logID;
+
+		public int Timestamp => ticksAbs;
+
 		public LogEntry(LogEntryDef def = null)
 		{
-			this.ticksAbs = Find.TickManager.TicksAbs;
+			ticksAbs = Find.TickManager.TicksAbs;
 			this.def = def;
 			if (Scribe.mode == LoadSaveMode.Inactive)
 			{
-				this.logID = Find.UniqueIDsManager.GetNextLogID();
+				logID = Find.UniqueIDsManager.GetNextLogID();
 			}
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ticksAbs, "ticksAbs", 0, false);
-			Scribe_Values.Look<int>(ref this.logID, "logID", 0, false);
-			Scribe_Defs.Look<LogEntryDef>(ref this.def, "def");
+			Scribe_Values.Look(ref ticksAbs, "ticksAbs", 0);
+			Scribe_Values.Look(ref logID, "logID", 0);
+			Scribe_Defs.Look(ref def, "def");
 		}
 
-		
 		public string ToGameStringFromPOV(Thing pov, bool forceLog = false)
 		{
-			if (this.cachedString == null || pov == null != (this.cachedStringPov == null) || (this.cachedStringPov != null && pov != this.cachedStringPov.Target) || DebugViewSettings.logGrammarResolution || forceLog)
+			if ((cachedString == null || pov == null != (cachedStringPov == null) || (cachedStringPov != null && pov != cachedStringPov.Target) || DebugViewSettings.logGrammarResolution) | forceLog)
 			{
 				Rand.PushState();
 				try
 				{
-					Rand.Seed = this.logID;
-					this.cachedStringPov = ((pov != null) ? new WeakReference<Thing>(pov) : null);
-					this.cachedString = this.ToGameStringFromPOV_Worker(pov, forceLog);
-					this.cachedHeightWidth = 0f;
-					this.cachedHeight = 0f;
+					Rand.Seed = logID;
+					cachedStringPov = ((pov != null) ? new WeakReference<Thing>(pov) : null);
+					cachedString = ToGameStringFromPOV_Worker(pov, forceLog);
+					cachedHeightWidth = 0f;
+					cachedHeight = 0f;
 				}
 				finally
 				{
 					Rand.PopState();
 				}
 			}
-			return this.cachedString;
+			return cachedString;
 		}
 
-		
 		protected virtual string ToGameStringFromPOV_Worker(Thing pov, bool forceLog)
 		{
-			return GrammarResolver.Resolve("r_logentry", this.GenerateGrammarRequest(), null, forceLog, null, null, null, true);
+			return GrammarResolver.Resolve("r_logentry", GenerateGrammarRequest(), null, forceLog);
 		}
 
-		
 		protected virtual GrammarRequest GenerateGrammarRequest()
 		{
 			return default(GrammarRequest);
 		}
 
-		
 		public float GetTextHeight(Thing pov, float width)
 		{
-			string text = this.ToGameStringFromPOV(pov, false);
-			if (this.cachedHeightWidth != width)
+			string text = ToGameStringFromPOV(pov);
+			if (cachedHeightWidth != width)
 			{
-				this.cachedHeightWidth = width;
-				this.cachedHeight = Text.CalcHeight(text, width);
+				cachedHeightWidth = width;
+				cachedHeight = Text.CalcHeight(text, width);
 			}
-			return this.cachedHeight;
+			return cachedHeight;
 		}
 
-		
 		protected void ResetCache()
 		{
-			this.cachedStringPov = null;
-			this.cachedString = null;
-			this.cachedHeightWidth = 0f;
-			this.cachedHeight = 0f;
+			cachedStringPov = null;
+			cachedString = null;
+			cachedHeightWidth = 0f;
+			cachedHeight = 0f;
 		}
 
-		
 		public abstract bool Concerns(Thing t);
 
-		
 		public abstract IEnumerable<Thing> GetConcerns();
 
-		
 		public virtual bool CanBeClickedFromPOV(Thing pov)
 		{
 			return false;
 		}
 
-		
 		public virtual void ClickedFromPOV(Thing pov)
 		{
 		}
 
-		
 		public virtual Texture2D IconFromPOV(Thing pov)
 		{
 			return null;
 		}
 
-		
 		public virtual string GetTipString()
 		{
-			return "OccurredTimeAgo".Translate(this.Age.ToStringTicksToPeriod(true, false, true, true)).CapitalizeFirst() + ".";
+			return "OccurredTimeAgo".Translate(Age.ToStringTicksToPeriod()).CapitalizeFirst() + ".";
 		}
 
-		
 		public virtual bool ShowInCompactView()
 		{
 			return true;
 		}
 
-		
 		public void Debug_OverrideTicks(int newTicks)
 		{
-			this.ticksAbs = newTicks;
+			ticksAbs = newTicks;
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return string.Format("LogEntry_{0}_{1}", this.ticksAbs, this.logID);
+			return $"LogEntry_{ticksAbs}_{logID}";
 		}
-
-		
-		protected int logID;
-
-		
-		protected int ticksAbs = -1;
-
-		
-		public LogEntryDef def;
-
-		
-		private WeakReference<Thing> cachedStringPov;
-
-		
-		private string cachedString;
-
-		
-		private float cachedHeightWidth;
-
-		
-		private float cachedHeight;
-
-		
-		public static readonly Texture2D Blood = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/Blood", true);
-
-		
-		public static readonly Texture2D BloodTarget = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/BloodTarget", true);
-
-		
-		public static readonly Texture2D Downed = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/Downed", true);
-
-		
-		public static readonly Texture2D DownedTarget = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/DownedTarget", true);
-
-		
-		public static readonly Texture2D Skull = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/Skull", true);
-
-		
-		public static readonly Texture2D SkullTarget = ContentFinder<Texture2D>.Get("Things/Mote/BattleSymbols/SkullTarget", true);
 	}
 }

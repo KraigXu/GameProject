@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,170 +6,108 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordJob_Joinable_Party : LordJob_Joinable_Gathering
 	{
-		
-		
-		public override bool AllowStartNewGatherings
-		{
-			get
-			{
-				return false;
-			}
-		}
+		private int durationTicks;
 
-		
-		
-		protected virtual ThoughtDef AttendeeThought
-		{
-			get
-			{
-				return ThoughtDefOf.AttendedParty;
-			}
-		}
+		public override bool AllowStartNewGatherings => false;
 
-		
-		
-		protected virtual TaleDef AttendeeTale
-		{
-			get
-			{
-				return TaleDefOf.AttendedParty;
-			}
-		}
+		protected virtual ThoughtDef AttendeeThought => ThoughtDefOf.AttendedParty;
 
-		
-		
-		protected virtual ThoughtDef OrganizerThought
-		{
-			get
-			{
-				return ThoughtDefOf.AttendedParty;
-			}
-		}
+		protected virtual TaleDef AttendeeTale => TaleDefOf.AttendedParty;
 
-		
-		
-		protected virtual TaleDef OrganizerTale
-		{
-			get
-			{
-				return TaleDefOf.AttendedParty;
-			}
-		}
+		protected virtual ThoughtDef OrganizerThought => ThoughtDefOf.AttendedParty;
 
-		
-		
-		public int DurationTicks
-		{
-			get
-			{
-				return this.durationTicks;
-			}
-		}
+		protected virtual TaleDef OrganizerTale => TaleDefOf.AttendedParty;
 
-		
+		public int DurationTicks => durationTicks;
+
 		public LordJob_Joinable_Party()
 		{
 		}
 
-		
-		public LordJob_Joinable_Party(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef) : base(spot, organizer, gatheringDef)
+		public LordJob_Joinable_Party(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
+			: base(spot, organizer, gatheringDef)
 		{
-			this.durationTicks = Rand.RangeInclusive(5000, 15000);
+			durationTicks = Rand.RangeInclusive(5000, 15000);
 		}
 
-		
 		public override string GetReport(Pawn pawn)
 		{
 			return "LordReportAttendingParty".Translate();
 		}
 
-		
 		protected override LordToil CreateGatheringToil(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
 		{
-			return new LordToil_Party(spot, gatheringDef, 3.5E-05f);
+			return new LordToil_Party(spot, gatheringDef);
 		}
 
-		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
-			LordToil party = this.CreateGatheringToil(this.spot, this.organizer, this.gatheringDef);
+			LordToil party = CreateGatheringToil(spot, organizer, gatheringDef);
 			stateGraph.AddToil(party);
 			LordToil_End lordToil_End = new LordToil_End();
 			stateGraph.AddToil(lordToil_End);
-			Transition transition = new Transition(party, lordToil_End, false, true);
-			transition.AddTrigger(new Trigger_TickCondition(() => this.ShouldBeCalledOff(), 1));
+			Transition transition = new Transition(party, lordToil_End);
+			transition.AddTrigger(new Trigger_TickCondition(() => ShouldBeCalledOff()));
 			transition.AddTrigger(new Trigger_PawnKilled());
-			transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.LeftVoluntarily, this.organizer));
-			transition.AddPreAction(new TransitionAction_Custom(CallApplyOutcome));
-			transition.AddPreAction(new TransitionAction_Message(this.gatheringDef.calledOffMessage, MessageTypeDefOf.NegativeEvent, new TargetInfo(this.spot, base.Map, false), null, 1f));
-			stateGraph.AddTransition(transition, false);
-			this.timeoutTrigger = this.GetTimeoutTrigger();
-			Transition transition2 = new Transition(party, lordToil_End, false, true);
-			transition2.AddTrigger(this.timeoutTrigger);
-			transition2.AddPreAction(new TransitionAction_Custom(CallApplyOutcome));
-			transition2.AddPreAction(new TransitionAction_Message(this.gatheringDef.finishedMessage, MessageTypeDefOf.SituationResolved, new TargetInfo(this.spot, base.Map, false), null, 1f));
-			stateGraph.AddTransition(transition2, false);
-
-			void CallApplyOutcome()
-            {
-				this.ApplyOutcome((LordToil_Party)party);
-			}
-
+			transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.LeftVoluntarily, organizer));
+			transition.AddPreAction(new TransitionAction_Custom((Action)delegate
+			{
+				ApplyOutcome((LordToil_Party)party);
+			}));
+			transition.AddPreAction(new TransitionAction_Message(gatheringDef.calledOffMessage, MessageTypeDefOf.NegativeEvent, new TargetInfo(spot, base.Map)));
+			stateGraph.AddTransition(transition);
+			timeoutTrigger = GetTimeoutTrigger();
+			Transition transition2 = new Transition(party, lordToil_End);
+			transition2.AddTrigger(timeoutTrigger);
+			transition2.AddPreAction(new TransitionAction_Custom((Action)delegate
+			{
+				ApplyOutcome((LordToil_Party)party);
+			}));
+			transition2.AddPreAction(new TransitionAction_Message(gatheringDef.finishedMessage, MessageTypeDefOf.SituationResolved, new TargetInfo(spot, base.Map)));
+			stateGraph.AddTransition(transition2);
 			return stateGraph;
 		}
 
-		
 		protected virtual Trigger_TicksPassed GetTimeoutTrigger()
 		{
-			return new Trigger_TicksPassed(this.durationTicks);
+			return new Trigger_TicksPassed(durationTicks);
 		}
 
-		
 		private void ApplyOutcome(LordToil_Party toil)
 		{
-			List<Pawn> ownedPawns = this.lord.ownedPawns;
+			List<Pawn> ownedPawns = lord.ownedPawns;
 			LordToilData_Party lordToilData_Party = (LordToilData_Party)toil.data;
 			for (int i = 0; i < ownedPawns.Count; i++)
 			{
 				Pawn pawn = ownedPawns[i];
-				bool flag = pawn == this.organizer;
-				int num;
-				if (lordToilData_Party.presentForTicks.TryGetValue(pawn, out num) && num > 0)
+				bool flag = pawn == organizer;
+				if (lordToilData_Party.presentForTicks.TryGetValue(pawn, out int value) && value > 0)
 				{
 					if (ownedPawns[i].needs.mood != null)
 					{
-						ThoughtDef thoughtDef = flag ? this.OrganizerThought : this.AttendeeThought;
-						float num2 = 0.5f / thoughtDef.stages[0].baseMoodEffect;
-						float moodPowerFactor = Mathf.Min((float)num / (float)this.durationTicks + num2, 1f);
+						ThoughtDef thoughtDef = flag ? OrganizerThought : AttendeeThought;
+						float num = 0.5f / thoughtDef.stages[0].baseMoodEffect;
+						float moodPowerFactor = Mathf.Min((float)value / (float)durationTicks + num, 1f);
 						Thought_Memory thought_Memory = (Thought_Memory)ThoughtMaker.MakeThought(thoughtDef);
 						thought_Memory.moodPowerFactor = moodPowerFactor;
-						ownedPawns[i].needs.mood.thoughts.memories.TryGainMemory(thought_Memory, null);
+						ownedPawns[i].needs.mood.thoughts.memories.TryGainMemory(thought_Memory);
 					}
-					TaleRecorder.RecordTale(flag ? this.OrganizerTale : this.AttendeeTale, new object[]
-					{
-						ownedPawns[i],
-						this.organizer
-					});
+					TaleRecorder.RecordTale(flag ? OrganizerTale : AttendeeTale, ownedPawns[i], organizer);
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.durationTicks, "durationTicks", 0, false);
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.gatheringDef == null)
+			Scribe_Values.Look(ref durationTicks, "durationTicks", 0);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && gatheringDef == null)
 			{
-				this.gatheringDef = GatheringDefOf.Party;
+				gatheringDef = GatheringDefOf.Party;
 			}
 		}
-
-		
-		private int durationTicks;
 	}
 }

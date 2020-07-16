@@ -1,37 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TraderKindDef : Def
 	{
-		
-		
+		public List<StockGenerator> stockGenerators = new List<StockGenerator>();
+
+		public bool orbital;
+
+		public bool requestable = true;
+
+		public bool hideThingsNotWillingToTrade;
+
+		public float commonality = 1f;
+
+		public string category;
+
+		public TradeCurrency tradeCurrency;
+
+		public SimpleCurve commonalityMultFromPopulationIntent;
+
+		public FactionDef faction;
+
+		public RoyalTitlePermitDef permitRequiredForTrading;
+
 		public float CalculatedCommonality
 		{
 			get
 			{
-				float num = this.commonality;
-				if (this.commonalityMultFromPopulationIntent != null)
+				float num = commonality;
+				if (commonalityMultFromPopulationIntent != null)
 				{
-					num *= this.commonalityMultFromPopulationIntent.Evaluate(StorytellerUtilityPopulation.PopulationIntent);
+					num *= commonalityMultFromPopulationIntent.Evaluate(StorytellerUtilityPopulation.PopulationIntent);
 				}
 				return num;
 			}
 		}
 
-		
-		
 		public RoyalTitleDef TitleRequiredToTrade
 		{
 			get
 			{
-				if (this.permitRequiredForTrading != null)
+				if (permitRequiredForTrading != null)
 				{
-					RoyalTitleDef royalTitleDef = this.faction.RoyalTitlesAwardableInSeniorityOrderForReading.FirstOrDefault((RoyalTitleDef x) => x.permits != null && x.permits.Contains(this.permitRequiredForTrading));
+					RoyalTitleDef royalTitleDef = faction.RoyalTitlesAwardableInSeniorityOrderForReading.FirstOrDefault((RoyalTitleDef x) => x.permits != null && x.permits.Contains(permitRequiredForTrading));
 					if (royalTitleDef != null)
 					{
 						return royalTitleDef;
@@ -41,43 +55,35 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
-			foreach (StockGenerator stockGenerator in this.stockGenerators)
+			foreach (StockGenerator stockGenerator in stockGenerators)
 			{
 				stockGenerator.ResolveReferences(this);
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			foreach (string text in this.ConfigErrors())
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			foreach (StockGenerator stockGenerator in this.stockGenerators)
+			foreach (StockGenerator stockGenerator in stockGenerators)
 			{
-				foreach (string text2 in stockGenerator.ConfigErrors(this))
+				foreach (string item2 in stockGenerator.ConfigErrors(this))
 				{
-					yield return text2;
+					yield return item2;
 				}
-				enumerator = null;
 			}
-			List<StockGenerator>.Enumerator enumerator2 = default(List<StockGenerator>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public bool WillTrade(ThingDef td)
 		{
-			for (int i = 0; i < this.stockGenerators.Count; i++)
+			for (int i = 0; i < stockGenerators.Count; i++)
 			{
-				if (this.stockGenerators[i].HandlesThingDef(td))
+				if (stockGenerators[i].HandlesThingDef(td))
 				{
 					return true;
 				}
@@ -85,7 +91,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public PriceType PriceTypeFor(ThingDef thingDef, TradeAction action)
 		{
 			if (thingDef == ThingDefOf.Silver)
@@ -94,46 +99,15 @@ namespace RimWorld
 			}
 			if (action == TradeAction.PlayerBuys)
 			{
-				for (int i = 0; i < this.stockGenerators.Count; i++)
+				for (int i = 0; i < stockGenerators.Count; i++)
 				{
-					PriceType result;
-					if (this.stockGenerators[i].TryGetPriceType(thingDef, action, out result))
+					if (stockGenerators[i].TryGetPriceType(thingDef, action, out PriceType priceType))
 					{
-						return result;
+						return priceType;
 					}
 				}
 			}
 			return PriceType.Normal;
 		}
-
-		
-		public List<StockGenerator> stockGenerators = new List<StockGenerator>();
-
-		
-		public bool orbital;
-
-		
-		public bool requestable = true;
-
-		
-		public bool hideThingsNotWillingToTrade;
-
-		
-		public float commonality = 1f;
-
-		
-		public string category;
-
-		
-		public TradeCurrency tradeCurrency;
-
-		
-		public SimpleCurve commonalityMultFromPopulationIntent;
-
-		
-		public FactionDef faction;
-
-		
-		public RoyalTitlePermitDef permitRequiredForTrading;
 	}
 }

@@ -1,125 +1,99 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public sealed class OutfitDatabase : IExposable
 	{
-		
-		
-		public List<Outfit> AllOutfits
-		{
-			get
-			{
-				return this.outfits;
-			}
-		}
+		private List<Outfit> outfits = new List<Outfit>();
 
-		
+		public List<Outfit> AllOutfits => outfits;
+
 		public OutfitDatabase()
 		{
-			this.GenerateStartingOutfits();
+			GenerateStartingOutfits();
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Outfit>(ref this.outfits, "outfits", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref outfits, "outfits", LookMode.Deep);
 		}
 
-		
 		public Outfit DefaultOutfit()
 		{
-			if (this.outfits.Count == 0)
+			if (outfits.Count == 0)
 			{
-				this.MakeNewOutfit();
+				MakeNewOutfit();
 			}
-			return this.outfits[0];
+			return outfits[0];
 		}
 
-		
 		public AcceptanceReport TryDelete(Outfit outfit)
 		{
-			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
+			foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
 			{
-				if (pawn.outfits != null && pawn.outfits.CurrentOutfit == outfit)
+				if (item.outfits != null && item.outfits.CurrentOutfit == outfit)
 				{
-					return new AcceptanceReport("OutfitInUse".Translate(pawn));
+					return new AcceptanceReport("OutfitInUse".Translate(item));
 				}
 			}
-			foreach (Pawn pawn2 in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
+			foreach (Pawn item2 in PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead)
 			{
-				if (pawn2.outfits != null && pawn2.outfits.CurrentOutfit == outfit)
+				if (item2.outfits != null && item2.outfits.CurrentOutfit == outfit)
 				{
-					pawn2.outfits.CurrentOutfit = null;
+					item2.outfits.CurrentOutfit = null;
 				}
 			}
-			this.outfits.Remove(outfit);
+			outfits.Remove(outfit);
 			return AcceptanceReport.WasAccepted;
 		}
 
-		
 		public Outfit MakeNewOutfit()
 		{
-			int num;
-			if (!this.outfits.Any<Outfit>())
-			{
-				num = 1;
-			}
-			else
-			{
-				num = this.outfits.Max((Outfit o) => o.uniqueId) + 1;
-			}
-			int uniqueId = num;
+			int uniqueId = (!outfits.Any()) ? 1 : (outfits.Max((Outfit o) => o.uniqueId) + 1);
 			Outfit outfit = new Outfit(uniqueId, "Outfit".Translate() + " " + uniqueId.ToString());
-			outfit.filter.SetAllow(ThingCategoryDefOf.Apparel, true, null, null);
-			this.outfits.Add(outfit);
+			outfit.filter.SetAllow(ThingCategoryDefOf.Apparel, allow: true);
+			outfits.Add(outfit);
 			return outfit;
 		}
 
-		
 		private void GenerateStartingOutfits()
 		{
-			this.MakeNewOutfit().label = "OutfitAnything".Translate();
-			Outfit outfit = this.MakeNewOutfit();
+			MakeNewOutfit().label = "OutfitAnything".Translate();
+			Outfit outfit = MakeNewOutfit();
 			outfit.label = "OutfitWorker".Translate();
-			outfit.filter.SetDisallowAll(null, null);
-			outfit.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, false);
-			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs)
+			outfit.filter.SetDisallowAll();
+			outfit.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
+			foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
 			{
-				if (thingDef.apparel != null && thingDef.apparel.defaultOutfitTags != null && thingDef.apparel.defaultOutfitTags.Contains("Worker"))
+				if (allDef.apparel != null && allDef.apparel.defaultOutfitTags != null && allDef.apparel.defaultOutfitTags.Contains("Worker"))
 				{
-					outfit.filter.SetAllow(thingDef, true);
+					outfit.filter.SetAllow(allDef, allow: true);
 				}
 			}
-			Outfit outfit2 = this.MakeNewOutfit();
+			Outfit outfit2 = MakeNewOutfit();
 			outfit2.label = "OutfitSoldier".Translate();
-			outfit2.filter.SetDisallowAll(null, null);
-			outfit2.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, false);
-			foreach (ThingDef thingDef2 in DefDatabase<ThingDef>.AllDefs)
+			outfit2.filter.SetDisallowAll();
+			outfit2.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
+			foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
 			{
-				if (thingDef2.apparel != null && thingDef2.apparel.defaultOutfitTags != null && thingDef2.apparel.defaultOutfitTags.Contains("Soldier"))
+				if (allDef2.apparel != null && allDef2.apparel.defaultOutfitTags != null && allDef2.apparel.defaultOutfitTags.Contains("Soldier"))
 				{
-					outfit2.filter.SetAllow(thingDef2, true);
+					outfit2.filter.SetAllow(allDef2, allow: true);
 				}
 			}
-			Outfit outfit3 = this.MakeNewOutfit();
+			Outfit outfit3 = MakeNewOutfit();
 			outfit3.label = "OutfitNudist".Translate();
-			outfit3.filter.SetDisallowAll(null, null);
-			outfit3.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, false);
-			foreach (ThingDef thingDef3 in DefDatabase<ThingDef>.AllDefs)
+			outfit3.filter.SetDisallowAll();
+			outfit3.filter.SetAllow(SpecialThingFilterDefOf.AllowDeadmansApparel, allow: false);
+			foreach (ThingDef allDef3 in DefDatabase<ThingDef>.AllDefs)
 			{
-				if (thingDef3.apparel != null && !thingDef3.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Legs) && !thingDef3.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso))
+				if (allDef3.apparel != null && !allDef3.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Legs) && !allDef3.apparel.bodyPartGroups.Contains(BodyPartGroupDefOf.Torso))
 				{
-					outfit3.filter.SetAllow(thingDef3, true);
+					outfit3.filter.SetAllow(allDef3, allow: true);
 				}
 			}
 		}
-
-		
-		private List<Outfit> outfits = new List<Outfit>();
 	}
 }

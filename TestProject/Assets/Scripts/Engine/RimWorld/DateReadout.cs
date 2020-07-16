@@ -1,64 +1,76 @@
-﻿using System;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DateReadout
 	{
-		
-		
-		public static float Height
-		{
-			get
-			{
-				return (float)(48 + (DateReadout.SeasonLabelVisible ? 26 : 0));
-			}
-		}
+		private static string dateString;
 
-		
-		
+		private static int dateStringDay;
+
+		private static Season dateStringSeason;
+
+		private static Quadrum dateStringQuadrum;
+
+		private static int dateStringYear;
+
+		private static readonly List<string> fastHourStrings;
+
+		private static readonly List<string> seasonsCached;
+
+		private const float DateRightPadding = 7f;
+
+		public static float Height => 48 + (SeasonLabelVisible ? 26 : 0);
+
 		private static bool SeasonLabelVisible
 		{
 			get
 			{
-				return !WorldRendererUtility.WorldRenderedNow && Find.CurrentMap != null;
+				if (!WorldRendererUtility.WorldRenderedNow)
+				{
+					return Find.CurrentMap != null;
+				}
+				return false;
 			}
 		}
 
-		
 		static DateReadout()
 		{
-			DateReadout.Reset();
+			dateStringDay = -1;
+			dateStringSeason = Season.Undefined;
+			dateStringQuadrum = Quadrum.Undefined;
+			dateStringYear = -1;
+			fastHourStrings = new List<string>();
+			seasonsCached = new List<string>();
+			Reset();
 		}
 
-		
 		public static void Reset()
 		{
-			DateReadout.dateString = null;
-			DateReadout.dateStringDay = -1;
-			DateReadout.dateStringSeason = Season.Undefined;
-			DateReadout.dateStringQuadrum = Quadrum.Undefined;
-			DateReadout.dateStringYear = -1;
-			DateReadout.fastHourStrings.Clear();
+			dateString = null;
+			dateStringDay = -1;
+			dateStringSeason = Season.Undefined;
+			dateStringQuadrum = Quadrum.Undefined;
+			dateStringYear = -1;
+			fastHourStrings.Clear();
 			for (int i = 0; i < 24; i++)
 			{
-				DateReadout.fastHourStrings.Add(i + "LetterHour".Translate());
+				fastHourStrings.Add(i + (string)"LetterHour".Translate());
 			}
-			DateReadout.seasonsCached.Clear();
+			seasonsCached.Clear();
 			int length = Enum.GetValues(typeof(Season)).Length;
 			for (int j = 0; j < length; j++)
 			{
 				Season season = (Season)j;
-				DateReadout.seasonsCached.Add((season == Season.Undefined) ? "" : season.LabelCap());
+				seasonsCached.Add((season == Season.Undefined) ? "" : season.LabelCap());
 			}
 		}
 
-		
 		public static void DateOnGUI(Rect dateRect)
 		{
 			Vector2 vector;
@@ -78,22 +90,22 @@ namespace RimWorld
 				}
 				vector = Find.WorldGrid.LongLatOf(Find.CurrentMap.Tile);
 			}
-			int index = GenDate.HourInteger((long)Find.TickManager.TicksAbs, vector.x);
-			int num = GenDate.DayOfTwelfth((long)Find.TickManager.TicksAbs, vector.x);
-			Season season = GenDate.Season((long)Find.TickManager.TicksAbs, vector);
-			Quadrum quadrum = GenDate.Quadrum((long)Find.TickManager.TicksAbs, vector.x);
-			int num2 = GenDate.Year((long)Find.TickManager.TicksAbs, vector.x);
-			string text = DateReadout.SeasonLabelVisible ? DateReadout.seasonsCached[(int)season] : "";
-			if (num != DateReadout.dateStringDay || season != DateReadout.dateStringSeason || quadrum != DateReadout.dateStringQuadrum || num2 != DateReadout.dateStringYear)
+			int index = GenDate.HourInteger(Find.TickManager.TicksAbs, vector.x);
+			int num = GenDate.DayOfTwelfth(Find.TickManager.TicksAbs, vector.x);
+			Season season = GenDate.Season(Find.TickManager.TicksAbs, vector);
+			Quadrum quadrum = GenDate.Quadrum(Find.TickManager.TicksAbs, vector.x);
+			int num2 = GenDate.Year(Find.TickManager.TicksAbs, vector.x);
+			string text = SeasonLabelVisible ? seasonsCached[(int)season] : "";
+			if (num != dateStringDay || season != dateStringSeason || quadrum != dateStringQuadrum || num2 != dateStringYear)
 			{
-				DateReadout.dateString = GenDate.DateReadoutStringAt((long)Find.TickManager.TicksAbs, vector);
-				DateReadout.dateStringDay = num;
-				DateReadout.dateStringSeason = season;
-				DateReadout.dateStringQuadrum = quadrum;
-				DateReadout.dateStringYear = num2;
+				dateString = GenDate.DateReadoutStringAt(Find.TickManager.TicksAbs, vector);
+				dateStringDay = num;
+				dateStringSeason = season;
+				dateStringQuadrum = quadrum;
+				dateStringYear = num2;
 			}
 			Text.Font = GameFont.Small;
-			float num3 = Mathf.Max(Mathf.Max(Text.CalcSize(DateReadout.fastHourStrings[index]).x, Text.CalcSize(DateReadout.dateString).x), Text.CalcSize(text).x) + 7f;
+			float num3 = Mathf.Max(Mathf.Max(Text.CalcSize(fastHourStrings[index]).x, Text.CalcSize(dateString).x), Text.CalcSize(text).x) + 7f;
 			dateRect.xMin = dateRect.xMax - num3;
 			if (Mouse.IsOver(dateRect))
 			{
@@ -104,9 +116,9 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperRight;
 			Rect rect = dateRect.AtZero();
 			rect.xMax -= 7f;
-			Widgets.Label(rect, DateReadout.fastHourStrings[index]);
+			Widgets.Label(rect, fastHourStrings[index]);
 			rect.yMin += 26f;
-			Widgets.Label(rect, DateReadout.dateString);
+			Widgets.Label(rect, dateString);
 			rect.yMin += 26f;
 			if (!text.NullOrEmpty())
 			{
@@ -122,33 +134,9 @@ namespace RimWorld
 					Quadrum quadrum2 = (Quadrum)i;
 					stringBuilder.AppendLine(quadrum2.Label() + " - " + quadrum2.GetSeason(vector.y).LabelCap());
 				}
-				TaggedString taggedString = "DateReadoutTip".Translate(GenDate.DaysPassed, 15, season.LabelCap(), 15, GenDate.Quadrum((long)GenTicks.TicksAbs, vector.x).Label(), stringBuilder.ToString());
+				TaggedString taggedString = "DateReadoutTip".Translate(GenDate.DaysPassed, 15, season.LabelCap(), 15, GenDate.Quadrum(GenTicks.TicksAbs, vector.x).Label(), stringBuilder.ToString());
 				TooltipHandler.TipRegion(dateRect, new TipSignal(taggedString, 86423));
 			}
 		}
-
-		
-		private static string dateString;
-
-		
-		private static int dateStringDay = -1;
-
-		
-		private static Season dateStringSeason = Season.Undefined;
-
-		
-		private static Quadrum dateStringQuadrum = Quadrum.Undefined;
-
-		
-		private static int dateStringYear = -1;
-
-		
-		private static readonly List<string> fastHourStrings = new List<string>();
-
-		
-		private static readonly List<string> seasonsCached = new List<string>();
-
-		
-		private const float DateRightPadding = 7f;
 	}
 }

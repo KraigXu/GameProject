@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,74 +7,99 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class CompShuttle : ThingComp
 	{
-		
-		
-		public bool Autoload
-		{
-			get
-			{
-				return this.autoload;
-			}
-		}
+		public List<ThingDefCount> requiredItems = new List<ThingDefCount>();
 
-		
-		
-		public bool LoadingInProgressOrReadyToLaunch
-		{
-			get
-			{
-				return this.Transporter.LoadingInProgressOrReadyToLaunch;
-			}
-		}
+		public List<Pawn> requiredPawns = new List<Pawn>();
 
-		
-		
-		public List<CompTransporter> TransportersInGroup
-		{
-			get
-			{
-				return this.Transporter.TransportersInGroup(this.parent.Map);
-			}
-		}
+		public int requiredColonistCount;
 
-		
-		
+		public bool acceptColonists;
+
+		public bool onlyAcceptColonists;
+
+		public bool onlyAcceptHealthy;
+
+		public bool dropEverythingIfUnsatisfied;
+
+		public bool dropNonRequiredIfUnsatisfied = true;
+
+		public bool leaveImmediatelyWhenSatisfied;
+
+		public bool dropEverythingOnArrival;
+
+		private bool autoload;
+
+		public bool leaveASAP;
+
+		private CompTransporter cachedCompTransporter;
+
+		private List<CompTransporter> cachedTransporterList;
+
+		private bool sending;
+
+		private const int CheckAutoloadIntervalTicks = 120;
+
+		private const int DropInterval = 60;
+
+		private static readonly Texture2D AutoloadToggleTex = ContentFinder<Texture2D>.Get("UI/Commands/Autoload");
+
+		private static readonly Texture2D SendCommandTex = CompLaunchable.LaunchCommandTex;
+
+		private static List<ThingDefCount> tmpRequiredItemsWithoutDuplicates = new List<ThingDefCount>();
+
+		private static List<string> tmpRequiredLabels = new List<string>();
+
+		private static List<ThingDefCount> tmpRequiredItems = new List<ThingDefCount>();
+
+		private static List<Pawn> tmpRequiredPawns = new List<Pawn>();
+
+		private static List<Pawn> tmpAllSendablePawns = new List<Pawn>();
+
+		private static List<Thing> tmpAllSendableItems = new List<Thing>();
+
+		private static List<Pawn> tmpRequiredPawnsPossibleToSend = new List<Pawn>();
+
+		public bool Autoload => autoload;
+
+		public bool LoadingInProgressOrReadyToLaunch => Transporter.LoadingInProgressOrReadyToLaunch;
+
+		public List<CompTransporter> TransportersInGroup => Transporter.TransportersInGroup(parent.Map);
+
 		public CompTransporter Transporter
 		{
 			get
 			{
-				if (this.cachedCompTransporter == null)
+				if (cachedCompTransporter == null)
 				{
-					this.cachedCompTransporter = this.parent.GetComp<CompTransporter>();
+					cachedCompTransporter = parent.GetComp<CompTransporter>();
 				}
-				return this.cachedCompTransporter;
+				return cachedCompTransporter;
 			}
 		}
 
-		
-		
 		public bool ShowLoadingGizmos
 		{
 			get
 			{
-				return this.parent.Faction == null || this.parent.Faction == Faction.OfPlayer;
+				if (parent.Faction != null)
+				{
+					return parent.Faction == Faction.OfPlayer;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public bool AnyInGroupIsUnderRoof
 		{
 			get
 			{
-				List<CompTransporter> transportersInGroup = this.TransportersInGroup;
+				List<CompTransporter> transportersInGroup = TransportersInGroup;
 				for (int i = 0; i < transportersInGroup.Count; i++)
 				{
-					if (transportersInGroup[i].parent.Position.Roofed(this.parent.Map))
+					if (transportersInGroup[i].parent.Position.Roofed(parent.Map))
 					{
 						return true;
 					}
@@ -84,29 +108,27 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		private bool Autoloadable
 		{
 			get
 			{
-				if (this.cachedTransporterList == null)
+				if (cachedTransporterList == null)
 				{
-					this.cachedTransporterList = new List<CompTransporter>
+					cachedTransporterList = new List<CompTransporter>
 					{
-						this.Transporter
+						Transporter
 					};
 				}
-				foreach (Pawn thing in TransporterUtility.AllSendablePawns(this.cachedTransporterList, this.parent.Map))
+				foreach (Pawn item in TransporterUtility.AllSendablePawns(cachedTransporterList, parent.Map))
 				{
-					if (!this.IsRequired(thing))
+					if (!IsRequired(item))
 					{
 						return false;
 					}
 				}
-				foreach (Thing thing2 in TransporterUtility.AllSendableItems(this.cachedTransporterList, this.parent.Map))
+				foreach (Thing item2 in TransporterUtility.AllSendableItems(cachedTransporterList, parent.Map))
 				{
-					if (!this.IsRequired(thing2))
+					if (!IsRequired(item2))
 					{
 						return false;
 					}
@@ -115,21 +137,19 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool AllRequiredThingsLoaded
 		{
 			get
 			{
-				ThingOwner innerContainer = this.Transporter.innerContainer;
-				for (int i = 0; i < this.requiredPawns.Count; i++)
+				ThingOwner innerContainer = Transporter.innerContainer;
+				for (int i = 0; i < requiredPawns.Count; i++)
 				{
-					if (!innerContainer.Contains(this.requiredPawns[i]))
+					if (!innerContainer.Contains(requiredPawns[i]))
 					{
 						return false;
 					}
 				}
-				if (this.requiredColonistCount > 0)
+				if (requiredColonistCount > 0)
 				{
 					int num = 0;
 					for (int j = 0; j < innerContainer.Count; j++)
@@ -140,40 +160,40 @@ namespace RimWorld
 							num++;
 						}
 					}
-					if (num < this.requiredColonistCount)
+					if (num < requiredColonistCount)
 					{
 						return false;
 					}
 				}
-				CompShuttle.tmpRequiredItemsWithoutDuplicates.Clear();
-				for (int k = 0; k < this.requiredItems.Count; k++)
+				tmpRequiredItemsWithoutDuplicates.Clear();
+				for (int k = 0; k < requiredItems.Count; k++)
 				{
 					bool flag = false;
-					for (int l = 0; l < CompShuttle.tmpRequiredItemsWithoutDuplicates.Count; l++)
+					for (int l = 0; l < tmpRequiredItemsWithoutDuplicates.Count; l++)
 					{
-						if (CompShuttle.tmpRequiredItemsWithoutDuplicates[l].ThingDef == this.requiredItems[k].ThingDef)
+						if (tmpRequiredItemsWithoutDuplicates[l].ThingDef == requiredItems[k].ThingDef)
 						{
-							CompShuttle.tmpRequiredItemsWithoutDuplicates[l] = CompShuttle.tmpRequiredItemsWithoutDuplicates[l].WithCount(CompShuttle.tmpRequiredItemsWithoutDuplicates[l].Count + this.requiredItems[k].Count);
+							tmpRequiredItemsWithoutDuplicates[l] = tmpRequiredItemsWithoutDuplicates[l].WithCount(tmpRequiredItemsWithoutDuplicates[l].Count + requiredItems[k].Count);
 							flag = true;
 							break;
 						}
 					}
 					if (!flag)
 					{
-						CompShuttle.tmpRequiredItemsWithoutDuplicates.Add(this.requiredItems[k]);
+						tmpRequiredItemsWithoutDuplicates.Add(requiredItems[k]);
 					}
 				}
-				for (int m = 0; m < CompShuttle.tmpRequiredItemsWithoutDuplicates.Count; m++)
+				for (int m = 0; m < tmpRequiredItemsWithoutDuplicates.Count; m++)
 				{
 					int num2 = 0;
 					for (int n = 0; n < innerContainer.Count; n++)
 					{
-						if (innerContainer[n].def == CompShuttle.tmpRequiredItemsWithoutDuplicates[m].ThingDef)
+						if (innerContainer[n].def == tmpRequiredItemsWithoutDuplicates[m].ThingDef)
 						{
 							num2 += innerContainer[n].stackCount;
 						}
 					}
-					if (num2 < CompShuttle.tmpRequiredItemsWithoutDuplicates[m].Count)
+					if (num2 < tmpRequiredItemsWithoutDuplicates[m].Count)
 					{
 						return false;
 					}
@@ -182,176 +202,165 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public TaggedString RequiredThingsLabel
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				for (int i = 0; i < this.requiredPawns.Count; i++)
+				for (int i = 0; i < requiredPawns.Count; i++)
 				{
-					stringBuilder.AppendLine("  - " + this.requiredPawns[i].NameShortColored.Resolve());
+					stringBuilder.AppendLine("  - " + requiredPawns[i].NameShortColored.Resolve());
 				}
-				for (int j = 0; j < this.requiredItems.Count; j++)
+				for (int j = 0; j < requiredItems.Count; j++)
 				{
-					stringBuilder.AppendLine("  - " + this.requiredItems[j].LabelCap);
+					stringBuilder.AppendLine("  - " + requiredItems[j].LabelCap);
 				}
 				return stringBuilder.ToString().TrimEndNewlines();
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Shuttle is a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 8811221, false);
-				return;
+				Log.ErrorOnce("Shuttle is a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 8811221);
 			}
-			base.PostSpawnSetup(respawningAfterLoad);
+			else
+			{
+				base.PostSpawnSetup(respawningAfterLoad);
+			}
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (this.ShowLoadingGizmos)
+			foreach (Gizmo item in base.CompGetGizmosExtra())
 			{
-				if (this.Autoloadable)
+				yield return item;
+			}
+			if (ShowLoadingGizmos)
+			{
+				if (Autoloadable)
 				{
-					yield return new Command_Toggle
+					Command_Toggle command_Toggle = new Command_Toggle();
+					command_Toggle.defaultLabel = "CommandAutoloadTransporters".Translate();
+					command_Toggle.defaultDesc = "CommandAutoloadTransportersDesc".Translate();
+					command_Toggle.icon = AutoloadToggleTex;
+					command_Toggle.isActive = (() => autoload);
+					command_Toggle.toggleAction = delegate
 					{
-						defaultLabel = "CommandAutoloadTransporters".Translate(),
-						defaultDesc = "CommandAutoloadTransportersDesc".Translate(),
-						icon = CompShuttle.AutoloadToggleTex,
-						isActive = (() => this.autoload),
-						toggleAction = delegate
+						autoload = !autoload;
+						if (autoload && !LoadingInProgressOrReadyToLaunch)
 						{
-							this.autoload = !this.autoload;
-							if (this.autoload && !this.LoadingInProgressOrReadyToLaunch)
-							{
-								TransporterUtility.InitiateLoading(Gen.YieldSingle<CompTransporter>(this.Transporter));
-							}
-							this.CheckAutoload();
+							TransporterUtility.InitiateLoading(Gen.YieldSingle(Transporter));
 						}
+						CheckAutoload();
 					};
+					yield return command_Toggle;
 				}
 				Command_Action command_Action = new Command_Action();
 				command_Action.defaultLabel = "CommandSendShuttle".Translate();
 				command_Action.defaultDesc = "CommandSendShuttleDesc".Translate();
-				command_Action.icon = CompShuttle.SendCommandTex;
+				command_Action.icon = SendCommandTex;
 				command_Action.alsoClickIfOtherInGroupClicked = false;
 				command_Action.action = delegate
 				{
-					this.Send();
+					Send();
 				};
-				if (!this.LoadingInProgressOrReadyToLaunch || !this.AllRequiredThingsLoaded)
+				if (!LoadingInProgressOrReadyToLaunch || !AllRequiredThingsLoaded)
 				{
 					command_Action.Disable("CommandSendShuttleFailMissingRequiredThing".Translate());
 				}
 				yield return command_Action;
 			}
-			foreach (Gizmo gizmo2 in QuestUtility.GetQuestRelatedGizmos(this.parent))
+			foreach (Gizmo questRelatedGizmo in QuestUtility.GetQuestRelatedGizmos(parent))
 			{
-				yield return gizmo2;
+				yield return questRelatedGizmo;
 			}
-			enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
 		{
-			if (!selPawn.CanReach(this.parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+			if (selPawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly))
 			{
-				yield break;
-			}
-			string text = "EnterShuttle".Translate();
-			if (!this.IsAllowed(selPawn))
-			{
-				yield return new FloatMenuOption(text + " (" + "NotAllowed".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
-				yield break;
-			}
-			yield return new FloatMenuOption(text, delegate
-			{
-				if (!this.LoadingInProgressOrReadyToLaunch)
+				string text = "EnterShuttle".Translate();
+				if (!IsAllowed(selPawn))
 				{
-					TransporterUtility.InitiateLoading(Gen.YieldSingle<CompTransporter>(this.Transporter));
+					yield return new FloatMenuOption(text + " (" + "NotAllowed".Translate() + ")", null);
 				}
-				Job job = JobMaker.MakeJob(JobDefOf.EnterTransporter, this.parent);
-				selPawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-			}, MenuOptionPriority.Default, null, null, 0f, null, null);
-			yield break;
+				else
+				{
+					yield return new FloatMenuOption(text, delegate
+					{
+						if (!LoadingInProgressOrReadyToLaunch)
+						{
+							TransporterUtility.InitiateLoading(Gen.YieldSingle(Transporter));
+						}
+						Job job = JobMaker.MakeJob(JobDefOf.EnterTransporter, parent);
+						selPawn.jobs.TryTakeOrderedJob(job);
+					});
+				}
+			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (this.parent.IsHashIntervalTick(120))
+			if (parent.IsHashIntervalTick(120))
 			{
-				this.CheckAutoload();
+				CheckAutoload();
 			}
-			if (this.parent.Spawned && this.dropEverythingOnArrival && this.parent.IsHashIntervalTick(60))
+			if (parent.Spawned && dropEverythingOnArrival && parent.IsHashIntervalTick(60))
 			{
-				if (this.Transporter.innerContainer.Any<Thing>())
+				if (Transporter.innerContainer.Any())
 				{
-					Thing thing = this.Transporter.innerContainer[0];
-					IntVec3 dropLoc = this.parent.Position + IntVec3.South;
-					Thing thing2;
-					if (this.Transporter.innerContainer.TryDrop_NewTmp(thing, dropLoc, this.parent.Map, ThingPlaceMode.Near, out thing2, null, delegate(IntVec3 c)
+					Thing thing = Transporter.innerContainer[0];
+					IntVec3 dropLoc = parent.Position + IntVec3.South;
+					Pawn pawn;
+					if (Transporter.innerContainer.TryDrop_NewTmp(thing, dropLoc, parent.Map, ThingPlaceMode.Near, out Thing _, null, (IntVec3 c) => ((pawn = (Transporter.innerContainer[0] as Pawn)) == null || !pawn.Downed || c.GetFirstPawn(parent.Map) == null) ? true : false, playDropSound: false))
 					{
-						Pawn pawn;
-						return (pawn = (this.Transporter.innerContainer[0] as Pawn)) == null || !pawn.Downed || c.GetFirstPawn(this.parent.Map) == null;
-					}, false))
-					{
-						this.Transporter.Notify_ThingRemoved(thing);
+						Transporter.Notify_ThingRemoved(thing);
 					}
 				}
 				else
 				{
-					TransporterUtility.InitiateLoading(Gen.YieldSingle<CompTransporter>(this.Transporter));
-					this.Send();
+					TransporterUtility.InitiateLoading(Gen.YieldSingle(Transporter));
+					Send();
 				}
 			}
-			if (this.leaveASAP && this.parent.Spawned)
+			if (leaveASAP && parent.Spawned)
 			{
-				if (!this.LoadingInProgressOrReadyToLaunch)
+				if (!LoadingInProgressOrReadyToLaunch)
 				{
-					TransporterUtility.InitiateLoading(Gen.YieldSingle<CompTransporter>(this.Transporter));
+					TransporterUtility.InitiateLoading(Gen.YieldSingle(Transporter));
 				}
-				this.Send();
+				Send();
 			}
-			if (this.leaveImmediatelyWhenSatisfied && this.AllRequiredThingsLoaded)
+			if (leaveImmediatelyWhenSatisfied && AllRequiredThingsLoaded)
 			{
-				this.Send();
+				Send();
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append("Required".Translate() + ": ");
-			CompShuttle.tmpRequiredLabels.Clear();
-			if (this.requiredColonistCount > 0)
+			tmpRequiredLabels.Clear();
+			if (requiredColonistCount > 0)
 			{
-				CompShuttle.tmpRequiredLabels.Add(this.requiredColonistCount + " " + ((this.requiredColonistCount > 1) ? Faction.OfPlayer.def.pawnsPlural : Faction.OfPlayer.def.pawnSingular));
+				tmpRequiredLabels.Add(requiredColonistCount + " " + ((requiredColonistCount > 1) ? Faction.OfPlayer.def.pawnsPlural : Faction.OfPlayer.def.pawnSingular));
 			}
-			for (int i = 0; i < this.requiredPawns.Count; i++)
+			for (int i = 0; i < requiredPawns.Count; i++)
 			{
-				CompShuttle.tmpRequiredLabels.Add(this.requiredPawns[i].LabelShort);
+				tmpRequiredLabels.Add(requiredPawns[i].LabelShort);
 			}
-			for (int j = 0; j < this.requiredItems.Count; j++)
+			for (int j = 0; j < requiredItems.Count; j++)
 			{
-				CompShuttle.tmpRequiredLabels.Add(this.requiredItems[j].Label);
+				tmpRequiredLabels.Add(requiredItems[j].Label);
 			}
-			if (CompShuttle.tmpRequiredLabels.Any<string>())
+			if (tmpRequiredLabels.Any())
 			{
-				stringBuilder.Append(CompShuttle.tmpRequiredLabels.ToCommaList(true).CapitalizeFirst());
+				stringBuilder.Append(tmpRequiredLabels.ToCommaList(useAnd: true).CapitalizeFirst());
 			}
 			else
 			{
@@ -360,236 +369,237 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		
 		public void Send()
 		{
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Shuttle is a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 8811221, false);
-				return;
+				Log.ErrorOnce("Shuttle is a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 8811221);
 			}
-			if (this.sending)
+			else
 			{
-				return;
-			}
-			if (!this.parent.Spawned)
-			{
-				Log.Error("Tried to send " + this.parent + ", but it's unspawned.", false);
-				return;
-			}
-			List<CompTransporter> transportersInGroup = this.TransportersInGroup;
-			if (transportersInGroup == null)
-			{
-				Log.Error("Tried to send " + this.parent + ", but it's not in any group.", false);
-				return;
-			}
-			if (!this.LoadingInProgressOrReadyToLaunch)
-			{
-				return;
-			}
-			if (!this.AllRequiredThingsLoaded)
-			{
-				if (this.dropEverythingIfUnsatisfied)
+				if (sending)
 				{
-					this.Transporter.CancelLoad();
+					return;
 				}
-				else if (this.dropNonRequiredIfUnsatisfied)
+				if (!parent.Spawned)
 				{
-					for (int i = 0; i < transportersInGroup.Count; i++)
+					Log.Error("Tried to send " + parent + ", but it's unspawned.");
+					return;
+				}
+				List<CompTransporter> transportersInGroup = TransportersInGroup;
+				if (transportersInGroup == null)
+				{
+					Log.Error("Tried to send " + parent + ", but it's not in any group.");
+				}
+				else
+				{
+					if (!LoadingInProgressOrReadyToLaunch)
 					{
-						for (int j = transportersInGroup[i].innerContainer.Count - 1; j >= 0; j--)
+						return;
+					}
+					if (!AllRequiredThingsLoaded)
+					{
+						if (dropEverythingIfUnsatisfied)
 						{
-							Thing thing = transportersInGroup[i].innerContainer[j];
-							Pawn pawn;
-							if (!this.IsRequired(thing) && (this.requiredColonistCount <= 0 || (pawn = (thing as Pawn)) == null || !pawn.IsColonist))
+							Transporter.CancelLoad();
+						}
+						else if (dropNonRequiredIfUnsatisfied)
+						{
+							for (int i = 0; i < transportersInGroup.Count; i++)
 							{
-								Thing thing2;
-								transportersInGroup[i].innerContainer.TryDrop(thing, ThingPlaceMode.Near, out thing2, null, null);
+								for (int num = transportersInGroup[i].innerContainer.Count - 1; num >= 0; num--)
+								{
+									Thing thing = transportersInGroup[i].innerContainer[num];
+									Pawn pawn;
+									if (!IsRequired(thing) && (requiredColonistCount <= 0 || (pawn = (thing as Pawn)) == null || !pawn.IsColonist))
+									{
+										transportersInGroup[i].innerContainer.TryDrop(thing, ThingPlaceMode.Near, out Thing _);
+									}
+								}
 							}
 						}
 					}
-				}
-			}
-			this.sending = true;
-			bool allRequiredThingsLoaded = this.AllRequiredThingsLoaded;
-			Map map = this.parent.Map;
-			this.Transporter.TryRemoveLord(map);
-			string signalPart = allRequiredThingsLoaded ? "SentSatisfied" : "SentUnsatisfied";
-			for (int k = 0; k < transportersInGroup.Count; k++)
-			{
-				QuestUtility.SendQuestTargetSignals(transportersInGroup[k].parent.questTags, signalPart, transportersInGroup[k].parent.Named("SUBJECT"), transportersInGroup[k].innerContainer.ToList<Thing>().Named("SENT"));
-			}
-			List<Pawn> list = new List<Pawn>();
-			for (int l = 0; l < transportersInGroup.Count; l++)
-			{
-				CompTransporter compTransporter = transportersInGroup[l];
-				for (int m = transportersInGroup[l].innerContainer.Count - 1; m >= 0; m--)
-				{
-					Pawn pawn2 = transportersInGroup[l].innerContainer[m] as Pawn;
-					if (pawn2 != null)
+					sending = true;
+					bool allRequiredThingsLoaded = AllRequiredThingsLoaded;
+					Map map = parent.Map;
+					Transporter.TryRemoveLord(map);
+					string signalPart = allRequiredThingsLoaded ? "SentSatisfied" : "SentUnsatisfied";
+					for (int j = 0; j < transportersInGroup.Count; j++)
 					{
-						if (pawn2.IsColonist && !this.requiredPawns.Contains(pawn2))
-						{
-							list.Add(pawn2);
-						}
-						pawn2.ExitMap(false, Rot4.Invalid);
+						QuestUtility.SendQuestTargetSignals(transportersInGroup[j].parent.questTags, signalPart, transportersInGroup[j].parent.Named("SUBJECT"), transportersInGroup[j].innerContainer.ToList().Named("SENT"));
 					}
+					List<Pawn> list = new List<Pawn>();
+					for (int k = 0; k < transportersInGroup.Count; k++)
+					{
+						CompTransporter compTransporter = transportersInGroup[k];
+						for (int num2 = transportersInGroup[k].innerContainer.Count - 1; num2 >= 0; num2--)
+						{
+							Pawn pawn2 = transportersInGroup[k].innerContainer[num2] as Pawn;
+							if (pawn2 != null)
+							{
+								if (pawn2.IsColonist && !requiredPawns.Contains(pawn2))
+								{
+									list.Add(pawn2);
+								}
+								pawn2.ExitMap(allowedToJoinOrCreateCaravan: false, Rot4.Invalid);
+							}
+						}
+						compTransporter.innerContainer.ClearAndDestroyContentsOrPassToWorld();
+						Thing newThing = ThingMaker.MakeThing(ThingDefOf.ShuttleLeaving);
+						compTransporter.CleanUpLoadingVars(map);
+						compTransporter.parent.Destroy(DestroyMode.QuestLogic);
+						GenSpawn.Spawn(newThing, compTransporter.parent.Position, map);
+					}
+					if (list.Count != 0)
+					{
+						for (int l = 0; l < transportersInGroup.Count; l++)
+						{
+							QuestUtility.SendQuestTargetSignals(transportersInGroup[l].parent.questTags, "SentWithExtraColonists", transportersInGroup[l].parent.Named("SUBJECT"), list.Named("SENTCOLONISTS"));
+						}
+					}
+					sending = false;
 				}
-				compTransporter.innerContainer.ClearAndDestroyContentsOrPassToWorld(DestroyMode.Vanish);
-				Thing newThing = ThingMaker.MakeThing(ThingDefOf.ShuttleLeaving, null);
-				compTransporter.CleanUpLoadingVars(map);
-				compTransporter.parent.Destroy(DestroyMode.QuestLogic);
-				GenSpawn.Spawn(newThing, compTransporter.parent.Position, map, WipeMode.Vanish);
 			}
-			if (list.Count != 0)
-			{
-				for (int n = 0; n < transportersInGroup.Count; n++)
-				{
-					QuestUtility.SendQuestTargetSignals(transportersInGroup[n].parent.questTags, "SentWithExtraColonists", transportersInGroup[n].parent.Named("SUBJECT"), list.Named("SENTCOLONISTS"));
-				}
-			}
-			this.sending = false;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Collections.Look<ThingDefCount>(ref this.requiredItems, "requiredItems", LookMode.Deep, Array.Empty<object>());
-			Scribe_Collections.Look<Pawn>(ref this.requiredPawns, "requiredPawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<int>(ref this.requiredColonistCount, "requiredColonistCount", 0, false);
-			Scribe_Values.Look<bool>(ref this.acceptColonists, "acceptColonists", false, false);
-			Scribe_Values.Look<bool>(ref this.onlyAcceptColonists, "onlyAcceptColonists", false, false);
-			Scribe_Values.Look<bool>(ref this.leaveImmediatelyWhenSatisfied, "leaveImmediatelyWhenSatisfied", false, false);
-			Scribe_Values.Look<bool>(ref this.autoload, "autoload", false, false);
-			Scribe_Values.Look<bool>(ref this.dropEverythingIfUnsatisfied, "dropEverythingIfUnsatisfied", false, false);
-			Scribe_Values.Look<bool>(ref this.dropNonRequiredIfUnsatisfied, "dropNonRequiredIfUnsatisfied", false, false);
-			Scribe_Values.Look<bool>(ref this.leaveASAP, "leaveASAP", false, false);
-			Scribe_Values.Look<bool>(ref this.dropEverythingOnArrival, "dropEverythingOnArrival", false, false);
+			Scribe_Collections.Look(ref requiredItems, "requiredItems", LookMode.Deep);
+			Scribe_Collections.Look(ref requiredPawns, "requiredPawns", LookMode.Reference);
+			Scribe_Values.Look(ref requiredColonistCount, "requiredColonistCount", 0);
+			Scribe_Values.Look(ref acceptColonists, "acceptColonists", defaultValue: false);
+			Scribe_Values.Look(ref onlyAcceptColonists, "onlyAcceptColonists", defaultValue: false);
+			Scribe_Values.Look(ref leaveImmediatelyWhenSatisfied, "leaveImmediatelyWhenSatisfied", defaultValue: false);
+			Scribe_Values.Look(ref autoload, "autoload", defaultValue: false);
+			Scribe_Values.Look(ref dropEverythingIfUnsatisfied, "dropEverythingIfUnsatisfied", defaultValue: false);
+			Scribe_Values.Look(ref dropNonRequiredIfUnsatisfied, "dropNonRequiredIfUnsatisfied", defaultValue: false);
+			Scribe_Values.Look(ref leaveASAP, "leaveASAP", defaultValue: false);
+			Scribe_Values.Look(ref dropEverythingOnArrival, "dropEverythingOnArrival", defaultValue: false);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.requiredPawns.RemoveAll((Pawn x) => x == null);
+				requiredPawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		private void CheckAutoload()
 		{
-			if (!this.autoload || !this.LoadingInProgressOrReadyToLaunch || !this.parent.Spawned)
+			if (!autoload || !LoadingInProgressOrReadyToLaunch || !parent.Spawned)
 			{
 				return;
 			}
-			CompShuttle.tmpRequiredItems.Clear();
-			CompShuttle.tmpRequiredItems.AddRange(this.requiredItems);
-			CompShuttle.tmpRequiredPawns.Clear();
-			CompShuttle.tmpRequiredPawns.AddRange(this.requiredPawns);
-			ThingOwner innerContainer = this.Transporter.innerContainer;
+			tmpRequiredItems.Clear();
+			tmpRequiredItems.AddRange(requiredItems);
+			tmpRequiredPawns.Clear();
+			tmpRequiredPawns.AddRange(requiredPawns);
+			ThingOwner innerContainer = Transporter.innerContainer;
 			for (int i = 0; i < innerContainer.Count; i++)
 			{
 				Pawn pawn = innerContainer[i] as Pawn;
 				if (pawn != null)
 				{
-					CompShuttle.tmpRequiredPawns.Remove(pawn);
+					tmpRequiredPawns.Remove(pawn);
+					continue;
 				}
-				else
+				int num = innerContainer[i].stackCount;
+				for (int j = 0; j < tmpRequiredItems.Count; j++)
 				{
-					int num = innerContainer[i].stackCount;
-					for (int j = 0; j < CompShuttle.tmpRequiredItems.Count; j++)
+					if (tmpRequiredItems[j].ThingDef == innerContainer[i].def)
 					{
-						if (CompShuttle.tmpRequiredItems[j].ThingDef == innerContainer[i].def)
+						int num2 = Mathf.Min(tmpRequiredItems[j].Count, num);
+						if (num2 > 0)
 						{
-							int num2 = Mathf.Min(CompShuttle.tmpRequiredItems[j].Count, num);
-							if (num2 > 0)
-							{
-								CompShuttle.tmpRequiredItems[j] = CompShuttle.tmpRequiredItems[j].WithCount(CompShuttle.tmpRequiredItems[j].Count - num2);
-								num -= num2;
-							}
+							tmpRequiredItems[j] = tmpRequiredItems[j].WithCount(tmpRequiredItems[j].Count - num2);
+							num -= num2;
 						}
 					}
 				}
 			}
-			for (int k = CompShuttle.tmpRequiredItems.Count - 1; k >= 0; k--)
+			for (int num3 = tmpRequiredItems.Count - 1; num3 >= 0; num3--)
 			{
-				if (CompShuttle.tmpRequiredItems[k].Count <= 0)
+				if (tmpRequiredItems[num3].Count <= 0)
 				{
-					CompShuttle.tmpRequiredItems.RemoveAt(k);
+					tmpRequiredItems.RemoveAt(num3);
 				}
 			}
-			if (CompShuttle.tmpRequiredItems.Any<ThingDefCount>() || CompShuttle.tmpRequiredPawns.Any<Pawn>())
+			if (tmpRequiredItems.Any() || tmpRequiredPawns.Any())
 			{
-				if (this.Transporter.leftToLoad != null)
+				if (Transporter.leftToLoad != null)
 				{
-					this.Transporter.leftToLoad.Clear();
+					Transporter.leftToLoad.Clear();
 				}
-				CompShuttle.tmpAllSendablePawns.Clear();
-				CompShuttle.tmpAllSendablePawns.AddRange(TransporterUtility.AllSendablePawns(this.TransportersInGroup, this.parent.Map));
-				CompShuttle.tmpAllSendableItems.Clear();
-				CompShuttle.tmpAllSendableItems.AddRange(TransporterUtility.AllSendableItems(this.TransportersInGroup, this.parent.Map));
-				CompShuttle.tmpAllSendableItems.AddRange(TransporterUtility.ThingsBeingHauledTo(this.TransportersInGroup, this.parent.Map));
-				CompShuttle.tmpRequiredPawnsPossibleToSend.Clear();
-				for (int l = 0; l < CompShuttle.tmpRequiredPawns.Count; l++)
+				tmpAllSendablePawns.Clear();
+				tmpAllSendablePawns.AddRange(TransporterUtility.AllSendablePawns(TransportersInGroup, parent.Map));
+				tmpAllSendableItems.Clear();
+				tmpAllSendableItems.AddRange(TransporterUtility.AllSendableItems(TransportersInGroup, parent.Map));
+				tmpAllSendableItems.AddRange(TransporterUtility.ThingsBeingHauledTo(TransportersInGroup, parent.Map));
+				tmpRequiredPawnsPossibleToSend.Clear();
+				for (int k = 0; k < tmpRequiredPawns.Count; k++)
 				{
-					if (CompShuttle.tmpAllSendablePawns.Contains(CompShuttle.tmpRequiredPawns[l]))
+					if (tmpAllSendablePawns.Contains(tmpRequiredPawns[k]))
 					{
 						TransferableOneWay transferableOneWay = new TransferableOneWay();
-						transferableOneWay.things.Add(CompShuttle.tmpRequiredPawns[l]);
-						this.Transporter.AddToTheToLoadList(transferableOneWay, 1);
-						CompShuttle.tmpRequiredPawnsPossibleToSend.Add(CompShuttle.tmpRequiredPawns[l]);
+						transferableOneWay.things.Add(tmpRequiredPawns[k]);
+						Transporter.AddToTheToLoadList(transferableOneWay, 1);
+						tmpRequiredPawnsPossibleToSend.Add(tmpRequiredPawns[k]);
 					}
 				}
-				for (int m = 0; m < CompShuttle.tmpRequiredItems.Count; m++)
+				for (int l = 0; l < tmpRequiredItems.Count; l++)
 				{
-					if (CompShuttle.tmpRequiredItems[m].Count > 0)
+					if (tmpRequiredItems[l].Count <= 0)
 					{
-						int num3 = 0;
-						for (int n = 0; n < CompShuttle.tmpAllSendableItems.Count; n++)
+						continue;
+					}
+					int num4 = 0;
+					for (int m = 0; m < tmpAllSendableItems.Count; m++)
+					{
+						if (tmpAllSendableItems[m].def == tmpRequiredItems[l].ThingDef)
 						{
-							if (CompShuttle.tmpAllSendableItems[n].def == CompShuttle.tmpRequiredItems[m].ThingDef)
-							{
-								num3 += CompShuttle.tmpAllSendableItems[n].stackCount;
-							}
-						}
-						if (num3 > 0)
-						{
-							TransferableOneWay transferableOneWay2 = new TransferableOneWay();
-							for (int num4 = 0; num4 < CompShuttle.tmpAllSendableItems.Count; num4++)
-							{
-								if (CompShuttle.tmpAllSendableItems[num4].def == CompShuttle.tmpRequiredItems[m].ThingDef)
-								{
-									transferableOneWay2.things.Add(CompShuttle.tmpAllSendableItems[num4]);
-								}
-							}
-							int count = Mathf.Min(CompShuttle.tmpRequiredItems[m].Count, num3);
-							this.Transporter.AddToTheToLoadList(transferableOneWay2, count);
+							num4 += tmpAllSendableItems[m].stackCount;
 						}
 					}
+					if (num4 <= 0)
+					{
+						continue;
+					}
+					TransferableOneWay transferableOneWay2 = new TransferableOneWay();
+					for (int n = 0; n < tmpAllSendableItems.Count; n++)
+					{
+						if (tmpAllSendableItems[n].def == tmpRequiredItems[l].ThingDef)
+						{
+							transferableOneWay2.things.Add(tmpAllSendableItems[n]);
+						}
+					}
+					int count = Mathf.Min(tmpRequiredItems[l].Count, num4);
+					Transporter.AddToTheToLoadList(transferableOneWay2, count);
 				}
-				TransporterUtility.MakeLordsAsAppropriate(CompShuttle.tmpRequiredPawnsPossibleToSend, this.TransportersInGroup, this.parent.Map);
-				CompShuttle.tmpAllSendablePawns.Clear();
-				CompShuttle.tmpAllSendableItems.Clear();
-				CompShuttle.tmpRequiredItems.Clear();
-				CompShuttle.tmpRequiredPawns.Clear();
-				CompShuttle.tmpRequiredPawnsPossibleToSend.Clear();
-				return;
+				TransporterUtility.MakeLordsAsAppropriate(tmpRequiredPawnsPossibleToSend, TransportersInGroup, parent.Map);
+				tmpAllSendablePawns.Clear();
+				tmpAllSendableItems.Clear();
+				tmpRequiredItems.Clear();
+				tmpRequiredPawns.Clear();
+				tmpRequiredPawnsPossibleToSend.Clear();
 			}
-			if (this.Transporter.leftToLoad != null)
+			else
 			{
-				this.Transporter.leftToLoad.Clear();
+				if (Transporter.leftToLoad != null)
+				{
+					Transporter.leftToLoad.Clear();
+				}
+				TransporterUtility.MakeLordsAsAppropriate(tmpRequiredPawnsPossibleToSend, TransportersInGroup, parent.Map);
 			}
-			TransporterUtility.MakeLordsAsAppropriate(CompShuttle.tmpRequiredPawnsPossibleToSend, this.TransportersInGroup, this.parent.Map);
 		}
 
-		
 		public bool IsRequired(Thing thing)
 		{
 			Pawn pawn = thing as Pawn;
 			if (pawn != null)
 			{
-				return this.requiredPawns.Contains(pawn);
+				return requiredPawns.Contains(pawn);
 			}
-			for (int i = 0; i < this.requiredItems.Count; i++)
+			for (int i = 0; i < requiredItems.Count; i++)
 			{
-				if (this.requiredItems[i].ThingDef == thing.def && this.requiredItems[i].Count != 0)
+				if (requiredItems[i].ThingDef == thing.def && requiredItems[i].Count != 0)
 				{
 					return true;
 				}
@@ -597,17 +607,16 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public bool IsAllowed(Thing t)
 		{
-			if (this.IsRequired(t))
+			if (IsRequired(t))
 			{
 				return true;
 			}
-			if (this.acceptColonists)
+			if (acceptColonists)
 			{
 				Pawn pawn = t as Pawn;
-				if (pawn != null && (pawn.IsColonist || (!this.onlyAcceptColonists && pawn.RaceProps.Animal && pawn.Faction == Faction.OfPlayer)) && (!this.onlyAcceptColonists || !pawn.IsQuestLodger()) && (!this.onlyAcceptHealthy || this.PawnIsHealthyEnoughForShuttle(pawn)))
+				if (pawn != null && (pawn.IsColonist || (!onlyAcceptColonists && pawn.RaceProps.Animal && pawn.Faction == Faction.OfPlayer)) && (!onlyAcceptColonists || !pawn.IsQuestLodger()) && (!onlyAcceptHealthy || PawnIsHealthyEnoughForShuttle(pawn)))
 				{
 					return true;
 				}
@@ -615,94 +624,18 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private bool PawnIsHealthyEnoughForShuttle(Pawn p)
 		{
-			return !p.Downed && !p.InMentalState && p.health.capacities.CanBeAwake && p.health.capacities.CapableOf(PawnCapacityDefOf.Moving) && p.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation);
+			if (p.Downed || p.InMentalState || !p.health.capacities.CanBeAwake || !p.health.capacities.CapableOf(PawnCapacityDefOf.Moving) || !p.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public void CleanUpLoadingVars()
 		{
-			this.autoload = false;
+			autoload = false;
 		}
-
-		
-		public List<ThingDefCount> requiredItems = new List<ThingDefCount>();
-
-		
-		public List<Pawn> requiredPawns = new List<Pawn>();
-
-		
-		public int requiredColonistCount;
-
-		
-		public bool acceptColonists;
-
-		
-		public bool onlyAcceptColonists;
-
-		
-		public bool onlyAcceptHealthy;
-
-		
-		public bool dropEverythingIfUnsatisfied;
-
-		
-		public bool dropNonRequiredIfUnsatisfied = true;
-
-		
-		public bool leaveImmediatelyWhenSatisfied;
-
-		
-		public bool dropEverythingOnArrival;
-
-		
-		private bool autoload;
-
-		
-		public bool leaveASAP;
-
-		
-		private CompTransporter cachedCompTransporter;
-
-		
-		private List<CompTransporter> cachedTransporterList;
-
-		
-		private bool sending;
-
-		
-		private const int CheckAutoloadIntervalTicks = 120;
-
-		
-		private const int DropInterval = 60;
-
-		
-		private static readonly Texture2D AutoloadToggleTex = ContentFinder<Texture2D>.Get("UI/Commands/Autoload", true);
-
-		
-		private static readonly Texture2D SendCommandTex = CompLaunchable.LaunchCommandTex;
-
-		
-		private static List<ThingDefCount> tmpRequiredItemsWithoutDuplicates = new List<ThingDefCount>();
-
-		
-		private static List<string> tmpRequiredLabels = new List<string>();
-
-		
-		private static List<ThingDefCount> tmpRequiredItems = new List<ThingDefCount>();
-
-		
-		private static List<Pawn> tmpRequiredPawns = new List<Pawn>();
-
-		
-		private static List<Pawn> tmpAllSendablePawns = new List<Pawn>();
-
-		
-		private static List<Thing> tmpAllSendableItems = new List<Thing>();
-
-		
-		private static List<Pawn> tmpRequiredPawnsPossibleToSend = new List<Pawn>();
 	}
 }

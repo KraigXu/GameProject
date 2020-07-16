@@ -1,10 +1,8 @@
-﻿using System;
 using System.Globalization;
 using System.Threading;
 
 namespace Verse
 {
-	
 	public static class CultureInfoUtility
 	{
 		private const string EnglishCulture = "en-US";
@@ -16,6 +14,5 @@ namespace Verse
 				Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 			}
 		}
-		
 	}
 }

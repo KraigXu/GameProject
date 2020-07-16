@@ -1,31 +1,26 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PawnGroupKindDef : Def
 	{
-		
-		
+		public Type workerClass = typeof(PawnGroupKindWorker);
+
+		[Unsaved(false)]
+		private PawnGroupKindWorker workerInt;
+
 		public PawnGroupKindWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (PawnGroupKindWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.def = this;
+					workerInt = (PawnGroupKindWorker)Activator.CreateInstance(workerClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
-
-		
-		public Type workerClass = typeof(PawnGroupKindWorker);
-
-		
-		[Unsaved(false)]
-		private PawnGroupKindWorker workerInt;
 	}
 }

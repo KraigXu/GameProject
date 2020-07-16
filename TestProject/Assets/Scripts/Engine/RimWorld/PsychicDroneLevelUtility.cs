@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PsychicDroneLevelUtility
 	{
-		
 		public static string GetLabel(this PsychicDroneLevel level)
 		{
 			switch (level)
@@ -28,7 +25,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static string GetLabelCap(this PsychicDroneLevel level)
 		{
 			return level.GetLabel().CapitalizeFirst();

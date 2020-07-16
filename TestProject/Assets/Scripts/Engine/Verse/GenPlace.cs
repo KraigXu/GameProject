@@ -1,26 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class GenPlace
 	{
-		
-		public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> nearPlaceValidator = null, Rot4 rot = default(Rot4))
+		private enum PlaceSpotQuality : byte
 		{
-			Thing thing2;
-			return GenPlace.TryPlaceThing(thing, center, map, mode, out thing2, placedAction, nearPlaceValidator, rot);
+			Unusable,
+			Awful,
+			Bad,
+			Okay,
+			Perfect
 		}
 
-		
+		private static readonly int PlaceNearMaxRadialCells = GenRadial.NumCellsInRadius(12.9f);
+
+		private static readonly int PlaceNearMiddleRadialCells = GenRadial.NumCellsInRadius(3f);
+
+		public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> nearPlaceValidator = null, Rot4 rot = default(Rot4))
+		{
+			Thing lastResultingThing;
+			return TryPlaceThing(thing, center, map, mode, out lastResultingThing, placedAction, nearPlaceValidator, rot);
+		}
+
 		public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, out Thing lastResultingThing, Action<Thing, int> placedAction = null, Predicate<IntVec3> nearPlaceValidator = null, Rot4 rot = default(Rot4))
 		{
 			if (map == null)
 			{
-				Log.Error("Tried to place thing " + thing + " in a null map.", false);
+				Log.Error("Tried to place thing " + thing + " in a null map.");
 				lastResultingThing = null;
 				return false;
 			}
@@ -28,104 +38,91 @@ namespace Verse
 			{
 				mode = ThingPlaceMode.Direct;
 			}
-			if (mode == ThingPlaceMode.Direct)
+			switch (mode)
 			{
-				return GenPlace.TryPlaceDirect(thing, center, rot, map, out lastResultingThing, placedAction);
-			}
-			if (mode == ThingPlaceMode.Near)
+			case ThingPlaceMode.Direct:
+				return TryPlaceDirect(thing, center, rot, map, out lastResultingThing, placedAction);
+			case ThingPlaceMode.Near:
 			{
 				lastResultingThing = null;
-				for (;;)
+				int num = -1;
+				do
 				{
-					int stackCount = thing.stackCount;
-					IntVec3 loc;
-					if (!GenPlace.TryFindPlaceSpotNear(center, rot, map, thing, true, out loc, nearPlaceValidator))
+					num = thing.stackCount;
+					if (!TryFindPlaceSpotNear(center, rot, map, thing, allowStacking: true, out IntVec3 bestSpot, nearPlaceValidator))
 					{
-						break;
+						return false;
 					}
-					if (GenPlace.TryPlaceDirect(thing, loc, rot, map, out lastResultingThing, placedAction))
+					if (TryPlaceDirect(thing, bestSpot, rot, map, out lastResultingThing, placedAction))
 					{
 						return true;
 					}
-					if (thing.stackCount == stackCount)
-					{
-						goto Block_7;
-					}
 				}
-				return false;
-				Block_7:
-				Log.Error(string.Concat(new object[]
-				{
-					"Failed to place ",
-					thing,
-					" at ",
-					center,
-					" in mode ",
-					mode,
-					"."
-				}), false);
+				while (thing.stackCount != num);
+				Log.Error("Failed to place " + thing + " at " + center + " in mode " + mode + ".");
 				lastResultingThing = null;
 				return false;
 			}
-			throw new InvalidOperationException();
+			default:
+				throw new InvalidOperationException();
+			}
 		}
 
-		
 		private static bool TryFindPlaceSpotNear(IntVec3 center, Rot4 rot, Map map, Thing thing, bool allowStacking, out IntVec3 bestSpot, Predicate<IntVec3> extraValidator = null)
 		{
-			GenPlace.PlaceSpotQuality placeSpotQuality = GenPlace.PlaceSpotQuality.Unusable;
+			PlaceSpotQuality placeSpotQuality = PlaceSpotQuality.Unusable;
 			bestSpot = center;
 			for (int i = 0; i < 9; i++)
 			{
 				IntVec3 intVec = center + GenRadial.RadialPattern[i];
-				GenPlace.PlaceSpotQuality placeSpotQuality2 = GenPlace.PlaceSpotQualityAt(intVec, rot, map, thing, center, allowStacking, extraValidator);
-				if (placeSpotQuality2 > placeSpotQuality)
+				PlaceSpotQuality placeSpotQuality2 = PlaceSpotQualityAt(intVec, rot, map, thing, center, allowStacking, extraValidator);
+				if ((int)placeSpotQuality2 > (int)placeSpotQuality)
 				{
 					bestSpot = intVec;
 					placeSpotQuality = placeSpotQuality2;
 				}
-				if (placeSpotQuality == GenPlace.PlaceSpotQuality.Perfect)
+				if (placeSpotQuality == PlaceSpotQuality.Perfect)
 				{
 					break;
 				}
 			}
-			if (placeSpotQuality >= GenPlace.PlaceSpotQuality.Okay)
+			if ((int)placeSpotQuality >= 3)
 			{
 				return true;
 			}
-			for (int j = 0; j < GenPlace.PlaceNearMiddleRadialCells; j++)
+			for (int j = 0; j < PlaceNearMiddleRadialCells; j++)
 			{
 				IntVec3 intVec = center + GenRadial.RadialPattern[j];
-				GenPlace.PlaceSpotQuality placeSpotQuality2 = GenPlace.PlaceSpotQualityAt(intVec, rot, map, thing, center, allowStacking, extraValidator);
-				if (placeSpotQuality2 > placeSpotQuality)
+				PlaceSpotQuality placeSpotQuality2 = PlaceSpotQualityAt(intVec, rot, map, thing, center, allowStacking, extraValidator);
+				if ((int)placeSpotQuality2 > (int)placeSpotQuality)
 				{
 					bestSpot = intVec;
 					placeSpotQuality = placeSpotQuality2;
 				}
-				if (placeSpotQuality == GenPlace.PlaceSpotQuality.Perfect)
+				if (placeSpotQuality == PlaceSpotQuality.Perfect)
 				{
 					break;
 				}
 			}
-			if (placeSpotQuality >= GenPlace.PlaceSpotQuality.Okay)
+			if ((int)placeSpotQuality >= 3)
 			{
 				return true;
 			}
-			for (int k = 0; k < GenPlace.PlaceNearMaxRadialCells; k++)
+			for (int k = 0; k < PlaceNearMaxRadialCells; k++)
 			{
 				IntVec3 intVec = center + GenRadial.RadialPattern[k];
-				GenPlace.PlaceSpotQuality placeSpotQuality2 = GenPlace.PlaceSpotQualityAt(intVec, rot, map, thing, center, allowStacking, extraValidator);
-				if (placeSpotQuality2 > placeSpotQuality)
+				PlaceSpotQuality placeSpotQuality2 = PlaceSpotQualityAt(intVec, rot, map, thing, center, allowStacking, extraValidator);
+				if ((int)placeSpotQuality2 > (int)placeSpotQuality)
 				{
 					bestSpot = intVec;
 					placeSpotQuality = placeSpotQuality2;
 				}
-				if (placeSpotQuality == GenPlace.PlaceSpotQuality.Perfect)
+				if (placeSpotQuality == PlaceSpotQuality.Perfect)
 				{
 					break;
 				}
 			}
-			if (placeSpotQuality > GenPlace.PlaceSpotQuality.Unusable)
+			if ((int)placeSpotQuality > 0)
 			{
 				return true;
 			}
@@ -133,20 +130,19 @@ namespace Verse
 			return false;
 		}
 
-		
-		private static GenPlace.PlaceSpotQuality PlaceSpotQualityAt(IntVec3 c, Rot4 rot, Map map, Thing thing, IntVec3 center, bool allowStacking, Predicate<IntVec3> extraValidator = null)
+		private static PlaceSpotQuality PlaceSpotQualityAt(IntVec3 c, Rot4 rot, Map map, Thing thing, IntVec3 center, bool allowStacking, Predicate<IntVec3> extraValidator = null)
 		{
 			if (!c.InBounds(map) || !c.Walkable(map))
 			{
-				return GenPlace.PlaceSpotQuality.Unusable;
+				return PlaceSpotQuality.Unusable;
 			}
 			if (!GenAdj.OccupiedRect(c, rot, thing.def.Size).InBounds(map))
 			{
-				return GenPlace.PlaceSpotQuality.Unusable;
+				return PlaceSpotQuality.Unusable;
 			}
 			if (extraValidator != null && !extraValidator(c))
 			{
-				return GenPlace.PlaceSpotQuality.Unusable;
+				return PlaceSpotQuality.Unusable;
 			}
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
 			for (int i = 0; i < list.Count; i++)
@@ -154,78 +150,76 @@ namespace Verse
 				Thing thing2 = list[i];
 				if (thing.def.saveCompressible && thing2.def.saveCompressible)
 				{
-					return GenPlace.PlaceSpotQuality.Unusable;
+					return PlaceSpotQuality.Unusable;
 				}
 				if (thing.def.category == ThingCategory.Item && thing2.def.category == ThingCategory.Item && (!thing2.CanStackWith(thing) || thing2.stackCount >= thing.def.stackLimit))
 				{
-					return GenPlace.PlaceSpotQuality.Unusable;
+					return PlaceSpotQuality.Unusable;
 				}
 			}
 			if (thing is Building)
 			{
-				foreach (IntVec3 c2 in GenAdj.OccupiedRect(c, rot, thing.def.size))
+				foreach (IntVec3 item in GenAdj.OccupiedRect(c, rot, thing.def.size))
 				{
-					Building edifice = c2.GetEdifice(map);
+					Building edifice = item.GetEdifice(map);
 					if (edifice != null && GenSpawn.SpawningWipes(thing.def, edifice.def))
 					{
-						return GenPlace.PlaceSpotQuality.Awful;
+						return PlaceSpotQuality.Awful;
 					}
 				}
 			}
-			if (c.GetRoom(map, RegionType.Set_Passable) == center.GetRoom(map, RegionType.Set_Passable))
+			if (c.GetRoom(map) != center.GetRoom(map))
 			{
-				if (allowStacking)
+				if (!map.reachability.CanReach(center, c, PathEndMode.OnCell, TraverseMode.PassDoors, Danger.Deadly))
 				{
-					for (int j = 0; j < list.Count; j++)
-					{
-						Thing thing3 = list[j];
-						if (thing3.def.category == ThingCategory.Item && thing3.CanStackWith(thing) && thing3.stackCount < thing.def.stackLimit)
-						{
-							return GenPlace.PlaceSpotQuality.Perfect;
-						}
-					}
+					return PlaceSpotQuality.Awful;
 				}
-				Pawn pawn = thing as Pawn;
-				bool flag = pawn != null && pawn.Downed;
-				GenPlace.PlaceSpotQuality placeSpotQuality = GenPlace.PlaceSpotQuality.Perfect;
-				for (int k = 0; k < list.Count; k++)
-				{
-					Thing thing4 = list[k];
-					if (thing4.def.IsDoor)
-					{
-						return GenPlace.PlaceSpotQuality.Bad;
-					}
-					if (thing4 is Building_WorkTable)
-					{
-						return GenPlace.PlaceSpotQuality.Bad;
-					}
-					Pawn pawn2 = thing4 as Pawn;
-					if (pawn2 != null)
-					{
-						if (pawn2.Downed || flag)
-						{
-							return GenPlace.PlaceSpotQuality.Bad;
-						}
-						if (placeSpotQuality > GenPlace.PlaceSpotQuality.Okay)
-						{
-							placeSpotQuality = GenPlace.PlaceSpotQuality.Okay;
-						}
-					}
-					if (thing4.def.category == ThingCategory.Plant && thing4.def.selectable && placeSpotQuality > GenPlace.PlaceSpotQuality.Okay)
-					{
-						placeSpotQuality = GenPlace.PlaceSpotQuality.Okay;
-					}
-				}
-				return placeSpotQuality;
+				return PlaceSpotQuality.Bad;
 			}
-			if (!map.reachability.CanReach(center, c, PathEndMode.OnCell, TraverseMode.PassDoors, Danger.Deadly))
+			if (allowStacking)
 			{
-				return GenPlace.PlaceSpotQuality.Awful;
+				for (int j = 0; j < list.Count; j++)
+				{
+					Thing thing3 = list[j];
+					if (thing3.def.category == ThingCategory.Item && thing3.CanStackWith(thing) && thing3.stackCount < thing.def.stackLimit)
+					{
+						return PlaceSpotQuality.Perfect;
+					}
+				}
 			}
-			return GenPlace.PlaceSpotQuality.Bad;
+			bool flag = (thing as Pawn)?.Downed ?? false;
+			PlaceSpotQuality placeSpotQuality = PlaceSpotQuality.Perfect;
+			for (int k = 0; k < list.Count; k++)
+			{
+				Thing thing4 = list[k];
+				if (thing4.def.IsDoor)
+				{
+					return PlaceSpotQuality.Bad;
+				}
+				if (thing4 is Building_WorkTable)
+				{
+					return PlaceSpotQuality.Bad;
+				}
+				Pawn pawn = thing4 as Pawn;
+				if (pawn != null)
+				{
+					if (pawn.Downed | flag)
+					{
+						return PlaceSpotQuality.Bad;
+					}
+					if ((int)placeSpotQuality > 3)
+					{
+						placeSpotQuality = PlaceSpotQuality.Okay;
+					}
+				}
+				if (thing4.def.category == ThingCategory.Plant && thing4.def.selectable && (int)placeSpotQuality > 3)
+				{
+					placeSpotQuality = PlaceSpotQuality.Okay;
+				}
+			}
+			return placeSpotQuality;
 		}
 
-		
 		private static bool TryPlaceDirect(Thing thing, IntVec3 loc, Rot4 rot, Map map, out Thing resultingThing, Action<Thing, int> placedAction = null)
 		{
 			Thing thing2 = thing;
@@ -238,20 +232,16 @@ namespace Verse
 			if (thing.def.stackLimit > 1)
 			{
 				List<Thing> thingList = loc.GetThingList(map);
-				int i = 0;
-				while (i < thingList.Count)
+				for (int i = 0; i < thingList.Count; i++)
 				{
 					Thing thing3 = thingList[i];
 					if (thing3.CanStackWith(thing))
 					{
 						int stackCount = thing.stackCount;
-						if (thing3.TryAbsorbStack(thing, true))
+						if (thing3.TryAbsorbStack(thing, respectStackLimit: true))
 						{
 							resultingThing = thing3;
-							if (placedAction != null)
-							{
-								placedAction(thing3, stackCount);
-							}
+							placedAction?.Invoke(thing3, stackCount);
 							return !flag;
 						}
 						resultingThing = null;
@@ -261,25 +251,17 @@ namespace Verse
 						}
 						if (thing2 != thing)
 						{
-							thing2.TryAbsorbStack(thing, false);
+							thing2.TryAbsorbStack(thing, respectStackLimit: false);
 						}
 						return false;
 					}
-					else
-					{
-						i++;
-					}
 				}
 			}
-			resultingThing = GenSpawn.Spawn(thing, loc, map, rot, WipeMode.Vanish, false);
-			if (placedAction != null)
-			{
-				placedAction(thing, thing.stackCount);
-			}
+			resultingThing = GenSpawn.Spawn(thing, loc, map, rot);
+			placedAction?.Invoke(thing, thing.stackCount);
 			return !flag;
 		}
 
-		
 		public static Thing HaulPlaceBlockerIn(Thing haulThing, IntVec3 c, Map map, bool checkBlueprintsAndFrames)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -290,7 +272,7 @@ namespace Verse
 				{
 					return thing;
 				}
-				if ((thing.def.category != ThingCategory.Plant || thing.def.passability != Traversability.Standable) && thing.def.category != ThingCategory.Filth && (haulThing == null || thing.def.category != ThingCategory.Item || !thing.CanStackWith(haulThing) || thing.def.stackLimit - thing.stackCount < haulThing.stackCount))
+				if ((thing.def.category != ThingCategory.Plant || thing.def.passability != 0) && thing.def.category != ThingCategory.Filth && (haulThing == null || thing.def.category != ThingCategory.Item || !thing.CanStackWith(haulThing) || thing.def.stackLimit - thing.stackCount < haulThing.stackCount))
 				{
 					if (thing.def.EverHaulable)
 					{
@@ -300,34 +282,13 @@ namespace Verse
 					{
 						return thing;
 					}
-					if (thing.def.passability != Traversability.Standable && thing.def.surfaceType != SurfaceType.Item)
+					if (thing.def.passability != 0 && thing.def.surfaceType != SurfaceType.Item)
 					{
 						return thing;
 					}
 				}
 			}
 			return null;
-		}
-
-		
-		private static readonly int PlaceNearMaxRadialCells = GenRadial.NumCellsInRadius(12.9f);
-
-		
-		private static readonly int PlaceNearMiddleRadialCells = GenRadial.NumCellsInRadius(3f);
-
-		
-		private enum PlaceSpotQuality : byte
-		{
-			
-			Unusable,
-			
-			Awful,
-			
-			Bad,
-			
-			Okay,
-			
-			Perfect
 		}
 	}
 }

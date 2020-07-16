@@ -1,24 +1,28 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Graphic_LinkedTransmitter : Graphic_Linked
 	{
-		
-		public Graphic_LinkedTransmitter(Graphic subGraphic) : base(subGraphic)
+		public Graphic_LinkedTransmitter(Graphic subGraphic)
+			: base(subGraphic)
 		{
 		}
 
-		
 		public override bool ShouldLinkWith(IntVec3 c, Thing parent)
 		{
-			return c.InBounds(parent.Map) && (base.ShouldLinkWith(c, parent) || parent.Map.powerNetGrid.TransmittedPowerNetAt(c) != null);
+			if (!c.InBounds(parent.Map))
+			{
+				return false;
+			}
+			if (base.ShouldLinkWith(c, parent) || parent.Map.powerNetGrid.TransmittedPowerNetAt(c) != null)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override void Print(SectionLayer layer, Thing thing)
 		{
 			base.Print(layer, thing);
@@ -30,8 +34,8 @@ namespace RimWorld
 					Building transmitter = intVec.GetTransmitter(thing.Map);
 					if (transmitter != null && !transmitter.def.graphicData.Linked)
 					{
-						Material mat = base.LinkedDrawMatFrom(thing, intVec);
-						Printer_Plane.PrintPlane(layer, intVec.ToVector3ShiftedWithAltitude(thing.def.Altitude), Vector2.one, mat, 0f, false, null, null, 0.01f, 0f);
+						Material mat = LinkedDrawMatFrom(thing, intVec);
+						Printer_Plane.PrintPlane(layer, intVec.ToVector3ShiftedWithAltitude(thing.def.Altitude), Vector2.one, mat);
 					}
 				}
 			}

@@ -1,176 +1,150 @@
-﻿using System;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class MoteThrown : Mote
 	{
-		
-		
-		protected bool Flying
-		{
-			get
-			{
-				return this.airTimeLeft > 0f;
-			}
-		}
+		public float airTimeLeft = 999999f;
 
-		
-		
+		protected Vector3 velocity = Vector3.zero;
+
+		protected bool Flying => airTimeLeft > 0f;
+
 		protected bool Skidding
 		{
 			get
 			{
-				return !this.Flying && this.Speed > 0.01f;
+				if (!Flying)
+				{
+					return Speed > 0.01f;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		
 		public Vector3 Velocity
 		{
 			get
 			{
-				return this.velocity;
+				return velocity;
 			}
 			set
 			{
-				this.velocity = value;
+				velocity = value;
 			}
 		}
 
-		
-		
-		
 		public float MoveAngle
 		{
 			get
 			{
-				return this.velocity.AngleFlat();
+				return velocity.AngleFlat();
 			}
 			set
 			{
-				this.SetVelocity(value, this.Speed);
+				SetVelocity(value, Speed);
 			}
 		}
 
-		
-		
-		
 		public float Speed
 		{
 			get
 			{
-				return this.velocity.MagnitudeHorizontal();
+				return velocity.MagnitudeHorizontal();
 			}
 			set
 			{
 				if (value == 0f)
 				{
-					this.velocity = Vector3.zero;
-					return;
+					velocity = Vector3.zero;
 				}
-				if (this.velocity == Vector3.zero)
+				else if (velocity == Vector3.zero)
 				{
-					this.velocity = new Vector3(value, 0f, 0f);
-					return;
+					velocity = new Vector3(value, 0f, 0f);
 				}
-				this.velocity = this.velocity.normalized * value;
+				else
+				{
+					velocity = velocity.normalized * value;
+				}
 			}
 		}
 
-		
 		protected override void TimeInterval(float deltaTime)
 		{
 			base.TimeInterval(deltaTime);
-			if (base.Destroyed)
+			if (base.Destroyed || (!Flying && !Skidding))
 			{
 				return;
 			}
-			if (!this.Flying && !this.Skidding)
-			{
-				return;
-			}
-			Vector3 vector = this.NextExactPosition(deltaTime);
+			Vector3 vector = NextExactPosition(deltaTime);
 			IntVec3 intVec = new IntVec3(vector);
 			if (intVec != base.Position)
 			{
 				if (!intVec.InBounds(base.Map))
 				{
-					this.Destroy(DestroyMode.Vanish);
+					Destroy();
 					return;
 				}
-				if (this.def.mote.collide && intVec.Filled(base.Map))
+				if (def.mote.collide && intVec.Filled(base.Map))
 				{
-					this.WallHit();
+					WallHit();
 					return;
 				}
 			}
 			base.Position = intVec;
-			this.exactPosition = vector;
-			if (this.def.mote.rotateTowardsMoveDirection && this.velocity != default(Vector3))
+			exactPosition = vector;
+			if (def.mote.rotateTowardsMoveDirection && velocity != default(Vector3))
 			{
-				this.exactRotation = this.velocity.AngleFlat();
+				exactRotation = velocity.AngleFlat();
 			}
 			else
 			{
-				this.exactRotation += this.rotationRate * deltaTime;
+				exactRotation += rotationRate * deltaTime;
 			}
-			this.velocity += this.def.mote.acceleration * deltaTime;
-			if (this.def.mote.speedPerTime != 0f)
+			velocity += def.mote.acceleration * deltaTime;
+			if (def.mote.speedPerTime != 0f)
 			{
-				this.Speed = Mathf.Max(this.Speed + this.def.mote.speedPerTime * deltaTime, 0f);
+				Speed = Mathf.Max(Speed + def.mote.speedPerTime * deltaTime, 0f);
 			}
-			if (this.airTimeLeft > 0f)
+			if (airTimeLeft > 0f)
 			{
-				this.airTimeLeft -= deltaTime;
-				if (this.airTimeLeft < 0f)
+				airTimeLeft -= deltaTime;
+				if (airTimeLeft < 0f)
 				{
-					this.airTimeLeft = 0f;
+					airTimeLeft = 0f;
 				}
-				if (this.airTimeLeft <= 0f && !this.def.mote.landSound.NullOrUndefined())
+				if (airTimeLeft <= 0f && !def.mote.landSound.NullOrUndefined())
 				{
-					this.def.mote.landSound.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
+					def.mote.landSound.PlayOneShot(new TargetInfo(base.Position, base.Map));
 				}
 			}
-			if (this.Skidding)
+			if (Skidding)
 			{
-				this.Speed *= this.skidSpeedMultiplierPerTick;
-				this.rotationRate *= this.skidSpeedMultiplierPerTick;
-				if (this.Speed < 0.02f)
+				Speed *= skidSpeedMultiplierPerTick;
+				rotationRate *= skidSpeedMultiplierPerTick;
+				if (Speed < 0.02f)
 				{
-					this.Speed = 0f;
+					Speed = 0f;
 				}
 			}
 		}
 
-		
 		protected virtual Vector3 NextExactPosition(float deltaTime)
 		{
-			return this.exactPosition + this.velocity * deltaTime;
+			return exactPosition + velocity * deltaTime;
 		}
 
-		
 		public void SetVelocity(float angle, float speed)
 		{
-			this.velocity = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward * speed;
+			velocity = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward * speed;
 		}
 
-		
 		protected virtual void WallHit()
 		{
-			this.airTimeLeft = 0f;
-			this.Speed = 0f;
-			this.rotationRate = 0f;
+			airTimeLeft = 0f;
+			Speed = 0f;
+			rotationRate = 0f;
 		}
-
-		
-		public float airTimeLeft = 999999f;
-
-		
-		protected Vector3 velocity = Vector3.zero;
 	}
 }

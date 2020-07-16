@@ -1,20 +1,40 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public static class DebugThingPlaceHelper
 	{
-		
 		public static bool IsDebugSpawnable(ThingDef def, bool allowPlayerBuildable = false)
 		{
-			return def.forceDebugSpawnable || (!(def.thingClass == typeof(Corpse)) && !def.IsBlueprint && !def.IsFrame && def != ThingDefOf.ActiveDropPod && !(def.thingClass == typeof(MinifiedThing)) && !(def.thingClass == typeof(UnfinishedThing)) && !def.destroyOnDrop && (def.category == ThingCategory.Filth || def.category == ThingCategory.Item || def.category == ThingCategory.Plant || def.category == ThingCategory.Ethereal || (def.category == ThingCategory.Building && def.building.isNaturalRock) || (def.category == ThingCategory.Building && !def.BuildableByPlayer) || (def.category == ThingCategory.Building && def.BuildableByPlayer && allowPlayerBuildable)));
+			if (def.forceDebugSpawnable)
+			{
+				return true;
+			}
+			if (def.thingClass == typeof(Corpse) || def.IsBlueprint || def.IsFrame || def == ThingDefOf.ActiveDropPod || def.thingClass == typeof(MinifiedThing) || def.thingClass == typeof(UnfinishedThing) || def.destroyOnDrop)
+			{
+				return false;
+			}
+			if (def.category == ThingCategory.Filth || def.category == ThingCategory.Item || def.category == ThingCategory.Plant || def.category == ThingCategory.Ethereal)
+			{
+				return true;
+			}
+			if (def.category == ThingCategory.Building && def.building.isNaturalRock)
+			{
+				return true;
+			}
+			if (def.category == ThingCategory.Building && !def.BuildableByPlayer)
+			{
+				return true;
+			}
+			if ((def.category == ThingCategory.Building && def.BuildableByPlayer) & allowPlayerBuildable)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static void DebugSpawn(ThingDef def, IntVec3 c, int stackCount = -1, bool direct = false)
 		{
 			if (stackCount <= 0)
@@ -23,11 +43,7 @@ namespace Verse
 			}
 			ThingDef stuff = GenStuff.RandomStuffFor(def);
 			Thing thing = ThingMaker.MakeThing(def, stuff);
-			CompQuality compQuality = thing.TryGetComp<CompQuality>();
-			if (compQuality != null)
-			{
-				compQuality.SetQuality(QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Colony);
-			}
+			thing.TryGetComp<CompQuality>()?.SetQuality(QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Colony);
 			if (thing.def.Minifiable)
 			{
 				thing = thing.MakeMinified();
@@ -35,59 +51,50 @@ namespace Verse
 			thing.stackCount = stackCount;
 			if (direct)
 			{
-				GenPlace.TryPlaceThing(thing, c, Find.CurrentMap, ThingPlaceMode.Direct, null, null, default(Rot4));
-				return;
+				GenPlace.TryPlaceThing(thing, c, Find.CurrentMap, ThingPlaceMode.Direct);
 			}
-			GenPlace.TryPlaceThing(thing, c, Find.CurrentMap, ThingPlaceMode.Near, null, null, default(Rot4));
+			else
+			{
+				GenPlace.TryPlaceThing(thing, c, Find.CurrentMap, ThingPlaceMode.Near);
+			}
 		}
 
-		
 		public static List<DebugMenuOption> TryPlaceOptionsForStackCount(int stackCount, bool direct)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			foreach (ThingDef localDef3 in from def in DefDatabase<ThingDef>.AllDefs
-			where DebugThingPlaceHelper.IsDebugSpawnable(def, false) && def.stackLimit >= stackCount
-			select def)
+			foreach (ThingDef item in DefDatabase<ThingDef>.AllDefs.Where((ThingDef def) => IsDebugSpawnable(def) && def.stackLimit >= stackCount))
 			{
-				ThingDef localDef = localDef3;
-				list.Add(new DebugMenuOption(localDef.LabelCap, DebugMenuOptionMode.Tool, delegate
+				ThingDef localDef2 = item;
+				list.Add(new DebugMenuOption(localDef2.LabelCap, DebugMenuOptionMode.Tool, delegate
 				{
-					DebugThingPlaceHelper.DebugSpawn(localDef, UI.MouseCell(), stackCount, direct);
+					DebugSpawn(localDef2, UI.MouseCell(), stackCount, direct);
 				}));
 			}
 			if (stackCount == 1)
 			{
-				foreach (ThingDef localDef2 in from def in DefDatabase<ThingDef>.AllDefs
-				where def.Minifiable
-				select def)
+				foreach (ThingDef item2 in DefDatabase<ThingDef>.AllDefs.Where((ThingDef def) => def.Minifiable))
 				{
-					ThingDef localDef = localDef2;
+					ThingDef localDef = item2;
 					list.Add(new DebugMenuOption(localDef.LabelCap + " (minified)", DebugMenuOptionMode.Tool, delegate
 					{
-						DebugThingPlaceHelper.DebugSpawn(localDef, UI.MouseCell(), stackCount, direct);
+						DebugSpawn(localDef, UI.MouseCell(), stackCount, direct);
 					}));
 				}
+				return list;
 			}
 			return list;
 		}
 
-		
 		public static List<DebugMenuOption> SpawnOptions(WipeMode wipeMode)
 		{
 			List<DebugMenuOption> list = new List<DebugMenuOption>();
-			foreach (ThingDef localDef2 in from def in DefDatabase<ThingDef>.AllDefs
-			where DebugThingPlaceHelper.IsDebugSpawnable(def, true)
-			select def)
+			foreach (ThingDef item in DefDatabase<ThingDef>.AllDefs.Where((ThingDef def) => IsDebugSpawnable(def, allowPlayerBuildable: true)))
 			{
-				ThingDef localDef = localDef2;
+				ThingDef localDef = item;
 				list.Add(new DebugMenuOption(localDef.LabelCap, DebugMenuOptionMode.Tool, delegate
 				{
 					Thing thing = ThingMaker.MakeThing(localDef, GenStuff.RandomStuffFor(localDef));
-					CompQuality compQuality = thing.TryGetComp<CompQuality>();
-					if (compQuality != null)
-					{
-						compQuality.SetQuality(QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Colony);
-					}
+					thing.TryGetComp<CompQuality>()?.SetQuality(QualityUtility.GenerateQualityRandomEqualChance(), ArtGenerationContext.Colony);
 					GenSpawn.Spawn(thing, UI.MouseCell(), Find.CurrentMap, wipeMode);
 				}));
 			}

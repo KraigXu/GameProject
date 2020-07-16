@@ -1,20 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FilthMaker
 	{
-		
+		private static List<Filth> toBeRemoved = new List<Filth>();
+
 		public static bool CanMakeFilth(IntVec3 c, Map map, ThingDef filthDef, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
-			return FilthMaker.TerrainAcceptsFilth(c.GetTerrain(map), filthDef, additionalFlags);
+			return TerrainAcceptsFilth(c.GetTerrain(map), filthDef, additionalFlags);
 		}
 
-		
 		public static bool TerrainAcceptsFilth(TerrainDef terrainDef, ThingDef filthDef, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
 			if (terrainDef.filthAcceptanceMask == FilthSourceFlags.None)
@@ -25,40 +23,36 @@ namespace RimWorld
 			return (terrainDef.filthAcceptanceMask & filthSourceFlags) == filthSourceFlags;
 		}
 
-		
 		public static bool TryMakeFilth(IntVec3 c, Map map, ThingDef filthDef, int count = 1, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
 			bool flag = false;
 			for (int i = 0; i < count; i++)
 			{
-				flag |= FilthMaker.TryMakeFilth(c, map, filthDef, null, true, additionalFlags);
+				flag |= TryMakeFilth(c, map, filthDef, null, shouldPropagate: true, additionalFlags);
 			}
 			return flag;
 		}
 
-		
 		public static bool TryMakeFilth(IntVec3 c, Map map, ThingDef filthDef, string source, int count = 1, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
 			bool flag = false;
 			for (int i = 0; i < count; i++)
 			{
-				flag |= FilthMaker.TryMakeFilth(c, map, filthDef, Gen.YieldSingle<string>(source), true, additionalFlags);
+				flag |= TryMakeFilth(c, map, filthDef, Gen.YieldSingle(source), shouldPropagate: true, additionalFlags);
 			}
 			return flag;
 		}
 
-		
 		public static bool TryMakeFilth(IntVec3 c, Map map, ThingDef filthDef, IEnumerable<string> sources, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
-			return FilthMaker.TryMakeFilth(c, map, filthDef, sources, true, additionalFlags);
+			return TryMakeFilth(c, map, filthDef, sources, shouldPropagate: true, additionalFlags);
 		}
 
-		
 		private static bool TryMakeFilth(IntVec3 c, Map map, ThingDef filthDef, IEnumerable<string> sources, bool shouldPropagate, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
 			Filth filth = (Filth)(from t in c.GetThingList(map)
-			where t.def == filthDef
-			select t).FirstOrDefault<Thing>();
+				where t.def == filthDef
+				select t).FirstOrDefault();
 			if (!c.Walkable(map) || (filth != null && !filth.CanBeThickened))
 			{
 				if (shouldPropagate)
@@ -67,16 +61,13 @@ namespace RimWorld
 					for (int i = 0; i < 8; i++)
 					{
 						IntVec3 c2 = c + list[i];
-						if (c2.InBounds(map) && FilthMaker.TryMakeFilth(c2, map, filthDef, sources, false, FilthSourceFlags.None))
+						if (c2.InBounds(map) && TryMakeFilth(c2, map, filthDef, sources, shouldPropagate: false))
 						{
 							return true;
 						}
 					}
 				}
-				if (filth != null)
-				{
-					filth.AddSources(sources);
-				}
+				filth?.AddSources(sources);
 				return false;
 			}
 			if (filth != null)
@@ -86,39 +77,35 @@ namespace RimWorld
 			}
 			else
 			{
-				if (!FilthMaker.CanMakeFilth(c, map, filthDef, additionalFlags))
+				if (!CanMakeFilth(c, map, filthDef, additionalFlags))
 				{
 					return false;
 				}
-				Filth filth2 = (Filth)ThingMaker.MakeThing(filthDef, null);
-				filth2.AddSources(sources);
-				GenSpawn.Spawn(filth2, c, map, WipeMode.Vanish);
+				Filth obj = (Filth)ThingMaker.MakeThing(filthDef);
+				obj.AddSources(sources);
+				GenSpawn.Spawn(obj, c, map);
 			}
 			FilthMonitor.Notify_FilthSpawned();
 			return true;
 		}
 
-		
 		public static void RemoveAllFilth(IntVec3 c, Map map)
 		{
-			FilthMaker.toBeRemoved.Clear();
+			toBeRemoved.Clear();
 			List<Thing> thingList = c.GetThingList(map);
 			for (int i = 0; i < thingList.Count; i++)
 			{
 				Filth filth = thingList[i] as Filth;
 				if (filth != null)
 				{
-					FilthMaker.toBeRemoved.Add(filth);
+					toBeRemoved.Add(filth);
 				}
 			}
-			for (int j = 0; j < FilthMaker.toBeRemoved.Count; j++)
+			for (int j = 0; j < toBeRemoved.Count; j++)
 			{
-				FilthMaker.toBeRemoved[j].Destroy(DestroyMode.Vanish);
+				toBeRemoved[j].Destroy();
 			}
-			FilthMaker.toBeRemoved.Clear();
+			toBeRemoved.Clear();
 		}
-
-		
-		private static List<Filth> toBeRemoved = new List<Filth>();
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
@@ -7,37 +6,36 @@ namespace Verse
 	{
 		public float severityAmount = float.NaN;
 
-
 		public float mtbHours = -1f;
 
 		private static int mtbCheckInterval = 1200;
+
 		public override void OnIntervalPassed(Pawn pawn, Hediff cause)
 		{
-			if (pawn.IsNestedHashIntervalTick(60, HediffGiver_AddSeverity.mtbCheckInterval) && Rand.MTBEventOccurs(this.mtbHours, 2500f, (float)HediffGiver_AddSeverity.mtbCheckInterval))
+			if (pawn.IsNestedHashIntervalTick(60, mtbCheckInterval) && Rand.MTBEventOccurs(mtbHours, 2500f, mtbCheckInterval))
 			{
-				if (base.TryApply(pawn, null))
+				if (TryApply(pawn))
 				{
-					base.SendLetter(pawn, cause);
+					SendLetter(pawn, cause);
 				}
-				pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff, false).Severity += this.severityAmount;
+				pawn.health.hediffSet.GetFirstHediffOfDef(hediff).Severity += severityAmount;
 			}
 		}
 
 		public override IEnumerable<string> ConfigErrors()
 		{
-
-			IEnumerator<string> enumerator = null;
-			if (float.IsNaN(this.severityAmount))
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (float.IsNaN(severityAmount))
 			{
 				yield return "severityAmount is not defined";
 			}
-			if (this.mtbHours < 0f)
+			if (mtbHours < 0f)
 			{
 				yield return "mtbHours is not defined";
 			}
-			yield break;
-			yield break;
 		}
-
 	}
 }

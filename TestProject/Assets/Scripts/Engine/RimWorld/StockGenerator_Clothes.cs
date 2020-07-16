@@ -1,45 +1,39 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StockGenerator_Clothes : StockGenerator_MiscItems
 	{
-		
-		public override bool HandlesThingDef(ThingDef td)
-		{
-			return td != ThingDefOf.Apparel_ShieldBelt && (base.HandlesThingDef(td) && td.IsApparel && (this.apparelTag == null || (td.apparel.tags != null && td.apparel.tags.Contains(this.apparelTag)))) && (td.GetStatValueAbstract(StatDefOf.ArmorRating_Blunt, null) < 0.15f || td.GetStatValueAbstract(StatDefOf.ArmorRating_Sharp, null) < 0.15f);
-		}
-
-		
-		protected override float SelectionWeight(ThingDef thingDef)
-		{
-			return StockGenerator_Clothes.SelectionWeightMarketValueCurve.Evaluate(thingDef.BaseMarketValue);
-		}
-
-		
 		private static readonly SimpleCurve SelectionWeightMarketValueCurve = new SimpleCurve
 		{
-			{
-				new CurvePoint(0f, 1f),
-				true
-			},
-			{
-				new CurvePoint(500f, 0.5f),
-				true
-			},
-			{
-				new CurvePoint(1500f, 0.2f),
-				true
-			},
-			{
-				new CurvePoint(5000f, 0.1f),
-				true
-			}
+			new CurvePoint(0f, 1f),
+			new CurvePoint(500f, 0.5f),
+			new CurvePoint(1500f, 0.2f),
+			new CurvePoint(5000f, 0.1f)
 		};
 
-		
 		public string apparelTag;
+
+		public override bool HandlesThingDef(ThingDef td)
+		{
+			if (td == ThingDefOf.Apparel_ShieldBelt)
+			{
+				return false;
+			}
+			if (base.HandlesThingDef(td) && td.IsApparel && (apparelTag == null || (td.apparel.tags != null && td.apparel.tags.Contains(apparelTag))))
+			{
+				if (!(td.GetStatValueAbstract(StatDefOf.ArmorRating_Blunt) < 0.15f))
+				{
+					return td.GetStatValueAbstract(StatDefOf.ArmorRating_Sharp) < 0.15f;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		protected override float SelectionWeight(ThingDef thingDef)
+		{
+			return SelectionWeightMarketValueCurve.Evaluate(thingDef.BaseMarketValue);
+		}
 	}
 }

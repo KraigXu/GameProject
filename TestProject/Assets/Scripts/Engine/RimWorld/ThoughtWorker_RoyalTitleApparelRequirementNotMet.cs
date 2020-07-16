@@ -1,29 +1,26 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_RoyalTitleApparelRequirementNotMet : ThoughtWorker
 	{
-		
 		private static RoyalTitleDef Validate(Pawn p)
 		{
 			if (p.royalty == null || !p.royalty.allowApparelRequirements)
 			{
 				return null;
 			}
-			foreach (RoyalTitle royalTitle in p.royalty.AllTitlesInEffectForReading)
+			foreach (RoyalTitle item in p.royalty.AllTitlesInEffectForReading)
 			{
-				if (royalTitle.def.requiredApparel != null && royalTitle.def.requiredApparel.Count > 0)
+				if (item.def.requiredApparel != null && item.def.requiredApparel.Count > 0)
 				{
-					for (int i = 0; i < royalTitle.def.requiredApparel.Count; i++)
+					for (int i = 0; i < item.def.requiredApparel.Count; i++)
 					{
-						if (!royalTitle.def.requiredApparel[i].IsMet(p))
+						if (!item.def.requiredApparel[i].IsMet(p))
 						{
-							return royalTitle.def;
+							return item.def;
 						}
 					}
 				}
@@ -31,41 +28,32 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		private static IEnumerable<string> GetFirstRequiredApparelPerGroup(Pawn p)
 		{
-			if (p.royalty == null || !p.royalty.allowApparelRequirements)
+			if (p.royalty != null && p.royalty.allowApparelRequirements)
 			{
-				yield break;
-			}
-			foreach (RoyalTitle t in p.royalty.AllTitlesInEffectForReading)
-			{
-				if (t.def.requiredApparel != null && t.def.requiredApparel.Count > 0)
+				foreach (RoyalTitle t in p.royalty.AllTitlesInEffectForReading)
 				{
-					int num;
-					for (int i = 0; i < t.def.requiredApparel.Count; i = num + 1)
+					if (t.def.requiredApparel != null && t.def.requiredApparel.Count > 0)
 					{
-						RoyalTitleDef.ApparelRequirement apparelRequirement = t.def.requiredApparel[i];
-						if (!apparelRequirement.IsMet(p))
+						for (int i = 0; i < t.def.requiredApparel.Count; i++)
 						{
-							yield return apparelRequirement.AllRequiredApparelForPawn(p, false, false).First<ThingDef>().LabelCap;
+							RoyalTitleDef.ApparelRequirement apparelRequirement = t.def.requiredApparel[i];
+							if (!apparelRequirement.IsMet(p))
+							{
+								yield return apparelRequirement.AllRequiredApparelForPawn(p).First().LabelCap;
+							}
 						}
-						num = i;
 					}
 				}
-				
+				yield return "ApparelRequirementAnyPrestigeArmor".Translate();
+				yield return "ApparelRequirementAnyPsycasterApparel".Translate();
 			}
-			List<RoyalTitle>.Enumerator enumerator = default(List<RoyalTitle>.Enumerator);
-			yield return "ApparelRequirementAnyPrestigeArmor".Translate();
-			yield return "ApparelRequirementAnyPsycasterApparel".Translate();
-			yield break;
-			yield break;
 		}
 
-		
 		public override string PostProcessLabel(Pawn p, string label)
 		{
-			RoyalTitleDef royalTitleDef = ThoughtWorker_RoyalTitleApparelRequirementNotMet.Validate(p);
+			RoyalTitleDef royalTitleDef = Validate(p);
 			if (royalTitleDef == null)
 			{
 				return string.Empty;
@@ -73,21 +61,19 @@ namespace RimWorld
 			return label.Formatted(royalTitleDef.GetLabelCapFor(p).Named("TITLE"), p.Named("PAWN"));
 		}
 
-		
 		public override string PostProcessDescription(Pawn p, string description)
 		{
-			RoyalTitleDef royalTitleDef = ThoughtWorker_RoyalTitleApparelRequirementNotMet.Validate(p);
+			RoyalTitleDef royalTitleDef = Validate(p);
 			if (royalTitleDef == null)
 			{
 				return string.Empty;
 			}
-			return description.Formatted(ThoughtWorker_RoyalTitleApparelRequirementNotMet.GetFirstRequiredApparelPerGroup(p).ToLineList("- ", false), royalTitleDef.GetLabelCapFor(p).Named("TITLE"), p.Named("PAWN"));
+			return description.Formatted(GetFirstRequiredApparelPerGroup(p).ToLineList("- "), royalTitleDef.GetLabelCapFor(p).Named("TITLE"), p.Named("PAWN"));
 		}
 
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
-			if (ThoughtWorker_RoyalTitleApparelRequirementNotMet.Validate(p) == null)
+			if (Validate(p) == null)
 			{
 				return ThoughtState.Inactive;
 			}

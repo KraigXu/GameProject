@@ -1,12 +1,11 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_DrugDesireSatisfied : ThoughtWorker
 	{
-		
+		private const int Neutral = 3;
+
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			Need_Chemical_Any drugsDesire = p.needs.drugsDesire;
@@ -21,8 +20,5 @@ namespace RimWorld
 			}
 			return false;
 		}
-
-		
-		private const int Neutral = 3;
 	}
 }

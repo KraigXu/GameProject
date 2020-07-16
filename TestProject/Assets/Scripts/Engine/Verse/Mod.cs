@@ -1,68 +1,51 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class Mod
 	{
-		
-		
-		public ModContentPack Content
-		{
-			get
-			{
-				return this.intContent;
-			}
-		}
+		private ModSettings modSettings;
 
-		
+		private ModContentPack intContent;
+
+		public ModContentPack Content => intContent;
+
 		public Mod(ModContentPack content)
 		{
-			this.intContent = content;
+			intContent = content;
 		}
 
-		
 		public T GetSettings<T>() where T : ModSettings, new()
 		{
-			if (this.modSettings != null && this.modSettings.GetType() != typeof(T))
+			if (modSettings != null && modSettings.GetType() != typeof(T))
 			{
-				Log.Error(string.Format("Mod {0} attempted to read two different settings classes (was {1}, is now {2})", this.Content.Name, this.modSettings.GetType(), typeof(T)), false);
-				return default(T);
+				Log.Error($"Mod {Content.Name} attempted to read two different settings classes (was {modSettings.GetType()}, is now {typeof(T)})");
+				return null;
 			}
-			if (this.modSettings != null)
+			if (modSettings != null)
 			{
-				return (T)((object)this.modSettings);
+				return (T)modSettings;
 			}
-			this.modSettings = LoadedModManager.ReadModSettings<T>(this.intContent.FolderName, base.GetType().Name);
-			this.modSettings.Mod = this;
-			return this.modSettings as T;
+			modSettings = LoadedModManager.ReadModSettings<T>(intContent.FolderName, GetType().Name);
+			modSettings.Mod = this;
+			return modSettings as T;
 		}
 
-		
 		public virtual void WriteSettings()
 		{
-			if (this.modSettings != null)
+			if (modSettings != null)
 			{
-				this.modSettings.Write();
+				modSettings.Write();
 			}
 		}
 
-		
 		public virtual void DoSettingsWindowContents(Rect inRect)
 		{
 		}
 
-		
 		public virtual string SettingsCategory()
 		{
 			return "";
 		}
-
-		
-		private ModSettings modSettings;
-
-		
-		private ModContentPack intContent;
 	}
 }

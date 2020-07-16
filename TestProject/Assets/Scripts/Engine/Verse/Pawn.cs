@@ -1,11 +1,10 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
@@ -1050,7 +1049,7 @@ namespace Verse
 			{
 				bool tryMedievalOrBetter = base.Faction != null && (int)base.Faction.def.techLevel >= 3;
 				Faction faction;
-				if (this.HasExtraHomeFaction(base.Faction) && !this.GetExtraHomeFaction().IsPlayer)
+				if (this.HasExtraHomeFaction() && !this.GetExtraHomeFaction().IsPlayer)
 				{
 					if (base.Faction != this.GetExtraHomeFaction())
 					{
@@ -1605,31 +1604,31 @@ namespace Verse
 			}
 			switch (action)
 			{
-				case TradeAction.PlayerBuys:
-					if (needs.mood != null)
-					{
-						needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.FreedFromSlavery);
-					}
-					SetFaction(Faction.OfPlayer);
-					break;
-				case TradeAction.PlayerSells:
-					if (RaceProps.Humanlike)
-					{
-						TaleRecorder.RecordTale(TaleDefOf.SoldPrisoner, playerNegotiator, this, trader);
-					}
-					if (base.Faction != null)
-					{
-						SetFaction(null);
-					}
-					if (RaceProps.IsFlesh)
-					{
-						relations.Notify_PawnSold(playerNegotiator);
-					}
-					if (RaceProps.Humanlike)
-					{
-						GenGuest.AddPrisonerSoldThoughts(this);
-					}
-					break;
+			case TradeAction.PlayerBuys:
+				if (needs.mood != null)
+				{
+					needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.FreedFromSlavery);
+				}
+				SetFaction(Faction.OfPlayer);
+				break;
+			case TradeAction.PlayerSells:
+				if (RaceProps.Humanlike)
+				{
+					TaleRecorder.RecordTale(TaleDefOf.SoldPrisoner, playerNegotiator, this, trader);
+				}
+				if (base.Faction != null)
+				{
+					SetFaction(null);
+				}
+				if (RaceProps.IsFlesh)
+				{
+					relations.Notify_PawnSold(playerNegotiator);
+				}
+				if (RaceProps.Humanlike)
+				{
+					GenGuest.AddPrisonerSoldThoughts(this);
+				}
+				break;
 			}
 			ClearMind();
 		}
@@ -1956,8 +1955,8 @@ namespace Verse
 			while (true)
 			{
 				BodyPartRecord bodyPartRecord = (from x in health.hediffSet.GetNotMissingParts()
-												 where x.IsInGroup(lifeStage.butcherBodyPart.bodyPartGroup)
-												 select x).FirstOrDefault();
+					where x.IsInGroup(lifeStage.butcherBodyPart.bodyPartGroup)
+					select x).FirstOrDefault();
 				if (bodyPartRecord != null)
 				{
 					health.AddHediff(HediffMaker.MakeHediff(HediffDefOf.MissingBodyPart, this, bodyPartRecord));

@@ -1,109 +1,67 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public struct FloatMenuAcceptanceReport
 	{
-		
-		
-		public bool Accepted
-		{
-			get
-			{
-				return this.acceptedInt;
-			}
-		}
+		private string failMessageInt;
 
-		
-		
-		public string FailMessage
-		{
-			get
-			{
-				return this.failMessageInt;
-			}
-		}
+		private string failReasonInt;
 
-		
-		
-		public string FailReason
-		{
-			get
-			{
-				return this.failReasonInt;
-			}
-		}
+		private bool acceptedInt;
 
-		
-		
+		public bool Accepted => acceptedInt;
+
+		public string FailMessage => failMessageInt;
+
+		public string FailReason => failReasonInt;
+
 		public static FloatMenuAcceptanceReport WasAccepted
 		{
 			get
 			{
-				return new FloatMenuAcceptanceReport
-				{
-					acceptedInt = true
-				};
+				FloatMenuAcceptanceReport result = default(FloatMenuAcceptanceReport);
+				result.acceptedInt = true;
+				return result;
 			}
 		}
 
-		
-		
 		public static FloatMenuAcceptanceReport WasRejected
 		{
 			get
 			{
-				return new FloatMenuAcceptanceReport
-				{
-					acceptedInt = false
-				};
+				FloatMenuAcceptanceReport result = default(FloatMenuAcceptanceReport);
+				result.acceptedInt = false;
+				return result;
 			}
 		}
 
-		
 		public static implicit operator FloatMenuAcceptanceReport(bool value)
 		{
 			if (value)
 			{
-				return FloatMenuAcceptanceReport.WasAccepted;
+				return WasAccepted;
 			}
-			return FloatMenuAcceptanceReport.WasRejected;
+			return WasRejected;
 		}
 
-		
 		public static implicit operator bool(FloatMenuAcceptanceReport rep)
 		{
 			return rep.Accepted;
 		}
 
-		
 		public static FloatMenuAcceptanceReport WithFailReason(string failReason)
 		{
-			return new FloatMenuAcceptanceReport
-			{
-				acceptedInt = false,
-				failReasonInt = failReason
-			};
+			FloatMenuAcceptanceReport result = default(FloatMenuAcceptanceReport);
+			result.acceptedInt = false;
+			result.failReasonInt = failReason;
+			return result;
 		}
 
-		
 		public static FloatMenuAcceptanceReport WithFailMessage(string failMessage)
 		{
-			return new FloatMenuAcceptanceReport
-			{
-				acceptedInt = false,
-				failMessageInt = failMessage
-			};
+			FloatMenuAcceptanceReport result = default(FloatMenuAcceptanceReport);
+			result.acceptedInt = false;
+			result.failMessageInt = failMessage;
+			return result;
 		}
-
-		
-		private string failMessageInt;
-
-		
-		private string failReasonInt;
-
-		
-		private bool acceptedInt;
 	}
 }

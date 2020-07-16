@@ -1,57 +1,45 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class CompHeatPusher : ThingComp
 	{
-		
-		
-		public CompProperties_HeatPusher Props
-		{
-			get
-			{
-				return (CompProperties_HeatPusher)this.props;
-			}
-		}
+		private const int HeatPushInterval = 60;
 
-		
-		
+		public CompProperties_HeatPusher Props => (CompProperties_HeatPusher)props;
+
 		protected virtual bool ShouldPushHeatNow
 		{
 			get
 			{
-				if (!this.parent.SpawnedOrAnyParentSpawned)
+				if (!parent.SpawnedOrAnyParentSpawned)
 				{
 					return false;
 				}
-				CompProperties_HeatPusher props = this.Props;
-				float ambientTemperature = this.parent.AmbientTemperature;
-				return ambientTemperature < props.heatPushMaxTemperature && ambientTemperature > props.heatPushMinTemperature;
+				CompProperties_HeatPusher props = Props;
+				float ambientTemperature = parent.AmbientTemperature;
+				if (ambientTemperature < props.heatPushMaxTemperature)
+				{
+					return ambientTemperature > props.heatPushMinTemperature;
+				}
+				return false;
 			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (this.parent.IsHashIntervalTick(60) && this.ShouldPushHeatNow)
+			if (parent.IsHashIntervalTick(60) && ShouldPushHeatNow)
 			{
-				GenTemperature.PushHeat(this.parent.PositionHeld, this.parent.MapHeld, this.Props.heatPerSecond);
+				GenTemperature.PushHeat(parent.PositionHeld, parent.MapHeld, Props.heatPerSecond);
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
-			if (this.ShouldPushHeatNow)
+			if (ShouldPushHeatNow)
 			{
-				GenTemperature.PushHeat(this.parent.PositionHeld, this.parent.MapHeld, this.Props.heatPerSecond * 4.16666651f);
+				GenTemperature.PushHeat(parent.PositionHeld, parent.MapHeld, Props.heatPerSecond * 4.16666651f);
 			}
 		}
-
-		
-		private const int HeatPushInterval = 60;
 	}
 }

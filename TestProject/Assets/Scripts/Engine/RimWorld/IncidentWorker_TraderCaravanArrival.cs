@@ -1,30 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_TraderCaravanArrival : IncidentWorker_NeutralGroup
 	{
-		
-		
-		protected override PawnGroupKindDef PawnGroupKindDef
-		{
-			get
-			{
-				return PawnGroupKindDefOf.Trader;
-			}
-		}
+		protected override PawnGroupKindDef PawnGroupKindDef => PawnGroupKindDefOf.Trader;
 
-		
 		protected override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
 		{
-			return base.FactionCanBeGroupSource(f, map, desperate) && f.def.caravanTraderKinds.Count != 0 && f.def.caravanTraderKinds.Any((TraderKindDef t) => this.TraderKindCommonality(t, map, f) > 0f);
+			if (!base.FactionCanBeGroupSource(f, map, desperate) || f.def.caravanTraderKinds.Count == 0)
+			{
+				return false;
+			}
+			return f.def.caravanTraderKinds.Any((TraderKindDef t) => TraderKindCommonality(t, map, f) > 0f);
 		}
 
-		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -32,10 +24,13 @@ namespace RimWorld
 				return false;
 			}
 			Map map = (Map)parms.target;
-			return parms.faction == null || !NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, parms.faction);
+			if (parms.faction != null && NeutralGroupIncidentUtility.AnyBlockingHostileLord(map, parms.faction))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected override bool TryResolveParmsGeneral(IncidentParms parms)
 		{
 			if (!base.TryResolveParmsGeneral(parms))
@@ -45,7 +40,7 @@ namespace RimWorld
 			if (parms.traderKind == null)
 			{
 				Map map = (Map)parms.target;
-				if (!parms.faction.def.caravanTraderKinds.TryRandomElementByWeight((TraderKindDef traderDef) => this.TraderKindCommonality(traderDef, map, parms.faction), out parms.traderKind))
+				if (!parms.faction.def.caravanTraderKinds.TryRandomElementByWeight((TraderKindDef traderDef) => TraderKindCommonality(traderDef, map, parms.faction), out parms.traderKind))
 				{
 					return false;
 				}
@@ -53,29 +48,27 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected virtual float TraderKindCommonality(TraderKindDef traderKind, Map map, Faction faction)
 		{
-			if (traderKind.faction == null)
+			if (traderKind.faction != null)
 			{
+				if (faction.def != traderKind.faction)
+				{
+					return 0f;
+				}
+				if (traderKind.permitRequiredForTrading != null && !map.mapPawns.FreeColonists.Any((Pawn p) => p.royalty != null && p.royalty.HasPermit(traderKind.permitRequiredForTrading, faction)))
+				{
+					return 0f;
+				}
 				return traderKind.CalculatedCommonality;
-			}
-			if (faction.def != traderKind.faction)
-			{
-				return 0f;
-			}
-			if (traderKind.permitRequiredForTrading != null && !map.mapPawns.FreeColonists.Any((Pawn p) => p.royalty != null && p.royalty.HasPermit(traderKind.permitRequiredForTrading, faction)))
-			{
-				return 0f;
 			}
 			return traderKind.CalculatedCommonality;
 		}
 
-		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			if (!base.TryResolveParms(parms))
+			if (!TryResolveParms(parms))
 			{
 				return false;
 			}
@@ -83,7 +76,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			List<Pawn> list = base.SpawnPawns(parms);
+			List<Pawn> list = SpawnPawns(parms);
 			if (list.Count == 0)
 			{
 				return false;
@@ -105,25 +98,22 @@ namespace RimWorld
 					break;
 				}
 			}
-			this.SendLetter(parms, list, traderKind);
-			IntVec3 chillSpot;
-			RCellFinder.TryFindRandomSpotJustOutsideColony(list[0], out chillSpot);
-			LordJob_TradeWithColony lordJob = new LordJob_TradeWithColony(parms.faction, chillSpot);
+			SendLetter(parms, list, traderKind);
+			RCellFinder.TryFindRandomSpotJustOutsideColony(list[0], out IntVec3 result);
+			LordJob_TradeWithColony lordJob = new LordJob_TradeWithColony(parms.faction, result);
 			LordMaker.MakeNewLord(parms.faction, lordJob, map, list);
 			return true;
 		}
 
-		
 		protected virtual void SendLetter(IncidentParms parms, List<Pawn> pawns, TraderKindDef traderKind)
 		{
-			TaggedString baseLetterLabel = "LetterLabelTraderCaravanArrival".Translate(parms.faction.Name, traderKind.label).CapitalizeFirst();
-			TaggedString taggedString = "LetterTraderCaravanArrival".Translate(parms.faction.NameColored, traderKind.label).CapitalizeFirst();
-			taggedString += "\n\n" + "LetterCaravanArrivalCommonWarning".Translate();
-			PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(pawns, ref baseLetterLabel, ref taggedString, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), true, true);
-			base.SendStandardLetter(baseLetterLabel, taggedString, LetterDefOf.PositiveEvent, parms, pawns[0], Array.Empty<NamedArgument>());
+			TaggedString letterLabel = "LetterLabelTraderCaravanArrival".Translate(parms.faction.Name, traderKind.label).CapitalizeFirst();
+			TaggedString letterText = "LetterTraderCaravanArrival".Translate(parms.faction.NameColored, traderKind.label).CapitalizeFirst();
+			letterText += "\n\n" + "LetterCaravanArrivalCommonWarning".Translate();
+			PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(pawns, ref letterLabel, ref letterText, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), informEvenIfSeenBefore: true);
+			SendStandardLetter(letterLabel, letterText, LetterDefOf.PositiveEvent, parms, pawns[0]);
 		}
 
-		
 		protected override void ResolveParmsPoints(IncidentParms parms)
 		{
 			parms.points = TraderCaravanUtility.GenerateGuardPoints();

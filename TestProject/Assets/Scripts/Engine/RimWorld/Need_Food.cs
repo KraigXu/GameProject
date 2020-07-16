@@ -1,55 +1,27 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Need_Food : Need
 	{
-		
-		
-		public bool Starving
-		{
-			get
-			{
-				return this.CurCategory == HungerCategory.Starving;
-			}
-		}
+		private int lastNonStarvingTick = -99999;
 
-		
-		
-		public float PercentageThreshUrgentlyHungry
-		{
-			get
-			{
-				return this.pawn.RaceProps.FoodLevelPercentageWantEat * 0.4f;
-			}
-		}
+		public const float BaseFoodFallPerTick = 2.66666666E-05f;
 
-		
-		
-		public float PercentageThreshHungry
-		{
-			get
-			{
-				return this.pawn.RaceProps.FoodLevelPercentageWantEat * 0.8f;
-			}
-		}
+		private const float BaseMalnutritionSeverityPerDay = 0.17f;
 
-		
-		
-		public float NutritionBetweenHungryAndFed
-		{
-			get
-			{
-				return (1f - this.PercentageThreshHungry) * this.MaxLevel;
-			}
-		}
+		private const float BaseMalnutritionSeverityPerInterval = 0.00113333331f;
 
-		
-		
+		public bool Starving => CurCategory == HungerCategory.Starving;
+
+		public float PercentageThreshUrgentlyHungry => pawn.RaceProps.FoodLevelPercentageWantEat * 0.4f;
+
+		public float PercentageThreshHungry => pawn.RaceProps.FoodLevelPercentageWantEat * 0.8f;
+
+		public float NutritionBetweenHungryAndFed => (1f - PercentageThreshHungry) * MaxLevel;
+
 		public HungerCategory CurCategory
 		{
 			get
@@ -58,11 +30,11 @@ namespace RimWorld
 				{
 					return HungerCategory.Starving;
 				}
-				if (base.CurLevelPercentage < this.PercentageThreshUrgentlyHungry)
+				if (base.CurLevelPercentage < PercentageThreshUrgentlyHungry)
 				{
 					return HungerCategory.UrgentlyHungry;
 				}
-				if (base.CurLevelPercentage < this.PercentageThreshHungry)
+				if (base.CurLevelPercentage < PercentageThreshHungry)
 				{
 					return HungerCategory.Hungry;
 				}
@@ -70,122 +42,40 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		public float FoodFallPerTick
-		{
-			get
-			{
-				return this.FoodFallPerTickAssumingCategory(this.CurCategory, false);
-			}
-		}
+		public float FoodFallPerTick => FoodFallPerTickAssumingCategory(CurCategory);
 
-		
-		
-		public int TicksUntilHungryWhenFed
-		{
-			get
-			{
-				return Mathf.CeilToInt(this.NutritionBetweenHungryAndFed / this.FoodFallPerTickAssumingCategory(HungerCategory.Fed, false));
-			}
-		}
+		public int TicksUntilHungryWhenFed => Mathf.CeilToInt(NutritionBetweenHungryAndFed / FoodFallPerTickAssumingCategory(HungerCategory.Fed));
 
-		
-		
-		public int TicksUntilHungryWhenFedIgnoringMalnutrition
-		{
-			get
-			{
-				return Mathf.CeilToInt(this.NutritionBetweenHungryAndFed / this.FoodFallPerTickAssumingCategory(HungerCategory.Fed, true));
-			}
-		}
+		public int TicksUntilHungryWhenFedIgnoringMalnutrition => Mathf.CeilToInt(NutritionBetweenHungryAndFed / FoodFallPerTickAssumingCategory(HungerCategory.Fed, ignoreMalnutrition: true));
 
-		
-		
-		public override int GUIChangeArrow
-		{
-			get
-			{
-				return -1;
-			}
-		}
+		public override int GUIChangeArrow => -1;
 
-		
-		
-		public override float MaxLevel
-		{
-			get
-			{
-				return this.pawn.BodySize * this.pawn.ageTracker.CurLifeStage.foodMaxFactor;
-			}
-		}
+		public override float MaxLevel => pawn.BodySize * pawn.ageTracker.CurLifeStage.foodMaxFactor;
 
-		
-		
-		public float NutritionWanted
-		{
-			get
-			{
-				return this.MaxLevel - this.CurLevel;
-			}
-		}
+		public float NutritionWanted => MaxLevel - CurLevel;
 
-		
-		
-		private float HungerRate
-		{
-			get
-			{
-				return this.pawn.ageTracker.CurLifeStage.hungerRateFactor * this.pawn.RaceProps.baseHungerRate * this.pawn.health.hediffSet.HungerRateFactor * ((this.pawn.story == null || this.pawn.story.traits == null) ? 1f : this.pawn.story.traits.HungerRateFactor) * this.pawn.GetStatValue(StatDefOf.HungerRateMultiplier, true);
-			}
-		}
+		private float HungerRate => pawn.ageTracker.CurLifeStage.hungerRateFactor * pawn.RaceProps.baseHungerRate * pawn.health.hediffSet.HungerRateFactor * ((pawn.story == null || pawn.story.traits == null) ? 1f : pawn.story.traits.HungerRateFactor) * pawn.GetStatValue(StatDefOf.HungerRateMultiplier);
 
-		
-		
-		private float HungerRateIgnoringMalnutrition
-		{
-			get
-			{
-				return this.pawn.ageTracker.CurLifeStage.hungerRateFactor * this.pawn.RaceProps.baseHungerRate * this.pawn.health.hediffSet.GetHungerRateFactor(HediffDefOf.Malnutrition) * ((this.pawn.story == null || this.pawn.story.traits == null) ? 1f : this.pawn.story.traits.HungerRateFactor) * this.pawn.GetStatValue(StatDefOf.HungerRateMultiplier, true);
-			}
-		}
+		private float HungerRateIgnoringMalnutrition => pawn.ageTracker.CurLifeStage.hungerRateFactor * pawn.RaceProps.baseHungerRate * pawn.health.hediffSet.GetHungerRateFactor(HediffDefOf.Malnutrition) * ((pawn.story == null || pawn.story.traits == null) ? 1f : pawn.story.traits.HungerRateFactor) * pawn.GetStatValue(StatDefOf.HungerRateMultiplier);
 
-		
-		
-		public int TicksStarving
-		{
-			get
-			{
-				return Mathf.Max(0, Find.TickManager.TicksGame - this.lastNonStarvingTick);
-			}
-		}
+		public int TicksStarving => Mathf.Max(0, Find.TickManager.TicksGame - lastNonStarvingTick);
 
-		
-		
-		private float MalnutritionSeverityPerInterval
-		{
-			get
-			{
-				return 0.00113333331f * Mathf.Lerp(0.8f, 1.2f, Rand.ValueSeeded(this.pawn.thingIDNumber ^ 2551674));
-			}
-		}
+		private float MalnutritionSeverityPerInterval => 0.00113333331f * Mathf.Lerp(0.8f, 1.2f, Rand.ValueSeeded(pawn.thingIDNumber ^ 0x26EF7A));
 
-		
-		public Need_Food(Pawn pawn) : base(pawn)
+		public Need_Food(Pawn pawn)
+			: base(pawn)
 		{
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.lastNonStarvingTick, "lastNonStarvingTick", -99999, false);
+			Scribe_Values.Look(ref lastNonStarvingTick, "lastNonStarvingTick", -99999);
 		}
 
-		
 		public float FoodFallPerTickAssumingCategory(HungerCategory cat, bool ignoreMalnutrition = false)
 		{
-			float num = ignoreMalnutrition ? this.HungerRateIgnoringMalnutrition : this.HungerRate;
+			float num = ignoreMalnutrition ? HungerRateIgnoringMalnutrition : HungerRate;
 			switch (cat)
 			{
 			case HungerCategory.Fed:
@@ -201,32 +91,32 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void NeedInterval()
 		{
-			if (!this.IsFrozen)
+			if (!IsFrozen)
 			{
-				this.CurLevel -= this.FoodFallPerTick * 150f;
+				CurLevel -= FoodFallPerTick * 150f;
 			}
-			if (!this.Starving)
+			if (!Starving)
 			{
-				this.lastNonStarvingTick = Find.TickManager.TicksGame;
+				lastNonStarvingTick = Find.TickManager.TicksGame;
 			}
-			if (!this.IsFrozen)
+			if (!IsFrozen)
 			{
-				if (this.Starving)
+				if (Starving)
 				{
-					HealthUtility.AdjustSeverity(this.pawn, HediffDefOf.Malnutrition, this.MalnutritionSeverityPerInterval);
-					return;
+					HealthUtility.AdjustSeverity(pawn, HediffDefOf.Malnutrition, MalnutritionSeverityPerInterval);
 				}
-				HealthUtility.AdjustSeverity(this.pawn, HediffDefOf.Malnutrition, -this.MalnutritionSeverityPerInterval);
+				else
+				{
+					HealthUtility.AdjustSeverity(pawn, HediffDefOf.Malnutrition, 0f - MalnutritionSeverityPerInterval);
+				}
 			}
 		}
 
-		
 		public override void SetInitialLevel()
 		{
-			if (this.pawn.RaceProps.Humanlike)
+			if (pawn.RaceProps.Humanlike)
 			{
 				base.CurLevelPercentage = 0.8f;
 			}
@@ -236,50 +126,25 @@ namespace RimWorld
 			}
 			if (Current.ProgramState == ProgramState.Playing)
 			{
-				this.lastNonStarvingTick = Find.TickManager.TicksGame;
+				lastNonStarvingTick = Find.TickManager.TicksGame;
 			}
 		}
 
-		
 		public override string GetTipString()
 		{
-			return string.Concat(new string[]
-			{
-				base.LabelCap,
-				": ",
-				base.CurLevelPercentage.ToStringPercent(),
-				" (",
-				this.CurLevel.ToString("0.##"),
-				" / ",
-				this.MaxLevel.ToString("0.##"),
-				")\n",
-				this.def.description
-			});
+			return base.LabelCap + ": " + base.CurLevelPercentage.ToStringPercent() + " (" + CurLevel.ToString("0.##") + " / " + MaxLevel.ToString("0.##") + ")\n" + def.description;
 		}
 
-		
-		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = 2147483647, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
+		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
 		{
-			if (this.threshPercents == null)
+			if (threshPercents == null)
 			{
-				this.threshPercents = new List<float>();
+				threshPercents = new List<float>();
 			}
-			this.threshPercents.Clear();
-			this.threshPercents.Add(this.PercentageThreshHungry);
-			this.threshPercents.Add(this.PercentageThreshUrgentlyHungry);
+			threshPercents.Clear();
+			threshPercents.Add(PercentageThreshHungry);
+			threshPercents.Add(PercentageThreshUrgentlyHungry);
 			base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
 		}
-
-		
-		private int lastNonStarvingTick = -99999;
-
-		
-		public const float BaseFoodFallPerTick = 2.66666666E-05f;
-
-		
-		private const float BaseMalnutritionSeverityPerDay = 0.17f;
-
-		
-		private const float BaseMalnutritionSeverityPerInterval = 0.00113333331f;
 	}
 }

@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public static class SnowUtility
 	{
-		
 		public static SnowCategory GetSnowCategory(float snowDepth)
 		{
 			if (snowDepth < 0.03f)
@@ -27,7 +23,6 @@ namespace Verse
 			return SnowCategory.Thick;
 		}
 
-		
 		public static string GetDescription(SnowCategory category)
 		{
 			switch (category)
@@ -47,7 +42,6 @@ namespace Verse
 			}
 		}
 
-		
 		public static int MovementTicksAddOn(SnowCategory category)
 		{
 			switch (category)
@@ -67,7 +61,6 @@ namespace Verse
 			}
 		}
 
-		
 		public static void AddSnowRadial(IntVec3 center, Map map, float radius, float depth)
 		{
 			int num = GenRadial.NumCellsInRadius(radius);

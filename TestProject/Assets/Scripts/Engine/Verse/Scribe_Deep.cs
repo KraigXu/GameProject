@@ -1,125 +1,87 @@
-﻿using System;
-using System.Xml;
+using System;
 
 namespace Verse
 {
-	
 	public class Scribe_Deep
 	{
-		
 		public static void Look<T>(ref T target, string label, params object[] ctorArgs)
 		{
-			Scribe_Deep.Look<T>(ref target, false, label, ctorArgs);
+			Look(ref target, saveDestroyedThings: false, label, ctorArgs);
 		}
 
-		
 		public static void Look<T>(ref T target, bool saveDestroyedThings, string label, params object[] ctorArgs)
 		{
-			if (Scribe.mode != LoadSaveMode.Saving)
+			if (Scribe.mode == LoadSaveMode.Saving)
 			{
-				if (Scribe.mode == LoadSaveMode.LoadingVars)
+				Thing thing = target as Thing;
+				if (thing != null && thing.Destroyed)
+				{
+					if (!saveDestroyedThings)
+					{
+						Log.Warning("Deep-saving destroyed thing " + thing + " with saveDestroyedThings==false. label=" + label);
+					}
+					else if (thing.Discarded)
+					{
+						Log.Warning("Deep-saving discarded thing " + thing + ". This mode means that the thing is no longer managed by anything in the code and should not be deep-saved anywhere. (even with saveDestroyedThings==true) , label=" + label);
+					}
+				}
+				IExposable exposable = target as IExposable;
+				if (target != null && exposable == null)
+				{
+					Log.Error("Cannot use LookDeep to save non-IExposable non-null " + label + " of type " + typeof(T));
+					return;
+				}
+				if (target == null)
+				{
+					if (Scribe.EnterNode(label))
+					{
+						try
+						{
+							Scribe.saver.WriteAttribute("IsNull", "True");
+						}
+						finally
+						{
+							Scribe.ExitNode();
+						}
+					}
+				}
+				else if (Scribe.EnterNode(label))
 				{
 					try
 					{
-						target = ScribeExtractor.SaveableFromNode<T>(Scribe.loader.curXmlParent[label], ctorArgs);
-					}
-					catch (Exception ex)
-					{
-						Log.Error(string.Concat(new object[]
+						if (target.GetType() != typeof(T) || typeof(T).IsGenericTypeDefinition)
 						{
-							"Exception while loading ",
-							Scribe.loader.curXmlParent[label].ToStringSafe<XmlElement>(),
-							": ",
-							ex
-						}), false);
-						target = default(T);
+							Scribe.saver.WriteAttribute("Class", GenTypes.GetTypeNameWithoutIgnoredNamespaces(target.GetType()));
+						}
+						exposable.ExposeData();
+					}
+					catch (OutOfMemoryException)
+					{
+						throw;
+					}
+					catch (Exception ex2)
+					{
+						Log.Error("Exception while saving " + exposable.ToStringSafe() + ": " + ex2);
+					}
+					finally
+					{
+						Scribe.ExitNode();
 					}
 				}
-				return;
+				Scribe.saver.loadIDsErrorsChecker.RegisterDeepSaved(target, label);
 			}
-			Thing thing = target as Thing;
-			if (thing != null && thing.Destroyed)
-			{
-				if (!saveDestroyedThings)
-				{
-					Log.Warning(string.Concat(new object[]
-					{
-						"Deep-saving destroyed thing ",
-						thing,
-						" with saveDestroyedThings==false. label=",
-						label
-					}), false);
-				}
-				else if (thing.Discarded)
-				{
-					Log.Warning(string.Concat(new object[]
-					{
-						"Deep-saving discarded thing ",
-						thing,
-						". This mode means that the thing is no longer managed by anything in the code and should not be deep-saved anywhere. (even with saveDestroyedThings==true) , label=",
-						label
-					}), false);
-				}
-			}
-			IExposable exposable = target as IExposable;
-			if (target != null && exposable == null)
-			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Cannot use LookDeep to save non-IExposable non-null ",
-					label,
-					" of type ",
-					typeof(T)
-				}), false);
-				return;
-			}
-			if (target == null)
-			{
-				if (!Scribe.EnterNode(label))
-				{
-					goto IL_1AC;
-				}
-				try
-				{
-					Scribe.saver.WriteAttribute("IsNull", "True");
-					goto IL_1AC;
-				}
-				finally
-				{
-					Scribe.ExitNode();
-				}
-			}
-			if (Scribe.EnterNode(label))
+			else if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
 				try
 				{
-					if (target.GetType() != typeof(T) || typeof(T).IsGenericTypeDefinition)
-					{
-						Scribe.saver.WriteAttribute("Class", GenTypes.GetTypeNameWithoutIgnoredNamespaces(target.GetType()));
-					}
-					exposable.ExposeData();
+					target = ScribeExtractor.SaveableFromNode<T>(Scribe.loader.curXmlParent[label], ctorArgs);
 				}
-				catch (OutOfMemoryException)
+				catch (Exception ex3)
 				{
-					throw;
-				}
-				catch (Exception ex2)
-				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Exception while saving ",
-						exposable.ToStringSafe<IExposable>(),
-						": ",
-						ex2
-					}), false);
-				}
-				finally
-				{
-					Scribe.ExitNode();
+					Log.Error("Exception while loading " + Scribe.loader.curXmlParent[label].ToStringSafe() + ": " + ex3);
+					target = default(T);
 				}
 			}
-			IL_1AC:
-			Scribe.saver.loadIDsErrorsChecker.RegisterDeepSaved(target, label);
 		}
 	}
 }

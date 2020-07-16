@@ -1,13 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_DropUnusedInventory : ThinkNode_JobGiver
 	{
-		
+		private const int RawFoodDropDelay = 150000;
+
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.inventory == null)
@@ -24,34 +23,29 @@ namespace RimWorld
 			}
 			if (Find.TickManager.TicksGame > pawn.mindState.lastInventoryRawFoodUseTick + 150000)
 			{
-				for (int i = pawn.inventory.innerContainer.Count - 1; i >= 0; i--)
+				for (int num = pawn.inventory.innerContainer.Count - 1; num >= 0; num--)
 				{
-					Thing thing = pawn.inventory.innerContainer[i];
-					if (thing.def.IsIngestible && !thing.def.IsDrug && thing.def.ingestible.preferability <= FoodPreferability.RawTasty)
+					Thing thing = pawn.inventory.innerContainer[num];
+					if (thing.def.IsIngestible && !thing.def.IsDrug && (int)thing.def.ingestible.preferability <= 5)
 					{
-						this.Drop(pawn, thing);
+						Drop(pawn, thing);
 					}
 				}
 			}
-			for (int j = pawn.inventory.innerContainer.Count - 1; j >= 0; j--)
+			for (int num2 = pawn.inventory.innerContainer.Count - 1; num2 >= 0; num2--)
 			{
-				Thing thing2 = pawn.inventory.innerContainer[j];
+				Thing thing2 = pawn.inventory.innerContainer[num2];
 				if (thing2.def.IsDrug && pawn.drugs != null && !pawn.drugs.AllowedToTakeScheduledEver(thing2.def) && pawn.drugs.CurrentPolicy[thing2.def].takeToInventory == 0 && !AddictionUtility.IsAddicted(pawn, thing2))
 				{
-					this.Drop(pawn, thing2);
+					Drop(pawn, thing2);
 				}
 			}
 			return null;
 		}
 
-		
 		private void Drop(Pawn pawn, Thing thing)
 		{
-			Thing thing2;
-			pawn.inventory.innerContainer.TryDrop(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out thing2, null, null);
+			pawn.inventory.innerContainer.TryDrop(thing, pawn.Position, pawn.Map, ThingPlaceMode.Near, out Thing _);
 		}
-
-		
-		private const int RawFoodDropDelay = 150000;
 	}
 }

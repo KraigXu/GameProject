@@ -1,85 +1,57 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PawnRecentMemory : IExposable
 	{
-		
-		
-		public int TicksSinceLastLight
-		{
-			get
-			{
-				return Find.TickManager.TicksGame - this.lastLightTick;
-			}
-		}
+		private Pawn pawn;
 
-		
-		
-		public int TicksSinceOutdoors
-		{
-			get
-			{
-				return Find.TickManager.TicksGame - this.lastOutdoorTick;
-			}
-		}
+		private int lastLightTick = 999999;
 
-		
+		private int lastOutdoorTick = 999999;
+
+		public int TicksSinceLastLight => Find.TickManager.TicksGame - lastLightTick;
+
+		public int TicksSinceOutdoors => Find.TickManager.TicksGame - lastOutdoorTick;
+
 		public PawnRecentMemory(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.lastLightTick, "lastLightTick", 999999, false);
-			Scribe_Values.Look<int>(ref this.lastOutdoorTick, "lastOutdoorTick", 999999, false);
+			Scribe_Values.Look(ref lastLightTick, "lastLightTick", 999999);
+			Scribe_Values.Look(ref lastOutdoorTick, "lastOutdoorTick", 999999);
 		}
 
-		
 		public void RecentMemoryInterval()
 		{
-			if (!this.pawn.Spawned)
+			if (pawn.Spawned)
 			{
-				return;
-			}
-			if (this.pawn.Map.glowGrid.PsychGlowAt(this.pawn.Position) != PsychGlow.Dark)
-			{
-				this.lastLightTick = Find.TickManager.TicksGame;
-			}
-			if (this.Outdoors())
-			{
-				this.lastOutdoorTick = Find.TickManager.TicksGame;
+				if (pawn.Map.glowGrid.PsychGlowAt(pawn.Position) != 0)
+				{
+					lastLightTick = Find.TickManager.TicksGame;
+				}
+				if (Outdoors())
+				{
+					lastOutdoorTick = Find.TickManager.TicksGame;
+				}
 			}
 		}
 
-		
 		private bool Outdoors()
 		{
-			Room room = this.pawn.GetRoom(RegionType.Set_Passable);
-			return room != null && room.PsychologicallyOutdoors;
+			return pawn.GetRoom()?.PsychologicallyOutdoors ?? false;
 		}
 
-		
 		public void Notify_Spawned(bool respawningAfterLoad)
 		{
-			this.lastLightTick = Find.TickManager.TicksGame;
-			if (!respawningAfterLoad && this.Outdoors())
+			lastLightTick = Find.TickManager.TicksGame;
+			if (!respawningAfterLoad && Outdoors())
 			{
-				this.lastOutdoorTick = Find.TickManager.TicksGame;
+				lastOutdoorTick = Find.TickManager.TicksGame;
 			}
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private int lastLightTick = 999999;
-
-		
-		private int lastOutdoorTick = 999999;
 	}
 }

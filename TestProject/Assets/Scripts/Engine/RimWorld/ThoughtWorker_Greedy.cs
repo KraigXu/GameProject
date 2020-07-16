@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Greedy : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (!p.IsColonist)
@@ -19,7 +16,7 @@ namespace RimWorld
 				return ThoughtState.ActiveAtStage(0);
 			}
 			int num = RoomStatDefOf.Impressiveness.GetScoreStageIndex(ownedRoom.GetStat(RoomStatDefOf.Impressiveness)) + 1;
-			if (this.def.stages[num] != null)
+			if (def.stages[num] != null)
 			{
 				return ThoughtState.ActiveAtStage(num);
 			}

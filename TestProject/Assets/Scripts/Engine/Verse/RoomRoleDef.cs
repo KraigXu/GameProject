@@ -1,50 +1,43 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class RoomRoleDef : Def
 	{
-		
-		
+		public Type workerClass;
+
+		private List<RoomStatDef> relatedStats;
+
+		[Unsaved(false)]
+		private RoomRoleWorker workerInt;
+
 		public RoomRoleWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (RoomRoleWorker)Activator.CreateInstance(this.workerClass);
+					workerInt = (RoomRoleWorker)Activator.CreateInstance(workerClass);
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
 		public bool IsStatRelated(RoomStatDef def)
 		{
-			if (this.relatedStats == null)
+			if (relatedStats == null)
 			{
 				return false;
 			}
-			for (int i = 0; i < this.relatedStats.Count; i++)
+			for (int i = 0; i < relatedStats.Count; i++)
 			{
-				if (this.relatedStats[i] == def)
+				if (relatedStats[i] == def)
 				{
 					return true;
 				}
 			}
 			return false;
 		}
-
-		
-		public Type workerClass;
-
-		
-		private List<RoomStatDef> relatedStats;
-
-		
-		[Unsaved(false)]
-		private RoomRoleWorker workerInt;
 	}
 }

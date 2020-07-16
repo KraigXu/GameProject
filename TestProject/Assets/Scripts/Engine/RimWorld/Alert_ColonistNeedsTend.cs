@@ -1,60 +1,52 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_ColonistNeedsTend : Alert
 	{
-		
-		public Alert_ColonistNeedsTend()
-		{
-			this.defaultLabel = "ColonistNeedsTreatment".Translate();
-			this.defaultPriority = AlertPriority.High;
-		}
+		private List<Pawn> needingColonistsResult = new List<Pawn>();
 
-		
-		
 		private List<Pawn> NeedingColonists
 		{
 			get
 			{
-				this.needingColonistsResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMaps_FreeColonistsSpawned)
+				needingColonistsResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMaps_FreeColonistsSpawned)
 				{
-					if (pawn.health.HasHediffsNeedingTendByPlayer(true))
+					if (item.health.HasHediffsNeedingTendByPlayer(forAlert: true))
 					{
-						Building_Bed building_Bed = pawn.CurrentBed();
-						if ((building_Bed == null || !building_Bed.Medical) && !Alert_ColonistNeedsRescuing.NeedsRescue(pawn))
+						Building_Bed building_Bed = item.CurrentBed();
+						if ((building_Bed == null || !building_Bed.Medical) && !Alert_ColonistNeedsRescuing.NeedsRescue(item))
 						{
-							this.needingColonistsResult.Add(pawn);
+							needingColonistsResult.Add(item);
 						}
 					}
 				}
-				return this.needingColonistsResult;
+				return needingColonistsResult;
 			}
 		}
 
-		
+		public Alert_ColonistNeedsTend()
+		{
+			defaultLabel = "ColonistNeedsTreatment".Translate();
+			defaultPriority = AlertPriority.High;
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.NeedingColonists)
+			foreach (Pawn needingColonist in NeedingColonists)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + needingColonist.NameShortColored.Resolve());
 			}
 			return "ColonistNeedsTreatmentDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.NeedingColonists);
+			return AlertReport.CulpritsAre(NeedingColonists);
 		}
-
-		
-		private List<Pawn> needingColonistsResult = new List<Pawn>();
 	}
 }

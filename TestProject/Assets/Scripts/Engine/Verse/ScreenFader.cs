@@ -1,99 +1,83 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public static class ScreenFader
 	{
-		
-		
-		private static float CurTime
-		{
-			get
-			{
-				return Time.realtimeSinceStartup;
-			}
-		}
+		private static GUIStyle backgroundStyle;
 
-		
+		private static Texture2D fadeTexture;
+
+		private static Color sourceColor;
+
+		private static Color targetColor;
+
+		private static float sourceTime;
+
+		private static float targetTime;
+
+		private static bool fadeTextureDirty;
+
+		private static float CurTime => Time.realtimeSinceStartup;
+
 		static ScreenFader()
 		{
-			ScreenFader.fadeTexture = new Texture2D(1, 1);
-			ScreenFader.fadeTexture.name = "ScreenFader";
-			ScreenFader.backgroundStyle.normal.background = ScreenFader.fadeTexture;
-			ScreenFader.fadeTextureDirty = true;
+			backgroundStyle = new GUIStyle();
+			sourceColor = new Color(0f, 0f, 0f, 0f);
+			targetColor = new Color(0f, 0f, 0f, 0f);
+			sourceTime = 0f;
+			targetTime = 0f;
+			fadeTextureDirty = true;
+			fadeTexture = new Texture2D(1, 1);
+			fadeTexture.name = "ScreenFader";
+			backgroundStyle.normal.background = fadeTexture;
+			fadeTextureDirty = true;
 		}
 
-		
 		public static void OverlayOnGUI(Vector2 windowSize)
 		{
-			Color color = ScreenFader.CurrentInstantColor();
+			Color color = CurrentInstantColor();
 			if (color.a > 0f)
 			{
-				if (ScreenFader.fadeTextureDirty)
+				if (fadeTextureDirty)
 				{
-					ScreenFader.fadeTexture.SetPixel(0, 0, color);
-					ScreenFader.fadeTexture.Apply();
+					fadeTexture.SetPixel(0, 0, color);
+					fadeTexture.Apply();
 				}
-				GUI.Label(new Rect(-10f, -10f, windowSize.x + 10f, windowSize.y + 10f), ScreenFader.fadeTexture, ScreenFader.backgroundStyle);
+				GUI.Label(new Rect(-10f, -10f, windowSize.x + 10f, windowSize.y + 10f), fadeTexture, backgroundStyle);
 			}
 		}
 
-		
 		private static Color CurrentInstantColor()
 		{
-			if (ScreenFader.CurTime > ScreenFader.targetTime || ScreenFader.targetTime == ScreenFader.sourceTime)
+			if (CurTime > targetTime || targetTime == sourceTime)
 			{
-				return ScreenFader.targetColor;
+				return targetColor;
 			}
-			return Color.Lerp(ScreenFader.sourceColor, ScreenFader.targetColor, (ScreenFader.CurTime - ScreenFader.sourceTime) / (ScreenFader.targetTime - ScreenFader.sourceTime));
+			return Color.Lerp(sourceColor, targetColor, (CurTime - sourceTime) / (targetTime - sourceTime));
 		}
 
-		
 		public static void SetColor(Color newColor)
 		{
-			ScreenFader.sourceColor = newColor;
-			ScreenFader.targetColor = newColor;
-			ScreenFader.targetTime = 0f;
-			ScreenFader.sourceTime = 0f;
-			ScreenFader.fadeTextureDirty = true;
+			sourceColor = newColor;
+			targetColor = newColor;
+			targetTime = 0f;
+			sourceTime = 0f;
+			fadeTextureDirty = true;
 		}
 
-		
 		public static void StartFade(Color finalColor, float duration)
 		{
 			if (duration <= 0f)
 			{
-				ScreenFader.SetColor(finalColor);
+				SetColor(finalColor);
 				return;
 			}
-			ScreenFader.sourceColor = ScreenFader.CurrentInstantColor();
-			ScreenFader.targetColor = finalColor;
-			ScreenFader.sourceTime = ScreenFader.CurTime;
-			ScreenFader.targetTime = ScreenFader.CurTime + duration;
+			sourceColor = CurrentInstantColor();
+			targetColor = finalColor;
+			sourceTime = CurTime;
+			targetTime = CurTime + duration;
 		}
-
-		
-		private static GUIStyle backgroundStyle = new GUIStyle();
-
-		
-		private static Texture2D fadeTexture;
-
-		
-		private static Color sourceColor = new Color(0f, 0f, 0f, 0f);
-
-		
-		private static Color targetColor = new Color(0f, 0f, 0f, 0f);
-
-		
-		private static float sourceTime = 0f;
-
-		
-		private static float targetTime = 0f;
-
-		
-		private static bool fadeTextureDirty = true;
 	}
 }

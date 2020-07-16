@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Verse
 {
-	
 	public class DebugLogsUtility
 	{
-		
 		public static string ThingListToUniqueCountString(IEnumerable<Thing> things)
 		{
 			if (things == null)
@@ -22,18 +19,13 @@ namespace Verse
 				{
 					dictionary.Add(thing.def, 0);
 				}
-				Dictionary<ThingDef, int> dictionary2 = dictionary;
-				ThingDef def = thing.def;
-				int num = dictionary2[def];
-				dictionary2[def] = num + 1;
+				dictionary[thing.def]++;
 			}
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("Registered things in dynamic draw list:");
-			foreach (KeyValuePair<ThingDef, int> keyValuePair in from k in dictionary
-			orderby k.Value descending
-			select k)
+			foreach (KeyValuePair<ThingDef, int> item in dictionary.OrderByDescending((KeyValuePair<ThingDef, int> k) => k.Value))
 			{
-				stringBuilder.AppendLine(keyValuePair.Key + " - " + keyValuePair.Value);
+				stringBuilder.AppendLine(item.Key + " - " + item.Value);
 			}
 			return stringBuilder.ToString();
 		}

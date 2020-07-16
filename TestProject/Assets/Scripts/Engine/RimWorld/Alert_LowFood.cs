@@ -1,24 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_LowFood : Alert
 	{
-		
+		private const float NutritionThresholdPerColonist = 4f;
+
 		public Alert_LowFood()
 		{
-			this.defaultLabel = "LowFood".Translate();
-			this.defaultPriority = AlertPriority.High;
+			defaultLabel = "LowFood".Translate();
+			defaultPriority = AlertPriority.High;
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
-			Map map = this.MapWithLowFood();
+			Map map = MapWithLowFood();
 			if (map == null)
 			{
 				return "";
@@ -29,17 +27,15 @@ namespace RimWorld
 			return "LowFoodDesc".Translate(totalHumanEdibleNutrition.ToString("F0"), num.ToStringCached(), num2.ToStringCached());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (Find.TickManager.TicksGame < 150000)
 			{
 				return false;
 			}
-			return this.MapWithLowFood() != null;
+			return MapWithLowFood() != null;
 		}
 
-		
 		private Map MapWithLowFood()
 		{
 			List<Map> maps = Find.Maps;
@@ -57,8 +53,5 @@ namespace RimWorld
 			}
 			return null;
 		}
-
-		
-		private const float NutritionThresholdPerColonist = 4f;
 	}
 }

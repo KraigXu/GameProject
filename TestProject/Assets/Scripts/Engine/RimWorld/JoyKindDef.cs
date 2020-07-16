@@ -1,50 +1,43 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class JoyKindDef : Def
 	{
-		
+		public List<RoyalTitleDef> titleRequiredAny;
+
+		public bool needsThing = true;
+
 		public bool PawnCanDo(Pawn pawn)
 		{
 			if (pawn.royalty != null)
 			{
-				foreach (RoyalTitle royalTitle in pawn.royalty.AllTitlesInEffectForReading)
+				foreach (RoyalTitle item in pawn.royalty.AllTitlesInEffectForReading)
 				{
-					if (royalTitle.conceited && royalTitle.def.JoyKindDisabled(this))
+					if (item.conceited && item.def.JoyKindDisabled(this))
 					{
 						return false;
 					}
 				}
-				if (this.titleRequiredAny == null)
+				if (titleRequiredAny != null)
 				{
-					return true;
-				}
-				bool flag = false;
-				foreach (RoyalTitle royalTitle2 in pawn.royalty.AllTitlesInEffectForReading)
-				{
-					if (this.titleRequiredAny.Contains(royalTitle2.def))
+					bool flag = false;
+					foreach (RoyalTitle item2 in pawn.royalty.AllTitlesInEffectForReading)
 					{
-						flag = true;
-						break;
+						if (titleRequiredAny.Contains(item2.def))
+						{
+							flag = true;
+							break;
+						}
+					}
+					if (!flag)
+					{
+						return false;
 					}
 				}
-				if (!flag)
-				{
-					return false;
-				}
-				return true;
 			}
 			return true;
 		}
-
-		
-		public List<RoyalTitleDef> titleRequiredAny;
-
-		
-		public bool needsThing = true;
 	}
 }

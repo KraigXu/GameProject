@@ -1,22 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class DebugActionsUtility
 	{
-		
 		public static void DustPuffFrom(Thing t)
 		{
-			Pawn pawn = t as Pawn;
-			if (pawn != null)
-			{
-				pawn.Drawer.Notify_DebugAffected();
-			}
+			(t as Pawn)?.Drawer.Notify_DebugAffected();
 		}
 
-		
 		public static IEnumerable<float> PointsOptions(bool extended)
 		{
 			if (!extended)
@@ -39,21 +31,21 @@ namespace Verse
 			}
 			else
 			{
-				for (int i = 20; i < 100; i += 10)
+				for (int l = 20; l < 100; l += 10)
 				{
-					yield return (float)i;
+					yield return l;
 				}
-				for (int i = 100; i < 500; i += 25)
+				for (int l = 100; l < 500; l += 25)
 				{
-					yield return (float)i;
+					yield return l;
 				}
-				for (int i = 500; i < 1500; i += 50)
+				for (int l = 500; l < 1500; l += 50)
 				{
-					yield return (float)i;
+					yield return l;
 				}
-				for (int i = 1500; i <= 5000; i += 100)
+				for (int l = 1500; l <= 5000; l += 100)
 				{
-					yield return (float)i;
+					yield return l;
 				}
 			}
 			yield return 6000f;
@@ -61,7 +53,6 @@ namespace Verse
 			yield return 8000f;
 			yield return 9000f;
 			yield return 10000f;
-			yield break;
 		}
 	}
 }

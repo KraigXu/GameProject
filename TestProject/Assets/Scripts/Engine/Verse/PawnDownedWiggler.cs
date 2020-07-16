@@ -1,13 +1,29 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class PawnDownedWiggler
 	{
-		
-		
+		private Pawn pawn;
+
+		public float downedAngle = RandomDownedAngle;
+
+		public int ticksToIncapIcon;
+
+		private bool usingCustomRotation;
+
+		private const float DownedAngleWidth = 45f;
+
+		private const float DamageTakenDownedAngleShift = 10f;
+
+		private const int IncapWigglePeriod = 300;
+
+		private const int IncapWiggleLength = 90;
+
+		private const float IncapWiggleSpeed = 0.35f;
+
+		private const int TicksBetweenIncapIcons = 200;
+
 		private static float RandomDownedAngle
 		{
 			get
@@ -21,115 +37,83 @@ namespace Verse
 			}
 		}
 
-		
 		public PawnDownedWiggler(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void WigglerTick()
 		{
-			if (this.pawn.Downed && this.pawn.Spawned && !this.pawn.InBed())
+			if (!pawn.Downed || !pawn.Spawned || pawn.InBed())
 			{
-				this.ticksToIncapIcon--;
-				if (this.ticksToIncapIcon <= 0)
+				return;
+			}
+			ticksToIncapIcon--;
+			if (ticksToIncapIcon <= 0)
+			{
+				MoteMaker.ThrowMetaIcon(pawn.Position, pawn.Map, ThingDefOf.Mote_IncapIcon);
+				ticksToIncapIcon = 200;
+			}
+			if (pawn.Awake())
+			{
+				int num = Find.TickManager.TicksGame % 300 * 2;
+				if (num < 90)
 				{
-					MoteMaker.ThrowMetaIcon(this.pawn.Position, this.pawn.Map, ThingDefOf.Mote_IncapIcon);
-					this.ticksToIncapIcon = 200;
+					downedAngle += 0.35f;
 				}
-				if (this.pawn.Awake())
+				else if (num < 390 && num >= 300)
 				{
-					int num = Find.TickManager.TicksGame % 300 * 2;
-					if (num < 90)
-					{
-						this.downedAngle += 0.35f;
-						return;
-					}
-					if (num < 390 && num >= 300)
-					{
-						this.downedAngle -= 0.35f;
-					}
+					downedAngle -= 0.35f;
 				}
 			}
 		}
 
-		
 		public void SetToCustomRotation(float rot)
 		{
-			this.downedAngle = rot;
-			this.usingCustomRotation = true;
+			downedAngle = rot;
+			usingCustomRotation = true;
 		}
 
-		
 		public void Notify_DamageApplied(DamageInfo dam)
 		{
-			if ((this.pawn.Downed || this.pawn.Dead) && dam.Def.hasForcefulImpact)
+			if ((!pawn.Downed && !pawn.Dead) || !dam.Def.hasForcefulImpact)
 			{
-				this.downedAngle += 10f * Rand.Range(-1f, 1f);
-				if (!this.usingCustomRotation)
+				return;
+			}
+			downedAngle += 10f * Rand.Range(-1f, 1f);
+			if (!usingCustomRotation)
+			{
+				if (downedAngle > 315f)
 				{
-					if (this.downedAngle > 315f)
-					{
-						this.downedAngle = 315f;
-					}
-					if (this.downedAngle < 45f)
-					{
-						this.downedAngle = 45f;
-					}
-					if (this.downedAngle > 135f && this.downedAngle < 225f)
-					{
-						if (this.downedAngle > 180f)
-						{
-							this.downedAngle = 225f;
-							return;
-						}
-						this.downedAngle = 135f;
-						return;
-					}
+					downedAngle = 315f;
 				}
-				else
+				if (downedAngle < 45f)
 				{
-					if (this.downedAngle >= 360f)
+					downedAngle = 45f;
+				}
+				if (downedAngle > 135f && downedAngle < 225f)
+				{
+					if (downedAngle > 180f)
 					{
-						this.downedAngle -= 360f;
+						downedAngle = 225f;
 					}
-					if (this.downedAngle < 0f)
+					else
 					{
-						this.downedAngle += 360f;
+						downedAngle = 135f;
 					}
 				}
 			}
+			else
+			{
+				if (downedAngle >= 360f)
+				{
+					downedAngle -= 360f;
+				}
+				if (downedAngle < 0f)
+				{
+					downedAngle += 360f;
+				}
+			}
 		}
-
-		
-		private Pawn pawn;
-
-		
-		public float downedAngle = PawnDownedWiggler.RandomDownedAngle;
-
-		
-		public int ticksToIncapIcon;
-
-		
-		private bool usingCustomRotation;
-
-		
-		private const float DownedAngleWidth = 45f;
-
-		
-		private const float DamageTakenDownedAngleShift = 10f;
-
-		
-		private const int IncapWigglePeriod = 300;
-
-		
-		private const int IncapWiggleLength = 90;
-
-		
-		private const float IncapWiggleSpeed = 0.35f;
-
-		
-		private const int TicksBetweenIncapIcons = 200;
 	}
 }

@@ -1,89 +1,99 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PlayerItemAccessibilityUtility
 	{
-		
+		private static List<Thing> cachedAccessibleThings = new List<Thing>();
+
+		private static List<ThingDefCount> cachedPossiblyAccessibleThings = new List<ThingDefCount>();
+
+		private static HashSet<ThingDef> cachedMakeableItemDefs = new HashSet<ThingDef>();
+
+		private static int cachedAccessibleThingsForTile = -1;
+
+		private static int cachedAccessibleThingsForFrame = -1;
+
+		private static List<Thing> tmpThings = new List<Thing>();
+
+		private static HashSet<ThingDef> tmpWorkTables = new HashSet<ThingDef>();
+
+		private const float MaxDistanceInTilesToConsiderAccessible = 5f;
+
 		public static bool Accessible(ThingDef thing, int count, Map map)
 		{
-			PlayerItemAccessibilityUtility.CacheAccessibleThings(map.Tile);
+			CacheAccessibleThings(map.Tile);
 			int num = 0;
-			for (int i = 0; i < PlayerItemAccessibilityUtility.cachedAccessibleThings.Count; i++)
+			for (int i = 0; i < cachedAccessibleThings.Count; i++)
 			{
-				if (PlayerItemAccessibilityUtility.cachedAccessibleThings[i].def == thing)
+				if (cachedAccessibleThings[i].def == thing)
 				{
-					num += PlayerItemAccessibilityUtility.cachedAccessibleThings[i].stackCount;
+					num += cachedAccessibleThings[i].stackCount;
 				}
 			}
 			return num >= count;
 		}
 
-		
 		public static bool PossiblyAccessible(ThingDef thing, int count, Map map)
 		{
-			if (PlayerItemAccessibilityUtility.Accessible(thing, count, map))
+			if (Accessible(thing, count, map))
 			{
 				return true;
 			}
-			PlayerItemAccessibilityUtility.CacheAccessibleThings(map.Tile);
+			CacheAccessibleThings(map.Tile);
 			int num = 0;
-			for (int i = 0; i < PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Count; i++)
+			for (int i = 0; i < cachedPossiblyAccessibleThings.Count; i++)
 			{
-				if (PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings[i].ThingDef == thing)
+				if (cachedPossiblyAccessibleThings[i].ThingDef == thing)
 				{
-					num += PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings[i].Count;
+					num += cachedPossiblyAccessibleThings[i].Count;
 				}
 			}
 			return num >= count;
 		}
 
-		
 		public static bool PlayerCanMake(ThingDef thing, Map map)
 		{
-			PlayerItemAccessibilityUtility.CacheAccessibleThings(map.Tile);
-			return PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Contains(thing);
+			CacheAccessibleThings(map.Tile);
+			return cachedMakeableItemDefs.Contains(thing);
 		}
 
-		
 		private static void CacheAccessibleThings(int nearTile)
 		{
-			if (nearTile == PlayerItemAccessibilityUtility.cachedAccessibleThingsForTile && RealTime.frameCount == PlayerItemAccessibilityUtility.cachedAccessibleThingsForFrame)
+			if (nearTile == cachedAccessibleThingsForTile && RealTime.frameCount == cachedAccessibleThingsForFrame)
 			{
 				return;
 			}
-			PlayerItemAccessibilityUtility.cachedAccessibleThings.Clear();
-			PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Clear();
-			PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Clear();
+			cachedAccessibleThings.Clear();
+			cachedPossiblyAccessibleThings.Clear();
+			cachedMakeableItemDefs.Clear();
 			WorldGrid worldGrid = Find.WorldGrid;
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				if (worldGrid.ApproxDistanceInTiles(nearTile, maps[i].Tile) <= 5f)
+				if (!(worldGrid.ApproxDistanceInTiles(nearTile, maps[i].Tile) > 5f))
 				{
-					ThingOwnerUtility.GetAllThingsRecursively(maps[i], PlayerItemAccessibilityUtility.tmpThings, false, null);
-					PlayerItemAccessibilityUtility.cachedAccessibleThings.AddRange(PlayerItemAccessibilityUtility.tmpThings);
+					ThingOwnerUtility.GetAllThingsRecursively(maps[i], tmpThings, allowUnreal: false);
+					cachedAccessibleThings.AddRange(tmpThings);
 				}
 			}
 			List<Caravan> caravans = Find.WorldObjects.Caravans;
 			for (int j = 0; j < caravans.Count; j++)
 			{
-				if (caravans[j].IsPlayerControlled && worldGrid.ApproxDistanceInTiles(nearTile, caravans[j].Tile) <= 5f)
+				if (caravans[j].IsPlayerControlled && !(worldGrid.ApproxDistanceInTiles(nearTile, caravans[j].Tile) > 5f))
 				{
-					ThingOwnerUtility.GetAllThingsRecursively(caravans[j], PlayerItemAccessibilityUtility.tmpThings, false, null);
-					PlayerItemAccessibilityUtility.cachedAccessibleThings.AddRange(PlayerItemAccessibilityUtility.tmpThings);
+					ThingOwnerUtility.GetAllThingsRecursively(caravans[j], tmpThings, allowUnreal: false);
+					cachedAccessibleThings.AddRange(tmpThings);
 				}
 			}
-			for (int k = 0; k < PlayerItemAccessibilityUtility.cachedAccessibleThings.Count; k++)
+			for (int k = 0; k < cachedAccessibleThings.Count; k++)
 			{
-				Thing thing = PlayerItemAccessibilityUtility.cachedAccessibleThings[k];
-				PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(thing.def, thing.stackCount));
+				Thing thing = cachedAccessibleThings[k];
+				cachedPossiblyAccessibleThings.Add(new ThingDefCount(thing.def, thing.stackCount));
 				if (GenLeaving.CanBuildingLeaveResources(thing, DestroyMode.Deconstruct))
 				{
 					List<ThingDefCountClass> list = thing.CostListAdjusted();
@@ -92,8 +102,8 @@ namespace RimWorld
 						int num = Mathf.RoundToInt((float)list[l].count * thing.def.resourcesFractionWhenDeconstructed);
 						if (num > 0)
 						{
-							PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(list[l].thingDef, num));
-							PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(list[l].thingDef);
+							cachedPossiblyAccessibleThings.Add(new ThingDefCount(list[l].thingDef, num));
+							cachedMakeableItemDefs.Add(list[l].thingDef);
 						}
 					}
 				}
@@ -103,16 +113,16 @@ namespace RimWorld
 					int num2 = Mathf.RoundToInt(plant.def.plant.harvestYield * Find.Storyteller.difficulty.cropYieldFactor);
 					if (num2 > 0)
 					{
-						PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(plant.def.plant.harvestedThingDef, num2));
-						PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(plant.def.plant.harvestedThingDef);
+						cachedPossiblyAccessibleThings.Add(new ThingDefCount(plant.def.plant.harvestedThingDef, num2));
+						cachedMakeableItemDefs.Add(plant.def.plant.harvestedThingDef);
 					}
 				}
-				if (!thing.def.butcherProducts.NullOrEmpty<ThingDefCountClass>())
+				if (!thing.def.butcherProducts.NullOrEmpty())
 				{
 					for (int m = 0; m < thing.def.butcherProducts.Count; m++)
 					{
-						PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(thing.def.butcherProducts[m]);
-						PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(thing.def.butcherProducts[m].thingDef);
+						cachedPossiblyAccessibleThings.Add(thing.def.butcherProducts[m]);
+						cachedMakeableItemDefs.Add(thing.def.butcherProducts[m].thingDef);
 					}
 				}
 				Pawn pawn = thing as Pawn;
@@ -120,20 +130,20 @@ namespace RimWorld
 				{
 					if (pawn.RaceProps.meatDef != null)
 					{
-						int num3 = Mathf.RoundToInt(pawn.GetStatValue(StatDefOf.MeatAmount, true));
+						int num3 = Mathf.RoundToInt(pawn.GetStatValue(StatDefOf.MeatAmount));
 						if (num3 > 0)
 						{
-							PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(pawn.RaceProps.meatDef, num3));
-							PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(pawn.RaceProps.meatDef);
+							cachedPossiblyAccessibleThings.Add(new ThingDefCount(pawn.RaceProps.meatDef, num3));
+							cachedMakeableItemDefs.Add(pawn.RaceProps.meatDef);
 						}
 					}
 					if (pawn.RaceProps.leatherDef != null)
 					{
-						int num4 = GenMath.RoundRandom(pawn.GetStatValue(StatDefOf.LeatherAmount, true));
+						int num4 = GenMath.RoundRandom(pawn.GetStatValue(StatDefOf.LeatherAmount));
 						if (num4 > 0)
 						{
-							PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(pawn.RaceProps.leatherDef, num4));
-							PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(pawn.RaceProps.leatherDef);
+							cachedPossiblyAccessibleThings.Add(new ThingDefCount(pawn.RaceProps.leatherDef, num4));
+							cachedMakeableItemDefs.Add(pawn.RaceProps.leatherDef);
 						}
 					}
 					if (!pawn.RaceProps.Humanlike)
@@ -141,8 +151,8 @@ namespace RimWorld
 						PawnKindLifeStage curKindLifeStage = pawn.ageTracker.CurKindLifeStage;
 						if (curKindLifeStage.butcherBodyPart != null)
 						{
-							PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(curKindLifeStage.butcherBodyPart.thing, 1));
-							PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(curKindLifeStage.butcherBodyPart.thing);
+							cachedPossiblyAccessibleThings.Add(new ThingDefCount(curKindLifeStage.butcherBodyPart.thing, 1));
+							cachedMakeableItemDefs.Add(curKindLifeStage.butcherBodyPart.thing);
 						}
 					}
 				}
@@ -156,25 +166,25 @@ namespace RimWorld
 							int num5 = Mathf.RoundToInt((float)list2[n].count * 0.25f);
 							if (num5 > 0)
 							{
-								PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(list2[n].thingDef, num5));
-								PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(list2[n].thingDef);
+								cachedPossiblyAccessibleThings.Add(new ThingDefCount(list2[n].thingDef, num5));
+								cachedMakeableItemDefs.Add(list2[n].thingDef);
 							}
 						}
 					}
 				}
-				if (thing.def.smeltable && !thing.def.smeltProducts.NullOrEmpty<ThingDefCountClass>())
+				if (thing.def.smeltable && !thing.def.smeltProducts.NullOrEmpty())
 				{
 					for (int num6 = 0; num6 < thing.def.smeltProducts.Count; num6++)
 					{
-						PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(thing.def.smeltProducts[num6]);
-						PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(thing.def.smeltProducts[num6].thingDef);
+						cachedPossiblyAccessibleThings.Add(thing.def.smeltProducts[num6]);
+						cachedMakeableItemDefs.Add(thing.def.smeltProducts[num6].thingDef);
 					}
 				}
 			}
 			int num7 = 0;
-			for (int num8 = 0; num8 < PlayerItemAccessibilityUtility.cachedAccessibleThings.Count; num8++)
+			for (int num8 = 0; num8 < cachedAccessibleThings.Count; num8++)
 			{
-				Pawn pawn2 = PlayerItemAccessibilityUtility.cachedAccessibleThings[num8] as Pawn;
+				Pawn pawn2 = cachedAccessibleThings[num8] as Pawn;
 				if (pawn2 != null && pawn2.IsFreeColonist && !pawn2.Dead && !pawn2.Downed && pawn2.workSettings.WorkIsActive(WorkTypeDefOf.Crafting))
 				{
 					num7++;
@@ -182,41 +192,43 @@ namespace RimWorld
 			}
 			if (num7 > 0)
 			{
-				PlayerItemAccessibilityUtility.tmpWorkTables.Clear();
-				for (int num9 = 0; num9 < PlayerItemAccessibilityUtility.cachedAccessibleThings.Count; num9++)
+				tmpWorkTables.Clear();
+				for (int num9 = 0; num9 < cachedAccessibleThings.Count; num9++)
 				{
-					Building_WorkTable building_WorkTable = PlayerItemAccessibilityUtility.cachedAccessibleThings[num9] as Building_WorkTable;
-					if (building_WorkTable != null && building_WorkTable.Spawned && PlayerItemAccessibilityUtility.tmpWorkTables.Add(building_WorkTable.def))
+					Building_WorkTable building_WorkTable = cachedAccessibleThings[num9] as Building_WorkTable;
+					if (building_WorkTable == null || !building_WorkTable.Spawned || !tmpWorkTables.Add(building_WorkTable.def))
 					{
-						List<RecipeDef> allRecipes = building_WorkTable.def.AllRecipes;
-						for (int num10 = 0; num10 < allRecipes.Count; num10++)
+						continue;
+					}
+					List<RecipeDef> allRecipes = building_WorkTable.def.AllRecipes;
+					for (int num10 = 0; num10 < allRecipes.Count; num10++)
+					{
+						if (!allRecipes[num10].AvailableNow || !allRecipes[num10].AvailableOnNow(building_WorkTable) || !allRecipes[num10].products.Any() || allRecipes[num10].PotentiallyMissingIngredients(null, building_WorkTable.Map).Any())
 						{
-							if (allRecipes[num10].AvailableNow && allRecipes[num10].AvailableOnNow(building_WorkTable) && allRecipes[num10].products.Any<ThingDefCountClass>() && !allRecipes[num10].PotentiallyMissingIngredients(null, building_WorkTable.Map).Any<ThingDef>())
+							continue;
+						}
+						ThingDef stuffDef = allRecipes[num10].products[0].thingDef.MadeFromStuff ? GenStuff.DefaultStuffFor(allRecipes[num10].products[0].thingDef) : null;
+						float num11 = allRecipes[num10].WorkAmountTotal(stuffDef);
+						if (num11 <= 0f)
+						{
+							continue;
+						}
+						int num12 = Mathf.FloorToInt((float)(num7 * 60000 * 5) * 0.09f / num11);
+						if (num12 > 0)
+						{
+							for (int num13 = 0; num13 < allRecipes[num10].products.Count; num13++)
 							{
-								ThingDef stuffDef = allRecipes[num10].products[0].thingDef.MadeFromStuff ? GenStuff.DefaultStuffFor(allRecipes[num10].products[0].thingDef) : null;
-								float num11 = allRecipes[num10].WorkAmountTotal(stuffDef);
-								if (num11 > 0f)
-								{
-									int num12 = Mathf.FloorToInt((float)(num7 * 60000 * 5) * 0.09f / num11);
-									if (num12 > 0)
-									{
-										for (int num13 = 0; num13 < allRecipes[num10].products.Count; num13++)
-										{
-											PlayerItemAccessibilityUtility.cachedPossiblyAccessibleThings.Add(new ThingDefCount(allRecipes[num10].products[num13].thingDef, allRecipes[num10].products[num13].count * num12));
-											PlayerItemAccessibilityUtility.cachedMakeableItemDefs.Add(allRecipes[num10].products[num13].thingDef);
-										}
-									}
-								}
+								cachedPossiblyAccessibleThings.Add(new ThingDefCount(allRecipes[num10].products[num13].thingDef, allRecipes[num10].products[num13].count * num12));
+								cachedMakeableItemDefs.Add(allRecipes[num10].products[num13].thingDef);
 							}
 						}
 					}
 				}
 			}
-			PlayerItemAccessibilityUtility.cachedAccessibleThingsForTile = nearTile;
-			PlayerItemAccessibilityUtility.cachedAccessibleThingsForFrame = RealTime.frameCount;
+			cachedAccessibleThingsForTile = nearTile;
+			cachedAccessibleThingsForFrame = RealTime.frameCount;
 		}
 
-		
 		public static bool PlayerOrQuestRewardHas(ThingFilter thingFilter)
 		{
 			ThingRequest bestThingRequest = thingFilter.BestThingRequest;
@@ -235,15 +247,16 @@ namespace RimWorld
 			List<Caravan> caravans = Find.WorldObjects.Caravans;
 			for (int k = 0; k < caravans.Count; k++)
 			{
-				if (caravans[k].IsPlayerControlled)
+				if (!caravans[k].IsPlayerControlled)
 				{
-					List<Thing> list2 = CaravanInventoryUtility.AllInventoryItems(caravans[k]);
-					for (int l = 0; l < list2.Count; l++)
+					continue;
+				}
+				List<Thing> list2 = CaravanInventoryUtility.AllInventoryItems(caravans[k]);
+				for (int l = 0; l < list2.Count; l++)
+				{
+					if (thingFilter.Allows(list2[l]))
 					{
-						if (thingFilter.Allows(list2[l]))
-						{
-							return true;
-						}
+						return true;
 					}
 				}
 			}
@@ -253,34 +266,35 @@ namespace RimWorld
 				for (int n = 0; n < sites[m].parts.Count; n++)
 				{
 					SitePart sitePart = sites[m].parts[n];
-					if (sitePart.things != null)
+					if (sitePart.things == null)
 					{
-						for (int num = 0; num < sitePart.things.Count; num++)
+						continue;
+					}
+					for (int num = 0; num < sitePart.things.Count; num++)
+					{
+						if (thingFilter.Allows(sitePart.things[num]))
 						{
-							if (thingFilter.Allows(sitePart.things[num]))
-							{
-								return true;
-							}
+							return true;
 						}
 					}
 				}
 				DefeatAllEnemiesQuestComp component = sites[m].GetComponent<DefeatAllEnemiesQuestComp>();
-				if (component != null)
+				if (component == null)
 				{
-					ThingOwner rewards = component.rewards;
-					for (int num2 = 0; num2 < rewards.Count; num2++)
+					continue;
+				}
+				ThingOwner rewards = component.rewards;
+				for (int num2 = 0; num2 < rewards.Count; num2++)
+				{
+					if (thingFilter.Allows(rewards[num2]))
 					{
-						if (thingFilter.Allows(rewards[num2]))
-						{
-							return true;
-						}
+						return true;
 					}
 				}
 			}
 			return false;
 		}
 
-		
 		public static bool PlayerOrQuestRewardHas(ThingDef thingDef, int count = 1)
 		{
 			if (count <= 0)
@@ -297,31 +311,30 @@ namespace RimWorld
 					{
 						return true;
 					}
+					continue;
 				}
-				else
+				num += Mathf.Max(maps[i].resourceCounter.GetCount(thingDef), maps[i].listerThings.ThingsOfDef(thingDef).Count);
+				if (num >= count)
 				{
-					num += Mathf.Max(maps[i].resourceCounter.GetCount(thingDef), maps[i].listerThings.ThingsOfDef(thingDef).Count);
-					if (num >= count)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 			List<Caravan> caravans = Find.WorldObjects.Caravans;
 			for (int j = 0; j < caravans.Count; j++)
 			{
-				if (caravans[j].IsPlayerControlled)
+				if (!caravans[j].IsPlayerControlled)
 				{
-					List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravans[j]);
-					for (int k = 0; k < list.Count; k++)
+					continue;
+				}
+				List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravans[j]);
+				for (int k = 0; k < list.Count; k++)
+				{
+					if (list[k].def == thingDef)
 					{
-						if (list[k].def == thingDef)
+						num += list[k].stackCount;
+						if (num >= count)
 						{
-							num += list[k].stackCount;
-							if (num >= count)
-							{
-								return true;
-							}
+							return true;
 						}
 					}
 				}
@@ -332,30 +345,15 @@ namespace RimWorld
 				for (int m = 0; m < sites[l].parts.Count; m++)
 				{
 					SitePart sitePart = sites[l].parts[m];
-					if (sitePart.things != null)
+					if (sitePart.things == null)
 					{
-						for (int n = 0; n < sitePart.things.Count; n++)
-						{
-							if (sitePart.things[n].def == thingDef)
-							{
-								num += sitePart.things[n].stackCount;
-								if (num >= count)
-								{
-									return true;
-								}
-							}
-						}
+						continue;
 					}
-				}
-				DefeatAllEnemiesQuestComp component = sites[l].GetComponent<DefeatAllEnemiesQuestComp>();
-				if (component != null)
-				{
-					ThingOwner rewards = component.rewards;
-					for (int num2 = 0; num2 < rewards.Count; num2++)
+					for (int n = 0; n < sitePart.things.Count; n++)
 					{
-						if (rewards[num2].def == thingDef)
+						if (sitePart.things[n].def == thingDef)
 						{
-							num += rewards[num2].stackCount;
+							num += sitePart.things[n].stackCount;
 							if (num >= count)
 							{
 								return true;
@@ -363,11 +361,27 @@ namespace RimWorld
 						}
 					}
 				}
+				DefeatAllEnemiesQuestComp component = sites[l].GetComponent<DefeatAllEnemiesQuestComp>();
+				if (component == null)
+				{
+					continue;
+				}
+				ThingOwner rewards = component.rewards;
+				for (int num2 = 0; num2 < rewards.Count; num2++)
+				{
+					if (rewards[num2].def == thingDef)
+					{
+						num += rewards[num2].stackCount;
+						if (num >= count)
+						{
+							return true;
+						}
+					}
+				}
 			}
 			return false;
 		}
 
-		
 		public static bool ItemStashHas(ThingDef thingDef)
 		{
 			List<Site> sites = Find.WorldObjects.Sites;
@@ -377,43 +391,20 @@ namespace RimWorld
 				for (int j = 0; j < site.parts.Count; j++)
 				{
 					SitePart sitePart = site.parts[j];
-					if (sitePart.things != null)
+					if (sitePart.things == null)
 					{
-						for (int k = 0; k < sitePart.things.Count; k++)
+						continue;
+					}
+					for (int k = 0; k < sitePart.things.Count; k++)
+					{
+						if (sitePart.things[k].def == thingDef)
 						{
-							if (sitePart.things[k].def == thingDef)
-							{
-								return true;
-							}
+							return true;
 						}
 					}
 				}
 			}
 			return false;
 		}
-
-		
-		private static List<Thing> cachedAccessibleThings = new List<Thing>();
-
-		
-		private static List<ThingDefCount> cachedPossiblyAccessibleThings = new List<ThingDefCount>();
-
-		
-		private static HashSet<ThingDef> cachedMakeableItemDefs = new HashSet<ThingDef>();
-
-		
-		private static int cachedAccessibleThingsForTile = -1;
-
-		
-		private static int cachedAccessibleThingsForFrame = -1;
-
-		
-		private static List<Thing> tmpThings = new List<Thing>();
-
-		
-		private static HashSet<ThingDef> tmpWorkTables = new HashSet<ThingDef>();
-
-		
-		private const float MaxDistanceInTilesToConsiderAccessible = 5f;
 	}
 }

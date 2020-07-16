@@ -1,14 +1,10 @@
-﻿using System;
 using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class HediffComp_PsychicSuppression : HediffComp
 	{
-		
-		
 		public override bool CompShouldRemove
 		{
 			get
@@ -24,21 +20,23 @@ namespace RimWorld
 				else if (base.Pawn.IsCaravanMember())
 				{
 					bool result = true;
-					foreach (Site site in Find.World.worldObjects.Sites)
 					{
-						foreach (SitePart sitePart in site.parts)
+						foreach (Site site in Find.World.worldObjects.Sites)
 						{
-							if (sitePart.def.Worker is SitePartWorker_ConditionCauser_PsychicSuppressor)
+							foreach (SitePart part in site.parts)
 							{
-								CompCauseGameCondition_PsychicSuppression compCauseGameCondition_PsychicSuppression = sitePart.conditionCauser.TryGetComp<CompCauseGameCondition_PsychicSuppression>();
-								if (compCauseGameCondition_PsychicSuppression.ConditionDef.conditionClass == typeof(GameCondition_PsychicSuppression) && compCauseGameCondition_PsychicSuppression.InAoE(base.Pawn.GetCaravan().Tile) && compCauseGameCondition_PsychicSuppression.gender == base.Pawn.gender)
+								if (part.def.Worker is SitePartWorker_ConditionCauser_PsychicSuppressor)
 								{
-									result = false;
+									CompCauseGameCondition_PsychicSuppression compCauseGameCondition_PsychicSuppression = part.conditionCauser.TryGetComp<CompCauseGameCondition_PsychicSuppression>();
+									if (compCauseGameCondition_PsychicSuppression.ConditionDef.conditionClass == typeof(GameCondition_PsychicSuppression) && compCauseGameCondition_PsychicSuppression.InAoE(base.Pawn.GetCaravan().Tile) && compCauseGameCondition_PsychicSuppression.gender == base.Pawn.gender)
+									{
+										result = false;
+									}
 								}
 							}
 						}
+						return result;
 					}
-					return result;
 				}
 				return true;
 			}

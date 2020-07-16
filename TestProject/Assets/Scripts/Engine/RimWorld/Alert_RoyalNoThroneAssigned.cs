@@ -1,61 +1,54 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_RoyalNoThroneAssigned : Alert
 	{
-		
-		public Alert_RoyalNoThroneAssigned()
-		{
-			this.defaultLabel = "NeedThroneAssigned".Translate();
-			this.defaultExplanation = "NeedThroneAssignedDesc".Translate();
-		}
+		private List<Pawn> targetsResult = new List<Pawn>();
 
-		
-		
 		public List<Pawn> Targets
 		{
 			get
 			{
-				this.targetsResult.Clear();
+				targetsResult.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
-					foreach (Pawn pawn in maps[i].mapPawns.FreeColonists)
+					foreach (Pawn freeColonist in maps[i].mapPawns.FreeColonists)
 					{
-						if (pawn.royalty != null && pawn.royalty.CanRequireThroneroom())
+						if (freeColonist.royalty != null && freeColonist.royalty.CanRequireThroneroom())
 						{
 							bool flag = false;
-							List<RoyalTitle> allTitlesForReading = pawn.royalty.AllTitlesForReading;
+							List<RoyalTitle> allTitlesForReading = freeColonist.royalty.AllTitlesForReading;
 							for (int j = 0; j < allTitlesForReading.Count; j++)
 							{
-								if (!allTitlesForReading[j].def.throneRoomRequirements.NullOrEmpty<RoomRequirement>())
+								if (!allTitlesForReading[j].def.throneRoomRequirements.NullOrEmpty())
 								{
 									flag = true;
 									break;
 								}
 							}
-							if (flag && pawn.ownership.AssignedThrone == null)
+							if (flag && freeColonist.ownership.AssignedThrone == null)
 							{
-								this.targetsResult.Add(pawn);
+								targetsResult.Add(freeColonist);
 							}
 						}
 					}
 				}
-				return this.targetsResult;
+				return targetsResult;
 			}
 		}
 
-		
-		public override AlertReport GetReport()
+		public Alert_RoyalNoThroneAssigned()
 		{
-			return AlertReport.CulpritsAre(this.Targets);
+			defaultLabel = "NeedThroneAssigned".Translate();
+			defaultExplanation = "NeedThroneAssignedDesc".Translate();
 		}
 
-		
-		private List<Pawn> targetsResult = new List<Pawn>();
+		public override AlertReport GetReport()
+		{
+			return AlertReport.CulpritsAre(Targets);
+		}
 	}
 }

@@ -1,147 +1,108 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.QuestGen;
+using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class QuestScriptDef : Def
 	{
-		
-		
-		public bool IsRootRandomSelected
-		{
-			get
-			{
-				return this.rootSelectionWeight != 0f;
-			}
-		}
+		public QuestNode root;
 
-		
-		
-		public bool IsRootDecree
-		{
-			get
-			{
-				return this.decreeSelectionWeight != 0f;
-			}
-		}
+		public float rootSelectionWeight;
 
-		
-		
+		public float rootMinPoints;
+
+		public float rootMinProgressScore;
+
+		public bool rootIncreasesPopulation;
+
+		public float decreeSelectionWeight;
+
+		public List<string> decreeTags;
+
+		public RulePack questDescriptionRules;
+
+		public RulePack questNameRules;
+
+		public RulePack questDescriptionAndNameRules;
+
+		public bool autoAccept;
+
+		public FloatRange expireDaysRange = new FloatRange(-1f, -1f);
+
+		public bool nameMustBeUnique;
+
+		public int defaultChallengeRating = -1;
+
+		public bool isRootSpecial;
+
+		public bool canGiveRoyalFavor;
+
+		public bool IsRootRandomSelected => rootSelectionWeight != 0f;
+
+		public bool IsRootDecree => decreeSelectionWeight != 0f;
+
 		public bool IsRootAny
 		{
 			get
 			{
-				return this.IsRootRandomSelected || this.IsRootDecree || this.isRootSpecial;
+				if (!IsRootRandomSelected && !IsRootDecree)
+				{
+					return isRootSpecial;
+				}
+				return true;
 			}
 		}
 
-		
 		public void Run()
 		{
-			if (this.questDescriptionRules != null)
+			if (questDescriptionRules != null)
 			{
-                QuestGen.QuestGen.AddQuestDescriptionRules(this.questDescriptionRules);
+				RimWorld.QuestGen.QuestGen.AddQuestDescriptionRules(questDescriptionRules);
 			}
-			if (this.questNameRules != null)
+			if (questNameRules != null)
 			{
-                QuestGen.QuestGen.AddQuestNameRules(this.questNameRules);
+				RimWorld.QuestGen.QuestGen.AddQuestNameRules(questNameRules);
 			}
-			if (this.questDescriptionAndNameRules != null)
+			if (questDescriptionAndNameRules != null)
 			{
-                QuestGen.QuestGen.AddQuestDescriptionRules(this.questDescriptionAndNameRules);
-                QuestGen.QuestGen.AddQuestNameRules(this.questDescriptionAndNameRules);
+				RimWorld.QuestGen.QuestGen.AddQuestDescriptionRules(questDescriptionAndNameRules);
+				RimWorld.QuestGen.QuestGen.AddQuestNameRules(questDescriptionAndNameRules);
 			}
-			this.root.Run();
+			root.Run();
 		}
 
-		
 		public bool CanRun(Slate slate)
 		{
-			return this.root.TestRun(slate.DeepCopy());
+			return root.TestRun(slate.DeepCopy());
 		}
 
-		
 		public bool CanRun(float points)
 		{
 			Slate slate = new Slate();
-			slate.Set<float>("points", points, false);
-			return this.CanRun(slate);
+			slate.Set("points", points);
+			return CanRun(slate);
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			if (this.rootSelectionWeight > 0f && !this.autoAccept && this.expireDaysRange.TrueMax <= 0f)
+			if (rootSelectionWeight > 0f && !autoAccept && expireDaysRange.TrueMax <= 0f)
 			{
 				yield return "rootSelectionWeight > 0 but expireDaysRange not set";
 			}
-			if (this.autoAccept && this.expireDaysRange.TrueMax > 0f)
+			if (autoAccept && expireDaysRange.TrueMax > 0f)
 			{
 				yield return "autoAccept but there is an expireDaysRange set";
 			}
-			if (this.defaultChallengeRating > 0 && !this.IsRootAny)
+			if (defaultChallengeRating > 0 && !IsRootAny)
 			{
 				yield return "non-root quest has defaultChallengeRating";
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public QuestNode root;
-
-		
-		public float rootSelectionWeight;
-
-		
-		public float rootMinPoints;
-
-		
-		public float rootMinProgressScore;
-
-		
-		public bool rootIncreasesPopulation;
-
-		
-		public float decreeSelectionWeight;
-
-		
-		public List<string> decreeTags;
-
-		
-		public RulePack questDescriptionRules;
-
-		
-		public RulePack questNameRules;
-
-		
-		public RulePack questDescriptionAndNameRules;
-
-		
-		public bool autoAccept;
-
-		
-		public FloatRange expireDaysRange = new FloatRange(-1f, -1f);
-
-		
-		public bool nameMustBeUnique;
-
-		
-		public int defaultChallengeRating = -1;
-
-		
-		public bool isRootSpecial;
-
-		
-		public bool canGiveRoyalFavor;
 	}
 }

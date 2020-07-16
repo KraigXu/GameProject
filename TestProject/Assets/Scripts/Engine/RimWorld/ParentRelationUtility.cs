@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ParentRelationUtility
 	{
-		
 		public static Pawn GetFather(this Pawn pawn)
 		{
 			if (!pawn.RaceProps.IsFlesh)
@@ -27,7 +24,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static Pawn GetMother(this Pawn pawn)
 		{
 			if (!pawn.RaceProps.IsFlesh)
@@ -46,21 +42,11 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static void SetFather(this Pawn pawn, Pawn newFather)
 		{
 			if (newFather != null && newFather.gender == Gender.Female)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Tried to set ",
-					newFather,
-					" with gender ",
-					newFather.gender,
-					" as ",
-					pawn,
-					"'s father."
-				}), false);
+				Log.Warning("Tried to set " + newFather + " with gender " + newFather.gender + " as " + pawn + "'s father.");
 				return;
 			}
 			Pawn father = pawn.GetFather();
@@ -77,21 +63,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void SetMother(this Pawn pawn, Pawn newMother)
 		{
 			if (newMother != null && newMother.gender != Gender.Female)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Tried to set ",
-					newMother,
-					" with gender ",
-					newMother.gender,
-					" as ",
-					pawn,
-					"'s mother."
-				}), false);
+				Log.Warning("Tried to set " + newMother + " with gender " + newMother.gender + " as " + pawn + "'s mother.");
 				return;
 			}
 			Pawn mother = pawn.GetMother();
@@ -108,35 +84,27 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static float GetRandomSecondParentSkinColor(float otherParentSkin, float childSkin, float? secondChildSkin = null)
 		{
-			float mirror;
-			if (secondChildSkin != null)
-			{
-				mirror = (childSkin + secondChildSkin.Value) / 2f;
-			}
-			else
-			{
-				mirror = childSkin;
-			}
-			float reflectedSkin = ChildRelationUtility.GetReflectedSkin(otherParentSkin, mirror);
-			float num = childSkin;
+			float num = 0f;
+			num = ((!secondChildSkin.HasValue) ? childSkin : ((childSkin + secondChildSkin.Value) / 2f));
+			float reflectedSkin = ChildRelationUtility.GetReflectedSkin(otherParentSkin, num);
 			float num2 = childSkin;
-			if (secondChildSkin != null)
+			float num3 = childSkin;
+			if (secondChildSkin.HasValue)
 			{
-				num = Mathf.Min(num, secondChildSkin.Value);
-				num2 = Mathf.Max(num2, secondChildSkin.Value);
+				num2 = Mathf.Min(num2, secondChildSkin.Value);
+				num3 = Mathf.Max(num3, secondChildSkin.Value);
 			}
 			float clampMin = 0f;
 			float clampMax = 1f;
-			if (reflectedSkin >= num2)
+			if (reflectedSkin >= num3)
 			{
-				clampMin = num2;
+				clampMin = num3;
 			}
 			else
 			{
-				clampMax = num;
+				clampMax = num2;
 			}
 			return PawnSkinColors.GetRandomMelaninSimilarTo(reflectedSkin, clampMin, clampMax);
 		}

@@ -1,175 +1,286 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Dialog_InfoCard : Window
 	{
-		
-		public static IEnumerable<Dialog_InfoCard.Hyperlink> DefsToHyperlinks(IEnumerable<ThingDef> defs)
+		private enum InfoCardTab : byte
 		{
-			if (defs == null)
-			{
-				return null;
-			}
-			return from def in defs
-			select new Dialog_InfoCard.Hyperlink(def, -1);
+			Stats,
+			Character,
+			Health,
+			Records
 		}
 
-		
-		public static IEnumerable<Dialog_InfoCard.Hyperlink> DefsToHyperlinks(IEnumerable<DefHyperlink> links)
+		public struct Hyperlink
 		{
-			if (links == null)
+			public Thing thing;
+
+			public ThingDef stuff;
+
+			public Def def;
+
+			public WorldObject worldObject;
+
+			public RoyalTitleDef titleDef;
+
+			public Faction faction;
+
+			public int selectedStatIndex;
+
+			public string Label
 			{
-				return null;
+				get
+				{
+					string result = null;
+					if (worldObject != null)
+					{
+						result = worldObject.Label;
+					}
+					else if (def != null && def is ThingDef && stuff != null)
+					{
+						result = (def as ThingDef).label;
+					}
+					else if (def != null)
+					{
+						result = def.label;
+					}
+					else if (thing != null)
+					{
+						result = thing.Label;
+					}
+					else if (titleDef != null)
+					{
+						result = titleDef.GetLabelCapForBothGenders();
+					}
+					return result;
+				}
 			}
-			return from link in links
-			select new Dialog_InfoCard.Hyperlink(link.def, -1);
+
+			public Hyperlink(Dialog_InfoCard infoCard, int statIndex = -1)
+			{
+				def = infoCard.def;
+				thing = infoCard.thing;
+				stuff = infoCard.stuff;
+				worldObject = infoCard.worldObject;
+				titleDef = infoCard.titleDef;
+				faction = infoCard.faction;
+				selectedStatIndex = statIndex;
+			}
+
+			public Hyperlink(Def def, int statIndex = -1)
+			{
+				this.def = def;
+				thing = null;
+				stuff = null;
+				worldObject = null;
+				titleDef = null;
+				faction = null;
+				selectedStatIndex = statIndex;
+			}
+
+			public Hyperlink(RoyalTitleDef titleDef, Faction faction, int statIndex = -1)
+			{
+				def = null;
+				thing = null;
+				stuff = null;
+				worldObject = null;
+				this.titleDef = titleDef;
+				this.faction = faction;
+				selectedStatIndex = statIndex;
+			}
+
+			public Hyperlink(Thing thing, int statIndex = -1)
+			{
+				this.thing = thing;
+				stuff = null;
+				def = null;
+				worldObject = null;
+				titleDef = null;
+				faction = null;
+				selectedStatIndex = statIndex;
+			}
+
+			public void OpenDialog()
+			{
+				Dialog_InfoCard dialog_InfoCard = null;
+				if (def == null && thing == null && worldObject == null && titleDef == null)
+				{
+					dialog_InfoCard = Find.WindowStack.WindowOfType<Dialog_InfoCard>();
+				}
+				else
+				{
+					PushCurrentToHistoryAndClose();
+					if (worldObject != null)
+					{
+						dialog_InfoCard = new Dialog_InfoCard(worldObject);
+					}
+					else if (def != null && def is ThingDef && (stuff != null || GenStuff.DefaultStuffFor((ThingDef)def) != null))
+					{
+						dialog_InfoCard = new Dialog_InfoCard(def as ThingDef, stuff ?? GenStuff.DefaultStuffFor((ThingDef)def));
+					}
+					else if (def != null)
+					{
+						dialog_InfoCard = new Dialog_InfoCard(def);
+					}
+					else if (thing != null)
+					{
+						dialog_InfoCard = new Dialog_InfoCard(thing);
+					}
+					else if (titleDef != null)
+					{
+						dialog_InfoCard = new Dialog_InfoCard(titleDef, faction);
+					}
+				}
+				if (dialog_InfoCard != null)
+				{
+					int localSelectedStatIndex = selectedStatIndex;
+					if (selectedStatIndex >= 0)
+					{
+						dialog_InfoCard.executeAfterFillCardOnce = delegate
+						{
+							StatsReportUtility.SelectEntry(localSelectedStatIndex);
+						};
+					}
+					Find.WindowStack.Add(dialog_InfoCard);
+				}
+			}
 		}
 
-		
-		public static IEnumerable<Dialog_InfoCard.Hyperlink> TitleDefsToHyperlinks(IEnumerable<DefHyperlink> links)
-		{
-			if (links == null)
-			{
-				return null;
-			}
-			return from link in links
-			select new Dialog_InfoCard.Hyperlink((RoyalTitleDef)link.def, link.faction, -1);
-		}
+		private const float ShowMaterialsButtonWidth = 200f;
 
-		
-		public static void PushCurrentToHistoryAndClose()
-		{
-			Dialog_InfoCard dialog_InfoCard = Find.WindowStack.WindowOfType<Dialog_InfoCard>();
-			if (dialog_InfoCard == null)
-			{
-				return;
-			}
-			Dialog_InfoCard.history.Add(new Dialog_InfoCard.Hyperlink(dialog_InfoCard, StatsReportUtility.SelectedStatIndex));
-			Find.WindowStack.TryRemove(dialog_InfoCard, false);
-		}
+		private const float ShowMaterialsButtonHeight = 40f;
 
-		
-		
+		private const float ShowMaterialsMargin = 16f;
+
+		private Action executeAfterFillCardOnce;
+
+		private static List<Hyperlink> history = new List<Hyperlink>();
+
+		private Thing thing;
+
+		private ThingDef stuff;
+
+		private Def def;
+
+		private WorldObject worldObject;
+
+		private RoyalTitleDef titleDef;
+
+		private Faction faction;
+
+		private InfoCardTab tab;
+
 		private Def Def
 		{
 			get
 			{
-				if (this.thing != null)
+				if (thing != null)
 				{
-					return this.thing.def;
+					return thing.def;
 				}
-				if (this.worldObject != null)
+				if (worldObject != null)
 				{
-					return this.worldObject.def;
+					return worldObject.def;
 				}
-				return this.def;
+				return def;
 			}
 		}
 
-		
-		
-		private Pawn ThingPawn
+		private Pawn ThingPawn => thing as Pawn;
+
+		public override Vector2 InitialSize => new Vector2(950f, 760f);
+
+		protected override float Margin => 0f;
+
+		public static IEnumerable<Hyperlink> DefsToHyperlinks(IEnumerable<ThingDef> defs)
 		{
-			get
-			{
-				return this.thing as Pawn;
-			}
+			return defs?.Select((ThingDef def) => new Hyperlink(def));
 		}
 
-		
-		
-		public override Vector2 InitialSize
+		public static IEnumerable<Hyperlink> DefsToHyperlinks(IEnumerable<DefHyperlink> links)
 		{
-			get
-			{
-				return new Vector2(950f, 760f);
-			}
+			return links?.Select((DefHyperlink link) => new Hyperlink(link.def));
 		}
 
-		
-		
-		protected override float Margin
+		public static IEnumerable<Hyperlink> TitleDefsToHyperlinks(IEnumerable<DefHyperlink> links)
 		{
-			get
+			return links?.Select((DefHyperlink link) => new Hyperlink((RoyalTitleDef)link.def, link.faction));
+		}
+
+		public static void PushCurrentToHistoryAndClose()
+		{
+			Dialog_InfoCard dialog_InfoCard = Find.WindowStack.WindowOfType<Dialog_InfoCard>();
+			if (dialog_InfoCard != null)
 			{
-				return 0f;
+				history.Add(new Hyperlink(dialog_InfoCard, StatsReportUtility.SelectedStatIndex));
+				Find.WindowStack.TryRemove(dialog_InfoCard, doCloseSound: false);
 			}
 		}
 
-		
 		public Dialog_InfoCard(Thing thing)
 		{
 			this.thing = thing;
-			this.tab = Dialog_InfoCard.InfoCardTab.Stats;
-			this.Setup();
+			tab = InfoCardTab.Stats;
+			Setup();
 		}
 
-		
 		public Dialog_InfoCard(Def onlyDef)
 		{
-			this.def = onlyDef;
-			this.Setup();
+			def = onlyDef;
+			Setup();
 		}
 
-		
 		public Dialog_InfoCard(ThingDef thingDef, ThingDef stuff)
 		{
-			this.def = thingDef;
+			def = thingDef;
 			this.stuff = stuff;
-			this.Setup();
+			Setup();
 		}
 
-		
 		public Dialog_InfoCard(RoyalTitleDef titleDef, Faction faction)
 		{
 			this.titleDef = titleDef;
 			this.faction = faction;
-			this.Setup();
+			Setup();
 		}
 
-		
 		public Dialog_InfoCard(Faction faction)
 		{
 			this.faction = faction;
-			this.Setup();
+			Setup();
 		}
 
-		
 		public Dialog_InfoCard(WorldObject worldObject)
 		{
 			this.worldObject = worldObject;
-			this.Setup();
+			Setup();
 		}
 
-		
 		public override void Close(bool doCloseSound = true)
 		{
 			base.Close(doCloseSound);
-			Dialog_InfoCard.history.Clear();
+			history.Clear();
 		}
 
-		
 		private void Setup()
 		{
-			this.forcePause = true;
-			this.doCloseButton = true;
-			this.doCloseX = true;
-			this.absorbInputAroundWindow = true;
-			this.closeOnClickedOutside = true;
-			this.soundAppear = SoundDefOf.InfoCard_Open;
-			this.soundClose = SoundDefOf.InfoCard_Close;
+			forcePause = true;
+			doCloseButton = true;
+			doCloseX = true;
+			absorbInputAroundWindow = true;
+			closeOnClickedOutside = true;
+			soundAppear = SoundDefOf.InfoCard_Open;
+			soundClose = SoundDefOf.InfoCard_Close;
 			StatsReportUtility.Reset();
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.InfoCard, KnowledgeAmount.Total);
 		}
 
-		
 		private static bool ShowMaterialsButton(Rect containerRect, bool withBackButtonOffset = false)
 		{
 			float num = containerRect.x + containerRect.width - 14f - 200f - 16f;
@@ -177,10 +288,9 @@ namespace Verse
 			{
 				num -= 136f;
 			}
-			return Widgets.ButtonText(new Rect(num, containerRect.y + 18f, 200f, 40f), "ShowMaterials".Translate(), true, true, true);
+			return Widgets.ButtonText(new Rect(num, containerRect.y + 18f, 200f, 40f), "ShowMaterials".Translate());
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Rect rect = new Rect(inRect);
@@ -188,15 +298,15 @@ namespace Verse
 			rect.height = 34f;
 			rect.x += 34f;
 			Text.Font = GameFont.Medium;
-			Widgets.Label(rect, this.GetTitle());
+			Widgets.Label(rect, GetTitle());
 			Rect rect2 = new Rect(inRect.x + 9f, rect.y, 34f, 34f);
-			if (this.thing != null)
+			if (thing != null)
 			{
-				Widgets.ThingIcon(rect2, this.thing, 1f);
+				Widgets.ThingIcon(rect2, thing);
 			}
 			else
 			{
-				Widgets.DefIcon(rect2, this.def, this.stuff, 1f, true);
+				Widgets.DefIcon(rect2, def, stuff, 1f, drawPlaceholder: true);
 			}
 			Rect rect3 = new Rect(inRect);
 			rect3.yMin = rect.yMax;
@@ -205,349 +315,147 @@ namespace Verse
 			List<TabRecord> list = new List<TabRecord>();
 			TabRecord item = new TabRecord("TabStats".Translate(), delegate
 			{
-				this.tab = Dialog_InfoCard.InfoCardTab.Stats;
-			}, this.tab == Dialog_InfoCard.InfoCardTab.Stats);
+				tab = InfoCardTab.Stats;
+			}, tab == InfoCardTab.Stats);
 			list.Add(item);
-			if (this.ThingPawn != null)
+			if (ThingPawn != null)
 			{
-				if (this.ThingPawn.RaceProps.Humanlike)
+				if (ThingPawn.RaceProps.Humanlike)
 				{
 					TabRecord item2 = new TabRecord("TabCharacter".Translate(), delegate
 					{
-						this.tab = Dialog_InfoCard.InfoCardTab.Character;
-					}, this.tab == Dialog_InfoCard.InfoCardTab.Character);
+						tab = InfoCardTab.Character;
+					}, tab == InfoCardTab.Character);
 					list.Add(item2);
 				}
 				TabRecord item3 = new TabRecord("TabHealth".Translate(), delegate
 				{
-					this.tab = Dialog_InfoCard.InfoCardTab.Health;
-				}, this.tab == Dialog_InfoCard.InfoCardTab.Health);
+					tab = InfoCardTab.Health;
+				}, tab == InfoCardTab.Health);
 				list.Add(item3);
 				TabRecord item4 = new TabRecord("TabRecords".Translate(), delegate
 				{
-					this.tab = Dialog_InfoCard.InfoCardTab.Records;
-				}, this.tab == Dialog_InfoCard.InfoCardTab.Records);
+					tab = InfoCardTab.Records;
+				}, tab == InfoCardTab.Records);
 				list.Add(item4);
 			}
 			if (list.Count > 1)
 			{
 				rect4.yMin += 45f;
-				TabDrawer.DrawTabs(rect4, list, 200f);
+				TabDrawer.DrawTabs(rect4, list);
 			}
-			this.FillCard(rect4.ContractedBy(18f));
-			if (this.def != null && this.def is BuildableDef)
+			FillCard(rect4.ContractedBy(18f));
+			if (def != null && def is BuildableDef)
 			{
-				IEnumerable<ThingDef> enumerable = GenStuff.AllowedStuffsFor((BuildableDef)this.def, TechLevel.Undefined);
-				if (enumerable.Count<ThingDef>() > 0 && Dialog_InfoCard.ShowMaterialsButton(inRect, Dialog_InfoCard.history.Count > 0))
+				IEnumerable<ThingDef> enumerable = GenStuff.AllowedStuffsFor((BuildableDef)def);
+				if (enumerable.Count() > 0 && ShowMaterialsButton(inRect, history.Count > 0))
 				{
 					List<FloatMenuOption> list2 = new List<FloatMenuOption>();
-					foreach (ThingDef thingDef in enumerable)
+					foreach (ThingDef item5 in enumerable)
 					{
-						ThingDef localStuff = thingDef;
-						list2.Add(new FloatMenuOption(thingDef.label, delegate
+						ThingDef localStuff = item5;
+						list2.Add(new FloatMenuOption(item5.label, delegate
 						{
-							this.stuff = localStuff;
-							this.Setup();
-						}, thingDef, MenuOptionPriority.Default, null, null, 0f, null, null));
+							stuff = localStuff;
+							Setup();
+						}, item5));
 					}
 					Find.WindowStack.Add(new FloatMenu(list2));
 				}
 			}
-			if (Dialog_InfoCard.history.Count > 0 && Widgets.BackButtonFor(inRect))
+			if (history.Count > 0 && Widgets.BackButtonFor(inRect))
 			{
-				Dialog_InfoCard.Hyperlink hyperlink = Dialog_InfoCard.history[Dialog_InfoCard.history.Count - 1];
-				Dialog_InfoCard.history.RemoveAt(Dialog_InfoCard.history.Count - 1);
-				Find.WindowStack.TryRemove(typeof(Dialog_InfoCard), false);
+				Hyperlink hyperlink = history[history.Count - 1];
+				history.RemoveAt(history.Count - 1);
+				Find.WindowStack.TryRemove(typeof(Dialog_InfoCard), doCloseSound: false);
 				hyperlink.OpenDialog();
 			}
 		}
 
-		
 		protected void FillCard(Rect cardRect)
 		{
-			if (this.tab == Dialog_InfoCard.InfoCardTab.Stats)
+			if (tab == InfoCardTab.Stats)
 			{
-				if (this.thing != null)
+				if (thing != null)
 				{
-					Thing innerThing = this.thing;
-					MinifiedThing minifiedThing = this.thing as MinifiedThing;
+					Thing innerThing = thing;
+					MinifiedThing minifiedThing = thing as MinifiedThing;
 					if (minifiedThing != null)
 					{
 						innerThing = minifiedThing.InnerThing;
 					}
 					StatsReportUtility.DrawStatsReport(cardRect, innerThing);
 				}
-				else if (this.titleDef != null)
+				else if (titleDef != null)
 				{
-					StatsReportUtility.DrawStatsReport(cardRect, this.titleDef, this.faction);
+					StatsReportUtility.DrawStatsReport(cardRect, titleDef, faction);
 				}
-				else if (this.faction != null)
+				else if (faction != null)
 				{
-					StatsReportUtility.DrawStatsReport(cardRect, this.faction);
+					StatsReportUtility.DrawStatsReport(cardRect, faction);
 				}
-				else if (this.worldObject != null)
+				else if (worldObject != null)
 				{
-					StatsReportUtility.DrawStatsReport(cardRect, this.worldObject);
+					StatsReportUtility.DrawStatsReport(cardRect, worldObject);
 				}
-				else if (this.def is AbilityDef)
+				else if (def is AbilityDef)
 				{
-					StatsReportUtility.DrawStatsReport(cardRect, (AbilityDef)this.def);
+					StatsReportUtility.DrawStatsReport(cardRect, (AbilityDef)def);
 				}
 				else
 				{
-					StatsReportUtility.DrawStatsReport(cardRect, this.def, this.stuff);
+					StatsReportUtility.DrawStatsReport(cardRect, def, stuff);
 				}
 			}
-			else if (this.tab == Dialog_InfoCard.InfoCardTab.Character)
+			else if (tab == InfoCardTab.Character)
 			{
-				CharacterCardUtility.DrawCharacterCard(cardRect, (Pawn)this.thing, null, default(Rect));
+				CharacterCardUtility.DrawCharacterCard(cardRect, (Pawn)thing);
 			}
-			else if (this.tab == Dialog_InfoCard.InfoCardTab.Health)
+			else if (tab == InfoCardTab.Health)
 			{
 				cardRect.yMin += 8f;
-				HealthCardUtility.DrawPawnHealthCard(cardRect, (Pawn)this.thing, false, false, null);
+				HealthCardUtility.DrawPawnHealthCard(cardRect, (Pawn)thing, allowOperations: false, showBloodLoss: false, null);
 			}
-			else if (this.tab == Dialog_InfoCard.InfoCardTab.Records)
+			else if (tab == InfoCardTab.Records)
 			{
-				RecordsCardUtility.DrawRecordsCard(cardRect, (Pawn)this.thing);
+				RecordsCardUtility.DrawRecordsCard(cardRect, (Pawn)thing);
 			}
-			if (this.executeAfterFillCardOnce != null)
+			if (executeAfterFillCardOnce != null)
 			{
-				this.executeAfterFillCardOnce();
-				this.executeAfterFillCardOnce = null;
+				executeAfterFillCardOnce();
+				executeAfterFillCardOnce = null;
 			}
 		}
 
-		
 		private string GetTitle()
 		{
-			if (this.thing != null)
+			if (thing != null)
 			{
-				return this.thing.LabelCapNoCount;
+				return thing.LabelCapNoCount;
 			}
-			if (this.worldObject != null)
+			if (worldObject != null)
 			{
-				return this.worldObject.LabelCap;
+				return worldObject.LabelCap;
 			}
-			ThingDef thingDef = this.Def as ThingDef;
+			ThingDef thingDef = Def as ThingDef;
 			if (thingDef != null)
 			{
-				return GenLabel.ThingLabel(thingDef, this.stuff, 1).CapitalizeFirst();
+				return GenLabel.ThingLabel(thingDef, stuff).CapitalizeFirst();
 			}
-			AbilityDef abilityDef = this.Def as AbilityDef;
+			AbilityDef abilityDef = Def as AbilityDef;
 			if (abilityDef != null)
 			{
 				return abilityDef.LabelCap;
 			}
-			if (this.titleDef != null)
+			if (titleDef != null)
 			{
-				return this.titleDef.GetLabelCapForBothGenders();
+				return titleDef.GetLabelCapForBothGenders();
 			}
-			if (this.faction != null)
+			if (faction != null)
 			{
-				return this.faction.Name;
+				return faction.Name;
 			}
-			return this.Def.LabelCap;
-		}
-
-		
-		private const float ShowMaterialsButtonWidth = 200f;
-
-		
-		private const float ShowMaterialsButtonHeight = 40f;
-
-		
-		private const float ShowMaterialsMargin = 16f;
-
-		
-		private Action executeAfterFillCardOnce;
-
-		
-		private static List<Dialog_InfoCard.Hyperlink> history = new List<Dialog_InfoCard.Hyperlink>();
-
-		
-		private Thing thing;
-
-		
-		private ThingDef stuff;
-
-		
-		private Def def;
-
-		
-		private WorldObject worldObject;
-
-		
-		private RoyalTitleDef titleDef;
-
-		
-		private Faction faction;
-
-		
-		private Dialog_InfoCard.InfoCardTab tab;
-
-		
-		private enum InfoCardTab : byte
-		{
-			
-			Stats,
-			
-			Character,
-			
-			Health,
-			
-			Records
-		}
-
-		
-		public struct Hyperlink
-		{
-			
-			
-			public string Label
-			{
-				get
-				{
-					string result = null;
-					if (this.worldObject != null)
-					{
-						result = this.worldObject.Label;
-					}
-					else if (this.def != null && this.def is ThingDef && this.stuff != null)
-					{
-						result = (this.def as ThingDef).label;
-					}
-					else if (this.def != null)
-					{
-						result = this.def.label;
-					}
-					else if (this.thing != null)
-					{
-						result = this.thing.Label;
-					}
-					else if (this.titleDef != null)
-					{
-						result = this.titleDef.GetLabelCapForBothGenders();
-					}
-					return result;
-				}
-			}
-
-			
-			public Hyperlink(Dialog_InfoCard infoCard, int statIndex = -1)
-			{
-				this.def = infoCard.def;
-				this.thing = infoCard.thing;
-				this.stuff = infoCard.stuff;
-				this.worldObject = infoCard.worldObject;
-				this.titleDef = infoCard.titleDef;
-				this.faction = infoCard.faction;
-				this.selectedStatIndex = statIndex;
-			}
-
-			
-			public Hyperlink(Def def, int statIndex = -1)
-			{
-				this.def = def;
-				this.thing = null;
-				this.stuff = null;
-				this.worldObject = null;
-				this.titleDef = null;
-				this.faction = null;
-				this.selectedStatIndex = statIndex;
-			}
-
-			
-			public Hyperlink(RoyalTitleDef titleDef, Faction faction, int statIndex = -1)
-			{
-				this.def = null;
-				this.thing = null;
-				this.stuff = null;
-				this.worldObject = null;
-				this.titleDef = titleDef;
-				this.faction = faction;
-				this.selectedStatIndex = statIndex;
-			}
-
-			
-			public Hyperlink(Thing thing, int statIndex = -1)
-			{
-				this.thing = thing;
-				this.stuff = null;
-				this.def = null;
-				this.worldObject = null;
-				this.titleDef = null;
-				this.faction = null;
-				this.selectedStatIndex = statIndex;
-			}
-
-			
-			public void OpenDialog()
-			{
-				Dialog_InfoCard dialog_InfoCard = null;
-				if (this.def == null && this.thing == null && this.worldObject == null && this.titleDef == null)
-				{
-					dialog_InfoCard = Find.WindowStack.WindowOfType<Dialog_InfoCard>();
-				}
-				else
-				{
-					Dialog_InfoCard.PushCurrentToHistoryAndClose();
-					if (this.worldObject != null)
-					{
-						dialog_InfoCard = new Dialog_InfoCard(this.worldObject);
-					}
-					else if (this.def != null && this.def is ThingDef && (this.stuff != null || GenStuff.DefaultStuffFor((ThingDef)this.def) != null))
-					{
-						dialog_InfoCard = new Dialog_InfoCard(this.def as ThingDef, this.stuff ?? GenStuff.DefaultStuffFor((ThingDef)this.def));
-					}
-					else if (this.def != null)
-					{
-						dialog_InfoCard = new Dialog_InfoCard(this.def);
-					}
-					else if (this.thing != null)
-					{
-						dialog_InfoCard = new Dialog_InfoCard(this.thing);
-					}
-					else if (this.titleDef != null)
-					{
-						dialog_InfoCard = new Dialog_InfoCard(this.titleDef, this.faction);
-					}
-				}
-				if (dialog_InfoCard == null)
-				{
-					return;
-				}
-				int localSelectedStatIndex = this.selectedStatIndex;
-				if (this.selectedStatIndex >= 0)
-				{
-					dialog_InfoCard.executeAfterFillCardOnce = delegate
-					{
-						StatsReportUtility.SelectEntry(localSelectedStatIndex);
-					};
-				}
-				Find.WindowStack.Add(dialog_InfoCard);
-			}
-
-			
-			public Thing thing;
-
-			
-			public ThingDef stuff;
-
-			
-			public Def def;
-
-			
-			public WorldObject worldObject;
-
-			
-			public RoyalTitleDef titleDef;
-
-			
-			public Faction faction;
-
-			
-			public int selectedStatIndex;
+			return Def.LabelCap;
 		}
 	}
 }

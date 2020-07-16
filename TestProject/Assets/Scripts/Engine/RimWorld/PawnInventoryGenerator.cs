@@ -1,40 +1,36 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnInventoryGenerator
 	{
-		
 		public static void GenerateInventoryFor(Pawn p, PawnGenerationRequest request)
 		{
-			p.inventory.DestroyAll(DestroyMode.Vanish);
+			p.inventory.DestroyAll();
 			for (int i = 0; i < p.kindDef.fixedInventory.Count; i++)
 			{
 				ThingDefCountClass thingDefCountClass = p.kindDef.fixedInventory[i];
-				Thing thing = ThingMaker.MakeThing(thingDefCountClass.thingDef, null);
+				Thing thing = ThingMaker.MakeThing(thingDefCountClass.thingDef);
 				thing.stackCount = thingDefCountClass.count;
-				p.inventory.innerContainer.TryAdd(thing, true);
+				p.inventory.innerContainer.TryAdd(thing);
 			}
 			if (p.kindDef.inventoryOptions != null)
 			{
 				foreach (Thing item in p.kindDef.inventoryOptions.GenerateThings())
 				{
-					p.inventory.innerContainer.TryAdd(item, true);
+					p.inventory.innerContainer.TryAdd(item);
 				}
 			}
 			if (request.AllowFood)
 			{
-				PawnInventoryGenerator.GiveRandomFood(p);
+				GiveRandomFood(p);
 			}
-			PawnInventoryGenerator.GiveDrugsIfAddicted(p);
-			PawnInventoryGenerator.GiveCombatEnhancingDrugs(p);
+			GiveDrugsIfAddicted(p);
+			GiveCombatEnhancingDrugs(p);
 		}
 
-		
 		public static void GiveRandomFood(Pawn p)
 		{
 			if (p.kindDef.invNutrition > 0.001f)
@@ -47,54 +43,36 @@ namespace RimWorld
 				else
 				{
 					float value = Rand.Value;
-					if (value < 0.5f)
-					{
-						def = ThingDefOf.MealSimple;
-					}
-					else if ((double)value < 0.75)
-					{
-						def = ThingDefOf.MealFine;
-					}
-					else
-					{
-						def = ThingDefOf.MealSurvivalPack;
-					}
+					def = ((value < 0.5f) ? ThingDefOf.MealSimple : ((!((double)value < 0.75)) ? ThingDefOf.MealSurvivalPack : ThingDefOf.MealFine));
 				}
-				Thing thing = ThingMaker.MakeThing(def, null);
-				thing.stackCount = GenMath.RoundRandom(p.kindDef.invNutrition / thing.GetStatValue(StatDefOf.Nutrition, true));
+				Thing thing = ThingMaker.MakeThing(def);
+				thing.stackCount = GenMath.RoundRandom(p.kindDef.invNutrition / thing.GetStatValue(StatDefOf.Nutrition));
 				p.inventory.TryAddItemNotForSale(thing);
 			}
 		}
 
-		
 		private static void GiveDrugsIfAddicted(Pawn p)
 		{
-			if (!p.RaceProps.Humanlike)
+			if (p.RaceProps.Humanlike)
 			{
-				return;
-			}
-			IEnumerator<Hediff_Addiction> enumerator = p.health.hediffSet.GetHediffs<Hediff_Addiction>().GetEnumerator();
-			{
-				while (enumerator.MoveNext())
+				foreach (Hediff_Addiction addiction in p.health.hediffSet.GetHediffs<Hediff_Addiction>())
 				{
-					Hediff_Addiction addiction = enumerator.Current;
-					ThingDef def;
 					if (DefDatabase<ThingDef>.AllDefsListForReading.Where(delegate(ThingDef x)
 					{
 						if (x.category != ThingCategory.Item)
 						{
 							return false;
 						}
-						if (p.Faction != null && x.techLevel > p.Faction.def.techLevel)
+						if (p.Faction != null && (int)x.techLevel > (int)p.Faction.def.techLevel)
 						{
 							return false;
 						}
 						CompProperties_Drug compProperties = x.GetCompProperties<CompProperties_Drug>();
 						return compProperties != null && compProperties.chemical != null && compProperties.chemical.addictionHediff == addiction.def;
-					}).TryRandomElement(out def))
+					}).TryRandomElement(out ThingDef result))
 					{
 						int stackCount = Rand.RangeInclusive(2, 5);
-						Thing thing = ThingMaker.MakeThing(def, null);
+						Thing thing = ThingMaker.MakeThing(result);
 						thing.stackCount = stackCount;
 						p.inventory.TryAddItemNotForSale(thing);
 					}
@@ -102,14 +80,9 @@ namespace RimWorld
 			}
 		}
 
-		
 		private static void GiveCombatEnhancingDrugs(Pawn pawn)
 		{
-			if (Rand.Value >= pawn.kindDef.combatEnhancingDrugsChance)
-			{
-				return;
-			}
-			if (pawn.IsTeetotaler())
+			if (Rand.Value >= pawn.kindDef.combatEnhancingDrugsChance || pawn.IsTeetotaler())
 			{
 				return;
 			}
@@ -132,19 +105,20 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (pawn.Faction != null && x.techLevel > pawn.Faction.def.techLevel)
+				if (pawn.Faction != null && (int)x.techLevel > (int)pawn.Faction.def.techLevel)
 				{
 					return false;
 				}
 				CompProperties_Drug compProperties = x.GetCompProperties<CompProperties_Drug>();
-				return compProperties != null && compProperties.isCombatEnhancingDrug;
+				return (compProperties != null && compProperties.isCombatEnhancingDrug) ? true : false;
 			});
-			int num = 0;
-			ThingDef def;
-			while (num < randomInRange && source.TryRandomElement(out def))
+			for (int j = 0; j < randomInRange; j++)
 			{
-				pawn.inventory.innerContainer.TryAdd(ThingMaker.MakeThing(def, null), true);
-				num++;
+				if (!source.TryRandomElement(out ThingDef result))
+				{
+					break;
+				}
+				pawn.inventory.innerContainer.TryAdd(ThingMaker.MakeThing(result));
 			}
 		}
 	}

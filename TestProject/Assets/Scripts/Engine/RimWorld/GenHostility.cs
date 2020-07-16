@@ -1,14 +1,11 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class GenHostility
 	{
-		
 		public static bool HostileTo(this Thing a, Thing b)
 		{
 			if (a.Destroyed || b.Destroyed || a == b)
@@ -17,10 +14,49 @@ namespace RimWorld
 			}
 			Pawn pawn = a as Pawn;
 			Pawn pawn2 = b as Pawn;
-			return (pawn != null && pawn.MentalState != null && pawn.MentalState.ForceHostileTo(b)) || (pawn2 != null && pawn2.MentalState != null && pawn2.MentalState.ForceHostileTo(a)) || (pawn != null && pawn2 != null && (GenHostility.IsPredatorHostileTo(pawn, pawn2) || GenHostility.IsPredatorHostileTo(pawn2, pawn))) || ((a.Faction != null && pawn2 != null && pawn2.HostFaction == a.Faction && (pawn == null || pawn.HostFaction == null) && PrisonBreakUtility.IsPrisonBreaking(pawn2)) || (b.Faction != null && pawn != null && pawn.HostFaction == b.Faction && (pawn2 == null || pawn2.HostFaction == null) && PrisonBreakUtility.IsPrisonBreaking(pawn))) || ((a.Faction == null || pawn2 == null || pawn2.HostFaction != a.Faction) && (b.Faction == null || pawn == null || pawn.HostFaction != b.Faction) && (pawn == null || !pawn.IsPrisoner || pawn2 == null || !pawn2.IsPrisoner) && (pawn == null || pawn2 == null || ((!pawn.IsPrisoner || pawn.HostFaction != pawn2.HostFaction || PrisonBreakUtility.IsPrisonBreaking(pawn)) && (!pawn2.IsPrisoner || pawn2.HostFaction != pawn.HostFaction || PrisonBreakUtility.IsPrisonBreaking(pawn2)))) && (pawn == null || pawn2 == null || ((pawn.HostFaction == null || pawn2.Faction == null || pawn.HostFaction.HostileTo(pawn2.Faction) || PrisonBreakUtility.IsPrisonBreaking(pawn)) && (pawn2.HostFaction == null || pawn.Faction == null || pawn2.HostFaction.HostileTo(pawn.Faction) || PrisonBreakUtility.IsPrisonBreaking(pawn2)))) && (a.Faction == null || !a.Faction.IsPlayer || pawn2 == null || !pawn2.mindState.WillJoinColonyIfRescued) && (b.Faction == null || !b.Faction.IsPlayer || pawn == null || !pawn.mindState.WillJoinColonyIfRescued) && ((pawn != null && pawn.Faction == null && pawn.RaceProps.Humanlike && b.Faction != null && b.Faction.def.hostileToFactionlessHumanlikes) || (pawn2 != null && pawn2.Faction == null && pawn2.RaceProps.Humanlike && a.Faction != null && a.Faction.def.hostileToFactionlessHumanlikes) || (a.Faction != null && b.Faction != null && a.Faction.HostileTo(b.Faction))));
+			if ((pawn != null && pawn.MentalState != null && pawn.MentalState.ForceHostileTo(b)) || (pawn2 != null && pawn2.MentalState != null && pawn2.MentalState.ForceHostileTo(a)))
+			{
+				return true;
+			}
+			if (pawn != null && pawn2 != null && (IsPredatorHostileTo(pawn, pawn2) || IsPredatorHostileTo(pawn2, pawn)))
+			{
+				return true;
+			}
+			if ((a.Faction != null && pawn2 != null && pawn2.HostFaction == a.Faction && (pawn == null || pawn.HostFaction == null) && PrisonBreakUtility.IsPrisonBreaking(pawn2)) || (b.Faction != null && pawn != null && pawn.HostFaction == b.Faction && (pawn2 == null || pawn2.HostFaction == null) && PrisonBreakUtility.IsPrisonBreaking(pawn)))
+			{
+				return true;
+			}
+			if ((a.Faction != null && pawn2 != null && pawn2.HostFaction == a.Faction) || (b.Faction != null && pawn != null && pawn.HostFaction == b.Faction))
+			{
+				return false;
+			}
+			if (pawn != null && pawn.IsPrisoner && pawn2 != null && pawn2.IsPrisoner)
+			{
+				return false;
+			}
+			if (pawn != null && pawn2 != null && ((pawn.IsPrisoner && pawn.HostFaction == pawn2.HostFaction && !PrisonBreakUtility.IsPrisonBreaking(pawn)) || (pawn2.IsPrisoner && pawn2.HostFaction == pawn.HostFaction && !PrisonBreakUtility.IsPrisonBreaking(pawn2))))
+			{
+				return false;
+			}
+			if (pawn != null && pawn2 != null && ((pawn.HostFaction != null && pawn2.Faction != null && !pawn.HostFaction.HostileTo(pawn2.Faction) && !PrisonBreakUtility.IsPrisonBreaking(pawn)) || (pawn2.HostFaction != null && pawn.Faction != null && !pawn2.HostFaction.HostileTo(pawn.Faction) && !PrisonBreakUtility.IsPrisonBreaking(pawn2))))
+			{
+				return false;
+			}
+			if ((a.Faction != null && a.Faction.IsPlayer && pawn2 != null && pawn2.mindState.WillJoinColonyIfRescued) || (b.Faction != null && b.Faction.IsPlayer && pawn != null && pawn.mindState.WillJoinColonyIfRescued))
+			{
+				return false;
+			}
+			if ((pawn != null && pawn.Faction == null && pawn.RaceProps.Humanlike && b.Faction != null && b.Faction.def.hostileToFactionlessHumanlikes) || (pawn2 != null && pawn2.Faction == null && pawn2.RaceProps.Humanlike && a.Faction != null && a.Faction.def.hostileToFactionlessHumanlikes))
+			{
+				return true;
+			}
+			if (a.Faction == null || b.Faction == null)
+			{
+				return false;
+			}
+			return a.Faction.HostileTo(b.Faction);
 		}
 
-		
 		public static bool HostileTo(this Thing t, Faction fac)
 		{
 			if (t.Destroyed)
@@ -39,7 +75,7 @@ namespace RimWorld
 				{
 					return true;
 				}
-				if (GenHostility.IsPredatorHostileTo(pawn, fac))
+				if (IsPredatorHostileTo(pawn, fac))
 				{
 					return true;
 				}
@@ -64,10 +100,13 @@ namespace RimWorld
 					return true;
 				}
 			}
-			return t.Faction != null && t.Faction.HostileTo(fac);
+			if (t.Faction == null)
+			{
+				return false;
+			}
+			return t.Faction.HostileTo(fac);
 		}
 
-		
 		private static bool IsPredatorHostileTo(Pawn predator, Pawn toPawn)
 		{
 			if (toPawn.Faction == null)
@@ -78,17 +117,27 @@ namespace RimWorld
 			{
 				return true;
 			}
-			Pawn preyOfMyFaction = GenHostility.GetPreyOfMyFaction(predator, toPawn.Faction);
-			return preyOfMyFaction != null && predator.Position.InHorDistOf(preyOfMyFaction.Position, 12f);
+			Pawn preyOfMyFaction = GetPreyOfMyFaction(predator, toPawn.Faction);
+			if (preyOfMyFaction != null && predator.Position.InHorDistOf(preyOfMyFaction.Position, 12f))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		private static bool IsPredatorHostileTo(Pawn predator, Faction toFaction)
 		{
-			return toFaction.HasPredatorRecentlyAttackedAnyone(predator) || GenHostility.GetPreyOfMyFaction(predator, toFaction) != null;
+			if (toFaction.HasPredatorRecentlyAttackedAnyone(predator))
+			{
+				return true;
+			}
+			if (GetPreyOfMyFaction(predator, toFaction) != null)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		private static Pawn GetPreyOfMyFaction(Pawn predator, Faction myFaction)
 		{
 			Job curJob = predator.CurJob;
@@ -103,23 +152,21 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static bool AnyHostileActiveThreatToPlayer(Map map, bool countDormantPawnsAsHostile = false)
 		{
-			return GenHostility.AnyHostileActiveThreatTo(map, Faction.OfPlayer, countDormantPawnsAsHostile);
+			return AnyHostileActiveThreatTo(map, Faction.OfPlayer, countDormantPawnsAsHostile);
 		}
 
-		
 		public static bool AnyHostileActiveThreatTo(Map map, Faction faction, bool countDormantPawnsAsHostile = false)
 		{
-			foreach (IAttackTarget attackTarget in map.attackTargetsCache.TargetsHostileToFaction(faction))
+			foreach (IAttackTarget item in map.attackTargetsCache.TargetsHostileToFaction(faction))
 			{
-				if (GenHostility.IsActiveThreatTo(attackTarget, faction))
+				if (IsActiveThreatTo(item, faction))
 				{
 					return true;
 				}
 				Pawn pawn;
-				if (countDormantPawnsAsHostile && attackTarget.Thing.HostileTo(faction) && !attackTarget.Thing.Fogged() && !attackTarget.ThreatDisabled(null) && (pawn = (attackTarget.Thing as Pawn)) != null)
+				if (countDormantPawnsAsHostile && item.Thing.HostileTo(faction) && !item.Thing.Fogged() && !item.ThreatDisabled(null) && (pawn = (item.Thing as Pawn)) != null)
 				{
 					CompCanBeDormant comp = pawn.GetComp<CompCanBeDormant>();
 					if (comp != null && !comp.Awake)
@@ -131,13 +178,11 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static bool IsActiveThreatToPlayer(IAttackTarget target)
 		{
-			return GenHostility.IsActiveThreatTo(target, Faction.OfPlayer);
+			return IsActiveThreatTo(target, Faction.OfPlayer);
 		}
 
-		
 		public static bool IsActiveThreatTo(IAttackTarget target, Faction faction)
 		{
 			if (!target.Thing.HostileTo(faction))
@@ -178,7 +223,7 @@ namespace RimWorld
 			}
 			if (target.Thing.Spawned)
 			{
-				TraverseParms traverseParms = (pawn2 != null) ? TraverseParms.For(pawn2, Danger.Deadly, TraverseMode.ByPawn, false) : TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false);
+				TraverseParms traverseParms = (pawn2 != null) ? TraverseParms.For(pawn2) : TraverseParms.For(TraverseMode.PassDoors);
 				if (!target.Thing.Map.reachability.CanReachUnfogged(target.Thing.Position, traverseParms))
 				{
 					return false;
@@ -187,16 +232,18 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool IsDefMechClusterThreat(ThingDef def)
 		{
-			return (def.building != null && (def.building.IsTurret || def.building.IsMortar)) || def.isMechClusterThreat;
+			if (def.building != null && (def.building.IsTurret || def.building.IsMortar))
+			{
+				return true;
+			}
+			return def.isMechClusterThreat;
 		}
 
-		
 		public static void Notify_PawnLostForTutor(Pawn pawn, Map map)
 		{
-			if (!map.IsPlayerHome && map.mapPawns.FreeColonistsSpawnedCount != 0 && !GenHostility.AnyHostileActiveThreatToPlayer(map, false))
+			if (!map.IsPlayerHome && map.mapPawns.FreeColonistsSpawnedCount != 0 && !AnyHostileActiveThreatToPlayer(map))
 			{
 				LessonAutoActivator.TeachOpportunity(ConceptDefOf.ReformCaravan, OpportunityType.Important);
 			}

@@ -1,328 +1,197 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class FactionManager : IExposable
 	{
-		
-		
-		public List<Faction> AllFactionsListForReading
-		{
-			get
-			{
-				return this.allFactions;
-			}
-		}
+		private List<Faction> allFactions = new List<Faction>();
 
-		
-		
-		public IEnumerable<Faction> AllFactions
-		{
-			get
-			{
-				return this.allFactions;
-			}
-		}
+		private Faction ofPlayer;
 
-		
-		
-		public IEnumerable<Faction> AllFactionsVisible
-		{
-			get
-			{
-				return from fa in this.allFactions
-				where !fa.def.hidden
-				select fa;
-			}
-		}
+		private Faction ofMechanoids;
 
-		
-		
-		public IEnumerable<Faction> AllFactionsVisibleInViewOrder
-		{
-			get
-			{
-				return FactionManager.GetInViewOrder(this.AllFactionsVisible);
-			}
-		}
+		private Faction ofInsects;
 
-		
-		
-		public IEnumerable<Faction> AllFactionsInViewOrder
-		{
-			get
-			{
-				return FactionManager.GetInViewOrder(this.AllFactions);
-			}
-		}
+		private Faction ofAncients;
 
-		
-		
-		public Faction OfPlayer
-		{
-			get
-			{
-				return this.ofPlayer;
-			}
-		}
+		private Faction ofAncientsHostile;
 
-		
-		
-		public Faction OfMechanoids
-		{
-			get
-			{
-				return this.ofMechanoids;
-			}
-		}
+		private Faction empire;
 
-		
-		
-		public Faction OfInsects
-		{
-			get
-			{
-				return this.ofInsects;
-			}
-		}
+		public List<Faction> AllFactionsListForReading => allFactions;
 
-		
-		
-		public Faction OfAncients
-		{
-			get
-			{
-				return this.ofAncients;
-			}
-		}
+		public IEnumerable<Faction> AllFactions => allFactions;
 
-		
-		
-		public Faction OfAncientsHostile
-		{
-			get
-			{
-				return this.ofAncientsHostile;
-			}
-		}
+		public IEnumerable<Faction> AllFactionsVisible => allFactions.Where((Faction fa) => !fa.def.hidden);
 
-		
-		
-		public Faction Empire
-		{
-			get
-			{
-				return this.empire;
-			}
-		}
+		public IEnumerable<Faction> AllFactionsVisibleInViewOrder => GetInViewOrder(AllFactionsVisible);
 
-		
+		public IEnumerable<Faction> AllFactionsInViewOrder => GetInViewOrder(AllFactions);
+
+		public Faction OfPlayer => ofPlayer;
+
+		public Faction OfMechanoids => ofMechanoids;
+
+		public Faction OfInsects => ofInsects;
+
+		public Faction OfAncients => ofAncients;
+
+		public Faction OfAncientsHostile => ofAncientsHostile;
+
+		public Faction Empire => empire;
+
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Faction>(ref this.allFactions, "allFactions", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref allFactions, "allFactions", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
 				BackCompatibility.FactionManagerPostLoadInit();
 			}
 			if (Scribe.mode == LoadSaveMode.LoadingVars || Scribe.mode == LoadSaveMode.ResolvingCrossRefs || Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.allFactions.RemoveAll((Faction x) => x == null || x.def == null) != 0)
+				if (allFactions.RemoveAll((Faction x) => x == null || x.def == null) != 0)
 				{
-					Log.Error("Some factions were null after loading.", false);
+					Log.Error("Some factions were null after loading.");
 				}
-				this.RecacheFactions();
+				RecacheFactions();
 			}
 		}
 
-		
 		public void Add(Faction faction)
 		{
-			if (this.allFactions.Contains(faction))
+			if (!allFactions.Contains(faction))
 			{
-				return;
+				allFactions.Add(faction);
+				RecacheFactions();
 			}
-			this.allFactions.Add(faction);
-			this.RecacheFactions();
 		}
 
-		
 		public void Remove(Faction faction)
 		{
-			if (!this.allFactions.Contains(faction))
+			if (allFactions.Contains(faction))
 			{
-				return;
+				allFactions.Remove(faction);
+				RecacheFactions();
 			}
-			this.allFactions.Remove(faction);
-			this.RecacheFactions();
 		}
 
-		
 		public void FactionManagerTick()
 		{
 			SettlementProximityGoodwillUtility.CheckSettlementProximityGoodwillChange();
-			for (int i = 0; i < this.allFactions.Count; i++)
+			for (int i = 0; i < allFactions.Count; i++)
 			{
-				this.allFactions[i].FactionTick();
+				allFactions[i].FactionTick();
 			}
 		}
 
-		
 		public Faction FirstFactionOfDef(FactionDef facDef)
 		{
-			for (int i = 0; i < this.allFactions.Count; i++)
+			for (int i = 0; i < allFactions.Count; i++)
 			{
-				if (this.allFactions[i].def == facDef)
+				if (allFactions[i].def == facDef)
 				{
-					return this.allFactions[i];
+					return allFactions[i];
 				}
 			}
 			return null;
 		}
 
-		
 		public bool TryGetRandomNonColonyHumanlikeFaction(out Faction faction, bool tryMedievalOrBetter, bool allowDefeated = false, TechLevel minTechLevel = TechLevel.Undefined)
 		{
-			return (from x in this.AllFactions
-			where !x.IsPlayer && !x.def.hidden && x.def.humanlikeFaction && (allowDefeated || !x.defeated) && (minTechLevel == TechLevel.Undefined || x.def.techLevel >= minTechLevel)
-			select x).TryRandomElementByWeight(delegate(Faction x)
-			{
-				if (tryMedievalOrBetter && x.def.techLevel < TechLevel.Medieval)
-				{
-					return 0.1f;
-				}
-				return 1f;
-			}, out faction);
+			return AllFactions.Where((Faction x) => !x.IsPlayer && !x.def.hidden && x.def.humanlikeFaction && (allowDefeated || !x.defeated) && (minTechLevel == TechLevel.Undefined || (int)x.def.techLevel >= (int)minTechLevel)).TryRandomElementByWeight((Faction x) => (tryMedievalOrBetter && (int)x.def.techLevel < 3) ? 0.1f : 1f, out faction);
 		}
 
-		
 		public IEnumerable<Faction> GetFactions(bool allowHidden = false, bool allowDefeated = false, bool allowNonHumanlike = true, TechLevel minTechLevel = TechLevel.Undefined)
 		{
-			int num;
-			for (int i = 0; i < this.allFactions.Count; i = num + 1)
+			for (int i = 0; i < allFactions.Count; i++)
 			{
-				Faction faction = this.allFactions[i];
-				if (!faction.IsPlayer && (allowHidden || !faction.def.hidden) && (allowDefeated || !faction.defeated) && (allowNonHumanlike || faction.def.humanlikeFaction) && (minTechLevel == TechLevel.Undefined || faction.def.techLevel >= minTechLevel))
+				Faction faction = allFactions[i];
+				if (!faction.IsPlayer && (allowHidden || !faction.def.hidden) && (allowDefeated || !faction.defeated) && (allowNonHumanlike || faction.def.humanlikeFaction) && (minTechLevel == TechLevel.Undefined || (int)faction.def.techLevel >= (int)minTechLevel))
 				{
 					yield return faction;
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public Faction RandomEnemyFaction(bool allowHidden = false, bool allowDefeated = false, bool allowNonHumanlike = true, TechLevel minTechLevel = TechLevel.Undefined)
 		{
-			Faction result;
-			if ((from x in this.GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
-			where x.HostileTo(Faction.OfPlayer)
-			select x).TryRandomElement(out result))
+			if ((from x in GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
+				where x.HostileTo(Faction.OfPlayer)
+				select x).TryRandomElement(out Faction result))
 			{
 				return result;
 			}
 			return null;
 		}
 
-		
 		public Faction RandomNonHostileFaction(bool allowHidden = false, bool allowDefeated = false, bool allowNonHumanlike = true, TechLevel minTechLevel = TechLevel.Undefined)
 		{
-			Faction result;
-			if ((from x in this.GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
-			where !x.HostileTo(Faction.OfPlayer)
-			select x).TryRandomElement(out result))
+			if ((from x in GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
+				where !x.HostileTo(Faction.OfPlayer)
+				select x).TryRandomElement(out Faction result))
 			{
 				return result;
 			}
 			return null;
 		}
 
-		
 		public Faction RandomAlliedFaction(bool allowHidden = false, bool allowDefeated = false, bool allowNonHumanlike = true, TechLevel minTechLevel = TechLevel.Undefined)
 		{
-			Faction result;
-			if ((from x in this.GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
-			where x.PlayerRelationKind == FactionRelationKind.Ally
-			select x).TryRandomElement(out result))
+			if ((from x in GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
+				where x.PlayerRelationKind == FactionRelationKind.Ally
+				select x).TryRandomElement(out Faction result))
 			{
 				return result;
 			}
 			return null;
 		}
 
-		
 		public Faction RandomRoyalFaction(bool allowHidden = false, bool allowDefeated = false, bool allowNonHumanlike = true, TechLevel minTechLevel = TechLevel.Undefined)
 		{
-			Faction result;
-			if ((from x in this.GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
-			where x.def.HasRoyalTitles
-			select x).TryRandomElement(out result))
+			if ((from x in GetFactions(allowHidden, allowDefeated, allowNonHumanlike, minTechLevel)
+				where x.def.HasRoyalTitles
+				select x).TryRandomElement(out Faction result))
 			{
 				return result;
 			}
 			return null;
 		}
 
-		
 		public void LogKidnappedPawns()
 		{
-			Log.Message("Kidnapped pawns:", false);
-			for (int i = 0; i < this.allFactions.Count; i++)
+			Log.Message("Kidnapped pawns:");
+			for (int i = 0; i < allFactions.Count; i++)
 			{
-				this.allFactions[i].kidnapped.LogKidnappedPawns();
+				allFactions[i].kidnapped.LogKidnappedPawns();
 			}
 		}
 
-		
 		public static IEnumerable<Faction> GetInViewOrder(IEnumerable<Faction> factions)
 		{
 			return from x in factions
-			orderby x.defeated, x.def.listOrderPriority descending
-			select x;
+				orderby x.defeated, x.def.listOrderPriority descending
+				select x;
 		}
 
-		
 		private void RecacheFactions()
 		{
-			this.ofPlayer = null;
-			for (int i = 0; i < this.allFactions.Count; i++)
+			ofPlayer = null;
+			for (int i = 0; i < allFactions.Count; i++)
 			{
-				if (this.allFactions[i].IsPlayer)
+				if (allFactions[i].IsPlayer)
 				{
-					this.ofPlayer = this.allFactions[i];
+					ofPlayer = allFactions[i];
 					break;
 				}
 			}
-			this.ofMechanoids = this.FirstFactionOfDef(FactionDefOf.Mechanoid);
-			this.ofInsects = this.FirstFactionOfDef(FactionDefOf.Insect);
-			this.ofAncients = this.FirstFactionOfDef(FactionDefOf.Ancients);
-			this.ofAncientsHostile = this.FirstFactionOfDef(FactionDefOf.AncientsHostile);
-			this.empire = this.FirstFactionOfDef(FactionDefOf.Empire);
+			ofMechanoids = FirstFactionOfDef(FactionDefOf.Mechanoid);
+			ofInsects = FirstFactionOfDef(FactionDefOf.Insect);
+			ofAncients = FirstFactionOfDef(FactionDefOf.Ancients);
+			ofAncientsHostile = FirstFactionOfDef(FactionDefOf.AncientsHostile);
+			empire = FirstFactionOfDef(FactionDefOf.Empire);
 		}
-
-		
-		private List<Faction> allFactions = new List<Faction>();
-
-		
-		private Faction ofPlayer;
-
-		
-		private Faction ofMechanoids;
-
-		
-		private Faction ofInsects;
-
-		
-		private Faction ofAncients;
-
-		
-		private Faction ofAncientsHostile;
-
-		
-		private Faction empire;
 	}
 }

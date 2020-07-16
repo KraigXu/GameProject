@@ -1,112 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class HediffComp_VerbGiver : HediffComp, IVerbOwner
 	{
-		
-		
-		public HediffCompProperties_VerbGiver Props
-		{
-			get
-			{
-				return (HediffCompProperties_VerbGiver)this.props;
-			}
-		}
+		public VerbTracker verbTracker;
 
-		
-		
-		public VerbTracker VerbTracker
-		{
-			get
-			{
-				return this.verbTracker;
-			}
-		}
+		public HediffCompProperties_VerbGiver Props => (HediffCompProperties_VerbGiver)props;
 
-		
-		
-		public List<VerbProperties> VerbProperties
-		{
-			get
-			{
-				return this.Props.verbs;
-			}
-		}
+		public VerbTracker VerbTracker => verbTracker;
 
-		
-		
-		public List<Tool> Tools
-		{
-			get
-			{
-				return this.Props.tools;
-			}
-		}
+		public List<VerbProperties> VerbProperties => Props.verbs;
 
-		
-		
-		Thing IVerbOwner.ConstantCaster
-		{
-			get
-			{
-				return base.Pawn;
-			}
-		}
+		public List<Tool> Tools => Props.tools;
 
-		
-		
-		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
-		{
-			get
-			{
-				return ImplementOwnerTypeDefOf.Hediff;
-			}
-		}
+		Thing IVerbOwner.ConstantCaster => base.Pawn;
 
-		
+		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef => ImplementOwnerTypeDefOf.Hediff;
+
 		public HediffComp_VerbGiver()
 		{
-			this.verbTracker = new VerbTracker(this);
+			verbTracker = new VerbTracker(this);
 		}
 
-		
 		public override void CompExposeData()
 		{
 			base.CompExposeData();
-			Scribe_Deep.Look<VerbTracker>(ref this.verbTracker, "verbTracker", new object[]
+			Scribe_Deep.Look(ref verbTracker, "verbTracker", this);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && verbTracker == null)
 			{
-				this
-			});
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.verbTracker == null)
-			{
-				this.verbTracker = new VerbTracker(this);
+				verbTracker = new VerbTracker(this);
 			}
 		}
 
-		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			base.CompPostTick(ref severityAdjustment);
-			this.verbTracker.VerbsTick();
+			verbTracker.VerbsTick();
 		}
 
-		
 		string IVerbOwner.UniqueVerbOwnerID()
 		{
-			return this.parent.GetUniqueLoadID() + "_" + this.parent.comps.IndexOf(this);
+			return parent.GetUniqueLoadID() + "_" + parent.comps.IndexOf(this);
 		}
 
-		
 		bool IVerbOwner.VerbsStillUsableBy(Pawn p)
 		{
-			return p.health.hediffSet.hediffs.Contains(this.parent);
+			return p.health.hediffSet.hediffs.Contains(parent);
 		}
-
-		
-		public VerbTracker verbTracker;
 	}
 }

@@ -1,12 +1,14 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public struct ThoughtToAddToAll
 	{
-		
+		public ThoughtDef thoughtDef;
+
+		public Pawn otherPawn;
+
 		public ThoughtToAddToAll(ThoughtDef thoughtDef, Pawn otherPawn = null)
 		{
 			if (thoughtDef == null)
@@ -17,25 +19,19 @@ namespace RimWorld
 			this.otherPawn = otherPawn;
 		}
 
-		
 		public void Add(Pawn to)
 		{
-			if (to.needs == null || to.needs.mood == null)
+			if (to.needs != null && to.needs.mood != null)
 			{
-				return;
+				if (otherPawn == null)
+				{
+					to.needs.mood.thoughts.memories.TryGainMemory(thoughtDef);
+				}
+				else
+				{
+					to.needs.mood.thoughts.memories.TryGainMemory(thoughtDef, otherPawn);
+				}
 			}
-			if (this.otherPawn == null)
-			{
-				to.needs.mood.thoughts.memories.TryGainMemory(this.thoughtDef, null);
-				return;
-			}
-			to.needs.mood.thoughts.memories.TryGainMemory(this.thoughtDef, this.otherPawn);
 		}
-
-		
-		public ThoughtDef thoughtDef;
-
-		
-		public Pawn otherPawn;
 	}
 }

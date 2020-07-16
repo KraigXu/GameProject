@@ -1,17 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_Warden_DeliverFood : WorkGiver_Warden
 	{
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
-			if (!base.ShouldTakeCareOfPrisoner(pawn, t))
+			if (!ShouldTakeCareOfPrisoner(pawn, t))
 			{
 				return null;
 			}
@@ -32,37 +29,34 @@ namespace RimWorld
 			{
 				return null;
 			}
-			Thing thing;
-			ThingDef thingDef;
-			if (!FoodUtility.TryFindBestFoodSourceFor(pawn, pawn2, pawn2.needs.food.CurCategory == HungerCategory.Starving, out thing, out thingDef, false, true, false, false, false, false, false, false, FoodPreferability.Undefined))
+			if (!FoodUtility.TryFindBestFoodSourceFor(pawn, pawn2, pawn2.needs.food.CurCategory == HungerCategory.Starving, out Thing foodSource, out ThingDef foodDef, canRefillDispenser: false, canUseInventory: true, allowForbidden: false, allowCorpse: false))
 			{
 				return null;
 			}
-			if (thing.GetRoom(RegionType.Set_Passable) == pawn2.GetRoom(RegionType.Set_Passable))
+			if (foodSource.GetRoom() == pawn2.GetRoom())
 			{
 				return null;
 			}
-			if (WorkGiver_Warden_DeliverFood.FoodAvailableInRoomTo(pawn2))
+			if (FoodAvailableInRoomTo(pawn2))
 			{
 				return null;
 			}
-			float nutrition = FoodUtility.GetNutrition(thing, thingDef);
-			Job job = JobMaker.MakeJob(JobDefOf.DeliverFood, thing, pawn2);
-			job.count = FoodUtility.WillIngestStackCountOf(pawn2, thingDef, nutrition);
-			job.targetC = RCellFinder.SpotToChewStandingNear(pawn2, thing);
+			float nutrition = FoodUtility.GetNutrition(foodSource, foodDef);
+			Job job = JobMaker.MakeJob(JobDefOf.DeliverFood, foodSource, pawn2);
+			job.count = FoodUtility.WillIngestStackCountOf(pawn2, foodDef, nutrition);
+			job.targetC = RCellFinder.SpotToChewStandingNear(pawn2, foodSource);
 			return job;
 		}
 
-		
 		private static bool FoodAvailableInRoomTo(Pawn prisoner)
 		{
-			if (prisoner.carryTracker.CarriedThing != null && WorkGiver_Warden_DeliverFood.NutritionAvailableForFrom(prisoner, prisoner.carryTracker.CarriedThing) > 0f)
+			if (prisoner.carryTracker.CarriedThing != null && NutritionAvailableForFrom(prisoner, prisoner.carryTracker.CarriedThing) > 0f)
 			{
 				return true;
 			}
 			float num = 0f;
 			float num2 = 0f;
-			Room room = prisoner.GetRoom(RegionType.Set_Passable);
+			Room room = prisoner.GetRoom();
 			if (room == null)
 			{
 				return false;
@@ -74,35 +68,38 @@ namespace RimWorld
 				for (int j = 0; j < list.Count; j++)
 				{
 					Thing thing = list[j];
-					if (!thing.def.IsIngestible || thing.def.ingestible.preferability > FoodPreferability.DesperateOnlyForHumanlikes)
+					if (!thing.def.IsIngestible || (int)thing.def.ingestible.preferability > 3)
 					{
-						num2 += WorkGiver_Warden_DeliverFood.NutritionAvailableForFrom(prisoner, thing);
+						num2 += NutritionAvailableForFrom(prisoner, thing);
 					}
 				}
 				List<Thing> list2 = region.ListerThings.ThingsInGroup(ThingRequestGroup.Pawn);
 				for (int k = 0; k < list2.Count; k++)
 				{
 					Pawn pawn = list2[k] as Pawn;
-					if (pawn.IsPrisonerOfColony && pawn.needs.food.CurLevelPercentage < pawn.needs.food.PercentageThreshHungry + 0.02f && (pawn.carryTracker.CarriedThing == null || !pawn.WillEat(pawn.carryTracker.CarriedThing, null, true)))
+					if (pawn.IsPrisonerOfColony && pawn.needs.food.CurLevelPercentage < pawn.needs.food.PercentageThreshHungry + 0.02f && (pawn.carryTracker.CarriedThing == null || !pawn.WillEat(pawn.carryTracker.CarriedThing)))
 					{
 						num += pawn.needs.food.NutritionWanted;
 					}
 				}
 			}
-			return num2 + 0.5f >= num;
+			if (num2 + 0.5f >= num)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		private static float NutritionAvailableForFrom(Pawn p, Thing foodSource)
 		{
-			if (foodSource.def.IsNutritionGivingIngestible && p.WillEat(foodSource, null, true))
+			if (foodSource.def.IsNutritionGivingIngestible && p.WillEat(foodSource))
 			{
-				return foodSource.GetStatValue(StatDefOf.Nutrition, true) * (float)foodSource.stackCount;
+				return foodSource.GetStatValue(StatDefOf.Nutrition) * (float)foodSource.stackCount;
 			}
 			if (p.RaceProps.ToolUser && p.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 			{
 				Building_NutrientPasteDispenser building_NutrientPasteDispenser = foodSource as Building_NutrientPasteDispenser;
-				if (building_NutrientPasteDispenser != null && building_NutrientPasteDispenser.CanDispenseNow && p.CanReach(building_NutrientPasteDispenser.InteractionCell, PathEndMode.OnCell, Danger.Some, false, TraverseMode.ByPawn))
+				if (building_NutrientPasteDispenser != null && building_NutrientPasteDispenser.CanDispenseNow && p.CanReach(building_NutrientPasteDispenser.InteractionCell, PathEndMode.OnCell, Danger.Some))
 				{
 					return 99999f;
 				}

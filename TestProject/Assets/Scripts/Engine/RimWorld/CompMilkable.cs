@@ -1,63 +1,19 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompMilkable : CompHasGatherableBodyResource
 	{
-		
-		
-		protected override int GatherResourcesIntervalDays
-		{
-			get
-			{
-				return this.Props.milkIntervalDays;
-			}
-		}
+		protected override int GatherResourcesIntervalDays => Props.milkIntervalDays;
 
-		
-		
-		protected override int ResourceAmount
-		{
-			get
-			{
-				return this.Props.milkAmount;
-			}
-		}
+		protected override int ResourceAmount => Props.milkAmount;
 
-		
-		
-		protected override ThingDef ResourceDef
-		{
-			get
-			{
-				return this.Props.milkDef;
-			}
-		}
+		protected override ThingDef ResourceDef => Props.milkDef;
 
-		
-		
-		protected override string SaveKey
-		{
-			get
-			{
-				return "milkFullness";
-			}
-		}
+		protected override string SaveKey => "milkFullness";
 
-		
-		
-		public CompProperties_Milkable Props
-		{
-			get
-			{
-				return (CompProperties_Milkable)this.props;
-			}
-		}
+		public CompProperties_Milkable Props => (CompProperties_Milkable)props;
 
-		
-		
 		protected override bool Active
 		{
 			get
@@ -66,15 +22,22 @@ namespace RimWorld
 				{
 					return false;
 				}
-				Pawn pawn = this.parent as Pawn;
-				return (!this.Props.milkFemaleOnly || pawn == null || pawn.gender == Gender.Female) && (pawn == null || pawn.ageTracker.CurLifeStage.milkable);
+				Pawn pawn = parent as Pawn;
+				if (Props.milkFemaleOnly && pawn != null && pawn.gender != Gender.Female)
+				{
+					return false;
+				}
+				if (pawn != null && !pawn.ageTracker.CurLifeStage.milkable)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return null;
 			}

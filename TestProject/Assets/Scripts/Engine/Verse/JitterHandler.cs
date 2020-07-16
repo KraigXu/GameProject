@@ -1,73 +1,56 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class JitterHandler
 	{
-		
-		
-		public Vector3 CurrentOffset
-		{
-			get
-			{
-				return this.curOffset;
-			}
-		}
+		private Vector3 curOffset = new Vector3(0f, 0f, 0f);
 
-		
+		private float DamageJitterDistance = 0.17f;
+
+		private float DeflectJitterDistance = 0.1f;
+
+		private float JitterDropPerTick = 0.018f;
+
+		private float JitterMax = 0.35f;
+
+		public Vector3 CurrentOffset => curOffset;
+
 		public void JitterHandlerTick()
 		{
-			if (this.curOffset.sqrMagnitude < this.JitterDropPerTick * this.JitterDropPerTick)
+			if (curOffset.sqrMagnitude < JitterDropPerTick * JitterDropPerTick)
 			{
-				this.curOffset = new Vector3(0f, 0f, 0f);
-				return;
+				curOffset = new Vector3(0f, 0f, 0f);
 			}
-			this.curOffset -= this.curOffset.normalized * this.JitterDropPerTick;
+			else
+			{
+				curOffset -= curOffset.normalized * JitterDropPerTick;
+			}
 		}
 
-		
 		public void Notify_DamageApplied(DamageInfo dinfo)
 		{
 			if (dinfo.Def.hasForcefulImpact)
 			{
-				this.AddOffset(this.DamageJitterDistance, dinfo.Angle);
+				AddOffset(DamageJitterDistance, dinfo.Angle);
 			}
 		}
 
-		
 		public void Notify_DamageDeflected(DamageInfo dinfo)
 		{
 			if (dinfo.Def.hasForcefulImpact)
 			{
-				this.AddOffset(this.DeflectJitterDistance, dinfo.Angle);
+				AddOffset(DeflectJitterDistance, dinfo.Angle);
 			}
 		}
 
-		
 		public void AddOffset(float dist, float dir)
 		{
-			this.curOffset += Quaternion.AngleAxis(dir, Vector3.up) * Vector3.forward * dist;
-			if (this.curOffset.sqrMagnitude > this.JitterMax * this.JitterMax)
+			curOffset += Quaternion.AngleAxis(dir, Vector3.up) * Vector3.forward * dist;
+			if (curOffset.sqrMagnitude > JitterMax * JitterMax)
 			{
-				this.curOffset *= this.JitterMax / this.curOffset.magnitude;
+				curOffset *= JitterMax / curOffset.magnitude;
 			}
 		}
-
-		
-		private Vector3 curOffset = new Vector3(0f, 0f, 0f);
-
-		
-		private float DamageJitterDistance = 0.17f;
-
-		
-		private float DeflectJitterDistance = 0.1f;
-
-		
-		private float JitterDropPerTick = 0.018f;
-
-		
-		private float JitterMax = 0.35f;
 	}
 }

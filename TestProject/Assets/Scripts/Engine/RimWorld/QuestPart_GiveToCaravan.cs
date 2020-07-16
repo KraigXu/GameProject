@@ -1,177 +1,159 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_GiveToCaravan : QuestPart
 	{
-		
-		
-		
+		public string inSignal;
+
+		public Caravan caravan;
+
+		private List<Thing> items = new List<Thing>();
+
+		private List<Pawn> pawns = new List<Pawn>();
+
 		public IEnumerable<Thing> Things
 		{
 			get
 			{
-				return this.items.Concat(this.pawns.Cast<Thing>());
+				return items.Concat(pawns.Cast<Thing>());
 			}
 			set
 			{
-				this.items.Clear();
-				this.pawns.Clear();
+				items.Clear();
+				pawns.Clear();
 				if (value != null)
 				{
-					foreach (Thing thing in value)
+					foreach (Thing item in value)
 					{
-						Pawn pawn = thing as Pawn;
+						Pawn pawn = item as Pawn;
 						if (pawn != null)
 						{
-							this.pawns.Add(pawn);
+							pawns.Add(pawn);
 						}
 						else
 						{
-							this.items.Add(thing);
+							items.Add(item);
 						}
 					}
 				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.caravan != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.caravan;
+					yield return questLookTarget;
 				}
-				foreach (Pawn t in PawnsArriveQuestPartUtility.GetQuestLookTargets(this.pawns))
+				if (caravan != null)
 				{
-					yield return t;
+					yield return caravan;
 				}
-				IEnumerator<Pawn> enumerator2 = null;
-				yield break;
-				yield break;
+				foreach (Pawn questLookTarget2 in PawnsArriveQuestPartUtility.GetQuestLookTargets(pawns))
+				{
+					yield return questLookTarget2;
+				}
 			}
 		}
 
-		
-		
-		public override bool IncreasesPopulation
-		{
-			get
-			{
-				return PawnsArriveQuestPartUtility.IncreasesPopulation(this.pawns, true, false);
-			}
-		}
+		public override bool IncreasesPopulation => PawnsArriveQuestPartUtility.IncreasesPopulation(pawns, joinPlayer: true, makePrisoners: false);
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				this.pawns.RemoveAll((Pawn x) => x.Destroyed);
-				Caravan caravan = this.caravan;
-				if (caravan == null)
-				{
-					signal.args.TryGetArg<Caravan>("CARAVAN", out caravan);
-				}
-				if (caravan != null && this.Things.Any<Thing>())
-				{
-					for (int i = 0; i < this.pawns.Count; i++)
-					{
-						if (this.pawns[i].Faction != Faction.OfPlayer)
-						{
-							this.pawns[i].SetFaction(Faction.OfPlayer, null);
-						}
-						caravan.AddPawn(this.pawns[i], true);
-					}
-					for (int j = 0; j < this.items.Count; j++)
-					{
-						CaravanInventoryUtility.GiveThing(caravan, this.items[j]);
-					}
-					this.items.Clear();
-				}
+				return;
 			}
+			pawns.RemoveAll((Pawn x) => x.Destroyed);
+			Caravan arg = caravan;
+			if (arg == null)
+			{
+				signal.args.TryGetArg("CARAVAN", out arg);
+			}
+			if (arg == null || !Things.Any())
+			{
+				return;
+			}
+			for (int i = 0; i < pawns.Count; i++)
+			{
+				if (pawns[i].Faction != Faction.OfPlayer)
+				{
+					pawns[i].SetFaction(Faction.OfPlayer);
+				}
+				arg.AddPawn(pawns[i], addCarriedPawnToWorldPawnsIfAny: true);
+			}
+			for (int j = 0; j < items.Count; j++)
+			{
+				CaravanInventoryUtility.GiveThing(arg, items[j]);
+			}
+			items.Clear();
 		}
 
-		
 		public override void PostQuestAdded()
 		{
 			base.PostQuestAdded();
-			for (int i = 0; i < this.items.Count; i++)
+			int num = 0;
+			while (true)
 			{
-				if (this.items[i].def == ThingDefOf.PsychicAmplifier)
+				if (num < items.Count)
 				{
-					Find.History.Notify_PsylinkAvailable();
-					return;
+					if (items[num].def == ThingDefOf.PsychicAmplifier)
+					{
+						break;
+					}
+					num++;
+					continue;
 				}
+				return;
 			}
+			Find.History.Notify_PsylinkAvailable();
 		}
 
-		
 		public override bool QuestPartReserves(Pawn p)
 		{
-			return this.pawns.Contains(p);
+			return pawns.Contains(p);
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			for (int i = 0; i < this.items.Count; i++)
+			for (int i = 0; i < items.Count; i++)
 			{
-				this.items[i].Destroy(DestroyMode.Vanish);
+				items[i].Destroy();
 			}
-			this.items.Clear();
+			items.Clear();
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<Caravan>(ref this.caravan, "caravan", false);
-			Scribe_Collections.Look<Thing>(ref this.items, "items", LookMode.Deep, Array.Empty<object>());
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref caravan, "caravan");
+			Scribe_Collections.Look(ref items, "items", LookMode.Deep);
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.items.RemoveAll((Thing x) => x == null);
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				items.RemoveAll((Thing x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.pawns.Replace(replace, with);
+			pawns.Replace(replace, with);
 		}
-
-		
-		public string inSignal;
-
-		
-		public Caravan caravan;
-
-		
-		private List<Thing> items = new List<Thing>();
-
-		
-		private List<Pawn> pawns = new List<Pawn>();
 	}
 }

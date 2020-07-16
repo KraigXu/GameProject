@@ -1,25 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ThoughtUtility
 	{
-		
+		public static List<ThoughtDef> situationalSocialThoughtDefs;
+
+		public static List<ThoughtDef> situationalNonSocialThoughtDefs;
+
 		public static void Reset()
 		{
-			ThoughtUtility.situationalSocialThoughtDefs = (from x in DefDatabase<ThoughtDef>.AllDefs
-			where x.IsSituational && x.IsSocial
-			select x).ToList<ThoughtDef>();
-			ThoughtUtility.situationalNonSocialThoughtDefs = (from x in DefDatabase<ThoughtDef>.AllDefs
-			where x.IsSituational && !x.IsSocial
-			select x).ToList<ThoughtDef>();
+			situationalSocialThoughtDefs = DefDatabase<ThoughtDef>.AllDefs.Where((ThoughtDef x) => x.IsSituational && x.IsSocial).ToList();
+			situationalNonSocialThoughtDefs = DefDatabase<ThoughtDef>.AllDefs.Where((ThoughtDef x) => x.IsSituational && !x.IsSocial).ToList();
 		}
 
-		
 		public static void GiveThoughtsForPawnExecuted(Pawn victim, PawnExecutionKind kind)
 		{
 			if (!victim.RaceProps.Humanlike)
@@ -35,68 +32,57 @@ namespace RimWorld
 			{
 				switch (kind)
 				{
-				case PawnExecutionKind.GenericBrutal:
-					forcedStage = 2;
-					break;
 				case PawnExecutionKind.GenericHumane:
 					forcedStage = 1;
+					break;
+				case PawnExecutionKind.GenericBrutal:
+					forcedStage = 2;
 					break;
 				case PawnExecutionKind.OrganHarvesting:
 					forcedStage = 3;
 					break;
 				}
 			}
-			ThoughtDef def;
-			if (victim.IsColonist)
+			ThoughtDef def = (!victim.IsColonist) ? ThoughtDefOf.KnowGuestExecuted : ThoughtDefOf.KnowColonistExecuted;
+			foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
 			{
-				def = ThoughtDefOf.KnowColonistExecuted;
-			}
-			else
-			{
-				def = ThoughtDefOf.KnowGuestExecuted;
-			}
-			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
-			{
-				if (pawn.IsColonist && pawn.needs.mood != null)
+				if (allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.IsColonist && allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood != null)
 				{
-					pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtMaker.MakeThought(def, forcedStage), null);
+					allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood.thoughts.memories.TryGainMemory(ThoughtMaker.MakeThought(def, forcedStage));
 				}
 			}
 		}
 
-		
 		public static void GiveThoughtsForPawnOrganHarvested(Pawn victim)
 		{
-			if (!victim.RaceProps.Humanlike)
+			if (victim.RaceProps.Humanlike)
 			{
-				return;
-			}
-			ThoughtDef thoughtDef = null;
-			if (victim.IsColonist)
-			{
-				thoughtDef = ThoughtDefOf.KnowColonistOrganHarvested;
-			}
-			else if (victim.HostFaction == Faction.OfPlayer)
-			{
-				thoughtDef = ThoughtDefOf.KnowGuestOrganHarvested;
-			}
-			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
-			{
-				if (pawn.needs.mood != null)
+				ThoughtDef thoughtDef = null;
+				if (victim.IsColonist)
 				{
-					if (pawn == victim)
+					thoughtDef = ThoughtDefOf.KnowColonistOrganHarvested;
+				}
+				else if (victim.HostFaction == Faction.OfPlayer)
+				{
+					thoughtDef = ThoughtDefOf.KnowGuestOrganHarvested;
+				}
+				foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
+				{
+					if (allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood != null)
 					{
-						pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.MyOrganHarvested, null);
-					}
-					else if (thoughtDef != null)
-					{
-						pawn.needs.mood.thoughts.memories.TryGainMemory(thoughtDef, null);
+						if (allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner == victim)
+						{
+							allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.MyOrganHarvested);
+						}
+						else if (thoughtDef != null)
+						{
+							allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood.thoughts.memories.TryGainMemory(thoughtDef);
+						}
 					}
 				}
 			}
 		}
 
-		
 		public static Hediff NullifyingHediff(ThoughtDef def, Pawn pawn)
 		{
 			if (def.IsMemory)
@@ -120,17 +106,16 @@ namespace RimWorld
 				return null;
 			}
 			Rand.PushState();
-			Rand.Seed = pawn.thingIDNumber * 31 + (int)(def.index * 139);
-			bool flag = Rand.Value < num;
+			Rand.Seed = pawn.thingIDNumber * 31 + def.index * 139;
+			bool num2 = Rand.Value < num;
 			Rand.PopState();
-			if (!flag)
+			if (!num2)
 			{
 				return null;
 			}
 			return result;
 		}
 
-		
 		public static Trait NullifyingTrait(ThoughtDef def, Pawn pawn)
 		{
 			if (def.nullifyingTraits != null)
@@ -147,7 +132,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static TaleDef NullifyingTale(ThoughtDef def, Pawn pawn)
 		{
 			if (def.nullifyingOwnTales != null)
@@ -163,25 +147,21 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static void RemovePositiveBedroomThoughts(Pawn pawn)
 		{
-			if (pawn.needs.mood == null)
+			if (pawn.needs.mood != null)
 			{
-				return;
+				pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefIf(ThoughtDefOf.SleptInBedroom, (Thought_Memory thought) => thought.MoodOffset() > 0f);
+				pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefIf(ThoughtDefOf.SleptInBarracks, (Thought_Memory thought) => thought.MoodOffset() > 0f);
 			}
-			pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefIf(ThoughtDefOf.SleptInBedroom, (Thought_Memory thought) => thought.MoodOffset() > 0f);
-			pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefIf(ThoughtDefOf.SleptInBarracks, (Thought_Memory thought) => thought.MoodOffset() > 0f);
 		}
 
-		
 		[Obsolete("Only need this overload to not break mod compatibility.")]
 		public static bool CanGetThought(Pawn pawn, ThoughtDef def)
 		{
-			return ThoughtUtility.CanGetThought_NewTemp(pawn, def, false);
+			return CanGetThought_NewTemp(pawn, def);
 		}
 
-		
 		public static bool CanGetThought_NewTemp(Pawn pawn, ThoughtDef def, bool checkIfNullified = false)
 		{
 			try
@@ -190,7 +170,7 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (!def.requiredTraits.NullOrEmpty<TraitDef>())
+				if (!def.requiredTraits.NullOrEmpty())
 				{
 					bool flag = false;
 					for (int i = 0; i < def.requiredTraits.Count; i++)
@@ -210,7 +190,7 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (checkIfNullified && ThoughtUtility.ThoughtNullified(pawn, def))
+				if (checkIfNullified && ThoughtNullified(pawn, def))
 				{
 					return false;
 				}
@@ -221,38 +201,42 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool ThoughtNullified(Pawn pawn, ThoughtDef def)
 		{
-			return ThoughtUtility.NullifyingTrait(def, pawn) != null || ThoughtUtility.NullifyingHediff(def, pawn) != null || ThoughtUtility.NullifyingTale(def, pawn) != null;
+			if (NullifyingTrait(def, pawn) != null)
+			{
+				return true;
+			}
+			if (NullifyingHediff(def, pawn) != null)
+			{
+				return true;
+			}
+			if (NullifyingTale(def, pawn) != null)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static string ThoughtNullifiedMessage(Pawn pawn, ThoughtDef def)
 		{
 			TaggedString t = "ThoughtNullifiedBy".Translate().CapitalizeFirst() + ": ";
-			Trait trait = ThoughtUtility.NullifyingTrait(def, pawn);
+			Trait trait = NullifyingTrait(def, pawn);
 			if (trait != null)
 			{
 				return t + trait.LabelCap;
 			}
-			Hediff hediff = ThoughtUtility.NullifyingHediff(def, pawn);
+			Hediff hediff = NullifyingHediff(def, pawn);
 			if (hediff != null)
 			{
 				return t + hediff.def.LabelCap;
 			}
-			TaleDef taleDef = ThoughtUtility.NullifyingTale(def, pawn);
+			TaleDef taleDef = NullifyingTale(def, pawn);
 			if (taleDef != null)
 			{
 				return t + taleDef.LabelCap;
 			}
 			return "";
 		}
-
-		
-		public static List<ThoughtDef> situationalSocialThoughtDefs;
-
-		
-		public static List<ThoughtDef> situationalNonSocialThoughtDefs;
 	}
 }

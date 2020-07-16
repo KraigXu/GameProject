@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse.AI;
 
@@ -6,36 +5,38 @@ namespace Verse
 {
 	public class ThinkTreeDef : Def
 	{
+		public ThinkNode thinkRoot;
+
+		[NoTranslate]
+		public string insertTag;
+
+		public float insertPriority;
 
 		public override void ResolveReferences()
 		{
-			this.thinkRoot.ResolveSubnodesAndRecur();
-			foreach (ThinkNode thinkNode in this.thinkRoot.ThisAndChildrenRecursive)
+			thinkRoot.ResolveSubnodesAndRecur();
+			foreach (ThinkNode item in thinkRoot.ThisAndChildrenRecursive)
 			{
-				thinkNode.ResolveReferences();
+				item.ResolveReferences();
 			}
-			ThinkTreeKeyAssigner.AssignKeys(this.thinkRoot, GenText.StableStringHash(this.defName));
-			this.ResolveParentNodes(this.thinkRoot);
+			ThinkTreeKeyAssigner.AssignKeys(thinkRoot, GenText.StableStringHash(defName));
+			ResolveParentNodes(thinkRoot);
 		}
-
 
 		public override IEnumerable<string> ConfigErrors()
 		{
-			IEnumerator<string> enumerator = null;
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
 			HashSet<int> usedKeys = new HashSet<int>();
 			HashSet<ThinkNode> instances = new HashSet<ThinkNode>();
-			foreach (ThinkNode node in this.thinkRoot.ThisAndChildrenRecursive)
+			foreach (ThinkNode node in thinkRoot.ThisAndChildrenRecursive)
 			{
 				int key = node.UniqueSaveKey;
 				if (key == -1)
 				{
-					yield return string.Concat(new object[]
-					{
-						"Thinknode ",
-						node.GetType(),
-						" has invalid save key ",
-						key
-					});
+					yield return "Thinknode " + node.GetType() + " has invalid save key " + key;
 				}
 				else if (instances.Contains(node))
 				{
@@ -43,26 +44,16 @@ namespace Verse
 				}
 				else if (usedKeys.Contains(key))
 				{
-					yield return string.Concat(new object[]
-					{
-						"Two ThinkNodes have the same unique save key ",
-						key,
-						" (one of the nodes is ",
-						node.GetType(),
-						")"
-					});
+					yield return "Two ThinkNodes have the same unique save key " + key + " (one of the nodes is " + node.GetType() + ")";
 				}
 				if (key != -1)
 				{
 					usedKeys.Add(key);
 				}
 				instances.Add(node);
-				
 			}
-			yield break;
 		}
 
-		
 		public bool TryGetThinkNodeWithSaveKey(int key, out ThinkNode outNode)
 		{
 			outNode = null;
@@ -70,56 +61,34 @@ namespace Verse
 			{
 				return false;
 			}
-			if (key == this.thinkRoot.UniqueSaveKey)
+			if (key == thinkRoot.UniqueSaveKey)
 			{
-				outNode = this.thinkRoot;
+				outNode = thinkRoot;
 				return true;
 			}
-			foreach (ThinkNode thinkNode in this.thinkRoot.ChildrenRecursive)
+			foreach (ThinkNode item in thinkRoot.ChildrenRecursive)
 			{
-				if (thinkNode.UniqueSaveKey == key)
+				if (item.UniqueSaveKey == key)
 				{
-					outNode = thinkNode;
+					outNode = item;
 					return true;
 				}
 			}
 			return false;
 		}
 
-		
 		private void ResolveParentNodes(ThinkNode node)
 		{
 			for (int i = 0; i < node.subNodes.Count; i++)
 			{
 				if (node.subNodes[i].parent != null)
 				{
-					Log.Warning(string.Concat(new object[]
-					{
-						"Think node ",
-						node.subNodes[i],
-						" from think tree ",
-						this.defName,
-						" already has a parent node (",
-						node.subNodes[i].parent,
-						"). This means that it's referenced by more than one think tree (should have been copied instead)."
-					}), false);
+					Log.Warning("Think node " + node.subNodes[i] + " from think tree " + defName + " already has a parent node (" + node.subNodes[i].parent + "). This means that it's referenced by more than one think tree (should have been copied instead).");
+					continue;
 				}
-				else
-				{
-					node.subNodes[i].parent = node;
-					this.ResolveParentNodes(node.subNodes[i]);
-				}
+				node.subNodes[i].parent = node;
+				ResolveParentNodes(node.subNodes[i]);
 			}
 		}
-
-		
-		public ThinkNode thinkRoot;
-
-		
-		[NoTranslate]
-		public string insertTag;
-
-		
-		public float insertPriority;
 	}
 }

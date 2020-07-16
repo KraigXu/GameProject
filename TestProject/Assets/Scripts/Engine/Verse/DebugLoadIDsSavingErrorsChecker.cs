@@ -1,50 +1,87 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class DebugLoadIDsSavingErrorsChecker
 	{
-		
+		private struct ReferencedObject : IEquatable<ReferencedObject>
+		{
+			public string loadID;
+
+			public string label;
+
+			public ReferencedObject(string loadID, string label)
+			{
+				this.loadID = loadID;
+				this.label = label;
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (!(obj is ReferencedObject))
+				{
+					return false;
+				}
+				return Equals((ReferencedObject)obj);
+			}
+
+			public bool Equals(ReferencedObject other)
+			{
+				if (loadID == other.loadID)
+				{
+					return label == other.label;
+				}
+				return false;
+			}
+
+			public override int GetHashCode()
+			{
+				return Gen.HashCombine(Gen.HashCombine(0, loadID), label);
+			}
+
+			public static bool operator ==(ReferencedObject lhs, ReferencedObject rhs)
+			{
+				return lhs.Equals(rhs);
+			}
+
+			public static bool operator !=(ReferencedObject lhs, ReferencedObject rhs)
+			{
+				return !(lhs == rhs);
+			}
+		}
+
+		private HashSet<string> deepSaved = new HashSet<string>();
+
+		private HashSet<ReferencedObject> referenced = new HashSet<ReferencedObject>();
+
 		public void Clear()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				return;
+				deepSaved.Clear();
+				referenced.Clear();
 			}
-			this.deepSaved.Clear();
-			this.referenced.Clear();
 		}
 
-		
 		public void CheckForErrorsAndClear()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				return;
-			}
-			if (!Scribe.saver.savingForDebug)
-			{
-				foreach (DebugLoadIDsSavingErrorsChecker.ReferencedObject referencedObject in this.referenced)
+				if (!Scribe.saver.savingForDebug)
 				{
-					if (!this.deepSaved.Contains(referencedObject.loadID))
+					foreach (ReferencedObject item in referenced)
 					{
-						Log.Warning(string.Concat(new string[]
+						if (!deepSaved.Contains(item.loadID))
 						{
-							"Object with load ID ",
-							referencedObject.loadID,
-							" is referenced (xml node name: ",
-							referencedObject.label,
-							") but is not deep-saved. This will cause errors during loading."
-						}), false);
+							Log.Warning("Object with load ID " + item.loadID + " is referenced (xml node name: " + item.label + ") but is not deep-saved. This will cause errors during loading.");
+						}
 					}
 				}
+				Clear();
 			}
-			this.Clear();
 		}
 
-		
 		public void RegisterDeepSaved(object obj, string label)
 		{
 			if (!Prefs.DevMode)
@@ -53,126 +90,48 @@ namespace Verse
 			}
 			if (Scribe.mode != LoadSaveMode.Saving)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Registered ",
-					obj,
-					", but current mode is ",
-					Scribe.mode
-				}), false);
-				return;
+				Log.Error("Registered " + obj + ", but current mode is " + Scribe.mode);
 			}
-			if (obj == null)
+			else if (obj != null)
 			{
-				return;
-			}
-			ILoadReferenceable loadReferenceable = obj as ILoadReferenceable;
-			if (loadReferenceable != null)
-			{
-				try
+				ILoadReferenceable loadReferenceable = obj as ILoadReferenceable;
+				if (loadReferenceable != null)
 				{
-					if (!this.deepSaved.Add(loadReferenceable.GetUniqueLoadID()))
+					try
 					{
-						Log.Warning(string.Concat(new string[]
+						if (!deepSaved.Add(loadReferenceable.GetUniqueLoadID()))
 						{
-							"DebugLoadIDsSavingErrorsChecker error: tried to register deep-saved object with loadID ",
-							loadReferenceable.GetUniqueLoadID(),
-							", but it's already here. label=",
-							label,
-							" (not cleared after the previous save? different objects have the same load ID? the same object is deep-saved twice?)"
-						}), false);
+							Log.Warning("DebugLoadIDsSavingErrorsChecker error: tried to register deep-saved object with loadID " + loadReferenceable.GetUniqueLoadID() + ", but it's already here. label=" + label + " (not cleared after the previous save? different objects have the same load ID? the same object is deep-saved twice?)");
+						}
+					}
+					catch (Exception arg)
+					{
+						Log.Error("Error in GetUniqueLoadID(): " + arg);
 					}
 				}
-				catch (Exception arg)
-				{
-					Log.Error("Error in GetUniqueLoadID(): " + arg, false);
-				}
 			}
 		}
 
-		
 		public void RegisterReferenced(ILoadReferenceable obj, string label)
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				return;
-			}
-			if (Scribe.mode != LoadSaveMode.Saving)
-			{
-				Log.Error(string.Concat(new object[]
+				if (Scribe.mode != LoadSaveMode.Saving)
 				{
-					"Registered ",
-					obj,
-					", but current mode is ",
-					Scribe.mode
-				}), false);
-				return;
+					Log.Error("Registered " + obj + ", but current mode is " + Scribe.mode);
+				}
+				else if (obj != null)
+				{
+					try
+					{
+						referenced.Add(new ReferencedObject(obj.GetUniqueLoadID(), label));
+					}
+					catch (Exception arg)
+					{
+						Log.Error("Error in GetUniqueLoadID(): " + arg);
+					}
+				}
 			}
-			if (obj == null)
-			{
-				return;
-			}
-			try
-			{
-				this.referenced.Add(new DebugLoadIDsSavingErrorsChecker.ReferencedObject(obj.GetUniqueLoadID(), label));
-			}
-			catch (Exception arg)
-			{
-				Log.Error("Error in GetUniqueLoadID(): " + arg, false);
-			}
-		}
-
-		
-		private HashSet<string> deepSaved = new HashSet<string>();
-
-		
-		private HashSet<DebugLoadIDsSavingErrorsChecker.ReferencedObject> referenced = new HashSet<DebugLoadIDsSavingErrorsChecker.ReferencedObject>();
-
-		
-		private struct ReferencedObject : IEquatable<DebugLoadIDsSavingErrorsChecker.ReferencedObject>
-		{
-			
-			public ReferencedObject(string loadID, string label)
-			{
-				this.loadID = loadID;
-				this.label = label;
-			}
-
-			
-			public override bool Equals(object obj)
-			{
-				return obj is DebugLoadIDsSavingErrorsChecker.ReferencedObject && this.Equals((DebugLoadIDsSavingErrorsChecker.ReferencedObject)obj);
-			}
-
-			
-			public bool Equals(DebugLoadIDsSavingErrorsChecker.ReferencedObject other)
-			{
-				return this.loadID == other.loadID && this.label == other.label;
-			}
-
-			
-			public override int GetHashCode()
-			{
-				return Gen.HashCombine<string>(Gen.HashCombine<string>(0, this.loadID), this.label);
-			}
-
-			
-			public static bool operator ==(DebugLoadIDsSavingErrorsChecker.ReferencedObject lhs, DebugLoadIDsSavingErrorsChecker.ReferencedObject rhs)
-			{
-				return lhs.Equals(rhs);
-			}
-
-			
-			public static bool operator !=(DebugLoadIDsSavingErrorsChecker.ReferencedObject lhs, DebugLoadIDsSavingErrorsChecker.ReferencedObject rhs)
-			{
-				return !(lhs == rhs);
-			}
-
-			
-			public string loadID;
-
-			
-			public string label;
 		}
 	}
 }

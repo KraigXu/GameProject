@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public static class StoryDangerUtility
 	{
-		
 		public static float Scale(this StoryDanger d)
 		{
 			switch (d)

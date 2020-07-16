@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class TraderCaravanUtility
 	{
-		
 		public static TraderCaravanRole GetTraderCaravanRole(this Pawn p)
 		{
 			if (p.kindDef == PawnKindDefOf.Slave)
@@ -29,7 +26,6 @@ namespace RimWorld
 			return TraderCaravanRole.Guard;
 		}
 
-		
 		public static Pawn FindTrader(Lord lord)
 		{
 			for (int i = 0; i < lord.ownedPawns.Count; i++)
@@ -42,10 +38,9 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static float GenerateGuardPoints()
 		{
-			return (float)Rand.Range(550, 1000);
+			return Rand.Range(550, 1000);
 		}
 	}
 }

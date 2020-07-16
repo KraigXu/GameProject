@@ -1,22 +1,33 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Xml;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.Text.RegularExpressions;
+using System.Xml;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class BackCompatibilityConverter_0_18 : BackCompatibilityConverter
 	{
-		
+		private static readonly Regex MeatSuffixExtract = new Regex("^(.+)_Meat$");
+
+		private static readonly Regex CorpseSuffixExtract = new Regex("^(.+)_Corpse$");
+
+		private static readonly Regex BlueprintSuffixExtract = new Regex("^(.+)_Blueprint$");
+
+		private static readonly Regex BlueprintInstallSuffixExtract = new Regex("^(.+)_Blueprint_Install$");
+
+		private static readonly Regex FrameSuffixExtract = new Regex("^(.+)_Frame$");
+
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
-			return majorVer == 0 && minorVer <= 18;
+			if (majorVer == 0)
+			{
+				return minorVer <= 18;
+			}
+			return false;
 		}
 
-		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			if (defType == typeof(ThingDef))
@@ -611,23 +622,23 @@ namespace Verse
 				}
 				if (defName.EndsWith("_Meat"))
 				{
-					return BackCompatibilityConverter_0_18.MeatSuffixExtract.Replace(defName, "Meat_$1");
+					return MeatSuffixExtract.Replace(defName, "Meat_$1");
 				}
 				if (defName.EndsWith("_Corpse"))
 				{
-					return BackCompatibilityConverter_0_18.CorpseSuffixExtract.Replace(defName, "Corpse_$1");
+					return CorpseSuffixExtract.Replace(defName, "Corpse_$1");
 				}
 				if (defName.EndsWith("_Blueprint"))
 				{
-					return BackCompatibilityConverter_0_18.BlueprintSuffixExtract.Replace(defName, "Blueprint_$1");
+					return BlueprintSuffixExtract.Replace(defName, "Blueprint_$1");
 				}
 				if (defName.EndsWith("_Blueprint_Install"))
 				{
-					return BackCompatibilityConverter_0_18.BlueprintInstallSuffixExtract.Replace(defName, "Blueprint_Install_$1");
+					return BlueprintInstallSuffixExtract.Replace(defName, "Blueprint_Install_$1");
 				}
 				if (defName.EndsWith("_Frame"))
 				{
-					return BackCompatibilityConverter_0_18.FrameSuffixExtract.Replace(defName, "Frame_$1");
+					return FrameSuffixExtract.Replace(defName, "Frame_$1");
 				}
 			}
 			else if (defType == typeof(HediffDef))
@@ -1307,7 +1318,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			if (baseType == typeof(WorldObject))
@@ -1328,7 +1338,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -1357,7 +1366,7 @@ namespace Verse
 				Pawn pawn = obj as Pawn;
 				if (pawn != null && !pawn.Destroyed && !pawn.Dead && pawn.needs == null)
 				{
-					Log.Error(pawn.ToStringSafe<Pawn>() + " has null needs tracker even though he's not dead. Fixing...", false);
+					Log.Error(pawn.ToStringSafe() + " has null needs tracker even though he's not dead. Fixing...");
 					pawn.needs = new Pawn_NeedsTracker(pawn);
 					pawn.needs.SetInitialLevels();
 				}
@@ -1407,19 +1416,19 @@ namespace Verse
 				Hediff hediff = obj as Hediff;
 				if (hediff != null)
 				{
-					Scribe_Values.Look<int>(ref hediff.temp_partIndexToSetLater, "partIndex", -1, false);
+					Scribe_Values.Look(ref hediff.temp_partIndexToSetLater, "partIndex", -1);
 				}
 				Bill_Medical bill_Medical = obj as Bill_Medical;
 				if (bill_Medical != null)
 				{
-					Scribe_Values.Look<int>(ref bill_Medical.temp_partIndexToSetLater, "partIndex", -1, false);
+					Scribe_Values.Look(ref bill_Medical.temp_partIndexToSetLater, "partIndex", -1);
 				}
 				FactionRelation factionRelation = obj as FactionRelation;
 				if (factionRelation != null)
 				{
-					bool flag = false;
-					Scribe_Values.Look<bool>(ref flag, "hostile", false, false);
-					if (flag || factionRelation.goodwill <= -75)
+					bool value = false;
+					Scribe_Values.Look(ref value, "hostile", defaultValue: false);
+					if (value || factionRelation.goodwill <= -75)
 					{
 						factionRelation.kind = FactionRelationKind.Hostile;
 					}
@@ -1431,74 +1440,60 @@ namespace Verse
 				HediffComp_GetsPermanent hediffComp_GetsPermanent = obj as HediffComp_GetsPermanent;
 				if (hediffComp_GetsPermanent != null)
 				{
-					bool flag2 = false;
-					Scribe_Values.Look<bool>(ref flag2, "isOld", false, false);
-					if (flag2)
+					bool value2 = false;
+					Scribe_Values.Look(ref value2, "isOld", defaultValue: false);
+					if (value2)
 					{
 						hediffComp_GetsPermanent.isPermanentInt = true;
 					}
 				}
 				if (obj is World)
 				{
-					UniqueIDsManager uniqueIDsManager = null;
-					Scribe_Deep.Look<UniqueIDsManager>(ref uniqueIDsManager, "uniqueIDsManager", Array.Empty<object>());
-					if (uniqueIDsManager != null)
+					UniqueIDsManager target = null;
+					Scribe_Deep.Look(ref target, "uniqueIDsManager");
+					if (target != null)
 					{
-						Current.Game.uniqueIDsManager = uniqueIDsManager;
+						Current.Game.uniqueIDsManager = target;
 					}
 				}
 				WorldFeature worldFeature = obj as WorldFeature;
 				if (worldFeature != null && worldFeature.maxDrawSizeInTiles == 0f)
 				{
-					Vector2 zero = Vector2.zero;
-					Scribe_Values.Look<Vector2>(ref zero, "maxDrawSizeInTiles", default(Vector2), false);
-					worldFeature.maxDrawSizeInTiles = zero.x;
+					Vector2 value3 = Vector2.zero;
+					Scribe_Values.Look(ref value3, "maxDrawSizeInTiles");
+					worldFeature.maxDrawSizeInTiles = value3.x;
 				}
 			}
-			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs)
+			if (Scribe.mode != LoadSaveMode.ResolvingCrossRefs)
 			{
-				Hediff hediff2 = obj as Hediff;
-				if (hediff2 != null && hediff2.temp_partIndexToSetLater >= 0 && hediff2.pawn != null)
+				return;
+			}
+			Hediff hediff2 = obj as Hediff;
+			if (hediff2 != null && hediff2.temp_partIndexToSetLater >= 0 && hediff2.pawn != null)
+			{
+				if (hediff2.temp_partIndexToSetLater == 0)
 				{
-					if (hediff2.temp_partIndexToSetLater == 0)
-					{
-						hediff2.Part = hediff2.pawn.RaceProps.body.GetPartAtIndex(hediff2.temp_partIndexToSetLater);
-					}
-					else
-					{
-						hediff2.pawn.health.hediffSet.hediffs.Remove(hediff2);
-					}
-					hediff2.temp_partIndexToSetLater = -1;
+					hediff2.Part = hediff2.pawn.RaceProps.body.GetPartAtIndex(hediff2.temp_partIndexToSetLater);
 				}
-				Bill_Medical bill_Medical2 = obj as Bill_Medical;
-				if (bill_Medical2 != null)
+				else
 				{
-					if (bill_Medical2.temp_partIndexToSetLater == 0)
-					{
-						bill_Medical2.Part = bill_Medical2.GiverPawn.RaceProps.body.GetPartAtIndex(bill_Medical2.temp_partIndexToSetLater);
-					}
-					else
-					{
-						bill_Medical2.GiverPawn.BillStack.Bills.Remove(bill_Medical2);
-					}
-					bill_Medical2.temp_partIndexToSetLater = -1;
+					hediff2.pawn.health.hediffSet.hediffs.Remove(hediff2);
 				}
+				hediff2.temp_partIndexToSetLater = -1;
+			}
+			Bill_Medical bill_Medical2 = obj as Bill_Medical;
+			if (bill_Medical2 != null)
+			{
+				if (bill_Medical2.temp_partIndexToSetLater == 0)
+				{
+					bill_Medical2.Part = bill_Medical2.GiverPawn.RaceProps.body.GetPartAtIndex(bill_Medical2.temp_partIndexToSetLater);
+				}
+				else
+				{
+					bill_Medical2.GiverPawn.BillStack.Bills.Remove(bill_Medical2);
+				}
+				bill_Medical2.temp_partIndexToSetLater = -1;
 			}
 		}
-
-		
-		private static readonly Regex MeatSuffixExtract = new Regex("^(.+)_Meat$");
-
-		
-		private static readonly Regex CorpseSuffixExtract = new Regex("^(.+)_Corpse$");
-
-		
-		private static readonly Regex BlueprintSuffixExtract = new Regex("^(.+)_Blueprint$");
-
-		
-		private static readonly Regex BlueprintInstallSuffixExtract = new Regex("^(.+)_Blueprint_Install$");
-
-		
-		private static readonly Regex FrameSuffixExtract = new Regex("^(.+)_Frame$");
 	}
 }

@@ -1,81 +1,25 @@
-﻿using System;
+using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld;
-using RimWorld.Planet;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class DebugOutputsPawns
 	{
-		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsBasics()
 		{
-			IEnumerable<PawnKindDef> dataSources = (from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.race != null && d.RaceProps.Humanlike
-			select d).OrderBy(delegate(PawnKindDef k)
-			{
-				if (k.defaultFactionType == null)
-				{
-					return "";
-				}
-				return k.defaultFactionType.label;
-			}).ThenBy((PawnKindDef k) => k.combatPower);
-			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[18];
-			array[0] = new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName);
-			array[1] = new TableDataGetter<PawnKindDef>("faction", delegate(PawnKindDef d)
-			{
-				if (d.defaultFactionType == null)
-				{
-					return "";
-				}
-				return d.defaultFactionType.defName;
-			});
-			array[2] = new TableDataGetter<PawnKindDef>("points", (PawnKindDef d) => d.combatPower.ToString("F0"));
-			array[3] = new TableDataGetter<PawnKindDef>("minAge", (PawnKindDef d) => d.minGenerationAge.ToString("F0"));
-			array[4] = new TableDataGetter<PawnKindDef>("maxAge", delegate(PawnKindDef d)
-			{
-				if (d.maxGenerationAge >= 10000)
-				{
-					return "";
-				}
-				return d.maxGenerationAge.ToString("F0");
-			});
-			array[5] = new TableDataGetter<PawnKindDef>("recruitDiff", (PawnKindDef d) => d.baseRecruitDifficulty.ToStringPercent());
-			array[6] = new TableDataGetter<PawnKindDef>("itemQuality", (PawnKindDef d) => d.itemQuality.ToString());
-			array[7] = new TableDataGetter<PawnKindDef>("forceNormGearQual", (PawnKindDef d) => d.forceNormalGearQuality.ToStringCheckBlank());
-			array[8] = new TableDataGetter<PawnKindDef>("weapon$", (PawnKindDef d) => d.weaponMoney.ToString());
-			array[9] = new TableDataGetter<PawnKindDef>("apparel$", (PawnKindDef d) => d.apparelMoney.ToString());
-			array[10] = new TableDataGetter<PawnKindDef>("techHediffsCh", (PawnKindDef d) => d.techHediffsChance.ToStringPercentEmptyZero("F0"));
-			array[11] = new TableDataGetter<PawnKindDef>("techHediffs$", (PawnKindDef d) => d.techHediffsMoney.ToString());
-			array[12] = new TableDataGetter<PawnKindDef>("gearHealth", (PawnKindDef d) => d.gearHealthRange.ToString());
-			array[13] = new TableDataGetter<PawnKindDef>("invNutrition", (PawnKindDef d) => d.invNutrition.ToString());
-			array[14] = new TableDataGetter<PawnKindDef>("addictionChance", (PawnKindDef d) => d.chemicalAddictionChance.ToStringPercent());
-			array[15] = new TableDataGetter<PawnKindDef>("combatDrugChance", delegate(PawnKindDef d)
-			{
-				if (d.combatEnhancingDrugsChance <= 0f)
-				{
-					return "";
-				}
-				return d.combatEnhancingDrugsChance.ToStringPercent();
-			});
-			array[16] = new TableDataGetter<PawnKindDef>("combatDrugCount", delegate(PawnKindDef d)
-			{
-				if (d.combatEnhancingDrugsCount.max <= 0)
-				{
-					return "";
-				}
-				return d.combatEnhancingDrugsCount.ToString();
-			});
-			array[17] = new TableDataGetter<PawnKindDef>("bsCryptosleepComm", (PawnKindDef d) => d.backstoryCryptosleepCommonality.ToStringPercentEmptyZero("F0"));
-			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from d in DefDatabase<PawnKindDef>.AllDefs
+				where d.race != null && d.RaceProps.Humanlike
+				select d into k
+				orderby (k.defaultFactionType == null) ? "" : k.defaultFactionType.label, k.combatPower
+				select k, new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName), new TableDataGetter<PawnKindDef>("faction", (PawnKindDef d) => (d.defaultFactionType == null) ? "" : d.defaultFactionType.defName), new TableDataGetter<PawnKindDef>("points", (PawnKindDef d) => d.combatPower.ToString("F0")), new TableDataGetter<PawnKindDef>("minAge", (PawnKindDef d) => d.minGenerationAge.ToString("F0")), new TableDataGetter<PawnKindDef>("maxAge", (PawnKindDef d) => (d.maxGenerationAge >= 10000) ? "" : d.maxGenerationAge.ToString("F0")), new TableDataGetter<PawnKindDef>("recruitDiff", (PawnKindDef d) => d.baseRecruitDifficulty.ToStringPercent()), new TableDataGetter<PawnKindDef>("itemQuality", (PawnKindDef d) => d.itemQuality.ToString()), new TableDataGetter<PawnKindDef>("forceNormGearQual", (PawnKindDef d) => d.forceNormalGearQuality.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("weapon$", (PawnKindDef d) => d.weaponMoney.ToString()), new TableDataGetter<PawnKindDef>("apparel$", (PawnKindDef d) => d.apparelMoney.ToString()), new TableDataGetter<PawnKindDef>("techHediffsCh", (PawnKindDef d) => d.techHediffsChance.ToStringPercentEmptyZero()), new TableDataGetter<PawnKindDef>("techHediffs$", (PawnKindDef d) => d.techHediffsMoney.ToString()), new TableDataGetter<PawnKindDef>("gearHealth", (PawnKindDef d) => d.gearHealthRange.ToString()), new TableDataGetter<PawnKindDef>("invNutrition", (PawnKindDef d) => d.invNutrition.ToString()), new TableDataGetter<PawnKindDef>("addictionChance", (PawnKindDef d) => d.chemicalAddictionChance.ToStringPercent()), new TableDataGetter<PawnKindDef>("combatDrugChance", (PawnKindDef d) => (!(d.combatEnhancingDrugsChance > 0f)) ? "" : d.combatEnhancingDrugsChance.ToStringPercent()), new TableDataGetter<PawnKindDef>("combatDrugCount", (PawnKindDef d) => (d.combatEnhancingDrugsCount.max <= 0) ? "" : d.combatEnhancingDrugsCount.ToString()), new TableDataGetter<PawnKindDef>("bsCryptosleepComm", (PawnKindDef d) => d.backstoryCryptosleepCommonality.ToStringPercentEmptyZero()));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsWeaponUsage()
 		{
@@ -86,38 +30,31 @@ namespace Verse
 			list.Add(new TableDataGetter<PawnKindDef>("max $", (PawnKindDef x) => x.weaponMoney.max.ToString()));
 			list.Add(new TableDataGetter<PawnKindDef>("points", (PawnKindDef x) => x.combatPower.ToString()));
 			list.AddRange(from w in DefDatabase<ThingDef>.AllDefs
-			where w.IsWeapon && !w.weaponTags.NullOrEmpty<string>()
-			orderby w.IsMeleeWeapon descending, w.techLevel, w.BaseMarketValue
-			select new TableDataGetter<PawnKindDef>(w.label.Shorten() + "\n$" + w.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
-			{
-				if (k.weaponTags == null || !w.weaponTags.Any((string z) => k.weaponTags.Contains(z)))
+				where w.IsWeapon && !w.weaponTags.NullOrEmpty()
+				orderby w.IsMeleeWeapon descending, w.techLevel, w.BaseMarketValue
+				select new TableDataGetter<PawnKindDef>(w.label.Shorten() + "\n$" + w.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
 				{
+					if (k.weaponTags != null && w.weaponTags.Any((string z) => k.weaponTags.Contains(z)))
+					{
+						float num = PawnWeaponGenerator.CheapestNonDerpPriceFor(w);
+						if (k.weaponMoney.max < num)
+						{
+							return "-";
+						}
+						if (k.weaponMoney.min > num)
+						{
+							return "✓";
+						}
+						return (1f - (num - k.weaponMoney.min) / (k.weaponMoney.max - k.weaponMoney.min)).ToStringPercent("F0");
+					}
 					return "";
-				}
-				float num = PawnWeaponGenerator.CheapestNonDerpPriceFor(w);
-				if (k.weaponMoney.max < num)
-				{
-					return "-";
-				}
-				if (k.weaponMoney.min > num)
-				{
-					return "✓";
-				}
-				return (1f - (num - k.weaponMoney.min) / (k.weaponMoney.max - k.weaponMoney.min)).ToStringPercent("F0");
-			}));
-			DebugTables.MakeTablesDialog<PawnKindDef>((from x in DefDatabase<PawnKindDef>.AllDefs
-			where x.RaceProps.intelligence >= Intelligence.ToolUser
-			select x).OrderBy(delegate(PawnKindDef x)
-			{
-				if (x.defaultFactionType == null)
-				{
-					return int.MaxValue;
-				}
-				return (int)x.defaultFactionType.techLevel;
-			}).ThenBy((PawnKindDef x) => x.combatPower), list.ToArray());
+				}));
+			DebugTables.MakeTablesDialog(from x in DefDatabase<PawnKindDef>.AllDefs
+				where (int)x.RaceProps.intelligence >= 1
+				orderby (x.defaultFactionType == null) ? int.MaxValue : ((int)x.defaultFactionType.techLevel), x.combatPower
+				select x, list.ToArray());
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsApparelUsage()
 		{
@@ -127,26 +64,18 @@ namespace Verse
 			list.Add(new TableDataGetter<PawnKindDef>("min $", (PawnKindDef x) => x.apparelMoney.min.ToString()));
 			list.Add(new TableDataGetter<PawnKindDef>("max $", (PawnKindDef x) => x.apparelMoney.max.ToString()));
 			list.Add(new TableDataGetter<PawnKindDef>("points", (PawnKindDef x) => x.combatPower.ToString()));
-			list.AddRange((from a in DefDatabase<ThingDef>.AllDefs
-			where a.IsApparel
-			orderby PawnApparelGenerator.IsHeadgear(a), a.techLevel, a.BaseMarketValue
-			select a).Select(delegate(ThingDef a)
-			{
-				return new TableDataGetter<PawnKindDef>(a.label.Shorten() + "\n$" + a.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
+			list.AddRange(from a in DefDatabase<ThingDef>.AllDefs
+				where a.IsApparel
+				orderby PawnApparelGenerator.IsHeadgear(a), a.techLevel, a.BaseMarketValue
+				select new TableDataGetter<PawnKindDef>(a.label.Shorten() + "\n$" + a.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
 				{
 					if (k.apparelRequired != null && k.apparelRequired.Contains(a))
 					{
 						return "Rq";
 					}
-					if (k.apparelDisallowTags != null)
+					if (k.apparelDisallowTags != null && k.apparelDisallowTags.Any((string tag) => a.apparel.tags.Contains(tag)))
 					{
-						List<string> apparelDisallowTags = k.apparelDisallowTags;
-						Predicate<string> predicate= (string tag) => a.apparel.tags.Contains(tag);
-
-						if (apparelDisallowTags.Any(predicate))
-						{
-							return "distag";
-						}
+						return "distag";
 					}
 					if (k.apparelAllowHeadgearChance <= 0f && PawnApparelGenerator.IsHeadgear(a))
 					{
@@ -163,35 +92,27 @@ namespace Verse
 							}
 						}
 					}
-					if (k.apparelTags == null || !a.apparel.tags.Any((string z) => k.apparelTags.Contains(z)))
+					if (k.apparelTags != null && a.apparel.tags.Any((string z) => k.apparelTags.Contains(z)))
 					{
-						return "";
+						float baseMarketValue = a.BaseMarketValue;
+						if (k.apparelMoney.max < baseMarketValue)
+						{
+							return "-";
+						}
+						if (k.apparelMoney.min > baseMarketValue)
+						{
+							return "✓";
+						}
+						return (1f - (baseMarketValue - k.apparelMoney.min) / (k.apparelMoney.max - k.apparelMoney.min)).ToStringPercent("F0");
 					}
-					float baseMarketValue = a.BaseMarketValue;
-					if (k.apparelMoney.max < baseMarketValue)
-					{
-						return "-";
-					}
-					if (k.apparelMoney.min > baseMarketValue)
-					{
-						return "✓";
-					}
-					return (1f - (baseMarketValue - k.apparelMoney.min) / (k.apparelMoney.max - k.apparelMoney.min)).ToStringPercent("F0");
-				});
-			}));
-			DebugTables.MakeTablesDialog<PawnKindDef>((from x in DefDatabase<PawnKindDef>.AllDefs
-			where x.RaceProps.Humanlike
-			select x).OrderBy(delegate(PawnKindDef x)
-			{
-				if (x.defaultFactionType == null)
-				{
-					return int.MaxValue;
-				}
-				return (int)x.defaultFactionType.techLevel;
-			}).ThenBy((PawnKindDef x) => x.combatPower), list.ToArray());
+					return "";
+				}));
+			DebugTables.MakeTablesDialog(from x in DefDatabase<PawnKindDef>.AllDefs
+				where x.RaceProps.Humanlike
+				orderby (x.defaultFactionType == null) ? int.MaxValue : ((int)x.defaultFactionType.techLevel), x.combatPower
+				select x, list.ToArray());
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindsTechHediffUsage()
 		{
@@ -202,56 +123,43 @@ namespace Verse
 			list.Add(new TableDataGetter<PawnKindDef>("$\nmax", (PawnKindDef x) => x.techHediffsMoney.max.ToString()));
 			list.Add(new TableDataGetter<PawnKindDef>("points", (PawnKindDef x) => x.combatPower.ToString()));
 			list.AddRange(from t in DefDatabase<ThingDef>.AllDefs
-			where t.isTechHediff && t.techHediffsTags != null
-			orderby t.techLevel descending, t.BaseMarketValue
-			select new TableDataGetter<PawnKindDef>(t.label.Shorten().Replace(" ", "\n") + "\n$" + t.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
-			{
-				if (k.techHediffsTags == null || !t.techHediffsTags.Any((string tag) => k.techHediffsTags.Contains(tag)))
+				where t.isTechHediff && t.techHediffsTags != null
+				orderby t.techLevel descending, t.BaseMarketValue
+				select new TableDataGetter<PawnKindDef>(t.label.Shorten().Replace(" ", "\n") + "\n$" + t.BaseMarketValue.ToString("F0"), delegate(PawnKindDef k)
 				{
+					if (k.techHediffsTags != null && t.techHediffsTags.Any((string tag) => k.techHediffsTags.Contains(tag)))
+					{
+						if (k.techHediffsMoney.max < t.BaseMarketValue)
+						{
+							return "-";
+						}
+						if (k.techHediffsMoney.min >= t.BaseMarketValue)
+						{
+							return "✓";
+						}
+						return (1f - (t.BaseMarketValue - k.techHediffsMoney.min) / (k.techHediffsMoney.max - k.techHediffsMoney.min)).ToStringPercent("F0");
+					}
 					return "";
-				}
-				if (k.techHediffsMoney.max < t.BaseMarketValue)
-				{
-					return "-";
-				}
-				if (k.techHediffsMoney.min >= t.BaseMarketValue)
-				{
-					return "✓";
-				}
-				return (1f - (t.BaseMarketValue - k.techHediffsMoney.min) / (k.techHediffsMoney.max - k.techHediffsMoney.min)).ToStringPercent("F0");
-			}));
-			DebugTables.MakeTablesDialog<PawnKindDef>((from x in DefDatabase<PawnKindDef>.AllDefs
-			where x.RaceProps.Humanlike
-			select x).OrderBy(delegate(PawnKindDef x)
-			{
-				if (x.defaultFactionType == null)
-				{
-					return int.MaxValue;
-				}
-				return (int)x.defaultFactionType.techLevel;
-			}).ThenBy((PawnKindDef x) => x.combatPower), list.ToArray());
+				}));
+			DebugTables.MakeTablesDialog(from x in DefDatabase<PawnKindDef>.AllDefs
+				where x.RaceProps.Humanlike
+				orderby (x.defaultFactionType == null) ? int.MaxValue : ((int)x.defaultFactionType.techLevel), x.combatPower
+				select x, list.ToArray());
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void PawnKindGearSampled()
 		{
-			IEnumerable<PawnKindDef> enumerable = from k in DefDatabase<PawnKindDef>.AllDefs
-			where k.RaceProps.ToolUser
-			orderby k.combatPower
-			select k;
+			IOrderedEnumerable<PawnKindDef> orderedEnumerable = from k in DefDatabase<PawnKindDef>.AllDefs
+				where k.RaceProps.ToolUser
+				orderby k.combatPower
+				select k;
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (PawnKindDef pawnKindDef in enumerable)
+			foreach (PawnKindDef item2 in orderedEnumerable)
 			{
-				Faction fac = FactionUtility.DefaultFactionFrom(pawnKindDef.defaultFactionType);
-				PawnKindDef kind = pawnKindDef;
-				FloatMenuOption item = new FloatMenuOption(string.Concat(new object[]
-				{
-					kind.defName,
-					" (",
-					kind.combatPower,
-					")"
-				}), delegate
+				Faction fac = FactionUtility.DefaultFactionFrom(item2.defaultFactionType);
+				PawnKindDef kind = item2;
+				FloatMenuOption item = new FloatMenuOption(kind.defName + " (" + kind.combatPower + ")", delegate
 				{
 					DefMap<ThingDef, int> weapons = new DefMap<ThingDef, int>();
 					DefMap<ThingDef, int> apparel = new DefMap<ThingDef, int>();
@@ -261,199 +169,143 @@ namespace Verse
 						Pawn pawn = PawnGenerator.GeneratePawn(kind, fac);
 						if (pawn.equipment.Primary != null)
 						{
-							DefMap<ThingDef, int> weapons2 = weapons;
-							ThingDef def = pawn.equipment.Primary.def;
-							int num = weapons2[def];
-							weapons2[def] = num + 1;
+							weapons[pawn.equipment.Primary.def]++;
 						}
 						foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
 						{
-							DefMap<HediffDef, int> hediffs2 = hediffs;
-							HediffDef def2 = hediff.def;
-							int num = hediffs2[def2];
-							hediffs2[def2] = num + 1;
+							hediffs[hediff.def]++;
 						}
-						foreach (Apparel apparel3 in pawn.apparel.WornApparel)
+						foreach (Apparel item3 in pawn.apparel.WornApparel)
 						{
-							DefMap<ThingDef, int> apparel2 = apparel;
-							ThingDef def = apparel3.def;
-							int num = apparel2[def];
-							apparel2[def] = num + 1;
+							apparel[item3.def]++;
 						}
-						pawn.Destroy(DestroyMode.Vanish);
+						pawn.Destroy();
 					}
 					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.AppendLine(string.Concat(new object[]
-					{
-						"Sampled ",
-						400,
-						"x ",
-						kind.defName,
-						":"
-					}));
+					stringBuilder.AppendLine("Sampled " + 400 + "x " + kind.defName + ":");
 					stringBuilder.AppendLine("Weapons");
-					IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-					Func<ThingDef, int> keySelector= (ThingDef t) => weapons[t];
-
-					foreach (ThingDef thingDef in allDefs.OrderByDescending(keySelector))
+					foreach (ThingDef item4 in DefDatabase<ThingDef>.AllDefs.OrderByDescending((ThingDef t) => weapons[t]))
 					{
-						int num2 = weapons[thingDef];
-						if (num2 > 0)
+						int num = weapons[item4];
+						if (num > 0)
 						{
-							stringBuilder.AppendLine("  " + thingDef.defName + "    " + ((float)num2 / 400f).ToStringPercent());
+							stringBuilder.AppendLine("  " + item4.defName + "    " + ((float)num / 400f).ToStringPercent());
 						}
 					}
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("Apparel");
-					IEnumerable<ThingDef> allDefs2 = DefDatabase<ThingDef>.AllDefs;
-					Func<ThingDef, int> keySelector2= (ThingDef t) => apparel[t];
-
-					foreach (ThingDef thingDef2 in allDefs2.OrderByDescending(keySelector2))
+					foreach (ThingDef item5 in DefDatabase<ThingDef>.AllDefs.OrderByDescending((ThingDef t) => apparel[t]))
 					{
-						int num3 = apparel[thingDef2];
-						if (num3 > 0)
+						int num2 = apparel[item5];
+						if (num2 > 0)
 						{
-							stringBuilder.AppendLine("  " + thingDef2.defName + "    " + ((float)num3 / 400f).ToStringPercent());
+							stringBuilder.AppendLine("  " + item5.defName + "    " + ((float)num2 / 400f).ToStringPercent());
 						}
 					}
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("Tech hediffs");
-					IEnumerable<HediffDef> source = from h in DefDatabase<HediffDef>.AllDefs
-					where h.spawnThingOnRemoved != null
-					select h;
-					Func<HediffDef, int> keySelector3= (HediffDef h) => hediffs[h];
-
-					foreach (HediffDef hediffDef in source.OrderByDescending(keySelector3))
+					foreach (HediffDef item6 in from h in DefDatabase<HediffDef>.AllDefs
+						where h.spawnThingOnRemoved != null
+						orderby hediffs[h] descending
+						select h)
 					{
-						int num4 = hediffs[hediffDef];
-						if (num4 > 0)
+						int num3 = hediffs[item6];
+						if (num3 > 0)
 						{
-							stringBuilder.AppendLine("  " + hediffDef.defName + "    " + ((float)num4 / 400f).ToStringPercent());
+							stringBuilder.AppendLine("  " + item6.defName + "    " + ((float)num3 / 400f).ToStringPercent());
 						}
 					}
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("Addiction hediffs");
-					IEnumerable<HediffDef> source2 = from h in DefDatabase<HediffDef>.AllDefs
-					where h.IsAddiction
-					select h;
-					Func<HediffDef, int> keySelector4= (HediffDef h) => hediffs[h];
-					foreach (HediffDef hediffDef2 in source2.OrderByDescending(keySelector4))
+					foreach (HediffDef item7 in from h in DefDatabase<HediffDef>.AllDefs
+						where h.IsAddiction
+						orderby hediffs[h] descending
+						select h)
 					{
-						int num5 = hediffs[hediffDef2];
-						if (num5 > 0)
+						int num4 = hediffs[item7];
+						if (num4 > 0)
 						{
-							stringBuilder.AppendLine("  " + hediffDef2.defName + "    " + ((float)num5 / 400f).ToStringPercent());
+							stringBuilder.AppendLine("  " + item7.defName + "    " + ((float)num4 / 400f).ToStringPercent());
 						}
 					}
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("Other hediffs");
-					IEnumerable<HediffDef> source3 = from h in DefDatabase<HediffDef>.AllDefs
-					where h.spawnThingOnRemoved == null && !h.IsAddiction
-					select h;
-					Func<HediffDef, int> keySelector5= (HediffDef h) => hediffs[h];
-
-					foreach (HediffDef hediffDef3 in source3.OrderByDescending(keySelector5))
+					foreach (HediffDef item8 in from h in DefDatabase<HediffDef>.AllDefs
+						where h.spawnThingOnRemoved == null && !h.IsAddiction
+						orderby hediffs[h] descending
+						select h)
 					{
-						int num6 = hediffs[hediffDef3];
-						if (num6 > 0)
+						int num5 = hediffs[item8];
+						if (num5 > 0)
 						{
-							stringBuilder.AppendLine("  " + hediffDef3.defName + "    " + ((float)num6 / 400f).ToStringPercent());
+							stringBuilder.AppendLine("  " + item8.defName + "    " + ((float)num5 / 400f).ToStringPercent());
 						}
 					}
-					Log.Message(stringBuilder.ToString().TrimEndNewlines(), false);
-				}, MenuOptionPriority.Default, null, null, 0f, null, null);
+					Log.Message(stringBuilder.ToString().TrimEndNewlines());
+				});
 				list.Add(item);
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void PawnWorkDisablesSampled()
 		{
-			IEnumerable<PawnKindDef> enumerable = from k in DefDatabase<PawnKindDef>.AllDefs
-			where k.RaceProps.Humanlike
-			orderby k.combatPower
-			select k;
+			IOrderedEnumerable<PawnKindDef> orderedEnumerable = from k in DefDatabase<PawnKindDef>.AllDefs
+				where k.RaceProps.Humanlike
+				orderby k.combatPower
+				select k;
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (PawnKindDef kind2 in enumerable)
+			foreach (PawnKindDef item2 in orderedEnumerable)
 			{
-				PawnKindDef kind = kind2;
+				PawnKindDef kind = item2;
 				Faction fac = FactionUtility.DefaultFactionFrom(kind.defaultFactionType);
-				FloatMenuOption item = new FloatMenuOption(string.Concat(new object[]
-				{
-					kind.defName,
-					" (",
-					kind.combatPower,
-					")"
-				}), delegate
+				FloatMenuOption item = new FloatMenuOption(kind.defName + " (" + kind.combatPower + ")", delegate
 				{
 					Dictionary<WorkTags, int> dictionary = new Dictionary<WorkTags, int>();
 					for (int i = 0; i < 1000; i++)
 					{
 						Pawn pawn = PawnGenerator.GeneratePawn(kind, fac);
 						WorkTags combinedDisabledWorkTags = pawn.CombinedDisabledWorkTags;
-						foreach (object obj in Enum.GetValues(typeof(WorkTags)))
+						foreach (WorkTags value in Enum.GetValues(typeof(WorkTags)))
 						{
-							WorkTags workTags = (WorkTags)obj;
-							if (!dictionary.ContainsKey(workTags))
+							if (!dictionary.ContainsKey(value))
 							{
-								dictionary.Add(workTags, 0);
+								dictionary.Add(value, 0);
 							}
-							if ((combinedDisabledWorkTags & workTags) != WorkTags.None)
+							if ((combinedDisabledWorkTags & value) != 0)
 							{
-								Dictionary<WorkTags, int> dictionary2 = dictionary;
-								WorkTags key = workTags;
-								int num = dictionary2[key];
-								dictionary2[key] = num + 1;
+								dictionary[value]++;
 							}
 						}
-						pawn.Destroy(DestroyMode.Vanish);
+						pawn.Destroy();
 					}
 					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.AppendLine(string.Concat(new object[]
-					{
-						"Sampled ",
-						1000,
-						"x ",
-						kind.defName,
-						":"
-					}));
+					stringBuilder.AppendLine("Sampled " + 1000 + "x " + kind.defName + ":");
 					stringBuilder.AppendLine("Worktags disabled");
-					foreach (object obj2 in Enum.GetValues(typeof(WorkTags)))
+					foreach (WorkTags value2 in Enum.GetValues(typeof(WorkTags)))
 					{
-						WorkTags key2 = (WorkTags)obj2;
-						int num2 = dictionary[key2];
-						stringBuilder.AppendLine(string.Concat(new object[]
-						{
-							"  ",
-							key2.ToString(),
-							"    ",
-							num2,
-							" (",
-							((float)num2 / 1000f).ToStringPercent(),
-							")"
-						}));
+						int num = dictionary[value2];
+						stringBuilder.AppendLine("  " + value2.ToString() + "    " + num + " (" + ((float)num / 1000f).ToStringPercent() + ")");
 					}
-					Log.Message(stringBuilder.ToString().TrimEndNewlines(), false);
-				}, MenuOptionPriority.Default, null, null, 0f, null, null);
+					Log.Message(stringBuilder.ToString().TrimEndNewlines());
+				});
 				list.Add(item);
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void RecruitDifficultiesSampled()
 		{
-			IEnumerable<PawnKindDef> enumerable = from k in DefDatabase<PawnKindDef>.AllDefs
-			where k.RaceProps.Humanlike
-			orderby k.combatPower
-			select k;
+			IOrderedEnumerable<PawnKindDef> orderedEnumerable = from k in DefDatabase<PawnKindDef>.AllDefs
+				where k.RaceProps.Humanlike
+				orderby k.combatPower
+				select k;
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (PawnKindDef kind2 in enumerable)
+			foreach (PawnKindDef item2 in orderedEnumerable)
 			{
-				PawnKindDef kind = kind2;
+				PawnKindDef kind = item2;
 				Faction fac = FactionUtility.DefaultFactionFrom(kind.defaultFactionType);
 				if (kind == PawnKindDefOf.WildMan)
 				{
@@ -469,87 +321,47 @@ namespace Verse
 					for (int j = 0; j < 300; j++)
 					{
 						Pawn pawn = PawnGenerator.GeneratePawn(kind, fac);
-						int num = Mathf.RoundToInt(pawn.RecruitDifficulty(Faction.OfPlayer) * 20f);
-						Dictionary<int, int> dictionary2 = dictionary;
-						int key = num;
-						int num2 = dictionary2[key];
-						dictionary2[key] = num2 + 1;
-						pawn.Destroy(DestroyMode.Vanish);
+						dictionary[Mathf.RoundToInt(pawn.RecruitDifficulty(Faction.OfPlayer) * 20f)]++;
+						pawn.Destroy();
 					}
 					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.AppendLine(string.Concat(new object[]
+					stringBuilder.AppendLine("Sampled " + 300 + "x " + kind.defName + ":");
+					for (int l = 0; l < 21; l++)
 					{
-						"Sampled ",
-						300,
-						"x ",
-						kind.defName,
-						":"
-					}));
-					for (int k = 0; k < 21; k++)
-					{
-						int num3 = dictionary[k];
-						stringBuilder.AppendLine(string.Concat(new object[]
-						{
-							"  ",
-							(k * 5).ToString(),
-							"    ",
-							num3,
-							" (",
-							((float)num3 / 300f).ToStringPercent(),
-							")"
-						}));
+						int num = dictionary[l];
+						stringBuilder.AppendLine("  " + (l * 5).ToString() + "    " + num + " (" + ((float)num / 300f).ToStringPercent() + ")");
 					}
-					Log.Message(stringBuilder.ToString().TrimEndNewlines(), false);
-				}, MenuOptionPriority.Default, null, null, 0f, null, null);
+					Log.Message(stringBuilder.ToString().TrimEndNewlines());
+				});
 				list.Add(item);
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void LivePawnsInspirationChances()
 		{
 			List<TableDataGetter<Pawn>> list = new List<TableDataGetter<Pawn>>();
 			list.Add(new TableDataGetter<Pawn>("name", (Pawn p) => p.Label));
-			IEnumerator<InspirationDef> enumerator = DefDatabase<InspirationDef>.AllDefs.GetEnumerator();
+			foreach (InspirationDef iDef in DefDatabase<InspirationDef>.AllDefs)
 			{
-				while (enumerator.MoveNext())
-				{
-					InspirationDef iDef = enumerator.Current;
-					list.Add(new TableDataGetter<Pawn>(iDef.defName, delegate(Pawn p)
-					{
-						if (iDef.Worker.InspirationCanOccur(p))
-						{
-							return iDef.Worker.CommonalityFor(p).ToString();
-						}
-						return "-no-";
-					}));
-				}
+				list.Add(new TableDataGetter<Pawn>(iDef.defName, (Pawn p) => iDef.Worker.InspirationCanOccur(p) ? iDef.Worker.CommonalityFor(p).ToString() : "-no-"));
 			}
-			DebugTables.MakeTablesDialog<Pawn>(Find.CurrentMap.mapPawns.FreeColonistsSpawned, list.ToArray());
+			DebugTables.MakeTablesDialog(Find.CurrentMap.mapPawns.FreeColonistsSpawned, list.ToArray());
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void RacesFoodConsumption()
 		{
-			Func<ThingDef, int, string> lsName = delegate(ThingDef d, int lsIndex)
-			{
-				if (d.race.lifeStageAges.Count <= lsIndex)
-				{
-					return "";
-				}
-				return d.race.lifeStageAges[lsIndex].def.defName;
-			};
+			Func<ThingDef, int, string> lsName = (ThingDef d, int lsIndex) => (d.race.lifeStageAges.Count <= lsIndex) ? "" : d.race.lifeStageAges[lsIndex].def.defName;
 			Func<ThingDef, int, string> maxFood = delegate(ThingDef d, int lsIndex)
 			{
 				if (d.race.lifeStageAges.Count <= lsIndex)
 				{
 					return "";
 				}
-				LifeStageDef def = d.race.lifeStageAges[lsIndex].def;
-				return (d.race.baseBodySize * def.bodySizeFactor * def.foodMaxFactor).ToString("F2");
+				LifeStageDef def2 = d.race.lifeStageAges[lsIndex].def;
+				return (d.race.baseBodySize * def2.bodySizeFactor * def2.foodMaxFactor).ToString("F2");
 			};
 			Func<ThingDef, int, string> hungerRate = delegate(ThingDef d, int lsIndex)
 			{
@@ -560,130 +372,112 @@ namespace Verse
 				LifeStageDef def = d.race.lifeStageAges[lsIndex].def;
 				return (d.race.baseHungerRate * def.hungerRateFactor).ToString("F2");
 			};
-			IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
-			where d.race != null && d.race.EatsFood
-			orderby d.race.baseHungerRate descending
-			select d;
-			TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[13];
-			array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-			array[1] = new TableDataGetter<ThingDef>("Lifestage 0", (ThingDef d) => lsName(d, 0));
-			array[2] = new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 0));
-			array[3] = new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 0));
-			array[4] = new TableDataGetter<ThingDef>("Lifestage 1", (ThingDef d) => lsName(d, 1));
-			array[5] = new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 1));
-			array[6] = new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 1));
-			array[7] = new TableDataGetter<ThingDef>("Lifestage 2", (ThingDef d) => lsName(d, 2));
-			array[8] = new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 2));
-			array[9] = new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 2));
-			array[10] = new TableDataGetter<ThingDef>("Lifestage 3", (ThingDef d) => lsName(d, 3));
-			array[11] = new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 3));
-			array[12] = new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 3));
-			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from d in DefDatabase<ThingDef>.AllDefs
+				where d.race != null && d.race.EatsFood
+				orderby d.race.baseHungerRate descending
+				select d, new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName), new TableDataGetter<ThingDef>("Lifestage 0", (ThingDef d) => lsName(d, 0)), new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 0)), new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 0)), new TableDataGetter<ThingDef>("Lifestage 1", (ThingDef d) => lsName(d, 1)), new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 1)), new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 1)), new TableDataGetter<ThingDef>("Lifestage 2", (ThingDef d) => lsName(d, 2)), new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 2)), new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 2)), new TableDataGetter<ThingDef>("Lifestage 3", (ThingDef d) => lsName(d, 3)), new TableDataGetter<ThingDef>("maxFood", (ThingDef d) => maxFood(d, 3)), new TableDataGetter<ThingDef>("hungerRate", (ThingDef d) => hungerRate(d, 3)));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void RacesButchery()
 		{
-			IEnumerable<ThingDef> dataSources = from d in DefDatabase<ThingDef>.AllDefs
-			where d.race != null
-			orderby d.race.baseBodySize
-			select d;
-			TableDataGetter<ThingDef>[] array = new TableDataGetter<ThingDef>[8];
-			array[0] = new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName);
-			array[1] = new TableDataGetter<ThingDef>("mktval", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MarketValue, null).ToString("F0"));
-			array[2] = new TableDataGetter<ThingDef>("healthScale", (ThingDef d) => d.race.baseHealthScale.ToString("F2"));
-			array[3] = new TableDataGetter<ThingDef>("hunger rate", (ThingDef d) => d.race.baseHungerRate.ToString("F2"));
-			array[4] = new TableDataGetter<ThingDef>("wildness", (ThingDef d) => d.race.wildness.ToStringPercent());
-			array[5] = new TableDataGetter<ThingDef>("bodySize", (ThingDef d) => d.race.baseBodySize.ToString("F2"));
-			array[6] = new TableDataGetter<ThingDef>("meatAmount", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MeatAmount, null).ToString("F0"));
-			array[7] = new TableDataGetter<ThingDef>("leatherAmount", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.LeatherAmount, null).ToString("F0"));
-			DebugTables.MakeTablesDialog<ThingDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from d in DefDatabase<ThingDef>.AllDefs
+				where d.race != null
+				orderby d.race.baseBodySize
+				select d, new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName), new TableDataGetter<ThingDef>("mktval", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MarketValue).ToString("F0")), new TableDataGetter<ThingDef>("healthScale", (ThingDef d) => d.race.baseHealthScale.ToString("F2")), new TableDataGetter<ThingDef>("hunger rate", (ThingDef d) => d.race.baseHungerRate.ToString("F2")), new TableDataGetter<ThingDef>("wildness", (ThingDef d) => d.race.wildness.ToStringPercent()), new TableDataGetter<ThingDef>("bodySize", (ThingDef d) => d.race.baseBodySize.ToString("F2")), new TableDataGetter<ThingDef>("meatAmount", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.MeatAmount).ToString("F0")), new TableDataGetter<ThingDef>("leatherAmount", (ThingDef d) => d.GetStatValueAbstract(StatDefOf.LeatherAmount).ToString("F0")));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalsBasics()
 		{
-			IEnumerable<PawnKindDef> dataSources = from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.race != null && d.RaceProps.Animal
-			select d;
-			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[16];
-			array[0] = new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName);
-		//	array[1] = new TableDataGetter<PawnKindDef>("dps", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__dps|10_0(d).ToString("F2"));
-			array[2] = new TableDataGetter<PawnKindDef>("healthScale", (PawnKindDef d) => d.RaceProps.baseHealthScale.ToString("F2"));
-			array[3] = new TableDataGetter<PawnKindDef>("points", (PawnKindDef d) => d.combatPower.ToString("F0"));
-		//	array[4] = new TableDataGetter<PawnKindDef>("points guess", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__pointsGuess|10_1(d).ToString("F0"));
-			array[5] = new TableDataGetter<PawnKindDef>("speed", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.MoveSpeed, null).ToString("F2"));
-			array[6] = new TableDataGetter<PawnKindDef>("mktval", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.MarketValue, null).ToString("F0"));
-		//	array[7] = new TableDataGetter<PawnKindDef>("mktval guess", (PawnKindDef d) => DebugOutputsPawns.<AnimalsBasics>g__mktValGuess|10_2(d).ToString("F0"));
-			array[8] = new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef d) => d.RaceProps.baseBodySize.ToString("F2"));
-			array[9] = new TableDataGetter<PawnKindDef>("hunger", (PawnKindDef d) => d.RaceProps.baseHungerRate.ToString("F2"));
-			array[10] = new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef d) => d.RaceProps.wildness.ToStringPercent());
-			array[11] = new TableDataGetter<PawnKindDef>("lifespan", (PawnKindDef d) => d.RaceProps.lifeExpectancy.ToString("F1"));
-			array[12] = new TableDataGetter<PawnKindDef>("trainability", delegate(PawnKindDef d)
+			DebugTables.MakeTablesDialog(DefDatabase<PawnKindDef>.AllDefs.Where((PawnKindDef d) => d.race != null && d.RaceProps.Animal), new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName), new TableDataGetter<PawnKindDef>("dps", (PawnKindDef d) => dps(d).ToString("F2")), new TableDataGetter<PawnKindDef>("healthScale", (PawnKindDef d) => d.RaceProps.baseHealthScale.ToString("F2")), new TableDataGetter<PawnKindDef>("points", (PawnKindDef d) => d.combatPower.ToString("F0")), new TableDataGetter<PawnKindDef>("points guess", (PawnKindDef d) => pointsGuess(d).ToString("F0")), new TableDataGetter<PawnKindDef>("speed", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.MoveSpeed).ToString("F2")), new TableDataGetter<PawnKindDef>("mktval", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.MarketValue).ToString("F0")), new TableDataGetter<PawnKindDef>("mktval guess", (PawnKindDef d) => mktValGuess(d).ToString("F0")), new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef d) => d.RaceProps.baseBodySize.ToString("F2")), new TableDataGetter<PawnKindDef>("hunger", (PawnKindDef d) => d.RaceProps.baseHungerRate.ToString("F2")), new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef d) => d.RaceProps.wildness.ToStringPercent()), new TableDataGetter<PawnKindDef>("lifespan", (PawnKindDef d) => d.RaceProps.lifeExpectancy.ToString("F1")), new TableDataGetter<PawnKindDef>("trainability", (PawnKindDef d) => (d.RaceProps.trainability == null) ? "null" : d.RaceProps.trainability.label), new TableDataGetter<PawnKindDef>("tempMin", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin).ToString("F0")), new TableDataGetter<PawnKindDef>("tempMax", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.ComfyTemperatureMax).ToString("F0")), new TableDataGetter<PawnKindDef>("flammability", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.Flammability).ToStringPercent()));
+			float dps(PawnKindDef d)
 			{
-				if (d.RaceProps.trainability == null)
+				return RaceMeleeDpsEstimate(d.race);
+			}
+			float mktValGuess(PawnKindDef d)
+			{
+				float num = 18f;
+				num += pointsGuess(d) * 2.7f;
+				if (d.RaceProps.trainability == TrainabilityDefOf.None)
 				{
-					return "null";
+					num *= 0.5f;
 				}
-				return d.RaceProps.trainability.label;
-			});
-			array[13] = new TableDataGetter<PawnKindDef>("tempMin", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.ComfyTemperatureMin, null).ToString("F0"));
-			array[14] = new TableDataGetter<PawnKindDef>("tempMax", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.ComfyTemperatureMax, null).ToString("F0"));
-			array[15] = new TableDataGetter<PawnKindDef>("flammability", (PawnKindDef d) => d.race.GetStatValueAbstract(StatDefOf.Flammability, null).ToStringPercent());
-			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
+				else if (d.RaceProps.trainability == TrainabilityDefOf.Simple)
+				{
+					num *= 0.8f;
+				}
+				else if (d.RaceProps.trainability == TrainabilityDefOf.Intermediate)
+				{
+					num += 0f;
+				}
+				else
+				{
+					if (d.RaceProps.trainability != TrainabilityDefOf.Advanced)
+					{
+						throw new InvalidOperationException();
+					}
+					num += 250f;
+				}
+				num += d.RaceProps.baseBodySize * 80f;
+				if (d.race.HasComp(typeof(CompMilkable)))
+				{
+					num += 125f;
+				}
+				if (d.race.HasComp(typeof(CompShearable)))
+				{
+					num += 90f;
+				}
+				if (d.race.HasComp(typeof(CompEggLayer)))
+				{
+					num += 90f;
+				}
+				num *= Mathf.Lerp(0.8f, 1.2f, d.RaceProps.wildness);
+				return num * 0.75f;
+			}
+			float pointsGuess(PawnKindDef d)
+			{
+				return (15f + dps(d) * 10f) * Mathf.Lerp(1f, d.race.GetStatValueAbstract(StatDefOf.MoveSpeed) / 3f, 0.25f) * d.RaceProps.baseHealthScale * GenMath.LerpDouble(0.25f, 1f, 1.65f, 1f, Mathf.Clamp(d.RaceProps.baseBodySize, 0.25f, 1f)) * 0.76f;
+			}
 		}
 
-		
 		private static float RaceMeleeDpsEstimate(ThingDef race)
 		{
-			return race.GetStatValueAbstract(StatDefOf.MeleeDPS, null);
+			return race.GetStatValueAbstract(StatDefOf.MeleeDPS);
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalPointsToHuntOrSlaughter()
 		{
-			IEnumerable<PawnKindDef> dataSources = from a in DefDatabase<PawnKindDef>.AllDefs
-			where a.race != null && a.RaceProps.Animal
-			select a into d
-			orderby d.GetAnimalPointsToHuntOrSlaughter()
-			select d;
-			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[7];
-			array[0] = new TableDataGetter<PawnKindDef>("animal", (PawnKindDef a) => a.LabelCap);
-			array[1] = new TableDataGetter<PawnKindDef>("combat power", (PawnKindDef a) => a.combatPower.ToString());
-			array[2] = new TableDataGetter<PawnKindDef>("manhunt on dmg", (PawnKindDef a) => a.RaceProps.manhunterOnDamageChance.ToStringPercent());
-			array[3] = new TableDataGetter<PawnKindDef>("manhunt on tame", (PawnKindDef a) => a.RaceProps.manhunterOnTameFailChance.ToStringPercent());
-			array[4] = new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef a) => a.RaceProps.wildness.ToString());
-			array[5] = new TableDataGetter<PawnKindDef>("mkt val", (PawnKindDef a) => a.race.statBases.Find((StatModifier x) => x.stat == StatDefOf.MarketValue).value.ToString());
-			array[6] = new TableDataGetter<PawnKindDef>("points", (PawnKindDef a) => a.GetAnimalPointsToHuntOrSlaughter().ToString());
-			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from a in DefDatabase<PawnKindDef>.AllDefs
+				where a.race != null && a.RaceProps.Animal
+				select a into d
+				orderby d.GetAnimalPointsToHuntOrSlaughter()
+				select d, new TableDataGetter<PawnKindDef>("animal", (PawnKindDef a) => a.LabelCap), new TableDataGetter<PawnKindDef>("combat power", (PawnKindDef a) => a.combatPower.ToString()), new TableDataGetter<PawnKindDef>("manhunt on dmg", (PawnKindDef a) => a.RaceProps.manhunterOnDamageChance.ToStringPercent()), new TableDataGetter<PawnKindDef>("manhunt on tame", (PawnKindDef a) => a.RaceProps.manhunterOnTameFailChance.ToStringPercent()), new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef a) => a.RaceProps.wildness.ToString()), new TableDataGetter<PawnKindDef>("mkt val", (PawnKindDef a) => a.race.statBases.Find((StatModifier x) => x.stat == StatDefOf.MarketValue).value.ToString()), new TableDataGetter<PawnKindDef>("points", (PawnKindDef a) => a.GetAnimalPointsToHuntOrSlaughter().ToString()));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalCombatBalance()
 		{
 			Func<PawnKindDef, float> meleeDps = delegate(PawnKindDef k)
 			{
-				Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(k, null, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, true, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-				while (pawn.health.hediffSet.hediffs.Count > 0)
+				Pawn pawn2 = PawnGenerator.GeneratePawn(new PawnGenerationRequest(k, null, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: true));
+				while (pawn2.health.hediffSet.hediffs.Count > 0)
 				{
-					pawn.health.RemoveHediff(pawn.health.hediffSet.hediffs[0]);
+					pawn2.health.RemoveHediff(pawn2.health.hediffSet.hediffs[0]);
 				}
-				float statValue = pawn.GetStatValue(StatDefOf.MeleeDPS, true);
-				Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
+				float statValue = pawn2.GetStatValue(StatDefOf.MeleeDPS);
+				Find.WorldPawns.PassToWorld(pawn2, PawnDiscardDecideMode.Discard);
 				return statValue;
 			};
 			Func<PawnKindDef, float> averageArmor = delegate(PawnKindDef k)
 			{
-				Pawn pawn = PawnGenerator.GeneratePawn(k, null);
+				Pawn pawn = PawnGenerator.GeneratePawn(k);
 				while (pawn.health.hediffSet.hediffs.Count > 0)
 				{
 					pawn.health.RemoveHediff(pawn.health.hediffSet.hediffs[0]);
 				}
-				float result = (pawn.GetStatValue(StatDefOf.ArmorRating_Blunt, true) + pawn.GetStatValue(StatDefOf.ArmorRating_Sharp, true)) / 2f;
+				float result = (pawn.GetStatValue(StatDefOf.ArmorRating_Blunt) + pawn.GetStatValue(StatDefOf.ArmorRating_Sharp)) / 2f;
 				Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
 				return result;
 			};
@@ -691,211 +485,50 @@ namespace Verse
 			{
 				float num = 1f + meleeDps(k) * 2f;
 				float num2 = 1f + (k.RaceProps.baseHealthScale + averageArmor(k) * 1.8f) * 2f;
-				return num * num2 * 2.5f + 10f + k.race.GetStatValueAbstract(StatDefOf.MoveSpeed, null) * 2f;
+				return num * num2 * 2.5f + 10f + k.race.GetStatValueAbstract(StatDefOf.MoveSpeed) * 2f;
 			};
-			IEnumerable<PawnKindDef> dataSources = from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.race != null && d.RaceProps.Animal
-			orderby d.combatPower
-			select d;
-			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[8];
-			array[0] = new TableDataGetter<PawnKindDef>("animal", (PawnKindDef k) => k.defName);
-			array[1] = new TableDataGetter<PawnKindDef>("meleeDps", (PawnKindDef k) => meleeDps(k).ToString("F1"));
-			array[2] = new TableDataGetter<PawnKindDef>("baseHealthScale", (PawnKindDef k) => k.RaceProps.baseHealthScale.ToString());
-			array[3] = new TableDataGetter<PawnKindDef>("moveSpeed", (PawnKindDef k) => k.race.GetStatValueAbstract(StatDefOf.MoveSpeed, null).ToString());
-			array[4] = new TableDataGetter<PawnKindDef>("averageArmor", (PawnKindDef k) => averageArmor(k).ToStringPercent());
-			array[5] = new TableDataGetter<PawnKindDef>("combatPowerCalculated", (PawnKindDef k) => combatPowerCalculated(k).ToString("F0"));
-			array[6] = new TableDataGetter<PawnKindDef>("combatPower", (PawnKindDef k) => k.combatPower.ToString());
-			array[7] = new TableDataGetter<PawnKindDef>("combatPower\ndifference", (PawnKindDef k) => (k.combatPower - combatPowerCalculated(k)).ToString("F0"));
-			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from d in DefDatabase<PawnKindDef>.AllDefs
+				where d.race != null && d.RaceProps.Animal
+				orderby d.combatPower
+				select d, new TableDataGetter<PawnKindDef>("animal", (PawnKindDef k) => k.defName), new TableDataGetter<PawnKindDef>("meleeDps", (PawnKindDef k) => meleeDps(k).ToString("F1")), new TableDataGetter<PawnKindDef>("baseHealthScale", (PawnKindDef k) => k.RaceProps.baseHealthScale.ToString()), new TableDataGetter<PawnKindDef>("moveSpeed", (PawnKindDef k) => k.race.GetStatValueAbstract(StatDefOf.MoveSpeed).ToString()), new TableDataGetter<PawnKindDef>("averageArmor", (PawnKindDef k) => averageArmor(k).ToStringPercent()), new TableDataGetter<PawnKindDef>("combatPowerCalculated", (PawnKindDef k) => combatPowerCalculated(k).ToString("F0")), new TableDataGetter<PawnKindDef>("combatPower", (PawnKindDef k) => k.combatPower.ToString()), new TableDataGetter<PawnKindDef>("combatPower\ndifference", (PawnKindDef k) => (k.combatPower - combatPowerCalculated(k)).ToString("F0")));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalTradeTags()
 		{
 			List<TableDataGetter<PawnKindDef>> list = new List<TableDataGetter<PawnKindDef>>();
 			list.Add(new TableDataGetter<PawnKindDef>("animal", (PawnKindDef k) => k.defName));
-			IEnumerator<string> enumerator = (from k in DefDatabase<PawnKindDef>.AllDefs
-			where k.race.tradeTags != null
-			select k).SelectMany((PawnKindDef k) => k.race.tradeTags).Distinct<string>().GetEnumerator();
+			foreach (string tag in DefDatabase<PawnKindDef>.AllDefs.Where((PawnKindDef k) => k.race.tradeTags != null).SelectMany((PawnKindDef k) => k.race.tradeTags).Distinct())
 			{
-				while (enumerator.MoveNext())
-				{
-					string tag = enumerator.Current;
-					list.Add(new TableDataGetter<PawnKindDef>(tag, (PawnKindDef k) => (k.race.tradeTags != null && k.race.tradeTags.Contains(tag)).ToStringCheckBlank()));
-				}
+				list.Add(new TableDataGetter<PawnKindDef>(tag, (PawnKindDef k) => (k.race.tradeTags != null && k.race.tradeTags.Contains(tag)).ToStringCheckBlank()));
 			}
-			DebugTables.MakeTablesDialog<PawnKindDef>(from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.race != null && d.RaceProps.Animal
-			select d, list.ToArray());
+			DebugTables.MakeTablesDialog(DefDatabase<PawnKindDef>.AllDefs.Where((PawnKindDef d) => d.race != null && d.RaceProps.Animal), list.ToArray());
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalBehavior()
 		{
-			IEnumerable<PawnKindDef> dataSources = from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.race != null && d.RaceProps.Animal
-			select d;
-			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[19];
-			array[0] = new TableDataGetter<PawnKindDef>("", (PawnKindDef k) => k.defName);
-			array[1] = new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef k) => k.RaceProps.wildness.ToStringPercent());
-			array[2] = new TableDataGetter<PawnKindDef>("min\nhandling\nskill", (PawnKindDef k) => k.race.GetStatValueAbstract(StatDefOf.MinimumHandlingSkill, null));
-			array[3] = new TableDataGetter<PawnKindDef>("trainability", (PawnKindDef k) => k.race.race.trainability.defName);
-			array[4] = new TableDataGetter<PawnKindDef>("manhunterOn\nDamage\nChance", (PawnKindDef k) => k.RaceProps.manhunterOnDamageChance.ToStringPercentEmptyZero("F1"));
-			array[5] = new TableDataGetter<PawnKindDef>("manhunterOn\nTameFail\nChance", (PawnKindDef k) => k.RaceProps.manhunterOnTameFailChance.ToStringPercentEmptyZero("F1"));
-			array[6] = new TableDataGetter<PawnKindDef>("predator", (PawnKindDef k) => k.RaceProps.predator.ToStringCheckBlank());
-			array[7] = new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef k) => k.RaceProps.baseBodySize.ToString("F2"));
-			array[8] = new TableDataGetter<PawnKindDef>("max\nPreyBodySize", delegate(PawnKindDef k)
-			{
-				if (!k.RaceProps.predator)
-				{
-					return "";
-				}
-				return k.RaceProps.maxPreyBodySize.ToString("F2");
-			});
-			array[9] = new TableDataGetter<PawnKindDef>("canBe\nPredatorPrey", (PawnKindDef k) => k.RaceProps.canBePredatorPrey.ToStringCheckBlank());
-			array[10] = new TableDataGetter<PawnKindDef>("petness", (PawnKindDef k) => k.RaceProps.petness.ToStringPercent());
-			array[11] = new TableDataGetter<PawnKindDef>("nuzzle\nMtbHours", delegate(PawnKindDef k)
-			{
-				if (k.RaceProps.nuzzleMtbHours <= 0f)
-				{
-					return "";
-				}
-				return k.RaceProps.nuzzleMtbHours.ToString();
-			});
-			array[12] = new TableDataGetter<PawnKindDef>("pack\nAnimal", (PawnKindDef k) => k.RaceProps.packAnimal.ToStringCheckBlank());
-			array[13] = new TableDataGetter<PawnKindDef>("herd\nAnimal", (PawnKindDef k) => k.RaceProps.herdAnimal.ToStringCheckBlank());
-			array[14] = new TableDataGetter<PawnKindDef>("wildGroupSize\nMin", delegate(PawnKindDef k)
-			{
-				if (k.wildGroupSize.min == 1)
-				{
-					return "";
-				}
-				return k.wildGroupSize.min.ToString();
-			});
-			array[15] = new TableDataGetter<PawnKindDef>("wildGroupSize\nMax", delegate(PawnKindDef k)
-			{
-				if (k.wildGroupSize.max == 1)
-				{
-					return "";
-				}
-				return k.wildGroupSize.max.ToString();
-			});
-			array[16] = new TableDataGetter<PawnKindDef>("CanDo\nHerdMigration", (PawnKindDef k) => k.RaceProps.CanDoHerdMigration.ToStringCheckBlank());
-			array[17] = new TableDataGetter<PawnKindDef>("herd\nMigration\nAllowed", (PawnKindDef k) => k.RaceProps.herdMigrationAllowed.ToStringCheckBlank());
-			array[18] = new TableDataGetter<PawnKindDef>("mateMtb", (PawnKindDef k) => k.RaceProps.mateMtbHours.ToStringEmptyZero("F0"));
-			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(DefDatabase<PawnKindDef>.AllDefs.Where((PawnKindDef d) => d.race != null && d.RaceProps.Animal), new TableDataGetter<PawnKindDef>("", (PawnKindDef k) => k.defName), new TableDataGetter<PawnKindDef>("wildness", (PawnKindDef k) => k.RaceProps.wildness.ToStringPercent()), new TableDataGetter<PawnKindDef>("min\nhandling\nskill", (PawnKindDef k) => k.race.GetStatValueAbstract(StatDefOf.MinimumHandlingSkill)), new TableDataGetter<PawnKindDef>("trainability", (PawnKindDef k) => k.race.race.trainability.defName), new TableDataGetter<PawnKindDef>("manhunterOn\nDamage\nChance", (PawnKindDef k) => k.RaceProps.manhunterOnDamageChance.ToStringPercentEmptyZero("F1")), new TableDataGetter<PawnKindDef>("manhunterOn\nTameFail\nChance", (PawnKindDef k) => k.RaceProps.manhunterOnTameFailChance.ToStringPercentEmptyZero("F1")), new TableDataGetter<PawnKindDef>("predator", (PawnKindDef k) => k.RaceProps.predator.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef k) => k.RaceProps.baseBodySize.ToString("F2")), new TableDataGetter<PawnKindDef>("max\nPreyBodySize", (PawnKindDef k) => (!k.RaceProps.predator) ? "" : k.RaceProps.maxPreyBodySize.ToString("F2")), new TableDataGetter<PawnKindDef>("canBe\nPredatorPrey", (PawnKindDef k) => k.RaceProps.canBePredatorPrey.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("petness", (PawnKindDef k) => k.RaceProps.petness.ToStringPercent()), new TableDataGetter<PawnKindDef>("nuzzle\nMtbHours", (PawnKindDef k) => (!(k.RaceProps.nuzzleMtbHours > 0f)) ? "" : k.RaceProps.nuzzleMtbHours.ToString()), new TableDataGetter<PawnKindDef>("pack\nAnimal", (PawnKindDef k) => k.RaceProps.packAnimal.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("herd\nAnimal", (PawnKindDef k) => k.RaceProps.herdAnimal.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("wildGroupSize\nMin", (PawnKindDef k) => (k.wildGroupSize.min == 1) ? "" : k.wildGroupSize.min.ToString()), new TableDataGetter<PawnKindDef>("wildGroupSize\nMax", (PawnKindDef k) => (k.wildGroupSize.max == 1) ? "" : k.wildGroupSize.max.ToString()), new TableDataGetter<PawnKindDef>("CanDo\nHerdMigration", (PawnKindDef k) => k.RaceProps.CanDoHerdMigration.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("herd\nMigration\nAllowed", (PawnKindDef k) => k.RaceProps.herdMigrationAllowed.ToStringCheckBlank()), new TableDataGetter<PawnKindDef>("mateMtb", (PawnKindDef k) => k.RaceProps.mateMtbHours.ToStringEmptyZero("F0")));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void AnimalsEcosystem()
 		{
 			Func<PawnKindDef, float> ecosystemWeightGuess = (PawnKindDef k) => k.RaceProps.baseBodySize * 0.2f + k.RaceProps.baseHungerRate * 0.8f;
-			IEnumerable<PawnKindDef> dataSources = from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.race != null && d.RaceProps.Animal
-			orderby d.ecoSystemWeight descending
-			select d;
-			TableDataGetter<PawnKindDef>[] array = new TableDataGetter<PawnKindDef>[6];
-			array[0] = new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName);
-			array[1] = new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef d) => d.RaceProps.baseBodySize.ToString("F2"));
-			array[2] = new TableDataGetter<PawnKindDef>("hunger rate", (PawnKindDef d) => d.RaceProps.baseHungerRate.ToString("F2"));
-			array[3] = new TableDataGetter<PawnKindDef>("ecosystem weight", (PawnKindDef d) => d.ecoSystemWeight.ToString("F2"));
-			array[4] = new TableDataGetter<PawnKindDef>("ecosystem weight guess", (PawnKindDef d) => ecosystemWeightGuess(d).ToString("F2"));
-			array[5] = new TableDataGetter<PawnKindDef>("predator", (PawnKindDef d) => d.RaceProps.predator.ToStringCheckBlank());
-			DebugTables.MakeTablesDialog<PawnKindDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from d in DefDatabase<PawnKindDef>.AllDefs
+				where d.race != null && d.RaceProps.Animal
+				orderby d.ecoSystemWeight descending
+				select d, new TableDataGetter<PawnKindDef>("defName", (PawnKindDef d) => d.defName), new TableDataGetter<PawnKindDef>("bodySize", (PawnKindDef d) => d.RaceProps.baseBodySize.ToString("F2")), new TableDataGetter<PawnKindDef>("hunger rate", (PawnKindDef d) => d.RaceProps.baseHungerRate.ToString("F2")), new TableDataGetter<PawnKindDef>("ecosystem weight", (PawnKindDef d) => d.ecoSystemWeight.ToString("F2")), new TableDataGetter<PawnKindDef>("ecosystem weight guess", (PawnKindDef d) => ecosystemWeightGuess(d).ToString("F2")), new TableDataGetter<PawnKindDef>("predator", (PawnKindDef d) => d.RaceProps.predator.ToStringCheckBlank()));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void MentalBreaks()
 		{
-			IEnumerable<MentalBreakDef> dataSources = from d in DefDatabase<MentalBreakDef>.AllDefs
-			orderby d.intensity, d.defName
-			select d;
-			TableDataGetter<MentalBreakDef>[] array = new TableDataGetter<MentalBreakDef>[12];
-			array[0] = new TableDataGetter<MentalBreakDef>("defName", (MentalBreakDef d) => d.defName);
-			array[1] = new TableDataGetter<MentalBreakDef>("intensity", (MentalBreakDef d) => d.intensity.ToString());
-			array[2] = new TableDataGetter<MentalBreakDef>("chance in intensity", (MentalBreakDef d) => (d.baseCommonality / (from x in DefDatabase<MentalBreakDef>.AllDefs
-			where x.intensity == d.intensity
-			select x).Sum((MentalBreakDef x) => x.baseCommonality)).ToStringPercent());
-			array[3] = new TableDataGetter<MentalBreakDef>("min duration (days)", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState != null)
-				{
-					return ((float)d.mentalState.minTicksBeforeRecovery / 60000f).ToString("0.##");
-				}
-				return "";
-			});
-			array[4] = new TableDataGetter<MentalBreakDef>("avg duration (days)", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState != null)
-				{
-					return (Mathf.Min((float)d.mentalState.minTicksBeforeRecovery + d.mentalState.recoveryMtbDays * 60000f, (float)d.mentalState.maxTicksBeforeRecovery) / 60000f).ToString("0.##");
-				}
-				return "";
-			});
-			array[5] = new TableDataGetter<MentalBreakDef>("max duration (days)", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState != null)
-				{
-					return ((float)d.mentalState.maxTicksBeforeRecovery / 60000f).ToString("0.##");
-				}
-				return "";
-			});
-			array[6] = new TableDataGetter<MentalBreakDef>("recoverFromSleep", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState == null || !d.mentalState.recoverFromSleep)
-				{
-					return "";
-				}
-				return "recoverFromSleep";
-			});
-			array[7] = new TableDataGetter<MentalBreakDef>("recoveryThought", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState != null)
-				{
-					return d.mentalState.moodRecoveryThought.ToStringSafe<ThoughtDef>();
-				}
-				return "";
-			});
-			array[8] = new TableDataGetter<MentalBreakDef>("category", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState == null)
-				{
-					return "";
-				}
-				return d.mentalState.category.ToString();
-			});
-			array[9] = new TableDataGetter<MentalBreakDef>("blockNormalThoughts", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState == null || !d.mentalState.blockNormalThoughts)
-				{
-					return "";
-				}
-				return "blockNormalThoughts";
-			});
-			array[10] = new TableDataGetter<MentalBreakDef>("blockRandomInteraction", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState == null || !d.mentalState.blockRandomInteraction)
-				{
-					return "";
-				}
-				return "blockRandomInteraction";
-			});
-			array[11] = new TableDataGetter<MentalBreakDef>("allowBeatfire", delegate(MentalBreakDef d)
-			{
-				if (d.mentalState == null || !d.mentalState.allowBeatfire)
-				{
-					return "";
-				}
-				return "allowBeatfire";
-			});
-			DebugTables.MakeTablesDialog<MentalBreakDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(from d in DefDatabase<MentalBreakDef>.AllDefs
+				orderby d.intensity, d.defName
+				select d, new TableDataGetter<MentalBreakDef>("defName", (MentalBreakDef d) => d.defName), new TableDataGetter<MentalBreakDef>("intensity", (MentalBreakDef d) => d.intensity.ToString()), new TableDataGetter<MentalBreakDef>("chance in intensity", (MentalBreakDef d) => (d.baseCommonality / DefDatabase<MentalBreakDef>.AllDefs.Where((MentalBreakDef x) => x.intensity == d.intensity).Sum((MentalBreakDef x) => x.baseCommonality)).ToStringPercent()), new TableDataGetter<MentalBreakDef>("min duration (days)", (MentalBreakDef d) => (d.mentalState != null) ? ((float)d.mentalState.minTicksBeforeRecovery / 60000f).ToString("0.##") : ""), new TableDataGetter<MentalBreakDef>("avg duration (days)", (MentalBreakDef d) => (d.mentalState != null) ? (Mathf.Min((float)d.mentalState.minTicksBeforeRecovery + d.mentalState.recoveryMtbDays * 60000f, d.mentalState.maxTicksBeforeRecovery) / 60000f).ToString("0.##") : ""), new TableDataGetter<MentalBreakDef>("max duration (days)", (MentalBreakDef d) => (d.mentalState != null) ? ((float)d.mentalState.maxTicksBeforeRecovery / 60000f).ToString("0.##") : ""), new TableDataGetter<MentalBreakDef>("recoverFromSleep", (MentalBreakDef d) => (d.mentalState == null || !d.mentalState.recoverFromSleep) ? "" : "recoverFromSleep"), new TableDataGetter<MentalBreakDef>("recoveryThought", (MentalBreakDef d) => (d.mentalState != null) ? d.mentalState.moodRecoveryThought.ToStringSafe() : ""), new TableDataGetter<MentalBreakDef>("category", (MentalBreakDef d) => (d.mentalState == null) ? "" : d.mentalState.category.ToString()), new TableDataGetter<MentalBreakDef>("blockNormalThoughts", (MentalBreakDef d) => (d.mentalState == null || !d.mentalState.blockNormalThoughts) ? "" : "blockNormalThoughts"), new TableDataGetter<MentalBreakDef>("blockRandomInteraction", (MentalBreakDef d) => (d.mentalState == null || !d.mentalState.blockRandomInteraction) ? "" : "blockRandomInteraction"), new TableDataGetter<MentalBreakDef>("allowBeatfire", (MentalBreakDef d) => (d.mentalState == null || !d.mentalState.allowBeatfire) ? "" : "allowBeatfire"));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void Thoughts()
 		{
@@ -909,13 +542,7 @@ namespace Verse
 				for (int i = 0; i < t.stages.Count; i++)
 				{
 					ThoughtStage thoughtStage = t.stages[i];
-					text = string.Concat(new object[]
-					{
-						text,
-						"[",
-						i,
-						"] "
-					});
+					text = text + "[" + i + "] ";
 					if (thoughtStage == null)
 					{
 						text += "null";
@@ -937,11 +564,11 @@ namespace Verse
 						text += " ";
 						if (thoughtStage.baseMoodEffect != 0f)
 						{
-							text = text + "[" + thoughtStage.baseMoodEffect.ToStringWithSign("0.##") + " Mo]";
+							text = text + "[" + thoughtStage.baseMoodEffect.ToStringWithSign() + " Mo]";
 						}
 						if (thoughtStage.baseOpinionOffset != 0f)
 						{
-							text = text + "(" + thoughtStage.baseOpinionOffset.ToStringWithSign("0.##") + " Op)";
+							text = text + "(" + thoughtStage.baseOpinionOffset.ToStringWithSign() + " Op)";
 						}
 					}
 					if (i < t.stages.Count - 1)
@@ -951,207 +578,82 @@ namespace Verse
 				}
 				return text;
 			};
-			IEnumerable<ThoughtDef> allDefs = DefDatabase<ThoughtDef>.AllDefs;
-			TableDataGetter<ThoughtDef>[] array = new TableDataGetter<ThoughtDef>[18];
-			array[0] = new TableDataGetter<ThoughtDef>("defName", (ThoughtDef d) => d.defName);
-			array[1] = new TableDataGetter<ThoughtDef>("type", delegate(ThoughtDef d)
-			{
-				if (!d.IsMemory)
-				{
-					return "situ";
-				}
-				return "mem";
-			});
-			array[2] = new TableDataGetter<ThoughtDef>("social", delegate(ThoughtDef d)
-			{
-				if (!d.IsSocial)
-				{
-					return "mood";
-				}
-				return "soc";
-			});
-			array[3] = new TableDataGetter<ThoughtDef>("stages", (ThoughtDef d) => stagesText(d));
-			array[4] = new TableDataGetter<ThoughtDef>("best\nmood", (ThoughtDef d) => (from st in d.stages
-			where st != null
-			select st).Max((ThoughtStage st) => st.baseMoodEffect));
-			array[5] = new TableDataGetter<ThoughtDef>("worst\nmood", (ThoughtDef d) => (from st in d.stages
-			where st != null
-			select st).Min((ThoughtStage st) => st.baseMoodEffect));
-			array[6] = new TableDataGetter<ThoughtDef>("stack\nlimit", (ThoughtDef d) => d.stackLimit.ToString());
-			array[7] = new TableDataGetter<ThoughtDef>("stack\nlimit\nper o. pawn", delegate(ThoughtDef d)
-			{
-				if (d.stackLimitForSameOtherPawn >= 0)
-				{
-					return d.stackLimitForSameOtherPawn.ToString();
-				}
-				return "";
-			});
-			array[8] = new TableDataGetter<ThoughtDef>("stacked\neffect\nmultiplier", delegate(ThoughtDef d)
-			{
-				if (d.stackLimit != 1)
-				{
-					return d.stackedEffectMultiplier.ToStringPercent();
-				}
-				return "";
-			});
-			array[9] = new TableDataGetter<ThoughtDef>("duration\n(days)", (ThoughtDef d) => d.durationDays.ToString());
-			array[10] = new TableDataGetter<ThoughtDef>("effect\nmultiplying\nstat", delegate(ThoughtDef d)
-			{
-				if (d.effectMultiplyingStat != null)
-				{
-					return d.effectMultiplyingStat.defName;
-				}
-				return "";
-			});
-			array[11] = new TableDataGetter<ThoughtDef>("game\ncondition", delegate(ThoughtDef d)
-			{
-				if (d.gameCondition != null)
-				{
-					return d.gameCondition.defName;
-				}
-				return "";
-			});
-			array[12] = new TableDataGetter<ThoughtDef>("hediff", delegate(ThoughtDef d)
-			{
-				if (d.hediff != null)
-				{
-					return d.hediff.defName;
-				}
-				return "";
-			});
-			array[13] = new TableDataGetter<ThoughtDef>("lerp opinion\nto zero\nafter duration pct", (ThoughtDef d) => d.lerpOpinionToZeroAfterDurationPct.ToStringPercent());
-			array[14] = new TableDataGetter<ThoughtDef>("max cumulated\nopinion\noffset", delegate(ThoughtDef d)
-			{
-				if (d.maxCumulatedOpinionOffset <= 99999f)
-				{
-					return d.maxCumulatedOpinionOffset.ToString();
-				}
-				return "";
-			});
-			array[15] = new TableDataGetter<ThoughtDef>("next\nthought", delegate(ThoughtDef d)
-			{
-				if (d.nextThought != null)
-				{
-					return d.nextThought.defName;
-				}
-				return "";
-			});
-			array[16] = new TableDataGetter<ThoughtDef>("nullified\nif not colonist", (ThoughtDef d) => d.nullifiedIfNotColonist.ToStringCheckBlank());
-			array[17] = new TableDataGetter<ThoughtDef>("show\nbubble", (ThoughtDef d) => d.showBubble.ToStringCheckBlank());
-			DebugTables.MakeTablesDialog<ThoughtDef>(allDefs, array);
+			DebugTables.MakeTablesDialog(DefDatabase<ThoughtDef>.AllDefs, new TableDataGetter<ThoughtDef>("defName", (ThoughtDef d) => d.defName), new TableDataGetter<ThoughtDef>("type", (ThoughtDef d) => (!d.IsMemory) ? "situ" : "mem"), new TableDataGetter<ThoughtDef>("social", (ThoughtDef d) => (!d.IsSocial) ? "mood" : "soc"), new TableDataGetter<ThoughtDef>("stages", (ThoughtDef d) => stagesText(d)), new TableDataGetter<ThoughtDef>("best\nmood", (ThoughtDef d) => d.stages.Where((ThoughtStage st) => st != null).Max((ThoughtStage st) => st.baseMoodEffect)), new TableDataGetter<ThoughtDef>("worst\nmood", (ThoughtDef d) => d.stages.Where((ThoughtStage st) => st != null).Min((ThoughtStage st) => st.baseMoodEffect)), new TableDataGetter<ThoughtDef>("stack\nlimit", (ThoughtDef d) => d.stackLimit.ToString()), new TableDataGetter<ThoughtDef>("stack\nlimit\nper o. pawn", (ThoughtDef d) => (d.stackLimitForSameOtherPawn >= 0) ? d.stackLimitForSameOtherPawn.ToString() : ""), new TableDataGetter<ThoughtDef>("stacked\neffect\nmultiplier", (ThoughtDef d) => (d.stackLimit != 1) ? d.stackedEffectMultiplier.ToStringPercent() : ""), new TableDataGetter<ThoughtDef>("duration\n(days)", (ThoughtDef d) => d.durationDays.ToString()), new TableDataGetter<ThoughtDef>("effect\nmultiplying\nstat", (ThoughtDef d) => (d.effectMultiplyingStat != null) ? d.effectMultiplyingStat.defName : ""), new TableDataGetter<ThoughtDef>("game\ncondition", (ThoughtDef d) => (d.gameCondition != null) ? d.gameCondition.defName : ""), new TableDataGetter<ThoughtDef>("hediff", (ThoughtDef d) => (d.hediff != null) ? d.hediff.defName : ""), new TableDataGetter<ThoughtDef>("lerp opinion\nto zero\nafter duration pct", (ThoughtDef d) => d.lerpOpinionToZeroAfterDurationPct.ToStringPercent()), new TableDataGetter<ThoughtDef>("max cumulated\nopinion\noffset", (ThoughtDef d) => (!(d.maxCumulatedOpinionOffset > 99999f)) ? d.maxCumulatedOpinionOffset.ToString() : ""), new TableDataGetter<ThoughtDef>("next\nthought", (ThoughtDef d) => (d.nextThought != null) ? d.nextThought.defName : ""), new TableDataGetter<ThoughtDef>("nullified\nif not colonist", (ThoughtDef d) => d.nullifiedIfNotColonist.ToStringCheckBlank()), new TableDataGetter<ThoughtDef>("show\nbubble", (ThoughtDef d) => d.showBubble.ToStringCheckBlank()));
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void TraitsSampled()
 		{
-			//DebugOutputsPawns.c__DisplayClass19_0 c__DisplayClass19_ = new DebugOutputsPawns.c__DisplayClass19_0();
-			//c__DisplayClass19_.testColonists = new List<Pawn>();
-			//for (int i = 0; i < 4000; i++)
-			//{
-			//	c__DisplayClass19_.testColonists.Add(PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer));
-			//}
-			//IEnumerable<TraitDegreeData> dataSources = DefDatabase<TraitDef>.AllDefs.SelectMany((TraitDef tr) => tr.degreeDatas);
-			//TableDataGetter<TraitDegreeData>[] array = new TableDataGetter<TraitDegreeData>[8];
-			//array[0] = new TableDataGetter<TraitDegreeData>("trait", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).defName);
-			//array[1] = new TableDataGetter<TraitDegreeData>("trait commonality", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).GetGenderSpecificCommonality(Gender.None).ToString("F2"));
-			//array[2] = new TableDataGetter<TraitDegreeData>("trait commonalityFemale", (TraitDegreeData d) => DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).GetGenderSpecificCommonality(Gender.Female).ToString("F2"));
-			//array[3] = new TableDataGetter<TraitDegreeData>("degree", (TraitDegreeData d) => d.label);
-			////array[4] = new TableDataGetter<TraitDegreeData>("degree num", delegate(TraitDegreeData d)
-			////{
-			////	if (DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).degreeDatas.Count <= 0)
-			////	{
-			////		return "";
-			////	}
-			////	return d.degree.ToString();
-			////});
-			////array[5] = new TableDataGetter<TraitDegreeData>("degree commonality", delegate(TraitDegreeData d)
-			////{
-			////	if (DebugOutputsPawns.<TraitsSampled>g__getTrait|19_0(d).degreeDatas.Count <= 0)
-			////	{
-			////		return "";
-			////	}
-			////	return d.commonality.ToString("F2");
-			////});
-			//array[6] = new TableDataGetter<TraitDegreeData>("marketValueFactorOffset", (TraitDegreeData d) => d.marketValueFactorOffset.ToString("F0"));
-			//array[7] = new TableDataGetter<TraitDegreeData>("prevalence among " + 4000 + "\ngenerated Colonists", (TraitDegreeData d) => c__DisplayClass19_.<TraitsSampled>g__getPrevalence|1(d).ToStringPercent());
-			//DebugTables.MakeTablesDialog<TraitDegreeData>(dataSources, array);
+			List<Pawn> testColonists = new List<Pawn>();
+			for (int i = 0; i < 4000; i++)
+			{
+				testColonists.Add(PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer));
+			}
+			DebugTables.MakeTablesDialog(DefDatabase<TraitDef>.AllDefs.SelectMany((TraitDef tr) => tr.degreeDatas), new TableDataGetter<TraitDegreeData>("trait", (TraitDegreeData d) => getTrait(d).defName), new TableDataGetter<TraitDegreeData>("trait commonality", (TraitDegreeData d) => getTrait(d).GetGenderSpecificCommonality(Gender.None).ToString("F2")), new TableDataGetter<TraitDegreeData>("trait commonalityFemale", (TraitDegreeData d) => getTrait(d).GetGenderSpecificCommonality(Gender.Female).ToString("F2")), new TableDataGetter<TraitDegreeData>("degree", (TraitDegreeData d) => d.label), new TableDataGetter<TraitDegreeData>("degree num", (TraitDegreeData d) => (getTrait(d).degreeDatas.Count <= 0) ? "" : d.degree.ToString()), new TableDataGetter<TraitDegreeData>("degree commonality", (TraitDegreeData d) => (getTrait(d).degreeDatas.Count <= 0) ? "" : d.commonality.ToString("F2")), new TableDataGetter<TraitDegreeData>("marketValueFactorOffset", (TraitDegreeData d) => d.marketValueFactorOffset.ToString("F0")), new TableDataGetter<TraitDegreeData>("prevalence among " + 4000 + "\ngenerated Colonists", (TraitDegreeData d) => getPrevalence(d).ToStringPercent()));
+			float getPrevalence(TraitDegreeData d)
+			{
+				float num = 0f;
+				foreach (Pawn item in testColonists)
+				{
+					Trait trait = item.story.traits.GetTrait(getTrait(d));
+					if (trait != null && trait.Degree == d.degree)
+					{
+						num += 1f;
+					}
+				}
+				return num / 4000f;
+			}
+			TraitDef getTrait(TraitDegreeData d)
+			{
+				return DefDatabase<TraitDef>.AllDefs.First((TraitDef td) => td.degreeDatas.Contains(d));
+			}
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void BackstoryCountsPerTag()
 		{
-			IEnumerable<Backstory> enumerable = from kvp in BackstoryDatabase.allBackstories
-			select kvp.Value;
-			List<string> dataSources = enumerable.SelectMany((Backstory bs) => bs.spawnCategories).Distinct<string>().ToList<string>();
+			IEnumerable<Backstory> enumerable = BackstoryDatabase.allBackstories.Select((KeyValuePair<string, Backstory> kvp) => kvp.Value);
+			List<string> dataSources = enumerable.SelectMany((Backstory bs) => bs.spawnCategories).Distinct().ToList();
 			Dictionary<string, int> countAdulthoods = new Dictionary<string, int>();
 			Dictionary<string, int> countChildhoods = new Dictionary<string, int>();
-			foreach (Backstory backstory in enumerable)
+			foreach (Backstory item in enumerable)
 			{
-				Dictionary<string, int> dictionary = (backstory.slot == BackstorySlot.Adulthood) ? countAdulthoods : countChildhoods;
-				foreach (string text in backstory.spawnCategories)
+				Dictionary<string, int> dictionary = (item.slot == BackstorySlot.Adulthood) ? countAdulthoods : countChildhoods;
+				foreach (string spawnCategory in item.spawnCategories)
 				{
-					if (!dictionary.ContainsKey(text))
+					if (!dictionary.ContainsKey(spawnCategory))
 					{
-						dictionary.Add(text, 0);
+						dictionary.Add(spawnCategory, 0);
 					}
-					Dictionary<string, int> dictionary2 = dictionary;
-					string key = text;
-					int num = dictionary2[key];
-					dictionary2[key] = num + 1;
+					dictionary[spawnCategory]++;
 				}
 			}
 			List<TableDataGetter<string>> list = new List<TableDataGetter<string>>();
 			list.Add(new TableDataGetter<string>("tag", (string t) => t));
-			list.Add(new TableDataGetter<string>("adulthoods", delegate(string t)
-			{
-				if (!countAdulthoods.ContainsKey(t))
-				{
-					return 0;
-				}
-				return countAdulthoods[t];
-			}));
-			list.Add(new TableDataGetter<string>("childhoods", delegate(string t)
-			{
-				if (!countChildhoods.ContainsKey(t))
-				{
-					return 0;
-				}
-				return countChildhoods[t];
-			}));
-			DebugTables.MakeTablesDialog<string>(dataSources, list.ToArray());
+			list.Add(new TableDataGetter<string>("adulthoods", (string t) => countAdulthoods.ContainsKey(t) ? countAdulthoods[t] : 0));
+			list.Add(new TableDataGetter<string>("childhoods", (string t) => countChildhoods.ContainsKey(t) ? countChildhoods[t] : 0));
+			DebugTables.MakeTablesDialog(dataSources, list.ToArray());
 		}
 
-		
 		[DebugOutput("Pawns", false)]
 		public static void ListSolidBackstories()
 		{
-			IEnumerable<string> enumerable = SolidBioDatabase.allBios.SelectMany((PawnBio bio) => bio.adulthood.spawnCategories).Distinct<string>();
+			IEnumerable<string> enumerable = SolidBioDatabase.allBios.SelectMany((PawnBio bio) => bio.adulthood.spawnCategories).Distinct();
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (string catInner2 in enumerable)
+			foreach (string item2 in enumerable)
 			{
-				string catInner = catInner2;
+				string catInner = item2;
 				FloatMenuOption item = new FloatMenuOption(catInner, delegate
 				{
-					IEnumerable<PawnBio> allBios = SolidBioDatabase.allBios;
-					Func<PawnBio, bool> predicate= ((PawnBio b) => b.adulthood.spawnCategories.Contains(catInner));
-					IEnumerable<PawnBio> enumerable2 = allBios.Where(predicate);
+					IEnumerable<PawnBio> enumerable2 = SolidBioDatabase.allBios.Where((PawnBio b) => b.adulthood.spawnCategories.Contains(catInner));
 					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.AppendLine(string.Concat(new object[]
+					stringBuilder.AppendLine("Backstories with category: " + catInner + " (" + enumerable2.Count() + ")");
+					foreach (PawnBio item3 in enumerable2)
 					{
-						"Backstories with category: ",
-						catInner,
-						" (",
-						enumerable2.Count<PawnBio>(),
-						")"
-					}));
-					foreach (PawnBio pawnBio in enumerable2)
-					{
-						stringBuilder.AppendLine(pawnBio.ToString());
+						stringBuilder.AppendLine(item3.ToString());
 					}
-					Log.Message(stringBuilder.ToString(), false);
-				}, MenuOptionPriority.Default, null, null, 0f, null, null);
+					Log.Message(stringBuilder.ToString());
+				});
 				list.Add(item);
 			}
 			Find.WindowStack.Add(new FloatMenu(list));

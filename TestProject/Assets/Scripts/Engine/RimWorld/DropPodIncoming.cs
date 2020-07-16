@@ -1,42 +1,35 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class DropPodIncoming : Skyfaller, IActiveDropPod, IThingHolder
 	{
-		
-		
-		
 		public ActiveDropPodInfo Contents
 		{
 			get
 			{
-				return ((ActiveDropPod)this.innerContainer[0]).Contents;
+				return ((ActiveDropPod)innerContainer[0]).Contents;
 			}
 			set
 			{
-				((ActiveDropPod)this.innerContainer[0]).Contents = value;
+				((ActiveDropPod)innerContainer[0]).Contents = value;
 			}
 		}
 
-		
 		protected override void SpawnThings()
 		{
-			if (this.Contents.spawnWipeMode == null)
+			if (!Contents.spawnWipeMode.HasValue)
 			{
 				base.SpawnThings();
 				return;
 			}
-			for (int i = this.innerContainer.Count - 1; i >= 0; i--)
+			for (int num = innerContainer.Count - 1; num >= 0; num--)
 			{
-				GenSpawn.Spawn(this.innerContainer[i], base.Position, base.Map, this.Contents.spawnWipeMode.Value);
+				GenSpawn.Spawn(innerContainer[num], base.Position, base.Map, Contents.spawnWipeMode.Value);
 			}
 		}
 
-		
 		protected override void Impact()
 		{
 			for (int i = 0; i < 6; i++)

@@ -1,85 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class JoyGiverDef : Def
 	{
-		
-		
+		public Type giverClass;
+
+		public float baseChance;
+
+		public bool requireChair = true;
+
+		public List<ThingDef> thingDefs;
+
+		public JobDef jobDef;
+
+		public bool desireSit = true;
+
+		public float pctPawnsEverDo = 1f;
+
+		public bool unroofedOnly;
+
+		public JoyKindDef joyKind;
+
+		public List<PawnCapacityDef> requiredCapacities = new List<PawnCapacityDef>();
+
+		public bool canDoWhileInBed;
+
+		private JoyGiver workerInt;
+
 		public JoyGiver Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (JoyGiver)Activator.CreateInstance(this.giverClass);
-					this.workerInt.def = this;
+					workerInt = (JoyGiver)Activator.CreateInstance(giverClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			if (this.jobDef != null && this.jobDef.joyKind != this.joyKind)
+			if (jobDef != null && jobDef.joyKind != joyKind)
 			{
-				yield return string.Concat(new object[]
-				{
-					"jobDef ",
-					this.jobDef,
-					" has joyKind ",
-					this.jobDef.joyKind,
-					" which does not match our joyKind ",
-					this.joyKind
-				});
+				yield return "jobDef " + jobDef + " has joyKind " + jobDef.joyKind + " which does not match our joyKind " + joyKind;
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public Type giverClass;
-
-		
-		public float baseChance;
-
-		
-		public bool requireChair = true;
-
-		
-		public List<ThingDef> thingDefs;
-
-		
-		public JobDef jobDef;
-
-		
-		public bool desireSit = true;
-
-		
-		public float pctPawnsEverDo = 1f;
-
-		
-		public bool unroofedOnly;
-
-		
-		public JoyKindDef joyKind;
-
-		
-		public List<PawnCapacityDef> requiredCapacities = new List<PawnCapacityDef>();
-
-		
-		public bool canDoWhileInBed;
-
-		
-		private JoyGiver workerInt;
 	}
 }

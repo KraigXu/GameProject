@@ -1,60 +1,52 @@
-﻿using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DefGenerator
 	{
-		
 		public static void GenerateImpliedDefs_PreResolve()
 		{
-			foreach (ThingDef def in ThingDefGenerator_Buildings.ImpliedBlueprintAndFrameDefs().Concat(ThingDefGenerator_Meat.ImpliedMeatDefs()).Concat(ThingDefGenerator_Techprints.ImpliedTechprintDefs()).Concat(ThingDefGenerator_Corpses.ImpliedCorpseDefs()))
+			foreach (ThingDef item in ThingDefGenerator_Buildings.ImpliedBlueprintAndFrameDefs().Concat(ThingDefGenerator_Meat.ImpliedMeatDefs()).Concat(ThingDefGenerator_Techprints.ImpliedTechprintDefs())
+				.Concat(ThingDefGenerator_Corpses.ImpliedCorpseDefs()))
 			{
-				DefGenerator.AddImpliedDef<ThingDef>(def);
+				AddImpliedDef(item);
 			}
 			DirectXmlCrossRefLoader.ResolveAllWantedCrossReferences(FailMode.Silent);
-			foreach (TerrainDef def2 in TerrainDefGenerator_Stone.ImpliedTerrainDefs())
+			foreach (TerrainDef item2 in TerrainDefGenerator_Stone.ImpliedTerrainDefs())
 			{
-				DefGenerator.AddImpliedDef<TerrainDef>(def2);
+				AddImpliedDef(item2);
 			}
-			foreach (RecipeDef def3 in RecipeDefGenerator.ImpliedRecipeDefs())
+			foreach (RecipeDef item3 in RecipeDefGenerator.ImpliedRecipeDefs())
 			{
-				DefGenerator.AddImpliedDef<RecipeDef>(def3);
+				AddImpliedDef(item3);
 			}
-			foreach (PawnColumnDef def4 in PawnColumnDefgenerator.ImpliedPawnColumnDefs())
+			foreach (PawnColumnDef item4 in PawnColumnDefgenerator.ImpliedPawnColumnDefs())
 			{
-				DefGenerator.AddImpliedDef<PawnColumnDef>(def4);
+				AddImpliedDef(item4);
 			}
-			foreach (ThingDef def5 in NeurotrainerDefGenerator.ImpliedThingDefs())
+			foreach (ThingDef item5 in NeurotrainerDefGenerator.ImpliedThingDefs())
 			{
-				DefGenerator.AddImpliedDef<ThingDef>(def5);
+				AddImpliedDef(item5);
 			}
 		}
 
-		
 		public static void GenerateImpliedDefs_PostResolve()
 		{
-			foreach (KeyBindingCategoryDef def in KeyBindingDefGenerator.ImpliedKeyBindingCategoryDefs())
+			foreach (KeyBindingCategoryDef item in KeyBindingDefGenerator.ImpliedKeyBindingCategoryDefs())
 			{
-				DefGenerator.AddImpliedDef<KeyBindingCategoryDef>(def);
+				AddImpliedDef(item);
 			}
-			foreach (KeyBindingDef def2 in KeyBindingDefGenerator.ImpliedKeyBindingDefs())
+			foreach (KeyBindingDef item2 in KeyBindingDefGenerator.ImpliedKeyBindingDefs())
 			{
-				DefGenerator.AddImpliedDef<KeyBindingDef>(def2);
+				AddImpliedDef(item2);
 			}
 		}
 
-		
 		public static void AddImpliedDef<T>(T def) where T : Def, new()
 		{
 			def.generated = true;
-			ModContentPack modContentPack = def.modContentPack;
-			if (modContentPack != null)
-			{
-				modContentPack.AddDef(def, "ImpliedDefs");
-			}
+			def.modContentPack?.AddDef(def, "ImpliedDefs");
 			def.PostLoad();
 			DefDatabase<T>.Add(def);
 		}

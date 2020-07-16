@@ -338,7 +338,7 @@ namespace GameSystem.Ui
                 current.text = value;
                 current.gameObject.SetActive(true);
                 current.transform.SetAsLastSibling();
-                current.DOFade(0, Time).OnComplete(() => TextAnimation(current));
+                //current.DOFade(0, Time).OnComplete(() => TextAnimation(current));
             }
             else
             {
@@ -350,8 +350,8 @@ namespace GameSystem.Ui
                 text.text = value;
                 text.color = Color.black;
 
-                text.DOFade(0, Time).OnComplete((() => DestoryText()));
-                go.SetActive(true);
+                //text.DOFade(0, Time).OnComplete((() => DestoryText()));
+                //go.SetActive(true);
             }
         }
 

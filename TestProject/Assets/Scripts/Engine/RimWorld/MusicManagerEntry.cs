@@ -1,75 +1,51 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class MusicManagerEntry
 	{
 		private AudioSource audioSource;
+
 		private const string SourceGameObjectName = "MusicAudioSourceDummy";
 
-		private float CurVolume
-		{
-			get
-			{
-				return Prefs.VolumeMusic * SongDefOf.EntrySong.volume;
-			}
-		}
+		private float CurVolume => Prefs.VolumeMusic * SongDefOf.EntrySong.volume;
 
-		
-		
-		public float CurSanitizedVolume
-		{
-			get
-			{
-				return AudioSourceUtility.GetSanitizedVolume(this.CurVolume, "MusicManagerEntry");
-			}
-		}
+		public float CurSanitizedVolume => AudioSourceUtility.GetSanitizedVolume(CurVolume, "MusicManagerEntry");
 
-		
 		public void MusicManagerEntryUpdate()
 		{
-			if (this.audioSource == null || !this.audioSource.isPlaying)
+			if (audioSource == null || !audioSource.isPlaying)
 			{
-				this.StartPlaying();
+				StartPlaying();
 			}
-			this.audioSource.volume = this.CurSanitizedVolume;
+			audioSource.volume = CurSanitizedVolume;
 		}
 
-		
 		private void StartPlaying()
 		{
-			if (this.audioSource != null && !this.audioSource.isPlaying)
+			if (audioSource != null && !audioSource.isPlaying)
 			{
-				this.audioSource.Play();
+				audioSource.Play();
 				return;
 			}
 			if (GameObject.Find("MusicAudioSourceDummy") != null)
 			{
-				Log.Error("MusicManagerEntry did StartPlaying but there is already a music source GameObject.", false);
+				Log.Error("MusicManagerEntry did StartPlaying but there is already a music source GameObject.");
 				return;
 			}
-			this.audioSource = new GameObject("MusicAudioSourceDummy")
-			{
-				transform = 
-				{
-					parent = Camera.main.transform
-				}
-			}.AddComponent<AudioSource>();
-			this.audioSource.bypassEffects = true;
-			this.audioSource.bypassListenerEffects = true;
-			this.audioSource.bypassReverbZones = true;
-			this.audioSource.priority = 0;
-			this.audioSource.clip = SongDefOf.EntrySong.clip;
-			this.audioSource.volume = this.CurSanitizedVolume;
-			this.audioSource.loop = true;
-			this.audioSource.spatialBlend = 0f;
-			this.audioSource.Play();
+			GameObject gameObject = new GameObject("MusicAudioSourceDummy");
+			gameObject.transform.parent = Camera.main.transform;
+			audioSource = gameObject.AddComponent<AudioSource>();
+			audioSource.bypassEffects = true;
+			audioSource.bypassListenerEffects = true;
+			audioSource.bypassReverbZones = true;
+			audioSource.priority = 0;
+			audioSource.clip = SongDefOf.EntrySong.clip;
+			audioSource.volume = CurSanitizedVolume;
+			audioSource.loop = true;
+			audioSource.spatialBlend = 0f;
+			audioSource.Play();
 		}
-
-		
-
 	}
 }

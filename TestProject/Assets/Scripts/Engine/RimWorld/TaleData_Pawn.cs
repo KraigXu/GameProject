@@ -1,40 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class TaleData_Pawn : TaleData
 	{
-		
+		public Pawn pawn;
+
+		public PawnKindDef kind;
+
+		public Faction faction;
+
+		public Gender gender;
+
+		public int age;
+
+		public int chronologicalAge;
+
+		public string relationInfo;
+
+		public bool everBeenColonistOrTameAnimal;
+
+		public bool everBeenQuestLodger;
+
+		public bool isFactionLeader;
+
+		public List<RoyalTitle> royalTitles;
+
+		public Name name;
+
+		public string title;
+
+		public ThingDef primaryEquipment;
+
+		public ThingDef notableApparel;
+
+		private List<Faction> tmpFactions;
+
+		private List<RoyalTitleDef> tmpRoyalTitles;
+
 		public override void ExposeData()
 		{
-			Scribe_References.Look<Pawn>(ref this.pawn, "pawn", true);
-			Scribe_Defs.Look<PawnKindDef>(ref this.kind, "kind");
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-			Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
-			Scribe_Values.Look<int>(ref this.age, "age", 0, false);
-			Scribe_Values.Look<int>(ref this.chronologicalAge, "chronologicalAge", 0, false);
-			Scribe_Values.Look<string>(ref this.relationInfo, "relationInfo", null, false);
-			Scribe_Values.Look<bool>(ref this.everBeenColonistOrTameAnimal, "everBeenColonistOrTameAnimal", false, false);
-			Scribe_Values.Look<bool>(ref this.everBeenQuestLodger, "everBeenQuestLodger", false, false);
-			Scribe_Values.Look<bool>(ref this.isFactionLeader, "isFactionLeader", false, false);
-			Scribe_Collections.Look<RoyalTitle>(ref this.royalTitles, "royalTitles", LookMode.Deep, Array.Empty<object>());
-			Scribe_Deep.Look<Name>(ref this.name, "name", Array.Empty<object>());
-			Scribe_Values.Look<string>(ref this.title, "title", null, false);
-			Scribe_Defs.Look<ThingDef>(ref this.primaryEquipment, "peq");
-			Scribe_Defs.Look<ThingDef>(ref this.notableApparel, "app");
+			Scribe_References.Look(ref pawn, "pawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref kind, "kind");
+			Scribe_References.Look(ref faction, "faction");
+			Scribe_Values.Look(ref gender, "gender", Gender.None);
+			Scribe_Values.Look(ref age, "age", 0);
+			Scribe_Values.Look(ref chronologicalAge, "chronologicalAge", 0);
+			Scribe_Values.Look(ref relationInfo, "relationInfo");
+			Scribe_Values.Look(ref everBeenColonistOrTameAnimal, "everBeenColonistOrTameAnimal", defaultValue: false);
+			Scribe_Values.Look(ref everBeenQuestLodger, "everBeenQuestLodger", defaultValue: false);
+			Scribe_Values.Look(ref isFactionLeader, "isFactionLeader", defaultValue: false);
+			Scribe_Collections.Look(ref royalTitles, "royalTitles", LookMode.Deep);
+			Scribe_Deep.Look(ref name, "name");
+			Scribe_Values.Look(ref title, "title");
+			Scribe_Defs.Look(ref primaryEquipment, "peq");
+			Scribe_Defs.Look(ref notableApparel, "app");
 		}
 
-		
 		public override IEnumerable<Rule> GetRules(string prefix)
 		{
-			return GrammarUtility.RulesForPawn(prefix, this.name, this.title, this.kind, this.gender, this.faction, this.age, this.chronologicalAge, this.relationInfo, this.everBeenColonistOrTameAnimal, this.everBeenQuestLodger, this.isFactionLeader, this.royalTitles, null, true);
+			return GrammarUtility.RulesForPawn(prefix, name, title, kind, gender, faction, age, chronologicalAge, relationInfo, everBeenColonistOrTameAnimal, everBeenQuestLodger, isFactionLeader, royalTitles);
 		}
 
-		
 		public static TaleData_Pawn GenerateFrom(Pawn pawn)
 		{
 			TaleData_Pawn taleData_Pawn = new TaleData_Pawn();
@@ -50,14 +79,14 @@ namespace RimWorld
 			if (pawn.royalty != null)
 			{
 				taleData_Pawn.royalTitles = new List<RoyalTitle>();
-				foreach (RoyalTitle other in pawn.royalty.AllTitlesForReading)
+				foreach (RoyalTitle item in pawn.royalty.AllTitlesForReading)
 				{
-					taleData_Pawn.royalTitles.Add(new RoyalTitle(other));
+					taleData_Pawn.royalTitles.Add(new RoyalTitle(item));
 				}
 			}
-			TaggedString taggedString = "";
-			PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref taggedString, pawn);
-			taleData_Pawn.relationInfo = taggedString.Resolve();
+			TaggedString text = "";
+			PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref text, pawn);
+			taleData_Pawn.relationInfo = text.Resolve();
 			if (pawn.story != null)
 			{
 				taleData_Pawn.title = pawn.story.title;
@@ -69,72 +98,19 @@ namespace RimWorld
 				{
 					taleData_Pawn.primaryEquipment = pawn.equipment.Primary.def;
 				}
-				Apparel apparel;
-				if (pawn.apparel.WornApparel.TryRandomElement(out apparel))
+				if (pawn.apparel.WornApparel.TryRandomElement(out Apparel result))
 				{
-					taleData_Pawn.notableApparel = apparel.def;
+					taleData_Pawn.notableApparel = result.def;
 				}
 			}
 			return taleData_Pawn;
 		}
 
-		
 		public static TaleData_Pawn GenerateRandom()
 		{
 			PawnKindDef random = DefDatabase<PawnKindDef>.GetRandom();
 			Faction faction = FactionUtility.DefaultFactionFrom(random.defaultFactionType);
-			return TaleData_Pawn.GenerateFrom(PawnGenerator.GeneratePawn(random, faction));
+			return GenerateFrom(PawnGenerator.GeneratePawn(random, faction));
 		}
-
-		
-		public Pawn pawn;
-
-		
-		public PawnKindDef kind;
-
-		
-		public Faction faction;
-
-		
-		public Gender gender;
-
-		
-		public int age;
-
-		
-		public int chronologicalAge;
-
-		
-		public string relationInfo;
-
-		
-		public bool everBeenColonistOrTameAnimal;
-
-		
-		public bool everBeenQuestLodger;
-
-		
-		public bool isFactionLeader;
-
-		
-		public List<RoyalTitle> royalTitles;
-
-		
-		public Name name;
-
-		
-		public string title;
-
-		
-		public ThingDef primaryEquipment;
-
-		
-		public ThingDef notableApparel;
-
-		
-		private List<Faction> tmpFactions;
-
-		
-		private List<RoyalTitleDef> tmpRoyalTitles;
 	}
 }

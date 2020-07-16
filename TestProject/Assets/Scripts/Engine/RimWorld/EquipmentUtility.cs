@@ -1,19 +1,15 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class EquipmentUtility
 	{
-		
 		public static bool CanEquip(Thing thing, Pawn pawn)
 		{
-			string text;
-			return EquipmentUtility.CanEquip(thing, pawn, out text);
+			string cantReason;
+			return CanEquip(thing, pawn, out cantReason);
 		}
 
-		
 		public static bool CanEquip(Thing thing, Pawn pawn, out string cantReason)
 		{
 			cantReason = null;
@@ -23,7 +19,7 @@ namespace RimWorld
 				cantReason = "BladelinkBondedToSomeoneElse".Translate();
 				return false;
 			}
-			if (EquipmentUtility.IsBiocoded(thing) && !EquipmentUtility.IsBiocodedFor(thing, pawn))
+			if (IsBiocoded(thing) && !IsBiocodedFor(thing, pawn))
 			{
 				cantReason = "BiocodedCodedForSomeoneElse".Translate();
 				return false;
@@ -31,24 +27,32 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool IsBiocoded(Thing thing)
 		{
-			CompBiocodable compBiocodable = thing.TryGetComp<CompBiocodable>();
-			return compBiocodable != null && compBiocodable.Biocoded;
+			return thing.TryGetComp<CompBiocodable>()?.Biocoded ?? false;
 		}
 
-		
 		public static bool IsBiocodedFor(Thing thing, Pawn pawn)
 		{
 			CompBiocodable compBiocodable = thing.TryGetComp<CompBiocodable>();
-			return compBiocodable != null && compBiocodable.CodedPawn == pawn;
+			if (compBiocodable != null)
+			{
+				return compBiocodable.CodedPawn == pawn;
+			}
+			return false;
 		}
 
-		
 		public static bool QuestLodgerCanEquip(Thing thing, Pawn pawn)
 		{
-			return EquipmentUtility.IsBiocodedFor(thing, pawn) || (thing.def.IsWeapon && pawn.equipment.Primary == null);
+			if (IsBiocodedFor(thing, pawn))
+			{
+				return true;
+			}
+			if (thing.def.IsWeapon)
+			{
+				return pawn.equipment.Primary == null;
+			}
+			return false;
 		}
 	}
 }

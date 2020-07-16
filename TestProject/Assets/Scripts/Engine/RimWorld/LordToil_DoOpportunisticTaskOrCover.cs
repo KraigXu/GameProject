@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,46 +5,38 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public abstract class LordToil_DoOpportunisticTaskOrCover : LordToil
 	{
-		
-		
-		public override bool AllowSatisfyLongNeeds
+		public bool cover = true;
+
+		public override bool AllowSatisfyLongNeeds => false;
+
+		protected abstract DutyDef DutyDef
 		{
-			get
-			{
-				return false;
-			}
+			get;
 		}
 
-		
-		
-		protected abstract DutyDef DutyDef { get; }
-
-		
 		protected abstract bool TryFindGoodOpportunisticTaskTarget(Pawn pawn, out Thing target, List<Thing> alreadyTakenTargets);
 
-		
 		public override void UpdateAllDuties()
 		{
 			List<Thing> list = null;
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn pawn = this.lord.ownedPawns[i];
-				Thing item = null;
-				if (!this.cover || (this.TryFindGoodOpportunisticTaskTarget(pawn, out item, list) && !GenAI.InDangerousCombat(pawn)))
+				Pawn pawn = lord.ownedPawns[i];
+				Thing target = null;
+				if (!cover || (TryFindGoodOpportunisticTaskTarget(pawn, out target, list) && !GenAI.InDangerousCombat(pawn)))
 				{
-					if (pawn.mindState.duty == null || pawn.mindState.duty.def != this.DutyDef)
+					if (pawn.mindState.duty == null || pawn.mindState.duty.def != DutyDef)
 					{
-						pawn.mindState.duty = new PawnDuty(this.DutyDef);
-						pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+						pawn.mindState.duty = new PawnDuty(DutyDef);
+						pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
 					}
 					if (list == null)
 					{
 						list = new List<Thing>();
 					}
-					list.Add(item);
+					list.Add(target);
 				}
 				else
 				{
@@ -54,34 +45,32 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void LordToilTick()
 		{
-			if (this.cover && Find.TickManager.TicksGame % 181 == 0)
+			if (!cover || Find.TickManager.TicksGame % 181 != 0)
 			{
-				List<Thing> list = null;
-				for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+				return;
+			}
+			List<Thing> list = null;
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
+			{
+				Pawn pawn = lord.ownedPawns[i];
+				if (pawn.Downed || pawn.mindState.duty.def != DutyDefOf.AssaultColony)
 				{
-					Pawn pawn = this.lord.ownedPawns[i];
-					if (!pawn.Downed && pawn.mindState.duty.def == DutyDefOf.AssaultColony)
+					continue;
+				}
+				Thing target = null;
+				if (TryFindGoodOpportunisticTaskTarget(pawn, out target, list) && !base.Map.reservationManager.IsReservedByAnyoneOf(target, lord.faction) && !GenAI.InDangerousCombat(pawn))
+				{
+					pawn.mindState.duty = new PawnDuty(DutyDef);
+					pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+					if (list == null)
 					{
-						Thing thing = null;
-						if (this.TryFindGoodOpportunisticTaskTarget(pawn, out thing, list) && !base.Map.reservationManager.IsReservedByAnyoneOf(thing, this.lord.faction) && !GenAI.InDangerousCombat(pawn))
-						{
-							pawn.mindState.duty = new PawnDuty(this.DutyDef);
-							pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
-							if (list == null)
-							{
-								list = new List<Thing>();
-							}
-							list.Add(thing);
-						}
+						list = new List<Thing>();
 					}
+					list.Add(target);
 				}
 			}
 		}
-
-		
-		public bool cover = true;
 	}
 }

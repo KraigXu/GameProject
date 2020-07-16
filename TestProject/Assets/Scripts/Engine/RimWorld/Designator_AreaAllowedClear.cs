@@ -1,32 +1,28 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_AreaAllowedClear : Designator_AreaAllowed
 	{
-		
-		public Designator_AreaAllowedClear() : base(DesignateMode.Remove)
+		public Designator_AreaAllowedClear()
+			: base(DesignateMode.Remove)
 		{
-			this.defaultLabel = "DesignatorClearAreaAllowed".Translate();
-			this.defaultDesc = "DesignatorClearAreaAllowedDesc".Translate();
-			this.icon = ContentFinder<Texture2D>.Get("UI/Designators/AreaAllowedClear", true);
-			this.soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
-			this.soundDragChanged = null;
-			this.soundSucceeded = SoundDefOf.Designate_ZoneDelete;
-			this.hotKey = KeyBindingDefOf.Misc10;
-			this.tutorTag = "AreaAllowedClear";
+			defaultLabel = "DesignatorClearAreaAllowed".Translate();
+			defaultDesc = "DesignatorClearAreaAllowedDesc".Translate();
+			icon = ContentFinder<Texture2D>.Get("UI/Designators/AreaAllowedClear");
+			soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
+			soundDragChanged = null;
+			soundSucceeded = SoundDefOf.Designate_ZoneDelete;
+			hotKey = KeyBindingDefOf.Misc10;
+			tutorTag = "AreaAllowedClear";
 		}
 
-		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			return c.InBounds(base.Map) && Designator_AreaAllowed.SelectedArea != null && Designator_AreaAllowed.SelectedArea[c];
 		}
 
-		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
 			Designator_AreaAllowed.SelectedArea[c] = false;

@@ -1,98 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DropMonumentMarkerCopy : QuestPart
 	{
-		
-		
+		public MapParent mapParent;
+
+		public string inSignal;
+
+		public string outSignalResult;
+
+		private MonumentMarker copy;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.mapParent != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.mapParent;
+					yield return questLookTarget;
 				}
-				if (this.copy != null)
+				if (mapParent != null)
 				{
-					yield return this.copy;
+					yield return mapParent;
 				}
-				yield break;
-				yield break;
+				if (copy != null)
+				{
+					yield return copy;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				this.copy = null;
-				MonumentMarker arg = signal.args.GetArg<MonumentMarker>("SUBJECT");
-				if (arg != null && this.mapParent != null && this.mapParent.HasMap)
+				return;
+			}
+			copy = null;
+			MonumentMarker arg = signal.args.GetArg<MonumentMarker>("SUBJECT");
+			if (arg != null && mapParent != null && mapParent.HasMap)
+			{
+				Map map = mapParent.Map;
+				IntVec3 dropCenter = DropCellFinder.RandomDropSpot(map);
+				copy = (MonumentMarker)ThingMaker.MakeThing(ThingDefOf.MonumentMarker);
+				copy.sketch = arg.sketch.DeepCopy();
+				if (!arg.questTags.NullOrEmpty())
 				{
-					Map map = this.mapParent.Map;
-					IntVec3 dropCenter = DropCellFinder.RandomDropSpot(map);
-					this.copy = (MonumentMarker)ThingMaker.MakeThing(ThingDefOf.MonumentMarker, null);
-					this.copy.sketch = arg.sketch.DeepCopy();
-					if (!arg.questTags.NullOrEmpty<string>())
-					{
-						this.copy.questTags = new List<string>();
-						this.copy.questTags.AddRange(arg.questTags);
-					}
-					DropPodUtility.DropThingsNear(dropCenter, map, Gen.YieldSingle<Thing>(this.copy.MakeMinified()), 110, false, false, true, false);
+					copy.questTags = new List<string>();
+					copy.questTags.AddRange(arg.questTags);
 				}
-				if (!this.outSignalResult.NullOrEmpty())
+				DropPodUtility.DropThingsNear(dropCenter, map, Gen.YieldSingle((Thing)copy.MakeMinified()), 110, canInstaDropDuringInit: false, leaveSlag: false, canRoofPunch: true, forbid: false);
+			}
+			if (!outSignalResult.NullOrEmpty())
+			{
+				if (copy != null)
 				{
-					if (this.copy != null)
-					{
-						Find.SignalManager.SendSignal(new Signal(this.outSignalResult, this.copy.Named("SUBJECT")));
-						return;
-					}
-					Find.SignalManager.SendSignal(new Signal(this.outSignalResult));
+					Find.SignalManager.SendSignal(new Signal(outSignalResult, copy.Named("SUBJECT")));
+				}
+				else
+				{
+					Find.SignalManager.SendSignal(new Signal(outSignalResult));
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<string>(ref this.outSignalResult, "outSignalResult", null, false);
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_References.Look<MonumentMarker>(ref this.copy, "copy", false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref outSignalResult, "outSignalResult");
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_References.Look(ref copy, "copy");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				this.mapParent = Find.RandomPlayerHomeMap.Parent;
+				mapParent = Find.RandomPlayerHomeMap.Parent;
 			}
 		}
-
-		
-		public MapParent mapParent;
-
-		
-		public string inSignal;
-
-		
-		public string outSignalResult;
-
-		
-		private MonumentMarker copy;
 	}
 }

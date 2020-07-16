@@ -1,67 +1,59 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class ShortHashGiver
 	{
-		
+		private static Dictionary<Type, HashSet<ushort>> takenHashesPerDeftype = new Dictionary<Type, HashSet<ushort>>();
+
 		public static void GiveAllShortHashes()
 		{
-			ShortHashGiver.takenHashesPerDeftype.Clear();
+			takenHashesPerDeftype.Clear();
 			List<Def> list = new List<Def>();
-			foreach (Type type in GenDefDatabase.AllDefTypesWithDatabases())
+			foreach (Type item2 in GenDefDatabase.AllDefTypesWithDatabases())
 			{
-				IEnumerable enumerable = (IEnumerable)typeof(DefDatabase<>).MakeGenericType(new Type[]
-				{
-					type
-				}).GetProperty("AllDefs").GetGetMethod().Invoke(null, null);
+				IEnumerable obj = (IEnumerable)typeof(DefDatabase<>).MakeGenericType(item2).GetProperty("AllDefs").GetGetMethod()
+					.Invoke(null, null);
 				list.Clear();
-				foreach (object obj in enumerable)
+				foreach (Def item3 in obj)
 				{
-					Def item = (Def)obj;
-					list.Add(item);
+					list.Add(item3);
 				}
 				list.SortBy((Def d) => d.defName);
 				for (int i = 0; i < list.Count; i++)
 				{
-					ShortHashGiver.GiveShortHash(list[i], type);
+					GiveShortHash(list[i], item2);
 				}
 			}
 		}
 
-		
 		private static void GiveShortHash(Def def, Type defType)
 		{
 			if (def.shortHash != 0)
 			{
-				Log.Error(def + " already has short hash.", false);
+				Log.Error(def + " already has short hash.");
 				return;
 			}
-			HashSet<ushort> hashSet;
-			if (!ShortHashGiver.takenHashesPerDeftype.TryGetValue(defType, out hashSet))
+			if (!takenHashesPerDeftype.TryGetValue(defType, out HashSet<ushort> value))
 			{
-				hashSet = new HashSet<ushort>();
-				ShortHashGiver.takenHashesPerDeftype.Add(defType, hashSet);
+				value = new HashSet<ushort>();
+				takenHashesPerDeftype.Add(defType, value);
 			}
 			ushort num = (ushort)(GenText.StableStringHash(def.defName) % 65535);
 			int num2 = 0;
-			while (num == 0 || hashSet.Contains(num))
+			while (num == 0 || value.Contains(num))
 			{
-				num += 1;
+				num = (ushort)(num + 1);
 				num2++;
 				if (num2 > 5000)
 				{
-					Log.Message("Short hashes are saturated. There are probably too many Defs.", false);
+					Log.Message("Short hashes are saturated. There are probably too many Defs.");
 				}
 			}
 			def.shortHash = num;
-			hashSet.Add(num);
+			value.Add(num);
 		}
-
-		
-		private static Dictionary<Type, HashSet<ushort>> takenHashesPerDeftype = new Dictionary<Type, HashSet<ushort>>();
 	}
 }

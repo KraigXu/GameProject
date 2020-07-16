@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,17 +5,18 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatWorker_MeleeAverageArmorPenetration : StatWorker
 	{
-		
 		public override bool ShouldShowFor(StatRequest req)
 		{
 			ThingDef thingDef = req.Def as ThingDef;
-			return thingDef != null && thingDef.IsWeapon && !thingDef.tools.NullOrEmpty<Tool>();
+			if (thingDef != null && thingDef.IsWeapon)
+			{
+				return !thingDef.tools.NullOrEmpty();
+			}
+			return false;
 		}
 
-		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			ThingDef thingDef = req.Def as ThingDef;
@@ -28,15 +28,14 @@ namespace RimWorld
 			{
 				Pawn attacker = StatWorker_MeleeAverageDPS.GetCurrentWeaponUser(req.Thing);
 				return (from x in VerbUtility.GetAllVerbProperties(thingDef.Verbs, thingDef.tools)
-				where x.verbProps.IsMeleeAttack
-				select x).AverageWeighted((VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedMeleeSelectionWeight(x.tool, attacker, req.Thing, null, false), (VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedArmorPenetration(x.tool, attacker, req.Thing, null));
+					where x.verbProps.IsMeleeAttack
+					select x).AverageWeighted((VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedMeleeSelectionWeight(x.tool, attacker, req.Thing, null, comesFromPawnNativeVerbs: false), (VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedArmorPenetration(x.tool, attacker, req.Thing, null));
 			}
 			return (from x in VerbUtility.GetAllVerbProperties(thingDef.Verbs, thingDef.tools)
-			where x.verbProps.IsMeleeAttack
-			select x).AverageWeighted((VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedMeleeSelectionWeight_NewTmp(x.tool, null, thingDef, req.StuffDef, null, false), (VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedArmorPenetration_NewTmp(x.tool, null, thingDef, req.StuffDef, null));
+				where x.verbProps.IsMeleeAttack
+				select x).AverageWeighted((VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedMeleeSelectionWeight_NewTmp(x.tool, null, thingDef, req.StuffDef, null, comesFromPawnNativeVerbs: false), (VerbUtility.VerbPropertiesWithSource x) => x.verbProps.AdjustedArmorPenetration_NewTmp(x.tool, null, thingDef, req.StuffDef, null));
 		}
 
-		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			ThingDef thingDef = req.Def as ThingDef;
@@ -46,15 +45,15 @@ namespace RimWorld
 			}
 			Pawn currentWeaponUser = StatWorker_MeleeAverageDPS.GetCurrentWeaponUser(req.Thing);
 			IEnumerable<VerbUtility.VerbPropertiesWithSource> enumerable = from x in VerbUtility.GetAllVerbProperties(thingDef.Verbs, thingDef.tools)
-			where x.verbProps.IsMeleeAttack
-			select x;
+				where x.verbProps.IsMeleeAttack
+				select x;
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (VerbUtility.VerbPropertiesWithSource verbPropertiesWithSource in enumerable)
+			foreach (VerbUtility.VerbPropertiesWithSource item in enumerable)
 			{
-				float f = verbPropertiesWithSource.verbProps.AdjustedArmorPenetration(verbPropertiesWithSource.tool, currentWeaponUser, req.Thing, null);
-				if (verbPropertiesWithSource.tool != null)
+				float f = item.verbProps.AdjustedArmorPenetration(item.tool, currentWeaponUser, req.Thing, null);
+				if (item.tool != null)
 				{
-					stringBuilder.AppendLine(string.Format("  {0} ({1})", verbPropertiesWithSource.tool.LabelCap, verbPropertiesWithSource.ToolCapacity.label));
+					stringBuilder.AppendLine($"  {item.tool.LabelCap} ({item.ToolCapacity.label})");
 				}
 				else
 				{

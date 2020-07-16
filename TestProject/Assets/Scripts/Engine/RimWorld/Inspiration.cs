@@ -1,122 +1,81 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Inspiration : IExposable
 	{
-		
-		
-		public int Age
-		{
-			get
-			{
-				return this.age;
-			}
-		}
+		public Pawn pawn;
 
-		
-		
-		public float AgeDays
-		{
-			get
-			{
-				return (float)this.age / 60000f;
-			}
-		}
+		public InspirationDef def;
 
-		
-		
+		private int age;
+
+		public string reason;
+
+		public int Age => age;
+
+		public float AgeDays => (float)age / 60000f;
+
 		public virtual string InspectLine
 		{
 			get
 			{
-				int numTicks = (int)((this.def.baseDurationDays - this.AgeDays) * 60000f);
-				return this.def.baseInspectLine + " (" + "ExpiresIn".Translate() + ": " + numTicks.ToStringTicksToPeriod(true, false, true, true) + ")";
+				int numTicks = (int)((def.baseDurationDays - AgeDays) * 60000f);
+				return def.baseInspectLine + " (" + "ExpiresIn".Translate() + ": " + numTicks.ToStringTicksToPeriod() + ")";
 			}
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Defs.Look<InspirationDef>(ref this.def, "def");
-			Scribe_Values.Look<int>(ref this.age, "age", 0, false);
-			Scribe_Values.Look<string>(ref this.reason, "reason", null, false);
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Values.Look(ref age, "age", 0);
+			Scribe_Values.Look(ref reason, "reason");
 		}
 
-		
 		public virtual void InspirationTick()
 		{
-			this.age++;
-			if (this.AgeDays >= this.def.baseDurationDays)
+			age++;
+			if (AgeDays >= def.baseDurationDays)
 			{
-				this.End();
+				End();
 			}
 		}
 
-		
 		public virtual void PostStart()
 		{
-			this.SendBeginLetter();
+			SendBeginLetter();
 		}
 
-		
 		public virtual void PostEnd()
 		{
-			this.AddEndMessage();
+			AddEndMessage();
 		}
 
-		
 		protected void End()
 		{
-			this.pawn.mindState.inspirationHandler.EndInspiration(this);
+			pawn.mindState.inspirationHandler.EndInspiration(this);
 		}
 
-		
 		protected virtual void SendBeginLetter()
 		{
-			if (this.def.beginLetter.NullOrEmpty())
+			if (!def.beginLetter.NullOrEmpty() && PawnUtility.ShouldSendNotificationAbout(pawn))
 			{
-				return;
+				TaggedString taggedString = def.beginLetter.Formatted(pawn.LabelCap, pawn.Named("PAWN")).AdjustedFor(pawn);
+				if (!string.IsNullOrWhiteSpace(reason))
+				{
+					taggedString = reason.Formatted(pawn.LabelCap, pawn.Named("PAWN")).AdjustedFor(pawn) + "\n\n" + taggedString;
+				}
+				string str = (def.beginLetterLabel ?? ((string)def.LabelCap)).CapitalizeFirst() + ": " + pawn.LabelShortCap;
+				Find.LetterStack.ReceiveLetter(str, taggedString, def.beginLetterDef, pawn);
 			}
-			if (!PawnUtility.ShouldSendNotificationAbout(this.pawn))
-			{
-				return;
-			}
-			TaggedString taggedString = this.def.beginLetter.Formatted(this.pawn.LabelCap, this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true);
-			if (!string.IsNullOrWhiteSpace(this.reason))
-			{
-				taggedString = this.reason.Formatted(this.pawn.LabelCap, this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true) + "\n\n" + taggedString;
-			}
-			string str = (this.def.beginLetterLabel ?? this.def.LabelCap).CapitalizeFirst() + ": " + this.pawn.LabelShortCap;
-			Find.LetterStack.ReceiveLetter(str, taggedString, this.def.beginLetterDef, this.pawn, null, null, null, null);
 		}
 
-		
 		protected virtual void AddEndMessage()
 		{
-			if (this.def.endMessage.NullOrEmpty())
+			if (!def.endMessage.NullOrEmpty() && PawnUtility.ShouldSendNotificationAbout(pawn))
 			{
-				return;
+				Messages.Message(def.endMessage.Formatted(pawn.LabelCap, pawn.Named("PAWN")).AdjustedFor(pawn), pawn, MessageTypeDefOf.NeutralEvent);
 			}
-			if (!PawnUtility.ShouldSendNotificationAbout(this.pawn))
-			{
-				return;
-			}
-			Messages.Message(this.def.endMessage.Formatted(this.pawn.LabelCap, this.pawn.Named("PAWN")).AdjustedFor(this.pawn, "PAWN", true), this.pawn, MessageTypeDefOf.NeutralEvent, true);
 		}
-
-		
-		public Pawn pawn;
-
-		
-		public InspirationDef def;
-
-		
-		private int age;
-
-		
-		public string reason;
 	}
 }

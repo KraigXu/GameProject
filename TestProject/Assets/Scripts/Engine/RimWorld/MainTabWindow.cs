@@ -1,84 +1,60 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class MainTabWindow : Window
 	{
-		
-		
-		public virtual Vector2 RequestedTabSize
-		{
-			get
-			{
-				return new Vector2(1010f, 684f);
-			}
-		}
+		public MainButtonDef def;
 
-		
-		
-		public virtual MainTabWindowAnchor Anchor
-		{
-			get
-			{
-				return MainTabWindowAnchor.Left;
-			}
-		}
+		public virtual Vector2 RequestedTabSize => new Vector2(1010f, 684f);
 
-		
-		
+		public virtual MainTabWindowAnchor Anchor => MainTabWindowAnchor.Left;
+
 		public override Vector2 InitialSize
 		{
 			get
 			{
-				Vector2 requestedTabSize = this.RequestedTabSize;
+				Vector2 requestedTabSize = RequestedTabSize;
 				if (requestedTabSize.y > (float)(UI.screenHeight - 35))
 				{
-					requestedTabSize.y = (float)(UI.screenHeight - 35);
+					requestedTabSize.y = UI.screenHeight - 35;
 				}
 				if (requestedTabSize.x > (float)UI.screenWidth)
 				{
-					requestedTabSize.x = (float)UI.screenWidth;
+					requestedTabSize.x = UI.screenWidth;
 				}
 				return requestedTabSize;
 			}
 		}
 
-		
 		public MainTabWindow()
 		{
-			this.layer = WindowLayer.GameUI;
-			this.soundAppear = null;
-			this.soundClose = SoundDefOf.TabClose;
-			this.doCloseButton = false;
-			this.doCloseX = false;
-			this.preventCameraMotion = false;
+			layer = WindowLayer.GameUI;
+			soundAppear = null;
+			soundClose = SoundDefOf.TabClose;
+			doCloseButton = false;
+			doCloseX = false;
+			preventCameraMotion = false;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
-			this.SetInitialSizeAndPosition();
+			SetInitialSizeAndPosition();
 		}
 
-		
 		protected override void SetInitialSizeAndPosition()
 		{
 			base.SetInitialSizeAndPosition();
-			if (this.Anchor == MainTabWindowAnchor.Left)
+			if (Anchor == MainTabWindowAnchor.Left)
 			{
-				this.windowRect.x = 0f;
+				windowRect.x = 0f;
 			}
 			else
 			{
-				this.windowRect.x = (float)UI.screenWidth - this.windowRect.width;
+				windowRect.x = (float)UI.screenWidth - windowRect.width;
 			}
-			this.windowRect.y = (float)(UI.screenHeight - 35) - this.windowRect.height;
+			windowRect.y = (float)(UI.screenHeight - 35) - windowRect.height;
 		}
-
-		
-		public MainButtonDef def;
 	}
 }

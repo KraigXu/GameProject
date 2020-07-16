@@ -1,145 +1,99 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public abstract class Command : Gizmo
 	{
-		
-		
-		public virtual string Label
-		{
-			get
-			{
-				return this.defaultLabel;
-			}
-		}
+		public string defaultLabel;
 
-		
-		
-		public virtual string LabelCap
-		{
-			get
-			{
-				return this.Label.CapitalizeFirst();
-			}
-		}
+		public string defaultDesc = "No description.";
 
-		
-		
-		public virtual string Desc
-		{
-			get
-			{
-				return this.defaultDesc;
-			}
-		}
+		public Texture2D icon;
 
-		
-		
-		public virtual Color IconDrawColor
-		{
-			get
-			{
-				return this.defaultIconColor;
-			}
-		}
+		public float iconAngle;
 
-		
-		
-		public virtual SoundDef CurActivateSound
-		{
-			get
-			{
-				return this.activateSound;
-			}
-		}
+		public Vector2 iconProportions = Vector2.one;
 
-		
-		
-		protected virtual bool DoTooltip
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public Rect iconTexCoords = new Rect(0f, 0f, 1f, 1f);
 
-		
-		
-		public virtual string HighlightTag
-		{
-			get
-			{
-				return this.tutorTag;
-			}
-		}
+		public float iconDrawScale = 1f;
 
-		
-		
-		public virtual string TutorTagSelect
-		{
-			get
-			{
-				return this.tutorTag;
-			}
-		}
+		public Vector2 iconOffset;
 
-		
-		
-		public virtual Texture2D BGTexture
-		{
-			get
-			{
-				return Command.BGTex;
-			}
-		}
+		public Color defaultIconColor = Color.white;
 
-		
+		public KeyBindingDef hotKey;
+
+		public SoundDef activateSound;
+
+		public int groupKey;
+
+		public string tutorTag = "TutorTagNotSet";
+
+		public static readonly Texture2D BGTex = ContentFinder<Texture2D>.Get("UI/Widgets/DesButBG");
+
+		protected const float InnerIconDrawScale = 0.85f;
+
+		public virtual string Label => defaultLabel;
+
+		public virtual string LabelCap => Label.CapitalizeFirst();
+
+		public virtual string Desc => defaultDesc;
+
+		public virtual Color IconDrawColor => defaultIconColor;
+
+		public virtual SoundDef CurActivateSound => activateSound;
+
+		protected virtual bool DoTooltip => true;
+
+		public virtual string HighlightTag => tutorTag;
+
+		public virtual string TutorTagSelect => tutorTag;
+
+		public virtual Texture2D BGTexture => BGTex;
+
 		public override float GetWidth(float maxWidth)
 		{
 			return 75f;
 		}
 
-		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
 			Text.Font = GameFont.Tiny;
-			Rect rect = new Rect(topLeft.x, topLeft.y, this.GetWidth(maxWidth), 75f);
+			Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
 			bool flag = false;
 			if (Mouse.IsOver(rect))
 			{
 				flag = true;
-				if (!this.disabled)
+				if (!disabled)
 				{
 					GUI.color = GenUI.MouseoverColor;
 				}
 			}
 			MouseoverSounds.DoRegion(rect, SoundDefOf.Mouseover_Command);
-			Material material = this.disabled ? TexUI.GrayscaleGUI : null;
-			GenUI.DrawTextureWithMaterial(rect, this.BGTexture, material, default(Rect));
-			this.DrawIcon(rect, material);
+			Material material = disabled ? TexUI.GrayscaleGUI : null;
+			GenUI.DrawTextureWithMaterial(rect, BGTexture, material);
+			DrawIcon(rect, material);
 			bool flag2 = false;
-			KeyCode keyCode = (this.hotKey == null) ? KeyCode.None : this.hotKey.MainKey;
-			if (keyCode != KeyCode.None && !GizmoGridDrawer.drawnHotKeys.Contains(keyCode))
+			KeyCode keyCode = (hotKey != null) ? hotKey.MainKey : KeyCode.None;
+			if (keyCode != 0 && !GizmoGridDrawer.drawnHotKeys.Contains(keyCode))
 			{
 				Widgets.Label(new Rect(rect.x + 5f, rect.y + 5f, rect.width - 10f, 18f), keyCode.ToStringReadable());
 				GizmoGridDrawer.drawnHotKeys.Add(keyCode);
-				if (this.hotKey.KeyDownEvent)
+				if (hotKey.KeyDownEvent)
 				{
 					flag2 = true;
 					Event.current.Use();
 				}
 			}
-			if (Widgets.ButtonInvisible(rect, true))
+			if (Widgets.ButtonInvisible(rect))
 			{
 				flag2 = true;
 			}
-			string labelCap = this.LabelCap;
+			string labelCap = LabelCap;
 			if (!labelCap.NullOrEmpty())
 			{
 				float num = Text.CalcHeight(labelCap, rect.width);
@@ -152,27 +106,28 @@ namespace Verse
 				GUI.color = Color.white;
 			}
 			GUI.color = Color.white;
-			if (Mouse.IsOver(rect) && this.DoTooltip)
+			if (Mouse.IsOver(rect) && DoTooltip)
 			{
-				TipSignal tip = this.Desc;
-				if (this.disabled && !this.disabledReason.NullOrEmpty())
+				TipSignal tip = Desc;
+				if (disabled && !disabledReason.NullOrEmpty())
 				{
-					tip.text += "\n\n" + "DisabledCommand".Translate() + ": " + this.disabledReason;
+					ref string text = ref tip.text;
+					text += "\n\n" + "DisabledCommand".Translate() + ": " + disabledReason;
 				}
 				TooltipHandler.TipRegion(rect, tip);
 			}
-			if (!this.HighlightTag.NullOrEmpty() && (Find.WindowStack.FloatMenu == null || !Find.WindowStack.FloatMenu.windowRect.Overlaps(rect)))
+			if (!HighlightTag.NullOrEmpty() && (Find.WindowStack.FloatMenu == null || !Find.WindowStack.FloatMenu.windowRect.Overlaps(rect)))
 			{
-				UIHighlighter.HighlightOpportunity(rect, this.HighlightTag);
+				UIHighlighter.HighlightOpportunity(rect, HighlightTag);
 			}
 			Text.Font = GameFont.Small;
 			if (flag2)
 			{
-				if (this.disabled)
+				if (disabled)
 				{
-					if (!this.disabledReason.NullOrEmpty())
+					if (!disabledReason.NullOrEmpty())
 					{
-						Messages.Message(this.disabledReason, MessageTypeDefOf.RejectInput, false);
+						Messages.Message(disabledReason, MessageTypeDefOf.RejectInput, historical: false);
 					}
 					return new GizmoResult(GizmoState.Mouseover, null);
 				}
@@ -183,111 +138,68 @@ namespace Verse
 				}
 				else
 				{
-					if (!TutorSystem.AllowAction(this.TutorTagSelect))
+					if (!TutorSystem.AllowAction(TutorTagSelect))
 					{
 						return new GizmoResult(GizmoState.Mouseover, null);
 					}
 					result = new GizmoResult(GizmoState.Interacted, Event.current);
-					TutorSystem.Notify_Event(this.TutorTagSelect);
+					TutorSystem.Notify_Event(TutorTagSelect);
 				}
 				return result;
 			}
-			else
+			if (flag)
 			{
-				if (flag)
-				{
-					return new GizmoResult(GizmoState.Mouseover, null);
-				}
-				return new GizmoResult(GizmoState.Clear, null);
+				return new GizmoResult(GizmoState.Mouseover, null);
 			}
+			return new GizmoResult(GizmoState.Clear, null);
 		}
 
-		
 		protected virtual void DrawIcon(Rect rect, Material buttonMat = null)
 		{
-			Texture2D badTex = this.icon;
+			Texture2D badTex = icon;
 			if (badTex == null)
 			{
 				badTex = BaseContent.BadTex;
 			}
-			rect.position += new Vector2(this.iconOffset.x * rect.size.x, this.iconOffset.y * rect.size.y);
-			GUI.color = this.IconDrawColor;
-			Widgets.DrawTextureFitted(rect, badTex, this.iconDrawScale * 0.85f, this.iconProportions, this.iconTexCoords, this.iconAngle, buttonMat);
+			rect.position += new Vector2(iconOffset.x * rect.size.x, iconOffset.y * rect.size.y);
+			GUI.color = IconDrawColor;
+			Widgets.DrawTextureFitted(rect, badTex, iconDrawScale * 0.85f, iconProportions, iconTexCoords, iconAngle, buttonMat);
 			GUI.color = Color.white;
 		}
 
-		
 		public override bool GroupsWith(Gizmo other)
 		{
 			Command command = other as Command;
-			return command != null && ((this.hotKey == command.hotKey && this.Label == command.Label && this.icon == command.icon) || (this.groupKey != 0 && command.groupKey != 0 && this.groupKey == command.groupKey));
+			if (command == null)
+			{
+				return false;
+			}
+			if (hotKey == command.hotKey && Label == command.Label && icon == command.icon)
+			{
+				return true;
+			}
+			if (groupKey == 0 || command.groupKey == 0)
+			{
+				return false;
+			}
+			if (groupKey == command.groupKey)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override void ProcessInput(Event ev)
 		{
-			if (this.CurActivateSound != null)
+			if (CurActivateSound != null)
 			{
-				this.CurActivateSound.PlayOneShotOnCamera(null);
+				CurActivateSound.PlayOneShotOnCamera();
 			}
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new string[]
-			{
-				"Command(label=",
-				this.defaultLabel,
-				", defaultDesc=",
-				this.defaultDesc,
-				")"
-			});
+			return "Command(label=" + defaultLabel + ", defaultDesc=" + defaultDesc + ")";
 		}
-
-		
-		public string defaultLabel;
-
-		
-		public string defaultDesc = "No description.";
-
-		
-		public Texture2D icon;
-
-		
-		public float iconAngle;
-
-		
-		public Vector2 iconProportions = Vector2.one;
-
-		
-		public Rect iconTexCoords = new Rect(0f, 0f, 1f, 1f);
-
-		
-		public float iconDrawScale = 1f;
-
-		
-		public Vector2 iconOffset;
-
-		
-		public Color defaultIconColor = Color.white;
-
-		
-		public KeyBindingDef hotKey;
-
-		
-		public SoundDef activateSound;
-
-		
-		public int groupKey;
-
-		
-		public string tutorTag = "TutorTagNotSet";
-
-		
-		public static readonly Texture2D BGTex = ContentFinder<Texture2D>.Get("UI/Widgets/DesButBG", true);
-
-		
-		protected const float InnerIconDrawScale = 0.85f;
 	}
 }

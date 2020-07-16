@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,63 +5,74 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ExpansionDef : Def
 	{
-		
-		
+		[NoTranslate]
+		public string iconPath;
+
+		[NoTranslate]
+		public string backgroundPath;
+
+		[NoTranslate]
+		public string linkedMod;
+
+		[NoTranslate]
+		public string steamUrl;
+
+		[NoTranslate]
+		public string siteUrl;
+
+		public bool isCore;
+
+		private Texture2D cachedIcon;
+
+		private Texture2D cachedBG;
+
 		public Texture2D Icon
 		{
 			get
 			{
-				if (this.cachedIcon == null)
+				if (cachedIcon == null)
 				{
-					this.cachedIcon = ContentFinder<Texture2D>.Get(this.iconPath, true);
+					cachedIcon = ContentFinder<Texture2D>.Get(iconPath);
 				}
-				return this.cachedIcon;
+				return cachedIcon;
 			}
 		}
 
-		
-		
 		public Texture2D BackgroundImage
 		{
 			get
 			{
-				if (this.cachedBG == null)
+				if (cachedBG == null)
 				{
-					Debug.Log(this.backgroundPath);
-					this.cachedBG = ContentFinder<Texture2D>.Get(this.backgroundPath, true);
+					cachedBG = ContentFinder<Texture2D>.Get(backgroundPath);
 				}
-				return this.cachedBG;
+				return cachedBG;
 			}
 		}
 
-		
-		
 		public string StoreURL
 		{
 			get
 			{
-				if (!this.steamUrl.NullOrEmpty())
+				if (!steamUrl.NullOrEmpty())
 				{
-					return this.steamUrl;
+					return steamUrl;
 				}
-				return this.siteUrl;
+				return siteUrl;
 			}
 		}
 
-		
-		
 		public ExpansionStatus Status
 		{
 			get
 			{
-				if (ModsConfig.IsActive(this.linkedMod))
+				if (ModsConfig.IsActive(linkedMod))
 				{
 					return ExpansionStatus.Active;
 				}
-				if (ModLister.AllInstalledMods.Any((ModMetaData m) => m.SamePackageId(this.linkedMod, false)))
+				if (ModLister.AllInstalledMods.Any((ModMetaData m) => m.SamePackageId(linkedMod)))
 				{
 					return ExpansionStatus.Installed;
 				}
@@ -70,76 +80,39 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public string StatusDescription
 		{
 			get
 			{
-				ExpansionStatus status = this.Status;
-				if (status == ExpansionStatus.Active)
+				switch (Status)
 				{
+				case ExpansionStatus.Active:
 					return "ContentActive".Translate();
-				}
-				if (status != ExpansionStatus.Installed)
-				{
+				case ExpansionStatus.Installed:
+					return "ContentInstalledButNotActive".Translate();
+				default:
 					return "ContentNotInstalled".Translate();
 				}
-				return "ContentInstalledButNotActive".Translate();
 			}
 		}
 
-		
 		public override void PostLoad()
 		{
 			base.PostLoad();
-			this.linkedMod = this.linkedMod.ToLower();
+			linkedMod = linkedMod.ToLower();
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.linkedMod, false);
+			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(linkedMod);
 			if (modWithIdentifier != null && !modWithIdentifier.Official)
 			{
 				yield return modWithIdentifier.Name + " - ExpansionDefs are used for official content. For mods, you should define ModMetaData in About.xml.";
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		[NoTranslate]
-		public string iconPath;
-
-		
-		[NoTranslate]
-		public string backgroundPath;
-
-		
-		[NoTranslate]
-		public string linkedMod;
-
-		
-		[NoTranslate]
-		public string steamUrl;
-
-		
-		[NoTranslate]
-		public string siteUrl;
-
-		
-		public bool isCore;
-
-		
-		private Texture2D cachedIcon;
-
-		
-		private Texture2D cachedBG;
 	}
 }

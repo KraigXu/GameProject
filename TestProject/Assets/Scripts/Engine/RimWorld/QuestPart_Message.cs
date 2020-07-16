@@ -1,88 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Message : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public string message;
+
+		public MessageTypeDef messageType;
+
+		public LookTargets lookTargets;
+
+		public bool historical = true;
+
+		public bool getLookTargetsFromSignal = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				GlobalTargetInfo globalTargetInfo2 = this.lookTargets.TryGetPrimaryTarget();
-				if (globalTargetInfo2.IsValid)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return globalTargetInfo2;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				GlobalTargetInfo globalTargetInfo = lookTargets.TryGetPrimaryTarget();
+				if (globalTargetInfo.IsValid)
+				{
+					yield return globalTargetInfo;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
 				LookTargets lookTargets = this.lookTargets;
-				if (this.getLookTargetsFromSignal && !lookTargets.IsValid())
+				if (getLookTargetsFromSignal && !lookTargets.IsValid())
 				{
 					SignalArgsUtility.TryGetLookTargets(signal.args, "SUBJECT", out lookTargets);
 				}
-				TaggedString formattedText = signal.args.GetFormattedText(this.message);
+				TaggedString formattedText = signal.args.GetFormattedText(message);
 				if (!formattedText.NullOrEmpty())
 				{
-					Messages.Message(formattedText, lookTargets, this.messageType ?? MessageTypeDefOf.NeutralEvent, this.quest, this.historical);
+					Messages.Message(formattedText, lookTargets, messageType ?? MessageTypeDefOf.NeutralEvent, quest, historical);
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<string>(ref this.message, "message", null, false);
-			Scribe_Defs.Look<MessageTypeDef>(ref this.messageType, "messageType");
-			Scribe_Deep.Look<LookTargets>(ref this.lookTargets, "lookTargets", Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.historical, "historical", true, false);
-			Scribe_Values.Look<bool>(ref this.getLookTargetsFromSignal, "getLookTargetsFromSignal", true, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref message, "message");
+			Scribe_Defs.Look(ref messageType, "messageType");
+			Scribe_Deep.Look(ref lookTargets, "lookTargets");
+			Scribe_Values.Look(ref historical, "historical", defaultValue: true);
+			Scribe_Values.Look(ref getLookTargetsFromSignal, "getLookTargetsFromSignal", defaultValue: true);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.message = "Dev: Test";
-			this.messageType = MessageTypeDefOf.PositiveEvent;
+			inSignal = "DebugSignal" + Rand.Int;
+			message = "Dev: Test";
+			messageType = MessageTypeDefOf.PositiveEvent;
 		}
-
-		
-		public string inSignal;
-
-		
-		public string message;
-
-		
-		public MessageTypeDef messageType;
-
-		
-		public LookTargets lookTargets;
-
-		
-		public bool historical = true;
-
-		
-		public bool getLookTargetsFromSignal = true;
 	}
 }

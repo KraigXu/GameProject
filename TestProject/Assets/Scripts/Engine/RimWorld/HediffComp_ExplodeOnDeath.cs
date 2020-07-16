@@ -1,38 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class HediffComp_ExplodeOnDeath : HediffComp
 	{
-		
-		
-		public HediffCompProperties_ExplodeOnDeath Props
-		{
-			get
-			{
-				return (HediffCompProperties_ExplodeOnDeath)this.props;
-			}
-		}
+		public HediffCompProperties_ExplodeOnDeath Props => (HediffCompProperties_ExplodeOnDeath)props;
 
-		
 		public override void Notify_PawnKilled()
 		{
-			GenExplosion.DoExplosion(base.Pawn.Position, base.Pawn.Map, this.Props.explosionRadius, this.Props.damageDef, base.Pawn, this.Props.damageAmount, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
-			if (this.Props.destroyGear)
+			GenExplosion.DoExplosion(base.Pawn.Position, base.Pawn.Map, Props.explosionRadius, Props.damageDef, base.Pawn, Props.damageAmount);
+			if (Props.destroyGear)
 			{
-				base.Pawn.equipment.DestroyAllEquipment(DestroyMode.Vanish);
-				base.Pawn.apparel.DestroyAll(DestroyMode.Vanish);
+				base.Pawn.equipment.DestroyAllEquipment();
+				base.Pawn.apparel.DestroyAll();
 			}
 		}
 
-		
 		public override void Notify_PawnDied()
 		{
-			if (this.Props.destroyBody)
+			if (Props.destroyBody)
 			{
-				base.Pawn.Corpse.Destroy(DestroyMode.Vanish);
+				base.Pawn.Corpse.Destroy();
 			}
 		}
 	}

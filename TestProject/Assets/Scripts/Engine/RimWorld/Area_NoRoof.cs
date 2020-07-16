@@ -1,56 +1,28 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Area_NoRoof : Area
 	{
-		
-		
-		public override string Label
-		{
-			get
-			{
-				return "NoRoof".Translate();
-			}
-		}
+		public override string Label => "NoRoof".Translate();
 
-		
-		
-		public override Color Color
-		{
-			get
-			{
-				return new Color(0.9f, 0.5f, 0.1f);
-			}
-		}
+		public override Color Color => new Color(0.9f, 0.5f, 0.1f);
 
-		
-		
-		public override int ListPriority
-		{
-			get
-			{
-				return 8000;
-			}
-		}
+		public override int ListPriority => 8000;
 
-		
 		public Area_NoRoof()
 		{
 		}
 
-		
-		public Area_NoRoof(AreaManager areaManager) : base(areaManager)
+		public Area_NoRoof(AreaManager areaManager)
+			: base(areaManager)
 		{
 		}
 
-		
 		public override string GetUniqueLoadID()
 		{
-			return "Area_" + this.ID + "_NoRoof";
+			return "Area_" + ID + "_NoRoof";
 		}
 	}
 }

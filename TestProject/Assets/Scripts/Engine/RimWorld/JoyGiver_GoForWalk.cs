@@ -1,17 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JoyGiver_GoForWalk : JoyGiver
 	{
-		
 		public override Job TryGiveJob(Pawn pawn)
 		{
-			if (!JoyUtility.EnjoyableOutsideNow(pawn, null))
+			if (!JoyUtility.EnjoyableOutsideNow(pawn))
 			{
 				return null;
 			}
@@ -20,31 +18,25 @@ namespace RimWorld
 				return null;
 			}
 			Predicate<IntVec3> cellValidator = (IntVec3 x) => !PawnUtility.KnownDangerAt(x, pawn.Map, pawn) && !x.GetTerrain(pawn.Map).avoidWander && x.Standable(pawn.Map) && !x.Roofed(pawn.Map);
-			Predicate<Region> validator = delegate(Region x)
-			{
-				IntVec3 intVec;
-				return x.Room.PsychologicallyOutdoors && !x.IsForbiddenEntirely(pawn) && x.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out intVec);
-			};
-			Region reg;
-			if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(RegionType.Set_Passable), TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), validator, 100, out reg, RegionType.Set_Passable))
+			IntVec3 result4;
+			Predicate<Region> validator = (Region x) => x.Room.PsychologicallyOutdoors && !x.IsForbiddenEntirely(pawn) && x.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out result4);
+			if (!CellFinder.TryFindClosestRegionWith(pawn.GetRegion(), TraverseParms.For(pawn), validator, 100, out Region result))
 			{
 				return null;
 			}
-			IntVec3 root;
-			if (!reg.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out root))
+			if (!result.TryFindRandomCellInRegionUnforbidden(pawn, cellValidator, out IntVec3 result2))
 			{
 				return null;
 			}
-			List<IntVec3> list;
-			if (!WalkPathFinder.TryFindWalkPath(pawn, root, out list))
+			if (!WalkPathFinder.TryFindWalkPath(pawn, result2, out List<IntVec3> result3))
 			{
 				return null;
 			}
-			Job job = JobMaker.MakeJob(this.def.jobDef, list[0]);
+			Job job = JobMaker.MakeJob(def.jobDef, result3[0]);
 			job.targetQueueA = new List<LocalTargetInfo>();
-			for (int i = 1; i < list.Count; i++)
+			for (int i = 1; i < result3.Count; i++)
 			{
-				job.targetQueueA.Add(list[i]);
+				job.targetQueueA.Add(result3[i]);
 			}
 			job.locomotionUrgency = LocomotionUrgency.Walk;
 			return job;

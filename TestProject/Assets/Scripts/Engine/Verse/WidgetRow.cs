@@ -1,125 +1,120 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class WidgetRow
 	{
-		
-		
-		public float FinalX
-		{
-			get
-			{
-				return this.curX;
-			}
-		}
+		private float startX;
 
-		
-		
-		public float FinalY
-		{
-			get
-			{
-				return this.curY;
-			}
-		}
+		private float curX;
 
-		
+		private float curY;
+
+		private float maxWidth = 99999f;
+
+		private float gap;
+
+		private UIDirection growDirection = UIDirection.RightThenUp;
+
+		public const float IconSize = 24f;
+
+		public const float DefaultGap = 4f;
+
+		private const float DefaultMaxWidth = 99999f;
+
+		public const float LabelGap = 2f;
+
+		public const float ButtonExtraSpace = 16f;
+
+		public float FinalX => curX;
+
+		public float FinalY => curY;
+
 		public WidgetRow()
 		{
 		}
 
-		
 		public WidgetRow(float x, float y, UIDirection growDirection = UIDirection.RightThenUp, float maxWidth = 99999f, float gap = 4f)
 		{
-			this.Init(x, y, growDirection, maxWidth, gap);
+			Init(x, y, growDirection, maxWidth, gap);
 		}
 
-		
 		public void Init(float x, float y, UIDirection growDirection = UIDirection.RightThenUp, float maxWidth = 99999f, float gap = 4f)
 		{
 			this.growDirection = growDirection;
-			this.startX = x;
-			this.curX = x;
-			this.curY = y;
+			startX = x;
+			curX = x;
+			curY = y;
 			this.maxWidth = maxWidth;
 			this.gap = gap;
 		}
 
-		
 		private float LeftX(float elementWidth)
 		{
-			if (this.growDirection == UIDirection.RightThenUp || this.growDirection == UIDirection.RightThenDown)
+			if (growDirection == UIDirection.RightThenUp || growDirection == UIDirection.RightThenDown)
 			{
-				return this.curX;
+				return curX;
 			}
-			return this.curX - elementWidth;
+			return curX - elementWidth;
 		}
 
-		
 		private void IncrementPosition(float amount)
 		{
-			if (this.growDirection == UIDirection.RightThenUp || this.growDirection == UIDirection.RightThenDown)
+			if (growDirection == UIDirection.RightThenUp || growDirection == UIDirection.RightThenDown)
 			{
-				this.curX += amount;
+				curX += amount;
 			}
 			else
 			{
-				this.curX -= amount;
+				curX -= amount;
 			}
-			if (Mathf.Abs(this.curX - this.startX) > this.maxWidth)
+			if (Mathf.Abs(curX - startX) > maxWidth)
 			{
-				this.IncrementY();
+				IncrementY();
 			}
 		}
 
-		
 		private void IncrementY()
 		{
-			if (this.growDirection == UIDirection.RightThenUp || this.growDirection == UIDirection.LeftThenUp)
+			if (growDirection == UIDirection.RightThenUp || growDirection == UIDirection.LeftThenUp)
 			{
-				this.curY -= 24f + this.gap;
+				curY -= 24f + gap;
 			}
 			else
 			{
-				this.curY += 24f + this.gap;
+				curY += 24f + gap;
 			}
-			this.curX = this.startX;
+			curX = startX;
 		}
 
-		
 		private void IncrementYIfWillExceedMaxWidth(float width)
 		{
-			if (Mathf.Abs(this.curX - this.startX) + Mathf.Abs(width) > this.maxWidth)
+			if (Mathf.Abs(curX - startX) + Mathf.Abs(width) > maxWidth)
 			{
-				this.IncrementY();
+				IncrementY();
 			}
 		}
 
-		
 		public void Gap(float width)
 		{
-			if (this.curX != this.startX)
+			if (curX != startX)
 			{
-				this.IncrementPosition(width);
+				IncrementPosition(width);
 			}
 		}
 
-		
 		public bool ButtonIcon(Texture2D tex, string tooltip = null, Color? mouseoverColor = null, bool doMouseoverSound = true)
 		{
-			this.IncrementYIfWillExceedMaxWidth(24f);
-			Rect rect = new Rect(this.LeftX(24f), this.curY, 24f, 24f);
+			IncrementYIfWillExceedMaxWidth(24f);
+			Rect rect = new Rect(LeftX(24f), curY, 24f, 24f);
 			if (doMouseoverSound)
 			{
 				MouseoverSounds.DoRegion(rect);
 			}
-			bool result = Widgets.ButtonImage(rect, tex, Color.white, mouseoverColor ?? GenUI.MouseoverColor, true);
-			this.IncrementPosition(24f + this.gap);
+			bool result = Widgets.ButtonImage(rect, tex, Color.white, mouseoverColor ?? GenUI.MouseoverColor);
+			IncrementPosition(24f + gap);
 			if (!tooltip.NullOrEmpty())
 			{
 				TooltipHandler.TipRegion(rect, tooltip);
@@ -127,22 +122,20 @@ namespace Verse
 			return result;
 		}
 
-		
 		public void GapButtonIcon()
 		{
-			if (this.curY != this.startX)
+			if (curY != startX)
 			{
-				this.IncrementPosition(24f + this.gap);
+				IncrementPosition(24f + gap);
 			}
 		}
 
-		
 		public void ToggleableIcon(ref bool toggleable, Texture2D tex, string tooltip, SoundDef mouseoverSound = null, string tutorTag = null)
 		{
-			this.IncrementYIfWillExceedMaxWidth(24f);
-			Rect rect = new Rect(this.LeftX(24f), this.curY, 24f, 24f);
-			bool flag = Widgets.ButtonImage(rect, tex, true);
-			this.IncrementPosition(24f + this.gap);
+			IncrementYIfWillExceedMaxWidth(24f);
+			Rect rect = new Rect(LeftX(24f), curY, 24f, 24f);
+			bool num = Widgets.ButtonImage(rect, tex);
+			IncrementPosition(24f + gap);
 			if (!tooltip.NullOrEmpty())
 			{
 				TooltipHandler.TipRegion(rect, tooltip);
@@ -154,16 +147,16 @@ namespace Verse
 			{
 				MouseoverSounds.DoRegion(rect, mouseoverSound);
 			}
-			if (flag)
+			if (num)
 			{
 				toggleable = !toggleable;
 				if (toggleable)
 				{
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
 				}
 				else
 				{
-					SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+					SoundDefOf.Tick_Low.PlayOneShotOnCamera();
 				}
 			}
 			if (tutorTag != null)
@@ -172,59 +165,55 @@ namespace Verse
 			}
 		}
 
-		
 		public Rect Icon(Texture2D tex, string tooltip = null)
 		{
-			this.IncrementYIfWillExceedMaxWidth(24f);
-			Rect rect = new Rect(this.LeftX(24f), this.curY, 24f, 24f);
+			IncrementYIfWillExceedMaxWidth(24f);
+			Rect rect = new Rect(LeftX(24f), curY, 24f, 24f);
 			GUI.DrawTexture(rect, tex);
 			if (!tooltip.NullOrEmpty())
 			{
 				TooltipHandler.TipRegion(rect, tooltip);
 			}
-			this.IncrementPosition(24f + this.gap);
+			IncrementPosition(24f + gap);
 			return rect;
 		}
 
-		
 		public bool ButtonText(string label, string tooltip = null, bool drawBackground = true, bool doMouseoverSound = true)
 		{
 			Vector2 vector = Text.CalcSize(label);
 			vector.x += 16f;
 			vector.y += 2f;
-			this.IncrementYIfWillExceedMaxWidth(vector.x);
-			Rect rect = new Rect(this.LeftX(vector.x), this.curY, vector.x, vector.y);
-			bool result = Widgets.ButtonText(rect, label, drawBackground, doMouseoverSound, true);
+			IncrementYIfWillExceedMaxWidth(vector.x);
+			Rect rect = new Rect(LeftX(vector.x), curY, vector.x, vector.y);
+			bool result = Widgets.ButtonText(rect, label, drawBackground, doMouseoverSound);
 			if (!tooltip.NullOrEmpty())
 			{
 				TooltipHandler.TipRegion(rect, tooltip);
 			}
-			this.IncrementPosition(rect.width + this.gap);
+			IncrementPosition(rect.width + gap);
 			return result;
 		}
 
-		
 		public Rect Label(string text, float width = -1f)
 		{
 			if (width < 0f)
 			{
 				width = Text.CalcSize(text).x;
 			}
-			this.IncrementYIfWillExceedMaxWidth(width);
-			Rect rect = new Rect(this.LeftX(width), this.curY, width, 24f);
-			this.IncrementPosition(2f);
+			IncrementYIfWillExceedMaxWidth(width);
+			Rect rect = new Rect(LeftX(width), curY, width, 24f);
+			IncrementPosition(2f);
 			Widgets.Label(rect, text);
-			this.IncrementPosition(2f);
-			this.IncrementPosition(rect.width);
+			IncrementPosition(2f);
+			IncrementPosition(rect.width);
 			return rect;
 		}
 
-		
 		public Rect FillableBar(float width, float height, float fillPct, string label, Texture2D fillTex, Texture2D bgTex = null)
 		{
-			this.IncrementYIfWillExceedMaxWidth(width);
-			Rect rect = new Rect(this.LeftX(width), this.curY, width, height);
-			Widgets.FillableBar(rect, fillPct, fillTex, bgTex, false);
+			IncrementYIfWillExceedMaxWidth(width);
+			Rect rect = new Rect(LeftX(width), curY, width, height);
+			Widgets.FillableBar(rect, fillPct, fillTex, bgTex, doBorder: false);
 			if (!label.NullOrEmpty())
 			{
 				Rect rect2 = rect;
@@ -239,41 +228,8 @@ namespace Verse
 				Widgets.Label(rect2, label);
 				Text.WordWrap = true;
 			}
-			this.IncrementPosition(width);
+			IncrementPosition(width);
 			return rect;
 		}
-
-		
-		private float startX;
-
-		
-		private float curX;
-
-		
-		private float curY;
-
-		
-		private float maxWidth = 99999f;
-
-		
-		private float gap;
-
-		
-		private UIDirection growDirection = UIDirection.RightThenUp;
-
-		
-		public const float IconSize = 24f;
-
-		
-		public const float DefaultGap = 4f;
-
-		
-		private const float DefaultMaxWidth = 99999f;
-
-		
-		public const float LabelGap = 2f;
-
-		
-		public const float ButtonExtraSpace = 16f;
 	}
 }

@@ -1,61 +1,46 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class Command_Ability : Command
 	{
-		
-		
-		public override Texture2D BGTexture
-		{
-			get
-			{
-				return Command_Ability.BGTex;
-			}
-		}
+		protected Ability ability;
 
-		
-		
-		public virtual string Tooltip
-		{
-			get
-			{
-				return this.ability.def.GetTooltip(this.ability.pawn);
-			}
-		}
+		public new static readonly Texture2D BGTex = ContentFinder<Texture2D>.Get("UI/Widgets/AbilityButBG");
 
-		
+		private static readonly Texture2D cooldownBarTex = SolidColorMaterials.NewSolidColorTexture(new Color32(9, 203, 4, 64));
+
+		public override Texture2D BGTexture => BGTex;
+
+		public virtual string Tooltip => ability.def.GetTooltip(ability.pawn);
+
 		public Command_Ability(Ability ability)
 		{
 			this.ability = ability;
-			this.order = 5f;
-			this.defaultLabel = ability.def.LabelCap;
-			this.hotKey = ability.def.hotKey;
-			this.icon = ability.def.uiIcon;
+			order = 5f;
+			defaultLabel = ability.def.LabelCap;
+			hotKey = ability.def.hotKey;
+			icon = ability.def.uiIcon;
 		}
 
-		
 		public override GizmoResult GizmoOnGUI(Vector2 topLeft, float maxWidth)
 		{
-			this.defaultDesc = this.Tooltip;
-			string str;
-			this.disabled = this.ability.GizmoDisabled(out str);
-			if (this.disabled)
+			defaultDesc = Tooltip;
+			disabled = ability.GizmoDisabled(out string reason);
+			if (disabled)
 			{
-				this.DisableWithReason(str.CapitalizeFirst());
+				DisableWithReason(reason.CapitalizeFirst());
 			}
 			GizmoResult result = base.GizmoOnGUI(topLeft, maxWidth);
-			if (this.ability.CooldownTicksRemaining > 0)
+			if (ability.CooldownTicksRemaining > 0)
 			{
-				float num = Mathf.InverseLerp((float)this.ability.CooldownTicksTotal, 0f, (float)this.ability.CooldownTicksRemaining);
-				Rect rect = new Rect(topLeft.x, topLeft.y, this.GetWidth(maxWidth), 75f);
-				Widgets.FillableBar(rect, Mathf.Clamp01(num), Command_Ability.cooldownBarTex, null, false);
-				if (this.ability.CooldownTicksRemaining > 0)
+				float num = Mathf.InverseLerp(ability.CooldownTicksTotal, 0f, ability.CooldownTicksRemaining);
+				Rect rect = new Rect(topLeft.x, topLeft.y, GetWidth(maxWidth), 75f);
+				Widgets.FillableBar(rect, Mathf.Clamp01(num), cooldownBarTex, null, doBorder: false);
+				if (ability.CooldownTicksRemaining > 0)
 				{
 					Text.Font = GameFont.Tiny;
 					Text.Anchor = TextAnchor.UpperCenter;
@@ -63,50 +48,40 @@ namespace RimWorld
 					Text.Anchor = TextAnchor.UpperLeft;
 				}
 			}
-			if (result.State == GizmoState.Interacted && this.ability.CanCast)
+			if (result.State == GizmoState.Interacted && ability.CanCast)
 			{
 				return result;
 			}
 			return new GizmoResult(result.State);
 		}
 
-		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
-			SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
-			if (this.ability.def.targetRequired)
+			SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
+			if (ability.def.targetRequired)
 			{
-				Find.Targeter.BeginTargeting(this.ability.verb, null);
-				return;
+				Find.Targeter.BeginTargeting(ability.verb);
 			}
-			this.ability.verb.TryStartCastOn(this.ability.pawn, false, true);
+			else
+			{
+				ability.verb.TryStartCastOn(ability.pawn);
+			}
 		}
 
-		
 		public override void GizmoUpdateOnMouseover()
 		{
 			Verb_CastAbility verb_CastAbility;
-			if ((verb_CastAbility = (this.ability.verb as Verb_CastAbility)) != null && this.ability.def.targetRequired)
+			if ((verb_CastAbility = (ability.verb as Verb_CastAbility)) != null && ability.def.targetRequired)
 			{
 				verb_CastAbility.DrawRadius();
 			}
 		}
 
-		
 		protected void DisableWithReason(string reason)
 		{
-			this.disabledReason = reason;
-			this.disabled = true;
+			disabledReason = reason;
+			disabled = true;
 		}
-
-		
-		protected Ability ability;
-
-		
-		public new static readonly Texture2D BGTex = ContentFinder<Texture2D>.Get("UI/Widgets/AbilityButBG", true);
-
-		
-		private static readonly Texture2D cooldownBarTex = SolidColorMaterials.NewSolidColorTexture(new Color32(9, 203, 4, 64));
 	}
 }

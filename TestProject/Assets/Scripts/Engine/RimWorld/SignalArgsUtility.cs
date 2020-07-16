@@ -1,41 +1,34 @@
-﻿using System;
 using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SignalArgsUtility
 	{
-		
 		public static bool TryGetLookTargets(SignalArgs args, string name, out LookTargets lookTargets)
 		{
-			if (args.TryGetArg<LookTargets>(name, out lookTargets))
+			if (args.TryGetArg(name, out lookTargets))
 			{
 				return true;
 			}
-			Thing t;
-			if (args.TryGetArg<Thing>(name, out t))
+			if (args.TryGetArg(name, out Thing arg))
 			{
-				lookTargets = t;
+				lookTargets = arg;
 				return true;
 			}
-			WorldObject o;
-			if (args.TryGetArg<WorldObject>(name, out o))
+			if (args.TryGetArg(name, out WorldObject arg2))
 			{
-				lookTargets = o;
+				lookTargets = arg2;
 				return true;
 			}
-			GlobalTargetInfo target;
-			if (args.TryGetArg<GlobalTargetInfo>(name, out target))
+			if (args.TryGetArg(name, out GlobalTargetInfo arg3))
 			{
-				lookTargets = target;
+				lookTargets = arg3;
 				return true;
 			}
-			TargetInfo target2;
-			if (args.TryGetArg<TargetInfo>(name, out target2))
+			if (args.TryGetArg(name, out TargetInfo arg4))
 			{
-				lookTargets = target2;
+				lookTargets = arg4;
 				return true;
 			}
 			lookTargets = LookTargets.Invalid;

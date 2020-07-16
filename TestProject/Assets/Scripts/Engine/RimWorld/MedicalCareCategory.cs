@@ -1,8 +1,5 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public enum MedicalCareCategory : byte
 	{
 		NoCare,

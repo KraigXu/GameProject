@@ -1,41 +1,22 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompGiveThoughtToAllMapPawnsOnDestroy : ThingComp
 	{
-		
-		
-		private CompProperties_GiveThoughtToAllMapPawnsOnDestroy Props
-		{
-			get
-			{
-				return (CompProperties_GiveThoughtToAllMapPawnsOnDestroy)this.props;
-			}
-		}
+		private CompProperties_GiveThoughtToAllMapPawnsOnDestroy Props => (CompProperties_GiveThoughtToAllMapPawnsOnDestroy)props;
 
-		
 		public override void PostDestroy(DestroyMode mode, Map previousMap)
 		{
 			if (previousMap != null)
 			{
-				if (!this.Props.message.NullOrEmpty())
+				if (!Props.message.NullOrEmpty())
 				{
-					Messages.Message(this.Props.message, new TargetInfo(this.parent.Position, previousMap, false), MessageTypeDefOf.NegativeEvent, true);
+					Messages.Message(Props.message, new TargetInfo(parent.Position, previousMap), MessageTypeDefOf.NegativeEvent);
 				}
-				foreach (Pawn pawn in previousMap.mapPawns.AllPawnsSpawned)
+				foreach (Pawn item in previousMap.mapPawns.AllPawnsSpawned)
 				{
-					Pawn_NeedsTracker needs = pawn.needs;
-					if (needs != null)
-					{
-						Need_Mood mood = needs.mood;
-						if (mood != null)
-						{
-							mood.thoughts.memories.TryGainMemory(this.Props.thought, null);
-						}
-					}
+					item.needs?.mood?.thoughts.memories.TryGainMemory(Props.thought);
 				}
 			}
 		}

@@ -1,84 +1,72 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public abstract class JoyGiver_InteractBuilding : JoyGiver
 	{
-		
-		
-		protected virtual bool CanDoDuringGathering
-		{
-			get
-			{
-				return false;
-			}
-		}
+		private static List<Thing> tmpCandidates = new List<Thing>();
 
-		
+		protected virtual bool CanDoDuringGathering => false;
+
 		public override Job TryGiveJob(Pawn pawn)
 		{
-			Thing thing = this.FindBestGame(pawn, false, IntVec3.Invalid);
+			Thing thing = FindBestGame(pawn, inBed: false, IntVec3.Invalid);
 			if (thing != null)
 			{
-				return this.TryGivePlayJob(pawn, thing);
+				return TryGivePlayJob(pawn, thing);
 			}
 			return null;
 		}
 
-		
 		public override Job TryGiveJobWhileInBed(Pawn pawn)
 		{
-			Thing thing = this.FindBestGame(pawn, true, IntVec3.Invalid);
+			Thing thing = FindBestGame(pawn, inBed: true, IntVec3.Invalid);
 			if (thing != null)
 			{
-				return this.TryGivePlayJobWhileInBed(pawn, thing);
+				return TryGivePlayJobWhileInBed(pawn, thing);
 			}
 			return null;
 		}
 
-		
 		public override Job TryGiveJobInGatheringArea(Pawn pawn, IntVec3 gatheringSpot)
 		{
-			if (!this.CanDoDuringGathering)
+			if (!CanDoDuringGathering)
 			{
 				return null;
 			}
-			Thing thing = this.FindBestGame(pawn, false, gatheringSpot);
+			Thing thing = FindBestGame(pawn, inBed: false, gatheringSpot);
 			if (thing != null)
 			{
-				return this.TryGivePlayJob(pawn, thing);
+				return TryGivePlayJob(pawn, thing);
 			}
 			return null;
 		}
 
-		
 		private Thing FindBestGame(Pawn pawn, bool inBed, IntVec3 gatheringSpot)
 		{
-			JoyGiver_InteractBuilding.tmpCandidates.Clear();
-			this.GetSearchSet(pawn, JoyGiver_InteractBuilding.tmpCandidates);
-			if (JoyGiver_InteractBuilding.tmpCandidates.Count == 0)
+			tmpCandidates.Clear();
+			GetSearchSet(pawn, tmpCandidates);
+			if (tmpCandidates.Count == 0)
 			{
 				return null;
 			}
-			Predicate<Thing> predicate = (Thing t) => this.CanInteractWith(pawn, t, inBed);
+			Predicate<Thing> predicate = (Thing t) => CanInteractWith(pawn, t, inBed);
 			if (gatheringSpot.IsValid)
 			{
 				Predicate<Thing> oldValidator = predicate;
 				predicate = ((Thing x) => GatheringsUtility.InGatheringArea(x.Position, gatheringSpot, pawn.Map) && oldValidator(x));
 			}
-			Thing result = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, JoyGiver_InteractBuilding.tmpCandidates, PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), 9999f, predicate, null);
-			JoyGiver_InteractBuilding.tmpCandidates.Clear();
+			Thing result = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, tmpCandidates, PathEndMode.OnCell, TraverseParms.For(pawn), 9999f, predicate);
+			tmpCandidates.Clear();
 			return result;
 		}
 
-		
 		protected virtual bool CanInteractWith(Pawn pawn, Thing t, bool inBed)
 		{
-			if (!pawn.CanReserve(t, this.def.jobDef.joyMaxParticipants, -1, null, false))
+			if (!pawn.CanReserve(t, def.jobDef.joyMaxParticipants))
 			{
 				return false;
 			}
@@ -95,20 +83,23 @@ namespace RimWorld
 				return false;
 			}
 			CompPowerTrader compPowerTrader = t.TryGetComp<CompPowerTrader>();
-			return (compPowerTrader == null || compPowerTrader.PowerOn) && (!this.def.unroofedOnly || !t.Position.Roofed(t.Map));
+			if (compPowerTrader != null && !compPowerTrader.PowerOn)
+			{
+				return false;
+			}
+			if (def.unroofedOnly && t.Position.Roofed(t.Map))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected abstract Job TryGivePlayJob(Pawn pawn, Thing bestGame);
 
-		
 		protected virtual Job TryGivePlayJobWhileInBed(Pawn pawn, Thing bestGame)
 		{
 			Building_Bed t = pawn.CurrentBed();
-			return JobMaker.MakeJob(this.def.jobDef, bestGame, pawn.Position, t);
+			return JobMaker.MakeJob(def.jobDef, bestGame, pawn.Position, t);
 		}
-
-		
-		private static List<Thing> tmpCandidates = new List<Thing>();
 	}
 }

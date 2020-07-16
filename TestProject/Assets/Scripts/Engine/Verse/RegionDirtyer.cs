@@ -1,115 +1,99 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class RegionDirtyer
 	{
-		
-		
-		public bool AnyDirty
-		{
-			get
-			{
-				return this.dirtyCells.Count > 0;
-			}
-		}
+		private Map map;
 
-		
-		
-		public List<IntVec3> DirtyCells
-		{
-			get
-			{
-				return this.dirtyCells;
-			}
-		}
+		private List<IntVec3> dirtyCells = new List<IntVec3>();
 
-		
+		private List<Region> regionsToDirty = new List<Region>();
+
+		public bool AnyDirty => dirtyCells.Count > 0;
+
+		public List<IntVec3> DirtyCells => dirtyCells;
+
 		public RegionDirtyer(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		internal void Notify_WalkabilityChanged(IntVec3 c)
 		{
-			this.regionsToDirty.Clear();
+			regionsToDirty.Clear();
 			for (int i = 0; i < 9; i++)
 			{
 				IntVec3 c2 = c + GenAdj.AdjacentCellsAndInside[i];
-				if (c2.InBounds(this.map))
+				if (c2.InBounds(map))
 				{
-					Region regionAt_NoRebuild_InvalidAllowed = this.map.regionGrid.GetRegionAt_NoRebuild_InvalidAllowed(c2);
+					Region regionAt_NoRebuild_InvalidAllowed = map.regionGrid.GetRegionAt_NoRebuild_InvalidAllowed(c2);
 					if (regionAt_NoRebuild_InvalidAllowed != null && regionAt_NoRebuild_InvalidAllowed.valid)
 					{
-						this.map.temperatureCache.TryCacheRegionTempInfo(c, regionAt_NoRebuild_InvalidAllowed);
-						this.regionsToDirty.Add(regionAt_NoRebuild_InvalidAllowed);
+						map.temperatureCache.TryCacheRegionTempInfo(c, regionAt_NoRebuild_InvalidAllowed);
+						regionsToDirty.Add(regionAt_NoRebuild_InvalidAllowed);
 					}
 				}
 			}
-			for (int j = 0; j < this.regionsToDirty.Count; j++)
+			for (int j = 0; j < regionsToDirty.Count; j++)
 			{
-				this.SetRegionDirty(this.regionsToDirty[j], true);
+				SetRegionDirty(regionsToDirty[j]);
 			}
-			this.regionsToDirty.Clear();
-			if (c.Walkable(this.map) && !this.dirtyCells.Contains(c))
+			regionsToDirty.Clear();
+			if (c.Walkable(map) && !dirtyCells.Contains(c))
 			{
-				this.dirtyCells.Add(c);
+				dirtyCells.Add(c);
 			}
 		}
 
-		
 		internal void Notify_ThingAffectingRegionsSpawned(Thing b)
 		{
-			this.regionsToDirty.Clear();
-			foreach (IntVec3 c in b.OccupiedRect().ExpandedBy(1).ClipInsideMap(b.Map))
+			regionsToDirty.Clear();
+			foreach (IntVec3 item in b.OccupiedRect().ExpandedBy(1).ClipInsideMap(b.Map))
 			{
-				Region validRegionAt_NoRebuild = b.Map.regionGrid.GetValidRegionAt_NoRebuild(c);
+				Region validRegionAt_NoRebuild = b.Map.regionGrid.GetValidRegionAt_NoRebuild(item);
 				if (validRegionAt_NoRebuild != null)
 				{
-					b.Map.temperatureCache.TryCacheRegionTempInfo(c, validRegionAt_NoRebuild);
-					this.regionsToDirty.Add(validRegionAt_NoRebuild);
+					b.Map.temperatureCache.TryCacheRegionTempInfo(item, validRegionAt_NoRebuild);
+					regionsToDirty.Add(validRegionAt_NoRebuild);
 				}
 			}
-			for (int i = 0; i < this.regionsToDirty.Count; i++)
+			for (int i = 0; i < regionsToDirty.Count; i++)
 			{
-				this.SetRegionDirty(this.regionsToDirty[i], true);
+				SetRegionDirty(regionsToDirty[i]);
 			}
-			this.regionsToDirty.Clear();
+			regionsToDirty.Clear();
 		}
 
-		
 		internal void Notify_ThingAffectingRegionsDespawned(Thing b)
 		{
-			this.regionsToDirty.Clear();
-			Region validRegionAt_NoRebuild = this.map.regionGrid.GetValidRegionAt_NoRebuild(b.Position);
+			regionsToDirty.Clear();
+			Region validRegionAt_NoRebuild = map.regionGrid.GetValidRegionAt_NoRebuild(b.Position);
 			if (validRegionAt_NoRebuild != null)
 			{
-				this.map.temperatureCache.TryCacheRegionTempInfo(b.Position, validRegionAt_NoRebuild);
-				this.regionsToDirty.Add(validRegionAt_NoRebuild);
+				map.temperatureCache.TryCacheRegionTempInfo(b.Position, validRegionAt_NoRebuild);
+				regionsToDirty.Add(validRegionAt_NoRebuild);
 			}
-			foreach (IntVec3 c in GenAdj.CellsAdjacent8Way(b))
+			foreach (IntVec3 item2 in GenAdj.CellsAdjacent8Way(b))
 			{
-				if (c.InBounds(this.map))
+				if (item2.InBounds(map))
 				{
-					Region validRegionAt_NoRebuild2 = this.map.regionGrid.GetValidRegionAt_NoRebuild(c);
+					Region validRegionAt_NoRebuild2 = map.regionGrid.GetValidRegionAt_NoRebuild(item2);
 					if (validRegionAt_NoRebuild2 != null)
 					{
-						this.map.temperatureCache.TryCacheRegionTempInfo(c, validRegionAt_NoRebuild2);
-						this.regionsToDirty.Add(validRegionAt_NoRebuild2);
+						map.temperatureCache.TryCacheRegionTempInfo(item2, validRegionAt_NoRebuild2);
+						regionsToDirty.Add(validRegionAt_NoRebuild2);
 					}
 				}
 			}
-			for (int i = 0; i < this.regionsToDirty.Count; i++)
+			for (int i = 0; i < regionsToDirty.Count; i++)
 			{
-				this.SetRegionDirty(this.regionsToDirty[i], true);
+				SetRegionDirty(regionsToDirty[i]);
 			}
-			this.regionsToDirty.Clear();
+			regionsToDirty.Clear();
 			if (b.def.size.x == 1 && b.def.size.z == 1)
 			{
-				this.dirtyCells.Add(b.Position);
+				dirtyCells.Add(b.Position);
 				return;
 			}
 			CellRect cellRect = b.OccupiedRect();
@@ -118,69 +102,56 @@ namespace Verse
 				for (int k = cellRect.minX; k <= cellRect.maxX; k++)
 				{
 					IntVec3 item = new IntVec3(k, 0, j);
-					this.dirtyCells.Add(item);
+					dirtyCells.Add(item);
 				}
 			}
 		}
 
-		
 		internal void SetAllClean()
 		{
-			for (int i = 0; i < this.dirtyCells.Count; i++)
+			for (int i = 0; i < dirtyCells.Count; i++)
 			{
-				this.map.temperatureCache.ResetCachedCellInfo(this.dirtyCells[i]);
+				map.temperatureCache.ResetCachedCellInfo(dirtyCells[i]);
 			}
-			this.dirtyCells.Clear();
+			dirtyCells.Clear();
 		}
 
-		
 		private void SetRegionDirty(Region reg, bool addCellsToDirtyCells = true)
 		{
-			if (!reg.valid)
+			if (reg.valid)
 			{
-				return;
-			}
-			reg.valid = false;
-			reg.Room = null;
-			for (int i = 0; i < reg.links.Count; i++)
-			{
-				reg.links[i].Deregister(reg);
-			}
-			reg.links.Clear();
-			if (addCellsToDirtyCells)
-			{
-				foreach (IntVec3 intVec in reg.Cells)
+				reg.valid = false;
+				reg.Room = null;
+				for (int i = 0; i < reg.links.Count; i++)
 				{
-					this.dirtyCells.Add(intVec);
-					if (DebugViewSettings.drawRegionDirties)
+					reg.links[i].Deregister(reg);
+				}
+				reg.links.Clear();
+				if (addCellsToDirtyCells)
+				{
+					foreach (IntVec3 cell in reg.Cells)
 					{
-						this.map.debugDrawer.FlashCell(intVec, 0f, null, 50);
+						dirtyCells.Add(cell);
+						if (DebugViewSettings.drawRegionDirties)
+						{
+							map.debugDrawer.FlashCell(cell);
+						}
 					}
 				}
 			}
 		}
 
-		
 		internal void SetAllDirty()
 		{
-			this.dirtyCells.Clear();
-			foreach (IntVec3 item in this.map)
+			dirtyCells.Clear();
+			foreach (IntVec3 item in map)
 			{
-				this.dirtyCells.Add(item);
+				dirtyCells.Add(item);
 			}
-			foreach (Region reg in this.map.regionGrid.AllRegions_NoRebuild_InvalidAllowed)
+			foreach (Region item2 in map.regionGrid.AllRegions_NoRebuild_InvalidAllowed)
 			{
-				this.SetRegionDirty(reg, false);
+				SetRegionDirty(item2, addCellsToDirtyCells: false);
 			}
 		}
-
-		
-		private Map map;
-
-		
-		private List<IntVec3> dirtyCells = new List<IntVec3>();
-
-		
-		private List<Region> regionsToDirty = new List<Region>();
 	}
 }

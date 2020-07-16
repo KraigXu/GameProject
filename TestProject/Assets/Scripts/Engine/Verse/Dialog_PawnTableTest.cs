@@ -1,88 +1,77 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Dialog_PawnTableTest : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2((float)UI.screenWidth, (float)UI.screenHeight);
-			}
-		}
+		private PawnColumnDef singleColumn;
 
-		
-		
-		private List<Pawn> Pawns
-		{
-			get
-			{
-				return Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer).ToList<Pawn>();
-			}
-		}
+		private PawnTable pawnTableMin;
 
-		
+		private PawnTable pawnTableOptimal;
+
+		private PawnTable pawnTableMax;
+
+		private const int TableTitleHeight = 30;
+
+		public override Vector2 InitialSize => new Vector2(UI.screenWidth, UI.screenHeight);
+
+		private List<Pawn> Pawns => Find.CurrentMap.mapPawns.PawnsInFaction(Faction.OfPlayer).ToList();
+
 		public Dialog_PawnTableTest(PawnColumnDef singleColumn)
 		{
 			this.singleColumn = singleColumn;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			int num = ((int)inRect.height - 90) / 3;
 			PawnTableDef pawnTableDef = new PawnTableDef();
 			pawnTableDef.columns = new List<PawnColumnDef>
 			{
-				this.singleColumn
+				singleColumn
 			};
 			pawnTableDef.minWidth = 0;
-			if (this.pawnTableMin == null)
+			if (pawnTableMin == null)
 			{
-				this.pawnTableMin = new PawnTable(pawnTableDef, () => this.Pawns, 0, 0);
-				this.pawnTableMin.SetMinMaxSize(Mathf.Min(this.singleColumn.Worker.GetMinWidth(this.pawnTableMin) + 16, (int)inRect.width), Mathf.Min(this.singleColumn.Worker.GetMinWidth(this.pawnTableMin) + 16, (int)inRect.width), 0, num);
+				pawnTableMin = new PawnTable(pawnTableDef, () => Pawns, 0, 0);
+				pawnTableMin.SetMinMaxSize(Mathf.Min(singleColumn.Worker.GetMinWidth(pawnTableMin) + 16, (int)inRect.width), Mathf.Min(singleColumn.Worker.GetMinWidth(pawnTableMin) + 16, (int)inRect.width), 0, num);
 			}
-			if (this.pawnTableOptimal == null)
+			if (pawnTableOptimal == null)
 			{
-				this.pawnTableOptimal = new PawnTable(pawnTableDef, () => this.Pawns, 0, 0);
-				this.pawnTableOptimal.SetMinMaxSize(Mathf.Min(this.singleColumn.Worker.GetOptimalWidth(this.pawnTableOptimal) + 16, (int)inRect.width), Mathf.Min(this.singleColumn.Worker.GetOptimalWidth(this.pawnTableOptimal) + 16, (int)inRect.width), 0, num);
+				pawnTableOptimal = new PawnTable(pawnTableDef, () => Pawns, 0, 0);
+				pawnTableOptimal.SetMinMaxSize(Mathf.Min(singleColumn.Worker.GetOptimalWidth(pawnTableOptimal) + 16, (int)inRect.width), Mathf.Min(singleColumn.Worker.GetOptimalWidth(pawnTableOptimal) + 16, (int)inRect.width), 0, num);
 			}
-			if (this.pawnTableMax == null)
+			if (pawnTableMax == null)
 			{
-				this.pawnTableMax = new PawnTable(pawnTableDef, () => this.Pawns, 0, 0);
-				this.pawnTableMax.SetMinMaxSize(Mathf.Min(this.singleColumn.Worker.GetMaxWidth(this.pawnTableMax) + 16, (int)inRect.width), Mathf.Min(this.singleColumn.Worker.GetMaxWidth(this.pawnTableMax) + 16, (int)inRect.width), 0, num);
+				pawnTableMax = new PawnTable(pawnTableDef, () => Pawns, 0, 0);
+				pawnTableMax.SetMinMaxSize(Mathf.Min(singleColumn.Worker.GetMaxWidth(pawnTableMax) + 16, (int)inRect.width), Mathf.Min(singleColumn.Worker.GetMaxWidth(pawnTableMax) + 16, (int)inRect.width), 0, num);
 			}
 			int num2 = 0;
 			Text.Font = GameFont.Small;
 			GUI.color = Color.gray;
-			Widgets.Label(new Rect(0f, (float)num2, inRect.width, 30f), "Min size");
+			Widgets.Label(new Rect(0f, num2, inRect.width, 30f), "Min size");
 			GUI.color = Color.white;
 			num2 += 30;
-			this.pawnTableMin.PawnTableOnGUI(new Vector2(0f, (float)num2));
+			pawnTableMin.PawnTableOnGUI(new Vector2(0f, num2));
 			num2 += num;
 			GUI.color = Color.gray;
-			Widgets.Label(new Rect(0f, (float)num2, inRect.width, 30f), "Optimal size");
+			Widgets.Label(new Rect(0f, num2, inRect.width, 30f), "Optimal size");
 			GUI.color = Color.white;
 			num2 += 30;
-			this.pawnTableOptimal.PawnTableOnGUI(new Vector2(0f, (float)num2));
+			pawnTableOptimal.PawnTableOnGUI(new Vector2(0f, num2));
 			num2 += num;
 			GUI.color = Color.gray;
-			Widgets.Label(new Rect(0f, (float)num2, inRect.width, 30f), "Max size");
+			Widgets.Label(new Rect(0f, num2, inRect.width, 30f), "Max size");
 			GUI.color = Color.white;
 			num2 += 30;
-			this.pawnTableMax.PawnTableOnGUI(new Vector2(0f, (float)num2));
+			pawnTableMax.PawnTableOnGUI(new Vector2(0f, num2));
 			num2 += num;
 		}
 
-		
 		[DebugOutput("UI", false)]
 		private static void PawnColumnTest()
 		{
@@ -98,20 +87,5 @@ namespace Verse
 			}
 			Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
 		}
-
-		
-		private PawnColumnDef singleColumn;
-
-		
-		private PawnTable pawnTableMin;
-
-		
-		private PawnTable pawnTableOptimal;
-
-		
-		private PawnTable pawnTableMax;
-
-		
-		private const int TableTitleHeight = 30;
 	}
 }

@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class RoyalTitleDefExt
 	{
-		
 		public static RoyalTitleDef GetNextTitle(this RoyalTitleDef currentTitle, Faction faction)
 		{
 			int num = faction.def.RoyalTitlesAwardableInSeniorityOrderForReading.IndexOf(currentTitle);
@@ -14,7 +11,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			int num2 = (currentTitle == null) ? 0 : (num + 1);
+			int num2 = (currentTitle != null) ? (num + 1) : 0;
 			if (faction.def.RoyalTitlesAwardableInSeniorityOrderForReading.Count <= num2)
 			{
 				return null;
@@ -22,7 +19,6 @@ namespace RimWorld
 			return faction.def.RoyalTitlesAwardableInSeniorityOrderForReading[num2];
 		}
 
-		
 		public static RoyalTitleDef GetPreviousTitle(this RoyalTitleDef currentTitle, Faction faction)
 		{
 			if (currentTitle == null)
@@ -37,7 +33,6 @@ namespace RimWorld
 			return faction.def.RoyalTitlesAwardableInSeniorityOrderForReading[num];
 		}
 
-		
 		public static bool TryInherit(this RoyalTitleDef title, Pawn from, Faction faction, out RoyalTitleInheritanceOutcome outcome)
 		{
 			outcome = default(RoyalTitleInheritanceOutcome);

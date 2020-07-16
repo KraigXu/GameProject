@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_NeedComfort : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.needs.comfort == null)

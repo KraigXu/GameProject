@@ -1,74 +1,53 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class BillStack : IExposable
 	{
-		
-		
-		public List<Bill> Bills
-		{
-			get
-			{
-				return this.bills;
-			}
-		}
+		[Unsaved(false)]
+		public IBillGiver billGiver;
 
-		
-		public IEnumerator<Bill> GetEnumerator()
-		{
-			return this.bills.GetEnumerator();
-		}
+		private List<Bill> bills = new List<Bill>();
 
-		
-		public Bill this[int index]
-		{
-			get
-			{
-				return this.bills[index];
-			}
-		}
+		public const int MaxCount = 15;
 
-		
-		
-		public int Count
-		{
-			get
-			{
-				return this.bills.Count;
-			}
-		}
+		private const float TopAreaHeight = 35f;
 
-		
-		
+		private const float BillInterfaceSpacing = 6f;
+
+		private const float ExtraViewHeight = 60f;
+
+		public List<Bill> Bills => bills;
+
+		public Bill this[int index] => bills[index];
+
+		public int Count => bills.Count;
+
 		public Bill FirstShouldDoNow
 		{
 			get
 			{
-				for (int i = 0; i < this.Count; i++)
+				for (int i = 0; i < Count; i++)
 				{
-					if (this.bills[i].ShouldDoNow())
+					if (bills[i].ShouldDoNow())
 					{
-						return this.bills[i];
+						return bills[i];
 					}
 				}
 				return null;
 			}
 		}
 
-		
-		
 		public bool AnyShouldDoNow
 		{
 			get
 			{
-				for (int i = 0; i < this.Count; i++)
+				for (int i = 0; i < Count; i++)
 				{
-					if (this.bills[i].ShouldDoNow())
+					if (bills[i].ShouldDoNow())
 					{
 						return true;
 					}
@@ -77,93 +56,89 @@ namespace RimWorld
 			}
 		}
 
-		
-		public BillStack(IBillGiver giver)
+		public IEnumerator<Bill> GetEnumerator()
 		{
-			this.billGiver = giver;
+			return bills.GetEnumerator();
 		}
 
-		
+		public BillStack(IBillGiver giver)
+		{
+			billGiver = giver;
+		}
+
 		public void AddBill(Bill bill)
 		{
 			bill.billStack = this;
-			this.bills.Add(bill);
+			bills.Add(bill);
 		}
 
-		
 		public void Delete(Bill bill)
 		{
 			bill.deleted = true;
-			this.bills.Remove(bill);
+			bills.Remove(bill);
 		}
 
-		
 		public void Clear()
 		{
-			this.bills.Clear();
+			bills.Clear();
 		}
 
-		
 		public void Reorder(Bill bill, int offset)
 		{
-			int num = this.bills.IndexOf(bill);
+			int num = bills.IndexOf(bill);
 			num += offset;
 			if (num >= 0)
 			{
-				this.bills.Remove(bill);
-				this.bills.Insert(num, bill);
+				bills.Remove(bill);
+				bills.Insert(num, bill);
 			}
 		}
 
-		
 		public void RemoveIncompletableBills()
 		{
-			for (int i = this.bills.Count - 1; i >= 0; i--)
+			for (int num = bills.Count - 1; num >= 0; num--)
 			{
-				if (!this.bills[i].CompletableEver)
+				if (!bills[num].CompletableEver)
 				{
-					this.bills.Remove(this.bills[i]);
+					bills.Remove(bills[num]);
 				}
 			}
 		}
 
-		
 		public int IndexOf(Bill bill)
 		{
-			return this.bills.IndexOf(bill);
+			return bills.IndexOf(bill);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Bill>(ref this.bills, "bills", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref bills, "bills", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs)
 			{
-				if (this.bills.RemoveAll((Bill x) => x == null) != 0)
+				if (bills.RemoveAll((Bill x) => x == null) != 0)
 				{
-					Log.Error("Some bills were null after loading.", false);
+					Log.Error("Some bills were null after loading.");
 				}
-				if (this.bills.RemoveAll((Bill x) => x.recipe == null) != 0)
+				if (bills.RemoveAll((Bill x) => x.recipe == null) != 0)
 				{
-					Log.Error("Some bills had null recipe after loading.", false);
+					Log.Error("Some bills had null recipe after loading.");
 				}
-				for (int i = 0; i < this.bills.Count; i++)
+				for (int i = 0; i < bills.Count; i++)
 				{
-					this.bills[i].billStack = this;
+					bills[i].billStack = this;
 				}
 			}
 		}
 
-		
 		public Bill DoListing(Rect rect, Func<List<FloatMenuOption>> recipeOptionsMaker, ref Vector2 scrollPosition, ref float viewHeight)
 		{
 			Bill result = null;
 			GUI.BeginGroup(rect);
 			Text.Font = GameFont.Small;
-			if (this.Count < 15)
+			if (Count < 15)
 			{
 				Rect rect2 = new Rect(0f, 0f, 150f, 29f);
-				if (Widgets.ButtonText(rect2, "AddBill".Translate(), true, true, true))
+				if (Widgets.ButtonText(rect2, "AddBill".Translate()))
 				{
 					Find.WindowStack.Add(new FloatMenu(recipeOptionsMaker()));
 				}
@@ -173,11 +148,11 @@ namespace RimWorld
 			GUI.color = Color.white;
 			Rect outRect = new Rect(0f, 35f, rect.width, rect.height - 35f);
 			Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, viewHeight);
-			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect, true);
+			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
 			float num = 0f;
-			for (int i = 0; i < this.Count; i++)
+			for (int i = 0; i < Count; i++)
 			{
-				Bill bill = this.bills[i];
+				Bill bill = bills[i];
 				Rect rect3 = bill.DoInterface(0f, num, viewRect.width, i);
 				if (!bill.DeletedOrDereferenced && Mouse.IsOver(rect3))
 				{
@@ -193,24 +168,5 @@ namespace RimWorld
 			GUI.EndGroup();
 			return result;
 		}
-
-		
-		[Unsaved(false)]
-		public IBillGiver billGiver;
-
-		
-		private List<Bill> bills = new List<Bill>();
-
-		
-		public const int MaxCount = 15;
-
-		
-		private const float TopAreaHeight = 35f;
-
-		
-		private const float BillInterfaceSpacing = 6f;
-
-		
-		private const float ExtraViewHeight = 60f;
 	}
 }

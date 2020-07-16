@@ -1,44 +1,50 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Dialog_SellableItems : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(650f, (float)Mathf.Min(UI.screenHeight, 1000));
-			}
-		}
+		private ThingCategoryDef currentCategory;
 
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		private bool pawnsTabOpen;
 
-		
+		private List<ThingDef> sellableItems = new List<ThingDef>();
+
+		private List<TabRecord> tabs = new List<TabRecord>();
+
+		private Vector2 scrollPosition;
+
+		private ITrader trader;
+
+		private List<ThingDef> cachedSellablePawns;
+
+		private Dictionary<ThingCategoryDef, List<ThingDef>> cachedSellableItemsByCategory = new Dictionary<ThingCategoryDef, List<ThingDef>>();
+
+		private const float RowHeight = 24f;
+
+		private const float TitleRectHeight = 40f;
+
+		private const float RestockTextHeight = 20f;
+
+		private const float BottomAreaHeight = 55f;
+
+		private readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
+
+		public override Vector2 InitialSize => new Vector2(650f, Mathf.Min(UI.screenHeight, 1000));
+
+		protected override float Margin => 0f;
+
 		public Dialog_SellableItems(ITrader trader)
 		{
-			this.forcePause = true;
-			this.absorbInputAroundWindow = true;
+			forcePause = true;
+			absorbInputAroundWindow = true;
 			this.trader = trader;
-			this.CalculateSellableItems(trader.TraderKind);
-			this.CalculateTabs();
+			CalculateSellableItems(trader.TraderKind);
+			CalculateTabs();
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			float num = 40f;
@@ -48,14 +54,13 @@ namespace RimWorld
 			Widgets.Label(rect, "SellableItemsTitle".Translate().CapitalizeFirst());
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.MiddleCenter;
-			ITraderRestockingInfoProvider traderRestockingInfoProvider = this.trader as ITraderRestockingInfoProvider;
+			ITraderRestockingInfoProvider traderRestockingInfoProvider = trader as ITraderRestockingInfoProvider;
 			if (traderRestockingInfoProvider != null)
 			{
 				int nextRestockTick = traderRestockingInfoProvider.NextRestockTick;
 				if (nextRestockTick != -1)
 				{
-					float num2 = (nextRestockTick - Find.TickManager.TicksGame).TicksToDays();
-					Widgets.Label(new Rect(0f, num, inRect.width, 20f), "NextTraderRestock".Translate(num2.ToString("0.0")));
+					Widgets.Label(label: "NextTraderRestock".Translate((nextRestockTick - Find.TickManager.TicksGame).TicksToDays().ToString("0.0")), rect: new Rect(0f, num, inRect.width, 20f));
 					num += 20f;
 				}
 				else if (!traderRestockingInfoProvider.EverVisited)
@@ -72,27 +77,27 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 			inRect.yMin += 64f + num;
 			Widgets.DrawMenuSection(inRect);
-			TabDrawer.DrawTabs(inRect, this.tabs, 2);
+			TabDrawer.DrawTabs(inRect, tabs, 2);
 			inRect = inRect.ContractedBy(17f);
 			GUI.BeginGroup(inRect);
 			Rect rect2 = inRect.AtZero();
-			this.DoBottomButtons(rect2);
+			DoBottomButtons(rect2);
 			Rect outRect = rect2;
 			outRect.yMax -= 65f;
-			List<ThingDef> sellableItemsInCategory = this.GetSellableItemsInCategory(this.currentCategory, this.pawnsTabOpen);
-			if (sellableItemsInCategory.Any<ThingDef>())
+			List<ThingDef> sellableItemsInCategory = GetSellableItemsInCategory(currentCategory, pawnsTabOpen);
+			if (sellableItemsInCategory.Any())
 			{
 				float height = (float)sellableItemsInCategory.Count * 24f;
 				num = 0f;
 				Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, height);
-				Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect, true);
-				float num3 = this.scrollPosition.y - 24f;
-				float num4 = this.scrollPosition.y + outRect.height;
+				Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+				float num2 = scrollPosition.y - 24f;
+				float num3 = scrollPosition.y + outRect.height;
 				for (int i = 0; i < sellableItemsInCategory.Count; i++)
 				{
-					if (num > num3 && num < num4)
+					if (num > num2 && num < num3)
 					{
-						Widgets.DefLabelWithIcon(new Rect(0f, num, viewRect.width, 24f), sellableItemsInCategory[i], 2f, 6f);
+						Widgets.DefLabelWithIcon(new Rect(0f, num, viewRect.width, 24f), sellableItemsInCategory[i]);
 					}
 					num += 24f;
 				}
@@ -100,158 +105,114 @@ namespace RimWorld
 			}
 			else
 			{
-				Widgets.NoneLabel(0f, outRect.width, null);
+				Widgets.NoneLabel(0f, outRect.width);
 			}
 			GUI.EndGroup();
 		}
 
-		
 		private void DoBottomButtons(Rect rect)
 		{
-			if (Widgets.ButtonText(new Rect(rect.width / 2f - this.BottomButtonSize.x / 2f, rect.height - 55f, this.BottomButtonSize.x, this.BottomButtonSize.y), "CloseButton".Translate(), true, true, true))
+			if (Widgets.ButtonText(new Rect(rect.width / 2f - BottomButtonSize.x / 2f, rect.height - 55f, BottomButtonSize.x, BottomButtonSize.y), "CloseButton".Translate()))
 			{
-				this.Close(true);
+				Close();
 			}
 		}
 
-		
 		private void CalculateSellableItems(TraderKindDef trader)
 		{
-			this.sellableItems.Clear();
-			this.cachedSellableItemsByCategory.Clear();
-			this.cachedSellablePawns = null;
+			sellableItems.Clear();
+			cachedSellableItemsByCategory.Clear();
+			cachedSellablePawns = null;
 			List<ThingDef> allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				if (allDefsListForReading[i].PlayerAcquirable && !allDefsListForReading[i].IsCorpse && !typeof(MinifiedThing).IsAssignableFrom(allDefsListForReading[i].thingClass) && trader.WillTrade(allDefsListForReading[i]) && TradeUtility.EverPlayerSellable(allDefsListForReading[i]))
 				{
-					this.sellableItems.Add(allDefsListForReading[i]);
+					sellableItems.Add(allDefsListForReading[i]);
 				}
 			}
-			this.sellableItems.SortBy((ThingDef x) => x.label);
+			sellableItems.SortBy((ThingDef x) => x.label);
 		}
 
-		
 		private void CalculateTabs()
 		{
-			this.tabs.Clear();
+			tabs.Clear();
 			List<ThingCategoryDef> allDefsListForReading = DefDatabase<ThingCategoryDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				ThingCategoryDef category = allDefsListForReading[i];
-				if (category.parent == ThingCategoryDefOf.Root && this.AnyTraderWillEverTrade(category))
+				if (category.parent == ThingCategoryDefOf.Root && AnyTraderWillEverTrade(category))
 				{
-					if (this.currentCategory == null)
+					if (currentCategory == null)
 					{
-						this.currentCategory = category;
+						currentCategory = category;
 					}
-					this.tabs.Add(new TabRecord(category.LabelCap, delegate
+					tabs.Add(new TabRecord(category.LabelCap, delegate
 					{
-						this.currentCategory = category;
-						this.pawnsTabOpen = false;
-					}, () => this.currentCategory == category));
+						currentCategory = category;
+						pawnsTabOpen = false;
+					}, () => currentCategory == category));
 				}
 			}
-			this.tabs.Add(new TabRecord("PawnsTabShort".Translate(), delegate
+			tabs.Add(new TabRecord("PawnsTabShort".Translate(), delegate
 			{
-				this.currentCategory = null;
-				this.pawnsTabOpen = true;
-			}, () => this.pawnsTabOpen));
+				currentCategory = null;
+				pawnsTabOpen = true;
+			}, () => pawnsTabOpen));
 		}
 
-		
 		private List<ThingDef> GetSellableItemsInCategory(ThingCategoryDef category, bool pawns)
 		{
 			if (pawns)
 			{
-				if (this.cachedSellablePawns == null)
+				if (cachedSellablePawns == null)
 				{
-					this.cachedSellablePawns = new List<ThingDef>();
-					for (int i = 0; i < this.sellableItems.Count; i++)
+					cachedSellablePawns = new List<ThingDef>();
+					for (int i = 0; i < sellableItems.Count; i++)
 					{
-						if (this.sellableItems[i].category == ThingCategory.Pawn)
+						if (sellableItems[i].category == ThingCategory.Pawn)
 						{
-							this.cachedSellablePawns.Add(this.sellableItems[i]);
+							cachedSellablePawns.Add(sellableItems[i]);
 						}
 					}
 				}
-				return this.cachedSellablePawns;
+				return cachedSellablePawns;
 			}
-			List<ThingDef> list;
-			if (this.cachedSellableItemsByCategory.TryGetValue(category, out list))
+			if (cachedSellableItemsByCategory.TryGetValue(category, out List<ThingDef> value))
 			{
-				return list;
+				return value;
 			}
-			list = new List<ThingDef>();
-			for (int j = 0; j < this.sellableItems.Count; j++)
+			value = new List<ThingDef>();
+			for (int j = 0; j < sellableItems.Count; j++)
 			{
-				if (this.sellableItems[j].IsWithinCategory(category))
+				if (sellableItems[j].IsWithinCategory(category))
 				{
-					list.Add(this.sellableItems[j]);
+					value.Add(sellableItems[j]);
 				}
 			}
-			this.cachedSellableItemsByCategory.Add(category, list);
-			return list;
+			cachedSellableItemsByCategory.Add(category, value);
+			return value;
 		}
 
-		
 		private bool AnyTraderWillEverTrade(ThingCategoryDef thingCategory)
 		{
 			List<ThingDef> allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
-				if (allDefsListForReading[i].IsWithinCategory(thingCategory))
+				if (!allDefsListForReading[i].IsWithinCategory(thingCategory))
 				{
-					List<TraderKindDef> allDefsListForReading2 = DefDatabase<TraderKindDef>.AllDefsListForReading;
-					for (int j = 0; j < allDefsListForReading2.Count; j++)
+					continue;
+				}
+				List<TraderKindDef> allDefsListForReading2 = DefDatabase<TraderKindDef>.AllDefsListForReading;
+				for (int j = 0; j < allDefsListForReading2.Count; j++)
+				{
+					if (allDefsListForReading2[j].WillTrade(allDefsListForReading[i]))
 					{
-						if (allDefsListForReading2[j].WillTrade(allDefsListForReading[i]))
-						{
-							return true;
-						}
+						return true;
 					}
 				}
 			}
 			return false;
 		}
-
-		
-		private ThingCategoryDef currentCategory;
-
-		
-		private bool pawnsTabOpen;
-
-		
-		private List<ThingDef> sellableItems = new List<ThingDef>();
-
-		
-		private List<TabRecord> tabs = new List<TabRecord>();
-
-		
-		private Vector2 scrollPosition;
-
-		
-		private ITrader trader;
-
-		
-		private List<ThingDef> cachedSellablePawns;
-
-		
-		private Dictionary<ThingCategoryDef, List<ThingDef>> cachedSellableItemsByCategory = new Dictionary<ThingCategoryDef, List<ThingDef>>();
-
-		
-		private const float RowHeight = 24f;
-
-		
-		private const float TitleRectHeight = 40f;
-
-		
-		private const float RestockTextHeight = 20f;
-
-		
-		private const float BottomAreaHeight = 55f;
-
-		
-		private readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
 	}
 }

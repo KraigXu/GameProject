@@ -1,116 +1,89 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 
 namespace Verse
 {
-	
 	public static class SafeSaver
 	{
-		
+		private static readonly string NewFileSuffix = ".new";
+
+		private static readonly string OldFileSuffix = ".old";
+
 		private static string GetFileFullPath(string path)
 		{
 			return Path.GetFullPath(path);
 		}
 
-		
 		private static string GetNewFileFullPath(string path)
 		{
-			return Path.GetFullPath(path + SafeSaver.NewFileSuffix);
+			return Path.GetFullPath(path + NewFileSuffix);
 		}
 
-		
 		private static string GetOldFileFullPath(string path)
 		{
-			return Path.GetFullPath(path + SafeSaver.OldFileSuffix);
+			return Path.GetFullPath(path + OldFileSuffix);
 		}
 
-		
 		public static void Save(string path, string documentElementName, Action saveAction, bool leaveOldFile = false)
 		{
 			try
 			{
-				SafeSaver.CleanSafeSaverFiles(path);
-				if (!File.Exists(SafeSaver.GetFileFullPath(path)))
+				CleanSafeSaverFiles(path);
+				if (!File.Exists(GetFileFullPath(path)))
 				{
-					SafeSaver.DoSave(SafeSaver.GetFileFullPath(path), documentElementName, saveAction);
+					DoSave(GetFileFullPath(path), documentElementName, saveAction);
 				}
 				else
 				{
-					SafeSaver.DoSave(SafeSaver.GetNewFileFullPath(path), documentElementName, saveAction);
+					DoSave(GetNewFileFullPath(path), documentElementName, saveAction);
 					try
 					{
-						SafeSaver.SafeMove(SafeSaver.GetFileFullPath(path), SafeSaver.GetOldFileFullPath(path));
+						SafeMove(GetFileFullPath(path), GetOldFileFullPath(path));
 					}
 					catch (Exception ex)
 					{
-						Log.Warning(string.Concat(new object[]
-						{
-							"Could not move file from \"",
-							SafeSaver.GetFileFullPath(path),
-							"\" to \"",
-							SafeSaver.GetOldFileFullPath(path),
-							"\": ",
-							ex
-						}), false);
+						Log.Warning("Could not move file from \"" + GetFileFullPath(path) + "\" to \"" + GetOldFileFullPath(path) + "\": " + ex);
 						throw;
 					}
 					try
 					{
-						SafeSaver.SafeMove(SafeSaver.GetNewFileFullPath(path), SafeSaver.GetFileFullPath(path));
+						SafeMove(GetNewFileFullPath(path), GetFileFullPath(path));
 					}
 					catch (Exception ex2)
 					{
-						Log.Warning(string.Concat(new object[]
-						{
-							"Could not move file from \"",
-							SafeSaver.GetNewFileFullPath(path),
-							"\" to \"",
-							SafeSaver.GetFileFullPath(path),
-							"\": ",
-							ex2
-						}), false);
-						SafeSaver.RemoveFileIfExists(SafeSaver.GetFileFullPath(path), false);
-						SafeSaver.RemoveFileIfExists(SafeSaver.GetNewFileFullPath(path), false);
+						Log.Warning("Could not move file from \"" + GetNewFileFullPath(path) + "\" to \"" + GetFileFullPath(path) + "\": " + ex2);
+						RemoveFileIfExists(GetFileFullPath(path), rethrow: false);
+						RemoveFileIfExists(GetNewFileFullPath(path), rethrow: false);
 						try
 						{
-							SafeSaver.SafeMove(SafeSaver.GetOldFileFullPath(path), SafeSaver.GetFileFullPath(path));
+							SafeMove(GetOldFileFullPath(path), GetFileFullPath(path));
 						}
 						catch (Exception ex3)
 						{
-							Log.Warning(string.Concat(new object[]
-							{
-								"Could not move file from \"",
-								SafeSaver.GetOldFileFullPath(path),
-								"\" back to \"",
-								SafeSaver.GetFileFullPath(path),
-								"\": ",
-								ex3
-							}), false);
+							Log.Warning("Could not move file from \"" + GetOldFileFullPath(path) + "\" back to \"" + GetFileFullPath(path) + "\": " + ex3);
 						}
 						throw;
 					}
 					if (!leaveOldFile)
 					{
-						SafeSaver.RemoveFileIfExists(SafeSaver.GetOldFileFullPath(path), true);
+						RemoveFileIfExists(GetOldFileFullPath(path), rethrow: true);
 					}
 				}
 			}
 			catch (Exception ex4)
 			{
-				GenUI.ErrorDialog("ProblemSavingFile".Translate(SafeSaver.GetFileFullPath(path), ex4.ToString()));
+				GenUI.ErrorDialog("ProblemSavingFile".Translate(GetFileFullPath(path), ex4.ToString()));
 				throw;
 			}
 		}
 
-		
 		private static void CleanSafeSaverFiles(string path)
 		{
-			SafeSaver.RemoveFileIfExists(SafeSaver.GetOldFileFullPath(path), true);
-			SafeSaver.RemoveFileIfExists(SafeSaver.GetNewFileFullPath(path), true);
+			RemoveFileIfExists(GetOldFileFullPath(path), rethrow: true);
+			RemoveFileIfExists(GetNewFileFullPath(path), rethrow: true);
 		}
 
-		
 		private static void DoSave(string fullPath, string documentElementName, Action saveAction)
 		{
 			try
@@ -121,20 +94,13 @@ namespace Verse
 			}
 			catch (Exception ex)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"An exception was thrown during saving to \"",
-					fullPath,
-					"\": ",
-					ex
-				}), false);
+				Log.Warning("An exception was thrown during saving to \"" + fullPath + "\": " + ex);
 				Scribe.saver.ForceStop();
-				SafeSaver.RemoveFileIfExists(fullPath, false);
+				RemoveFileIfExists(fullPath, rethrow: false);
 				throw;
 			}
 		}
 
-		
 		private static void RemoveFileIfExists(string path, bool rethrow)
 		{
 			try
@@ -146,13 +112,7 @@ namespace Verse
 			}
 			catch (Exception ex)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Could not remove file \"",
-					path,
-					"\": ",
-					ex
-				}), false);
+				Log.Warning("Could not remove file \"" + path + "\": " + ex);
 				if (rethrow)
 				{
 					throw;
@@ -160,7 +120,6 @@ namespace Verse
 			}
 		}
 
-		
 		private static void SafeMove(string from, string to)
 		{
 			Exception ex = null;
@@ -182,11 +141,5 @@ namespace Verse
 			}
 			throw ex;
 		}
-
-		
-		private static readonly string NewFileSuffix = ".new";
-
-		
-		private static readonly string OldFileSuffix = ".old";
 	}
 }

@@ -1,159 +1,138 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Letter : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Letter letter;
+
+		public bool getLookTargetsFromSignal = true;
+
+		public MapParent useColonistsOnMap;
+
+		public bool useColonistsFromCaravanArg;
+
+		public string chosenPawnSignal;
+
+		public bool filterDeadPawnsFromLookTargets;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-		
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				GlobalTargetInfo globalTargetInfo2 = this.letter.lookTargets.TryGetPrimaryTarget();
-				if (globalTargetInfo2.IsValid)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return globalTargetInfo2;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				GlobalTargetInfo globalTargetInfo = letter.lookTargets.TryGetPrimaryTarget();
+				if (globalTargetInfo.IsValid)
+				{
+					yield return globalTargetInfo;
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-		
-				IEnumerator<Faction> enumerator = null;
-				if (this.letter.relatedFaction != null)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return this.letter.relatedFaction;
+					yield return involvedFaction;
 				}
-				yield break;
-				yield break;
+				if (letter.relatedFaction != null)
+				{
+					yield return letter.relatedFaction;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				Letter letter = Gen.MemberwiseClone<Letter>(this.letter);
-				letter.ID = Find.UniqueIDsManager.GetNextLetterID();
-				ChoiceLetter choiceLetter = letter as ChoiceLetter;
-				if (choiceLetter != null)
+				return;
+			}
+			Letter letter = Gen.MemberwiseClone(this.letter);
+			letter.ID = Find.UniqueIDsManager.GetNextLetterID();
+			ChoiceLetter choiceLetter = letter as ChoiceLetter;
+			if (choiceLetter != null)
+			{
+				choiceLetter.quest = quest;
+			}
+			ChoiceLetter_ChoosePawn choiceLetter_ChoosePawn = letter as ChoiceLetter_ChoosePawn;
+			if (choiceLetter_ChoosePawn != null)
+			{
+				if (useColonistsOnMap != null && useColonistsOnMap.HasMap)
 				{
-					choiceLetter.quest = this.quest;
+					choiceLetter_ChoosePawn.pawns.Clear();
+					choiceLetter_ChoosePawn.pawns.AddRange(useColonistsOnMap.Map.mapPawns.FreeColonists);
+					choiceLetter_ChoosePawn.chosenPawnSignal = chosenPawnSignal;
 				}
-				ChoiceLetter_ChoosePawn choiceLetter_ChoosePawn = letter as ChoiceLetter_ChoosePawn;
-				if (choiceLetter_ChoosePawn != null)
+				if (useColonistsFromCaravanArg && signal.args.TryGetArg("CARAVAN", out Caravan arg) && arg != null)
 				{
-					if (this.useColonistsOnMap != null && this.useColonistsOnMap.HasMap)
-					{
-						choiceLetter_ChoosePawn.pawns.Clear();
-						choiceLetter_ChoosePawn.pawns.AddRange(this.useColonistsOnMap.Map.mapPawns.FreeColonists);
-						choiceLetter_ChoosePawn.chosenPawnSignal = this.chosenPawnSignal;
-					}
-					Caravan caravan;
-					if (this.useColonistsFromCaravanArg && signal.args.TryGetArg<Caravan>("CARAVAN", out caravan) && caravan != null)
-					{
-						choiceLetter_ChoosePawn.pawns.Clear();
-						choiceLetter_ChoosePawn.pawns.AddRange(from x in caravan.PawnsListForReading
-						where x.IsFreeColonist
-						select x);
-						choiceLetter_ChoosePawn.chosenPawnSignal = this.chosenPawnSignal;
-					}
+					choiceLetter_ChoosePawn.pawns.Clear();
+					choiceLetter_ChoosePawn.pawns.AddRange(arg.PawnsListForReading.Where((Pawn x) => x.IsFreeColonist));
+					choiceLetter_ChoosePawn.chosenPawnSignal = chosenPawnSignal;
 				}
-				LookTargets lookTargets;
-				if (this.getLookTargetsFromSignal && !letter.lookTargets.IsValid() && SignalArgsUtility.TryGetLookTargets(signal.args, "SUBJECT", out lookTargets))
+			}
+			if (getLookTargetsFromSignal && !letter.lookTargets.IsValid() && SignalArgsUtility.TryGetLookTargets(signal.args, "SUBJECT", out LookTargets lookTargets))
+			{
+				letter.lookTargets = lookTargets;
+			}
+			letter.label = signal.args.GetFormattedText(letter.label);
+			ChoiceLetter choiceLetter2 = letter as ChoiceLetter;
+			bool flag = true;
+			if (choiceLetter2 != null)
+			{
+				choiceLetter2.title = signal.args.GetFormattedText(choiceLetter2.title);
+				choiceLetter2.text = signal.args.GetFormattedText(choiceLetter2.text);
+				if (choiceLetter2.text.NullOrEmpty())
 				{
-					letter.lookTargets = lookTargets;
+					flag = false;
 				}
-				letter.label = signal.args.GetFormattedText(letter.label);
-				ChoiceLetter choiceLetter2 = letter as ChoiceLetter;
-				bool flag = true;
-				if (choiceLetter2 != null)
+			}
+			if (filterDeadPawnsFromLookTargets)
+			{
+				for (int num = letter.lookTargets.targets.Count - 1; num >= 0; num--)
 				{
-					choiceLetter2.title = signal.args.GetFormattedText(choiceLetter2.title);
-					choiceLetter2.text = signal.args.GetFormattedText(choiceLetter2.text);
-					if (choiceLetter2.text.NullOrEmpty())
+					Thing thing = letter.lookTargets.targets[num].Thing;
+					Pawn pawn = thing as Pawn;
+					if (pawn != null && pawn.Dead)
 					{
-						flag = false;
-					}
-				}
-				if (this.filterDeadPawnsFromLookTargets)
-				{
-					for (int i = letter.lookTargets.targets.Count - 1; i >= 0; i--)
-					{
-						Thing thing = letter.lookTargets.targets[i].Thing;
-						Pawn pawn = thing as Pawn;
-						if (pawn != null && pawn.Dead)
-						{
-							letter.lookTargets.targets.Remove(thing);
-						}
+						letter.lookTargets.targets.Remove(thing);
 					}
 				}
-				if (flag)
-				{
-					Find.LetterStack.ReceiveLetter(letter, null);
-				}
+			}
+			if (flag)
+			{
+				Find.LetterStack.ReceiveLetter(letter);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Deep.Look<Letter>(ref this.letter, "letter", Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.getLookTargetsFromSignal, "getLookTargetsFromSignal", true, false);
-			Scribe_References.Look<MapParent>(ref this.useColonistsOnMap, "useColonistsOnMap", false);
-			Scribe_Values.Look<bool>(ref this.useColonistsFromCaravanArg, "useColonistsFromCaravanArg", false, false);
-			Scribe_Values.Look<string>(ref this.chosenPawnSignal, "chosenPawnSignal", null, false);
-			Scribe_Values.Look<bool>(ref this.filterDeadPawnsFromLookTargets, "filterDeadPawnsFromLookTargets", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Deep.Look(ref letter, "letter");
+			Scribe_Values.Look(ref getLookTargetsFromSignal, "getLookTargetsFromSignal", defaultValue: true);
+			Scribe_References.Look(ref useColonistsOnMap, "useColonistsOnMap");
+			Scribe_Values.Look(ref useColonistsFromCaravanArg, "useColonistsFromCaravanArg", defaultValue: false);
+			Scribe_Values.Look(ref chosenPawnSignal, "chosenPawnSignal");
+			Scribe_Values.Look(ref filterDeadPawnsFromLookTargets, "filterDeadPawnsFromLookTargets", defaultValue: false);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.letter = LetterMaker.MakeLetter("Dev: Test", "Test text", LetterDefOf.PositiveEvent, null, null);
+			inSignal = "DebugSignal" + Rand.Int;
+			letter = LetterMaker.MakeLetter("Dev: Test", "Test text", LetterDefOf.PositiveEvent);
 		}
-
-		
-		public string inSignal;
-
-		
-		public Letter letter;
-
-		
-		public bool getLookTargetsFromSignal = true;
-
-		
-		public MapParent useColonistsOnMap;
-
-		
-		public bool useColonistsFromCaravanArg;
-
-		
-		public string chosenPawnSignal;
-
-		
-		public bool filterDeadPawnsFromLookTargets;
 	}
 }

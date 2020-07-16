@@ -1,128 +1,90 @@
-﻿using System;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompHibernatable : ThingComp
 	{
-		
-		
-		public CompProperties_Hibernatable Props
-		{
-			get
-			{
-				return (CompProperties_Hibernatable)this.props;
-			}
-		}
+		private HibernatableStateDef state = HibernatableStateDefOf.Hibernating;
 
-		
-		
-		
+		private int endStartupTick;
+
+		public CompProperties_Hibernatable Props => (CompProperties_Hibernatable)props;
+
 		public HibernatableStateDef State
 		{
 			get
 			{
-				return this.state;
+				return state;
 			}
 			set
 			{
-				if (this.state == value)
+				if (state != value)
 				{
-					return;
+					state = value;
+					parent.Map.info.parent.Notify_HibernatableChanged();
 				}
-				this.state = value;
-				this.parent.Map.info.parent.Notify_HibernatableChanged();
 			}
 		}
 
-		
-		
-		public bool Running
-		{
-			get
-			{
-				return this.State == HibernatableStateDefOf.Running;
-			}
-		}
+		public bool Running => State == HibernatableStateDefOf.Running;
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 			if (!respawningAfterLoad)
 			{
-				this.parent.Map.info.parent.Notify_HibernatableChanged();
+				parent.Map.info.parent.Notify_HibernatableChanged();
 			}
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
 			map.info.parent.Notify_HibernatableChanged();
 		}
 
-		
 		public void Startup()
 		{
-			if (this.State != HibernatableStateDefOf.Hibernating)
+			if (State != HibernatableStateDefOf.Hibernating)
 			{
-				Log.ErrorOnce("Attempted to start a non-hibernating object", 34361223, false);
+				Log.ErrorOnce("Attempted to start a non-hibernating object", 34361223);
 				return;
 			}
-			this.State = HibernatableStateDefOf.Starting;
-			this.endStartupTick = Mathf.RoundToInt((float)Find.TickManager.TicksGame + this.Props.startupDays * 60000f);
+			State = HibernatableStateDefOf.Starting;
+			endStartupTick = Mathf.RoundToInt((float)Find.TickManager.TicksGame + Props.startupDays * 60000f);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.State == HibernatableStateDefOf.Hibernating)
+			if (State == HibernatableStateDefOf.Hibernating)
 			{
 				return "HibernatableHibernating".Translate();
 			}
-			if (this.State == HibernatableStateDefOf.Starting)
+			if (State == HibernatableStateDefOf.Starting)
 			{
-				return string.Format("{0}: {1}", "HibernatableStartingUp".Translate(), (this.endStartupTick - Find.TickManager.TicksGame).ToStringTicksToPeriod(true, false, true, true));
+				return string.Format("{0}: {1}", "HibernatableStartingUp".Translate(), (endStartupTick - Find.TickManager.TicksGame).ToStringTicksToPeriod());
 			}
 			return null;
 		}
 
-		
 		public override void CompTick()
 		{
-			if (this.State == HibernatableStateDefOf.Starting && Find.TickManager.TicksGame > this.endStartupTick)
+			if (State == HibernatableStateDefOf.Starting && Find.TickManager.TicksGame > endStartupTick)
 			{
-				this.State = HibernatableStateDefOf.Running;
-				this.endStartupTick = 0;
-				string str;
-				if (this.parent.Map.Parent.GetComponent<EscapeShipComp>() != null)
-				{
-					str = "LetterHibernateComplete".Translate();
-				}
-				else
-				{
-					str = "LetterHibernateCompleteStandalone".Translate();
-				}
-				Find.LetterStack.ReceiveLetter("LetterLabelHibernateComplete".Translate(), str, LetterDefOf.PositiveEvent, new GlobalTargetInfo(this.parent), null, null, null, null);
+				State = HibernatableStateDefOf.Running;
+				endStartupTick = 0;
+				string str = (parent.Map.Parent.GetComponent<EscapeShipComp>() == null) ? ((string)"LetterHibernateCompleteStandalone".Translate()) : ((string)"LetterHibernateComplete".Translate());
+				Find.LetterStack.ReceiveLetter("LetterLabelHibernateComplete".Translate(), str, LetterDefOf.PositiveEvent, new GlobalTargetInfo(parent));
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Defs.Look<HibernatableStateDef>(ref this.state, "hibernateState");
-			Scribe_Values.Look<int>(ref this.endStartupTick, "hibernateendStartupTick", 0, false);
+			Scribe_Defs.Look(ref state, "hibernateState");
+			Scribe_Values.Look(ref endStartupTick, "hibernateendStartupTick", 0);
 		}
-
-		
-		private HibernatableStateDef state = HibernatableStateDefOf.Hibernating;
-
-		
-		private int endStartupTick;
 	}
 }

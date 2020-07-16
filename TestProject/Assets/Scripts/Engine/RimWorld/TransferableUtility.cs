@@ -1,26 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TransferableUtility
 	{
-		
+		private static List<Thing> tmpThings = new List<Thing>();
+
 		public static void Transfer(List<Thing> things, int count, Action<Thing, IThingHolder> transferred)
 		{
 			if (count <= 0)
 			{
 				return;
 			}
-			TransferableUtility.tmpThings.Clear();
-			TransferableUtility.tmpThings.AddRange(things);
+			tmpThings.Clear();
+			tmpThings.AddRange(things);
 			int num = count;
-			for (int i = 0; i < TransferableUtility.tmpThings.Count; i++)
+			for (int i = 0; i < tmpThings.Count; i++)
 			{
-				Thing thing = TransferableUtility.tmpThings[i];
+				Thing thing = tmpThings[i];
 				int num2 = Mathf.Min(num, thing.stackCount);
 				if (num2 > 0)
 				{
@@ -38,26 +38,25 @@ namespace RimWorld
 					}
 				}
 			}
-			TransferableUtility.tmpThings.Clear();
+			tmpThings.Clear();
 			if (num > 0)
 			{
-				Log.Error("Can't transfer things because there is nothing left.", false);
+				Log.Error("Can't transfer things because there is nothing left.");
 			}
 		}
 
-		
 		public static void TransferNoSplit(List<Thing> things, int count, Action<Thing, int> transfer, bool removeIfTakingEntireThing = true, bool errorIfNotEnoughThings = true)
 		{
 			if (count <= 0)
 			{
 				return;
 			}
-			TransferableUtility.tmpThings.Clear();
-			TransferableUtility.tmpThings.AddRange(things);
+			tmpThings.Clear();
+			tmpThings.AddRange(things);
 			int num = count;
-			for (int i = 0; i < TransferableUtility.tmpThings.Count; i++)
+			for (int i = 0; i < tmpThings.Count; i++)
 			{
-				Thing thing = TransferableUtility.tmpThings[i];
+				Thing thing = tmpThings[i];
 				int num2 = Mathf.Min(num, thing.stackCount);
 				if (num2 > 0)
 				{
@@ -73,14 +72,13 @@ namespace RimWorld
 					}
 				}
 			}
-			TransferableUtility.tmpThings.Clear();
+			tmpThings.Clear();
 			if (num > 0 && errorIfNotEnoughThings)
 			{
-				Log.Error("Can't transfer things because there is nothing left.", false);
+				Log.Error("Can't transfer things because there is nothing left.");
 			}
 		}
 
-		
 		public static bool TransferAsOne(Thing a, Thing b, TransferAsOneMode mode)
 		{
 			if (a == b)
@@ -97,7 +95,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (!TransferableUtility.CanStack(a) || !TransferableUtility.CanStack(b))
+			if (!CanStack(a) || !CanStack(b))
 			{
 				return false;
 			}
@@ -128,7 +126,23 @@ namespace RimWorld
 			{
 				Pawn innerPawn = ((Corpse)a).InnerPawn;
 				Pawn innerPawn2 = ((Corpse)b).InnerPawn;
-				return innerPawn.def == innerPawn2.def && innerPawn.kindDef == innerPawn2.kindDef && !innerPawn.RaceProps.Humanlike && !innerPawn2.RaceProps.Humanlike && (innerPawn.Name == null || innerPawn.Name.Numerical) && (innerPawn2.Name == null || innerPawn2.Name.Numerical);
+				if (innerPawn.def != innerPawn2.def)
+				{
+					return false;
+				}
+				if (innerPawn.kindDef != innerPawn2.kindDef)
+				{
+					return false;
+				}
+				if (innerPawn.RaceProps.Humanlike || innerPawn2.RaceProps.Humanlike)
+				{
+					return false;
+				}
+				if ((innerPawn.Name != null && !innerPawn.Name.Numerical) || (innerPawn2.Name != null && !innerPawn2.Name.Numerical))
+				{
+					return false;
+				}
+				return true;
 			}
 			if (a.def.category == ThingCategory.Pawn)
 			{
@@ -138,46 +152,50 @@ namespace RimWorld
 				}
 				Pawn pawn = (Pawn)a;
 				Pawn pawn2 = (Pawn)b;
-				return pawn.kindDef == pawn2.kindDef && pawn.gender == pawn2.gender && pawn.ageTracker.CurLifeStageIndex == pawn2.ageTracker.CurLifeStageIndex && Mathf.Abs(pawn.ageTracker.AgeBiologicalYearsFloat - pawn2.ageTracker.AgeBiologicalYearsFloat) <= 1f;
+				if (pawn.kindDef != pawn2.kindDef)
+				{
+					return false;
+				}
+				if (pawn.gender != pawn2.gender)
+				{
+					return false;
+				}
+				if (pawn.ageTracker.CurLifeStageIndex != pawn2.ageTracker.CurLifeStageIndex)
+				{
+					return false;
+				}
+				if (Mathf.Abs(pawn.ageTracker.AgeBiologicalYearsFloat - pawn2.ageTracker.AgeBiologicalYearsFloat) > 1f)
+				{
+					return false;
+				}
+				return true;
 			}
-			else
+			Apparel apparel = a as Apparel;
+			Apparel apparel2 = b as Apparel;
+			if (apparel != null && apparel2 != null && apparel.WornByCorpse != apparel2.WornByCorpse)
 			{
-				Apparel apparel = a as Apparel;
-				Apparel apparel2 = b as Apparel;
-				if (apparel != null && apparel2 != null && apparel.WornByCorpse != apparel2.WornByCorpse)
-				{
-					return false;
-				}
-				if (mode != TransferAsOneMode.InactiveTradeable && a.def.useHitPoints && a.def.healthAffectsPrice && Mathf.Abs(a.HitPoints - b.HitPoints) >= 10)
-				{
-					return false;
-				}
-				QualityCategory qualityCategory;
-				QualityCategory qualityCategory2;
-				if (a.TryGetQuality(out qualityCategory) && b.TryGetQuality(out qualityCategory2) && qualityCategory != qualityCategory2)
-				{
-					return false;
-				}
-				if (a.def.category == ThingCategory.Item)
-				{
-					return a.CanStackWith(b);
-				}
-				if (a.def.category == ThingCategory.Building)
-				{
-					return true;
-				}
-				Log.Error(string.Concat(new object[]
-				{
-					"Unknown TransferAsOne pair: ",
-					a,
-					", ",
-					b
-				}), false);
 				return false;
 			}
+			if (mode != TransferAsOneMode.InactiveTradeable && a.def.useHitPoints && a.def.healthAffectsPrice && Mathf.Abs(a.HitPoints - b.HitPoints) >= 10)
+			{
+				return false;
+			}
+			if (a.TryGetQuality(out QualityCategory qc) && b.TryGetQuality(out QualityCategory qc2) && qc != qc2)
+			{
+				return false;
+			}
+			if (a.def.category == ThingCategory.Item)
+			{
+				return a.CanStackWith(b);
+			}
+			if (a.def.category == ThingCategory.Building)
+			{
+				return true;
+			}
+			Log.Error("Unknown TransferAsOne pair: " + a + ", " + b);
+			return false;
 		}
 
-		
 		public static bool CanStack(Thing thing)
 		{
 			if (thing.def.category == ThingCategory.Pawn)
@@ -195,11 +213,11 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond, null) != null)
+				if (pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond) != null)
 				{
 					return false;
 				}
-				if (pawn.health.hediffSet.HasHediff(HediffDefOf.Pregnant, true))
+				if (pawn.health.hediffSet.HasHediff(HediffDefOf.Pregnant, mustBeVisible: true))
 				{
 					return false;
 				}
@@ -207,25 +225,23 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static T TransferableMatching<T>(Thing thing, List<T> transferables, TransferAsOneMode mode) where T : Transferable
 		{
 			if (thing == null || transferables == null)
 			{
-				return default(T);
+				return null;
 			}
 			for (int i = 0; i < transferables.Count; i++)
 			{
-				T t = transferables[i];
-				if (t.HasAnyThing && TransferableUtility.TransferAsOne(thing, t.AnyThing, mode))
+				T val = transferables[i];
+				if (val.HasAnyThing && TransferAsOne(thing, val.AnyThing, mode))
 				{
-					return t;
+					return val;
 				}
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		public static Tradeable TradeableMatching(Thing thing, List<Tradeable> tradeables)
 		{
 			if (thing == null || tradeables == null)
@@ -237,8 +253,8 @@ namespace RimWorld
 				Tradeable tradeable = tradeables[i];
 				if (tradeable.HasAnyThing)
 				{
-					TransferAsOneMode mode = tradeable.TraderWillTrade ? TransferAsOneMode.Normal : TransferAsOneMode.InactiveTradeable;
-					if (TransferableUtility.TransferAsOne(thing, tradeable.AnyThing, mode))
+					TransferAsOneMode mode = (!tradeable.TraderWillTrade) ? TransferAsOneMode.InactiveTradeable : TransferAsOneMode.Normal;
+					if (TransferAsOne(thing, tradeable.AnyThing, mode))
 					{
 						return tradeable;
 					}
@@ -247,7 +263,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static TransferableOneWay TransferableMatchingDesperate(Thing thing, List<TransferableOneWay> transferables, TransferAsOneMode mode)
 		{
 			if (thing == null || transferables == null)
@@ -265,7 +280,7 @@ namespace RimWorld
 			for (int j = 0; j < transferables.Count; j++)
 			{
 				TransferableOneWay transferableOneWay2 = transferables[j];
-				if (transferableOneWay2.HasAnyThing && TransferableUtility.TransferAsOne(thing, transferableOneWay2.AnyThing, mode))
+				if (transferableOneWay2.HasAnyThing && TransferAsOne(thing, transferableOneWay2.AnyThing, mode))
 				{
 					return transferableOneWay2;
 				}
@@ -284,7 +299,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static List<Pawn> GetPawnsFromTransferables(List<TransferableOneWay> transferables)
 		{
 			List<Pawn> list = new List<Pawn>();
@@ -302,7 +316,6 @@ namespace RimWorld
 			return list;
 		}
 
-		
 		public static void SimulateTradeableTransfer(List<Thing> all, List<Tradeable> tradeables, List<ThingCount> outThingsAfterTransfer)
 		{
 			outThingsAfterTransfer.Clear();
@@ -310,45 +323,40 @@ namespace RimWorld
 			{
 				outThingsAfterTransfer.Add(new ThingCount(all[i], all[i].stackCount));
 			}
-
 			for (int j = 0; j < tradeables.Count; j++)
 			{
 				int countToTransferToSource = tradeables[j].CountToTransferToSource;
 				int countToTransferToDestination = tradeables[j].CountToTransferToDestination;
 				if (countToTransferToSource > 0)
 				{
-					List<Thing> thingsTrader = tradeables[j].thingsTrader;
-					int count = countToTransferToSource;
-					Action<Thing, int> transfer = delegate (Thing originalThing, int toTake)
+					TransferNoSplit(tradeables[j].thingsTrader, countToTransferToSource, delegate(Thing originalThing, int toTake)
 					{
 						outThingsAfterTransfer.Add(new ThingCount(originalThing, toTake));
-					};
-
-					TransferableUtility.TransferNoSplit(thingsTrader, count, transfer, false, false);
+					}, removeIfTakingEntireThing: false, errorIfNotEnoughThings: false);
 				}
 				else if (countToTransferToDestination > 0)
 				{
-					List<Thing> thingsColony = tradeables[j].thingsColony;
-					int count2 = countToTransferToDestination;
-					Action<Thing, int> transfer2 = delegate (Thing originalThing, int toTake)
+					TransferNoSplit(tradeables[j].thingsColony, countToTransferToDestination, delegate(Thing originalThing, int toTake)
 					{
-						for (int k = 0; k < outThingsAfterTransfer.Count; k++)
+						int num = 0;
+						ThingCount thingCount;
+						while (true)
 						{
-							ThingCount thingCount = outThingsAfterTransfer[k];
-							if (thingCount.Thing == originalThing)
+							if (num >= outThingsAfterTransfer.Count)
 							{
-								outThingsAfterTransfer[k] = thingCount.WithCount(thingCount.Count - toTake);
 								return;
 							}
+							thingCount = outThingsAfterTransfer[num];
+							if (thingCount.Thing == originalThing)
+							{
+								break;
+							}
+							num++;
 						}
-					};
-
-					TransferableUtility.TransferNoSplit(thingsColony, count2, transfer2, false, false);
+						outThingsAfterTransfer[num] = thingCount.WithCount(thingCount.Count - toTake);
+					}, removeIfTakingEntireThing: false, errorIfNotEnoughThings: false);
 				}
 			}
 		}
-
-		
-		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

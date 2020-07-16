@@ -1,95 +1,75 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class InteractionDef : Def
 	{
-		
-		
+		private Type workerClass = typeof(InteractionWorker);
+
+		public ThingDef interactionMote;
+
+		public float socialFightBaseChance;
+
+		public ThoughtDef initiatorThought;
+
+		public SkillDef initiatorXpGainSkill;
+
+		public int initiatorXpGainAmount;
+
+		public ThoughtDef recipientThought;
+
+		public SkillDef recipientXpGainSkill;
+
+		public int recipientXpGainAmount;
+
+		[NoTranslate]
+		private string symbol;
+
+		public RulePack logRulesInitiator;
+
+		public RulePack logRulesRecipient;
+
+		[Unsaved(false)]
+		private InteractionWorker workerInt;
+
+		[Unsaved(false)]
+		private Texture2D symbolTex;
+
 		public InteractionWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (InteractionWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.interaction = this;
+					workerInt = (InteractionWorker)Activator.CreateInstance(workerClass);
+					workerInt.interaction = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
-		
 		public Texture2D Symbol
 		{
 			get
 			{
-				if (this.symbolTex == null)
+				if (symbolTex == null)
 				{
-					this.symbolTex = ContentFinder<Texture2D>.Get(this.symbol, true);
+					symbolTex = ContentFinder<Texture2D>.Get(symbol);
 				}
-				return this.symbolTex;
+				return symbolTex;
 			}
 		}
 
-		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
-			if (this.interactionMote == null)
+			if (interactionMote == null)
 			{
-				this.interactionMote = ThingDefOf.Mote_Speech;
+				interactionMote = ThingDefOf.Mote_Speech;
 			}
 		}
-
-		
-		private Type workerClass = typeof(InteractionWorker);
-
-		
-		public ThingDef interactionMote;
-
-		
-		public float socialFightBaseChance;
-
-		
-		public ThoughtDef initiatorThought;
-
-		
-		public SkillDef initiatorXpGainSkill;
-
-		
-		public int initiatorXpGainAmount;
-
-		
-		public ThoughtDef recipientThought;
-
-		
-		public SkillDef recipientXpGainSkill;
-
-		
-		public int recipientXpGainAmount;
-
-		
-		[NoTranslate]
-		private string symbol;
-
-		
-		public RulePack logRulesInitiator;
-
-		
-		public RulePack logRulesRecipient;
-
-		
-		[Unsaved(false)]
-		private InteractionWorker workerInt;
-
-		
-		[Unsaved(false)]
-		private Texture2D symbolTex;
 	}
 }

@@ -1,74 +1,41 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordToil_PrisonerEscape : LordToil_Travel
 	{
-		
-		
-		public override IntVec3 FlagLoc
-		{
-			get
-			{
-				return this.Data.dest;
-			}
-		}
+		private int sapperThingID;
 
-		
-		
-		private LordToilData_Travel Data
-		{
-			get
-			{
-				return (LordToilData_Travel)this.data;
-			}
-		}
+		public override IntVec3 FlagLoc => Data.dest;
 
-		
-		
-		public override bool AllowSatisfyLongNeeds
-		{
-			get
-			{
-				return false;
-			}
-		}
+		private LordToilData_Travel Data => (LordToilData_Travel)data;
 
-		
-		
-		protected override float AllArrivedCheckRadius
-		{
-			get
-			{
-				return 14f;
-			}
-		}
+		public override bool AllowSatisfyLongNeeds => false;
 
-		
-		public LordToil_PrisonerEscape(IntVec3 dest, int sapperThingID) : base(dest)
+		protected override float AllArrivedCheckRadius => 14f;
+
+		public LordToil_PrisonerEscape(IntVec3 dest, int sapperThingID)
+			: base(dest)
 		{
 			this.sapperThingID = sapperThingID;
 		}
 
-		
 		public override void UpdateAllDuties()
 		{
-			LordToilData_Travel data = this.Data;
-			Pawn leader = this.GetLeader();
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			LordToilData_Travel data = Data;
+			Pawn leader = GetLeader();
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn pawn = this.lord.ownedPawns[i];
-				if (this.IsSapper(pawn))
+				Pawn pawn = lord.ownedPawns[i];
+				if (IsSapper(pawn))
 				{
-					pawn.mindState.duty = new PawnDuty(DutyDefOf.PrisonerEscapeSapper, data.dest, -1f);
+					pawn.mindState.duty = new PawnDuty(DutyDefOf.PrisonerEscapeSapper, data.dest);
 				}
 				else if (leader == null || pawn == leader)
 				{
-					pawn.mindState.duty = new PawnDuty(DutyDefOf.PrisonerEscape, data.dest, -1f);
+					pawn.mindState.duty = new PawnDuty(DutyDefOf.PrisonerEscape, data.dest);
 				}
 				else
 				{
@@ -77,43 +44,37 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void LordToilTick()
 		{
 			base.LordToilTick();
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				this.lord.ownedPawns[i].guilt.Notify_Guilty();
+				lord.ownedPawns[i].guilt.Notify_Guilty();
 			}
 		}
 
-		
 		private Pawn GetLeader()
 		{
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				if (!this.lord.ownedPawns[i].Downed && this.IsSapper(this.lord.ownedPawns[i]))
+				if (!lord.ownedPawns[i].Downed && IsSapper(lord.ownedPawns[i]))
 				{
-					return this.lord.ownedPawns[i];
+					return lord.ownedPawns[i];
 				}
 			}
-			for (int j = 0; j < this.lord.ownedPawns.Count; j++)
+			for (int j = 0; j < lord.ownedPawns.Count; j++)
 			{
-				if (!this.lord.ownedPawns[j].Downed)
+				if (!lord.ownedPawns[j].Downed)
 				{
-					return this.lord.ownedPawns[j];
+					return lord.ownedPawns[j];
 				}
 			}
 			return null;
 		}
 
-		
 		private bool IsSapper(Pawn p)
 		{
-			return p.thingIDNumber == this.sapperThingID;
+			return p.thingIDNumber == sapperThingID;
 		}
-
-		
-		private int sapperThingID;
 	}
 }

@@ -1,17 +1,12 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class CompProperties_AbilitySmokepop : CompProperties_AbilityEffect
 	{
-		
+		public float smokeRadius;
+
 		public CompProperties_AbilitySmokepop()
 		{
-			this.compClass = typeof(CompAbilityEffect_Smokepop);
+			compClass = typeof(CompAbilityEffect_Smokepop);
 		}
-
-		
-		public float smokeRadius;
 	}
 }

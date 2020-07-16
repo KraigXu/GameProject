@@ -1,31 +1,30 @@
-﻿using System;
-using System.Xml;
 using RimWorld;
+using System;
+using System.Xml;
 
 namespace Verse
 {
-	
 	public class BackCompatibilityConverter_0_19 : BackCompatibilityConverter
 	{
-		
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
-			return majorVer == 0 && minorVer <= 19;
+			if (majorVer == 0)
+			{
+				return minorVer <= 19;
+			}
+			return false;
 		}
 
-		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			return null;
 		}
 
-		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			return null;
 		}
 
-		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.LoadingVars)

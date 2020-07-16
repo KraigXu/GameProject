@@ -1,13 +1,12 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_PsychicEmanatorSoothe : ThoughtWorker
 	{
-		
+		private const float Radius = 15f;
+
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (!p.Spawned)
@@ -25,8 +24,5 @@ namespace RimWorld
 			}
 			return false;
 		}
-
-		
-		private const float Radius = 15f;
 	}
 }

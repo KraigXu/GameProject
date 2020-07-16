@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,10 +5,10 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public static class AreaAllowedGUI
 	{
-		
+		private static bool dragging;
+
 		public static void DoAllowedAreaSelectors(Rect rect, Pawn p)
 		{
 			if (Find.CurrentMap == null)
@@ -28,14 +27,14 @@ namespace RimWorld
 			float num2 = rect.width / (float)num;
 			Text.WordWrap = false;
 			Text.Font = GameFont.Tiny;
-			AreaAllowedGUI.DoAreaSelector(new Rect(rect.x + 0f, rect.y, num2, rect.height), p, null);
+			DoAreaSelector(new Rect(rect.x + 0f, rect.y, num2, rect.height), p, null);
 			int num3 = 1;
 			for (int j = 0; j < allAreas.Count; j++)
 			{
 				if (allAreas[j].AssignableAsAllowed())
 				{
 					float num4 = (float)num3 * num2;
-					AreaAllowedGUI.DoAreaSelector(new Rect(rect.x + num4, rect.y, num2, rect.height), p, allAreas[j]);
+					DoAreaSelector(new Rect(rect.x + num4, rect.y, num2, rect.height), p, allAreas[j]);
 					num3++;
 				}
 			}
@@ -43,7 +42,6 @@ namespace RimWorld
 			Text.Font = GameFont.Small;
 		}
 
-		
 		private static void DoAreaSelector(Rect rect, Pawn p, Area area)
 		{
 			MouseoverSounds.DoRegion(rect);
@@ -61,33 +59,27 @@ namespace RimWorld
 			}
 			if (Event.current.rawType == EventType.MouseUp && Event.current.button == 0)
 			{
-				AreaAllowedGUI.dragging = false;
+				dragging = false;
 			}
-			if (!Input.GetMouseButton(0) && Event.current.type != EventType.MouseDown)
+			if (!Input.GetMouseButton(0) && Event.current.type != 0)
 			{
-				AreaAllowedGUI.dragging = false;
+				dragging = false;
 			}
 			if (Mouse.IsOver(rect))
 			{
-				if (area != null)
-				{
-					area.MarkForDraw();
-				}
+				area?.MarkForDraw();
 				if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
 				{
-					AreaAllowedGUI.dragging = true;
+					dragging = true;
 				}
-				if (AreaAllowedGUI.dragging && p.playerSettings.AreaRestriction != area)
+				if (dragging && p.playerSettings.AreaRestriction != area)
 				{
 					p.playerSettings.AreaRestriction = area;
-					SoundDefOf.Designate_DragStandard_Changed.PlayOneShotOnCamera(null);
+					SoundDefOf.Designate_DragStandard_Changed.PlayOneShotOnCamera();
 				}
 			}
 			Text.Anchor = TextAnchor.UpperLeft;
 			TooltipHandler.TipRegion(rect, text);
 		}
-
-		
-		private static bool dragging;
 	}
 }

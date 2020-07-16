@@ -1,31 +1,20 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class BedUtility
 	{
-		
 		public static int GetSleepingSlotsCount(IntVec2 bedSize)
 		{
 			return bedSize.x;
 		}
 
-		
 		public static IntVec3 GetSleepingSlotPos(int index, IntVec3 bedCenter, Rot4 bedRot, IntVec2 bedSize)
 		{
-			int sleepingSlotsCount = BedUtility.GetSleepingSlotsCount(bedSize);
+			int sleepingSlotsCount = GetSleepingSlotsCount(bedSize);
 			if (index < 0 || index >= sleepingSlotsCount)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Tried to get sleeping slot pos with index ",
-					index,
-					", but there are only ",
-					sleepingSlotsCount,
-					" sleeping slots available."
-				}), false);
+				Log.Error("Tried to get sleeping slot pos with index " + index + ", but there are only " + sleepingSlotsCount + " sleeping slots available.");
 				return bedCenter;
 			}
 			CellRect cellRect = GenAdj.OccupiedRect(bedCenter, bedRot, bedSize);

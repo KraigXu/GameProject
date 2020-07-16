@@ -1,86 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Blueprint_Build : Blueprint
 	{
-		
-		
+		public ThingDef stuffToUse;
+
 		public override string Label
 		{
 			get
 			{
-				string label = this.def.entityDefToBuild.label;
-				if (this.stuffToUse != null)
+				string label = def.entityDefToBuild.label;
+				if (stuffToUse != null)
 				{
-					return "ThingMadeOfStuffLabel".Translate(this.stuffToUse.LabelAsStuff, label) + "BlueprintLabelExtra".Translate();
+					return "ThingMadeOfStuffLabel".Translate(stuffToUse.LabelAsStuff, label) + "BlueprintLabelExtra".Translate();
 				}
 				return label + "BlueprintLabelExtra".Translate();
 			}
 		}
 
-		
-		
-		protected override float WorkTotal
-		{
-			get
-			{
-				return this.def.entityDefToBuild.GetStatValueAbstract(StatDefOf.WorkToBuild, this.stuffToUse);
-			}
-		}
+		protected override float WorkTotal => def.entityDefToBuild.GetStatValueAbstract(StatDefOf.WorkToBuild, stuffToUse);
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<ThingDef>(ref this.stuffToUse, "stuffToUse");
+			Scribe_Defs.Look(ref stuffToUse, "stuffToUse");
 		}
 
-		
 		public override ThingDef EntityToBuildStuff()
 		{
-			return this.stuffToUse;
+			return stuffToUse;
 		}
 
-		
 		public override List<ThingDefCountClass> MaterialsNeeded()
 		{
-			return this.def.entityDefToBuild.CostListAdjusted(this.stuffToUse, true);
+			return def.entityDefToBuild.CostListAdjusted(stuffToUse);
 		}
 
-		
 		protected override Thing MakeSolidThing()
 		{
-			return ThingMaker.MakeThing(this.def.entityDefToBuild.frameDef, this.stuffToUse);
+			return ThingMaker.MakeThing(def.entityDefToBuild.frameDef, stuffToUse);
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			Command command = BuildCopyCommandUtility.BuildCopyCommand(this.def.entityDefToBuild, this.stuffToUse);
+			foreach (Gizmo gizmo in base.GetGizmos())
+			{
+				yield return gizmo;
+			}
+			Command command = BuildCopyCommandUtility.BuildCopyCommand(def.entityDefToBuild, stuffToUse);
 			if (command != null)
 			{
 				yield return command;
 			}
 			if (base.Faction == Faction.OfPlayer)
 			{
-				foreach (Command command2 in BuildFacilityCommandUtility.BuildFacilityCommands(this.def.entityDefToBuild))
+				foreach (Command item in BuildFacilityCommandUtility.BuildFacilityCommands(def.entityDefToBuild))
 				{
-					yield return command2;
+					yield return item;
 				}
-				IEnumerator<Command> enumerator2 = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -91,19 +74,16 @@ namespace RimWorld
 			}
 			stringBuilder.AppendLine("ContainedResources".Translate() + ":");
 			bool flag = true;
-			foreach (ThingDefCountClass thingDefCountClass in this.MaterialsNeeded())
+			foreach (ThingDefCountClass item in MaterialsNeeded())
 			{
 				if (!flag)
 				{
 					stringBuilder.AppendLine();
 				}
-				stringBuilder.Append(thingDefCountClass.thingDef.LabelCap + ": 0 / " + thingDefCountClass.count);
+				stringBuilder.Append((string)(item.thingDef.LabelCap + ": 0 / ") + item.count);
 				flag = false;
 			}
 			return stringBuilder.ToString().Trim();
 		}
-
-		
-		public ThingDef stuffToUse;
 	}
 }

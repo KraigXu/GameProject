@@ -1,14 +1,10 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_Install : Designator_Place
 	{
-		
-		
 		private Thing MiniToInstallOrBuildingToReinstall
 		{
 			get
@@ -27,43 +23,17 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		private Thing ThingToInstall
-		{
-			get
-			{
-				return this.MiniToInstallOrBuildingToReinstall.GetInnerIfMinified();
-			}
-		}
+		private Thing ThingToInstall => MiniToInstallOrBuildingToReinstall.GetInnerIfMinified();
 
-		
-		
-		protected override bool DoTooltip
-		{
-			get
-			{
-				return true;
-			}
-		}
+		protected override bool DoTooltip => true;
 
-		
-		
-		public override BuildableDef PlacingDef
-		{
-			get
-			{
-				return this.ThingToInstall.def;
-			}
-		}
+		public override BuildableDef PlacingDef => ThingToInstall.def;
 
-		
-		
 		public override string Label
 		{
 			get
 			{
-				if (this.MiniToInstallOrBuildingToReinstall is MinifiedThing)
+				if (MiniToInstallOrBuildingToReinstall is MinifiedThing)
 				{
 					return "CommandInstall".Translate();
 				}
@@ -71,13 +41,11 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override string Desc
 		{
 			get
 			{
-				if (this.MiniToInstallOrBuildingToReinstall is MinifiedThing)
+				if (MiniToInstallOrBuildingToReinstall is MinifiedThing)
 				{
 					return "CommandInstallDesc".Translate();
 				}
@@ -85,109 +53,99 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		public override Color IconDrawColor
-		{
-			get
-			{
-				return Color.white;
-			}
-		}
+		public override Color IconDrawColor => Color.white;
 
-		
-		
 		public override bool Visible
 		{
 			get
 			{
-				return Find.Selector.SingleSelectedThing != null && base.Visible;
+				if (Find.Selector.SingleSelectedThing == null)
+				{
+					return false;
+				}
+				return base.Visible;
 			}
 		}
 
-		
 		public Designator_Install()
 		{
-			this.icon = TexCommand.Install;
-			this.iconProportions = new Vector2(1f, 1f);
-			this.order = -10f;
+			icon = TexCommand.Install;
+			iconProportions = new Vector2(1f, 1f);
+			order = -10f;
 		}
 
-		
 		public override bool CanRemainSelected()
 		{
-			return this.MiniToInstallOrBuildingToReinstall != null;
+			return MiniToInstallOrBuildingToReinstall != null;
 		}
 
-		
 		public override void ProcessInput(Event ev)
 		{
-			Thing miniToInstallOrBuildingToReinstall = this.MiniToInstallOrBuildingToReinstall;
+			Thing miniToInstallOrBuildingToReinstall = MiniToInstallOrBuildingToReinstall;
 			if (miniToInstallOrBuildingToReinstall != null)
 			{
 				InstallBlueprintUtility.CancelBlueprintsFor(miniToInstallOrBuildingToReinstall);
-				if (!((ThingDef)this.PlacingDef).rotatable)
+				if (!((ThingDef)PlacingDef).rotatable)
 				{
-					this.placingRot = Rot4.North;
+					placingRot = Rot4.North;
 				}
 			}
 			base.ProcessInput(ev);
 		}
 
-		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
 			{
 				return false;
 			}
-			if (!(this.MiniToInstallOrBuildingToReinstall is MinifiedThing) && c.GetThingList(base.Map).Find((Thing x) => x.Position == c && x.Rotation == this.placingRot && x.def == this.PlacingDef) != null)
+			if (!(MiniToInstallOrBuildingToReinstall is MinifiedThing) && c.GetThingList(base.Map).Find((Thing x) => x.Position == c && x.Rotation == placingRot && x.def == PlacingDef) != null)
 			{
 				return new AcceptanceReport("IdenticalThingExists".Translate());
 			}
-			return GenConstruct.CanPlaceBlueprintAt(this.PlacingDef, c, this.placingRot, base.Map, false, this.MiniToInstallOrBuildingToReinstall, this.ThingToInstall, null);
+			return GenConstruct.CanPlaceBlueprintAt(PlacingDef, c, placingRot, base.Map, godMode: false, MiniToInstallOrBuildingToReinstall, ThingToInstall);
 		}
 
-		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
-			GenSpawn.WipeExistingThings(c, this.placingRot, this.PlacingDef.installBlueprintDef, base.Map, DestroyMode.Deconstruct);
-			MinifiedThing minifiedThing = this.MiniToInstallOrBuildingToReinstall as MinifiedThing;
+			GenSpawn.WipeExistingThings(c, placingRot, PlacingDef.installBlueprintDef, base.Map, DestroyMode.Deconstruct);
+			MinifiedThing minifiedThing = MiniToInstallOrBuildingToReinstall as MinifiedThing;
 			if (minifiedThing != null)
 			{
-				GenConstruct.PlaceBlueprintForInstall(minifiedThing, c, base.Map, this.placingRot, Faction.OfPlayer);
+				GenConstruct.PlaceBlueprintForInstall(minifiedThing, c, base.Map, placingRot, Faction.OfPlayer);
 			}
 			else
 			{
-				GenConstruct.PlaceBlueprintForReinstall((Building)this.MiniToInstallOrBuildingToReinstall, c, base.Map, this.placingRot, Faction.OfPlayer);
+				GenConstruct.PlaceBlueprintForReinstall((Building)MiniToInstallOrBuildingToReinstall, c, base.Map, placingRot, Faction.OfPlayer);
 			}
-			MoteMaker.ThrowMetaPuffs(GenAdj.OccupiedRect(c, this.placingRot, this.PlacingDef.Size), base.Map);
+			MoteMaker.ThrowMetaPuffs(GenAdj.OccupiedRect(c, placingRot, PlacingDef.Size), base.Map);
 			Find.DesignatorManager.Deselect();
 		}
 
-		
 		protected override void DrawGhost(Color ghostCol)
 		{
 			ThingDef def;
-			if ((def = (this.PlacingDef as ThingDef)) != null)
+			if ((def = (PlacingDef as ThingDef)) != null)
 			{
-				MeditationUtility.DrawMeditationFociAffectedByBuildingOverlay(base.Map, def, Faction.OfPlayer, UI.MouseCell(), this.placingRot);
+				MeditationUtility.DrawMeditationFociAffectedByBuildingOverlay(base.Map, def, Faction.OfPlayer, UI.MouseCell(), placingRot);
 			}
-			Graphic baseGraphic = this.ThingToInstall.Graphic.ExtractInnerGraphicFor(this.ThingToInstall);
-			GhostDrawer.DrawGhostThing(UI.MouseCell(), this.placingRot, (ThingDef)this.PlacingDef, baseGraphic, ghostCol, AltitudeLayer.Blueprint, this.ThingToInstall);
+			Graphic baseGraphic = ThingToInstall.Graphic.ExtractInnerGraphicFor(ThingToInstall);
+			GhostDrawer.DrawGhostThing(UI.MouseCell(), placingRot, (ThingDef)PlacingDef, baseGraphic, ghostCol, AltitudeLayer.Blueprint, ThingToInstall);
 		}
 
-		
 		protected override bool CanDrawNumbersBetween(Thing thing, ThingDef def, IntVec3 a, IntVec3 b, Map map)
 		{
-			return this.ThingToInstall != thing && !GenThing.CloserThingBetween(def, a, b, map, this.ThingToInstall);
+			if (ThingToInstall != thing)
+			{
+				return !GenThing.CloserThingBetween(def, a, b, map, ThingToInstall);
+			}
+			return false;
 		}
 
-		
 		public override void SelectedUpdate()
 		{
 			base.SelectedUpdate();
-			BuildDesignatorUtility.TryDrawPowerGridAndAnticipatedConnection(this.PlacingDef, this.placingRot);
+			BuildDesignatorUtility.TryDrawPowerGridAndAnticipatedConnection(PlacingDef, placingRot);
 		}
 	}
 }

@@ -1,637 +1,532 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public static class Prefs
 	{
-		
-		
-		
+		private static PrefsData data;
+
 		public static float VolumeGame
 		{
 			get
 			{
-				return Prefs.data.volumeGame;
+				return data.volumeGame;
 			}
 			set
 			{
-				if (Prefs.data.volumeGame == value)
+				if (data.volumeGame != value)
 				{
-					return;
+					data.volumeGame = value;
+					Apply();
 				}
-				Prefs.data.volumeGame = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static float VolumeMusic
 		{
 			get
 			{
-				return Prefs.data.volumeMusic;
+				return data.volumeMusic;
 			}
 			set
 			{
-				if (Prefs.data.volumeMusic == value)
+				if (data.volumeMusic != value)
 				{
-					return;
+					data.volumeMusic = value;
+					Apply();
 				}
-				Prefs.data.volumeMusic = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static float VolumeAmbient
 		{
 			get
 			{
-				return Prefs.data.volumeAmbient;
+				return data.volumeAmbient;
 			}
 			set
 			{
-				if (Prefs.data.volumeAmbient == value)
+				if (data.volumeAmbient != value)
 				{
-					return;
+					data.volumeAmbient = value;
+					Apply();
 				}
-				Prefs.data.volumeAmbient = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool ExtremeDifficultyUnlocked
 		{
 			get
 			{
-				return Prefs.data.extremeDifficultyUnlocked;
+				return data.extremeDifficultyUnlocked;
 			}
 			set
 			{
-				if (Prefs.data.extremeDifficultyUnlocked == value)
+				if (data.extremeDifficultyUnlocked != value)
 				{
-					return;
+					data.extremeDifficultyUnlocked = value;
+					Apply();
 				}
-				Prefs.data.extremeDifficultyUnlocked = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool AdaptiveTrainingEnabled
 		{
 			get
 			{
-				return Prefs.data.adaptiveTrainingEnabled;
+				return data.adaptiveTrainingEnabled;
 			}
 			set
 			{
-				if (Prefs.data.adaptiveTrainingEnabled == value)
+				if (data.adaptiveTrainingEnabled != value)
 				{
-					return;
+					data.adaptiveTrainingEnabled = value;
+					Apply();
 				}
-				Prefs.data.adaptiveTrainingEnabled = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool EdgeScreenScroll
 		{
 			get
 			{
-				return Prefs.data.edgeScreenScroll;
+				return data.edgeScreenScroll;
 			}
 			set
 			{
-				if (Prefs.data.edgeScreenScroll == value)
+				if (data.edgeScreenScroll != value)
 				{
-					return;
+					data.edgeScreenScroll = value;
+					Apply();
 				}
-				Prefs.data.edgeScreenScroll = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool RunInBackground
 		{
 			get
 			{
-				return Prefs.data.runInBackground;
+				return data.runInBackground;
 			}
 			set
 			{
-				if (Prefs.data.runInBackground == value)
+				if (data.runInBackground != value)
 				{
-					return;
+					data.runInBackground = value;
+					Apply();
 				}
-				Prefs.data.runInBackground = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static TemperatureDisplayMode TemperatureMode
 		{
 			get
 			{
-				return Prefs.data.temperatureMode;
+				return data.temperatureMode;
 			}
 			set
 			{
-				if (Prefs.data.temperatureMode == value)
+				if (data.temperatureMode != value)
 				{
-					return;
+					data.temperatureMode = value;
+					Apply();
 				}
-				Prefs.data.temperatureMode = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static float AutosaveIntervalDays
 		{
 			get
 			{
-				return Prefs.data.autosaveIntervalDays;
+				return data.autosaveIntervalDays;
 			}
 			set
 			{
-				if (Prefs.data.autosaveIntervalDays == value)
+				if (data.autosaveIntervalDays != value)
 				{
-					return;
+					data.autosaveIntervalDays = value;
+					Apply();
 				}
-				Prefs.data.autosaveIntervalDays = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool CustomCursorEnabled
 		{
 			get
 			{
-				return Prefs.data.customCursorEnabled;
+				return data.customCursorEnabled;
 			}
 			set
 			{
-				if (Prefs.data.customCursorEnabled == value)
+				if (data.customCursorEnabled != value)
 				{
-					return;
+					data.customCursorEnabled = value;
+					Apply();
 				}
-				Prefs.data.customCursorEnabled = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static AnimalNameDisplayMode AnimalNameMode
 		{
 			get
 			{
-				return Prefs.data.animalNameMode;
+				return data.animalNameMode;
 			}
 			set
 			{
-				if (Prefs.data.animalNameMode == value)
+				if (data.animalNameMode != value)
 				{
-					return;
+					data.animalNameMode = value;
+					Apply();
 				}
-				Prefs.data.animalNameMode = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool DevMode
 		{
 			get
 			{
-				return Prefs.data == null || Prefs.data.devMode;
+				if (data == null)
+				{
+					return true;
+				}
+				return data.devMode;
 			}
 			set
 			{
-				if (Prefs.data.devMode == value)
+				if (data.devMode != value)
 				{
-					return;
+					data.devMode = value;
+					if (!data.devMode)
+					{
+						data.logVerbose = false;
+						data.resetModsConfigOnCrash = true;
+						DebugSettings.godMode = false;
+					}
+					Apply();
 				}
-				Prefs.data.devMode = value;
-				if (!Prefs.data.devMode)
-				{
-					Prefs.data.logVerbose = false;
-					Prefs.data.resetModsConfigOnCrash = true;
-					DebugSettings.godMode = false;
-				}
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool ResetModsConfigOnCrash
 		{
 			get
 			{
-				return Prefs.data == null || Prefs.data.resetModsConfigOnCrash;
+				if (data == null)
+				{
+					return true;
+				}
+				return data.resetModsConfigOnCrash;
 			}
 			set
 			{
-				if (Prefs.data.resetModsConfigOnCrash == value)
+				if (data.resetModsConfigOnCrash != value)
 				{
-					return;
+					data.resetModsConfigOnCrash = value;
+					Apply();
 				}
-				Prefs.data.resetModsConfigOnCrash = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool SimulateNotOwningRoyalty
 		{
 			get
 			{
-				return Prefs.data == null || Prefs.data.simulateNotOwningRoyalty;
+				if (data == null)
+				{
+					return true;
+				}
+				return data.simulateNotOwningRoyalty;
 			}
 			set
 			{
-				if (Prefs.data.simulateNotOwningRoyalty == value)
+				if (data.simulateNotOwningRoyalty != value)
 				{
-					return;
+					data.simulateNotOwningRoyalty = value;
+					Apply();
 				}
-				Prefs.data.simulateNotOwningRoyalty = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static List<string> PreferredNames
 		{
 			get
 			{
-				return Prefs.data.preferredNames;
+				return data.preferredNames;
 			}
 			set
 			{
-				if (Prefs.data.preferredNames == value)
+				if (data.preferredNames != value)
 				{
-					return;
+					data.preferredNames = value;
+					Apply();
 				}
-				Prefs.data.preferredNames = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static string LangFolderName
 		{
 			get
 			{
-				return Prefs.data.langFolderName;
+				return data.langFolderName;
 			}
 			set
 			{
-				if (Prefs.data.langFolderName == value)
+				if (!(data.langFolderName == value))
 				{
-					return;
+					data.langFolderName = value;
+					Apply();
 				}
-				Prefs.data.langFolderName = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool LogVerbose
 		{
 			get
 			{
-				return Prefs.data.logVerbose;
+				return data.logVerbose;
 			}
 			set
 			{
-				if (Prefs.data.logVerbose == value)
+				if (data.logVerbose != value)
 				{
-					return;
+					data.logVerbose = value;
+					Apply();
 				}
-				Prefs.data.logVerbose = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static bool PauseOnError
 		{
 			get
 			{
-				return Prefs.data != null && Prefs.data.pauseOnError;
+				if (data == null)
+				{
+					return false;
+				}
+				return data.pauseOnError;
 			}
 			set
 			{
-				Prefs.data.pauseOnError = value;
+				data.pauseOnError = value;
 			}
 		}
 
-		
-		
-		
 		public static bool PauseOnLoad
 		{
 			get
 			{
-				return Prefs.data.pauseOnLoad;
+				return data.pauseOnLoad;
 			}
 			set
 			{
-				Prefs.data.pauseOnLoad = value;
+				data.pauseOnLoad = value;
 			}
 		}
 
-		
-		
-		
 		public static AutomaticPauseMode AutomaticPauseMode
 		{
 			get
 			{
-				return Prefs.data.automaticPauseMode;
+				return data.automaticPauseMode;
 			}
 			set
 			{
-				Prefs.data.automaticPauseMode = value;
+				data.automaticPauseMode = value;
 			}
 		}
 
-		
-		
-		
 		public static bool ShowRealtimeClock
 		{
 			get
 			{
-				return Prefs.data.showRealtimeClock;
+				return data.showRealtimeClock;
 			}
 			set
 			{
-				Prefs.data.showRealtimeClock = value;
+				data.showRealtimeClock = value;
 			}
 		}
 
-		
-		
-		
 		public static bool TestMapSizes
 		{
 			get
 			{
-				return Prefs.data.testMapSizes;
+				return data.testMapSizes;
 			}
 			set
 			{
-				Prefs.data.testMapSizes = value;
+				data.testMapSizes = value;
 			}
 		}
 
-		
-		
-		
 		public static int MaxNumberOfPlayerSettlements
 		{
 			get
 			{
-				return Prefs.data.maxNumberOfPlayerSettlements;
+				return data.maxNumberOfPlayerSettlements;
 			}
 			set
 			{
-				Prefs.data.maxNumberOfPlayerSettlements = value;
+				data.maxNumberOfPlayerSettlements = value;
 			}
 		}
 
-		
-		
-		
 		public static bool PlantWindSway
 		{
 			get
 			{
-				return Prefs.data.plantWindSway;
+				return data.plantWindSway;
 			}
 			set
 			{
-				Prefs.data.plantWindSway = value;
+				data.plantWindSway = value;
 			}
 		}
 
-		
-		
-		
 		public static bool ResourceReadoutCategorized
 		{
 			get
 			{
-				return Prefs.data.resourceReadoutCategorized;
+				return data.resourceReadoutCategorized;
 			}
 			set
 			{
-				if (value == Prefs.data.resourceReadoutCategorized)
+				if (value != data.resourceReadoutCategorized)
 				{
-					return;
+					data.resourceReadoutCategorized = value;
+					Save();
 				}
-				Prefs.data.resourceReadoutCategorized = value;
-				Prefs.Save();
 			}
 		}
 
-		
-		
-		
 		public static float UIScale
 		{
 			get
 			{
-				return Prefs.data.uiScale;
+				return data.uiScale;
 			}
 			set
 			{
-				Prefs.data.uiScale = value;
+				data.uiScale = value;
 			}
 		}
 
-		
-		
-		
 		public static int ScreenWidth
 		{
 			get
 			{
-				return Prefs.data.screenWidth;
+				return data.screenWidth;
 			}
 			set
 			{
-				Prefs.data.screenWidth = value;
+				data.screenWidth = value;
 			}
 		}
 
-		
-		
-		
 		public static int ScreenHeight
 		{
 			get
 			{
-				return Prefs.data.screenHeight;
+				return data.screenHeight;
 			}
 			set
 			{
-				Prefs.data.screenHeight = value;
+				data.screenHeight = value;
 			}
 		}
 
-		
-		
-		
 		public static bool FullScreen
 		{
 			get
 			{
-				return Prefs.data.fullscreen;
+				return data.fullscreen;
 			}
 			set
 			{
-				Prefs.data.fullscreen = value;
+				data.fullscreen = value;
 			}
 		}
 
-		
-		
-		
 		public static bool HatsOnlyOnMap
 		{
 			get
 			{
-				return Prefs.data.hatsOnlyOnMap;
+				return data.hatsOnlyOnMap;
 			}
 			set
 			{
-				if (Prefs.data.hatsOnlyOnMap == value)
+				if (data.hatsOnlyOnMap != value)
 				{
-					return;
+					data.hatsOnlyOnMap = value;
+					Apply();
 				}
-				Prefs.data.hatsOnlyOnMap = value;
-				Prefs.Apply();
 			}
 		}
 
-		
-		
-		
 		public static float MapDragSensitivity
 		{
 			get
 			{
-				return Prefs.data.mapDragSensitivity;
+				return data.mapDragSensitivity;
 			}
 			set
 			{
-				Prefs.data.mapDragSensitivity = value;
+				data.mapDragSensitivity = value;
 			}
 		}
 
-		
 		public static void Init()
 		{
-			bool flag = !new FileInfo(GenFilePaths.PrefsFilePath).Exists;
-			Prefs.data = new PrefsData();
-			Prefs.data = DirectXmlLoader.ItemFromXmlFile<PrefsData>(GenFilePaths.PrefsFilePath, true);
-			BackCompatibility.PrefsDataPostLoad(Prefs.data);
-			if (flag)
+			bool num = !new FileInfo(GenFilePaths.PrefsFilePath).Exists;
+			data = new PrefsData();
+			data = DirectXmlLoader.ItemFromXmlFile<PrefsData>(GenFilePaths.PrefsFilePath);
+			BackCompatibility.PrefsDataPostLoad(data);
+			if (num)
 			{
-				Prefs.data.langFolderName = LanguageDatabase.SystemLanguageFolderName();
-				Prefs.data.uiScale = ResolutionUtility.GetRecommendedUIScale(Prefs.data.screenWidth, Prefs.data.screenHeight);
+				data.langFolderName = LanguageDatabase.SystemLanguageFolderName();
+				data.uiScale = ResolutionUtility.GetRecommendedUIScale(data.screenWidth, data.screenHeight);
 			}
 			if (DevModePermanentlyDisabledUtility.Disabled)
 			{
-				Prefs.DevMode = false;
+				DevMode = false;
 			}
-			Prefs.Apply();
+			Apply();
 		}
 
-		
 		public static void Save()
 		{
 			try
 			{
-				XDocument xdocument = new XDocument();
-				XElement content = DirectXmlSaver.XElementFromObject(Prefs.data, typeof(PrefsData));
-				xdocument.Add(content);
-				xdocument.Save(GenFilePaths.PrefsFilePath);
+				XDocument xDocument = new XDocument();
+				XElement content = DirectXmlSaver.XElementFromObject(data, typeof(PrefsData));
+				xDocument.Add(content);
+				xDocument.Save(GenFilePaths.PrefsFilePath);
 			}
 			catch (Exception ex)
 			{
 				GenUI.ErrorDialog("ProblemSavingFile".Translate(GenFilePaths.PrefsFilePath, ex.ToString()));
-				Log.Error("Exception saving prefs: " + ex, false);
+				Log.Error("Exception saving prefs: " + ex);
 			}
 		}
 
-		
 		public static void Apply()
 		{
-			Prefs.data.Apply();
+			data.Apply();
 		}
 
-		
 		public static NameTriple RandomPreferredName()
 		{
-			string rawName;
-			if ((from name in Prefs.PreferredNames
-			where !name.NullOrEmpty()
-			select name).TryRandomElement(out rawName))
+			if (PreferredNames.Where((string name) => !name.NullOrEmpty()).TryRandomElement(out string result))
 			{
-				return NameTriple.FromString(rawName);
+				return NameTriple.FromString(result);
 			}
 			return null;
 		}
-
-		
-		private static PrefsData data;
 	}
 }

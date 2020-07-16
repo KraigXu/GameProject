@@ -1,22 +1,63 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	internal struct PawnStatusEffecters
 	{
-		
+		private class LiveEffecter : IFullPoolable
+		{
+			public EffecterDef def;
+
+			public Effecter effecter;
+
+			public int lastMaintainTick;
+
+			public bool Expired => Find.TickManager.TicksGame > lastMaintainTick;
+
+			public void Cleanup()
+			{
+				if (effecter != null)
+				{
+					effecter.Cleanup();
+				}
+				FullPool<LiveEffecter>.Return(this);
+			}
+
+			public void Reset()
+			{
+				def = null;
+				effecter = null;
+				lastMaintainTick = -1;
+			}
+
+			public void Maintain()
+			{
+				lastMaintainTick = Find.TickManager.TicksGame;
+			}
+
+			public void Tick(Pawn pawn)
+			{
+				if (effecter == null)
+				{
+					effecter = def.Spawn();
+				}
+				effecter.EffectTick(pawn, null);
+			}
+		}
+
+		public Pawn pawn;
+
+		private List<LiveEffecter> pairs;
+
 		public PawnStatusEffecters(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.pairs = new List<PawnStatusEffecters.LiveEffecter>();
+			pairs = new List<LiveEffecter>();
 		}
 
-		
 		public void EffectersTick()
 		{
-			List<Hediff> hediffs = this.pawn.health.hediffSet.hediffs;
+			List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
 			for (int i = 0; i < hediffs.Count; i++)
 			{
 				HediffComp_Effecter hediffComp_Effecter = hediffs[i].TryGetComp<HediffComp_Effecter>();
@@ -25,110 +66,46 @@ namespace Verse
 					EffecterDef effecterDef = hediffComp_Effecter.CurrentStateEffecter();
 					if (effecterDef != null)
 					{
-						this.AddOrMaintain(effecterDef);
+						AddOrMaintain(effecterDef);
 					}
 				}
 			}
-			if (this.pawn.mindState.mentalStateHandler.CurState != null)
+			if (pawn.mindState.mentalStateHandler.CurState != null)
 			{
-				EffecterDef effecterDef2 = this.pawn.mindState.mentalStateHandler.CurState.CurrentStateEffecter();
+				EffecterDef effecterDef2 = pawn.mindState.mentalStateHandler.CurState.CurrentStateEffecter();
 				if (effecterDef2 != null)
 				{
-					this.AddOrMaintain(effecterDef2);
+					AddOrMaintain(effecterDef2);
 				}
 			}
-			for (int j = this.pairs.Count - 1; j >= 0; j--)
+			for (int num = pairs.Count - 1; num >= 0; num--)
 			{
-				if (this.pairs[j].Expired)
+				if (pairs[num].Expired)
 				{
-					this.pairs[j].Cleanup();
-					this.pairs.RemoveAt(j);
+					pairs[num].Cleanup();
+					pairs.RemoveAt(num);
 				}
 				else
 				{
-					this.pairs[j].Tick(this.pawn);
+					pairs[num].Tick(pawn);
 				}
 			}
 		}
 
-		
 		private void AddOrMaintain(EffecterDef def)
 		{
-			for (int i = 0; i < this.pairs.Count; i++)
+			for (int i = 0; i < pairs.Count; i++)
 			{
-				if (this.pairs[i].def == def)
+				if (pairs[i].def == def)
 				{
-					this.pairs[i].Maintain();
+					pairs[i].Maintain();
 					return;
 				}
 			}
-			PawnStatusEffecters.LiveEffecter liveEffecter = FullPool<PawnStatusEffecters.LiveEffecter>.Get();
+			LiveEffecter liveEffecter = FullPool<LiveEffecter>.Get();
 			liveEffecter.def = def;
 			liveEffecter.Maintain();
-			this.pairs.Add(liveEffecter);
-		}
-
-		
-		public Pawn pawn;
-
-		
-		private List<PawnStatusEffecters.LiveEffecter> pairs;
-
-		
-		private class LiveEffecter : IFullPoolable
-		{
-			
-			
-			public bool Expired
-			{
-				get
-				{
-					return Find.TickManager.TicksGame > this.lastMaintainTick;
-				}
-			}
-
-			
-			public void Cleanup()
-			{
-				if (this.effecter != null)
-				{
-					this.effecter.Cleanup();
-				}
-				FullPool<PawnStatusEffecters.LiveEffecter>.Return(this);
-			}
-
-			
-			public void Reset()
-			{
-				this.def = null;
-				this.effecter = null;
-				this.lastMaintainTick = -1;
-			}
-
-			
-			public void Maintain()
-			{
-				this.lastMaintainTick = Find.TickManager.TicksGame;
-			}
-
-			
-			public void Tick(Pawn pawn)
-			{
-				if (this.effecter == null)
-				{
-					this.effecter = this.def.Spawn();
-				}
-				this.effecter.EffectTick(pawn, null);
-			}
-
-			
-			public EffecterDef def;
-
-			
-			public Effecter effecter;
-
-			
-			public int lastMaintainTick;
+			pairs.Add(liveEffecter);
 		}
 	}
 }

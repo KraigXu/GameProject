@@ -1,11 +1,13 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public struct CachedTempInfo
 	{
-		
+		public int roomGroupID;
+
+		public int numCells;
+
+		public float temperature;
+
 		public static CachedTempInfo NewCachedTempInfo()
 		{
 			CachedTempInfo result = default(CachedTempInfo);
@@ -13,29 +15,18 @@ namespace Verse
 			return result;
 		}
 
-		
 		public void Reset()
 		{
-			this.roomGroupID = -1;
-			this.numCells = 0;
-			this.temperature = 0f;
+			roomGroupID = -1;
+			numCells = 0;
+			temperature = 0f;
 		}
 
-		
 		public CachedTempInfo(int roomGroupID, int numCells, float temperature)
 		{
 			this.roomGroupID = roomGroupID;
 			this.numCells = numCells;
 			this.temperature = temperature;
 		}
-
-		
-		public int roomGroupID;
-
-		
-		public int numCells;
-
-		
-		public float temperature;
 	}
 }

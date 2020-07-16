@@ -1,60 +1,42 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class DrugTakeRecord : IExposable
 	{
-		
-		
-		public int LastTakenDays
-		{
-			get
-			{
-				return GenDate.DaysPassedAt(this.lastTakenTicks);
-			}
-		}
+		public ThingDef drug;
 
-		
-		
-		
+		public int lastTakenTicks;
+
+		private int timesTakenThisDayInt;
+
+		private int thisDay;
+
+		public int LastTakenDays => GenDate.DaysPassedAt(lastTakenTicks);
+
 		public int TimesTakenThisDay
 		{
 			get
 			{
-				if (this.thisDay != GenDate.DaysPassed)
+				if (thisDay != GenDate.DaysPassed)
 				{
 					return 0;
 				}
-				return this.timesTakenThisDayInt;
+				return timesTakenThisDayInt;
 			}
 			set
 			{
-				this.timesTakenThisDayInt = value;
-				this.thisDay = GenDate.DaysPassed;
+				timesTakenThisDayInt = value;
+				thisDay = GenDate.DaysPassed;
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<ThingDef>(ref this.drug, "drug");
-			Scribe_Values.Look<int>(ref this.lastTakenTicks, "lastTakenTicks", 0, false);
-			Scribe_Values.Look<int>(ref this.timesTakenThisDayInt, "timesTakenThisDay", 0, false);
-			Scribe_Values.Look<int>(ref this.thisDay, "thisDay", 0, false);
+			Scribe_Defs.Look(ref drug, "drug");
+			Scribe_Values.Look(ref lastTakenTicks, "lastTakenTicks", 0);
+			Scribe_Values.Look(ref timesTakenThisDayInt, "timesTakenThisDay", 0);
+			Scribe_Values.Look(ref thisDay, "thisDay", 0);
 		}
-
-		
-		public ThingDef drug;
-
-		
-		public int lastTakenTicks;
-
-		
-		private int timesTakenThisDayInt;
-
-		
-		private int thisDay;
 	}
 }

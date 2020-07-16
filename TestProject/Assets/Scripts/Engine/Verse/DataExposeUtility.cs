@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Verse
 {
-	
 	public static class DataExposeUtility
 	{
-		
+		private const int NewlineInterval = 100;
+
 		public static void ByteArray(ref byte[] arr, string label)
 		{
 			if (Scribe.mode == LoadSaveMode.Saving && arr != null)
@@ -14,61 +14,61 @@ namespace Verse
 				byte[] array = CompressUtility.Compress(arr);
 				if (array.Length < arr.Length)
 				{
-					string text = DataExposeUtility.AddLineBreaksToLongString(Convert.ToBase64String(array));
-					Scribe_Values.Look<string>(ref text, label + "Deflate", null, false);
+					string value = AddLineBreaksToLongString(Convert.ToBase64String(array));
+					Scribe_Values.Look(ref value, label + "Deflate");
 				}
 				else
 				{
-					string text2 = DataExposeUtility.AddLineBreaksToLongString(Convert.ToBase64String(arr));
-					Scribe_Values.Look<string>(ref text2, label, null, false);
+					string value2 = AddLineBreaksToLongString(Convert.ToBase64String(arr));
+					Scribe_Values.Look(ref value2, label);
 				}
 			}
-			if (Scribe.mode == LoadSaveMode.LoadingVars)
+			if (Scribe.mode != LoadSaveMode.LoadingVars)
 			{
-				string text3 = null;
-				Scribe_Values.Look<string>(ref text3, label + "Deflate", null, false);
-				if (text3 != null)
-				{
-					arr = CompressUtility.Decompress(Convert.FromBase64String(DataExposeUtility.RemoveLineBreaks(text3)));
-					return;
-				}
-				Scribe_Values.Look<string>(ref text3, label, null, false);
-				if (text3 != null)
-				{
-					arr = Convert.FromBase64String(DataExposeUtility.RemoveLineBreaks(text3));
-					return;
-				}
+				return;
+			}
+			string value3 = null;
+			Scribe_Values.Look(ref value3, label + "Deflate");
+			if (value3 != null)
+			{
+				arr = CompressUtility.Decompress(Convert.FromBase64String(RemoveLineBreaks(value3)));
+				return;
+			}
+			Scribe_Values.Look(ref value3, label);
+			if (value3 != null)
+			{
+				arr = Convert.FromBase64String(RemoveLineBreaks(value3));
+			}
+			else
+			{
 				arr = null;
 			}
 		}
 
-		
 		public static void BoolArray(ref bool[] arr, int elements, string label)
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
 				if (arr.Length != elements)
 				{
-					Log.ErrorOnce(string.Format("Bool array length mismatch for {0}", label), 74135877, false);
+					Log.ErrorOnce($"Bool array length mismatch for {label}", 74135877);
 				}
 				elements = arr.Length;
 			}
 			int num = (elements + 7) / 8;
-			byte[] array = null;
+			byte[] arr2 = null;
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
-				array = new byte[num];
+				arr2 = new byte[num];
 				int num2 = 0;
 				byte b = 1;
 				for (int i = 0; i < elements; i++)
 				{
 					if (arr[i])
 					{
-						byte[] array2 = array;
-						int num3 = num2;
-						array2[num3] |= b;
+						arr2[num2] |= b;
 					}
-					b *= 2;
+					b = (byte)(b * 2);
 					if (b == 0)
 					{
 						b = 1;
@@ -76,48 +76,49 @@ namespace Verse
 					}
 				}
 			}
-			DataExposeUtility.ByteArray(ref array, label);
-			if (Scribe.mode == LoadSaveMode.LoadingVars)
+			ByteArray(ref arr2, label);
+			if (Scribe.mode != LoadSaveMode.LoadingVars)
 			{
-				if (arr == null)
+				return;
+			}
+			if (arr == null)
+			{
+				arr = new bool[elements];
+			}
+			if (arr2 == null || arr2.Length == 0)
+			{
+				return;
+			}
+			if (arr2.Length != num)
+			{
+				int num3 = 0;
+				byte b2 = 1;
+				for (int j = 0; j < elements; j++)
 				{
-					arr = new bool[elements];
+					arr[j] = ((arr2[num3] & b2) != 0);
+					b2 = (byte)(b2 * 2);
+					if (b2 > 32)
+					{
+						b2 = 1;
+						num3++;
+					}
 				}
-				if (array != null && array.Length != 0)
+				return;
+			}
+			int num4 = 0;
+			byte b3 = 1;
+			for (int k = 0; k < elements; k++)
+			{
+				arr[k] = ((arr2[num4] & b3) != 0);
+				b3 = (byte)(b3 * 2);
+				if (b3 == 0)
 				{
-					if (array.Length != num)
-					{
-						int num4 = 0;
-						byte b2 = 1;
-						for (int j = 0; j < elements; j++)
-						{
-							arr[j] = ((array[num4] & b2) > 0);
-							b2 *= 2;
-							if (b2 > 32)
-							{
-								b2 = 1;
-								num4++;
-							}
-						}
-						return;
-					}
-					int num5 = 0;
-					byte b3 = 1;
-					for (int k = 0; k < elements; k++)
-					{
-						arr[k] = ((array[num5] & b3) > 0);
-						b3 *= 2;
-						if (b3 == 0)
-						{
-							b3 = 1;
-							num5++;
-						}
-					}
+					b3 = 1;
+					num4++;
 				}
 			}
 		}
 
-		
 		public static string AddLineBreaksToLongString(string str)
 		{
 			StringBuilder stringBuilder = new StringBuilder(str.Length + (str.Length / 100 + 3) * 2 + 1);
@@ -134,13 +135,9 @@ namespace Verse
 			return stringBuilder.ToString();
 		}
 
-		
 		public static string RemoveLineBreaks(string str)
 		{
 			return str.Replace("\n", "").Replace("\r", "");
 		}
-
-		
-		private const int NewlineInterval = 100;
 	}
 }

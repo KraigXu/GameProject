@@ -1,82 +1,84 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Verse;
 
-public static class GenMorphology
+namespace Verse
 {
-	private static HashSet<IntVec3> tmpOutput = new HashSet<IntVec3>();
-
-	private static HashSet<IntVec3> cellsSet = new HashSet<IntVec3>();
-
-	private static List<IntVec3> tmpEdgeCells = new List<IntVec3>();
-
-	public static void Erode(List<IntVec3> cells, int count, Map map, Predicate<IntVec3> extraPredicate = null)
+	public static class GenMorphology
 	{
-		if (count <= 0)
+		private static HashSet<IntVec3> tmpOutput = new HashSet<IntVec3>();
+
+		private static HashSet<IntVec3> cellsSet = new HashSet<IntVec3>();
+
+		private static List<IntVec3> tmpEdgeCells = new List<IntVec3>();
+
+		public static void Erode(List<IntVec3> cells, int count, Map map, Predicate<IntVec3> extraPredicate = null)
 		{
-			return;
-		}
-		IntVec3[] cardinalDirections = GenAdj.CardinalDirections;
-		cellsSet.Clear();
-		cellsSet.AddRange(cells);
-		tmpEdgeCells.Clear();
-		for (int i = 0; i < cells.Count; i++)
-		{
-			for (int j = 0; j < 4; j++)
+			if (count <= 0)
 			{
-				IntVec3 item = cells[i] + cardinalDirections[j];
-				if (!cellsSet.Contains(item))
+				return;
+			}
+			IntVec3[] cardinalDirections = GenAdj.CardinalDirections;
+			cellsSet.Clear();
+			cellsSet.AddRange(cells);
+			tmpEdgeCells.Clear();
+			for (int i = 0; i < cells.Count; i++)
+			{
+				for (int j = 0; j < 4; j++)
 				{
-					tmpEdgeCells.Add(cells[i]);
-					break;
+					IntVec3 item = cells[i] + cardinalDirections[j];
+					if (!cellsSet.Contains(item))
+					{
+						tmpEdgeCells.Add(cells[i]);
+						break;
+					}
 				}
 			}
-		}
-		if (tmpEdgeCells.Any())
-		{
-			tmpOutput.Clear();
-			Predicate<IntVec3> passCheck = (extraPredicate == null) ? ((Predicate<IntVec3>)((IntVec3 x) => cellsSet.Contains(x))) : ((Predicate<IntVec3>)((IntVec3 x) => cellsSet.Contains(x) && extraPredicate(x)));
-			map.floodFiller.FloodFill(IntVec3.Invalid, passCheck, delegate (IntVec3 cell, int traversalDist)
+			if (tmpEdgeCells.Any())
 			{
-				if (traversalDist >= count)
+				tmpOutput.Clear();
+				Predicate<IntVec3> passCheck = (extraPredicate == null) ? ((Predicate<IntVec3>)((IntVec3 x) => cellsSet.Contains(x))) : ((Predicate<IntVec3>)((IntVec3 x) => cellsSet.Contains(x) && extraPredicate(x)));
+				map.floodFiller.FloodFill(IntVec3.Invalid, passCheck, delegate(IntVec3 cell, int traversalDist)
 				{
-					tmpOutput.Add(cell);
-				}
-				return false;
-			}, int.MaxValue, rememberParents: false, tmpEdgeCells);
-			cells.Clear();
-			cells.AddRange(tmpOutput);
+					if (traversalDist >= count)
+					{
+						tmpOutput.Add(cell);
+					}
+					return false;
+				}, int.MaxValue, rememberParents: false, tmpEdgeCells);
+				cells.Clear();
+				cells.AddRange(tmpOutput);
+			}
 		}
-	}
 
-	public static void Dilate(List<IntVec3> cells, int count, Map map, Predicate<IntVec3> extraPredicate = null)
-	{
-		if (count > 0)
+		public static void Dilate(List<IntVec3> cells, int count, Map map, Predicate<IntVec3> extraPredicate = null)
 		{
-			map.floodFiller.FloodFill(IntVec3.Invalid, extraPredicate ?? ((Predicate<IntVec3>)((IntVec3 x) => true)), delegate (IntVec3 cell, int traversalDist)
+			if (count > 0)
 			{
-				if (traversalDist > count)
+				map.floodFiller.FloodFill(IntVec3.Invalid, extraPredicate ?? ((Predicate<IntVec3>)((IntVec3 x) => true)), delegate(IntVec3 cell, int traversalDist)
 				{
-					return true;
-				}
-				if (traversalDist != 0)
-				{
-					cells.Add(cell);
-				}
-				return false;
-			}, int.MaxValue, rememberParents: false, cells);
+					if (traversalDist > count)
+					{
+						return true;
+					}
+					if (traversalDist != 0)
+					{
+						cells.Add(cell);
+					}
+					return false;
+				}, int.MaxValue, rememberParents: false, cells);
+			}
 		}
-	}
 
-	public static void Open(List<IntVec3> cells, int count, Map map)
-	{
-		Erode(cells, count, map);
-		Dilate(cells, count, map);
-	}
+		public static void Open(List<IntVec3> cells, int count, Map map)
+		{
+			Erode(cells, count, map);
+			Dilate(cells, count, map);
+		}
 
-	public static void Close(List<IntVec3> cells, int count, Map map)
-	{
-		Dilate(cells, count, map);
-		Erode(cells, count, map);
+		public static void Close(List<IntVec3> cells, int count, Map map)
+		{
+			Dilate(cells, count, map);
+			Erode(cells, count, map);
+		}
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +5,8 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_AwaitingMedicalOperation : Alert
 	{
-
 		private List<Pawn> awaitingMedicalOperationResult = new List<Pawn>();
 
 		private List<Pawn> AwaitingMedicalOperation
@@ -45,30 +42,24 @@ namespace RimWorld
 			}
 		}
 
-
 		public override string GetLabel()
 		{
-			return "PatientsAwaitingMedicalOperation".Translate(this.AwaitingMedicalOperation.Count<Pawn>().ToStringCached());
+			return "PatientsAwaitingMedicalOperation".Translate(AwaitingMedicalOperation.Count().ToStringCached());
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.AwaitingMedicalOperation)
+			foreach (Pawn item in AwaitingMedicalOperation)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + item.NameShortColored.Resolve());
 			}
 			return "PatientsAwaitingMedicalOperationDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.AwaitingMedicalOperation);
+			return AlertReport.CulpritsAre(AwaitingMedicalOperation);
 		}
-
-		
-		
 	}
 }

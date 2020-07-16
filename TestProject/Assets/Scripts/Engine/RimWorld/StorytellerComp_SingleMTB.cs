@@ -1,44 +1,27 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_SingleMTB : StorytellerComp
 	{
-		
-		
-		private StorytellerCompProperties_SingleMTB Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_SingleMTB)this.props;
-			}
-		}
+		private StorytellerCompProperties_SingleMTB Props => (StorytellerCompProperties_SingleMTB)props;
 
-		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
-			if (!this.Props.incident.TargetAllowed(target))
+			if (Props.incident.TargetAllowed(target) && Rand.MTBEventOccurs(Props.mtbDays, 60000f, 1000f))
 			{
-				yield break;
-			}
-			if (Rand.MTBEventOccurs(this.Props.mtbDays, 60000f, 1000f))
-			{
-				IncidentParms parms = this.GenerateParms(this.Props.incident.category, target);
-				if (this.Props.incident.Worker.CanFireNow(parms, false))
+				IncidentParms parms = GenerateParms(Props.incident.category, target);
+				if (Props.incident.Worker.CanFireNow(parms))
 				{
-					yield return new FiringIncident(this.Props.incident, this, parms);
+					yield return new FiringIncident(Props.incident, this, parms);
 				}
 			}
-			yield break;
 		}
 
-		
 		public override string ToString()
 		{
-			return base.ToString() + " " + this.Props.incident;
+			return base.ToString() + " " + Props.incident;
 		}
 	}
 }

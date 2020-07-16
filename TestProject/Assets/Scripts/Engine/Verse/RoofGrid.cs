@@ -1,149 +1,114 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public sealed class RoofGrid : IExposable, ICellBoolGiver
 	{
-		
-		
+		private Map map;
+
+		private RoofDef[] roofGrid;
+
+		private CellBoolDrawer drawerInt;
+
 		public CellBoolDrawer Drawer
 		{
 			get
 			{
-				if (this.drawerInt == null)
+				if (drawerInt == null)
 				{
-					this.drawerInt = new CellBoolDrawer(this, this.map.Size.x, this.map.Size.z, 3620, 0.33f);
+					drawerInt = new CellBoolDrawer(this, map.Size.x, map.Size.z, 3620);
 				}
-				return this.drawerInt;
+				return drawerInt;
 			}
 		}
 
-		
-		
-		public Color Color
-		{
-			get
-			{
-				return new Color(0.3f, 1f, 0.4f);
-			}
-		}
+		public Color Color => new Color(0.3f, 1f, 0.4f);
 
-		
 		public RoofGrid(Map map)
 		{
 			this.map = map;
-			this.roofGrid = new RoofDef[map.cellIndices.NumGridCells];
+			roofGrid = new RoofDef[map.cellIndices.NumGridCells];
 		}
 
-		
 		public void ExposeData()
 		{
-			MapExposeUtility.ExposeUshort(this.map, delegate(IntVec3 c)
+			MapExposeUtility.ExposeUshort(map, (IntVec3 c) => (ushort)((roofGrid[map.cellIndices.CellToIndex(c)] != null) ? roofGrid[map.cellIndices.CellToIndex(c)].shortHash : 0), delegate(IntVec3 c, ushort val)
 			{
-				if (this.roofGrid[this.map.cellIndices.CellToIndex(c)] != null)
-				{
-					return this.roofGrid[this.map.cellIndices.CellToIndex(c)].shortHash;
-				}
-				return 0;
-			}, delegate(IntVec3 c, ushort val)
-			{
-				this.SetRoof(c, DefDatabase<RoofDef>.GetByShortHash(val));
+				SetRoof(c, DefDatabase<RoofDef>.GetByShortHash(val));
 			}, "roofs");
 		}
 
-		
 		public bool GetCellBool(int index)
 		{
-			return this.roofGrid[index] != null && !this.map.fogGrid.IsFogged(index);
+			if (roofGrid[index] != null)
+			{
+				return !map.fogGrid.IsFogged(index);
+			}
+			return false;
 		}
 
-		
 		public Color GetCellExtraColor(int index)
 		{
-			if (RoofDefOf.RoofRockThick != null && this.roofGrid[index] == RoofDefOf.RoofRockThick)
+			if (RoofDefOf.RoofRockThick != null && roofGrid[index] == RoofDefOf.RoofRockThick)
 			{
 				return Color.gray;
 			}
 			return Color.white;
 		}
 
-		
 		public bool Roofed(int index)
 		{
-			return this.roofGrid[index] != null;
+			return roofGrid[index] != null;
 		}
 
-		
 		public bool Roofed(int x, int z)
 		{
-			return this.roofGrid[this.map.cellIndices.CellToIndex(x, z)] != null;
+			return roofGrid[map.cellIndices.CellToIndex(x, z)] != null;
 		}
 
-		
 		public bool Roofed(IntVec3 c)
 		{
-			return this.roofGrid[this.map.cellIndices.CellToIndex(c)] != null;
+			return roofGrid[map.cellIndices.CellToIndex(c)] != null;
 		}
 
-		
 		public RoofDef RoofAt(int index)
 		{
-			return this.roofGrid[index];
+			return roofGrid[index];
 		}
 
-		
 		public RoofDef RoofAt(IntVec3 c)
 		{
-			return this.roofGrid[this.map.cellIndices.CellToIndex(c)];
+			return roofGrid[map.cellIndices.CellToIndex(c)];
 		}
 
-		
 		public RoofDef RoofAt(int x, int z)
 		{
-			return this.roofGrid[this.map.cellIndices.CellToIndex(x, z)];
+			return roofGrid[map.cellIndices.CellToIndex(x, z)];
 		}
 
-		
 		public void SetRoof(IntVec3 c, RoofDef def)
 		{
-			if (this.roofGrid[this.map.cellIndices.CellToIndex(c)] == def)
+			if (roofGrid[map.cellIndices.CellToIndex(c)] != def)
 			{
-				return;
+				roofGrid[map.cellIndices.CellToIndex(c)] = def;
+				map.glowGrid.MarkGlowGridDirty(c);
+				map.regionGrid.GetValidRegionAt_NoRebuild(c)?.Room.Notify_RoofChanged();
+				if (drawerInt != null)
+				{
+					drawerInt.SetDirty();
+				}
+				map.mapDrawer.MapMeshDirty(c, MapMeshFlag.Roofs);
 			}
-			this.roofGrid[this.map.cellIndices.CellToIndex(c)] = def;
-			this.map.glowGrid.MarkGlowGridDirty(c);
-			Region validRegionAt_NoRebuild = this.map.regionGrid.GetValidRegionAt_NoRebuild(c);
-			if (validRegionAt_NoRebuild != null)
-			{
-				validRegionAt_NoRebuild.Room.Notify_RoofChanged();
-			}
-			if (this.drawerInt != null)
-			{
-				this.drawerInt.SetDirty();
-			}
-			this.map.mapDrawer.MapMeshDirty(c, MapMeshFlag.Roofs);
 		}
 
-		
 		public void RoofGridUpdate()
 		{
 			if (Find.PlaySettings.showRoofOverlay)
 			{
-				this.Drawer.MarkForDraw();
+				Drawer.MarkForDraw();
 			}
-			this.Drawer.CellBoolDrawerUpdate();
+			Drawer.CellBoolDrawerUpdate();
 		}
-
-		
-		private Map map;
-
-		
-		private RoofDef[] roofGrid;
-
-		
-		private CellBoolDrawer drawerInt;
 	}
 }

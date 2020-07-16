@@ -1,87 +1,87 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class StealAIDebugDrawer
 	{
-		
+		private static List<Thing> tmpToSteal = new List<Thing>();
+
+		private static BoolGrid debugDrawGrid;
+
+		private static Lord debugDrawLord = null;
+
 		public static void DebugDraw()
 		{
 			if (!DebugViewSettings.drawStealDebug)
 			{
-				StealAIDebugDrawer.debugDrawLord = null;
+				debugDrawLord = null;
 				return;
 			}
-			Lord lord = StealAIDebugDrawer.debugDrawLord;
-			StealAIDebugDrawer.debugDrawLord = StealAIDebugDrawer.FindHostileLord();
-			if (StealAIDebugDrawer.debugDrawLord == null)
+			Lord lord = debugDrawLord;
+			debugDrawLord = FindHostileLord();
+			if (debugDrawLord == null)
 			{
 				return;
 			}
-			StealAIDebugDrawer.CheckInitDebugDrawGrid();
-			float num = StealAIUtility.StartStealingMarketValueThreshold(StealAIDebugDrawer.debugDrawLord);
-			if (lord != StealAIDebugDrawer.debugDrawLord)
+			CheckInitDebugDrawGrid();
+			float num = StealAIUtility.StartStealingMarketValueThreshold(debugDrawLord);
+			if (lord != debugDrawLord)
 			{
-				foreach (IntVec3 intVec in Find.CurrentMap.AllCells)
+				foreach (IntVec3 allCell in Find.CurrentMap.AllCells)
 				{
-					StealAIDebugDrawer.debugDrawGrid[intVec] = (StealAIDebugDrawer.TotalMarketValueAround(intVec, Find.CurrentMap, StealAIDebugDrawer.debugDrawLord.ownedPawns.Count) > num);
+					debugDrawGrid[allCell] = (TotalMarketValueAround(allCell, Find.CurrentMap, debugDrawLord.ownedPawns.Count) > num);
 				}
 			}
-			foreach (IntVec3 c in Find.CurrentMap.AllCells)
+			foreach (IntVec3 allCell2 in Find.CurrentMap.AllCells)
 			{
-				if (StealAIDebugDrawer.debugDrawGrid[c])
+				if (debugDrawGrid[allCell2])
 				{
-					CellRenderer.RenderCell(c, 0.5f);
+					CellRenderer.RenderCell(allCell2);
 				}
 			}
-			StealAIDebugDrawer.tmpToSteal.Clear();
-			for (int i = 0; i < StealAIDebugDrawer.debugDrawLord.ownedPawns.Count; i++)
+			tmpToSteal.Clear();
+			for (int i = 0; i < debugDrawLord.ownedPawns.Count; i++)
 			{
-				Pawn pawn = StealAIDebugDrawer.debugDrawLord.ownedPawns[i];
-				Thing thing;
-				if (StealAIUtility.TryFindBestItemToSteal(pawn.Position, pawn.Map, 7f, out thing, pawn, StealAIDebugDrawer.tmpToSteal))
+				Pawn pawn = debugDrawLord.ownedPawns[i];
+				if (StealAIUtility.TryFindBestItemToSteal(pawn.Position, pawn.Map, 7f, out Thing item, pawn, tmpToSteal))
 				{
-					GenDraw.DrawLineBetween(pawn.TrueCenter(), thing.TrueCenter());
-					StealAIDebugDrawer.tmpToSteal.Add(thing);
+					GenDraw.DrawLineBetween(pawn.TrueCenter(), item.TrueCenter());
+					tmpToSteal.Add(item);
 				}
 			}
-			StealAIDebugDrawer.tmpToSteal.Clear();
+			tmpToSteal.Clear();
 		}
 
-		
 		public static void Notify_ThingChanged(Thing thing)
 		{
-			if (StealAIDebugDrawer.debugDrawLord == null)
+			if (debugDrawLord == null)
 			{
 				return;
 			}
-			StealAIDebugDrawer.CheckInitDebugDrawGrid();
+			CheckInitDebugDrawGrid();
 			if (thing.def.category != ThingCategory.Building && thing.def.category != ThingCategory.Item && thing.def.passability != Traversability.Impassable)
 			{
 				return;
 			}
 			if (thing.def.passability == Traversability.Impassable)
 			{
-				StealAIDebugDrawer.debugDrawLord = null;
+				debugDrawLord = null;
 				return;
 			}
 			int num = GenRadial.NumCellsInRadius(8f);
-			float num2 = StealAIUtility.StartStealingMarketValueThreshold(StealAIDebugDrawer.debugDrawLord);
+			float num2 = StealAIUtility.StartStealingMarketValueThreshold(debugDrawLord);
 			for (int i = 0; i < num; i++)
 			{
 				IntVec3 intVec = thing.Position + GenRadial.RadialPattern[i];
 				if (intVec.InBounds(thing.Map))
 				{
-					StealAIDebugDrawer.debugDrawGrid[intVec] = (StealAIDebugDrawer.TotalMarketValueAround(intVec, Find.CurrentMap, StealAIDebugDrawer.debugDrawLord.ownedPawns.Count) > num2);
+					debugDrawGrid[intVec] = (TotalMarketValueAround(intVec, Find.CurrentMap, debugDrawLord.ownedPawns.Count) > num2);
 				}
 			}
 		}
 
-		
 		private static float TotalMarketValueAround(IntVec3 center, Map map, int pawnsCount)
 		{
 			if (center.Impassable(map))
@@ -89,26 +89,24 @@ namespace RimWorld
 				return 0f;
 			}
 			float num = 0f;
-			StealAIDebugDrawer.tmpToSteal.Clear();
+			tmpToSteal.Clear();
 			for (int i = 0; i < pawnsCount; i++)
 			{
 				IntVec3 intVec = center + GenRadial.RadialPattern[i];
-				if (!intVec.InBounds(map) || intVec.Impassable(map) || !GenSight.LineOfSight(center, intVec, map, false, null, 0, 0))
+				if (!intVec.InBounds(map) || intVec.Impassable(map) || !GenSight.LineOfSight(center, intVec, map))
 				{
 					intVec = center;
 				}
-				Thing thing;
-				if (StealAIUtility.TryFindBestItemToSteal(intVec, map, 7f, out thing, null, StealAIDebugDrawer.tmpToSteal))
+				if (StealAIUtility.TryFindBestItemToSteal(intVec, map, 7f, out Thing item, null, tmpToSteal))
 				{
-					num += StealAIUtility.GetValue(thing);
-					StealAIDebugDrawer.tmpToSteal.Add(thing);
+					num += StealAIUtility.GetValue(item);
+					tmpToSteal.Add(item);
 				}
 			}
-			StealAIDebugDrawer.tmpToSteal.Clear();
+			tmpToSteal.Clear();
 			return num;
 		}
 
-		
 		private static Lord FindHostileLord()
 		{
 			Lord lord = null;
@@ -123,27 +121,16 @@ namespace RimWorld
 			return lord;
 		}
 
-		
 		private static void CheckInitDebugDrawGrid()
 		{
-			if (StealAIDebugDrawer.debugDrawGrid == null)
+			if (debugDrawGrid == null)
 			{
-				StealAIDebugDrawer.debugDrawGrid = new BoolGrid(Find.CurrentMap);
-				return;
+				debugDrawGrid = new BoolGrid(Find.CurrentMap);
 			}
-			if (!StealAIDebugDrawer.debugDrawGrid.MapSizeMatches(Find.CurrentMap))
+			else if (!debugDrawGrid.MapSizeMatches(Find.CurrentMap))
 			{
-				StealAIDebugDrawer.debugDrawGrid.ClearAndResizeTo(Find.CurrentMap);
+				debugDrawGrid.ClearAndResizeTo(Find.CurrentMap);
 			}
 		}
-
-		
-		private static List<Thing> tmpToSteal = new List<Thing>();
-
-		
-		private static BoolGrid debugDrawGrid;
-
-		
-		private static Lord debugDrawLord = null;
 	}
 }

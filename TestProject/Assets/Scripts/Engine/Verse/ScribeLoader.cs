@@ -1,187 +1,166 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class ScribeLoader
 	{
 		public CrossRefHandler crossRefs = new CrossRefHandler();
+
 		public PostLoadIniter initer = new PostLoadIniter();
+
 		public IExposable curParent;
+
 		public XmlNode curXmlParent;
+
 		public string curPathRelToParent;
 
 		public void InitLoading(string filePath)
 		{
-			if (Scribe.mode != LoadSaveMode.Inactive)
+			if (Scribe.mode != 0)
 			{
-				Log.Error("Called InitLoading() but current mode is " + Scribe.mode, false);
+				Log.Error("Called InitLoading() but current mode is " + Scribe.mode);
 				Scribe.ForceStop();
 			}
-			if (this.curParent != null)
+			if (curParent != null)
 			{
-				Log.Error("Current parent is not null in InitLoading", false);
-				this.curParent = null;
+				Log.Error("Current parent is not null in InitLoading");
+				curParent = null;
 			}
-			if (this.curPathRelToParent != null)
+			if (curPathRelToParent != null)
 			{
-				Log.Error("Current path relative to parent is not null in InitLoading", false);
-				this.curPathRelToParent = null;
+				Log.Error("Current path relative to parent is not null in InitLoading");
+				curPathRelToParent = null;
 			}
 			try
 			{
-				StreamReader streamReader = new StreamReader(filePath);
+				using (StreamReader input = new StreamReader(filePath))
 				{
-					XmlTextReader xmlTextReader = new XmlTextReader(streamReader);
+					using (XmlTextReader reader = new XmlTextReader(input))
 					{
 						XmlDocument xmlDocument = new XmlDocument();
-						xmlDocument.Load(xmlTextReader);
-						this.curXmlParent = xmlDocument.DocumentElement;
+						xmlDocument.Load(reader);
+						curXmlParent = xmlDocument.DocumentElement;
 					}
 				}
 				Scribe.mode = LoadSaveMode.LoadingVars;
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception while init loading file: ",
-					filePath,
-					"\n",
-					ex
-				}), false);
-				this.ForceStop();
+				Log.Error("Exception while init loading file: " + filePath + "\n" + ex);
+				ForceStop();
 				throw;
 			}
 		}
 
-		
 		public void InitLoadingMetaHeaderOnly(string filePath)
 		{
-			if (Scribe.mode != LoadSaveMode.Inactive)
+			if (Scribe.mode != 0)
 			{
-				Log.Error("Called InitLoadingMetaHeaderOnly() but current mode is " + Scribe.mode, false);
+				Log.Error("Called InitLoadingMetaHeaderOnly() but current mode is " + Scribe.mode);
 				Scribe.ForceStop();
 			}
 			try
 			{
-				StreamReader streamReader = new StreamReader(filePath);
+				using (StreamReader input = new StreamReader(filePath))
 				{
-					XmlTextReader xmlTextReader = new XmlTextReader(streamReader);
+					using (XmlTextReader xmlTextReader = new XmlTextReader(input))
 					{
-						if (ScribeMetaHeaderUtility.ReadToMetaElement(xmlTextReader))
+						if (!ScribeMetaHeaderUtility.ReadToMetaElement(xmlTextReader))
 						{
-							XmlReader xmlReader = xmlTextReader.ReadSubtree();
-							{
-								XmlDocument xmlDocument = new XmlDocument();
-								xmlDocument.Load(xmlReader);
-								XmlElement xmlElement = xmlDocument.CreateElement("root");
-								xmlElement.AppendChild(xmlDocument.DocumentElement);
-								this.curXmlParent = xmlElement;
-								goto IL_82;
-							}
-							goto IL_80;
-							IL_82:
-							goto IL_8E;
+							return;
 						}
-						IL_80:
-						return;
+						using (XmlReader reader = xmlTextReader.ReadSubtree())
+						{
+							XmlDocument xmlDocument = new XmlDocument();
+							xmlDocument.Load(reader);
+							XmlElement xmlElement = xmlDocument.CreateElement("root");
+							xmlElement.AppendChild(xmlDocument.DocumentElement);
+							curXmlParent = xmlElement;
+						}
 					}
-					IL_8E:;
 				}
 				Scribe.mode = LoadSaveMode.LoadingVars;
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception while init loading meta header: ",
-					filePath,
-					"\n",
-					ex
-				}), false);
-				this.ForceStop();
+				Log.Error("Exception while init loading meta header: " + filePath + "\n" + ex);
+				ForceStop();
 				throw;
 			}
 		}
 
-		
 		public void FinalizeLoading()
 		{
 			if (Scribe.mode != LoadSaveMode.LoadingVars)
 			{
-				Log.Error("Called FinalizeLoading() but current mode is " + Scribe.mode, false);
-				return;
+				Log.Error("Called FinalizeLoading() but current mode is " + Scribe.mode);
 			}
-			try
+			else
 			{
-				Scribe.ExitNode();
-				this.curXmlParent = null;
-				this.curParent = null;
-				this.curPathRelToParent = null;
-				Scribe.mode = LoadSaveMode.Inactive;
-				this.crossRefs.ResolveAllCrossReferences();
-				this.initer.DoAllPostLoadInits();
-			}
-			catch (Exception arg)
-			{
-				Log.Error("Exception in FinalizeLoading(): " + arg, false);
-				this.ForceStop();
-				throw;
+				try
+				{
+					Scribe.ExitNode();
+					curXmlParent = null;
+					curParent = null;
+					curPathRelToParent = null;
+					Scribe.mode = LoadSaveMode.Inactive;
+					crossRefs.ResolveAllCrossReferences();
+					initer.DoAllPostLoadInits();
+				}
+				catch (Exception arg)
+				{
+					Log.Error("Exception in FinalizeLoading(): " + arg);
+					ForceStop();
+					throw;
+				}
 			}
 		}
 
-		
 		public bool EnterNode(string nodeName)
 		{
-			if (this.curXmlParent != null)
+			if (curXmlParent != null)
 			{
-				XmlNode xmlNode = this.curXmlParent[nodeName];
+				XmlNode xmlNode = curXmlParent[nodeName];
 				if (xmlNode == null && char.IsDigit(nodeName[0]))
 				{
-					xmlNode = this.curXmlParent.ChildNodes[int.Parse(nodeName)];
+					xmlNode = curXmlParent.ChildNodes[int.Parse(nodeName)];
 				}
 				if (xmlNode == null)
 				{
 					return false;
 				}
-				this.curXmlParent = xmlNode;
+				curXmlParent = xmlNode;
 			}
-			this.curPathRelToParent = this.curPathRelToParent + "/" + nodeName;
+			curPathRelToParent = curPathRelToParent + "/" + nodeName;
 			return true;
 		}
 
-		
 		public void ExitNode()
 		{
-			if (this.curXmlParent != null)
+			if (curXmlParent != null)
 			{
-				this.curXmlParent = this.curXmlParent.ParentNode;
+				curXmlParent = curXmlParent.ParentNode;
 			}
-			if (this.curPathRelToParent != null)
+			if (curPathRelToParent != null)
 			{
-				int num = this.curPathRelToParent.LastIndexOf('/');
-				this.curPathRelToParent = ((num > 0) ? this.curPathRelToParent.Substring(0, num) : null);
+				int num = curPathRelToParent.LastIndexOf('/');
+				curPathRelToParent = ((num > 0) ? curPathRelToParent.Substring(0, num) : null);
 			}
 		}
 
-		
 		public void ForceStop()
 		{
-			this.curXmlParent = null;
-			this.curParent = null;
-			this.curPathRelToParent = null;
-			this.crossRefs.Clear(false);
-			this.initer.Clear();
+			curXmlParent = null;
+			curParent = null;
+			curPathRelToParent = null;
+			crossRefs.Clear(errorIfNotEmpty: false);
+			initer.Clear();
 			if (Scribe.mode == LoadSaveMode.LoadingVars || Scribe.mode == LoadSaveMode.ResolvingCrossRefs || Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
 				Scribe.mode = LoadSaveMode.Inactive;
 			}
 		}
-
-		
-
 	}
 }

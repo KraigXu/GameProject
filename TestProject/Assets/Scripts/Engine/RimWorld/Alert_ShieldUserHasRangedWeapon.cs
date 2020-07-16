@@ -1,52 +1,45 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_ShieldUserHasRangedWeapon : Alert
 	{
-		
-		
+		private List<Pawn> shieldUsersWithRangedWeaponResult = new List<Pawn>();
+
 		private List<Pawn> ShieldUsersWithRangedWeapon
 		{
 			get
 			{
-				this.shieldUsersWithRangedWeaponResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMaps_FreeColonistsSpawned)
+				shieldUsersWithRangedWeaponResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMaps_FreeColonistsSpawned)
 				{
-					if (pawn.equipment.Primary != null && pawn.equipment.Primary.def.IsRangedWeapon)
+					if (item.equipment.Primary != null && item.equipment.Primary.def.IsRangedWeapon)
 					{
-						List<Apparel> wornApparel = pawn.apparel.WornApparel;
+						List<Apparel> wornApparel = item.apparel.WornApparel;
 						for (int i = 0; i < wornApparel.Count; i++)
 						{
 							if (wornApparel[i] is ShieldBelt)
 							{
-								this.shieldUsersWithRangedWeaponResult.Add(pawn);
+								shieldUsersWithRangedWeaponResult.Add(item);
 								break;
 							}
 						}
 					}
 				}
-				return this.shieldUsersWithRangedWeaponResult;
+				return shieldUsersWithRangedWeaponResult;
 			}
 		}
 
-		
 		public Alert_ShieldUserHasRangedWeapon()
 		{
-			this.defaultLabel = "ShieldUserHasRangedWeapon".Translate();
-			this.defaultExplanation = "ShieldUserHasRangedWeaponDesc".Translate();
+			defaultLabel = "ShieldUserHasRangedWeapon".Translate();
+			defaultExplanation = "ShieldUserHasRangedWeaponDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.ShieldUsersWithRangedWeapon);
+			return AlertReport.CulpritsAre(ShieldUsersWithRangedWeapon);
 		}
-
-		
-		private List<Pawn> shieldUsersWithRangedWeaponResult = new List<Pawn>();
 	}
 }

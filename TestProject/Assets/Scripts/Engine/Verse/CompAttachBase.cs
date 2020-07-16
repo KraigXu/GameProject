@@ -1,91 +1,81 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Verse
 {
-	
 	public class CompAttachBase : ThingComp
 	{
-		
+		public List<AttachableThing> attachments;
+
 		public override void CompTick()
 		{
-			if (this.attachments != null)
+			if (attachments != null)
 			{
-				for (int i = 0; i < this.attachments.Count; i++)
+				for (int i = 0; i < attachments.Count; i++)
 				{
-					this.attachments[i].Position = this.parent.Position;
+					attachments[i].Position = parent.Position;
 				}
 			}
 		}
 
-		
 		public override void PostDestroy(DestroyMode mode, Map previousMap)
 		{
 			base.PostDestroy(mode, previousMap);
-			if (this.attachments != null)
+			if (attachments != null)
 			{
-				for (int i = this.attachments.Count - 1; i >= 0; i--)
+				for (int num = attachments.Count - 1; num >= 0; num--)
 				{
-					this.attachments[i].Destroy(DestroyMode.Vanish);
+					attachments[num].Destroy();
 				}
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.attachments != null)
+			if (attachments != null)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				for (int i = 0; i < this.attachments.Count; i++)
+				for (int i = 0; i < attachments.Count; i++)
 				{
-					stringBuilder.AppendLine(this.attachments[i].InspectStringAddon);
+					stringBuilder.AppendLine(attachments[i].InspectStringAddon);
 				}
 				return stringBuilder.ToString().TrimEndNewlines();
 			}
 			return null;
 		}
 
-		
 		public Thing GetAttachment(ThingDef def)
 		{
-			if (this.attachments != null)
+			if (attachments != null)
 			{
-				for (int i = 0; i < this.attachments.Count; i++)
+				for (int i = 0; i < attachments.Count; i++)
 				{
-					if (this.attachments[i].def == def)
+					if (attachments[i].def == def)
 					{
-						return this.attachments[i];
+						return attachments[i];
 					}
 				}
 			}
 			return null;
 		}
 
-		
 		public bool HasAttachment(ThingDef def)
 		{
-			return this.GetAttachment(def) != null;
+			return GetAttachment(def) != null;
 		}
 
-		
 		public void AddAttachment(AttachableThing t)
 		{
-			if (this.attachments == null)
+			if (attachments == null)
 			{
-				this.attachments = new List<AttachableThing>();
+				attachments = new List<AttachableThing>();
 			}
-			this.attachments.Add(t);
+			attachments.Add(t);
 		}
 
-		
 		public void RemoveAttachment(AttachableThing t)
 		{
-			this.attachments.Remove(t);
+			attachments.Remove(t);
 		}
-
-		
-		public List<AttachableThing> attachments;
 	}
 }

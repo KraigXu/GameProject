@@ -1,70 +1,53 @@
-﻿using System;
 using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class FactionRelation : IExposable
 	{
-		
+		public Faction other;
+
+		public int goodwill = 100;
+
+		public FactionRelationKind kind = FactionRelationKind.Neutral;
+
 		public void CheckKindThresholds(Faction faction, bool canSendLetter, string reason, GlobalTargetInfo lookTarget, out bool sentLetter)
 		{
-			FactionRelationKind previousKind = this.kind;
+			FactionRelationKind previousKind = kind;
 			sentLetter = false;
-			if (this.kind != FactionRelationKind.Hostile && this.goodwill <= -75)
+			if (kind != 0 && goodwill <= -75)
 			{
-				this.kind = FactionRelationKind.Hostile;
-				faction.Notify_RelationKindChanged(this.other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
+				kind = FactionRelationKind.Hostile;
+				faction.Notify_RelationKindChanged(other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
 			}
-			if (this.kind != FactionRelationKind.Ally && this.goodwill >= 75)
+			if (kind != FactionRelationKind.Ally && goodwill >= 75)
 			{
-				this.kind = FactionRelationKind.Ally;
-				faction.Notify_RelationKindChanged(this.other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
+				kind = FactionRelationKind.Ally;
+				faction.Notify_RelationKindChanged(other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
 			}
-			if (this.kind == FactionRelationKind.Hostile && this.goodwill >= 0)
+			if (kind == FactionRelationKind.Hostile && goodwill >= 0)
 			{
-				this.kind = FactionRelationKind.Neutral;
-				faction.Notify_RelationKindChanged(this.other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
+				kind = FactionRelationKind.Neutral;
+				faction.Notify_RelationKindChanged(other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
 			}
-			if (this.kind == FactionRelationKind.Ally && this.goodwill <= 0)
+			if (kind == FactionRelationKind.Ally && goodwill <= 0)
 			{
-				this.kind = FactionRelationKind.Neutral;
-				faction.Notify_RelationKindChanged(this.other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
+				kind = FactionRelationKind.Neutral;
+				faction.Notify_RelationKindChanged(other, previousKind, canSendLetter, reason, lookTarget, out sentLetter);
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_References.Look<Faction>(ref this.other, "other", false);
-			Scribe_Values.Look<int>(ref this.goodwill, "goodwill", 0, false);
-			Scribe_Values.Look<FactionRelationKind>(ref this.kind, "kind", FactionRelationKind.Neutral, false);
+			Scribe_References.Look(ref other, "other");
+			Scribe_Values.Look(ref goodwill, "goodwill", 0);
+			Scribe_Values.Look(ref kind, "kind", FactionRelationKind.Neutral);
 			BackCompatibility.PostExposeData(this);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"(",
-				this.other,
-				", goodwill=",
-				this.goodwill.ToString("F1"),
-				", kind=",
-				this.kind,
-				")"
-			});
+			return "(" + other + ", goodwill=" + goodwill.ToString("F1") + ", kind=" + kind + ")";
 		}
-
-		
-		public Faction other;
-
-		
-		public int goodwill = 100;
-
-		
-		public FactionRelationKind kind = FactionRelationKind.Neutral;
 	}
 }

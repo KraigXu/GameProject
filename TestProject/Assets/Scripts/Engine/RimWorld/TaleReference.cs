@@ -1,73 +1,48 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TaleReference : IExposable
 	{
-		
-		
-		public static TaleReference Taleless
-		{
-			get
-			{
-				return new TaleReference(null);
-			}
-		}
+		private Tale tale;
 
-		
+		private int seed;
+
+		public static TaleReference Taleless => new TaleReference(null);
+
 		public TaleReference()
 		{
 		}
 
-		
 		public TaleReference(Tale tale)
 		{
 			this.tale = tale;
-			this.seed = Rand.Range(0, int.MaxValue);
+			seed = Rand.Range(0, int.MaxValue);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.seed, "seed", 0, false);
-			Scribe_References.Look<Tale>(ref this.tale, "tale", false);
+			Scribe_Values.Look(ref seed, "seed", 0);
+			Scribe_References.Look(ref tale, "tale");
 		}
 
-		
 		public void ReferenceDestroyed()
 		{
-			if (this.tale != null)
+			if (tale != null)
 			{
-				this.tale.Notify_ReferenceDestroyed();
-				this.tale = null;
+				tale.Notify_ReferenceDestroyed();
+				tale = null;
 			}
 		}
 
-		
 		public TaggedString GenerateText(TextGenerationPurpose purpose, RulePackDef extraInclude)
 		{
-			return TaleTextGenerator.GenerateTextFromTale(purpose, this.tale, this.seed, extraInclude);
+			return TaleTextGenerator.GenerateTextFromTale(purpose, tale, seed, extraInclude);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"TaleReference(tale=",
-				(this.tale == null) ? "null" : this.tale.ToString(),
-				", seed=",
-				this.seed,
-				")"
-			});
+			return "TaleReference(tale=" + ((tale == null) ? "null" : tale.ToString()) + ", seed=" + seed + ")";
 		}
-
-		
-		private Tale tale;
-
-		
-		private int seed;
 	}
 }

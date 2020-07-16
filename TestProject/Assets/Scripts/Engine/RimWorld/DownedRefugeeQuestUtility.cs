@@ -1,35 +1,28 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DownedRefugeeQuestUtility
 	{
-		
+		private const float RelationWithColonistWeight = 20f;
+
+		private const float ChanceToRedressWorldPawn = 0.2f;
+
 		public static Pawn GenerateRefugee(int tile)
 		{
-			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.SpaceRefugee, DownedRefugeeQuestUtility.GetRandomFactionForRefugee(), PawnGenerationContext.NonPlayer, tile, false, false, false, false, true, false, 20f, true, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, new float?(0.2f), null, null, null, null, null, null, null));
-			HealthUtility.DamageUntilDowned(pawn, false);
-			HealthUtility.DamageLegsUntilIncapableOfMoving(pawn, false);
+			Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.SpaceRefugee, GetRandomFactionForRefugee(), PawnGenerationContext.NonPlayer, tile, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 20f, forceAddFreeWarmLayerIfNeeded: true, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: false, forceRedressWorldPawnIfFormerColonist: false, worldPawnFactionDoesntMatter: false, 0f, null, 1f, null, null, null, null, 0.2f));
+			HealthUtility.DamageUntilDowned(pawn, allowBleedingWounds: false);
+			HealthUtility.DamageLegsUntilIncapableOfMoving(pawn, allowBleedingWounds: false);
 			return pawn;
 		}
 
-		
 		public static Faction GetRandomFactionForRefugee()
 		{
-			Faction result;
-			if (Rand.Chance(0.6f) && Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out result, true, false, TechLevel.Undefined))
+			if (Rand.Chance(0.6f) && Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out Faction faction, tryMedievalOrBetter: true))
 			{
-				return result;
+				return faction;
 			}
 			return null;
 		}
-
-		
-		private const float RelationWithColonistWeight = 20f;
-
-		
-		private const float ChanceToRedressWorldPawn = 0.2f;
 	}
 }

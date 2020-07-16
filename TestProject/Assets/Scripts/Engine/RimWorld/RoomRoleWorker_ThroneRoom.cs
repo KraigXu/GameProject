@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRoleWorker_ThroneRoom : RoomRoleWorker
 	{
-		
 		public static string Validate(Room room)
 		{
 			if (room == null || room.OutdoorsForWork)
@@ -17,7 +14,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public override float GetScore(Room room)
 		{
 			List<Thing> containedAndAdjacentThings = room.ContainedAndAdjacentThings;
@@ -30,7 +26,7 @@ namespace RimWorld
 					break;
 				}
 			}
-			return (float)((flag && RoomRoleWorker_ThroneRoom.Validate(room) == null) ? 10000 : 0);
+			return (flag && Validate(room) == null) ? 10000 : 0;
 		}
 	}
 }

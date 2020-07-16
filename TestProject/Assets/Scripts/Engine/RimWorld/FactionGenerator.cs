@@ -1,92 +1,72 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FactionGenerator
 	{
-		
+		private const int MinStartVisibleFactions = 5;
+
+		private const int MaxPreferredFactionNameLength = 20;
+
+		private static readonly FloatRange SettlementsPer100kTiles = new FloatRange(75f, 85f);
+
 		public static void GenerateFactionsIntoWorld()
 		{
-			int num = 0;
-			IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator();
+			int i = 0;
+			foreach (FactionDef allDef in DefDatabase<FactionDef>.AllDefs)
 			{
-				while (enumerator.MoveNext())
+				for (int j = 0; j < allDef.requiredCountAtGameStart; j++)
 				{
-					FactionDef factionDef = enumerator.Current;
-					for (int i = 0; i < factionDef.requiredCountAtGameStart; i++)
+					Faction faction = NewGeneratedFaction(allDef);
+					Find.FactionManager.Add(faction);
+					if (!allDef.hidden)
 					{
-						Faction faction = FactionGenerator.NewGeneratedFaction(factionDef);
-						Find.FactionManager.Add(faction);
-						if (!factionDef.hidden)
-						{
-							num++;
-						}
+						i++;
 					}
 				}
-				goto IL_A9;
 			}
-			IL_5F:
-			Faction faction2 = FactionGenerator.NewGeneratedFaction((from fa in DefDatabase<FactionDef>.AllDefs
-			where fa.canMakeRandomly && Find.FactionManager.AllFactions.Count((Faction f) => f.def == fa) < fa.maxCountAtGameStart
-			select fa).RandomElement<FactionDef>());
-			Find.World.factionManager.Add(faction2);
-			num++;
-			IL_A9:
-			if (num >= 5)
+			for (; i < 5; i++)
 			{
-				int num2 = GenMath.RoundRandom((float)Find.WorldGrid.TilesCount / 100000f * FactionGenerator.SettlementsPer100kTiles.RandomInRange * Find.World.info.overallPopulation.GetScaleFactor());
-				num2 -= Find.WorldObjects.Settlements.Count;
-				for (int j = 0; j < num2; j++)
-				{
-					Faction faction3 = (from x in Find.World.factionManager.AllFactionsListForReading
-					where !x.def.isPlayer && !x.def.hidden
-					select x).RandomElementByWeight((Faction x) => x.def.settlementGenerationWeight);
-					Settlement settlement = (Settlement)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Settlement);
-					settlement.SetFaction(faction3);
-					settlement.Tile = TileFinder.RandomSettlementTileFor(faction3, false, null);
-					settlement.Name = SettlementNameGenerator.GenerateSettlementName(settlement, null);
-					Find.WorldObjects.Add(settlement);
-				}
-				return;
+				Faction faction2 = NewGeneratedFaction(DefDatabase<FactionDef>.AllDefs.Where((FactionDef fa) => fa.canMakeRandomly && Find.FactionManager.AllFactions.Count((Faction f) => f.def == fa) < fa.maxCountAtGameStart).RandomElement());
+				Find.World.factionManager.Add(faction2);
 			}
-			goto IL_5F;
+			int num = GenMath.RoundRandom((float)Find.WorldGrid.TilesCount / 100000f * SettlementsPer100kTiles.RandomInRange * Find.World.info.overallPopulation.GetScaleFactor());
+			num -= Find.WorldObjects.Settlements.Count;
+			for (int k = 0; k < num; k++)
+			{
+				Faction faction3 = Find.World.factionManager.AllFactionsListForReading.Where((Faction x) => !x.def.isPlayer && !x.def.hidden).RandomElementByWeight((Faction x) => x.def.settlementGenerationWeight);
+				Settlement settlement = (Settlement)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Settlement);
+				settlement.SetFaction(faction3);
+				settlement.Tile = TileFinder.RandomSettlementTileFor(faction3);
+				settlement.Name = SettlementNameGenerator.GenerateSettlementName(settlement);
+				Find.WorldObjects.Add(settlement);
+			}
 		}
 
-		
 		public static void EnsureRequiredEnemies(Faction player)
 		{
-			IEnumerator<FactionDef> enumerator = DefDatabase<FactionDef>.AllDefs.GetEnumerator();
+			foreach (FactionDef facDef in DefDatabase<FactionDef>.AllDefs)
 			{
-				while (enumerator.MoveNext())
+				if (facDef.mustStartOneEnemy && Find.World.factionManager.AllFactions.Any((Faction f) => f.def == facDef) && !Find.World.factionManager.AllFactions.Any((Faction f) => f.def == facDef && f.HostileTo(player)))
 				{
-					FactionDef facDef = enumerator.Current;
-					if (facDef.mustStartOneEnemy && Find.World.factionManager.AllFactions.Any((Faction f) => f.def == facDef) && !Find.World.factionManager.AllFactions.Any((Faction f) => f.def == facDef && f.HostileTo(player)))
-					{
-						Faction faction = (from f in Find.World.factionManager.AllFactions
-						where f.def == facDef
-						select f).RandomElement<Faction>();
-						int num = faction.GoodwillWith(player);
-						int goodwillChange = DiplomacyTuning.ForcedStartingEnemyGoodwillRange.RandomInRange - num;
-						faction.TryAffectGoodwillWith(player, goodwillChange, false, false, null, null);
-						faction.TrySetRelationKind(player, FactionRelationKind.Hostile, false, null, null);
-					}
+					Faction faction = Find.World.factionManager.AllFactions.Where((Faction f) => f.def == facDef).RandomElement();
+					int num = faction.GoodwillWith(player);
+					faction.TryAffectGoodwillWith(goodwillChange: DiplomacyTuning.ForcedStartingEnemyGoodwillRange.RandomInRange - num, other: player, canSendMessage: false, canSendHostilityLetter: false);
+					faction.TrySetRelationKind(player, FactionRelationKind.Hostile, canSendLetter: false);
 				}
 			}
 		}
 
-		
 		public static Faction NewGeneratedFaction(FactionDef facDef)
 		{
 			Faction faction = new Faction();
 			faction.def = facDef;
 			faction.loadID = Find.UniqueIDsManager.GetNextFactionID();
-			faction.colorFromSpectrum = FactionGenerator.NewRandomColorFromSpectrum(faction);
+			faction.colorFromSpectrum = NewRandomColorFromSpectrum(faction);
 			if (!facDef.isPlayer)
 			{
 				if (facDef.fixedName != null)
@@ -98,8 +78,7 @@ namespace RimWorld
 					string text = "";
 					for (int i = 0; i < 10; i++)
 					{
-						string text2 = NameGenerator.GenerateName(facDef.factionNameMaker, from fac in Find.FactionManager.AllFactionsVisible
-						select fac.Name, false, null);
+						string text2 = NameGenerator.GenerateName(facDef.factionNameMaker, Find.FactionManager.AllFactionsVisible.Select((Faction fac) => fac.Name));
 						if (text2.Length <= 20)
 						{
 							text = text2;
@@ -107,30 +86,28 @@ namespace RimWorld
 					}
 					if (text.NullOrEmpty())
 					{
-						text = NameGenerator.GenerateName(facDef.factionNameMaker, from fac in Find.FactionManager.AllFactionsVisible
-						select fac.Name, false, null);
+						text = NameGenerator.GenerateName(facDef.factionNameMaker, Find.FactionManager.AllFactionsVisible.Select((Faction fac) => fac.Name));
 					}
 					faction.Name = text;
 				}
 			}
 			faction.centralMelanin = Rand.Value;
-			foreach (Faction other in Find.FactionManager.AllFactionsListForReading)
+			foreach (Faction item in Find.FactionManager.AllFactionsListForReading)
 			{
-				faction.TryMakeInitialRelationsWith(other);
+				faction.TryMakeInitialRelationsWith(item);
 			}
 			if (!facDef.hidden && !facDef.isPlayer)
 			{
 				Settlement settlement = (Settlement)WorldObjectMaker.MakeWorldObject(WorldObjectDefOf.Settlement);
 				settlement.SetFaction(faction);
-				settlement.Tile = TileFinder.RandomSettlementTileFor(faction, false, null);
-				settlement.Name = SettlementNameGenerator.GenerateSettlementName(settlement, null);
+				settlement.Tile = TileFinder.RandomSettlementTileFor(faction);
+				settlement.Name = SettlementNameGenerator.GenerateSettlementName(settlement);
 				Find.WorldObjects.Add(settlement);
 			}
 			faction.GenerateNewLeader();
 			return faction;
 		}
 
-		
 		public static float NewRandomColorFromSpectrum(Faction faction)
 		{
 			float num = -1f;
@@ -160,14 +137,5 @@ namespace RimWorld
 			}
 			return result;
 		}
-
-		
-		private const int MinStartVisibleFactions = 5;
-
-		
-		private const int MaxPreferredFactionNameLength = 20;
-
-		
-		private static readonly FloatRange SettlementsPer100kTiles = new FloatRange(75f, 85f);
 	}
 }

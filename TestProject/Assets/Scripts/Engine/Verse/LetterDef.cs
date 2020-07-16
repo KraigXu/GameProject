@@ -1,66 +1,52 @@
-﻿using System;
 using RimWorld;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class LetterDef : Def
 	{
-		
-		
+		public Type letterClass = typeof(StandardLetter);
+
+		public Color color = Color.white;
+
+		public Color flashColor = Color.white;
+
+		public float flashInterval = 90f;
+
+		public bool bounce;
+
+		public SoundDef arriveSound;
+
+		[NoTranslate]
+		public string icon = "UI/Letters/LetterUnopened";
+
+		public AutomaticPauseMode pauseMode = AutomaticPauseMode.AnyLetter;
+
+		public bool forcedSlowdown;
+
+		[Unsaved(false)]
+		private Texture2D iconTex;
+
 		public Texture2D Icon
 		{
 			get
 			{
-				if (this.iconTex == null && !this.icon.NullOrEmpty())
+				if (iconTex == null && !icon.NullOrEmpty())
 				{
-					this.iconTex = ContentFinder<Texture2D>.Get(this.icon, true);
+					iconTex = ContentFinder<Texture2D>.Get(icon);
 				}
-				return this.iconTex;
+				return iconTex;
 			}
 		}
 
-		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
-			if (this.arriveSound == null)
+			if (arriveSound == null)
 			{
-				this.arriveSound = SoundDefOf.LetterArrive;
+				arriveSound = SoundDefOf.LetterArrive;
 			}
 		}
-
-		
-		public Type letterClass = typeof(StandardLetter);
-
-		
-		public Color color = Color.white;
-
-		
-		public Color flashColor = Color.white;
-
-		
-		public float flashInterval = 90f;
-
-		
-		public bool bounce;
-
-		
-		public SoundDef arriveSound;
-
-		
-		[NoTranslate]
-		public string icon = "UI/Letters/LetterUnopened";
-
-		
-		public AutomaticPauseMode pauseMode = AutomaticPauseMode.AnyLetter;
-
-		
-		public bool forcedSlowdown;
-
-		
-		[Unsaved(false)]
-		private Texture2D iconTex;
 	}
 }

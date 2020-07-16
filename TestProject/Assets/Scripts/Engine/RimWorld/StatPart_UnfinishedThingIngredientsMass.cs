@@ -1,33 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_UnfinishedThingIngredientsMass : StatPart
 	{
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
-			float num;
-			if (this.TryGetValue(req, out num))
+			if (TryGetValue(req, out float value))
 			{
-				val += num;
+				val += value;
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
-			float mass;
-			if (this.TryGetValue(req, out mass))
+			if (TryGetValue(req, out float value))
 			{
-				return "StatsReport_IngredientsMass".Translate() + ": " + mass.ToStringMassOffset();
+				return "StatsReport_IngredientsMass".Translate() + ": " + value.ToStringMassOffset();
 			}
 			return null;
 		}
 
-		
 		private bool TryGetValue(StatRequest req, out float value)
 		{
 			UnfinishedThing unfinishedThing = req.Thing as UnfinishedThing;
@@ -39,7 +32,7 @@ namespace RimWorld
 			float num = 0f;
 			for (int i = 0; i < unfinishedThing.ingredients.Count; i++)
 			{
-				num += unfinishedThing.ingredients[i].GetStatValue(StatDefOf.Mass, true) * (float)unfinishedThing.ingredients[i].stackCount;
+				num += unfinishedThing.ingredients[i].GetStatValue(StatDefOf.Mass) * (float)unfinishedThing.ingredients[i].stackCount;
 			}
 			value = num;
 			return true;

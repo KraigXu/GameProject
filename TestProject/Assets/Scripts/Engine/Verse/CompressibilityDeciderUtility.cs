@@ -1,12 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class CompressibilityDeciderUtility
 	{
-		
 		public static bool IsSaveCompressible(this Thing t)
 		{
 			if (Scribe.saver.savingForDebug)
@@ -40,7 +37,7 @@ namespace Verse
 			}
 			if (!flag)
 			{
-				Log.ErrorOnce("Called IsSaveCompressible but there are no maps with compressor != null. This should never happen. It probably means that we're not saving any map at the moment?", 1935111328, false);
+				Log.ErrorOnce("Called IsSaveCompressible but there are no maps with compressor != null. This should never happen. It probably means that we're not saving any map at the moment?", 1935111328);
 			}
 			return true;
 		}

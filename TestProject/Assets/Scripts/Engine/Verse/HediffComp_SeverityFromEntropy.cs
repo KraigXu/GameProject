@@ -1,12 +1,7 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class HediffComp_SeverityFromEntropy : HediffComp
 	{
-		
-		
 		private float EntropyAmount
 		{
 			get
@@ -19,20 +14,11 @@ namespace Verse
 			}
 		}
 
-		
-		
-		public override bool CompShouldRemove
-		{
-			get
-			{
-				return this.EntropyAmount < float.Epsilon;
-			}
-		}
+		public override bool CompShouldRemove => EntropyAmount < float.Epsilon;
 
-		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
-			this.parent.Severity = this.EntropyAmount;
+			parent.Severity = EntropyAmount;
 		}
 	}
 }

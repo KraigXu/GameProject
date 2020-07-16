@@ -1,72 +1,40 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct CurvePoint
 	{
-		
-		
-		public Vector2 Loc
-		{
-			get
-			{
-				return this.loc;
-			}
-		}
+		private Vector2 loc;
 
-		
-		
-		public float x
-		{
-			get
-			{
-				return this.loc.x;
-			}
-		}
+		public Vector2 Loc => loc;
 
-		
-		
-		public float y
-		{
-			get
-			{
-				return this.loc.y;
-			}
-		}
+		public float x => loc.x;
 
-		
+		public float y => loc.y;
+
 		public CurvePoint(float x, float y)
 		{
-			this.loc = new Vector2(x, y);
+			loc = new Vector2(x, y);
 		}
 
-		
 		public CurvePoint(Vector2 loc)
 		{
 			this.loc = loc;
 		}
 
-		
 		public static CurvePoint FromString(string str)
 		{
 			return new CurvePoint(ParseHelper.FromString<Vector2>(str));
 		}
 
-		
 		public override string ToString()
 		{
-			return this.loc.ToStringTwoDigits();
+			return loc.ToStringTwoDigits();
 		}
 
-		
 		public static implicit operator Vector2(CurvePoint pt)
 		{
 			return pt.loc;
 		}
-
-		
-		private Vector2 loc;
 	}
 }

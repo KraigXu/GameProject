@@ -1,49 +1,35 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompDestroyAfterDelay : ThingComp
 	{
-		
-		
-		public CompProperties_DestroyAfterDelay Props
-		{
-			get
-			{
-				return (CompProperties_DestroyAfterDelay)this.props;
-			}
-		}
+		public int spawnTick;
 
-		
+		public CompProperties_DestroyAfterDelay Props => (CompProperties_DestroyAfterDelay)props;
+
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (Find.TickManager.TicksGame > this.spawnTick + this.Props.delayTicks && !this.parent.Destroyed)
+			if (Find.TickManager.TicksGame > spawnTick + Props.delayTicks && !parent.Destroyed)
 			{
-				this.parent.Destroy(DestroyMode.Vanish);
+				parent.Destroy();
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 			if (!respawningAfterLoad)
 			{
-				this.spawnTick = Find.TickManager.TicksGame;
+				spawnTick = Find.TickManager.TicksGame;
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.spawnTick, "spawnTick", 0, false);
+			Scribe_Values.Look(ref spawnTick, "spawnTick", 0);
 		}
-
-		
-		public int spawnTick;
 	}
 }

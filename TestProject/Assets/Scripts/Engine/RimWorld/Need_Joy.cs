@@ -1,37 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Need_Joy : Need
 	{
-		
-		
+		public JoyToleranceSet tolerances = new JoyToleranceSet();
+
+		private int lastGainTick = -999;
+
 		public JoyCategory CurCategory
 		{
 			get
 			{
-				if (this.CurLevel < 0.01f)
+				if (CurLevel < 0.01f)
 				{
 					return JoyCategory.Empty;
 				}
-				if (this.CurLevel < 0.15f)
+				if (CurLevel < 0.15f)
 				{
 					return JoyCategory.VeryLow;
 				}
-				if (this.CurLevel < 0.3f)
+				if (CurLevel < 0.3f)
 				{
 					return JoyCategory.Low;
 				}
-				if (this.CurLevel < 0.7f)
+				if (CurLevel < 0.7f)
 				{
 					return JoyCategory.Satisfied;
 				}
-				if (this.CurLevel < 0.85f)
+				if (CurLevel < 0.85f)
 				{
 					return JoyCategory.High;
 				}
@@ -39,13 +40,11 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		private float FallPerInterval
 		{
 			get
 			{
-				switch (this.CurCategory)
+				switch (CurCategory)
 				{
 				case JoyCategory.Empty:
 					return 0.0015f;
@@ -65,17 +64,15 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override int GUIChangeArrow
 		{
 			get
 			{
-				if (this.IsFrozen)
+				if (IsFrozen)
 				{
 					return 0;
 				}
-				if (!this.GainingJoy)
+				if (!GainingJoy)
 				{
 					return -1;
 				}
@@ -83,90 +80,76 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		private bool GainingJoy
+		private bool GainingJoy => Find.TickManager.TicksGame < lastGainTick + 10;
+
+		public Need_Joy(Pawn pawn)
+			: base(pawn)
 		{
-			get
-			{
-				return Find.TickManager.TicksGame < this.lastGainTick + 10;
-			}
+			threshPercents = new List<float>();
+			threshPercents.Add(0.15f);
+			threshPercents.Add(0.3f);
+			threshPercents.Add(0.7f);
+			threshPercents.Add(0.85f);
 		}
 
-		
-		public Need_Joy(Pawn pawn) : base(pawn)
-		{
-			this.threshPercents = new List<float>();
-			this.threshPercents.Add(0.15f);
-			this.threshPercents.Add(0.3f);
-			this.threshPercents.Add(0.7f);
-			this.threshPercents.Add(0.85f);
-		}
-
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			this.tolerances.ExposeData();
+			tolerances.ExposeData();
 		}
 
-		
 		public override void SetInitialLevel()
 		{
-			this.CurLevel = Rand.Range(0.5f, 0.6f);
+			CurLevel = Rand.Range(0.5f, 0.6f);
 		}
 
-		
 		public void GainJoy(float amount, JoyKindDef joyKind)
 		{
-			if (amount <= 0f)
+			if (!(amount <= 0f))
 			{
-				return;
+				amount *= tolerances.JoyFactorFromTolerance(joyKind);
+				amount = Mathf.Min(amount, 1f - CurLevel);
+				curLevelInt += amount;
+				if (joyKind != null)
+				{
+					tolerances.Notify_JoyGained(amount, joyKind);
+				}
+				lastGainTick = Find.TickManager.TicksGame;
 			}
-			amount *= this.tolerances.JoyFactorFromTolerance(joyKind);
-			amount = Mathf.Min(amount, 1f - this.CurLevel);
-			this.curLevelInt += amount;
-			if (joyKind != null)
-			{
-				this.tolerances.Notify_JoyGained(amount, joyKind);
-			}
-			this.lastGainTick = Find.TickManager.TicksGame;
 		}
 
-		
 		public override void NeedInterval()
 		{
-			if (!this.IsFrozen)
+			if (!IsFrozen)
 			{
-				this.tolerances.NeedInterval(this.pawn);
-				if (!this.GainingJoy)
+				tolerances.NeedInterval(pawn);
+				if (!GainingJoy)
 				{
-					this.CurLevel -= this.FallPerInterval;
+					CurLevel -= FallPerInterval;
 				}
 			}
 		}
 
-		
 		public override string GetTipString()
 		{
 			string text = base.GetTipString();
-			string text2 = this.tolerances.TolerancesString();
+			string text2 = tolerances.TolerancesString();
 			if (!string.IsNullOrEmpty(text2))
 			{
 				text = text + "\n\n" + text2;
 			}
-			if (this.pawn.MapHeld != null)
+			if (pawn.MapHeld != null)
 			{
-				ExpectationDef expectationDef = ExpectationsUtility.CurrentExpectationFor(this.pawn);
+				ExpectationDef expectationDef = ExpectationsUtility.CurrentExpectationFor(pawn);
 				text += "\n\n" + "CurrentExpectationsAndRecreation".Translate(expectationDef.label, expectationDef.joyToleranceDropPerDay.ToStringPercent(), expectationDef.joyKindsNeeded);
-				text = text + "\n\n" + JoyUtility.JoyKindsOnMapString(this.pawn.MapHeld);
+				text = text + "\n\n" + JoyUtility.JoyKindsOnMapString(pawn.MapHeld);
 			}
 			else
 			{
-				Caravan caravan = this.pawn.GetCaravan();
+				Caravan caravan = pawn.GetCaravan();
 				if (caravan != null)
 				{
-					float num = caravan.needs.GetCurrentJoyGainPerTick(this.pawn) * 2500f;
+					float num = caravan.needs.GetCurrentJoyGainPerTick(pawn) * 2500f;
 					if (num > 0f)
 					{
 						text += "\n\n" + "GainingJoyBecauseCaravanNotMoving".Translate() + ": +" + num.ToStringPercent() + "/" + "LetterHour".Translate();
@@ -175,11 +158,5 @@ namespace RimWorld
 			}
 			return text;
 		}
-
-		
-		public JoyToleranceSet tolerances = new JoyToleranceSet();
-
-		
-		private int lastGainTick = -999;
 	}
 }

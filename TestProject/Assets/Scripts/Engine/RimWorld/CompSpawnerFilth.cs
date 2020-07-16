@@ -1,114 +1,85 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompSpawnerFilth : ThingComp
 	{
-		
-		
-		private CompProperties_SpawnerFilth Props
-		{
-			get
-			{
-				return (CompProperties_SpawnerFilth)this.props;
-			}
-		}
+		private int nextSpawnTimestamp = -1;
 
-		
-		
+		private CompProperties_SpawnerFilth Props => (CompProperties_SpawnerFilth)props;
+
 		private bool CanSpawnFilth
 		{
 			get
 			{
-				Hive hive = this.parent as Hive;
+				Hive hive = parent as Hive;
 				if (hive != null && !hive.CompDormant.Awake)
 				{
 					return false;
 				}
-				if (this.Props.requiredRotStage != null)
+				if (Props.requiredRotStage.HasValue && parent.GetRotStage() != Props.requiredRotStage)
 				{
-					RotStage rotStage = this.parent.GetRotStage();
-					RotStage? requiredRotStage = this.Props.requiredRotStage;
-					if (!(rotStage == requiredRotStage.GetValueOrDefault() & requiredRotStage != null))
-					{
-						return false;
-					}
+					return false;
 				}
 				return true;
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.nextSpawnTimestamp, "nextSpawnTimestamp", -1, false);
+			Scribe_Values.Look(ref nextSpawnTimestamp, "nextSpawnTimestamp", -1);
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			if (!respawningAfterLoad)
 			{
-				for (int i = 0; i < this.Props.spawnCountOnSpawn; i++)
+				for (int i = 0; i < Props.spawnCountOnSpawn; i++)
 				{
-					this.TrySpawnFilth();
+					TrySpawnFilth();
 				}
 			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			this.TickInterval(1);
+			TickInterval(1);
 		}
 
-		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
-			this.TickInterval(250);
+			TickInterval(250);
 		}
 
-		
 		private void TickInterval(int interval)
 		{
-			if (this.CanSpawnFilth)
+			if (!CanSpawnFilth)
 			{
-				if (this.Props.spawnMtbHours > 0f && Rand.MTBEventOccurs(this.Props.spawnMtbHours, 2500f, (float)interval))
+				return;
+			}
+			if (Props.spawnMtbHours > 0f && Rand.MTBEventOccurs(Props.spawnMtbHours, 2500f, interval))
+			{
+				TrySpawnFilth();
+			}
+			if (Props.spawnEveryDays >= 0f && Find.TickManager.TicksGame >= nextSpawnTimestamp)
+			{
+				if (nextSpawnTimestamp != -1)
 				{
-					this.TrySpawnFilth();
+					TrySpawnFilth();
 				}
-				if (this.Props.spawnEveryDays >= 0f && Find.TickManager.TicksGame >= this.nextSpawnTimestamp)
-				{
-					if (this.nextSpawnTimestamp != -1)
-					{
-						this.TrySpawnFilth();
-					}
-					this.nextSpawnTimestamp = Find.TickManager.TicksGame + (int)(this.Props.spawnEveryDays * 60000f);
-				}
+				nextSpawnTimestamp = Find.TickManager.TicksGame + (int)(Props.spawnEveryDays * 60000f);
 			}
 		}
 
-		
 		public void TrySpawnFilth()
 		{
-			if (this.parent.Map == null)
+			if (parent.Map != null && CellFinder.TryFindRandomReachableCellNear(parent.Position, parent.Map, Props.spawnRadius, TraverseParms.For(TraverseMode.NoPassClosedDoors), (IntVec3 x) => x.Standable(parent.Map), (Region x) => true, out IntVec3 result))
 			{
-				return;
+				FilthMaker.TryMakeFilth(result, parent.Map, Props.filthDef);
 			}
-			IntVec3 c;
-			if (!CellFinder.TryFindRandomReachableCellNear(this.parent.Position, this.parent.Map, this.Props.spawnRadius, TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false), (IntVec3 x) => x.Standable(this.parent.Map), (Region x) => true, out c, 999999))
-			{
-				return;
-			}
-			FilthMaker.TryMakeFilth(c, this.parent.Map, this.Props.filthDef, 1, FilthSourceFlags.None);
 		}
-
-		
-		private int nextSpawnTimestamp = -1;
 	}
 }

@@ -1,31 +1,21 @@
-﻿using System;
 using System.Collections.Generic;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class GenStep_SleepingMechanoids : GenStep
 	{
-		
-		
-		public override int SeedPart
-		{
-			get
-			{
-				return 341176078;
-			}
-		}
+		public FloatRange defaultPointsRange = new FloatRange(340f, 1000f);
 
-		
+		public override int SeedPart => 341176078;
+
 		public static void SendMechanoidsToSleepImmediately(List<Pawn> spawnedMechanoids)
 		{
 			for (int i = 0; i < spawnedMechanoids.Count; i++)
 			{
-				spawnedMechanoids[i].jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+				spawnedMechanoids[i].jobs.EndCurrentJob(JobCondition.InterruptForced);
 				JobDriver curDriver = spawnedMechanoids[i].jobs.curDriver;
 				if (curDriver != null)
 				{
@@ -38,53 +28,46 @@ namespace RimWorld
 				}
 				else
 				{
-					Log.ErrorOnce("Tried spawning sleeping mechanoid " + spawnedMechanoids[i] + " without CompCanBeDormant!", 317364857 ^ spawnedMechanoids[i].def.defName.GetHashCode(), false);
+					Log.ErrorOnce("Tried spawning sleeping mechanoid " + spawnedMechanoids[i] + " without CompCanBeDormant!", 0x12EA9A79 ^ spawnedMechanoids[i].def.defName.GetHashCode());
 				}
 			}
 		}
 
-		
 		public override void Generate(Map map, GenStepParams parms)
 		{
-			CellRect around;
-			IntVec3 near;
-			if (!SiteGenStepUtility.TryFindRootToSpawnAroundRectOfInterest(out around, out near, map))
+			if (SiteGenStepUtility.TryFindRootToSpawnAroundRectOfInterest(out CellRect rectToDefend, out IntVec3 singleCellToSpawnNear, map))
 			{
-				return;
-			}
-			List<Pawn> list = new List<Pawn>();
-			foreach (Pawn pawn in this.GeneratePawns(parms, map))
-			{
-				IntVec3 loc;
-				if (!SiteGenStepUtility.TryFindSpawnCellAroundOrNear(around, near, map, out loc))
+				List<Pawn> list = new List<Pawn>();
+				foreach (Pawn item in GeneratePawns(parms, map))
 				{
-					Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Decide);
-					break;
+					if (!SiteGenStepUtility.TryFindSpawnCellAroundOrNear(rectToDefend, singleCellToSpawnNear, map, out IntVec3 spawnCell))
+					{
+						Find.WorldPawns.PassToWorld(item);
+						break;
+					}
+					GenSpawn.Spawn(item, spawnCell, map);
+					list.Add(item);
 				}
-				GenSpawn.Spawn(pawn, loc, map, WipeMode.Vanish);
-				list.Add(pawn);
-			}
-			if (!list.Any<Pawn>())
-			{
-				return;
-			}
-			bool @bool = Rand.Bool;
-			foreach (Pawn pawn2 in list)
-			{
-				CompWakeUpDormant comp = pawn2.GetComp<CompWakeUpDormant>();
-				if (comp != null)
+				if (list.Any())
 				{
-					comp.wakeUpIfColonistClose = @bool;
+					bool @bool = Rand.Bool;
+					foreach (Pawn item2 in list)
+					{
+						CompWakeUpDormant comp = item2.GetComp<CompWakeUpDormant>();
+						if (comp != null)
+						{
+							comp.wakeUpIfColonistClose = @bool;
+						}
+					}
+					LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_SleepThenAssaultColony(Faction.OfMechanoids), map, list);
+					SendMechanoidsToSleepImmediately(list);
 				}
 			}
-			LordMaker.MakeNewLord(Faction.OfMechanoids, new LordJob_SleepThenAssaultColony(Faction.OfMechanoids), map, list);
-			GenStep_SleepingMechanoids.SendMechanoidsToSleepImmediately(list);
 		}
 
-		
 		private IEnumerable<Pawn> GeneratePawns(GenStepParams parms, Map map)
 		{
-			float points = (parms.sitePart != null) ? parms.sitePart.parms.threatPoints : this.defaultPointsRange.RandomInRange;
+			float points = (parms.sitePart != null) ? parms.sitePart.parms.threatPoints : defaultPointsRange.RandomInRange;
 			PawnGroupMakerParms pawnGroupMakerParms = new PawnGroupMakerParms();
 			pawnGroupMakerParms.groupKind = PawnGroupKindDefOf.Combat;
 			pawnGroupMakerParms.tile = map.Tile;
@@ -92,12 +75,9 @@ namespace RimWorld
 			pawnGroupMakerParms.points = points;
 			if (parms.sitePart != null)
 			{
-				pawnGroupMakerParms.seed = new int?(SleepingMechanoidsSitePartUtility.GetPawnGroupMakerSeed(parms.sitePart.parms));
+				pawnGroupMakerParms.seed = SleepingMechanoidsSitePartUtility.GetPawnGroupMakerSeed(parms.sitePart.parms);
 			}
-			return PawnGroupMakerUtility.GeneratePawns(pawnGroupMakerParms, true);
+			return PawnGroupMakerUtility.GeneratePawns(pawnGroupMakerParms);
 		}
-
-		
-		public FloatRange defaultPointsRange = new FloatRange(340f, 1000f);
 	}
 }

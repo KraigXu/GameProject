@@ -1,19 +1,17 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_NeedRoomSize : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.needs.roomsize == null)
 			{
 				return ThoughtState.Inactive;
 			}
-			Room room = p.GetRoom(RegionType.Set_Passable);
+			Room room = p.GetRoom();
 			if (room == null || room.PsychologicallyOutdoors)
 			{
 				return ThoughtState.Inactive;

@@ -1,18 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class LoadedObjectDirectory
 	{
-		
+		private Dictionary<string, ILoadReferenceable> allObjectsByLoadID = new Dictionary<string, ILoadReferenceable>();
+
 		public void Clear()
 		{
-			this.allObjectsByLoadID.Clear();
+			allObjectsByLoadID.Clear();
 		}
 
-		
 		public void RegisterLoaded(ILoadReferenceable reffable)
 		{
 			if (Prefs.DevMode)
@@ -33,33 +32,18 @@ namespace Verse
 				catch (Exception)
 				{
 				}
-				ILoadReferenceable loadReferenceable;
-				if (this.allObjectsByLoadID.TryGetValue(text, out loadReferenceable))
+				if (allObjectsByLoadID.TryGetValue(text, out ILoadReferenceable value))
 				{
 					string text3 = "";
-					Log.Error(string.Concat(new object[]
-					{
-						"Cannot register ",
-						reffable.GetType(),
-						" ",
-						text2,
-						", (id=",
-						text,
-						" in loaded object directory. Id already used by ",
-						loadReferenceable.GetType(),
-						" ",
-						loadReferenceable.ToStringSafe<ILoadReferenceable>(),
-						".",
-						text3
-					}), false);
+					Log.Error("Cannot register " + reffable.GetType() + " " + text2 + ", (id=" + text + " in loaded object directory. Id already used by " + value.GetType() + " " + value.ToStringSafe() + "." + text3);
 					return;
 				}
 			}
 			try
 			{
-				this.allObjectsByLoadID.Add(reffable.GetUniqueLoadID(), reffable);
+				allObjectsByLoadID.Add(reffable.GetUniqueLoadID(), reffable);
 			}
-			catch (Exception ex)
+			catch (Exception ex5)
 			{
 				string text4 = "[excepted]";
 				try
@@ -77,71 +61,34 @@ namespace Verse
 				catch (Exception)
 				{
 				}
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception registering ",
-					reffable.GetType(),
-					" ",
-					text5,
-					" in loaded object directory with unique load ID ",
-					text4,
-					": ",
-					ex
-				}), false);
+				Log.Error("Exception registering " + reffable.GetType() + " " + text5 + " in loaded object directory with unique load ID " + text4 + ": " + ex5);
 			}
 		}
 
-		
 		public T ObjectWithLoadID<T>(string loadID)
 		{
 			if (loadID.NullOrEmpty() || loadID == "null")
 			{
-				T result = default(T);
-				return result;
+				return default(T);
 			}
-			ILoadReferenceable loadReferenceable;
-			if (this.allObjectsByLoadID.TryGetValue(loadID, out loadReferenceable))
+			if (allObjectsByLoadID.TryGetValue(loadID, out ILoadReferenceable value))
 			{
-				if (loadReferenceable == null)
+				if (value == null)
 				{
-					T result = default(T);
-					return result;
+					return default(T);
 				}
 				try
 				{
-					return (T)((object)loadReferenceable);
+					return (T)value;
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Exception getting object with load id ",
-						loadID,
-						" of type ",
-						typeof(T),
-						". What we loaded was ",
-						loadReferenceable.ToStringSafe<ILoadReferenceable>(),
-						". Exception:\n",
-						ex
-					}), false);
+					Log.Error("Exception getting object with load id " + loadID + " of type " + typeof(T) + ". What we loaded was " + value.ToStringSafe() + ". Exception:\n" + ex);
 					return default(T);
 				}
 			}
-			Log.Warning(string.Concat(new object[]
-			{
-				"Could not resolve reference to object with loadID ",
-				loadID,
-				" of type ",
-				typeof(T),
-				". Was it compressed away, destroyed, had no ID number, or not saved/loaded right? curParent=",
-				Scribe.loader.curParent.ToStringSafe<IExposable>(),
-				" curPathRelToParent=",
-				Scribe.loader.curPathRelToParent
-			}), false);
+			Log.Warning("Could not resolve reference to object with loadID " + loadID + " of type " + typeof(T) + ". Was it compressed away, destroyed, had no ID number, or not saved/loaded right? curParent=" + Scribe.loader.curParent.ToStringSafe() + " curPathRelToParent=" + Scribe.loader.curPathRelToParent);
 			return default(T);
 		}
-
-		
-		private Dictionary<string, ILoadReferenceable> allObjectsByLoadID = new Dictionary<string, ILoadReferenceable>();
 	}
 }

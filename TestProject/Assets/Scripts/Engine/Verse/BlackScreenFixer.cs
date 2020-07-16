@@ -1,12 +1,9 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	internal class BlackScreenFixer : MonoBehaviour
 	{
-		
 		private void Start()
 		{
 			if (Screen.width != 0 && Screen.height != 0)

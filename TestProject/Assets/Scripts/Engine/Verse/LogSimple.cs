@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -6,78 +5,67 @@ using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class LogSimple
 	{
-		
+		private static List<string> messages = new List<string>();
+
+		private static int tabDepth = 0;
+
 		public static void Message(string text)
 		{
-			for (int i = 0; i < LogSimple.tabDepth; i++)
+			for (int i = 0; i < tabDepth; i++)
 			{
 				text = "  " + text;
 			}
-			LogSimple.messages.Add(text);
+			messages.Add(text);
 		}
 
-		
 		public static void BeginTabMessage(string text)
 		{
-			LogSimple.Message(text);
-			LogSimple.tabDepth++;
+			Message(text);
+			tabDepth++;
 		}
 
-		
 		public static void EndTab()
 		{
-			LogSimple.tabDepth--;
+			tabDepth--;
 		}
 
-		
 		public static void FlushToFileAndOpen()
 		{
-			if (LogSimple.messages.Count == 0)
+			if (messages.Count != 0)
 			{
-				return;
+				string value = CompiledLog();
+				string path = GenFilePaths.SaveDataFolderPath + Path.DirectorySeparatorChar.ToString() + "LogSimple.txt";
+				using (StreamWriter streamWriter = new StreamWriter(path, append: false))
+				{
+					streamWriter.Write(value);
+				}
+				LongEventHandler.ExecuteWhenFinished(delegate
+				{
+					Application.OpenURL(path);
+				});
+				messages.Clear();
 			}
-			string value = LogSimple.CompiledLog();
-			string path = GenFilePaths.SaveDataFolderPath + Path.DirectorySeparatorChar.ToString() + "LogSimple.txt";
-			StreamWriter streamWriter = new StreamWriter(path, false);
-			{
-				streamWriter.Write(value);
-			}
-			LongEventHandler.ExecuteWhenFinished(delegate
-			{
-				Application.OpenURL(path);
-			});
-			LogSimple.messages.Clear();
 		}
 
-		
 		public static void FlushToStandardLog()
 		{
-			if (LogSimple.messages.Count == 0)
+			if (messages.Count != 0)
 			{
-				return;
+				Log.Message(CompiledLog());
+				messages.Clear();
 			}
-			Log.Message(LogSimple.CompiledLog(), false);
-			LogSimple.messages.Clear();
 		}
 
-		
 		private static string CompiledLog()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (string value in LogSimple.messages)
+			foreach (string message in messages)
 			{
-				stringBuilder.AppendLine(value);
+				stringBuilder.AppendLine(message);
 			}
-			return stringBuilder.ToString().TrimEnd(Array.Empty<char>());
+			return stringBuilder.ToString().TrimEnd();
 		}
-
-		
-		private static List<string> messages = new List<string>();
-
-		
-		private static int tabDepth = 0;
 	}
 }

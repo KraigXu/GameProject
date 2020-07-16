@@ -1,43 +1,27 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Thought_Situational : Thought
 	{
-		
-		
-		public bool Active
-		{
-			get
-			{
-				return this.curStageIndex >= 0;
-			}
-		}
+		private int curStageIndex = -1;
 
-		
-		
-		public override int CurStageIndex
-		{
-			get
-			{
-				return this.curStageIndex;
-			}
-		}
+		protected string reason;
 
-		
-		
+		public bool Active => curStageIndex >= 0;
+
+		public override int CurStageIndex => curStageIndex;
+
 		public override string LabelCap
 		{
 			get
 			{
-				if (!this.reason.NullOrEmpty())
+				if (!reason.NullOrEmpty())
 				{
-					string text = base.CurStage.label.Formatted(this.reason).CapitalizeFirst();
-					if (this.def.Worker != null)
+					string text = base.CurStage.label.Formatted(reason).CapitalizeFirst();
+					if (def.Worker != null)
 					{
-						text = this.def.Worker.PostProcessLabel(this.pawn, text);
+						text = def.Worker.PostProcessLabel(pawn, text);
 					}
 					return text;
 				}
@@ -45,29 +29,23 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void RecalculateState()
 		{
-			ThoughtState thoughtState = this.CurrentStateInternal();
-			if (thoughtState.ActiveFor(this.def))
+			ThoughtState thoughtState = CurrentStateInternal();
+			if (thoughtState.ActiveFor(def))
 			{
-				this.curStageIndex = thoughtState.StageIndexFor(this.def);
-				this.reason = thoughtState.Reason;
-				return;
+				curStageIndex = thoughtState.StageIndexFor(def);
+				reason = thoughtState.Reason;
 			}
-			this.curStageIndex = -1;
+			else
+			{
+				curStageIndex = -1;
+			}
 		}
 
-		
 		protected virtual ThoughtState CurrentStateInternal()
 		{
-			return this.def.Worker.CurrentState(this.pawn);
+			return def.Worker.CurrentState(pawn);
 		}
-
-		
-		private int curStageIndex = -1;
-
-		
-		protected string reason;
 	}
 }

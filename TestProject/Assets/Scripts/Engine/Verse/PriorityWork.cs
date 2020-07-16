@@ -1,132 +1,98 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public class PriorityWork : IExposable
 	{
-		
-		
+		private Pawn pawn;
+
+		private IntVec3 prioritizedCell = IntVec3.Invalid;
+
+		private WorkGiverDef prioritizedWorkGiver;
+
+		private int prioritizeTick = Find.TickManager.TicksGame;
+
+		private const int Timeout = 30000;
+
 		public bool IsPrioritized
 		{
 			get
 			{
-				if (this.prioritizedCell.IsValid)
+				if (prioritizedCell.IsValid)
 				{
-					if (Find.TickManager.TicksGame < this.prioritizeTick + 30000)
+					if (Find.TickManager.TicksGame < prioritizeTick + 30000)
 					{
 						return true;
 					}
-					this.Clear();
+					Clear();
 				}
 				return false;
 			}
 		}
 
-		
-		
-		public IntVec3 Cell
-		{
-			get
-			{
-				return this.prioritizedCell;
-			}
-		}
+		public IntVec3 Cell => prioritizedCell;
 
-		
-		
-		public WorkGiverDef WorkGiver
-		{
-			get
-			{
-				return this.prioritizedWorkGiver;
-			}
-		}
+		public WorkGiverDef WorkGiver => prioritizedWorkGiver;
 
-		
 		public PriorityWork()
 		{
 		}
 
-		
 		public PriorityWork(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<IntVec3>(ref this.prioritizedCell, "prioritizedCell", default(IntVec3), false);
-			Scribe_Defs.Look<WorkGiverDef>(ref this.prioritizedWorkGiver, "prioritizedWorkGiver");
-			Scribe_Values.Look<int>(ref this.prioritizeTick, "prioritizeTick", 0, false);
+			Scribe_Values.Look(ref prioritizedCell, "prioritizedCell");
+			Scribe_Defs.Look(ref prioritizedWorkGiver, "prioritizedWorkGiver");
+			Scribe_Values.Look(ref prioritizeTick, "prioritizeTick", 0);
 		}
 
-		
 		public void Set(IntVec3 prioritizedCell, WorkGiverDef prioritizedWorkGiver)
 		{
 			this.prioritizedCell = prioritizedCell;
 			this.prioritizedWorkGiver = prioritizedWorkGiver;
-			this.prioritizeTick = Find.TickManager.TicksGame;
+			prioritizeTick = Find.TickManager.TicksGame;
 		}
 
-		
 		public void Clear()
 		{
-			this.prioritizedCell = IntVec3.Invalid;
-			this.prioritizedWorkGiver = null;
-			this.prioritizeTick = 0;
+			prioritizedCell = IntVec3.Invalid;
+			prioritizedWorkGiver = null;
+			prioritizeTick = 0;
 		}
 
-		
 		public void ClearPrioritizedWorkAndJobQueue()
 		{
-			this.Clear();
-			this.pawn.jobs.ClearQueuedJobs(true);
+			Clear();
+			pawn.jobs.ClearQueuedJobs();
 		}
 
-		
 		public IEnumerable<Gizmo> GetGizmos()
 		{
-			if ((this.IsPrioritized || (this.pawn.CurJob != null && this.pawn.CurJob.playerForced) || this.pawn.jobs.jobQueue.AnyPlayerForced) && !this.pawn.Drafted)
+			if ((IsPrioritized || (pawn.CurJob != null && pawn.CurJob.playerForced) || pawn.jobs.jobQueue.AnyPlayerForced) && !pawn.Drafted)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "CommandClearPrioritizedWork".Translate();
+				command_Action.defaultDesc = "CommandClearPrioritizedWorkDesc".Translate();
+				command_Action.icon = TexCommand.ClearPrioritizedWork;
+				command_Action.activateSound = SoundDefOf.Tick_Low;
+				command_Action.action = delegate
 				{
-					defaultLabel = "CommandClearPrioritizedWork".Translate(),
-					defaultDesc = "CommandClearPrioritizedWorkDesc".Translate(),
-					icon = TexCommand.ClearPrioritizedWork,
-					activateSound = SoundDefOf.Tick_Low,
-					action = delegate
+					ClearPrioritizedWorkAndJobQueue();
+					if (pawn.CurJob.playerForced)
 					{
-						this.ClearPrioritizedWorkAndJobQueue();
-						if (this.pawn.CurJob.playerForced)
-						{
-							this.pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
-						}
-					},
-					hotKey = KeyBindingDefOf.Designator_Cancel,
-					groupKey = 6165612
+						pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+					}
 				};
+				command_Action.hotKey = KeyBindingDefOf.Designator_Cancel;
+				command_Action.groupKey = 6165612;
+				yield return command_Action;
 			}
-			yield break;
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private IntVec3 prioritizedCell = IntVec3.Invalid;
-
-		
-		private WorkGiverDef prioritizedWorkGiver;
-
-		
-		private int prioritizeTick = Find.TickManager.TicksGame;
-
-		
-		private const int Timeout = 30000;
 	}
 }

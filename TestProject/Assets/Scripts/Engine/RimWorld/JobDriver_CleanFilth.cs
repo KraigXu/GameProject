@@ -1,100 +1,77 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_CleanFilth : JobDriver
 	{
-		
-		
-		private Filth Filth
-		{
-			get
-			{
-				return (Filth)this.job.GetTarget(TargetIndex.A).Thing;
-			}
-		}
+		private float cleaningWorkDone;
 
-		
+		private float totalCleaningWorkDone;
+
+		private float totalCleaningWorkRequired;
+
+		private const TargetIndex FilthInd = TargetIndex.A;
+
+		private Filth Filth => (Filth)job.GetTarget(TargetIndex.A).Thing;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			this.pawn.ReserveAsManyAsPossible(this.job.GetTargetQueue(TargetIndex.A), this.job, 1, -1, null);
+			pawn.ReserveAsManyAsPossible(job.GetTargetQueue(TargetIndex.A), job);
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			Toil initExtractTargetFromQueue = Toils_JobTransforms.ClearDespawnedNullOrForbiddenQueuedTargets(TargetIndex.A, null);
+			Toil initExtractTargetFromQueue = Toils_JobTransforms.ClearDespawnedNullOrForbiddenQueuedTargets(TargetIndex.A);
 			yield return initExtractTargetFromQueue;
 			yield return Toils_JobTransforms.SucceedOnNoTargetInQueue(TargetIndex.A);
-			yield return Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.A, true);
+			yield return Toils_JobTransforms.ExtractNextTargetFromQueue(TargetIndex.A);
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, initExtractTargetFromQueue).JumpIfOutsideHomeArea(TargetIndex.A, initExtractTargetFromQueue);
 			Toil clean = new Toil();
 			clean.initAction = delegate
 			{
-				this.cleaningWorkDone = 0f;
-				this.totalCleaningWorkDone = 0f;
-				this.totalCleaningWorkRequired = this.Filth.def.filth.cleaningWorkToReduceThickness * (float)this.Filth.thickness;
+				cleaningWorkDone = 0f;
+				totalCleaningWorkDone = 0f;
+				totalCleaningWorkRequired = Filth.def.filth.cleaningWorkToReduceThickness * (float)Filth.thickness;
 			};
 			clean.tickAction = delegate
 			{
-				Filth filth = this.Filth;
-				this.cleaningWorkDone += 1f;
-				this.totalCleaningWorkDone += 1f;
-				if (this.cleaningWorkDone > filth.def.filth.cleaningWorkToReduceThickness)
+				Filth filth = Filth;
+				cleaningWorkDone += 1f;
+				totalCleaningWorkDone += 1f;
+				if (cleaningWorkDone > filth.def.filth.cleaningWorkToReduceThickness)
 				{
 					filth.ThinFilth();
-					this.cleaningWorkDone = 0f;
+					cleaningWorkDone = 0f;
 					if (filth.Destroyed)
 					{
 						clean.actor.records.Increment(RecordDefOf.MessesCleaned);
-						this.ReadyForNextToil();
-						return;
+						ReadyForNextToil();
 					}
 				}
 			};
 			clean.defaultCompleteMode = ToilCompleteMode.Never;
 			clean.WithEffect(EffecterDefOf.Clean, TargetIndex.A);
-			clean.WithProgressBar(TargetIndex.A, () => this.totalCleaningWorkDone / this.totalCleaningWorkRequired, true, -0.5f);
+			clean.WithProgressBar(TargetIndex.A, () => totalCleaningWorkDone / totalCleaningWorkRequired, interpolateBetweenActorAndTarget: true);
 			clean.PlaySustainerOrSound(delegate
 			{
-				ThingDef def = this.Filth.def;
-				if (!def.filth.cleaningSound.NullOrUndefined())
-				{
-					return def.filth.cleaningSound;
-				}
-				return SoundDefOf.Interact_CleanFilth;
+				ThingDef def = Filth.def;
+				return (!def.filth.cleaningSound.NullOrUndefined()) ? def.filth.cleaningSound : SoundDefOf.Interact_CleanFilth;
 			});
 			clean.JumpIfDespawnedOrNullOrForbidden(TargetIndex.A, initExtractTargetFromQueue);
 			clean.JumpIfOutsideHomeArea(TargetIndex.A, initExtractTargetFromQueue);
 			yield return clean;
 			yield return Toils_Jump.Jump(initExtractTargetFromQueue);
-			yield break;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.cleaningWorkDone, "cleaningWorkDone", 0f, false);
-			Scribe_Values.Look<float>(ref this.totalCleaningWorkDone, "totalCleaningWorkDone", 0f, false);
-			Scribe_Values.Look<float>(ref this.totalCleaningWorkRequired, "totalCleaningWorkRequired", 0f, false);
+			Scribe_Values.Look(ref cleaningWorkDone, "cleaningWorkDone", 0f);
+			Scribe_Values.Look(ref totalCleaningWorkDone, "totalCleaningWorkDone", 0f);
+			Scribe_Values.Look(ref totalCleaningWorkRequired, "totalCleaningWorkRequired", 0f);
 		}
-
-		
-		private float cleaningWorkDone;
-
-		
-		private float totalCleaningWorkDone;
-
-		
-		private float totalCleaningWorkRequired;
-
-		
-		private const TargetIndex FilthInd = TargetIndex.A;
 	}
 }

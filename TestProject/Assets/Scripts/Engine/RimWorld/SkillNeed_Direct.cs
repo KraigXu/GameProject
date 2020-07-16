@@ -1,32 +1,28 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SkillNeed_Direct : SkillNeed
 	{
-		
+		public List<float> valuesPerLevel = new List<float>();
+
 		public override float ValueFor(Pawn pawn)
 		{
 			if (pawn.skills == null)
 			{
 				return 1f;
 			}
-			int level = pawn.skills.GetSkill(this.skill).Level;
-			if (this.valuesPerLevel.Count > level)
+			int level = pawn.skills.GetSkill(skill).Level;
+			if (valuesPerLevel.Count > level)
 			{
-				return this.valuesPerLevel[level];
+				return valuesPerLevel[level];
 			}
-			if (this.valuesPerLevel.Count > 0)
+			if (valuesPerLevel.Count > 0)
 			{
-				return this.valuesPerLevel[this.valuesPerLevel.Count - 1];
+				return valuesPerLevel[valuesPerLevel.Count - 1];
 			}
 			return 1f;
 		}
-
-		
-		public List<float> valuesPerLevel = new List<float>();
 	}
 }

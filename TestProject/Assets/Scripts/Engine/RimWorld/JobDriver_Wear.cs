@@ -1,54 +1,46 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Wear : JobDriver
 	{
-		
-		
-		private Apparel Apparel
-		{
-			get
-			{
-				return (Apparel)this.job.GetTarget(TargetIndex.A).Thing;
-			}
-		}
+		private int duration;
 
-		
+		private int unequipBuffer;
+
+		private const TargetIndex ApparelInd = TargetIndex.A;
+
+		private Apparel Apparel => (Apparel)job.GetTarget(TargetIndex.A).Thing;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.duration, "duration", 0, false);
-			Scribe_Values.Look<int>(ref this.unequipBuffer, "unequipBuffer", 0, false);
+			Scribe_Values.Look(ref duration, "duration", 0);
+			Scribe_Values.Look(ref unequipBuffer, "unequipBuffer", 0);
 		}
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.Apparel, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(Apparel, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
-			this.duration = (int)(this.Apparel.GetStatValue(StatDefOf.EquipDelay, true) * 60f);
-			Apparel apparel = this.Apparel;
-			List<Apparel> wornApparel = this.pawn.apparel.WornApparel;
-			for (int i = wornApparel.Count - 1; i >= 0; i--)
+			duration = (int)(Apparel.GetStatValue(StatDefOf.EquipDelay) * 60f);
+			Apparel apparel = Apparel;
+			List<Apparel> wornApparel = pawn.apparel.WornApparel;
+			for (int num = wornApparel.Count - 1; num >= 0; num--)
 			{
-				if (!ApparelUtility.CanWearTogether(apparel.def, wornApparel[i].def, this.pawn.RaceProps.body))
+				if (!ApparelUtility.CanWearTogether(apparel.def, wornApparel[num].def, pawn.RaceProps.body))
 				{
-					this.duration += (int)(wornApparel[i].GetStatValue(StatDefOf.EquipDelay, true) * 60f);
+					duration += (int)(wornApparel[num].GetStatValue(StatDefOf.EquipDelay) * 60f);
 				}
 			}
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnBurningImmobile(TargetIndex.A);
@@ -56,65 +48,53 @@ namespace RimWorld
 			Toil toil = new Toil();
 			toil.tickAction = delegate
 			{
-				this.unequipBuffer++;
-				this.TryUnequipSomething();
+				unequipBuffer++;
+				TryUnequipSomething();
 			};
-			toil.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
+			toil.WithProgressBarToilDelay(TargetIndex.A);
 			toil.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			toil.defaultCompleteMode = ToilCompleteMode.Delay;
-			toil.defaultDuration = this.duration;
+			toil.defaultDuration = duration;
 			yield return toil;
 			yield return Toils_General.Do(delegate
 			{
-				Apparel apparel = this.Apparel;
-				this.pawn.apparel.Wear(apparel, true, false);
-				if (this.pawn.outfits != null && this.job.playerForced)
+				Apparel apparel = Apparel;
+				pawn.apparel.Wear(apparel);
+				if (pawn.outfits != null && job.playerForced)
 				{
-					this.pawn.outfits.forcedHandler.SetForced(apparel, true);
+					pawn.outfits.forcedHandler.SetForced(apparel, forced: true);
 				}
 			});
-			yield break;
 		}
 
-		
 		private void TryUnequipSomething()
 		{
-			Apparel apparel = this.Apparel;
-			List<Apparel> wornApparel = this.pawn.apparel.WornApparel;
-			int i = wornApparel.Count - 1;
-			while (i >= 0)
+			Apparel apparel = Apparel;
+			List<Apparel> wornApparel = pawn.apparel.WornApparel;
+			int num = wornApparel.Count - 1;
+			while (true)
 			{
-				if (!ApparelUtility.CanWearTogether(apparel.def, wornApparel[i].def, this.pawn.RaceProps.body))
+				if (num >= 0)
 				{
-					int num = (int)(wornApparel[i].GetStatValue(StatDefOf.EquipDelay, true) * 60f);
-					if (this.unequipBuffer < num)
+					if (!ApparelUtility.CanWearTogether(apparel.def, wornApparel[num].def, pawn.RaceProps.body))
 					{
 						break;
 					}
-					bool forbid = this.pawn.Faction != null && this.pawn.Faction.HostileTo(Faction.OfPlayer);
-					Apparel apparel2;
-					if (!this.pawn.apparel.TryDrop(wornApparel[i], out apparel2, this.pawn.PositionHeld, forbid))
-					{
-						Log.Error(this.pawn + " could not drop " + wornApparel[i].ToStringSafe<Apparel>(), false);
-						base.EndJobWith(JobCondition.Errored);
-						return;
-					}
-					break;
+					num--;
+					continue;
 				}
-				else
+				return;
+			}
+			int num2 = (int)(wornApparel[num].GetStatValue(StatDefOf.EquipDelay) * 60f);
+			if (unequipBuffer >= num2)
+			{
+				bool forbid = pawn.Faction != null && pawn.Faction.HostileTo(Faction.OfPlayer);
+				if (!pawn.apparel.TryDrop(wornApparel[num], out Apparel _, pawn.PositionHeld, forbid))
 				{
-					i--;
+					Log.Error(pawn + " could not drop " + wornApparel[num].ToStringSafe());
+					EndJobWith(JobCondition.Errored);
 				}
 			}
 		}
-
-		
-		private int duration;
-
-		
-		private int unequipBuffer;
-
-		
-		private const TargetIndex ApparelInd = TargetIndex.A;
 	}
 }

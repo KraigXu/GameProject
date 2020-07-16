@@ -1,26 +1,21 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class DebugSolidColorMats
 	{
-		
+		private static Dictionary<Color, Material> colorMatDict = new Dictionary<Color, Material>();
+
 		public static Material MaterialOf(Color col)
 		{
-			Material material;
-			if (DebugSolidColorMats.colorMatDict.TryGetValue(col, out material))
+			if (colorMatDict.TryGetValue(col, out Material value))
 			{
-				return material;
+				return value;
 			}
-			material = SolidColorMaterials.SimpleSolidColorMaterial(col, false);
-			DebugSolidColorMats.colorMatDict.Add(col, material);
-			return material;
+			value = SolidColorMaterials.SimpleSolidColorMaterial(col);
+			colorMatDict.Add(col, value);
+			return value;
 		}
-
-		
-		private static Dictionary<Color, Material> colorMatDict = new Dictionary<Color, Material>();
 	}
 }

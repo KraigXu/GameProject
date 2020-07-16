@@ -1,71 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_PawnsAvailable : QuestPartActivable
 	{
-		
+		public ThingDef race;
+
+		public int requiredCount;
+
+		public MapParent mapParent;
+
+		public string inSignalDecrement;
+
+		public string outSignalPawnsNotAvailable;
+
+		private const int CheckInterval = 500;
+
 		public override void QuestPartTick()
 		{
-			if (this.requiredCount > 0 && Find.TickManager.TicksAbs % 500 == 0)
+			if (requiredCount <= 0 || Find.TickManager.TicksAbs % 500 != 0)
 			{
-				int num = 0;
-				List<Pawn> allPawnsSpawned = this.mapParent.Map.mapPawns.AllPawnsSpawned;
-				for (int i = 0; i < allPawnsSpawned.Count; i++)
+				return;
+			}
+			int num = 0;
+			List<Pawn> allPawnsSpawned = mapParent.Map.mapPawns.AllPawnsSpawned;
+			for (int i = 0; i < allPawnsSpawned.Count; i++)
+			{
+				if (allPawnsSpawned[i].def == race && allPawnsSpawned[i].Faction == null)
 				{
-					if (allPawnsSpawned[i].def == this.race && allPawnsSpawned[i].Faction == null)
-					{
-						num++;
-					}
+					num++;
 				}
-				if (num < this.requiredCount)
-				{
-					Find.SignalManager.SendSignal(new Signal(this.outSignalPawnsNotAvailable));
-				}
+			}
+			if (num < requiredCount)
+			{
+				Find.SignalManager.SendSignal(new Signal(outSignalPawnsNotAvailable));
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignalDecrement)
+			if (signal.tag == inSignalDecrement)
 			{
-				this.requiredCount--;
+				requiredCount--;
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<ThingDef>(ref this.race, "race");
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Values.Look<int>(ref this.requiredCount, "requiredCount", 0, false);
-			Scribe_Values.Look<string>(ref this.inSignalDecrement, "inSignalChangeCount", null, false);
-			Scribe_Values.Look<string>(ref this.outSignalPawnsNotAvailable, "outSignalPawnsNotAvailable", null, false);
+			Scribe_Defs.Look(ref race, "race");
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Values.Look(ref requiredCount, "requiredCount", 0);
+			Scribe_Values.Look(ref inSignalDecrement, "inSignalChangeCount");
+			Scribe_Values.Look(ref outSignalPawnsNotAvailable, "outSignalPawnsNotAvailable");
 		}
-
-		
-		public ThingDef race;
-
-		
-		public int requiredCount;
-
-		
-		public MapParent mapParent;
-
-		
-		public string inSignalDecrement;
-
-		
-		public string outSignalPawnsNotAvailable;
-
-		
-		private const int CheckInterval = 500;
 	}
 }

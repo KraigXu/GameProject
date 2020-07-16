@@ -1,101 +1,63 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_MeleeVerbs_TerrainSource : IExposable, IVerbOwner
 	{
-		
-		
-		public VerbTracker VerbTracker
-		{
-			get
-			{
-				return this.tracker;
-			}
-		}
-
-		
-		
-		public List<VerbProperties> VerbProperties
-		{
-			get
-			{
-				return null;
-			}
-		}
-
-		
-		
-		public List<Tool> Tools
-		{
-			get
-			{
-				return this.def.tools;
-			}
-		}
-
-		
-		
-		Thing IVerbOwner.ConstantCaster
-		{
-			get
-			{
-				return this.parent.Pawn;
-			}
-		}
-
-		
-		
-		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
-		{
-			get
-			{
-				return ImplementOwnerTypeDefOf.Terrain;
-			}
-		}
-
-		
-		public static Pawn_MeleeVerbs_TerrainSource Create(Pawn_MeleeVerbs parent, TerrainDef terrainDef)
-		{
-			Pawn_MeleeVerbs_TerrainSource pawn_MeleeVerbs_TerrainSource = new Pawn_MeleeVerbs_TerrainSource();
-			pawn_MeleeVerbs_TerrainSource.parent = parent;
-			pawn_MeleeVerbs_TerrainSource.def = terrainDef;
-			pawn_MeleeVerbs_TerrainSource.tracker = new VerbTracker(pawn_MeleeVerbs_TerrainSource);
-			return pawn_MeleeVerbs_TerrainSource;
-		}
-
-		
-		public void ExposeData()
-		{
-			Scribe_Defs.Look<TerrainDef>(ref this.def, "def");
-			Scribe_Deep.Look<VerbTracker>(ref this.tracker, "tracker", new object[]
-			{
-				this
-			});
-		}
-
-		
-		string IVerbOwner.UniqueVerbOwnerID()
-		{
-			return "TerrainVerbs_" + this.parent.Pawn.ThingID;
-		}
-
-		
-		bool IVerbOwner.VerbsStillUsableBy(Pawn p)
-		{
-			return p == this.parent.Pawn && p.Spawned && this.def == p.Position.GetTerrain(p.Map) && Find.TickManager.TicksGame >= this.parent.lastTerrainBasedVerbUseTick + 1200;
-		}
-
-		
 		public Pawn_MeleeVerbs parent;
 
-		
 		public TerrainDef def;
 
-		
 		public VerbTracker tracker;
+
+		public VerbTracker VerbTracker => tracker;
+
+		public List<VerbProperties> VerbProperties => null;
+
+		public List<Tool> Tools => def.tools;
+
+		Thing IVerbOwner.ConstantCaster => parent.Pawn;
+
+		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef => ImplementOwnerTypeDefOf.Terrain;
+
+		public static Pawn_MeleeVerbs_TerrainSource Create(Pawn_MeleeVerbs parent, TerrainDef terrainDef)
+		{
+			Pawn_MeleeVerbs_TerrainSource obj = new Pawn_MeleeVerbs_TerrainSource
+			{
+				parent = parent,
+				def = terrainDef
+			};
+			obj.tracker = new VerbTracker(obj);
+			return obj;
+		}
+
+		public void ExposeData()
+		{
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Deep.Look(ref tracker, "tracker", this);
+		}
+
+		string IVerbOwner.UniqueVerbOwnerID()
+		{
+			return "TerrainVerbs_" + parent.Pawn.ThingID;
+		}
+
+		bool IVerbOwner.VerbsStillUsableBy(Pawn p)
+		{
+			if (p != parent.Pawn)
+			{
+				return false;
+			}
+			if (!p.Spawned || def != p.Position.GetTerrain(p.Map))
+			{
+				return false;
+			}
+			if (Find.TickManager.TicksGame < parent.lastTerrainBasedVerbUseTick + 1200)
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 }

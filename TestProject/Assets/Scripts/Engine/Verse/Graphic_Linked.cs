@@ -1,66 +1,44 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Graphic_Linked : Graphic
 	{
-		
-		
-		public virtual LinkDrawerType LinkerType
-		{
-			get
-			{
-				return LinkDrawerType.Basic;
-			}
-		}
+		protected Graphic subGraphic;
 
-		
-		
-		public override Material MatSingle
-		{
-			get
-			{
-				return MaterialAtlasPool.SubMaterialFromAtlas(this.subGraphic.MatSingle, LinkDirections.None);
-			}
-		}
+		public virtual LinkDrawerType LinkerType => LinkDrawerType.Basic;
 
-		
+		public override Material MatSingle => MaterialAtlasPool.SubMaterialFromAtlas(subGraphic.MatSingle, LinkDirections.None);
+
 		public Graphic_Linked()
 		{
 		}
 
-		
 		public Graphic_Linked(Graphic subGraphic)
 		{
 			this.subGraphic = subGraphic;
 		}
 
-		
 		public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
 		{
-			return new Graphic_Linked(this.subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
+			return new Graphic_Linked(subGraphic.GetColoredVersion(newShader, newColor, newColorTwo))
 			{
-				data = this.data
+				data = data
 			};
 		}
 
-		
 		public override void Print(SectionLayer layer, Thing thing)
 		{
-			Material mat = this.LinkedDrawMatFrom(thing, thing.Position);
-			Printer_Plane.PrintPlane(layer, thing.TrueCenter(), new Vector2(1f, 1f), mat, 0f, false, null, null, 0.01f, 0f);
+			Material mat = LinkedDrawMatFrom(thing, thing.Position);
+			Printer_Plane.PrintPlane(layer, thing.TrueCenter(), new Vector2(1f, 1f), mat);
 		}
 
-		
 		public override Material MatSingleFor(Thing thing)
 		{
-			return this.LinkedDrawMatFrom(thing, thing.Position);
+			return LinkedDrawMatFrom(thing, thing.Position);
 		}
 
-		
 		protected Material LinkedDrawMatFrom(Thing parent, IntVec3 cell)
 		{
 			int num = 0;
@@ -68,17 +46,16 @@ namespace Verse
 			for (int i = 0; i < 4; i++)
 			{
 				IntVec3 c = cell + GenAdj.CardinalDirections[i];
-				if (this.ShouldLinkWith(c, parent))
+				if (ShouldLinkWith(c, parent))
 				{
 					num += num2;
 				}
 				num2 *= 2;
 			}
 			LinkDirections linkSet = (LinkDirections)num;
-			return MaterialAtlasPool.SubMaterialFromAtlas(this.subGraphic.MatSingleFor(parent), linkSet);
+			return MaterialAtlasPool.SubMaterialFromAtlas(subGraphic.MatSingleFor(parent), linkSet);
 		}
 
-		
 		public virtual bool ShouldLinkWith(IntVec3 c, Thing parent)
 		{
 			if (!parent.Spawned)
@@ -87,12 +64,9 @@ namespace Verse
 			}
 			if (!c.InBounds(parent.Map))
 			{
-				return (parent.def.graphicData.linkFlags & LinkFlags.MapEdge) > LinkFlags.None;
+				return (parent.def.graphicData.linkFlags & LinkFlags.MapEdge) != 0;
 			}
-			return (parent.Map.linkGrid.LinkFlagsAt(c) & parent.def.graphicData.linkFlags) > LinkFlags.None;
+			return (parent.Map.linkGrid.LinkFlagsAt(c) & parent.def.graphicData.linkFlags) != 0;
 		}
-
-		
-		protected Graphic subGraphic;
 	}
 }

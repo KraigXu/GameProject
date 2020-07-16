@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,10 +5,45 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class InteractionWorker_RecruitAttempt : InteractionWorker
 	{
-		
+		private const float BaseResistanceReductionPerInteraction = 1f;
+
+		private static readonly SimpleCurve ResistanceImpactFactorCurve_Mood = new SimpleCurve
+		{
+			new CurvePoint(0f, 0.2f),
+			new CurvePoint(0.5f, 1f),
+			new CurvePoint(1f, 1.5f)
+		};
+
+		private static readonly SimpleCurve ResistanceImpactFactorCurve_Opinion = new SimpleCurve
+		{
+			new CurvePoint(-100f, 0.5f),
+			new CurvePoint(0f, 1f),
+			new CurvePoint(100f, 1.5f)
+		};
+
+		private const float MaxMoodForWarning = 0.4f;
+
+		private const float MaxOpinionForWarning = -0.01f;
+
+		public const float WildmanWildness = 0.75f;
+
+		private const float WildmanPrisonerChanceFactor = 0.6f;
+
+		private static readonly SimpleCurve TameChanceFactorCurve_Wildness = new SimpleCurve
+		{
+			new CurvePoint(1f, 0f),
+			new CurvePoint(0.5f, 1f),
+			new CurvePoint(0f, 2f)
+		};
+
+		private const float TameChanceFactor_Bonded = 4f;
+
+		private const float ChanceToDevelopBondRelationOnTamed = 0.01f;
+
+		private const int MenagerieTaleThreshold = 5;
+
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
 			letterText = null;
@@ -17,7 +51,7 @@ namespace RimWorld
 			letterDef = null;
 			lookTargets = null;
 			bool flag = recipient.AnimalOrWildMan();
-			float x = (float)((recipient.relations != null) ? recipient.relations.OpinionOf(initiator) : 0);
+			float x = (recipient.relations != null) ? recipient.relations.OpinionOf(initiator) : 0;
 			bool flag2 = initiator.InspirationDef == InspirationDefOf.Inspired_Recruitment && !flag && recipient.guest.interactionMode != PrisonerInteractionModeDefOf.ReduceResistance;
 			if (DebugSettings.instantRecruit)
 			{
@@ -27,9 +61,9 @@ namespace RimWorld
 			if (!flag && recipient.guest.resistance > 0f && !flag2)
 			{
 				float num = 1f;
-				num *= initiator.GetStatValue(StatDefOf.NegotiationAbility, true);
-				num *= InteractionWorker_RecruitAttempt.ResistanceImpactFactorCurve_Mood.Evaluate((recipient.needs.mood == null) ? 1f : recipient.needs.mood.CurInstantLevelPercentage);
-				num *= InteractionWorker_RecruitAttempt.ResistanceImpactFactorCurve_Opinion.Evaluate(x);
+				num *= initiator.GetStatValue(StatDefOf.NegotiationAbility);
+				num *= ResistanceImpactFactorCurve_Mood.Evaluate((recipient.needs.mood == null) ? 1f : recipient.needs.mood.CurInstantLevelPercentage);
+				num *= ResistanceImpactFactorCurve_Opinion.Evaluate(x);
 				num = Mathf.Min(num, recipient.guest.resistance);
 				float resistance = recipient.guest.resistance;
 				recipient.guest.resistance = Mathf.Max(0f, recipient.guest.resistance - num);
@@ -51,41 +85,34 @@ namespace RimWorld
 					{
 						taggedString += " " + "MessagePrisonerResistanceBroken_RecruitAttempsWillBegin".Translate();
 					}
-					Messages.Message(taggedString, recipient, MessageTypeDefOf.PositiveEvent, true);
+					Messages.Message(taggedString, recipient, MessageTypeDefOf.PositiveEvent);
 				}
 			}
 			else
 			{
 				float num2;
-				if (flag)
+				if (!flag)
 				{
-					if (initiator.InspirationDef == InspirationDefOf.Inspired_Taming)
-					{
-						num2 = 1f;
-						initiator.mindState.inspirationHandler.EndInspiration(InspirationDefOf.Inspired_Taming);
-					}
-					else
-					{
-						num2 = initiator.GetStatValue(StatDefOf.TameAnimalChance, true);
-						float x2 = recipient.IsWildMan() ? 0.75f : recipient.RaceProps.wildness;
-						num2 *= InteractionWorker_RecruitAttempt.TameChanceFactorCurve_Wildness.Evaluate(x2);
-						if (recipient.IsPrisonerInPrisonCell())
-						{
-							num2 *= 0.6f;
-						}
-						if (initiator.relations.DirectRelationExists(PawnRelationDefOf.Bond, recipient))
-						{
-							num2 *= 4f;
-						}
-					}
+					num2 = ((!flag2 && !DebugSettings.instantRecruit) ? recipient.RecruitChanceFinalByPawn(initiator) : 1f);
 				}
-				else if (flag2 || DebugSettings.instantRecruit)
+				else if (initiator.InspirationDef == InspirationDefOf.Inspired_Taming)
 				{
 					num2 = 1f;
+					initiator.mindState.inspirationHandler.EndInspiration(InspirationDefOf.Inspired_Taming);
 				}
 				else
 				{
-					num2 = recipient.RecruitChanceFinalByPawn(initiator);
+					num2 = initiator.GetStatValue(StatDefOf.TameAnimalChance);
+					float x2 = recipient.IsWildMan() ? 0.75f : recipient.RaceProps.wildness;
+					num2 *= TameChanceFactorCurve_Wildness.Evaluate(x2);
+					if (recipient.IsPrisonerInPrisonCell())
+					{
+						num2 *= 0.6f;
+					}
+					if (initiator.relations.DirectRelationExists(PawnRelationDefOf.Bond, recipient))
+					{
+						num2 *= 4f;
+					}
 				}
 				if (Rand.Chance(num2))
 				{
@@ -93,16 +120,12 @@ namespace RimWorld
 					{
 						recipient.guest.ClearLastRecruiterData();
 					}
-					InteractionWorker_RecruitAttempt.DoRecruit(initiator, recipient, num2, out letterLabel, out letterText, true, false);
+					DoRecruit(initiator, recipient, num2, out letterLabel, out letterText, useAudiovisualEffects: true, sendLetter: false);
 					if (!letterLabel.NullOrEmpty())
 					{
 						letterDef = LetterDefOf.PositiveEvent;
 					}
-					lookTargets = new LookTargets(new TargetInfo[]
-					{
-						recipient,
-						initiator
-					});
+					lookTargets = new LookTargets(recipient, initiator);
 					if (flag2)
 					{
 						initiator.mindState.inspirationHandler.EndInspiration(InspirationDefOf.Inspired_Recruitment);
@@ -134,15 +157,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void DoRecruit(Pawn recruiter, Pawn recruitee, float recruitChance, bool useAudiovisualEffects = true)
 		{
-			string text;
-			string text2;
-			InteractionWorker_RecruitAttempt.DoRecruit(recruiter, recruitee, recruitChance, out text, out text2, useAudiovisualEffects, true);
+			DoRecruit(recruiter, recruitee, recruitChance, out string _, out string _, useAudiovisualEffects);
 		}
 
-		
 		public static void DoRecruit(Pawn recruiter, Pawn recruitee, float recruitChance, out string letterLabel, out string letter, bool useAudiovisualEffects = true, bool sendLetter = true)
 		{
 			letterLabel = null;
@@ -152,24 +171,24 @@ namespace RimWorld
 			if (recruitee.apparel != null && recruitee.apparel.LockedApparel != null)
 			{
 				List<Apparel> lockedApparel = recruitee.apparel.LockedApparel;
-				for (int i = lockedApparel.Count - 1; i >= 0; i--)
+				for (int num = lockedApparel.Count - 1; num >= 0; num--)
 				{
-					recruitee.apparel.Unlock(lockedApparel[i]);
+					recruitee.apparel.Unlock(lockedApparel[num]);
 				}
 			}
 			if (recruitee.royalty != null)
 			{
-				foreach (RoyalTitle royalTitle in recruitee.royalty.AllTitlesForReading)
+				foreach (RoyalTitle item in recruitee.royalty.AllTitlesForReading)
 				{
-					if (royalTitle.def.replaceOnRecruited != null)
+					if (item.def.replaceOnRecruited != null)
 					{
-						recruitee.royalty.SetTitle(royalTitle.faction, royalTitle.def.replaceOnRecruited, false, false, false);
+						recruitee.royalty.SetTitle(item.faction, item.def.replaceOnRecruited, grantRewards: false, rewardsOnlyForNewestTitle: false, sendLetter: false);
 					}
 				}
 			}
 			if (recruitee.guest != null)
 			{
-				recruitee.guest.SetGuestStatus(null, false);
+				recruitee.guest.SetGuestStatus(null);
 			}
 			bool flag = recruitee.Name != null;
 			if (recruitee.Faction != recruiter.Faction)
@@ -183,14 +202,10 @@ namespace RimWorld
 					letterLabel = "LetterLabelMessageRecruitSuccess".Translate() + ": " + recruitee.LabelShortCap;
 					if (sendLetter)
 					{
-						Find.LetterStack.ReceiveLetter(letterLabel, "MessageRecruitSuccess".Translate(recruiter, recruitee, recruitChance.ToStringPercent(), recruiter.Named("RECRUITER"), recruitee.Named("RECRUITEE")), LetterDefOf.PositiveEvent, recruitee, null, null, null, null);
+						Find.LetterStack.ReceiveLetter(letterLabel, "MessageRecruitSuccess".Translate(recruiter, recruitee, recruitChance.ToStringPercent(), recruiter.Named("RECRUITER"), recruitee.Named("RECRUITEE")), LetterDefOf.PositiveEvent, recruitee);
 					}
 				}
-				TaleRecorder.RecordTale(TaleDefOf.Recruited, new object[]
-				{
-					recruiter,
-					recruitee
-				});
+				TaleRecorder.RecordTale(TaleDefOf.Recruited, recruiter, recruitee);
 				recruiter.records.Increment(RecordDefOf.PrisonersRecruited);
 				if (recruitee.needs.mood != null)
 				{
@@ -204,11 +219,11 @@ namespace RimWorld
 				{
 					if (!flag)
 					{
-						Messages.Message("MessageTameAndNameSuccess".Translate(recruiter.LabelShort, value, recruitChance.ToStringPercent(), recruitee.Name.ToStringFull, recruiter.Named("RECRUITER"), recruitee.Named("RECRUITEE")).AdjustedFor(recruitee, "PAWN", true), recruitee, MessageTypeDefOf.PositiveEvent, true);
+						Messages.Message("MessageTameAndNameSuccess".Translate(recruiter.LabelShort, value, recruitChance.ToStringPercent(), recruitee.Name.ToStringFull, recruiter.Named("RECRUITER"), recruitee.Named("RECRUITEE")).AdjustedFor(recruitee), recruitee, MessageTypeDefOf.PositiveEvent);
 					}
 					else
 					{
-						Messages.Message("MessageTameSuccess".Translate(recruiter.LabelShort, value, recruitChance.ToStringPercent(), recruiter.Named("RECRUITER")), recruitee, MessageTypeDefOf.PositiveEvent, true);
+						Messages.Message("MessageTameSuccess".Translate(recruiter.LabelShort, value, recruitChance.ToStringPercent(), recruiter.Named("RECRUITER")), recruitee, MessageTypeDefOf.PositiveEvent);
 					}
 					if (recruiter.Spawned && recruitee.Spawned)
 					{
@@ -219,19 +234,11 @@ namespace RimWorld
 				RelationsUtility.TryDevelopBondRelation(recruiter, recruitee, 0.01f);
 				if (Rand.Chance(Mathf.Lerp(0.02f, 1f, recruitee.RaceProps.wildness)) || recruitee.IsWildMan())
 				{
-					TaleRecorder.RecordTale(TaleDefOf.TamedAnimal, new object[]
-					{
-						recruiter,
-						recruitee
-					});
+					TaleRecorder.RecordTale(TaleDefOf.TamedAnimal, recruiter, recruitee);
 				}
 				if (PawnsFinder.AllMapsWorldAndTemporary_Alive.Count((Pawn p) => p.playerSettings != null && p.playerSettings.Master == recruiter) >= 5)
 				{
-					TaleRecorder.RecordTale(TaleDefOf.IncreasedMenagerie, new object[]
-					{
-						recruiter,
-						recruitee
-					});
+					TaleRecorder.RecordTale(TaleDefOf.IncreasedMenagerie, recruiter, recruitee);
 				}
 			}
 			if (recruitee.caller != null)
@@ -239,80 +246,5 @@ namespace RimWorld
 				recruitee.caller.DoCall();
 			}
 		}
-
-		
-		private const float BaseResistanceReductionPerInteraction = 1f;
-
-		
-		private static readonly SimpleCurve ResistanceImpactFactorCurve_Mood = new SimpleCurve
-		{
-			{
-				new CurvePoint(0f, 0.2f),
-				true
-			},
-			{
-				new CurvePoint(0.5f, 1f),
-				true
-			},
-			{
-				new CurvePoint(1f, 1.5f),
-				true
-			}
-		};
-
-		
-		private static readonly SimpleCurve ResistanceImpactFactorCurve_Opinion = new SimpleCurve
-		{
-			{
-				new CurvePoint(-100f, 0.5f),
-				true
-			},
-			{
-				new CurvePoint(0f, 1f),
-				true
-			},
-			{
-				new CurvePoint(100f, 1.5f),
-				true
-			}
-		};
-
-		
-		private const float MaxMoodForWarning = 0.4f;
-
-		
-		private const float MaxOpinionForWarning = -0.01f;
-
-		
-		public const float WildmanWildness = 0.75f;
-
-		
-		private const float WildmanPrisonerChanceFactor = 0.6f;
-
-		
-		private static readonly SimpleCurve TameChanceFactorCurve_Wildness = new SimpleCurve
-		{
-			{
-				new CurvePoint(1f, 0f),
-				true
-			},
-			{
-				new CurvePoint(0.5f, 1f),
-				true
-			},
-			{
-				new CurvePoint(0f, 2f),
-				true
-			}
-		};
-
-		
-		private const float TameChanceFactor_Bonded = 4f;
-
-		
-		private const float ChanceToDevelopBondRelationOnTamed = 0.01f;
-
-		
-		private const int MenagerieTaleThreshold = 5;
 	}
 }

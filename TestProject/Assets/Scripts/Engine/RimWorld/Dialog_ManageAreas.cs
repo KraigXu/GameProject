@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -6,64 +5,54 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Dialog_ManageAreas : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(450f, 400f);
-			}
-		}
+		private Map map;
 
-		
+		private static Regex validNameRegex = new Regex("^[\\p{L}0-9 '\\-]*$");
+
+		public override Vector2 InitialSize => new Vector2(450f, 400f);
+
 		public Dialog_ManageAreas(Map map)
 		{
 			this.map = map;
-			this.forcePause = true;
-			this.doCloseX = true;
-			this.doCloseButton = true;
-			this.closeOnClickedOutside = true;
-			this.absorbInputAroundWindow = true;
+			forcePause = true;
+			doCloseX = true;
+			doCloseButton = true;
+			closeOnClickedOutside = true;
+			absorbInputAroundWindow = true;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Listing_Standard listing_Standard = new Listing_Standard();
 			listing_Standard.ColumnWidth = inRect.width;
 			listing_Standard.Begin(inRect);
-			List<Area> allAreas = this.map.areaManager.AllAreas;
+			List<Area> allAreas = map.areaManager.AllAreas;
 			int i = 0;
 			for (int j = 0; j < allAreas.Count; j++)
 			{
 				if (allAreas[j].Mutable)
 				{
-					Dialog_ManageAreas.DoAreaRow(listing_Standard.GetRect(24f), allAreas[j]);
+					DoAreaRow(listing_Standard.GetRect(24f), allAreas[j]);
 					listing_Standard.Gap(6f);
 					i++;
 				}
 			}
-			if (this.map.areaManager.CanMakeNewAllowed())
+			if (map.areaManager.CanMakeNewAllowed())
 			{
-				while (i < 9)
+				for (; i < 9; i++)
 				{
 					listing_Standard.Gap(30f);
-					i++;
 				}
-				if (listing_Standard.ButtonText("NewArea".Translate(), null))
+				if (listing_Standard.ButtonText("NewArea".Translate()))
 				{
-					Area_Allowed area_Allowed;
-					this.map.areaManager.TryMakeNewAllowed(out area_Allowed);
+					map.areaManager.TryMakeNewAllowed(out Area_Allowed _);
 				}
 			}
 			listing_Standard.End();
 		}
 
-		
 		private static void DoAreaRow(Rect rect, Area area)
 		{
 			if (Mouse.IsOver(rect))
@@ -74,40 +63,33 @@ namespace RimWorld
 				GUI.color = Color.white;
 			}
 			GUI.BeginGroup(rect);
-			WidgetRow widgetRow = new WidgetRow(0f, 0f, UIDirection.RightThenUp, 99999f, 4f);
-			widgetRow.Icon(area.ColorTexture, null);
+			WidgetRow widgetRow = new WidgetRow(0f, 0f);
+			widgetRow.Icon(area.ColorTexture);
 			widgetRow.Gap(4f);
 			float width = rect.width - widgetRow.FinalX - 4f - Text.CalcSize("Rename".Translate()).x - 16f - 4f - Text.CalcSize("InvertArea".Translate()).x - 16f - 4f - 24f;
 			widgetRow.Label(area.Label, width);
-			if (widgetRow.ButtonText("Rename".Translate(), null, true, true))
+			if (widgetRow.ButtonText("Rename".Translate()))
 			{
 				Find.WindowStack.Add(new Dialog_RenameArea(area));
 			}
-			if (widgetRow.ButtonText("InvertArea".Translate(), null, true, true))
+			if (widgetRow.ButtonText("InvertArea".Translate()))
 			{
 				area.Invert();
 			}
-			if (widgetRow.ButtonIcon(TexButton.DeleteX, null, new Color?(GenUI.SubtleMouseoverColor), true))
+			if (widgetRow.ButtonIcon(TexButton.DeleteX, null, GenUI.SubtleMouseoverColor))
 			{
 				area.Delete();
 			}
 			GUI.EndGroup();
 		}
 
-		
 		public static void DoNameInputRect(Rect rect, ref string name, int maxLength)
 		{
 			string text = Widgets.TextField(rect, name);
-			if (text.Length <= maxLength && Dialog_ManageAreas.validNameRegex.IsMatch(text))
+			if (text.Length <= maxLength && validNameRegex.IsMatch(text))
 			{
 				name = text;
 			}
 		}
-
-		
-		private Map map;
-
-		
-		private static Regex validNameRegex = new Regex("^[\\p{L}0-9 '\\-]*$");
 	}
 }

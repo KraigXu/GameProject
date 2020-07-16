@@ -1,13 +1,12 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PortraitRenderer : MonoBehaviour
 	{
-		
+		private Pawn pawn;
+
 		public void RenderPortrait(Pawn pawn, RenderTexture renderTexture, Vector3 cameraOffset, float cameraZoom)
 		{
 			Camera portraitCamera = Find.PortraitCamera;
@@ -24,13 +23,9 @@ namespace RimWorld
 			portraitCamera.targetTexture = null;
 		}
 
-		
 		public void OnPostRender()
 		{
-			this.pawn.Drawer.renderer.RenderPortrait();
+			pawn.Drawer.renderer.RenderPortrait();
 		}
-
-		
-		private Pawn pawn;
 	}
 }

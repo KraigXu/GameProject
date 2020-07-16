@@ -1,61 +1,39 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_SelfTame : IncidentWorker
 	{
-		
 		private IEnumerable<Pawn> Candidates(Map map)
 		{
-			return from x in map.mapPawns.AllPawnsSpawned
-			where x.RaceProps.Animal && x.Faction == null && !x.Position.Fogged(x.Map) && !x.InMentalState && !x.Downed && x.RaceProps.wildness > 0f
-			select x;
+			return map.mapPawns.AllPawnsSpawned.Where((Pawn x) => x.RaceProps.Animal && x.Faction == null && !x.Position.Fogged(x.Map) && !x.InMentalState && !x.Downed && x.RaceProps.wildness > 0f);
 		}
 
-		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			return this.Candidates(map).Any<Pawn>();
+			return Candidates(map).Any();
 		}
 
-		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			Pawn pawn = null;
-			if (!this.Candidates(map).TryRandomElement(out pawn))
+			Pawn result = null;
+			if (!Candidates(map).TryRandomElement(out result))
 			{
 				return false;
 			}
-			if (pawn.guest != null)
+			if (result.guest != null)
 			{
-				pawn.guest.SetGuestStatus(null, false);
+				result.guest.SetGuestStatus(null);
 			}
-			string value = pawn.LabelIndefinite();
-			bool flag = pawn.Name != null;
-			pawn.SetFaction(Faction.OfPlayer, null);
-			string str;
-			if (!flag && pawn.Name != null)
-			{
-				if (pawn.Name.Numerical)
-				{
-					str = "LetterAnimalSelfTameAndNameNumerical".Translate(value, pawn.Name.ToStringFull, pawn.Named("ANIMAL")).CapitalizeFirst();
-				}
-				else
-				{
-					str = "LetterAnimalSelfTameAndName".Translate(value, pawn.Name.ToStringFull, pawn.Named("ANIMAL")).CapitalizeFirst();
-				}
-			}
-			else
-			{
-				str = "LetterAnimalSelfTame".Translate(pawn).CapitalizeFirst();
-			}
-			base.SendStandardLetter("LetterLabelAnimalSelfTame".Translate(pawn.KindLabel, pawn).CapitalizeFirst(), str, LetterDefOf.PositiveEvent, parms, pawn, Array.Empty<NamedArgument>());
+			string value = result.LabelIndefinite();
+			bool num = result.Name != null;
+			result.SetFaction(Faction.OfPlayer);
+			SendStandardLetter(baseLetterText: (num || result.Name == null) ? ((string)"LetterAnimalSelfTame".Translate(result).CapitalizeFirst()) : ((!result.Name.Numerical) ? ((string)"LetterAnimalSelfTameAndName".Translate(value, result.Name.ToStringFull, result.Named("ANIMAL")).CapitalizeFirst()) : ((string)"LetterAnimalSelfTameAndNameNumerical".Translate(value, result.Name.ToStringFull, result.Named("ANIMAL")).CapitalizeFirst())), baseLetterLabel: "LetterLabelAnimalSelfTame".Translate(result.KindLabel, result).CapitalizeFirst(), baseLetterDef: LetterDefOf.PositiveEvent, parms: parms, lookTargets: result, textArgs: Array.Empty<NamedArgument>());
 			return true;
 		}
 	}

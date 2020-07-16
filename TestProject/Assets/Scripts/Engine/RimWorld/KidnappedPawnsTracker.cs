@@ -1,66 +1,60 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class KidnappedPawnsTracker : IExposable
 	{
-		
-		
-		public List<Pawn> KidnappedPawnsListForReading
-		{
-			get
-			{
-				return this.kidnappedPawns;
-			}
-		}
+		private Faction faction;
 
-		
+		private List<Pawn> kidnappedPawns = new List<Pawn>();
+
+		private const int TryRecruitInterval = 15051;
+
+		private const float RecruitMTBDays = 30f;
+
+		public List<Pawn> KidnappedPawnsListForReading => kidnappedPawns;
+
 		public KidnappedPawnsTracker(Faction faction)
 		{
 			this.faction = faction;
 		}
 
-		
 		public void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
-				this.kidnappedPawns.RemoveAll((Pawn x) => x.Destroyed);
+				kidnappedPawns.RemoveAll((Pawn x) => x.Destroyed);
 			}
-			Scribe_Collections.Look<Pawn>(ref this.kidnappedPawns, "kidnappedPawns", LookMode.Reference, Array.Empty<object>());
+			Scribe_Collections.Look(ref kidnappedPawns, "kidnappedPawns", LookMode.Reference);
 		}
 
-		
 		public void Kidnap(Pawn pawn, Pawn kidnapper)
 		{
-			if (this.kidnappedPawns.Contains(pawn))
+			if (kidnappedPawns.Contains(pawn))
 			{
-				Log.Error("Tried to kidnap already kidnapped pawn " + pawn, false);
+				Log.Error("Tried to kidnap already kidnapped pawn " + pawn);
 				return;
 			}
-			if (pawn.Faction == this.faction)
+			if (pawn.Faction == faction)
 			{
-				Log.Error("Tried to kidnap pawn with the same faction: " + pawn, false);
+				Log.Error("Tried to kidnap pawn with the same faction: " + pawn);
 				return;
 			}
 			pawn.PreKidnapped(kidnapper);
 			if (pawn.Spawned)
 			{
-				pawn.DeSpawn(DestroyMode.Vanish);
+				pawn.DeSpawn();
 			}
-			this.kidnappedPawns.Add(pawn);
+			kidnappedPawns.Add(pawn);
 			if (!Find.WorldPawns.Contains(pawn))
 			{
-				Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Decide);
+				Find.WorldPawns.PassToWorld(pawn);
 				if (!Find.WorldPawns.Contains(pawn))
 				{
-					Log.Error("WorldPawns discarded kidnapped pawn.", false);
-					this.kidnappedPawns.Remove(pawn);
+					Log.Error("WorldPawns discarded kidnapped pawn.");
+					kidnappedPawns.Remove(pawn);
 				}
 			}
 			if (pawn.Faction == Faction.OfPlayer)
@@ -69,75 +63,60 @@ namespace RimWorld
 				BillUtility.Notify_ColonistUnavailable(pawn);
 				if (kidnapper != null)
 				{
-					Find.LetterStack.ReceiveLetter("LetterLabelPawnsKidnapped".Translate(pawn.Named("PAWN")), "LetterPawnsKidnapped".Translate(pawn.Named("PAWN"), kidnapper.Faction.Named("FACTION")), LetterDefOf.NegativeEvent, null);
+					Find.LetterStack.ReceiveLetter("LetterLabelPawnsKidnapped".Translate(pawn.Named("PAWN")), "LetterPawnsKidnapped".Translate(pawn.Named("PAWN"), kidnapper.Faction.Named("FACTION")), LetterDefOf.NegativeEvent);
 				}
 			}
 			QuestUtility.SendQuestTargetSignals(pawn.questTags, "Kidnapped", this.Named("SUBJECT"), kidnapper.Named("KIDNAPPER"));
 			Find.GameEnder.CheckOrUpdateGameOver();
 		}
 
-		
 		public void RemoveKidnappedPawn(Pawn pawn)
 		{
-			if (this.kidnappedPawns.Remove(pawn))
+			if (kidnappedPawns.Remove(pawn))
 			{
 				if (pawn.Faction == Faction.OfPlayer)
 				{
 					PawnDiedOrDownedThoughtsUtility.RemoveLostThoughts(pawn);
-					return;
 				}
 			}
 			else
 			{
-				Log.Warning("Tried to remove kidnapped pawn " + pawn + " but he's not here.", false);
+				Log.Warning("Tried to remove kidnapped pawn " + pawn + " but he's not here.");
 			}
 		}
 
-		
 		public void LogKidnappedPawns()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine(this.faction.Name + ":");
-			for (int i = 0; i < this.kidnappedPawns.Count; i++)
+			stringBuilder.AppendLine(faction.Name + ":");
+			for (int i = 0; i < kidnappedPawns.Count; i++)
 			{
-				stringBuilder.AppendLine(this.kidnappedPawns[i].Name.ToStringFull);
+				stringBuilder.AppendLine(kidnappedPawns[i].Name.ToStringFull);
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
 
-		
 		public void KidnappedPawnsTrackerTick()
 		{
-			for (int i = this.kidnappedPawns.Count - 1; i >= 0; i--)
+			for (int num = kidnappedPawns.Count - 1; num >= 0; num--)
 			{
-				if (this.kidnappedPawns[i].DestroyedOrNull())
+				if (kidnappedPawns[num].DestroyedOrNull())
 				{
-					this.kidnappedPawns.RemoveAt(i);
+					kidnappedPawns.RemoveAt(num);
 				}
 			}
-			if (Find.TickManager.TicksGame % 15051 == 0)
+			if (Find.TickManager.TicksGame % 15051 != 0)
 			{
-				for (int j = this.kidnappedPawns.Count - 1; j >= 0; j--)
+				return;
+			}
+			for (int num2 = kidnappedPawns.Count - 1; num2 >= 0; num2--)
+			{
+				if (Rand.MTBEventOccurs(30f, 60000f, 15051f))
 				{
-					if (Rand.MTBEventOccurs(30f, 60000f, 15051f))
-					{
-						this.kidnappedPawns[j].SetFaction(this.faction, null);
-						this.kidnappedPawns.RemoveAt(j);
-					}
+					kidnappedPawns[num2].SetFaction(faction);
+					kidnappedPawns.RemoveAt(num2);
 				}
 			}
 		}
-
-		
-		private Faction faction;
-
-		
-		private List<Pawn> kidnappedPawns = new List<Pawn>();
-
-		
-		private const int TryRecruitInterval = 15051;
-
-		
-		private const float RecruitMTBDays = 30f;
 	}
 }

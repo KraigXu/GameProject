@@ -1,66 +1,68 @@
-﻿using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-public class RoomRequirement_ThingAnyOf : RoomRequirement
+namespace RimWorld
 {
-	public List<ThingDef> things;
-
-	public override string Label(Room r = null)
+	public class RoomRequirement_ThingAnyOf : RoomRequirement
 	{
-		return ((!labelKey.NullOrEmpty()) ? ((string)labelKey.Translate()) : things[0].label) + ((r != null) ? " 0/1" : "");
-	}
+		public List<ThingDef> things;
 
-	public override bool Met(Room r, Pawn p = null)
-	{
-		foreach (ThingDef thing in things)
+		public override string Label(Room r = null)
 		{
-			if (r.ContainsThing(thing))
-			{
-				return true;
-			}
+			return ((!labelKey.NullOrEmpty()) ? ((string)labelKey.Translate()) : things[0].label) + ((r != null) ? " 0/1" : "");
 		}
-		return false;
-	}
 
-	public override bool SameOrSubsetOf(RoomRequirement other)
-	{
-		if (!base.SameOrSubsetOf(other))
+		public override bool Met(Room r, Pawn p = null)
 		{
+			foreach (ThingDef thing in things)
+			{
+				if (r.ContainsThing(thing))
+				{
+					return true;
+				}
+			}
 			return false;
 		}
-		RoomRequirement_ThingAnyOf roomRequirement_ThingAnyOf = (RoomRequirement_ThingAnyOf)other;
-		foreach (ThingDef thing in things)
+
+		public override bool SameOrSubsetOf(RoomRequirement other)
 		{
-			if (!roomRequirement_ThingAnyOf.things.Contains(thing))
+			if (!base.SameOrSubsetOf(other))
 			{
 				return false;
 			}
-		}
-		return true;
-	}
-
-	public override IEnumerable<string> ConfigErrors()
-	{
-		foreach (string item in base.ConfigErrors())
-		{
-			yield return item;
-		}
-		if (things.NullOrEmpty())
-		{
-			yield return "things are null or empty";
-		}
-	}
-
-	public override bool PlayerHasResearched()
-	{
-		for (int i = 0; i < things.Count; i++)
-		{
-			if (things[i].IsResearchFinished)
+			RoomRequirement_ThingAnyOf roomRequirement_ThingAnyOf = (RoomRequirement_ThingAnyOf)other;
+			foreach (ThingDef thing in things)
 			{
-				return true;
+				if (!roomRequirement_ThingAnyOf.things.Contains(thing))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public override IEnumerable<string> ConfigErrors()
+		{
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (things.NullOrEmpty())
+			{
+				yield return "things are null or empty";
 			}
 		}
-		return false;
+
+		public override bool PlayerHasResearched()
+		{
+			for (int i = 0; i < things.Count; i++)
+			{
+				if (things[i].IsResearchFinished)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

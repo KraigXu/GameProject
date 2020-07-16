@@ -1,31 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public sealed class SituationalThoughtHandler
 	{
-		
+		private class CachedSocialThoughts
+		{
+			public List<Thought_SituationalSocial> thoughts = new List<Thought_SituationalSocial>();
+
+			public List<Thought_SituationalSocial> activeThoughts = new List<Thought_SituationalSocial>();
+
+			public int lastRecalculationTick = -99999;
+
+			public int lastQueryTick = -99999;
+
+			private const int ExpireAfterTicks = 300;
+
+			public bool Expired => Find.TickManager.TicksGame - lastQueryTick >= 300;
+
+			public bool ShouldRecalculateState => Find.TickManager.TicksGame - lastRecalculationTick >= 100;
+		}
+
+		public Pawn pawn;
+
+		private List<Thought_Situational> cachedThoughts = new List<Thought_Situational>();
+
+		private int lastMoodThoughtsRecalculationTick = -99999;
+
+		private Dictionary<Pawn, CachedSocialThoughts> cachedSocialThoughts = new Dictionary<Pawn, CachedSocialThoughts>();
+
+		private const int RecalculateStateEveryTicks = 100;
+
+		private HashSet<ThoughtDef> tmpCachedThoughts = new HashSet<ThoughtDef>();
+
+		private HashSet<ThoughtDef> tmpCachedSocialThoughts = new HashSet<ThoughtDef>();
+
 		public SituationalThoughtHandler(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void SituationalThoughtInterval()
 		{
-			this.RemoveExpiredThoughtsFromCache();
+			RemoveExpiredThoughtsFromCache();
 		}
 
-		
 		public void AppendMoodThoughts(List<Thought> outThoughts)
 		{
-			this.CheckRecalculateMoodThoughts();
-			for (int i = 0; i < this.cachedThoughts.Count; i++)
+			CheckRecalculateMoodThoughts();
+			for (int i = 0; i < cachedThoughts.Count; i++)
 			{
-				Thought_Situational thought_Situational = this.cachedThoughts[i];
+				Thought_Situational thought_Situational = cachedThoughts[i];
 				if (thought_Situational.Active)
 				{
 					outThoughts.Add(thought_Situational);
@@ -33,100 +60,91 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void AppendSocialThoughts(Pawn otherPawn, List<ISocialThought> outThoughts)
 		{
-			this.CheckRecalculateSocialThoughts(otherPawn);
-			SituationalThoughtHandler.CachedSocialThoughts cachedSocialThoughts = this.cachedSocialThoughts[otherPawn];
-			cachedSocialThoughts.lastQueryTick = Find.TickManager.TicksGame;
-			List<Thought_SituationalSocial> activeThoughts = cachedSocialThoughts.activeThoughts;
+			CheckRecalculateSocialThoughts(otherPawn);
+			CachedSocialThoughts obj = cachedSocialThoughts[otherPawn];
+			obj.lastQueryTick = Find.TickManager.TicksGame;
+			List<Thought_SituationalSocial> activeThoughts = obj.activeThoughts;
 			for (int i = 0; i < activeThoughts.Count; i++)
 			{
 				outThoughts.Add(activeThoughts[i]);
 			}
 		}
 
-		
 		private void CheckRecalculateMoodThoughts()
 		{
 			int ticksGame = Find.TickManager.TicksGame;
-			if (ticksGame - this.lastMoodThoughtsRecalculationTick < 100)
+			if (ticksGame - lastMoodThoughtsRecalculationTick >= 100)
 			{
-				return;
-			}
-			this.lastMoodThoughtsRecalculationTick = ticksGame;
-			try
-			{
-				this.tmpCachedThoughts.Clear();
-				for (int i = 0; i < this.cachedThoughts.Count; i++)
+				lastMoodThoughtsRecalculationTick = ticksGame;
+				try
 				{
-					this.cachedThoughts[i].RecalculateState();
-					this.tmpCachedThoughts.Add(this.cachedThoughts[i].def);
-				}
-				List<ThoughtDef> situationalNonSocialThoughtDefs = ThoughtUtility.situationalNonSocialThoughtDefs;
-				int j = 0;
-				int count = situationalNonSocialThoughtDefs.Count;
-				while (j < count)
-				{
-					if (!this.tmpCachedThoughts.Contains(situationalNonSocialThoughtDefs[j]))
+					tmpCachedThoughts.Clear();
+					for (int i = 0; i < cachedThoughts.Count; i++)
 					{
-						Thought_Situational thought_Situational = this.TryCreateThought(situationalNonSocialThoughtDefs[j]);
-						if (thought_Situational != null)
+						cachedThoughts[i].RecalculateState();
+						tmpCachedThoughts.Add(cachedThoughts[i].def);
+					}
+					List<ThoughtDef> situationalNonSocialThoughtDefs = ThoughtUtility.situationalNonSocialThoughtDefs;
+					int j = 0;
+					for (int count = situationalNonSocialThoughtDefs.Count; j < count; j++)
+					{
+						if (!tmpCachedThoughts.Contains(situationalNonSocialThoughtDefs[j]))
 						{
-							this.cachedThoughts.Add(thought_Situational);
+							Thought_Situational thought_Situational = TryCreateThought(situationalNonSocialThoughtDefs[j]);
+							if (thought_Situational != null)
+							{
+								cachedThoughts.Add(thought_Situational);
+							}
 						}
 					}
-					j++;
 				}
-			}
-			finally
-			{
+				finally
+				{
+				}
 			}
 		}
 
-		
 		private void CheckRecalculateSocialThoughts(Pawn otherPawn)
 		{
 			try
 			{
-				SituationalThoughtHandler.CachedSocialThoughts cachedSocialThoughts;
-				if (!this.cachedSocialThoughts.TryGetValue(otherPawn, out cachedSocialThoughts))
+				if (!cachedSocialThoughts.TryGetValue(otherPawn, out CachedSocialThoughts value))
 				{
-					cachedSocialThoughts = new SituationalThoughtHandler.CachedSocialThoughts();
-					this.cachedSocialThoughts.Add(otherPawn, cachedSocialThoughts);
+					value = new CachedSocialThoughts();
+					cachedSocialThoughts.Add(otherPawn, value);
 				}
-				if (cachedSocialThoughts.ShouldRecalculateState)
+				if (value.ShouldRecalculateState)
 				{
-					cachedSocialThoughts.lastRecalculationTick = Find.TickManager.TicksGame;
-					this.tmpCachedSocialThoughts.Clear();
-					for (int i = 0; i < cachedSocialThoughts.thoughts.Count; i++)
+					value.lastRecalculationTick = Find.TickManager.TicksGame;
+					tmpCachedSocialThoughts.Clear();
+					for (int i = 0; i < value.thoughts.Count; i++)
 					{
-						Thought_SituationalSocial thought_SituationalSocial = cachedSocialThoughts.thoughts[i];
+						Thought_SituationalSocial thought_SituationalSocial = value.thoughts[i];
 						thought_SituationalSocial.RecalculateState();
-						this.tmpCachedSocialThoughts.Add(thought_SituationalSocial.def);
+						tmpCachedSocialThoughts.Add(thought_SituationalSocial.def);
 					}
 					List<ThoughtDef> situationalSocialThoughtDefs = ThoughtUtility.situationalSocialThoughtDefs;
 					int j = 0;
-					int count = situationalSocialThoughtDefs.Count;
-					while (j < count)
+					for (int count = situationalSocialThoughtDefs.Count; j < count; j++)
 					{
-						if (!this.tmpCachedSocialThoughts.Contains(situationalSocialThoughtDefs[j]))
+						if (!tmpCachedSocialThoughts.Contains(situationalSocialThoughtDefs[j]))
 						{
-							Thought_SituationalSocial thought_SituationalSocial2 = this.TryCreateSocialThought(situationalSocialThoughtDefs[j], otherPawn);
+							Thought_SituationalSocial thought_SituationalSocial2 = TryCreateSocialThought(situationalSocialThoughtDefs[j], otherPawn);
 							if (thought_SituationalSocial2 != null)
 							{
-								cachedSocialThoughts.thoughts.Add(thought_SituationalSocial2);
+								value.thoughts.Add(thought_SituationalSocial2);
 							}
 						}
-						j++;
 					}
-					cachedSocialThoughts.activeThoughts.Clear();
-					for (int k = 0; k < cachedSocialThoughts.thoughts.Count; k++)
+					value.activeThoughts.Clear();
+					for (int k = 0; k < value.thoughts.Count; k++)
 					{
-						Thought_SituationalSocial thought_SituationalSocial3 = cachedSocialThoughts.thoughts[k];
+						Thought_SituationalSocial thought_SituationalSocial3 = value.thoughts[k];
 						if (thought_SituationalSocial3.Active)
 						{
-							cachedSocialThoughts.activeThoughts.Add(thought_SituationalSocial3);
+							value.activeThoughts.Add(thought_SituationalSocial3);
 						}
 					}
 				}
@@ -136,145 +154,67 @@ namespace RimWorld
 			}
 		}
 
-		
 		private Thought_Situational TryCreateThought(ThoughtDef def)
 		{
 			Thought_Situational thought_Situational = null;
 			try
 			{
-				if (!ThoughtUtility.CanGetThought(this.pawn, def))
+				if (!ThoughtUtility.CanGetThought(pawn, def))
 				{
 					return null;
 				}
-				if (!def.Worker.CurrentState(this.pawn).ActiveFor(def))
+				if (!def.Worker.CurrentState(pawn).ActiveFor(def))
 				{
 					return null;
 				}
 				thought_Situational = (Thought_Situational)ThoughtMaker.MakeThought(def);
-				thought_Situational.pawn = this.pawn;
+				thought_Situational.pawn = pawn;
 				thought_Situational.RecalculateState();
+				return thought_Situational;
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception while recalculating ",
-					def,
-					" thought state for pawn ",
-					this.pawn,
-					": ",
-					ex
-				}), false);
+				Log.Error("Exception while recalculating " + def + " thought state for pawn " + pawn + ": " + ex);
+				return thought_Situational;
 			}
-			return thought_Situational;
 		}
 
-		
 		private Thought_SituationalSocial TryCreateSocialThought(ThoughtDef def, Pawn otherPawn)
 		{
 			Thought_SituationalSocial thought_SituationalSocial = null;
 			try
 			{
-				if (!ThoughtUtility.CanGetThought(this.pawn, def))
+				if (!ThoughtUtility.CanGetThought(pawn, def))
 				{
 					return null;
 				}
-				if (!def.Worker.CurrentSocialState(this.pawn, otherPawn).ActiveFor(def))
+				if (!def.Worker.CurrentSocialState(pawn, otherPawn).ActiveFor(def))
 				{
 					return null;
 				}
 				thought_SituationalSocial = (Thought_SituationalSocial)ThoughtMaker.MakeThought(def);
-				thought_SituationalSocial.pawn = this.pawn;
+				thought_SituationalSocial.pawn = pawn;
 				thought_SituationalSocial.otherPawn = otherPawn;
 				thought_SituationalSocial.RecalculateState();
+				return thought_SituationalSocial;
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception while recalculating ",
-					def,
-					" thought state for pawn ",
-					this.pawn,
-					": ",
-					ex
-				}), false);
+				Log.Error("Exception while recalculating " + def + " thought state for pawn " + pawn + ": " + ex);
+				return thought_SituationalSocial;
 			}
-			return thought_SituationalSocial;
 		}
 
-		
 		public void Notify_SituationalThoughtsDirty()
 		{
-			this.cachedThoughts.Clear();
-			this.cachedSocialThoughts.Clear();
-			this.lastMoodThoughtsRecalculationTick = -99999;
+			cachedThoughts.Clear();
+			cachedSocialThoughts.Clear();
+			lastMoodThoughtsRecalculationTick = -99999;
 		}
 
-		
 		private void RemoveExpiredThoughtsFromCache()
 		{
-			this.cachedSocialThoughts.RemoveAll((KeyValuePair<Pawn, SituationalThoughtHandler.CachedSocialThoughts> x) => x.Value.Expired || x.Key.Discarded);
-		}
-
-		
-		public Pawn pawn;
-
-		
-		private List<Thought_Situational> cachedThoughts = new List<Thought_Situational>();
-
-		
-		private int lastMoodThoughtsRecalculationTick = -99999;
-
-		
-		private Dictionary<Pawn, SituationalThoughtHandler.CachedSocialThoughts> cachedSocialThoughts = new Dictionary<Pawn, SituationalThoughtHandler.CachedSocialThoughts>();
-
-		
-		private const int RecalculateStateEveryTicks = 100;
-
-		
-		private HashSet<ThoughtDef> tmpCachedThoughts = new HashSet<ThoughtDef>();
-
-		
-		private HashSet<ThoughtDef> tmpCachedSocialThoughts = new HashSet<ThoughtDef>();
-
-		
-		private class CachedSocialThoughts
-		{
-			
-			
-			public bool Expired
-			{
-				get
-				{
-					return Find.TickManager.TicksGame - this.lastQueryTick >= 300;
-				}
-			}
-
-			
-			
-			public bool ShouldRecalculateState
-			{
-				get
-				{
-					return Find.TickManager.TicksGame - this.lastRecalculationTick >= 100;
-				}
-			}
-
-			
-			public List<Thought_SituationalSocial> thoughts = new List<Thought_SituationalSocial>();
-
-			
-			public List<Thought_SituationalSocial> activeThoughts = new List<Thought_SituationalSocial>();
-
-			
-			public int lastRecalculationTick = -99999;
-
-			
-			public int lastQueryTick = -99999;
-
-			
-			private const int ExpireAfterTicks = 300;
+			cachedSocialThoughts.RemoveAll((KeyValuePair<Pawn, CachedSocialThoughts> x) => x.Value.Expired || x.Key.Discarded);
 		}
 	}
 }

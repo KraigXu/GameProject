@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class SimpleColorExtension
 	{
-		
 		public static Color ToUnityColor(this SimpleColor color)
 		{
 			switch (color)

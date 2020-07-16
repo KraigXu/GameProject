@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Expectations : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			ExpectationDef expectationDef = ExpectationsUtility.CurrentExpectationFor(p);

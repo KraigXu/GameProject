@@ -1,113 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
+using System.Linq;
 
 namespace Verse
 {
-	
 	public static class DebugOutputsJoy
 	{
-		
 		[DebugOutput]
 		public static void JoyGivers()
 		{
-			IEnumerable<JoyGiverDef> allDefs = DefDatabase<JoyGiverDef>.AllDefs;
-			TableDataGetter<JoyGiverDef>[] array = new TableDataGetter<JoyGiverDef>[11];
-			array[0] = new TableDataGetter<JoyGiverDef>("defName", (JoyGiverDef d) => d.defName);
-			array[1] = new TableDataGetter<JoyGiverDef>("joyKind", delegate(JoyGiverDef d)
-			{
-				if (d.joyKind != null)
-				{
-					return d.joyKind.defName;
-				}
-				return "null";
-			});
-			array[2] = new TableDataGetter<JoyGiverDef>("baseChance", (JoyGiverDef d) => d.baseChance.ToString());
-			array[3] = new TableDataGetter<JoyGiverDef>("canDoWhileInBed", (JoyGiverDef d) => d.canDoWhileInBed.ToStringCheckBlank());
-			array[4] = new TableDataGetter<JoyGiverDef>("desireSit", (JoyGiverDef d) => d.desireSit.ToStringCheckBlank());
-			array[5] = new TableDataGetter<JoyGiverDef>("unroofedOnly", (JoyGiverDef d) => d.unroofedOnly.ToStringCheckBlank());
-			array[6] = new TableDataGetter<JoyGiverDef>("jobDef", delegate(JoyGiverDef d)
-			{
-				if (d.jobDef != null)
-				{
-					return d.jobDef.defName;
-				}
-				return "null";
-			});
-			array[7] = new TableDataGetter<JoyGiverDef>("pctPawnsEverDo", (JoyGiverDef d) => d.pctPawnsEverDo.ToStringPercent());
-			array[8] = new TableDataGetter<JoyGiverDef>("requiredCapacities", delegate(JoyGiverDef d)
-			{
-				if (d.requiredCapacities != null)
-				{
-					return (from c in d.requiredCapacities
-					select c.defName).ToCommaList(false);
-				}
-				return "";
-			});
-			array[9] = new TableDataGetter<JoyGiverDef>("thingDefs", delegate(JoyGiverDef d)
-			{
-				if (d.thingDefs != null)
-				{
-					return (from c in d.thingDefs
-					select c.defName).ToCommaList(false);
-				}
-				return "";
-			});
-			array[10] = new TableDataGetter<JoyGiverDef>("JoyGainFactors", delegate(JoyGiverDef d)
-			{
-				if (d.thingDefs != null)
-				{
-					return (from c in d.thingDefs
-					select c.GetStatValueAbstract(StatDefOf.JoyGainFactor, null).ToString("F2")).ToCommaList(false);
-				}
-				return "";
-			});
-			DebugTables.MakeTablesDialog<JoyGiverDef>(allDefs, array);
+			DebugTables.MakeTablesDialog(DefDatabase<JoyGiverDef>.AllDefs, new TableDataGetter<JoyGiverDef>("defName", (JoyGiverDef d) => d.defName), new TableDataGetter<JoyGiverDef>("joyKind", (JoyGiverDef d) => (d.joyKind != null) ? d.joyKind.defName : "null"), new TableDataGetter<JoyGiverDef>("baseChance", (JoyGiverDef d) => d.baseChance.ToString()), new TableDataGetter<JoyGiverDef>("canDoWhileInBed", (JoyGiverDef d) => d.canDoWhileInBed.ToStringCheckBlank()), new TableDataGetter<JoyGiverDef>("desireSit", (JoyGiverDef d) => d.desireSit.ToStringCheckBlank()), new TableDataGetter<JoyGiverDef>("unroofedOnly", (JoyGiverDef d) => d.unroofedOnly.ToStringCheckBlank()), new TableDataGetter<JoyGiverDef>("jobDef", (JoyGiverDef d) => (d.jobDef != null) ? d.jobDef.defName : "null"), new TableDataGetter<JoyGiverDef>("pctPawnsEverDo", (JoyGiverDef d) => d.pctPawnsEverDo.ToStringPercent()), new TableDataGetter<JoyGiverDef>("requiredCapacities", (JoyGiverDef d) => (d.requiredCapacities != null) ? d.requiredCapacities.Select((PawnCapacityDef c) => c.defName).ToCommaList() : ""), new TableDataGetter<JoyGiverDef>("thingDefs", (JoyGiverDef d) => (d.thingDefs != null) ? d.thingDefs.Select((ThingDef c) => c.defName).ToCommaList() : ""), new TableDataGetter<JoyGiverDef>("JoyGainFactors", (JoyGiverDef d) => (d.thingDefs != null) ? d.thingDefs.Select((ThingDef c) => c.GetStatValueAbstract(StatDefOf.JoyGainFactor).ToString("F2")).ToCommaList() : ""));
 		}
 
-		
 		[DebugOutput]
 		public static void JoyKinds()
 		{
-			IEnumerable<JoyKindDef> allDefs = DefDatabase<JoyKindDef>.AllDefs;
-			TableDataGetter<JoyKindDef>[] array = new TableDataGetter<JoyKindDef>[2];
-			array[0] = new TableDataGetter<JoyKindDef>("defName", (JoyKindDef d) => d.defName);
-			array[1] = new TableDataGetter<JoyKindDef>("titleRequiredAny", delegate(JoyKindDef d)
-			{
-				if (d.titleRequiredAny != null)
-				{
-					return string.Join(",", (from t in d.titleRequiredAny
-					select t.defName).ToArray<string>());
-				}
-				return "NULL";
-			});
-			DebugTables.MakeTablesDialog<JoyKindDef>(allDefs, array);
+			DebugTables.MakeTablesDialog(DefDatabase<JoyKindDef>.AllDefs, new TableDataGetter<JoyKindDef>("defName", (JoyKindDef d) => d.defName), new TableDataGetter<JoyKindDef>("titleRequiredAny", (JoyKindDef d) => (d.titleRequiredAny != null) ? string.Join(",", d.titleRequiredAny.Select((RoyalTitleDef t) => t.defName).ToArray()) : "NULL"));
 		}
 
-		
 		[DebugOutput]
 		public static void JoyJobs()
 		{
-			IEnumerable<JobDef> dataSources = from j in DefDatabase<JobDef>.AllDefs
-			where j.joyKind != null
-			select j;
-			TableDataGetter<JobDef>[] array = new TableDataGetter<JobDef>[7];
-			array[0] = new TableDataGetter<JobDef>("defName", (JobDef d) => d.defName);
-			array[1] = new TableDataGetter<JobDef>("joyKind", (JobDef d) => d.joyKind.defName);
-			array[2] = new TableDataGetter<JobDef>("joyDuration", (JobDef d) => d.joyDuration.ToString());
-			array[3] = new TableDataGetter<JobDef>("joyGainRate", (JobDef d) => d.joyGainRate.ToString());
-			array[4] = new TableDataGetter<JobDef>("joyMaxParticipants", (JobDef d) => d.joyMaxParticipants.ToString());
-			array[5] = new TableDataGetter<JobDef>("joySkill", delegate(JobDef d)
-			{
-				if (d.joySkill == null)
-				{
-					return "";
-				}
-				return d.joySkill.defName;
-			});
-			array[6] = new TableDataGetter<JobDef>("joyXpPerTick", (JobDef d) => d.joyXpPerTick.ToString());
-			DebugTables.MakeTablesDialog<JobDef>(dataSources, array);
+			DebugTables.MakeTablesDialog(DefDatabase<JobDef>.AllDefs.Where((JobDef j) => j.joyKind != null), new TableDataGetter<JobDef>("defName", (JobDef d) => d.defName), new TableDataGetter<JobDef>("joyKind", (JobDef d) => d.joyKind.defName), new TableDataGetter<JobDef>("joyDuration", (JobDef d) => d.joyDuration.ToString()), new TableDataGetter<JobDef>("joyGainRate", (JobDef d) => d.joyGainRate.ToString()), new TableDataGetter<JobDef>("joyMaxParticipants", (JobDef d) => d.joyMaxParticipants.ToString()), new TableDataGetter<JobDef>("joySkill", (JobDef d) => (d.joySkill == null) ? "" : d.joySkill.defName), new TableDataGetter<JobDef>("joyXpPerTick", (JobDef d) => d.joyXpPerTick.ToString()));
 		}
 	}
 }

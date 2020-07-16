@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,100 +5,74 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class Hive : ThingWithComps, IAttackTarget, ILoadReferenceable
 	{
-		
-		
-		public CompCanBeDormant CompDormant
-		{
-			get
-			{
-				return base.GetComp<CompCanBeDormant>();
-			}
-		}
+		public const int PawnSpawnRadius = 2;
 
-		
-		
-		Thing IAttackTarget.Thing
-		{
-			get
-			{
-				return this;
-			}
-		}
+		public const float MaxSpawnedPawnsPoints = 500f;
 
-		
-		
-		public float TargetPriorityFactor
-		{
-			get
-			{
-				return 0.4f;
-			}
-		}
+		public const float InitialPawnsPoints = 200f;
 
-		
-		
-		public LocalTargetInfo TargetCurrentlyAimingAt
-		{
-			get
-			{
-				return LocalTargetInfo.Invalid;
-			}
-		}
+		public static List<PawnKindDef> spawnablePawnKinds = new List<PawnKindDef>();
 
-		
-		
-		public CompSpawnerPawn PawnSpawner
-		{
-			get
-			{
-				return base.GetComp<CompSpawnerPawn>();
-			}
-		}
+		public static readonly string MemoAttackedByEnemy = "HiveAttacked";
 
-		
+		public static readonly string MemoDeSpawned = "HiveDeSpawned";
+
+		public static readonly string MemoBurnedBadly = "HiveBurnedBadly";
+
+		public static readonly string MemoDestroyedNonRoofCollapse = "HiveDestroyedNonRoofCollapse";
+
+		public CompCanBeDormant CompDormant => GetComp<CompCanBeDormant>();
+
+		Thing IAttackTarget.Thing => this;
+
+		public float TargetPriorityFactor => 0.4f;
+
+		public LocalTargetInfo TargetCurrentlyAimingAt => LocalTargetInfo.Invalid;
+
+		public CompSpawnerPawn PawnSpawner => GetComp<CompSpawnerPawn>();
+
 		public bool ThreatDisabled(IAttackTargetSearcher disabledFor)
 		{
 			if (!base.Spawned)
 			{
 				return true;
 			}
-			CompCanBeDormant comp = base.GetComp<CompCanBeDormant>();
-			return comp != null && !comp.Awake;
+			CompCanBeDormant comp = GetComp<CompCanBeDormant>();
+			if (comp != null && !comp.Awake)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static void ResetStaticData()
 		{
-			Hive.spawnablePawnKinds.Clear();
-			Hive.spawnablePawnKinds.Add(PawnKindDefOf.Megascarab);
-			Hive.spawnablePawnKinds.Add(PawnKindDefOf.Spelopede);
-			Hive.spawnablePawnKinds.Add(PawnKindDefOf.Megaspider);
+			spawnablePawnKinds.Clear();
+			spawnablePawnKinds.Add(PawnKindDefOf.Megascarab);
+			spawnablePawnKinds.Add(PawnKindDefOf.Spelopede);
+			spawnablePawnKinds.Add(PawnKindDefOf.Megaspider);
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			if (base.Faction == null)
 			{
-				this.SetFaction(Faction.OfInsects, null);
+				SetFaction(Faction.OfInsects);
 			}
 		}
 
-		
 		public override void Tick()
 		{
 			base.Tick();
-			if (base.Spawned && !this.CompDormant.Awake && !base.Position.Fogged(base.Map))
+			if (base.Spawned && !CompDormant.Awake && !base.Position.Fogged(base.Map))
 			{
-				this.CompDormant.WakeUp();
+				CompDormant.WakeUp();
 			}
 		}
 
-		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
@@ -107,22 +80,21 @@ namespace RimWorld
 			List<Lord> lords = map.lordManager.lords;
 			for (int i = 0; i < lords.Count; i++)
 			{
-				lords[i].ReceiveMemo(Hive.MemoDeSpawned);
+				lords[i].ReceiveMemo(MemoDeSpawned);
 			}
 			HiveUtility.Notify_HiveDespawned(this, map);
 		}
 
-		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
-			if (!this.questTags.NullOrEmpty<string>())
+			if (!questTags.NullOrEmpty())
 			{
 				bool flag = false;
-				List<Thing> list = base.Map.listerThings.ThingsOfDef(this.def);
+				List<Thing> list = base.Map.listerThings.ThingsOfDef(def);
 				for (int i = 0; i < list.Count; i++)
 				{
 					Hive hive;
-					if ((hive = (list[i] as Hive)) != null && hive != this && hive.CompDormant.Awake && !hive.questTags.NullOrEmpty<string>() && QuestUtility.AnyMatchingTags(hive.questTags, this.questTags))
+					if ((hive = (list[i] as Hive)) != null && hive != this && hive.CompDormant.Awake && !hive.questTags.NullOrEmpty() && QuestUtility.AnyMatchingTags(hive.questTags, questTags))
 					{
 						flag = true;
 						break;
@@ -130,114 +102,73 @@ namespace RimWorld
 				}
 				if (!flag)
 				{
-					QuestUtility.SendQuestTargetSignals(this.questTags, "AllHivesDestroyed");
+					QuestUtility.SendQuestTargetSignals(questTags, "AllHivesDestroyed");
 				}
 			}
 			base.Destroy(mode);
 		}
 
-		
 		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			if (dinfo.Def.ExternalViolenceFor(this) && dinfo.Instigator != null && dinfo.Instigator.Faction != null)
 			{
-				Lord lord = base.GetComp<CompSpawnerPawn>().Lord;
-				if (lord != null)
-				{
-					lord.ReceiveMemo(Hive.MemoAttackedByEnemy);
-				}
+				GetComp<CompSpawnerPawn>().Lord?.ReceiveMemo(MemoAttackedByEnemy);
 			}
-			if (dinfo.Def == DamageDefOf.Flame && (float)this.HitPoints < (float)base.MaxHitPoints * 0.3f)
+			if (dinfo.Def == DamageDefOf.Flame && (float)HitPoints < (float)base.MaxHitPoints * 0.3f)
 			{
-				Lord lord2 = base.GetComp<CompSpawnerPawn>().Lord;
-				if (lord2 != null)
-				{
-					lord2.ReceiveMemo(Hive.MemoBurnedBadly);
-				}
+				GetComp<CompSpawnerPawn>().Lord?.ReceiveMemo(MemoBurnedBadly);
 			}
 			base.PostApplyDamage(dinfo, totalDamageDealt);
 		}
 
-		
 		public override void Kill(DamageInfo? dinfo = null, Hediff exactCulprit = null)
 		{
-			if (base.Spawned && (dinfo == null || dinfo.Value.Category != DamageInfo.SourceCategory.Collapse))
+			if (base.Spawned && (!dinfo.HasValue || dinfo.Value.Category != DamageInfo.SourceCategory.Collapse))
 			{
 				List<Lord> lords = base.Map.lordManager.lords;
 				for (int i = 0; i < lords.Count; i++)
 				{
-					lords[i].ReceiveMemo(Hive.MemoDestroyedNonRoofCollapse);
+					lords[i].ReceiveMemo(MemoDestroyedNonRoofCollapse);
 				}
 			}
 			base.Kill(dinfo, exactCulprit);
 		}
 
-		
 		public override bool PreventPlayerSellingThingsNearby(out string reason)
 		{
-			if (this.PawnSpawner.spawnedPawns.Count > 0)
+			if (PawnSpawner.spawnedPawns.Count > 0 && PawnSpawner.spawnedPawns.Any((Pawn p) => !p.Downed))
 			{
-				if (this.PawnSpawner.spawnedPawns.Any((Pawn p) => !p.Downed))
-				{
-					reason = this.def.label;
-					return true;
-				}
+				reason = def.label;
+				return true;
 			}
 			reason = null;
 			return false;
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			foreach (Gizmo gizmo2 in QuestUtility.GetQuestRelatedGizmos(this))
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				yield return gizmo2;
+				yield return gizmo;
 			}
-			enumerator = null;
-			yield break;
-			yield break;
+			foreach (Gizmo questRelatedGizmo in QuestUtility.GetQuestRelatedGizmos(this))
+			{
+				yield return questRelatedGizmo;
+			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			if (Scribe.mode != LoadSaveMode.Saving)
 			{
-				bool flag = false;
-				Scribe_Values.Look<bool>(ref flag, "active", false, false);
-				if (flag)
+				bool value = false;
+				Scribe_Values.Look(ref value, "active", defaultValue: false);
+				if (value)
 				{
-					this.CompDormant.WakeUp();
+					CompDormant.WakeUp();
 				}
 			}
 		}
-
-		
-		public const int PawnSpawnRadius = 2;
-
-		
-		public const float MaxSpawnedPawnsPoints = 500f;
-
-		
-		public const float InitialPawnsPoints = 200f;
-
-		
-		public static List<PawnKindDef> spawnablePawnKinds = new List<PawnKindDef>();
-
-		
-		public static readonly string MemoAttackedByEnemy = "HiveAttacked";
-
-		
-		public static readonly string MemoDeSpawned = "HiveDeSpawned";
-
-		
-		public static readonly string MemoBurnedBadly = "HiveBurnedBadly";
-
-		
-		public static readonly string MemoDestroyedNonRoofCollapse = "HiveDestroyedNonRoofCollapse";
 	}
 }

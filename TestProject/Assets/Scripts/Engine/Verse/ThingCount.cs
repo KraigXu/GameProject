@@ -1,118 +1,82 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public struct ThingCount : IEquatable<ThingCount>, IExposable
 	{
-		
-		
-		public Thing Thing
-		{
-			get
-			{
-				return this.thing;
-			}
-		}
+		private Thing thing;
 
-		
-		
-		public int Count
-		{
-			get
-			{
-				return this.count;
-			}
-		}
+		private int count;
 
-		
+		public Thing Thing => thing;
+
+		public int Count => count;
+
 		public ThingCount(Thing thing, int count)
 		{
 			if (count < 0)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Tried to set ThingCount stack count to ",
-					count,
-					". thing=",
-					thing
-				}), false);
+				Log.Warning("Tried to set ThingCount stack count to " + count + ". thing=" + thing);
 				count = 0;
 			}
 			if (count > thing.stackCount)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					"Tried to set ThingCount stack count to ",
-					count,
-					", but thing's stack count is only ",
-					thing.stackCount,
-					". thing=",
-					thing
-				}), false);
+				Log.Warning("Tried to set ThingCount stack count to " + count + ", but thing's stack count is only " + thing.stackCount + ". thing=" + thing);
 				count = thing.stackCount;
 			}
 			this.thing = thing;
 			this.count = count;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_References.Look<Thing>(ref this.thing, "thing", false);
-			Scribe_Values.Look<int>(ref this.count, "count", 1, false);
+			Scribe_References.Look(ref thing, "thing");
+			Scribe_Values.Look(ref count, "count", 1);
 		}
 
-		
 		public ThingCount WithCount(int newCount)
 		{
-			return new ThingCount(this.thing, newCount);
+			return new ThingCount(thing, newCount);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is ThingCount && this.Equals((ThingCount)obj);
+			if (!(obj is ThingCount))
+			{
+				return false;
+			}
+			return Equals((ThingCount)obj);
 		}
 
-		
 		public bool Equals(ThingCount other)
 		{
 			return this == other;
 		}
 
-		
 		public static bool operator ==(ThingCount a, ThingCount b)
 		{
-			return a.thing == b.thing && a.count == b.count;
+			if (a.thing == b.thing)
+			{
+				return a.count == b.count;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(ThingCount a, ThingCount b)
 		{
 			return !(a == b);
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombine<Thing>(this.count, this.thing);
+			return Gen.HashCombine(count, thing);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"(",
-				this.count,
-				"x ",
-				(this.thing != null) ? this.thing.LabelShort : "null",
-				")"
-			});
+			return "(" + count + "x " + ((thing != null) ? thing.LabelShort : "null") + ")";
 		}
 
-		
 		public static implicit operator ThingCount(ThingCountClass t)
 		{
 			if (t == null)
@@ -121,11 +85,5 @@ namespace Verse
 			}
 			return new ThingCount(t.thing, t.Count);
 		}
-
-		
-		private Thing thing;
-
-		
-		private int count;
 	}
 }

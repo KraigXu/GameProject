@@ -1,33 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_GearAndInventoryMass : StatPart
 	{
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
-			float num;
-			if (this.TryGetValue(req, out num))
+			if (TryGetValue(req, out float value))
 			{
-				val += num;
+				val += value;
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
-			float mass;
-			if (this.TryGetValue(req, out mass))
+			if (TryGetValue(req, out float value))
 			{
-				return "StatsReport_GearAndInventoryMass".Translate() + ": " + mass.ToStringMassOffset();
+				return "StatsReport_GearAndInventoryMass".Translate() + ": " + value.ToStringMassOffset();
 			}
 			return null;
 		}
 
-		
 		private bool TryGetValue(StatRequest req, out float value)
 		{
 			return PawnOrCorpseStatUtility.TryGetPawnOrCorpseStat(req, (Pawn x) => MassUtility.GearAndInventoryMass(x), (ThingDef x) => 0f, out value);

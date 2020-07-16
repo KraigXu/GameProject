@@ -1,15 +1,12 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public static class LanguageDataWriter
 	{
-		
 		public static void WriteBackstoryFile()
 		{
 			DirectoryInfo directoryInfo = new DirectoryInfo(GenFilePaths.DevOutputFolderPath);
@@ -19,19 +16,19 @@ namespace Verse
 			}
 			if (new FileInfo(GenFilePaths.BackstoryOutputFilePath).Exists)
 			{
-				Find.WindowStack.Add(new Dialog_MessageBox("Cannot write: File already exists at " + GenFilePaths.BackstoryOutputFilePath, null, null, null, null, null, false, null, null));
+				Find.WindowStack.Add(new Dialog_MessageBox("Cannot write: File already exists at " + GenFilePaths.BackstoryOutputFilePath));
 				return;
 			}
 			XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
 			xmlWriterSettings.Indent = true;
 			xmlWriterSettings.IndentChars = "\t";
-			XmlWriter xmlWriter = XmlWriter.Create(GenFilePaths.BackstoryOutputFilePath, xmlWriterSettings);
+			using (XmlWriter xmlWriter = XmlWriter.Create(GenFilePaths.BackstoryOutputFilePath, xmlWriterSettings))
 			{
 				xmlWriter.WriteStartDocument();
 				xmlWriter.WriteStartElement("BackstoryTranslations");
-				foreach (KeyValuePair<string, Backstory> keyValuePair in BackstoryDatabase.allBackstories)
+				foreach (KeyValuePair<string, Backstory> allBackstory in BackstoryDatabase.allBackstories)
 				{
-					Backstory value = keyValuePair.Value;
+					Backstory value = allBackstory.Value;
 					xmlWriter.WriteStartElement(value.identifier);
 					xmlWriter.WriteElementString("title", value.title);
 					if (!value.titleFemale.NullOrEmpty())
@@ -49,7 +46,7 @@ namespace Verse
 				xmlWriter.WriteEndElement();
 				xmlWriter.WriteEndDocument();
 			}
-			Messages.Message("Fresh backstory translation file saved to " + GenFilePaths.BackstoryOutputFilePath, MessageTypeDefOf.NeutralEvent, false);
+			Messages.Message("Fresh backstory translation file saved to " + GenFilePaths.BackstoryOutputFilePath, MessageTypeDefOf.NeutralEvent, historical: false);
 		}
 	}
 }

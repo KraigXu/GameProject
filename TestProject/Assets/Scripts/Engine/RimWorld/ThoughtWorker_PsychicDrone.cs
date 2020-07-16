@@ -1,20 +1,18 @@
-﻿using System;
 using RimWorld.Planet;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_PsychicDrone : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			PsychicDroneLevel psychicDroneLevel = PsychicDroneLevel.None;
 			if (p.Map != null)
 			{
 				PsychicDroneLevel highestPsychicDroneLevelFor = p.Map.gameConditionManager.GetHighestPsychicDroneLevelFor(p.gender);
-				if (highestPsychicDroneLevelFor > psychicDroneLevel)
+				if ((int)highestPsychicDroneLevelFor > (int)psychicDroneLevel)
 				{
 					psychicDroneLevel = highestPsychicDroneLevelFor;
 				}
@@ -23,12 +21,12 @@ namespace RimWorld
 			{
 				foreach (Site site in Find.World.worldObjects.Sites)
 				{
-					foreach (SitePart sitePart in site.parts)
+					foreach (SitePart part in site.parts)
 					{
-						if (!sitePart.conditionCauser.DestroyedOrNull() && sitePart.def.Worker is SitePartWorker_ConditionCauser_PsychicDroner)
+						if (!part.conditionCauser.DestroyedOrNull() && part.def.Worker is SitePartWorker_ConditionCauser_PsychicDroner)
 						{
-							CompCauseGameCondition_PsychicEmanation compCauseGameCondition_PsychicEmanation = sitePart.conditionCauser.TryGetComp<CompCauseGameCondition_PsychicEmanation>();
-							if (compCauseGameCondition_PsychicEmanation.ConditionDef.conditionClass == typeof(GameCondition_PsychicEmanation) && compCauseGameCondition_PsychicEmanation.InAoE(p.GetCaravan().Tile) && compCauseGameCondition_PsychicEmanation.gender == p.gender && compCauseGameCondition_PsychicEmanation.Level > psychicDroneLevel)
+							CompCauseGameCondition_PsychicEmanation compCauseGameCondition_PsychicEmanation = part.conditionCauser.TryGetComp<CompCauseGameCondition_PsychicEmanation>();
+							if (compCauseGameCondition_PsychicEmanation.ConditionDef.conditionClass == typeof(GameCondition_PsychicEmanation) && compCauseGameCondition_PsychicEmanation.InAoE(p.GetCaravan().Tile) && compCauseGameCondition_PsychicEmanation.gender == p.gender && (int)compCauseGameCondition_PsychicEmanation.Level > (int)psychicDroneLevel)
 							{
 								psychicDroneLevel = compCauseGameCondition_PsychicEmanation.Level;
 							}
@@ -37,10 +35,10 @@ namespace RimWorld
 				}
 				foreach (Map map in Find.Maps)
 				{
-					foreach (GameCondition gameCondition in map.gameConditionManager.ActiveConditions)
+					foreach (GameCondition activeCondition in map.gameConditionManager.ActiveConditions)
 					{
-						CompCauseGameCondition_PsychicEmanation compCauseGameCondition_PsychicEmanation2 = gameCondition.conditionCauser.TryGetComp<CompCauseGameCondition_PsychicEmanation>();
-						if (compCauseGameCondition_PsychicEmanation2 != null && compCauseGameCondition_PsychicEmanation2.InAoE(p.GetCaravan().Tile) && compCauseGameCondition_PsychicEmanation2.gender == p.gender && compCauseGameCondition_PsychicEmanation2.Level > psychicDroneLevel)
+						CompCauseGameCondition_PsychicEmanation compCauseGameCondition_PsychicEmanation2 = activeCondition.conditionCauser.TryGetComp<CompCauseGameCondition_PsychicEmanation>();
+						if (compCauseGameCondition_PsychicEmanation2 != null && compCauseGameCondition_PsychicEmanation2.InAoE(p.GetCaravan().Tile) && compCauseGameCondition_PsychicEmanation2.gender == p.gender && (int)compCauseGameCondition_PsychicEmanation2.Level > (int)psychicDroneLevel)
 						{
 							psychicDroneLevel = compCauseGameCondition_PsychicEmanation2.Level;
 						}

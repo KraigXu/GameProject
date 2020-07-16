@@ -1,4 +1,3 @@
-﻿using System;
 using System.Linq;
 using UnityEngine;
 using Verse;
@@ -6,30 +5,27 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Dialog_AssignBuildingOwner : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(620f, 500f);
-			}
-		}
+		private CompAssignableToPawn assignable;
 
-		
+		private Vector2 scrollPosition;
+
+		private const float EntryHeight = 35f;
+
+		private const float LineSpacing = 8f;
+
+		public override Vector2 InitialSize => new Vector2(620f, 500f);
+
 		public Dialog_AssignBuildingOwner(CompAssignableToPawn assignable)
 		{
 			this.assignable = assignable;
-			this.doCloseButton = true;
-			this.doCloseX = true;
-			this.closeOnClickedOutside = true;
-			this.absorbInputAroundWindow = true;
+			doCloseButton = true;
+			doCloseX = true;
+			closeOnClickedOutside = true;
+			absorbInputAroundWindow = true;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Small;
@@ -37,23 +33,23 @@ namespace RimWorld
 			outRect.yMin += 20f;
 			outRect.yMax -= 40f;
 			outRect.width -= 16f;
-			Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, (float)this.assignable.AssigningCandidates.Count<Pawn>() * 35f + 100f);
-			Widgets.BeginScrollView(outRect, ref this.scrollPosition, viewRect, true);
+			Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, (float)assignable.AssigningCandidates.Count() * 35f + 100f);
+			Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
 			try
 			{
 				float num = 0f;
 				bool flag = false;
-				foreach (Pawn pawn in this.assignable.AssignedPawns)
+				foreach (Pawn assignedPawn in assignable.AssignedPawns)
 				{
 					flag = true;
 					Rect rect = new Rect(0f, num, viewRect.width * 0.7f, 32f);
-					Widgets.Label(rect, pawn.LabelCap);
+					Widgets.Label(rect, assignedPawn.LabelCap);
 					rect.x = rect.xMax;
 					rect.width = viewRect.width * 0.3f;
-					if (Widgets.ButtonText(rect, "BuildingUnassign".Translate(), true, true, true))
+					if (Widgets.ButtonText(rect, "BuildingUnassign".Translate()))
 					{
-						this.assignable.TryUnassignPawn(pawn, true);
-						SoundDefOf.Click.PlayOneShotOnCamera(null);
+						assignable.TryUnassignPawn(assignedPawn);
+						SoundDefOf.Click.PlayOneShotOnCamera();
 						return;
 					}
 					num += 35f;
@@ -62,13 +58,13 @@ namespace RimWorld
 				{
 					num += 15f;
 				}
-				foreach (Pawn pawn2 in this.assignable.AssigningCandidates)
+				foreach (Pawn assigningCandidate in assignable.AssigningCandidates)
 				{
-					if (!this.assignable.AssignedPawns.Contains(pawn2))
+					if (!assignable.AssignedPawns.Contains(assigningCandidate))
 					{
-						AcceptanceReport acceptanceReport = this.assignable.CanAssignTo(pawn2);
+						AcceptanceReport acceptanceReport = assignable.CanAssignTo(assigningCandidate);
 						bool accepted = acceptanceReport.Accepted;
-						string text = pawn2.LabelCap + (accepted ? "" : (" (" + acceptanceReport.Reason.StripTags() + ")"));
+						string text = assigningCandidate.LabelCap + (accepted ? "" : (" (" + acceptanceReport.Reason.StripTags() + ")"));
 						float width = viewRect.width * 0.7f;
 						float num2 = Text.CalcHeight(text, width);
 						float num3 = (35f > num2) ? 35f : num2;
@@ -81,23 +77,22 @@ namespace RimWorld
 						rect2.x = rect2.xMax;
 						rect2.width = viewRect.width * 0.3f;
 						rect2.height = 35f;
-						TaggedString taggedString = this.assignable.AssignedAnything(pawn2) ? "BuildingReassign".Translate() : "BuildingAssign".Translate();
-						if (Widgets.ButtonText(rect2, taggedString, true, true, accepted))
+						TaggedString taggedString = assignable.AssignedAnything(assigningCandidate) ? "BuildingReassign".Translate() : "BuildingAssign".Translate();
+						if (Widgets.ButtonText(rect2, taggedString, drawBackground: true, doMouseoverSound: true, accepted))
 						{
-							this.assignable.TryAssignPawn(pawn2);
-							if (this.assignable.MaxAssignedPawnsCount == 1)
+							assignable.TryAssignPawn(assigningCandidate);
+							if (assignable.MaxAssignedPawnsCount == 1)
 							{
-								this.Close(true);
-								break;
+								Close();
 							}
-							SoundDefOf.Click.PlayOneShotOnCamera(null);
+							else
+							{
+								SoundDefOf.Click.PlayOneShotOnCamera();
+							}
 							break;
 						}
-						else
-						{
-							GUI.color = Color.white;
-							num += num3;
-						}
+						GUI.color = Color.white;
+						num += num3;
 					}
 				}
 			}
@@ -106,17 +101,5 @@ namespace RimWorld
 				Widgets.EndScrollView();
 			}
 		}
-
-		
-		private CompAssignableToPawn assignable;
-
-		
-		private Vector2 scrollPosition;
-
-		
-		private const float EntryHeight = 35f;
-
-		
-		private const float LineSpacing = 8f;
 	}
 }

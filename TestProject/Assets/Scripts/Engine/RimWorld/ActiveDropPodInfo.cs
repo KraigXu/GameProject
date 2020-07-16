@@ -1,149 +1,116 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ActiveDropPodInfo : IThingHolder, IExposable
 	{
-		
-		
-		
+		public IThingHolder parent;
+
+		public ThingOwner innerContainer;
+
+		public int openDelay = 110;
+
+		public bool leaveSlag;
+
+		public bool savePawnsWithReferenceMode;
+
+		public bool despawnPodBeforeSpawningThing;
+
+		public WipeMode? spawnWipeMode;
+
+		public Rot4? setRotation;
+
+		public bool moveItemsAsideBeforeSpawning;
+
+		public const int DefaultOpenDelay = 110;
+
+		private List<Thing> tmpThings = new List<Thing>();
+
+		private List<Pawn> tmpSavedPawns = new List<Pawn>();
+
 		public Thing SingleContainedThing
 		{
 			get
 			{
-				if (this.innerContainer.Count == 0)
+				if (innerContainer.Count == 0)
 				{
 					return null;
 				}
-				if (this.innerContainer.Count > 1)
+				if (innerContainer.Count > 1)
 				{
-					Log.Error("ContainedThing used on a DropPodInfo holding > 1 thing.", false);
+					Log.Error("ContainedThing used on a DropPodInfo holding > 1 thing.");
 				}
-				return this.innerContainer[0];
+				return innerContainer[0];
 			}
 			set
 			{
-				this.innerContainer.Clear();
-				this.innerContainer.TryAdd(value, true);
+				innerContainer.Clear();
+				innerContainer.TryAdd(value);
 			}
 		}
 
-		
-		
-		public IThingHolder ParentHolder
-		{
-			get
-			{
-				return this.parent;
-			}
-		}
+		public IThingHolder ParentHolder => parent;
 
-		
 		public ActiveDropPodInfo()
 		{
-			this.innerContainer = new ThingOwner<Thing>(this);
+			innerContainer = new ThingOwner<Thing>(this);
 		}
 
-		
 		public ActiveDropPodInfo(IThingHolder parent)
 		{
-			this.innerContainer = new ThingOwner<Thing>(this);
+			innerContainer = new ThingOwner<Thing>(this);
 			this.parent = parent;
 		}
 
-		
 		public void ExposeData()
 		{
-			if (this.savePawnsWithReferenceMode && Scribe.mode == LoadSaveMode.Saving)
+			if (savePawnsWithReferenceMode && Scribe.mode == LoadSaveMode.Saving)
 			{
-				this.tmpThings.Clear();
-				this.tmpThings.AddRange(this.innerContainer);
-				this.tmpSavedPawns.Clear();
-				for (int i = 0; i < this.tmpThings.Count; i++)
+				tmpThings.Clear();
+				tmpThings.AddRange(innerContainer);
+				tmpSavedPawns.Clear();
+				for (int i = 0; i < tmpThings.Count; i++)
 				{
-					Pawn pawn = this.tmpThings[i] as Pawn;
+					Pawn pawn = tmpThings[i] as Pawn;
 					if (pawn != null)
 					{
-						this.innerContainer.Remove(pawn);
-						this.tmpSavedPawns.Add(pawn);
+						innerContainer.Remove(pawn);
+						tmpSavedPawns.Add(pawn);
 					}
 				}
-				this.tmpThings.Clear();
+				tmpThings.Clear();
 			}
-			Scribe_Values.Look<bool>(ref this.savePawnsWithReferenceMode, "savePawnsWithReferenceMode", false, false);
-			if (this.savePawnsWithReferenceMode)
+			Scribe_Values.Look(ref savePawnsWithReferenceMode, "savePawnsWithReferenceMode", defaultValue: false);
+			if (savePawnsWithReferenceMode)
 			{
-				Scribe_Collections.Look<Pawn>(ref this.tmpSavedPawns, "tmpSavedPawns", LookMode.Reference, Array.Empty<object>());
+				Scribe_Collections.Look(ref tmpSavedPawns, "tmpSavedPawns", LookMode.Reference);
 			}
-			Scribe_Deep.Look<ThingOwner>(ref this.innerContainer, "innerContainer", new object[]
+			Scribe_Deep.Look(ref innerContainer, "innerContainer", this);
+			Scribe_Values.Look(ref openDelay, "openDelay", 110);
+			Scribe_Values.Look(ref leaveSlag, "leaveSlag", defaultValue: false);
+			Scribe_Values.Look(ref spawnWipeMode, "spawnWipeMode");
+			Scribe_Values.Look(ref despawnPodBeforeSpawningThing, "despawnPodBeforeSpawningThing", defaultValue: false);
+			Scribe_Values.Look(ref setRotation, "setRotation");
+			Scribe_Values.Look(ref moveItemsAsideBeforeSpawning, "moveItemsAsideBeforeSpawning", defaultValue: false);
+			if (savePawnsWithReferenceMode && (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving))
 			{
-				this
-			});
-			Scribe_Values.Look<int>(ref this.openDelay, "openDelay", 110, false);
-			Scribe_Values.Look<bool>(ref this.leaveSlag, "leaveSlag", false, false);
-			Scribe_Values.Look<WipeMode?>(ref this.spawnWipeMode, "spawnWipeMode", null, false);
-			Scribe_Values.Look<bool>(ref this.despawnPodBeforeSpawningThing, "despawnPodBeforeSpawningThing", false, false);
-			Scribe_Values.Look<Rot4?>(ref this.setRotation, "setRotation", null, false);
-			Scribe_Values.Look<bool>(ref this.moveItemsAsideBeforeSpawning, "moveItemsAsideBeforeSpawning", false, false);
-			if (this.savePawnsWithReferenceMode && (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving))
-			{
-				for (int j = 0; j < this.tmpSavedPawns.Count; j++)
+				for (int j = 0; j < tmpSavedPawns.Count; j++)
 				{
-					this.innerContainer.TryAdd(this.tmpSavedPawns[j], true);
+					innerContainer.TryAdd(tmpSavedPawns[j]);
 				}
-				this.tmpSavedPawns.Clear();
+				tmpSavedPawns.Clear();
 			}
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.innerContainer;
+			return innerContainer;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
-
-		
-		public IThingHolder parent;
-
-		
-		public ThingOwner innerContainer;
-
-		
-		public int openDelay = 110;
-
-		
-		public bool leaveSlag;
-
-		
-		public bool savePawnsWithReferenceMode;
-
-		
-		public bool despawnPodBeforeSpawningThing;
-
-		
-		public WipeMode? spawnWipeMode;
-
-		
-		public Rot4? setRotation;
-
-		
-		public bool moveItemsAsideBeforeSpawning;
-
-		
-		public const int DefaultOpenDelay = 110;
-
-		
-		private List<Thing> tmpThings = new List<Thing>();
-
-		
-		private List<Pawn> tmpSavedPawns = new List<Pawn>();
 	}
 }

@@ -1,23 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public class Command_SetPlantToGrow : Command
 	{
-		
+		public IPlantToGrowSettable settable;
+
+		private List<IPlantToGrowSettable> settables;
+
+		private static List<ThingDef> tmpAvailablePlants = new List<ThingDef>();
+
+		private static readonly Texture2D SetPlantToGrowTex = ContentFinder<Texture2D>.Get("UI/Commands/SetPlantToGrow");
+
 		public Command_SetPlantToGrow()
 		{
-			this.tutorTag = "GrowingZoneSetPlant";
+			tutorTag = "GrowingZoneSetPlant";
 			ThingDef thingDef = null;
 			bool flag = false;
-			foreach (object obj in Find.Selector.SelectedObjects)
+			foreach (object selectedObject in Find.Selector.SelectedObjects)
 			{
-				IPlantToGrowSettable plantToGrowSettable = obj as IPlantToGrowSettable;
+				IPlantToGrowSettable plantToGrowSettable = selectedObject as IPlantToGrowSettable;
 				if (plantToGrowSettable != null)
 				{
 					if (thingDef != null && thingDef != plantToGrowSettable.GetPlantDefToGrow())
@@ -30,138 +35,125 @@ namespace Verse
 			}
 			if (flag)
 			{
-				this.icon = Command_SetPlantToGrow.SetPlantToGrowTex;
-				this.defaultLabel = "CommandSelectPlantToGrowMulti".Translate();
+				icon = SetPlantToGrowTex;
+				defaultLabel = "CommandSelectPlantToGrowMulti".Translate();
 				return;
 			}
-			this.icon = thingDef.uiIcon;
-			this.iconAngle = thingDef.uiIconAngle;
-			this.iconOffset = thingDef.uiIconOffset;
-			this.defaultLabel = "CommandSelectPlantToGrow".Translate(thingDef.LabelCap);
+			icon = thingDef.uiIcon;
+			iconAngle = thingDef.uiIconAngle;
+			iconOffset = thingDef.uiIconOffset;
+			defaultLabel = "CommandSelectPlantToGrow".Translate(thingDef.LabelCap);
 		}
 
-		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			if (this.settables == null)
+			if (settables == null)
 			{
-				this.settables = new List<IPlantToGrowSettable>();
+				settables = new List<IPlantToGrowSettable>();
 			}
-			if (!this.settables.Contains(this.settable))
+			if (!settables.Contains(settable))
 			{
-				this.settables.Add(this.settable);
+				settables.Add(settable);
 			}
-			Command_SetPlantToGrow.tmpAvailablePlants.Clear();
-			foreach (ThingDef thingDef in PlantUtility.ValidPlantTypesForGrowers(this.settables))
+			tmpAvailablePlants.Clear();
+			foreach (ThingDef item in PlantUtility.ValidPlantTypesForGrowers(settables))
 			{
-				if (Command_SetPlantToGrow.IsPlantAvailable(thingDef, this.settable.Map))
+				if (IsPlantAvailable(item, settable.Map))
 				{
-					Command_SetPlantToGrow.tmpAvailablePlants.Add(thingDef);
+					tmpAvailablePlants.Add(item);
 				}
 			}
-			Command_SetPlantToGrow.tmpAvailablePlants.SortBy((ThingDef x) => -this.GetPlantListPriority(x), (ThingDef x) => x.label);
-			for (int i = 0; i < Command_SetPlantToGrow.tmpAvailablePlants.Count; i++)
+			tmpAvailablePlants.SortBy((ThingDef x) => 0f - GetPlantListPriority(x), (ThingDef x) => x.label);
+			for (int i = 0; i < tmpAvailablePlants.Count; i++)
 			{
-				ThingDef plantDef = Command_SetPlantToGrow.tmpAvailablePlants[i];
+				ThingDef plantDef = tmpAvailablePlants[i];
 				string text = plantDef.LabelCap;
 				if (plantDef.plant.sowMinSkill > 0)
 				{
-					text = string.Concat(new object[]
-					{
-						text,
-						" (" + "MinSkill".Translate() + ": ",
-						plantDef.plant.sowMinSkill,
-						")"
-					});
+					text = text + (string)(" (" + "MinSkill".Translate() + ": ") + plantDef.plant.sowMinSkill + ")";
 				}
 				list.Add(new FloatMenuOption(text, delegate
 				{
-					string s = this.tutorTag + "-" + plantDef.defName;
-					if (!TutorSystem.AllowAction(s))
+					string s = tutorTag + "-" + plantDef.defName;
+					if (TutorSystem.AllowAction(s))
 					{
-						return;
-					}
-					bool flag = true;
-					for (int j = 0; j < this.settables.Count; j++)
-					{
-						this.settables[j].SetPlantDefToGrow(plantDef);
-						if (flag && plantDef.plant.interferesWithRoof)
+						bool flag = true;
+						for (int j = 0; j < settables.Count; j++)
 						{
-							IEnumerator<IntVec3> enumerator2 = this.settables[j].Cells.GetEnumerator();
+							settables[j].SetPlantDefToGrow(plantDef);
+							if (flag && plantDef.plant.interferesWithRoof)
 							{
-								while (enumerator2.MoveNext())
+								foreach (IntVec3 cell in settables[j].Cells)
 								{
-									if (enumerator2.Current.Roofed(this.settables[j].Map))
+									if (cell.Roofed(settables[j].Map))
 									{
-										Messages.Message("MessagePlantIncompatibleWithRoof".Translate(Find.ActiveLanguageWorker.Pluralize(plantDef.LabelCap, -1)), MessageTypeDefOf.CautionInput, false);
+										Messages.Message("MessagePlantIncompatibleWithRoof".Translate(Find.ActiveLanguageWorker.Pluralize(plantDef.LabelCap)), MessageTypeDefOf.CautionInput, historical: false);
 										flag = false;
 										break;
 									}
 								}
 							}
 						}
+						PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.SetGrowingZonePlant, KnowledgeAmount.Total);
+						WarnAsAppropriate(plantDef);
+						TutorSystem.Notify_Event(s);
 					}
-					PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.SetGrowingZonePlant, KnowledgeAmount.Total);
-					this.WarnAsAppropriate(plantDef);
-					TutorSystem.Notify_Event(s);
-				}, plantDef, MenuOptionPriority.Default, null, null, 29f, (Rect rect) => Widgets.InfoCardButton(rect.x + 5f, rect.y + (rect.height - 24f) / 2f, plantDef), null));
+				}, plantDef, MenuOptionPriority.Default, null, null, 29f, (Rect rect) => Widgets.InfoCardButton(rect.x + 5f, rect.y + (rect.height - 24f) / 2f, plantDef)));
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		
 		public override bool InheritInteractionsFrom(Gizmo other)
 		{
-			if (this.settables == null)
+			if (settables == null)
 			{
-				this.settables = new List<IPlantToGrowSettable>();
+				settables = new List<IPlantToGrowSettable>();
 			}
-			this.settables.Add(((Command_SetPlantToGrow)other).settable);
+			settables.Add(((Command_SetPlantToGrow)other).settable);
 			return false;
 		}
 
-		
 		private void WarnAsAppropriate(ThingDef plantDef)
 		{
 			if (plantDef.plant.sowMinSkill > 0)
 			{
-				foreach (Pawn pawn in this.settable.Map.mapPawns.FreeColonistsSpawned)
+				foreach (Pawn item in settable.Map.mapPawns.FreeColonistsSpawned)
 				{
-					if (pawn.skills.GetSkill(SkillDefOf.Plants).Level >= plantDef.plant.sowMinSkill && !pawn.Downed && pawn.workSettings.WorkIsActive(WorkTypeDefOf.Growing))
+					if (item.skills.GetSkill(SkillDefOf.Plants).Level >= plantDef.plant.sowMinSkill && !item.Downed && item.workSettings.WorkIsActive(WorkTypeDefOf.Growing))
 					{
 						return;
 					}
 				}
-				Find.WindowStack.Add(new Dialog_MessageBox("NoGrowerCanPlant".Translate(plantDef.label, plantDef.plant.sowMinSkill).CapitalizeFirst(), null, null, null, null, null, false, null, null));
+				Find.WindowStack.Add(new Dialog_MessageBox("NoGrowerCanPlant".Translate(plantDef.label, plantDef.plant.sowMinSkill).CapitalizeFirst()));
 			}
-			if (plantDef.plant.cavePlant)
+			if (!plantDef.plant.cavePlant)
 			{
-				IntVec3 cell = IntVec3.Invalid;
-				for (int i = 0; i < this.settables.Count; i++)
+				return;
+			}
+			IntVec3 cell = IntVec3.Invalid;
+			for (int i = 0; i < settables.Count; i++)
+			{
+				foreach (IntVec3 cell2 in settables[i].Cells)
 				{
-					foreach (IntVec3 intVec in this.settables[i].Cells)
+					if (!cell2.Roofed(settables[i].Map) || settables[i].Map.glowGrid.GameGlowAt(cell2, ignoreCavePlants: true) > 0f)
 					{
-						if (!intVec.Roofed(this.settables[i].Map) || this.settables[i].Map.glowGrid.GameGlowAt(intVec, true) > 0f)
-						{
-							cell = intVec;
-							break;
-						}
-					}
-					if (cell.IsValid)
-					{
+						cell = cell2;
 						break;
 					}
 				}
 				if (cell.IsValid)
 				{
-					Messages.Message("MessageWarningCavePlantsExposedToLight".Translate(plantDef.LabelCap), new TargetInfo(cell, this.settable.Map, false), MessageTypeDefOf.RejectInput, true);
+					break;
 				}
+			}
+			if (cell.IsValid)
+			{
+				Messages.Message("MessageWarningCavePlantsExposedToLight".Translate(plantDef.LabelCap), new TargetInfo(cell, settable.Map), MessageTypeDefOf.RejectInput);
 			}
 		}
 
-		
 		public static bool IsPlantAvailable(ThingDef plantDef, Map map)
 		{
 			List<ResearchProjectDef> sowResearchPrerequisites = plantDef.plant.sowResearchPrerequisites;
@@ -176,10 +168,13 @@ namespace Verse
 					return false;
 				}
 			}
-			return !plantDef.plant.mustBeWildToSow || map.Biome.AllWildPlants.Contains(plantDef);
+			if (plantDef.plant.mustBeWildToSow && !map.Biome.AllWildPlants.Contains(plantDef))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		private float GetPlantListPriority(ThingDef plantDef)
 		{
 			if (plantDef.plant.IsTree)
@@ -200,17 +195,5 @@ namespace Verse
 				return 0f;
 			}
 		}
-
-		
-		public IPlantToGrowSettable settable;
-
-		
-		private List<IPlantToGrowSettable> settables;
-
-		
-		private static List<ThingDef> tmpAvailablePlants = new List<ThingDef>();
-
-		
-		private static readonly Texture2D SetPlantToGrowTex = ContentFinder<Texture2D>.Get("UI/Commands/SetPlantToGrow", true);
 	}
 }

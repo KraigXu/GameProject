@@ -1,56 +1,48 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_CaravanIdle : Alert
 	{
-		
-		
+		private List<Caravan> idleCaravansResult = new List<Caravan>();
+
 		private List<Caravan> IdleCaravans
 		{
 			get
 			{
-				this.idleCaravansResult.Clear();
+				idleCaravansResult.Clear();
 				foreach (Caravan caravan in Find.WorldObjects.Caravans)
 				{
 					if (caravan.Spawned && caravan.IsPlayerControlled && !caravan.pather.MovingNow && !caravan.CantMove)
 					{
-						this.idleCaravansResult.Add(caravan);
+						idleCaravansResult.Add(caravan);
 					}
 				}
-				return this.idleCaravansResult;
+				return idleCaravansResult;
 			}
 		}
 
-		
 		public override string GetLabel()
 		{
 			return "CaravanIdle".Translate();
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Caravan caravan in this.IdleCaravans)
+			foreach (Caravan idleCaravan in IdleCaravans)
 			{
-				stringBuilder.AppendLine("  - " + caravan.Label);
+				stringBuilder.AppendLine("  - " + idleCaravan.Label);
 			}
 			return "CaravanIdleDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.IdleCaravans);
+			return AlertReport.CulpritsAre(IdleCaravans);
 		}
-
-		
-		private List<Caravan> idleCaravansResult = new List<Caravan>();
 	}
 }

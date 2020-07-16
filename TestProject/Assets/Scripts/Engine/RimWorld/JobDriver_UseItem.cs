@@ -1,46 +1,42 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_UseItem : JobDriver
 	{
-		
+		private int useDuration = -1;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.useDuration, "useDuration", 0, false);
+			Scribe_Values.Look(ref useDuration, "useDuration", 0);
 		}
 
-		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
-			this.useDuration = this.job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompUsable>().Props.useDuration;
+			useDuration = job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompUsable>().Props.useDuration;
 		}
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnIncapable(PawnCapacityDefOf.Manipulation);
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
-			Toil toil = Toils_General.Wait(this.useDuration, TargetIndex.None);
-			toil.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
+			Toil toil = Toils_General.Wait(useDuration);
+			toil.WithProgressBarToilDelay(TargetIndex.A);
 			toil.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			toil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
-			if (this.job.targetB.IsValid)
+			if (job.targetB.IsValid)
 			{
 				toil.FailOnDespawnedOrNull(TargetIndex.B);
-				CompTargetable compTargetable = this.job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompTargetable>();
+				CompTargetable compTargetable = job.GetTarget(TargetIndex.A).Thing.TryGetComp<CompTargetable>();
 				if (compTargetable != null && compTargetable.Props.nonDownedPawnOnly)
 				{
 					toil.FailOnDownedOrDead(TargetIndex.B);
@@ -55,10 +51,6 @@ namespace RimWorld
 			};
 			use.defaultCompleteMode = ToilCompleteMode.Instant;
 			yield return use;
-			yield break;
 		}
-
-		
-		private int useDuration = -1;
 	}
 }

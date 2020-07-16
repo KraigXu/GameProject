@@ -1,45 +1,32 @@
-﻿using System;
 using RimWorld;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct Rot4 : IEquatable<Rot4>
 	{
-		
-		
-		public bool IsValid
-		{
-			get
-			{
-				return this.rotInt < 100;
-			}
-		}
+		private byte rotInt;
 
-		
-		
-		
+		public bool IsValid => rotInt < 100;
+
 		public byte AsByte
 		{
 			get
 			{
-				return this.rotInt;
+				return rotInt;
 			}
 			set
 			{
-				this.rotInt = (byte)(value % 4);
+				rotInt = (byte)((int)value % 4);
 			}
 		}
 
-		
-		
-		
 		public int AsInt
 		{
 			get
 			{
-				return (int)this.rotInt;
+				return rotInt;
 			}
 			set
 			{
@@ -47,17 +34,15 @@ namespace Verse
 				{
 					value += 4000;
 				}
-				this.rotInt = (byte)(value % 4);
+				rotInt = (byte)(value % 4);
 			}
 		}
 
-		
-		
 		public float AsAngle
 		{
 			get
 			{
-				switch (this.AsInt)
+				switch (AsInt)
 				{
 				case 0:
 					return 0f;
@@ -73,13 +58,11 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public SpectateRectSide AsSpectateSide
 		{
 			get
 			{
-				switch (this.AsInt)
+				switch (AsInt)
 				{
 				case 0:
 					return SpectateRectSide.Up;
@@ -95,13 +78,11 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public Quaternion AsQuat
 		{
 			get
 			{
-				switch (this.rotInt)
+				switch (rotInt)
 				{
 				case 0:
 					return Quaternion.identity;
@@ -112,19 +93,17 @@ namespace Verse
 				case 3:
 					return Quaternion.LookRotation(Vector3.left);
 				default:
-					Log.Error("ToQuat with Rot = " + this.AsInt, false);
+					Log.Error("ToQuat with Rot = " + AsInt);
 					return Quaternion.identity;
 				}
 			}
 		}
 
-		
-		
 		public Vector2 AsVector2
 		{
 			get
 			{
-				switch (this.rotInt)
+				switch (rotInt)
 				{
 				case 0:
 					return Vector2.up;
@@ -135,103 +114,48 @@ namespace Verse
 				case 3:
 					return Vector2.left;
 				default:
-					throw new Exception("rotInt's value cannot be >3 but it is:" + this.rotInt);
+					throw new Exception("rotInt's value cannot be >3 but it is:" + rotInt);
 				}
 			}
 		}
 
-		
-		
 		public bool IsHorizontal
 		{
 			get
 			{
-				return this.rotInt == 1 || this.rotInt == 3;
+				if (rotInt != 1)
+				{
+					return rotInt == 3;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public static Rot4 North
-		{
-			get
-			{
-				return new Rot4(0);
-			}
-		}
+		public static Rot4 North => new Rot4(0);
 
-		
-		
-		public static Rot4 East
-		{
-			get
-			{
-				return new Rot4(1);
-			}
-		}
+		public static Rot4 East => new Rot4(1);
 
-		
-		
-		public static Rot4 South
-		{
-			get
-			{
-				return new Rot4(2);
-			}
-		}
+		public static Rot4 South => new Rot4(2);
 
-		
-		
-		public static Rot4 West
-		{
-			get
-			{
-				return new Rot4(3);
-			}
-		}
+		public static Rot4 West => new Rot4(3);
 
-		
-		
-		public static Rot4 Random
-		{
-			get
-			{
-				return new Rot4(Rand.RangeInclusive(0, 3));
-			}
-		}
+		public static Rot4 Random => new Rot4(Rand.RangeInclusive(0, 3));
 
-		
-		
 		public static Rot4 Invalid
 		{
 			get
 			{
-				return new Rot4
-				{
-					rotInt = 200
-				};
+				Rot4 result = default(Rot4);
+				result.rotInt = 200;
+				return result;
 			}
 		}
 
-		
-		public Rot4(byte newRot)
-		{
-			this.rotInt = newRot;
-		}
-
-		
-		public Rot4(int newRot)
-		{
-			this.rotInt = (byte)(newRot % 4);
-		}
-
-		
-		
 		public IntVec3 FacingCell
 		{
 			get
 			{
-				switch (this.AsInt)
+				switch (AsInt)
 				{
 				case 0:
 					return new IntVec3(0, 0, 1);
@@ -247,13 +171,11 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public IntVec3 RighthandCell
 		{
 			get
 			{
-				switch (this.AsInt)
+				switch (AsInt)
 				{
 				case 0:
 					return new IntVec3(1, 0, 0);
@@ -269,13 +191,11 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public Rot4 Opposite
 		{
 			get
 			{
-				switch (this.AsInt)
+				switch (AsInt)
 				{
 				case 0:
 					return new Rot4(2);
@@ -291,22 +211,28 @@ namespace Verse
 			}
 		}
 
-		
+		public Rot4(byte newRot)
+		{
+			rotInt = newRot;
+		}
+
+		public Rot4(int newRot)
+		{
+			rotInt = (byte)(newRot % 4);
+		}
+
 		public void Rotate(RotationDirection RotDir)
 		{
 			if (RotDir == RotationDirection.Clockwise)
 			{
-				int asInt = this.AsInt;
-				this.AsInt = asInt + 1;
+				AsInt++;
 			}
 			if (RotDir == RotationDirection.Counterclockwise)
 			{
-				int asInt = this.AsInt;
-				this.AsInt = asInt - 1;
+				AsInt--;
 			}
 		}
 
-		
 		public Rot4 Rotated(RotationDirection RotDir)
 		{
 			Rot4 result = this;
@@ -314,74 +240,68 @@ namespace Verse
 			return result;
 		}
 
-		
 		public static Rot4 FromAngleFlat(float angle)
 		{
 			angle = GenMath.PositiveMod(angle, 360f);
 			if (angle < 45f)
 			{
-				return Rot4.North;
+				return North;
 			}
 			if (angle < 135f)
 			{
-				return Rot4.East;
+				return East;
 			}
 			if (angle < 225f)
 			{
-				return Rot4.South;
+				return South;
 			}
 			if (angle < 315f)
 			{
-				return Rot4.West;
+				return West;
 			}
-			return Rot4.North;
+			return North;
 		}
 
-		
 		public static Rot4 FromIntVec3(IntVec3 offset)
 		{
 			if (offset.x == 1)
 			{
-				return Rot4.East;
+				return East;
 			}
 			if (offset.x == -1)
 			{
-				return Rot4.West;
+				return West;
 			}
 			if (offset.z == 1)
 			{
-				return Rot4.North;
+				return North;
 			}
 			if (offset.z == -1)
 			{
-				return Rot4.South;
+				return South;
 			}
-			Log.Error("FromIntVec3 with bad offset " + offset, false);
-			return Rot4.North;
+			Log.Error("FromIntVec3 with bad offset " + offset);
+			return North;
 		}
 
-		
 		public static Rot4 FromIntVec2(IntVec2 offset)
 		{
-			return Rot4.FromIntVec3(offset.ToIntVec3);
+			return FromIntVec3(offset.ToIntVec3);
 		}
 
-		
 		public static bool operator ==(Rot4 a, Rot4 b)
 		{
 			return a.AsInt == b.AsInt;
 		}
 
-		
 		public static bool operator !=(Rot4 a, Rot4 b)
 		{
 			return a.AsInt != b.AsInt;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			switch (this.rotInt)
+			switch (rotInt)
 			{
 			case 0:
 				return 235515;
@@ -392,20 +312,18 @@ namespace Verse
 			case 3:
 				return 9231792;
 			default:
-				return (int)this.rotInt;
+				return rotInt;
 			}
 		}
 
-		
 		public override string ToString()
 		{
-			return this.rotInt.ToString();
+			return rotInt.ToString();
 		}
 
-		
 		public string ToStringHuman()
 		{
-			switch (this.rotInt)
+			switch (rotInt)
 			{
 			case 0:
 				return "North".Translate();
@@ -420,10 +338,9 @@ namespace Verse
 			}
 		}
 
-		
 		public string ToStringWord()
 		{
-			switch (this.rotInt)
+			switch (rotInt)
 			{
 			case 0:
 				return "North";
@@ -438,14 +355,12 @@ namespace Verse
 			}
 		}
 
-		
 		public static Rot4 FromString(string str)
 		{
-			int num;
 			byte newRot;
-			if (int.TryParse(str, out num))
+			if (int.TryParse(str, out int result))
 			{
-				newRot = (byte)num;
+				newRot = (byte)result;
 			}
 			else if (!(str == "North"))
 			{
@@ -453,14 +368,14 @@ namespace Verse
 				{
 					if (!(str == "South"))
 					{
-						if (!(str == "West"))
+						if (str == "West")
 						{
-							newRot = 0;
-							Log.Error("Invalid rotation: " + str, false);
+							newRot = 3;
 						}
 						else
 						{
-							newRot = 3;
+							newRot = 0;
+							Log.Error("Invalid rotation: " + str);
 						}
 					}
 					else
@@ -480,19 +395,18 @@ namespace Verse
 			return new Rot4(newRot);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is Rot4 && this.Equals((Rot4)obj);
+			if (!(obj is Rot4))
+			{
+				return false;
+			}
+			return Equals((Rot4)obj);
 		}
 
-		
 		public bool Equals(Rot4 other)
 		{
-			return this.rotInt == other.rotInt;
+			return rotInt == other.rotInt;
 		}
-
-		
-		private byte rotInt;
 	}
 }

@@ -1,46 +1,40 @@
-﻿using System;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
 namespace Verse
 {
-	
 	public static class DirectXmlSaveFormatter
 	{
-		
 		public static void AddWhitespaceFromRoot(XElement root)
 		{
-			if (!root.Elements().Any<XElement>())
+			if (root.Elements().Any())
 			{
-				return;
-			}
-			foreach (XNode xnode in root.Elements().ToList<XElement>())
-			{
-				XText content = new XText("\n");
-				xnode.AddAfterSelf(content);
-			}
-			root.Elements().First<XElement>().AddBeforeSelf(new XText("\n"));
-			root.Elements().Last<XElement>().AddAfterSelf(new XText("\n"));
-			foreach (XElement element in root.Elements().ToList<XElement>())
-			{
-				DirectXmlSaveFormatter.IndentXml(element, 1);
+				foreach (XElement item in root.Elements().ToList())
+				{
+					XText content = new XText("\n");
+					item.AddAfterSelf(content);
+				}
+				root.Elements().First().AddBeforeSelf(new XText("\n"));
+				root.Elements().Last().AddAfterSelf(new XText("\n"));
+				foreach (XElement item2 in root.Elements().ToList())
+				{
+					IndentXml(item2, 1);
+				}
 			}
 		}
 
-		
 		private static void IndentXml(XElement element, int depth)
 		{
-			element.AddBeforeSelf(new XText(DirectXmlSaveFormatter.IndentString(depth, true)));
+			element.AddBeforeSelf(new XText(IndentString(depth, startWithNewline: true)));
 			bool startWithNewline = element.NextNode == null;
-			element.AddAfterSelf(new XText(DirectXmlSaveFormatter.IndentString(depth - 1, startWithNewline)));
-			foreach (XElement element2 in element.Elements().ToList<XElement>())
+			element.AddAfterSelf(new XText(IndentString(depth - 1, startWithNewline)));
+			foreach (XElement item in element.Elements().ToList())
 			{
-				DirectXmlSaveFormatter.IndentXml(element2, depth + 1);
+				IndentXml(item, depth + 1);
 			}
 		}
 
-		
 		private static string IndentString(int depth, bool startWithNewline)
 		{
 			StringBuilder stringBuilder = new StringBuilder();

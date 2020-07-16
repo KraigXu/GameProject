@@ -1,98 +1,87 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class VerbTracker : IExposable
 	{
-		
-		
+		public IVerbOwner directOwner;
+
+		private List<Verb> verbs;
+
 		public List<Verb> AllVerbs
 		{
 			get
 			{
-				if (this.verbs == null)
+				if (verbs == null)
 				{
-					this.InitVerbsFromZero();
+					InitVerbsFromZero();
 				}
-				return this.verbs;
+				return verbs;
 			}
 		}
 
-		
-		
 		public Verb PrimaryVerb
 		{
 			get
 			{
-				if (this.verbs == null)
+				if (verbs == null)
 				{
-					this.InitVerbsFromZero();
+					InitVerbsFromZero();
 				}
-				for (int i = 0; i < this.verbs.Count; i++)
+				for (int i = 0; i < verbs.Count; i++)
 				{
-					if (this.verbs[i].verbProps.isPrimary)
+					if (verbs[i].verbProps.isPrimary)
 					{
-						return this.verbs[i];
+						return verbs[i];
 					}
 				}
 				return null;
 			}
 		}
 
-		
 		public VerbTracker(IVerbOwner directOwner)
 		{
 			this.directOwner = directOwner;
 		}
 
-		
 		public void VerbsTick()
 		{
-			if (this.verbs == null)
+			if (verbs != null)
 			{
-				return;
-			}
-			for (int i = 0; i < this.verbs.Count; i++)
-			{
-				this.verbs[i].VerbTick();
+				for (int i = 0; i < verbs.Count; i++)
+				{
+					verbs[i].VerbTick();
+				}
 			}
 		}
 
-		
 		public IEnumerable<Command> GetVerbsCommands(KeyCode hotKey = KeyCode.None)
 		{
-			CompEquippable ce = this.directOwner as CompEquippable;
+			CompEquippable ce = directOwner as CompEquippable;
 			if (ce == null)
 			{
 				yield break;
 			}
 			Thing ownerThing = ce.parent;
-			List<Verb> verbs = this.AllVerbs;
-			int num;
-			for (int i = 0; i < verbs.Count; i = num + 1)
+			List<Verb> verbs = AllVerbs;
+			for (int i = 0; i < verbs.Count; i++)
 			{
 				Verb verb = verbs[i];
 				if (verb.verbProps.hasStandardCommand)
 				{
-					yield return this.CreateVerbTargetCommand(ownerThing, verb);
+					yield return CreateVerbTargetCommand(ownerThing, verb);
 				}
-				num = i;
 			}
-			if (!this.directOwner.Tools.NullOrEmpty<Tool>() && ce != null && ce.parent.def.IsMeleeWeapon)
+			if (!directOwner.Tools.NullOrEmpty() && ce != null && ce.parent.def.IsMeleeWeapon)
 			{
-				yield return this.CreateVerbTargetCommand(ownerThing, (from v in verbs
-				where v.verbProps.IsMeleeAttack
-				select v).FirstOrDefault<Verb>());
+				yield return CreateVerbTargetCommand(ownerThing, verbs.Where((Verb v) => v.verbProps.IsMeleeAttack).FirstOrDefault());
 			}
-			yield break;
 		}
 
-		
 		private Command_VerbTarget CreateVerbTargetCommand(Thing ownerThing, Verb verb)
 		{
 			Command_VerbTarget command_VerbTarget = new Command_VerbTarget();
@@ -120,10 +109,9 @@ namespace Verse
 			return command_VerbTarget;
 		}
 
-		
 		public Verb GetVerb(VerbCategory category)
 		{
-			List<Verb> allVerbs = this.AllVerbs;
+			List<Verb> allVerbs = AllVerbs;
 			if (allVerbs != null)
 			{
 				for (int i = 0; i < allVerbs.Count; i++)
@@ -137,48 +125,45 @@ namespace Verse
 			return null;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Verb>(ref this.verbs, "verbs", LookMode.Deep, Array.Empty<object>());
-			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs && this.verbs != null)
+			Scribe_Collections.Look(ref verbs, "verbs", LookMode.Deep);
+			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs && verbs != null)
 			{
-				if (this.verbs.RemoveAll((Verb x) => x == null) != 0)
+				if (verbs.RemoveAll((Verb x) => x == null) != 0)
 				{
-					Log.Error("Some verbs were null after loading. directOwner=" + this.directOwner.ToStringSafe<IVerbOwner>(), false);
+					Log.Error("Some verbs were null after loading. directOwner=" + directOwner.ToStringSafe());
 				}
-				List<Verb> sources = this.verbs;
-				this.verbs = new List<Verb>();
-				this.InitVerbs(delegate(Type type, string id)
+				List<Verb> sources = verbs;
+				verbs = new List<Verb>();
+				InitVerbs(delegate(Type type, string id)
 				{
 					Verb verb = sources.FirstOrDefault((Verb v) => v.loadID == id && v.GetType() == type);
 					if (verb == null)
 					{
-						Log.Warning(string.Format("Replaced verb {0}/{1}; may have been changed through a version update or a mod change", type, id), false);
+						Log.Warning($"Replaced verb {type}/{id}; may have been changed through a version update or a mod change");
 						verb = (Verb)Activator.CreateInstance(type);
 					}
-					this.verbs.Add(verb);
+					verbs.Add(verb);
 					return verb;
 				});
 			}
 		}
 
-		
 		private void InitVerbsFromZero()
 		{
-			this.verbs = new List<Verb>();
-			this.InitVerbs(delegate(Type type, string id)
+			verbs = new List<Verb>();
+			InitVerbs(delegate(Type type, string id)
 			{
 				Verb verb = (Verb)Activator.CreateInstance(type);
-				this.verbs.Add(verb);
+				verbs.Add(verb);
 				return verb;
 			});
 		}
 
-		
 		private void InitVerbs(Func<Type, string, Verb> creator)
 		{
-			List<VerbProperties> verbProperties = this.directOwner.VerbProperties;
+			List<VerbProperties> verbProperties = directOwner.VerbProperties;
 			if (verbProperties != null)
 			{
 				for (int i = 0; i < verbProperties.Count; i++)
@@ -186,51 +171,38 @@ namespace Verse
 					try
 					{
 						VerbProperties verbProperties2 = verbProperties[i];
-						string text = Verb.CalculateUniqueLoadID(this.directOwner, i);
-						this.InitVerb(creator(verbProperties2.verbClass, text), verbProperties2, null, null, text);
+						string text = Verb.CalculateUniqueLoadID(directOwner, i);
+						InitVerb(creator(verbProperties2.verbClass, text), verbProperties2, null, null, text);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Could not instantiate Verb (directOwner=",
-							this.directOwner.ToStringSafe<IVerbOwner>(),
-							"): ",
-							ex
-						}), false);
+						Log.Error("Could not instantiate Verb (directOwner=" + directOwner.ToStringSafe() + "): " + ex);
 					}
 				}
 			}
-			List<Tool> tools = this.directOwner.Tools;
+			List<Tool> tools = directOwner.Tools;
 			if (tools != null)
 			{
 				for (int j = 0; j < tools.Count; j++)
 				{
 					Tool tool = tools[j];
-					foreach (ManeuverDef maneuverDef in tool.Maneuvers)
+					foreach (ManeuverDef maneuver in tool.Maneuvers)
 					{
 						try
 						{
-							VerbProperties verb = maneuverDef.verb;
-							string text2 = Verb.CalculateUniqueLoadID(this.directOwner, tool, maneuverDef);
-							this.InitVerb(creator(verb.verbClass, text2), verb, tool, maneuverDef, text2);
+							VerbProperties verb = maneuver.verb;
+							string text2 = Verb.CalculateUniqueLoadID(directOwner, tool, maneuver);
+							InitVerb(creator(verb.verbClass, text2), verb, tool, maneuver, text2);
 						}
 						catch (Exception ex2)
 						{
-							Log.Error(string.Concat(new object[]
-							{
-								"Could not instantiate Verb (directOwner=",
-								this.directOwner.ToStringSafe<IVerbOwner>(),
-								"): ",
-								ex2
-							}), false);
+							Log.Error("Could not instantiate Verb (directOwner=" + directOwner.ToStringSafe() + "): " + ex2);
 						}
 					}
 				}
 			}
 		}
 
-		
 		private void InitVerb(Verb verb, VerbProperties properties, Tool tool, ManeuverDef maneuver, string id)
 		{
 			verb.loadID = id;
@@ -238,13 +210,7 @@ namespace Verse
 			verb.verbTracker = this;
 			verb.tool = tool;
 			verb.maneuver = maneuver;
-			verb.caster = this.directOwner.ConstantCaster;
+			verb.caster = directOwner.ConstantCaster;
 		}
-
-		
-		public IVerbOwner directOwner;
-
-		
-		private List<Verb> verbs;
 	}
 }

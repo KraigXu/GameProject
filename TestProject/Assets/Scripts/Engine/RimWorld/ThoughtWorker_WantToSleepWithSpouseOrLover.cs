@@ -1,16 +1,13 @@
-﻿using System;
 using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_WantToSleepWithSpouseOrLover : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
-			DirectPawnRelation directPawnRelation = LovePartnerRelationUtility.ExistingMostLikedLovePartnerRel(p, false);
+			DirectPawnRelation directPawnRelation = LovePartnerRelationUtility.ExistingMostLikedLovePartnerRel(p, allowDead: false);
 			if (directPawnRelation == null)
 			{
 				return false;

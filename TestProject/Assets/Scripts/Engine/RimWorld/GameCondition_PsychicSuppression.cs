@@ -1,83 +1,59 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class GameCondition_PsychicSuppression : GameCondition
 	{
-		
-		
-		public override string LetterText
-		{
-			get
-			{
-				return base.LetterText.Formatted(this.gender.GetLabel(false).ToLower());
-			}
-		}
+		public Gender gender;
 
-		
-		
-		public override string Description
-		{
-			get
-			{
-				return base.Description.Formatted(this.gender.GetLabel(false).ToLower());
-			}
-		}
+		public override string LetterText => base.LetterText.Formatted(gender.GetLabel().ToLower());
 
-		
+		public override string Description => base.Description.Formatted(gender.GetLabel().ToLower());
+
 		public override void Init()
 		{
 			base.Init();
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.None, false);
+			Scribe_Values.Look(ref gender, "gender", Gender.None);
 		}
 
-		
 		public static void CheckPawn(Pawn pawn, Gender targetGender)
 		{
-			if (pawn.RaceProps.Humanlike && pawn.gender == targetGender && !pawn.health.hediffSet.HasHediff(HediffDefOf.PsychicSuppression, false))
+			if (pawn.RaceProps.Humanlike && pawn.gender == targetGender && !pawn.health.hediffSet.HasHediff(HediffDefOf.PsychicSuppression))
 			{
-				pawn.health.AddHediff(HediffDefOf.PsychicSuppression, null, null, null);
+				pawn.health.AddHediff(HediffDefOf.PsychicSuppression);
 			}
 		}
 
-		
 		public override void GameConditionTick()
 		{
-			foreach (Map map in base.AffectedMaps)
+			foreach (Map affectedMap in base.AffectedMaps)
 			{
-				foreach (Pawn pawn in map.mapPawns.AllPawns)
+				foreach (Pawn allPawn in affectedMap.mapPawns.AllPawns)
 				{
-					GameCondition_PsychicSuppression.CheckPawn(pawn, this.gender);
+					CheckPawn(allPawn, gender);
 				}
 			}
 		}
 
-		
 		public override void RandomizeSettings(float points, Map map, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 			base.RandomizeSettings(points, map, outExtraDescriptionRules, outExtraDescriptionConstants);
 			if (map.mapPawns.FreeColonistsCount > 0)
 			{
-				this.gender = map.mapPawns.FreeColonists.RandomElement<Pawn>().gender;
+				gender = map.mapPawns.FreeColonists.RandomElement().gender;
 			}
 			else
 			{
-				this.gender = Rand.Element<Gender>(Gender.Male, Gender.Female);
+				gender = Rand.Element(Gender.Male, Gender.Female);
 			}
-			outExtraDescriptionRules.Add(new Rule_String("psychicSuppressorGender", this.gender.GetLabel(false)));
+			outExtraDescriptionRules.Add(new Rule_String("psychicSuppressorGender", gender.GetLabel()));
 		}
-
-		
-		public Gender gender;
 	}
 }

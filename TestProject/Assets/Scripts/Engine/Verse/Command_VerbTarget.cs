@@ -1,94 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class Command_VerbTarget : Command
 	{
-		
-		
+		public Verb verb;
+
+		private List<Verb> groupedVerbs;
+
+		public bool drawRadius = true;
+
 		public override Color IconDrawColor
 		{
 			get
 			{
-				if (this.verb.EquipmentSource != null)
+				if (verb.EquipmentSource != null)
 				{
-					return this.verb.EquipmentSource.DrawColor;
+					return verb.EquipmentSource.DrawColor;
 				}
 				return base.IconDrawColor;
 			}
 		}
 
-		
 		public override void GizmoUpdateOnMouseover()
 		{
-			if (!this.drawRadius)
+			if (drawRadius)
 			{
-				return;
-			}
-			this.verb.verbProps.DrawRadiusRing(this.verb.caster.Position);
-			if (!this.groupedVerbs.NullOrEmpty<Verb>())
-			{
-				foreach (Verb verb in this.groupedVerbs)
+				verb.verbProps.DrawRadiusRing(verb.caster.Position);
+				if (!groupedVerbs.NullOrEmpty())
 				{
-					verb.verbProps.DrawRadiusRing(verb.caster.Position);
+					foreach (Verb groupedVerb in groupedVerbs)
+					{
+						groupedVerb.verbProps.DrawRadiusRing(groupedVerb.caster.Position);
+					}
 				}
 			}
 		}
 
-		
 		public override void MergeWith(Gizmo other)
 		{
 			base.MergeWith(other);
 			Command_VerbTarget command_VerbTarget = other as Command_VerbTarget;
 			if (command_VerbTarget == null)
 			{
-				Log.ErrorOnce("Tried to merge Command_VerbTarget with unexpected type", 73406263, false);
+				Log.ErrorOnce("Tried to merge Command_VerbTarget with unexpected type", 73406263);
 				return;
 			}
-			if (this.groupedVerbs == null)
+			if (groupedVerbs == null)
 			{
-				this.groupedVerbs = new List<Verb>();
+				groupedVerbs = new List<Verb>();
 			}
-			this.groupedVerbs.Add(command_VerbTarget.verb);
+			groupedVerbs.Add(command_VerbTarget.verb);
 			if (command_VerbTarget.groupedVerbs != null)
 			{
-				this.groupedVerbs.AddRange(command_VerbTarget.groupedVerbs);
+				groupedVerbs.AddRange(command_VerbTarget.groupedVerbs);
 			}
 		}
 
-		
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
-			SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
+			SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
 			Targeter targeter = Find.Targeter;
-			if (this.verb.CasterIsPawn && targeter.targetingSource != null && targeter.targetingSource.GetVerb.verbProps == this.verb.verbProps)
+			if (verb.CasterIsPawn && targeter.targetingSource != null && targeter.targetingSource.GetVerb.verbProps == verb.verbProps)
 			{
-				Pawn casterPawn = this.verb.CasterPawn;
+				Pawn casterPawn = verb.CasterPawn;
 				if (!targeter.IsPawnTargeting(casterPawn))
 				{
 					targeter.targetingSourceAdditionalPawns.Add(casterPawn);
-					return;
 				}
 			}
 			else
 			{
-				Find.Targeter.BeginTargeting(this.verb, null);
+				Find.Targeter.BeginTargeting(verb);
 			}
 		}
-
-		
-		public Verb verb;
-
-		
-		private List<Verb> groupedVerbs;
-
-		
-		public bool drawRadius = true;
 	}
 }

@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.BaseGen;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class GenStep_ItemStash : GenStep_Scatterer
 	{
-		
-		
-		public override int SeedPart
-		{
-			get
-			{
-				return 913432591;
-			}
-		}
+		public ThingSetMakerDef thingSetMakerDef;
 
-		
+		private const int Size = 7;
+
+		public override int SeedPart => 913432591;
+
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -30,19 +23,18 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (!map.reachability.CanReachMapEdge(c, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false)))
+			if (!map.reachability.CanReachMapEdge(c, TraverseParms.For(TraverseMode.PassDoors)))
 			{
 				return false;
 			}
 			CellRect rect = CellRect.CenteredOn(c, 7, 7);
-			List<CellRect> list;
-			if (MapGenerator.TryGetVar<List<CellRect>>("UsedRects", out list) && list.Any((CellRect x) => x.Overlaps(rect)))
+			if (MapGenerator.TryGetVar("UsedRects", out List<CellRect> var) && var.Any((CellRect x) => x.Overlaps(rect)))
 			{
 				return false;
 			}
-			foreach (IntVec3 c2 in rect)
+			foreach (IntVec3 item in rect)
 			{
-				if (!c2.InBounds(map) || c2.GetEdifice(map) != null)
+				if (!item.InBounds(map) || item.GetEdifice(map) != null)
 				{
 					return false;
 				}
@@ -50,15 +42,13 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int count = 1)
 		{
 			CellRect cellRect = CellRect.CenteredOn(loc, 7, 7).ClipInsideMap(map);
-			List<CellRect> list;
-			if (!MapGenerator.TryGetVar<List<CellRect>>("UsedRects", out list))
+			if (!MapGenerator.TryGetVar("UsedRects", out List<CellRect> var))
 			{
-				list = new List<CellRect>();
-				MapGenerator.SetVar<List<CellRect>>("UsedRects", list);
+				var = new List<CellRect>();
+				MapGenerator.SetVar("UsedRects", var);
 			}
 			ResolveParams resolveParams = default(ResolveParams);
 			resolveParams.rect = cellRect;
@@ -76,20 +66,14 @@ namespace RimWorld
 				}
 				else
 				{
-					resolveParams.thingSetMakerDef = (this.thingSetMakerDef ?? ThingSetMakerDefOf.MapGen_DefaultStockpile);
+					resolveParams.thingSetMakerDef = (thingSetMakerDef ?? ThingSetMakerDefOf.MapGen_DefaultStockpile);
 				}
 			}
-			BaseGenCore.globalSettings.map = map;
-			BaseGenCore.symbolStack.Push("storage", resolveParams, null);
-			BaseGenCore.Generate();
-			MapGenerator.SetVar<CellRect>("RectOfInterest", cellRect);
-			list.Add(cellRect);
+			RimWorld.BaseGen.BaseGen.globalSettings.map = map;
+			RimWorld.BaseGen.BaseGen.symbolStack.Push("storage", resolveParams);
+			RimWorld.BaseGen.BaseGen.Generate();
+			MapGenerator.SetVar("RectOfInterest", cellRect);
+			var.Add(cellRect);
 		}
-
-		
-		public ThingSetMakerDef thingSetMakerDef;
-
-		
-		private const int Size = 7;
 	}
 }

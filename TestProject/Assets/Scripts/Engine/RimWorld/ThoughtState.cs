@@ -1,125 +1,81 @@
-﻿using System;
 using UnityEngine;
 
 namespace RimWorld
 {
-	
 	public struct ThoughtState
 	{
-		
-		
-		public bool Active
-		{
-			get
-			{
-				return this.stageIndex != -99999;
-			}
-		}
+		private int stageIndex;
 
-		
-		
-		public int StageIndex
-		{
-			get
-			{
-				return this.stageIndex;
-			}
-		}
+		private string reason;
 
-		
-		
-		public string Reason
-		{
-			get
-			{
-				return this.reason;
-			}
-		}
+		private const int InactiveIndex = -99999;
 
-		
-		
-		public static ThoughtState ActiveDefault
-		{
-			get
-			{
-				return ThoughtState.ActiveAtStage(0);
-			}
-		}
+		public bool Active => stageIndex != -99999;
 
-		
-		
+		public int StageIndex => stageIndex;
+
+		public string Reason => reason;
+
+		public static ThoughtState ActiveDefault => ActiveAtStage(0);
+
 		public static ThoughtState Inactive
 		{
 			get
 			{
-				return new ThoughtState
-				{
-					stageIndex = -99999
-				};
+				ThoughtState result = default(ThoughtState);
+				result.stageIndex = -99999;
+				return result;
 			}
 		}
 
-		
 		public static ThoughtState ActiveAtStage(int stageIndex)
 		{
-			return new ThoughtState
-			{
-				stageIndex = stageIndex
-			};
+			ThoughtState result = default(ThoughtState);
+			result.stageIndex = stageIndex;
+			return result;
 		}
 
-		
 		public static ThoughtState ActiveAtStage(int stageIndex, string reason)
 		{
-			return new ThoughtState
-			{
-				stageIndex = stageIndex,
-				reason = reason
-			};
+			ThoughtState result = default(ThoughtState);
+			result.stageIndex = stageIndex;
+			result.reason = reason;
+			return result;
 		}
 
-		
 		public static ThoughtState ActiveWithReason(string reason)
 		{
-			ThoughtState activeDefault = ThoughtState.ActiveDefault;
+			ThoughtState activeDefault = ActiveDefault;
 			activeDefault.reason = reason;
 			return activeDefault;
 		}
 
-		
 		public static implicit operator ThoughtState(bool value)
 		{
 			if (value)
 			{
-				return ThoughtState.ActiveDefault;
+				return ActiveDefault;
 			}
-			return ThoughtState.Inactive;
+			return Inactive;
 		}
 
-		
 		public bool ActiveFor(ThoughtDef thoughtDef)
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return false;
 			}
-			int num = this.StageIndexFor(thoughtDef);
-			return num >= 0 && thoughtDef.stages[num] != null;
+			int num = StageIndexFor(thoughtDef);
+			if (num >= 0)
+			{
+				return thoughtDef.stages[num] != null;
+			}
+			return false;
 		}
 
-		
 		public int StageIndexFor(ThoughtDef thoughtDef)
 		{
-			return Mathf.Min(this.StageIndex, thoughtDef.stages.Count - 1);
+			return Mathf.Min(StageIndex, thoughtDef.stages.Count - 1);
 		}
-
-		
-		private int stageIndex;
-
-		
-		private string reason;
-
-		
-		private const int InactiveIndex = -99999;
 	}
 }

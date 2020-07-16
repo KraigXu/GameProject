@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_NeedFood : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.needs.food == null)
@@ -23,8 +21,7 @@ namespace RimWorld
 				return ThoughtState.ActiveAtStage(1);
 			case HungerCategory.Starving:
 			{
-				Hediff firstHediffOfDef = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition, false);
-				int num = (firstHediffOfDef == null) ? 0 : firstHediffOfDef.CurStageIndex;
+				int num = p.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition)?.CurStageIndex ?? 0;
 				return ThoughtState.ActiveAtStage(2 + num);
 			}
 			default:

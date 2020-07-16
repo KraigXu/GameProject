@@ -1,18 +1,14 @@
-﻿using System;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class XmlContainer
 	{
-		
+		public XmlNode node;
+
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
-			this.node = xmlRoot;
+			node = xmlRoot;
 		}
-
-		
-		public XmlNode node;
 	}
 }

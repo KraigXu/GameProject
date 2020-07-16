@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,135 +5,123 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompFacility : ThingComp
 	{
-		
-		
+		private List<Thing> linkedBuildings = new List<Thing>();
+
+		private HashSet<Thing> thingsToNotify = new HashSet<Thing>();
+
 		public bool CanBeActive
 		{
 			get
 			{
-				CompPowerTrader compPowerTrader = this.parent.TryGetComp<CompPowerTrader>();
-				return compPowerTrader == null || compPowerTrader.PowerOn;
+				CompPowerTrader compPowerTrader = parent.TryGetComp<CompPowerTrader>();
+				if (compPowerTrader != null && !compPowerTrader.PowerOn)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public CompProperties_Facility Props
-		{
-			get
-			{
-				return (CompProperties_Facility)this.props;
-			}
-		}
+		public CompProperties_Facility Props => (CompProperties_Facility)props;
 
-		
 		public static void DrawLinesToPotentialThingsToLinkTo(ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
 			CompProperties_Facility compProperties = myDef.GetCompProperties<CompProperties_Facility>();
 			Vector3 a = GenThing.TrueCenter(myPos, myRot, myDef.size, myDef.Altitude);
 			for (int i = 0; i < compProperties.linkableBuildings.Count; i++)
 			{
-				foreach (Thing thing in map.listerThings.ThingsOfDef(compProperties.linkableBuildings[i]))
+				foreach (Thing item in map.listerThings.ThingsOfDef(compProperties.linkableBuildings[i]))
 				{
-					CompAffectedByFacilities compAffectedByFacilities = thing.TryGetComp<CompAffectedByFacilities>();
+					CompAffectedByFacilities compAffectedByFacilities = item.TryGetComp<CompAffectedByFacilities>();
 					if (compAffectedByFacilities != null && compAffectedByFacilities.CanPotentiallyLinkTo(myDef, myPos, myRot))
 					{
-						GenDraw.DrawLineBetween(a, thing.TrueCenter());
+						GenDraw.DrawLineBetween(a, item.TrueCenter());
 						compAffectedByFacilities.DrawRedLineToPotentiallySupplantedFacility(myDef, myPos, myRot);
 					}
 				}
 			}
 		}
 
-		
 		public void Notify_NewLink(Thing thing)
 		{
-			for (int i = 0; i < this.linkedBuildings.Count; i++)
+			for (int i = 0; i < linkedBuildings.Count; i++)
 			{
-				if (this.linkedBuildings[i] == thing)
+				if (linkedBuildings[i] == thing)
 				{
-					Log.Error("Notify_NewLink was called but the link is already here.", false);
+					Log.Error("Notify_NewLink was called but the link is already here.");
 					return;
 				}
 			}
-			this.linkedBuildings.Add(thing);
+			linkedBuildings.Add(thing);
 		}
 
-		
 		public void Notify_LinkRemoved(Thing thing)
 		{
-			for (int i = 0; i < this.linkedBuildings.Count; i++)
+			for (int i = 0; i < linkedBuildings.Count; i++)
 			{
-				if (this.linkedBuildings[i] == thing)
+				if (linkedBuildings[i] == thing)
 				{
-					this.linkedBuildings.RemoveAt(i);
+					linkedBuildings.RemoveAt(i);
 					return;
 				}
 			}
-			Log.Error("Notify_LinkRemoved was called but there is no such link here.", false);
+			Log.Error("Notify_LinkRemoved was called but there is no such link here.");
 		}
 
-		
 		public void Notify_LOSBlockerSpawnedOrDespawned()
 		{
-			this.RelinkAll();
+			RelinkAll();
 		}
 
-		
 		public void Notify_ThingChanged()
 		{
-			this.RelinkAll();
+			RelinkAll();
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			this.LinkToNearbyBuildings();
+			LinkToNearbyBuildings();
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
-			this.thingsToNotify.Clear();
-			for (int i = 0; i < this.linkedBuildings.Count; i++)
+			thingsToNotify.Clear();
+			for (int i = 0; i < linkedBuildings.Count; i++)
 			{
-				this.thingsToNotify.Add(this.linkedBuildings[i]);
+				thingsToNotify.Add(linkedBuildings[i]);
 			}
-			this.UnlinkAll();
-			foreach (Thing thing in this.thingsToNotify)
+			UnlinkAll();
+			foreach (Thing item in thingsToNotify)
 			{
-				thing.TryGetComp<CompAffectedByFacilities>().Notify_FacilityDespawned();
+				item.TryGetComp<CompAffectedByFacilities>().Notify_FacilityDespawned();
 			}
 		}
 
-		
 		public override void PostDrawExtraSelectionOverlays()
 		{
-			for (int i = 0; i < this.linkedBuildings.Count; i++)
+			for (int i = 0; i < linkedBuildings.Count; i++)
 			{
-				if (this.linkedBuildings[i].TryGetComp<CompAffectedByFacilities>().IsFacilityActive(this.parent))
+				if (linkedBuildings[i].TryGetComp<CompAffectedByFacilities>().IsFacilityActive(parent))
 				{
-					GenDraw.DrawLineBetween(this.parent.TrueCenter(), this.linkedBuildings[i].TrueCenter());
+					GenDraw.DrawLineBetween(parent.TrueCenter(), linkedBuildings[i].TrueCenter());
 				}
 				else
 				{
-					GenDraw.DrawLineBetween(this.parent.TrueCenter(), this.linkedBuildings[i].TrueCenter(), CompAffectedByFacilities.InactiveFacilityLineMat);
+					GenDraw.DrawLineBetween(parent.TrueCenter(), linkedBuildings[i].TrueCenter(), CompAffectedByFacilities.InactiveFacilityLineMat);
 				}
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			CompProperties_Facility props = this.Props;
+			CompProperties_Facility props = Props;
 			if (props.statOffsets == null)
 			{
 				return null;
 			}
-			bool flag = this.AmIActiveForAnyone();
+			bool flag = AmIActiveForAnyone();
 			StringBuilder stringBuilder = new StringBuilder();
 			for (int i = 0; i < props.statOffsets.Count; i++)
 			{
@@ -157,41 +144,37 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		
 		private void RelinkAll()
 		{
-			this.LinkToNearbyBuildings();
+			LinkToNearbyBuildings();
 		}
 
-		
 		private void LinkToNearbyBuildings()
 		{
-			this.UnlinkAll();
-			CompProperties_Facility props = this.Props;
-			if (props.linkableBuildings == null)
+			UnlinkAll();
+			CompProperties_Facility props = Props;
+			if (props.linkableBuildings != null)
 			{
-				return;
-			}
-			for (int i = 0; i < props.linkableBuildings.Count; i++)
-			{
-				foreach (Thing thing in this.parent.Map.listerThings.ThingsOfDef(props.linkableBuildings[i]))
+				for (int i = 0; i < props.linkableBuildings.Count; i++)
 				{
-					CompAffectedByFacilities compAffectedByFacilities = thing.TryGetComp<CompAffectedByFacilities>();
-					if (compAffectedByFacilities != null && compAffectedByFacilities.CanLinkTo(this.parent))
+					foreach (Thing item in parent.Map.listerThings.ThingsOfDef(props.linkableBuildings[i]))
 					{
-						this.linkedBuildings.Add(thing);
-						compAffectedByFacilities.Notify_NewLink(this.parent);
+						CompAffectedByFacilities compAffectedByFacilities = item.TryGetComp<CompAffectedByFacilities>();
+						if (compAffectedByFacilities != null && compAffectedByFacilities.CanLinkTo(parent))
+						{
+							linkedBuildings.Add(item);
+							compAffectedByFacilities.Notify_NewLink(parent);
+						}
 					}
 				}
 			}
 		}
 
-		
 		private bool AmIActiveForAnyone()
 		{
-			for (int i = 0; i < this.linkedBuildings.Count; i++)
+			for (int i = 0; i < linkedBuildings.Count; i++)
 			{
-				if (this.linkedBuildings[i].TryGetComp<CompAffectedByFacilities>().IsFacilityActive(this.parent))
+				if (linkedBuildings[i].TryGetComp<CompAffectedByFacilities>().IsFacilityActive(parent))
 				{
 					return true;
 				}
@@ -199,20 +182,13 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private void UnlinkAll()
 		{
-			for (int i = 0; i < this.linkedBuildings.Count; i++)
+			for (int i = 0; i < linkedBuildings.Count; i++)
 			{
-				this.linkedBuildings[i].TryGetComp<CompAffectedByFacilities>().Notify_LinkRemoved(this.parent);
+				linkedBuildings[i].TryGetComp<CompAffectedByFacilities>().Notify_LinkRemoved(parent);
 			}
-			this.linkedBuildings.Clear();
+			linkedBuildings.Clear();
 		}
-
-		
-		private List<Thing> linkedBuildings = new List<Thing>();
-
-		
-		private HashSet<Thing> thingsToNotify = new HashSet<Thing>();
 	}
 }

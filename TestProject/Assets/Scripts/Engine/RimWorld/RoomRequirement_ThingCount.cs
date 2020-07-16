@@ -1,46 +1,47 @@
-﻿// RimWorld.RoomRequirement_ThingCount
-using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
-public class RoomRequirement_ThingCount : RoomRequirement_Thing
+namespace RimWorld
 {
-	public int count;
-
-	public override bool Met(Room r, Pawn p = null)
+	public class RoomRequirement_ThingCount : RoomRequirement_Thing
 	{
-		return Count(r) >= count;
-	}
+		public int count;
 
-	public int Count(Room r)
-	{
-		return r.ThingCount(thingDef);
-	}
-
-	public override string Label(Room r = null)
-	{
-		bool flag = !labelKey.NullOrEmpty();
-		string text = flag ? ((string)labelKey.Translate()) : thingDef.label;
-		if (r != null)
+		public override bool Met(Room r, Pawn p = null)
 		{
-			return text + " " + Count(r) + "/" + count;
+			return Count(r) >= count;
 		}
-		if (!flag)
-		{
-			return GenLabel.ThingLabel(thingDef, null, count);
-		}
-		return text + " x" + count;
-	}
 
-	public override IEnumerable<string> ConfigErrors()
-	{
-		foreach (string item in base.ConfigErrors())
+		public int Count(Room r)
 		{
-			yield return item;
+			return r.ThingCount(thingDef);
 		}
-		if (count <= 0)
+
+		public override string Label(Room r = null)
 		{
-			yield return "count must be larger than 0";
+			bool flag = !labelKey.NullOrEmpty();
+			string text = flag ? ((string)labelKey.Translate()) : thingDef.label;
+			if (r != null)
+			{
+				return text + " " + Count(r) + "/" + count;
+			}
+			if (!flag)
+			{
+				return GenLabel.ThingLabel(thingDef, null, count);
+			}
+			return text + " x" + count;
+		}
+
+		public override IEnumerable<string> ConfigErrors()
+		{
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (count <= 0)
+			{
+				yield return "count must be larger than 0";
+			}
 		}
 	}
 }

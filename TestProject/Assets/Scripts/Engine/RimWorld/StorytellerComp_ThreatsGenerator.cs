@@ -1,34 +1,19 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_ThreatsGenerator : StorytellerComp
 	{
-		
-		
-		protected StorytellerCompProperties_ThreatsGenerator Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_ThreatsGenerator)this.props;
-			}
-		}
+		protected StorytellerCompProperties_ThreatsGenerator Props => (StorytellerCompProperties_ThreatsGenerator)props;
 
-		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
-			Map map = target as Map;
-			foreach (FiringIncident firingIncident in ThreatsGenerator.MakeIntervalIncidents(this.Props.parms, target, (map != null) ? map.generationTick : 0))
+			foreach (FiringIncident item in ThreatsGenerator.MakeIntervalIncidents(Props.parms, target, (target as Map)?.generationTick ?? 0))
 			{
-				firingIncident.source = this;
-				yield return firingIncident;
+				item.source = this;
+				yield return item;
 			}
-			IEnumerator<FiringIncident> enumerator = null;
-			yield break;
-			yield break;
 		}
 	}
 }

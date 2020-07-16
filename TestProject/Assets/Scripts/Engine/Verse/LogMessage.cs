@@ -1,18 +1,22 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class LogMessage
 	{
-		
-		
+		public string text;
+
+		public LogMessageType type;
+
+		public int repeats = 1;
+
+		private string stackTrace;
+
 		public Color Color
 		{
 			get
 			{
-				switch (this.type)
+				switch (type)
 				{
 				case LogMessageType.Message:
 					return Color.white;
@@ -26,29 +30,25 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public string StackTrace
 		{
 			get
 			{
-				if (this.stackTrace != null)
+				if (stackTrace != null)
 				{
-					return this.stackTrace;
+					return stackTrace;
 				}
 				return "No stack trace.";
 			}
 		}
 
-		
 		public LogMessage(string text)
 		{
 			this.text = text;
-			this.type = LogMessageType.Message;
-			this.stackTrace = null;
+			type = LogMessageType.Message;
+			stackTrace = null;
 		}
 
-		
 		public LogMessage(LogMessageType type, string text, string stackTrace)
 		{
 			this.text = text;
@@ -56,32 +56,22 @@ namespace Verse
 			this.stackTrace = stackTrace;
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.repeats > 1)
+			if (repeats > 1)
 			{
-				return "(" + this.repeats.ToString() + ") " + this.text;
+				return "(" + repeats.ToString() + ") " + text;
 			}
-			return this.text;
+			return text;
 		}
 
-		
 		public bool CanCombineWith(LogMessage other)
 		{
-			return this.text == other.text && this.type == other.type;
+			if (text == other.text)
+			{
+				return type == other.type;
+			}
+			return false;
 		}
-
-		
-		public string text;
-
-		
-		public LogMessageType type;
-
-		
-		public int repeats = 1;
-
-		
-		private string stackTrace;
 	}
 }

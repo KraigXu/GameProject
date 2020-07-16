@@ -1,86 +1,81 @@
-﻿using System;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public abstract class CompAbilityEffect : AbilityComp
 	{
-		
-		
-		public CompProperties_AbilityEffect Props
-		{
-			get
-			{
-				return (CompProperties_AbilityEffect)this.props;
-			}
-		}
+		public CompProperties_AbilityEffect Props => (CompProperties_AbilityEffect)props;
 
-		
-		
 		protected bool SendLetter
 		{
 			get
 			{
-				return this.Props.sendLetter && !this.Props.customLetterText.NullOrEmpty() && !this.Props.customLetterLabel.NullOrEmpty();
+				if (!Props.sendLetter)
+				{
+					return false;
+				}
+				if (!Props.customLetterText.NullOrEmpty())
+				{
+					return !Props.customLetterLabel.NullOrEmpty();
+				}
+				return false;
 			}
 		}
 
-		
 		public virtual void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			if (this.Props.screenShakeIntensity > 1.401298E-45f)
+			if (Props.screenShakeIntensity > float.Epsilon)
 			{
-				Find.CameraDriver.shaker.DoShake(this.Props.screenShakeIntensity);
+				Find.CameraDriver.shaker.DoShake(Props.screenShakeIntensity);
 			}
-			Pawn pawn = this.parent.pawn;
+			Pawn pawn = parent.pawn;
 			Pawn pawn2 = target.Pawn;
 			if (pawn2 != null)
 			{
 				Faction factionOrExtraHomeFaction = pawn2.FactionOrExtraHomeFaction;
-				if (this.Props.goodwillImpact != 0 && pawn.Faction != null && factionOrExtraHomeFaction != null && !factionOrExtraHomeFaction.HostileTo(pawn.Faction) && (this.Props.applyGoodwillImpactToLodgers || !pawn2.IsQuestLodger()) && !pawn2.IsQuestHelper())
+				if (Props.goodwillImpact != 0 && pawn.Faction != null && factionOrExtraHomeFaction != null && !factionOrExtraHomeFaction.HostileTo(pawn.Faction) && (Props.applyGoodwillImpactToLodgers || !pawn2.IsQuestLodger()) && !pawn2.IsQuestHelper())
 				{
-					factionOrExtraHomeFaction.TryAffectGoodwillWith(pawn.Faction, this.Props.goodwillImpact, true, true, "GoodwillChangedReason_UsedAbility".Translate(this.parent.def.LabelCap, pawn2.LabelShort), new GlobalTargetInfo?(pawn2));
+					factionOrExtraHomeFaction.TryAffectGoodwillWith(pawn.Faction, Props.goodwillImpact, canSendMessage: true, canSendHostilityLetter: true, "GoodwillChangedReason_UsedAbility".Translate(parent.def.LabelCap, pawn2.LabelShort), pawn2);
 				}
 			}
-			ThingDef moteDef = (!this.Props.psychic) ? ThingDefOf.Mote_PsycastSkipEffect : ThingDefOf.Mote_PsycastPsychicEffect;
+			ThingDef moteDef = (!Props.psychic) ? ThingDefOf.Mote_PsycastSkipEffect : ThingDefOf.Mote_PsycastPsychicEffect;
 			if (target.HasThing)
 			{
-				MoteMaker.MakeAttachedOverlay(target.Thing, moteDef, Vector3.zero, 1f, -1f);
+				MoteMaker.MakeAttachedOverlay(target.Thing, moteDef, Vector3.zero);
 			}
 			else
 			{
-				MoteMaker.MakeStaticMote(target.Cell, this.parent.pawn.Map, moteDef, 1f);
+				MoteMaker.MakeStaticMote(target.Cell, parent.pawn.Map, moteDef);
 			}
-			if (this.Props.clamorType != null)
+			if (Props.clamorType != null)
 			{
-				GenClamor.DoClamor(this.parent.pawn, target.Cell, (float)this.Props.clamorRadius, this.Props.clamorType);
+				GenClamor.DoClamor(parent.pawn, target.Cell, Props.clamorRadius, Props.clamorType);
 			}
-			if (this.Props.sound != null)
+			if (Props.sound != null)
 			{
-				this.Props.sound.PlayOneShot(new TargetInfo(target.Cell, this.parent.pawn.Map, false));
+				Props.sound.PlayOneShot(new TargetInfo(target.Cell, parent.pawn.Map));
 			}
-			if (!this.Props.message.NullOrEmpty())
+			if (!Props.message.NullOrEmpty())
 			{
-				Messages.Message(this.Props.message, this.parent.pawn, this.Props.messageType ?? MessageTypeDefOf.SilentInput, true);
+				Messages.Message(Props.message, parent.pawn, Props.messageType ?? MessageTypeDefOf.SilentInput);
 			}
 		}
 
-		
 		public virtual bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			return this.Props.availableWhenTargetIsWounded || (target.Pawn.health.hediffSet.BleedRateTotal <= 0f && !target.Pawn.health.HasHediffsNeedingTend(false));
+			if (!Props.availableWhenTargetIsWounded && (target.Pawn.health.hediffSet.BleedRateTotal > 0f || target.Pawn.health.HasHediffsNeedingTend()))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public virtual void DrawEffectPreview(LocalTargetInfo target)
 		{
 		}
 
-		
 		public virtual bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
 			return true;

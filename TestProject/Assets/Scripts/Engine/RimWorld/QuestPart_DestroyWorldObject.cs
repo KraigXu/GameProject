@@ -1,62 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DestroyWorldObject : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public WorldObject worldObject;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.worldObject != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.worldObject;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (worldObject != null)
+				{
+					yield return worldObject;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
-				QuestPart_DestroyWorldObject.TryRemove(this.worldObject);
+				TryRemove(worldObject);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<WorldObject>(ref this.worldObject, "worldObject", false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref worldObject, "worldObject");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			int tile;
-			if (TileFinder.TryFindNewSiteTile(out tile, 7, 27, false, true, -1))
+			inSignal = "DebugSignal" + Rand.Int;
+			if (TileFinder.TryFindNewSiteTile(out int tile))
 			{
-				this.worldObject = SiteMaker.MakeSiteNormal(null, tile, null, true, null);
+				worldObject = SiteMaker.MakeSite((SitePartDef)null, tile, (Faction)null, ifHostileThenMustRemainHostile: true, (float?)null);
 			}
 		}
 
-		
 		public static void TryRemove(WorldObject worldObject)
 		{
 			if (worldObject != null && worldObject.Spawned)
@@ -65,16 +59,12 @@ namespace RimWorld
 				if (mapParent != null && mapParent.HasMap)
 				{
 					mapParent.forceRemoveWorldObjectWhenMapRemoved = true;
-					return;
 				}
-				worldObject.Destroy();
+				else
+				{
+					worldObject.Destroy();
+				}
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public WorldObject worldObject;
 	}
 }

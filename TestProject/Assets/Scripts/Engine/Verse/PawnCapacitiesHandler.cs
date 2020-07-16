@@ -1,109 +1,85 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class PawnCapacitiesHandler
 	{
-		
-		
-		public bool CanBeAwake
+		private enum CacheStatus
 		{
-			get
-			{
-				return this.GetLevel(PawnCapacityDefOf.Consciousness) >= 0.3f;
-			}
+			Uncached,
+			Caching,
+			Cached
 		}
 
-		
+		private class CacheElement
+		{
+			public CacheStatus status;
+
+			public float value;
+		}
+
+		private Pawn pawn;
+
+		private DefMap<PawnCapacityDef, CacheElement> cachedCapacityLevels;
+
+		public bool CanBeAwake => GetLevel(PawnCapacityDefOf.Consciousness) >= 0.3f;
+
 		public PawnCapacitiesHandler(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void Clear()
 		{
-			this.cachedCapacityLevels = null;
+			cachedCapacityLevels = null;
 		}
 
-		
 		public float GetLevel(PawnCapacityDef capacity)
 		{
-			if (this.pawn.health.Dead)
+			if (pawn.health.Dead)
 			{
 				return 0f;
 			}
-			if (this.cachedCapacityLevels == null)
+			if (cachedCapacityLevels == null)
 			{
-				this.Notify_CapacityLevelsDirty();
+				Notify_CapacityLevelsDirty();
 			}
-			PawnCapacitiesHandler.CacheElement cacheElement = this.cachedCapacityLevels[capacity];
-			if (cacheElement.status == PawnCapacitiesHandler.CacheStatus.Caching)
+			CacheElement cacheElement = cachedCapacityLevels[capacity];
+			if (cacheElement.status == CacheStatus.Caching)
 			{
-				Log.Error(string.Format("Detected infinite stat recursion when evaluating {0}", capacity), false);
+				Log.Error($"Detected infinite stat recursion when evaluating {capacity}");
 				return 0f;
 			}
-			if (cacheElement.status == PawnCapacitiesHandler.CacheStatus.Uncached)
+			if (cacheElement.status == CacheStatus.Uncached)
 			{
-				cacheElement.status = PawnCapacitiesHandler.CacheStatus.Caching;
+				cacheElement.status = CacheStatus.Caching;
 				try
 				{
-					cacheElement.value = PawnCapacityUtility.CalculateCapacityLevel(this.pawn.health.hediffSet, capacity, null, false);
+					cacheElement.value = PawnCapacityUtility.CalculateCapacityLevel(pawn.health.hediffSet, capacity);
 				}
 				finally
 				{
-					cacheElement.status = PawnCapacitiesHandler.CacheStatus.Cached;
+					cacheElement.status = CacheStatus.Cached;
 				}
 			}
 			return cacheElement.value;
 		}
 
-		
 		public bool CapableOf(PawnCapacityDef capacity)
 		{
-			return this.GetLevel(capacity) > capacity.minForCapable;
+			return GetLevel(capacity) > capacity.minForCapable;
 		}
 
-		
 		public void Notify_CapacityLevelsDirty()
 		{
-			if (this.cachedCapacityLevels == null)
+			if (cachedCapacityLevels == null)
 			{
-				this.cachedCapacityLevels = new DefMap<PawnCapacityDef, PawnCapacitiesHandler.CacheElement>();
+				cachedCapacityLevels = new DefMap<PawnCapacityDef, CacheElement>();
 			}
-			for (int i = 0; i < this.cachedCapacityLevels.Count; i++)
+			for (int i = 0; i < cachedCapacityLevels.Count; i++)
 			{
-				this.cachedCapacityLevels[i].status = PawnCapacitiesHandler.CacheStatus.Uncached;
+				cachedCapacityLevels[i].status = CacheStatus.Uncached;
 			}
-		}
-
-		
-		private Pawn pawn;
-
-		
-		private DefMap<PawnCapacityDef, PawnCapacitiesHandler.CacheElement> cachedCapacityLevels;
-
-		
-		private enum CacheStatus
-		{
-			
-			Uncached,
-			
-			Caching,
-			
-			Cached
-		}
-
-		
-		private class CacheElement
-		{
-			
-			public PawnCapacitiesHandler.CacheStatus status;
-
-			
-			public float value;
 		}
 	}
 }

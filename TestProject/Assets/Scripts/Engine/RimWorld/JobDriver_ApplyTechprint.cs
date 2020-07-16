@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,84 +5,56 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_ApplyTechprint : JobDriver
 	{
-		
-		
-		protected Building_ResearchBench ResearchBench
-		{
-			get
-			{
-				return (Building_ResearchBench)this.job.GetTarget(TargetIndex.A).Thing;
-			}
-		}
+		private const TargetIndex ResearchBenchInd = TargetIndex.A;
 
-		
-		
-		protected Thing Techprint
-		{
-			get
-			{
-				return this.job.GetTarget(TargetIndex.B).Thing;
-			}
-		}
+		private const TargetIndex TechprintInd = TargetIndex.B;
 
-		
-		
-		protected CompTechprint TechprintComp
-		{
-			get
-			{
-				return this.Techprint.TryGetComp<CompTechprint>();
-			}
-		}
+		private const TargetIndex HaulCell = TargetIndex.C;
 
-		
+		private const int Duration = 600;
+
+		protected Building_ResearchBench ResearchBench => (Building_ResearchBench)job.GetTarget(TargetIndex.A).Thing;
+
+		protected Thing Techprint => job.GetTarget(TargetIndex.B).Thing;
+
+		protected CompTechprint TechprintComp => Techprint.TryGetComp<CompTechprint>();
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.ResearchBench, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.Techprint, this.job, 1, -1, null, errorOnFailed);
+			if (pawn.Reserve(ResearchBench, job, 1, -1, null, errorOnFailed))
+			{
+				return pawn.Reserve(Techprint, job, 1, -1, null, errorOnFailed);
+			}
+			return false;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			this.FailOnBurningImmobile(TargetIndex.A);
 			yield return Toils_General.DoAtomic(delegate
 			{
-				this.job.count = 1;
+				job.count = 1;
 			});
-			Toil toil = Toils_Reserve.Reserve(TargetIndex.B, 1, -1, null);
-			yield return toil;
+			yield return Toils_Reserve.Reserve(TargetIndex.B);
 			yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOnSomeonePhysicallyInteracting(TargetIndex.B);
-			yield return Toils_Haul.StartCarryThing(TargetIndex.B, false, true, false).FailOnDestroyedNullOrForbidden(TargetIndex.B);
+			yield return Toils_Haul.StartCarryThing(TargetIndex.B, putRemainderInQueue: false, subtractNumTakenFromJobCount: true).FailOnDestroyedNullOrForbidden(TargetIndex.B);
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
-			yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.C, null, false, false);
-			yield return Toils_General.Wait(600, TargetIndex.None).FailOnDestroyedNullOrForbidden(TargetIndex.B).FailOnDestroyedNullOrForbidden(TargetIndex.A).FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell).WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
-			yield return new Toil
+			yield return Toils_Haul.PlaceHauledThingInCell(TargetIndex.C, null, storageMode: false);
+			yield return Toils_General.Wait(600).FailOnDestroyedNullOrForbidden(TargetIndex.B).FailOnDestroyedNullOrForbidden(TargetIndex.A)
+				.FailOnCannotTouch(TargetIndex.A, PathEndMode.InteractionCell)
+				.WithProgressBarToilDelay(TargetIndex.A);
+			Toil toil = new Toil();
+			toil.initAction = delegate
 			{
-				initAction = delegate
-				{
-					Find.ResearchManager.ApplyTechprint(this.TechprintComp.Props.project, this.pawn);
-					this.Techprint.Destroy(DestroyMode.Vanish);
-					SoundDefOf.TechprintApplied.PlayOneShotOnCamera(null);
-				},
-				defaultCompleteMode = ToilCompleteMode.Instant
+				Find.ResearchManager.ApplyTechprint(TechprintComp.Props.project, pawn);
+				Techprint.Destroy();
+				SoundDefOf.TechprintApplied.PlayOneShotOnCamera();
 			};
-			yield break;
+			toil.defaultCompleteMode = ToilCompleteMode.Instant;
+			yield return toil;
 		}
-
-		
-		private const TargetIndex ResearchBenchInd = TargetIndex.A;
-
-		
-		private const TargetIndex TechprintInd = TargetIndex.B;
-
-		
-		private const TargetIndex HaulCell = TargetIndex.C;
-
-		
-		private const int Duration = 600;
 	}
 }

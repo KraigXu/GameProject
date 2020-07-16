@@ -1,94 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_FoodFeedPatient : JobDriver
 	{
-		
-		
-		protected Thing Food
-		{
-			get
-			{
-				return this.job.targetA.Thing;
-			}
-		}
+		private const TargetIndex FoodSourceInd = TargetIndex.A;
 
-		
-		
-		protected Pawn Deliveree
-		{
-			get
-			{
-				return (Pawn)this.job.targetB.Thing;
-			}
-		}
+		private const TargetIndex DelivereeInd = TargetIndex.B;
 
-		
+		private const float FeedDurationMultiplier = 1.5f;
+
+		protected Thing Food => job.targetA.Thing;
+
+		protected Pawn Deliveree => (Pawn)job.targetB.Thing;
+
 		public override string GetReport()
 		{
-			if (this.job.GetTarget(TargetIndex.A).Thing is Building_NutrientPasteDispenser && this.Deliveree != null)
+			if (job.GetTarget(TargetIndex.A).Thing is Building_NutrientPasteDispenser && Deliveree != null)
 			{
-				return JobUtility.GetResolvedJobReportRaw(this.job.def.reportString, ThingDefOf.MealNutrientPaste.label, ThingDefOf.MealNutrientPaste, this.Deliveree.LabelShort, this.Deliveree, "", "");
+				return JobUtility.GetResolvedJobReportRaw(job.def.reportString, ThingDefOf.MealNutrientPaste.label, ThingDefOf.MealNutrientPaste, Deliveree.LabelShort, Deliveree, "", "");
 			}
 			return base.GetReport();
 		}
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			if (!this.pawn.Reserve(this.Deliveree, this.job, 1, -1, null, errorOnFailed))
+			if (!pawn.Reserve(Deliveree, job, 1, -1, null, errorOnFailed))
 			{
 				return false;
 			}
-			if (!(base.TargetThingA is Building_NutrientPasteDispenser) && (this.pawn.inventory == null || !this.pawn.inventory.Contains(base.TargetThingA)))
+			if (!(base.TargetThingA is Building_NutrientPasteDispenser) && (pawn.inventory == null || !pawn.inventory.Contains(base.TargetThingA)))
 			{
-				int maxAmountToPickup = FoodUtility.GetMaxAmountToPickup(this.Food, this.pawn, this.job.count);
-				if (!this.pawn.Reserve(this.Food, this.job, 10, maxAmountToPickup, null, errorOnFailed))
+				int maxAmountToPickup = FoodUtility.GetMaxAmountToPickup(Food, pawn, job.count);
+				if (!pawn.Reserve(Food, job, 10, maxAmountToPickup, null, errorOnFailed))
 				{
 					return false;
 				}
-				this.job.count = maxAmountToPickup;
+				job.count = maxAmountToPickup;
 			}
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.B);
-			this.FailOn(() => !FoodUtility.ShouldBeFedBySomeone(this.Deliveree));
-			if (this.pawn.inventory != null && this.pawn.inventory.Contains(base.TargetThingA))
+			this.FailOn(() => !FoodUtility.ShouldBeFedBySomeone(Deliveree));
+			if (pawn.inventory != null && pawn.inventory.Contains(base.TargetThingA))
 			{
-				yield return Toils_Misc.TakeItemFromInventoryToCarrier(this.pawn, TargetIndex.A);
+				yield return Toils_Misc.TakeItemFromInventoryToCarrier(pawn, TargetIndex.A);
 			}
 			else if (base.TargetThingA is Building_NutrientPasteDispenser)
 			{
 				yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnForbidden(TargetIndex.A);
-				yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, this.pawn);
+				yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, pawn);
 			}
 			else
 			{
 				yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnForbidden(TargetIndex.A);
-				yield return Toils_Ingest.PickupIngestible(TargetIndex.A, this.Deliveree);
+				yield return Toils_Ingest.PickupIngestible(TargetIndex.A, Deliveree);
 			}
 			yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch);
-			yield return Toils_Ingest.ChewIngestible(this.Deliveree, 1.5f, TargetIndex.A, TargetIndex.None).FailOnCannotTouch(TargetIndex.B, PathEndMode.Touch);
-			yield return Toils_Ingest.FinalizeIngest(this.Deliveree, TargetIndex.A);
-			yield break;
+			yield return Toils_Ingest.ChewIngestible(Deliveree, 1.5f, TargetIndex.A).FailOnCannotTouch(TargetIndex.B, PathEndMode.Touch);
+			yield return Toils_Ingest.FinalizeIngest(Deliveree, TargetIndex.A);
 		}
-
-		
-		private const TargetIndex FoodSourceInd = TargetIndex.A;
-
-		
-		private const TargetIndex DelivereeInd = TargetIndex.B;
-
-		
-		private const float FeedDurationMultiplier = 1.5f;
 	}
 }

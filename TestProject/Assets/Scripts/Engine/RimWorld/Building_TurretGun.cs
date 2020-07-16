@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,412 +9,395 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class Building_TurretGun : Building_Turret
 	{
-		
-		
+		protected int burstCooldownTicksLeft;
+
+		protected int burstWarmupTicksLeft;
+
+		protected LocalTargetInfo currentTargetInt = LocalTargetInfo.Invalid;
+
+		private bool holdFire;
+
+		public Thing gun;
+
+		protected TurretTop top;
+
+		protected CompPowerTrader powerComp;
+
+		protected CompCanBeDormant dormantComp;
+
+		protected CompInitiatable initiatableComp;
+
+		protected CompMannable mannableComp;
+
+		protected Effecter progressBarEffecter;
+
+		private const int TryStartShootSomethingIntervalTicks = 10;
+
+		public static Material ForcedTargetLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
+
 		public bool Active
 		{
 			get
 			{
-				return (this.powerComp == null || this.powerComp.PowerOn) && (this.dormantComp == null || this.dormantComp.Awake) && (this.initiatableComp == null || this.initiatableComp.Initiated);
+				if ((powerComp == null || powerComp.PowerOn) && (dormantComp == null || dormantComp.Awake))
+				{
+					if (initiatableComp != null)
+					{
+						return initiatableComp.Initiated;
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public CompEquippable GunCompEq
-		{
-			get
-			{
-				return this.gun.TryGetComp<CompEquippable>();
-			}
-		}
+		public CompEquippable GunCompEq => gun.TryGetComp<CompEquippable>();
 
-		
-		
-		public override LocalTargetInfo CurrentTarget
-		{
-			get
-			{
-				return this.currentTargetInt;
-			}
-		}
+		public override LocalTargetInfo CurrentTarget => currentTargetInt;
 
-		
-		
-		private bool WarmingUp
-		{
-			get
-			{
-				return this.burstWarmupTicksLeft > 0;
-			}
-		}
+		private bool WarmingUp => burstWarmupTicksLeft > 0;
 
-		
-		
-		public override Verb AttackVerb
-		{
-			get
-			{
-				return this.GunCompEq.PrimaryVerb;
-			}
-		}
+		public override Verb AttackVerb => GunCompEq.PrimaryVerb;
 
-		
-		
-		public bool IsMannable
-		{
-			get
-			{
-				return this.mannableComp != null;
-			}
-		}
+		public bool IsMannable => mannableComp != null;
 
-		
-		
 		private bool PlayerControlled
 		{
 			get
 			{
-				return (base.Faction == Faction.OfPlayer || this.MannedByColonist) && !this.MannedByNonColonist;
+				if (base.Faction == Faction.OfPlayer || MannedByColonist)
+				{
+					return !MannedByNonColonist;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		private bool CanSetForcedTarget
 		{
 			get
 			{
-				return this.mannableComp != null && this.PlayerControlled;
+				if (mannableComp != null)
+				{
+					return PlayerControlled;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		private bool CanToggleHoldFire
-		{
-			get
-			{
-				return this.PlayerControlled;
-			}
-		}
+		private bool CanToggleHoldFire => PlayerControlled;
 
-		
-		
-		private bool IsMortar
-		{
-			get
-			{
-				return this.def.building.IsMortar;
-			}
-		}
+		private bool IsMortar => def.building.IsMortar;
 
-		
-		
 		private bool IsMortarOrProjectileFliesOverhead
 		{
 			get
 			{
-				return this.AttackVerb.ProjectileFliesOverhead() || this.IsMortar;
+				if (!AttackVerb.ProjectileFliesOverhead())
+				{
+					return IsMortar;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		private bool CanExtractShell
 		{
 			get
 			{
-				if (!this.PlayerControlled)
+				if (!PlayerControlled)
 				{
 					return false;
 				}
-				CompChangeableProjectile compChangeableProjectile = this.gun.TryGetComp<CompChangeableProjectile>();
-				return compChangeableProjectile != null && compChangeableProjectile.Loaded;
+				return gun.TryGetComp<CompChangeableProjectile>()?.Loaded ?? false;
 			}
 		}
 
-		
-		
 		private bool MannedByColonist
 		{
 			get
 			{
-				return this.mannableComp != null && this.mannableComp.ManningPawn != null && this.mannableComp.ManningPawn.Faction == Faction.OfPlayer;
+				if (mannableComp != null && mannableComp.ManningPawn != null)
+				{
+					return mannableComp.ManningPawn.Faction == Faction.OfPlayer;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		private bool MannedByNonColonist
 		{
 			get
 			{
-				return this.mannableComp != null && this.mannableComp.ManningPawn != null && this.mannableComp.ManningPawn.Faction != Faction.OfPlayer;
+				if (mannableComp != null && mannableComp.ManningPawn != null)
+				{
+					return mannableComp.ManningPawn.Faction != Faction.OfPlayer;
+				}
+				return false;
 			}
 		}
 
-		
 		public Building_TurretGun()
 		{
-			this.top = new TurretTop(this);
+			top = new TurretTop(this);
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.dormantComp = base.GetComp<CompCanBeDormant>();
-			this.initiatableComp = base.GetComp<CompInitiatable>();
-			this.powerComp = base.GetComp<CompPowerTrader>();
-			this.mannableComp = base.GetComp<CompMannable>();
+			dormantComp = GetComp<CompCanBeDormant>();
+			initiatableComp = GetComp<CompInitiatable>();
+			powerComp = GetComp<CompPowerTrader>();
+			mannableComp = GetComp<CompMannable>();
 			if (!respawningAfterLoad)
 			{
-				this.top.SetRotationFromOrientation();
-				this.burstCooldownTicksLeft = this.def.building.turretInitialCooldownTime.SecondsToTicks();
+				top.SetRotationFromOrientation();
+				burstCooldownTicksLeft = def.building.turretInitialCooldownTime.SecondsToTicks();
 			}
 		}
 
-		
 		public override void PostMake()
 		{
 			base.PostMake();
-			this.MakeGun();
+			MakeGun();
 		}
 
-		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.DeSpawn(mode);
-			this.ResetCurrentTarget();
-			Effecter effecter = this.progressBarEffecter;
-			if (effecter == null)
-			{
-				return;
-			}
-			effecter.Cleanup();
+			ResetCurrentTarget();
+			progressBarEffecter?.Cleanup();
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.burstCooldownTicksLeft, "burstCooldownTicksLeft", 0, false);
-			Scribe_Values.Look<int>(ref this.burstWarmupTicksLeft, "burstWarmupTicksLeft", 0, false);
-			Scribe_TargetInfo.Look(ref this.currentTargetInt, "currentTarget");
-			Scribe_Values.Look<bool>(ref this.holdFire, "holdFire", false, false);
-			Scribe_Deep.Look<Thing>(ref this.gun, "gun", Array.Empty<object>());
+			Scribe_Values.Look(ref burstCooldownTicksLeft, "burstCooldownTicksLeft", 0);
+			Scribe_Values.Look(ref burstWarmupTicksLeft, "burstWarmupTicksLeft", 0);
+			Scribe_TargetInfo.Look(ref currentTargetInt, "currentTarget");
+			Scribe_Values.Look(ref holdFire, "holdFire", defaultValue: false);
+			Scribe_Deep.Look(ref gun, "gun");
 			BackCompatibility.PostExposeData(this);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.UpdateGunVerbs();
+				UpdateGunVerbs();
 			}
 		}
 
-		
 		public override bool ClaimableBy(Faction by)
 		{
-			return base.ClaimableBy(by) && (this.mannableComp == null || this.mannableComp.ManningPawn == null) && (!this.Active || this.mannableComp != null) && (((this.dormantComp == null || this.dormantComp.Awake) && (this.initiatableComp == null || this.initiatableComp.Initiated)) || (this.powerComp != null && !this.powerComp.PowerOn));
+			if (!base.ClaimableBy(by))
+			{
+				return false;
+			}
+			if (mannableComp != null && mannableComp.ManningPawn != null)
+			{
+				return false;
+			}
+			if (Active && mannableComp == null)
+			{
+				return false;
+			}
+			if (((dormantComp != null && !dormantComp.Awake) || (initiatableComp != null && !initiatableComp.Initiated)) && (powerComp == null || powerComp.PowerOn))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public override void OrderAttack(LocalTargetInfo targ)
 		{
 			if (!targ.IsValid)
 			{
-				if (this.forcedTarget.IsValid)
+				if (forcedTarget.IsValid)
 				{
-					this.ResetForcedTarget();
+					ResetForcedTarget();
 				}
 				return;
 			}
-			if ((targ.Cell - base.Position).LengthHorizontal < this.AttackVerb.verbProps.EffectiveMinRange(targ, this))
+			if ((targ.Cell - base.Position).LengthHorizontal < AttackVerb.verbProps.EffectiveMinRange(targ, this))
 			{
-				Messages.Message("MessageTargetBelowMinimumRange".Translate(), this, MessageTypeDefOf.RejectInput, false);
+				Messages.Message("MessageTargetBelowMinimumRange".Translate(), this, MessageTypeDefOf.RejectInput, historical: false);
 				return;
 			}
-			if ((targ.Cell - base.Position).LengthHorizontal > this.AttackVerb.verbProps.range)
+			if ((targ.Cell - base.Position).LengthHorizontal > AttackVerb.verbProps.range)
 			{
-				Messages.Message("MessageTargetBeyondMaximumRange".Translate(), this, MessageTypeDefOf.RejectInput, false);
+				Messages.Message("MessageTargetBeyondMaximumRange".Translate(), this, MessageTypeDefOf.RejectInput, historical: false);
 				return;
 			}
-			if (this.forcedTarget != targ)
+			if (forcedTarget != targ)
 			{
-				this.forcedTarget = targ;
-				if (this.burstCooldownTicksLeft <= 0)
+				forcedTarget = targ;
+				if (burstCooldownTicksLeft <= 0)
 				{
-					this.TryStartShootSomething(false);
+					TryStartShootSomething(canBeginBurstImmediately: false);
 				}
 			}
-			if (this.holdFire)
+			if (holdFire)
 			{
-				Messages.Message("MessageTurretWontFireBecauseHoldFire".Translate(this.def.label), this, MessageTypeDefOf.RejectInput, false);
+				Messages.Message("MessageTurretWontFireBecauseHoldFire".Translate(def.label), this, MessageTypeDefOf.RejectInput, historical: false);
 			}
 		}
 
-		
 		public override void Tick()
 		{
 			base.Tick();
-			if (this.CanExtractShell && this.MannedByColonist)
+			if (CanExtractShell && MannedByColonist)
 			{
-				CompChangeableProjectile compChangeableProjectile = this.gun.TryGetComp<CompChangeableProjectile>();
+				CompChangeableProjectile compChangeableProjectile = gun.TryGetComp<CompChangeableProjectile>();
 				if (!compChangeableProjectile.allowedShellsSettings.AllowedToAccept(compChangeableProjectile.LoadedShell))
 				{
-					this.ExtractShell();
+					ExtractShell();
 				}
 			}
-			if (this.forcedTarget.IsValid && !this.CanSetForcedTarget)
+			if (forcedTarget.IsValid && !CanSetForcedTarget)
 			{
-				this.ResetForcedTarget();
+				ResetForcedTarget();
 			}
-			if (!this.CanToggleHoldFire)
+			if (!CanToggleHoldFire)
 			{
-				this.holdFire = false;
+				holdFire = false;
 			}
-			if (this.forcedTarget.ThingDestroyed)
+			if (forcedTarget.ThingDestroyed)
 			{
-				this.ResetForcedTarget();
+				ResetForcedTarget();
 			}
-			if (this.Active && (this.mannableComp == null || this.mannableComp.MannedNow) && base.Spawned)
+			if (Active && (mannableComp == null || mannableComp.MannedNow) && base.Spawned)
 			{
-				this.GunCompEq.verbTracker.VerbsTick();
-				if (!this.stunner.Stunned && this.AttackVerb.state != VerbState.Bursting)
+				GunCompEq.verbTracker.VerbsTick();
+				if (stunner.Stunned || AttackVerb.state == VerbState.Bursting)
 				{
-					if (this.WarmingUp)
-					{
-						this.burstWarmupTicksLeft--;
-						if (this.burstWarmupTicksLeft == 0)
-						{
-							this.BeginBurst();
-						}
-					}
-					else
-					{
-						if (this.burstCooldownTicksLeft > 0)
-						{
-							this.burstCooldownTicksLeft--;
-							if (this.IsMortar)
-							{
-								if (this.progressBarEffecter == null)
-								{
-									this.progressBarEffecter = EffecterDefOf.ProgressBar.Spawn();
-								}
-								this.progressBarEffecter.EffectTick(this, TargetInfo.Invalid);
-								MoteProgressBar mote = ((SubEffecter_ProgressBar)this.progressBarEffecter.children[0]).mote;
-								mote.progress = 1f - (float)Math.Max(this.burstCooldownTicksLeft, 0) / (float)this.BurstCooldownTime().SecondsToTicks();
-								mote.offsetZ = -0.8f;
-							}
-						}
-						if (this.burstCooldownTicksLeft <= 0 && this.IsHashIntervalTick(10))
-						{
-							this.TryStartShootSomething(true);
-						}
-					}
-					this.top.TurretTopTick();
 					return;
 				}
+				if (WarmingUp)
+				{
+					burstWarmupTicksLeft--;
+					if (burstWarmupTicksLeft == 0)
+					{
+						BeginBurst();
+					}
+				}
+				else
+				{
+					if (burstCooldownTicksLeft > 0)
+					{
+						burstCooldownTicksLeft--;
+						if (IsMortar)
+						{
+							if (progressBarEffecter == null)
+							{
+								progressBarEffecter = EffecterDefOf.ProgressBar.Spawn();
+							}
+							progressBarEffecter.EffectTick(this, TargetInfo.Invalid);
+							MoteProgressBar mote = ((SubEffecter_ProgressBar)progressBarEffecter.children[0]).mote;
+							mote.progress = 1f - (float)Math.Max(burstCooldownTicksLeft, 0) / (float)BurstCooldownTime().SecondsToTicks();
+							mote.offsetZ = -0.8f;
+						}
+					}
+					if (burstCooldownTicksLeft <= 0 && this.IsHashIntervalTick(10))
+					{
+						TryStartShootSomething(canBeginBurstImmediately: true);
+					}
+				}
+				top.TurretTopTick();
 			}
 			else
 			{
-				this.ResetCurrentTarget();
+				ResetCurrentTarget();
 			}
 		}
 
-		
 		protected void TryStartShootSomething(bool canBeginBurstImmediately)
 		{
-			if (this.progressBarEffecter != null)
+			if (progressBarEffecter != null)
 			{
-				this.progressBarEffecter.Cleanup();
-				this.progressBarEffecter = null;
+				progressBarEffecter.Cleanup();
+				progressBarEffecter = null;
 			}
-			if (!base.Spawned || (this.holdFire && this.CanToggleHoldFire) || (this.AttackVerb.ProjectileFliesOverhead() && base.Map.roofGrid.Roofed(base.Position)) || !this.AttackVerb.Available())
+			if (!base.Spawned || (holdFire && CanToggleHoldFire) || (AttackVerb.ProjectileFliesOverhead() && base.Map.roofGrid.Roofed(base.Position)) || !AttackVerb.Available())
 			{
-				this.ResetCurrentTarget();
+				ResetCurrentTarget();
 				return;
 			}
-			bool isValid = this.currentTargetInt.IsValid;
-			if (this.forcedTarget.IsValid)
+			bool isValid = currentTargetInt.IsValid;
+			if (forcedTarget.IsValid)
 			{
-				this.currentTargetInt = this.forcedTarget;
+				currentTargetInt = forcedTarget;
 			}
 			else
 			{
-				this.currentTargetInt = this.TryFindNewTarget();
+				currentTargetInt = TryFindNewTarget();
 			}
-			if (!isValid && this.currentTargetInt.IsValid)
+			if (!isValid && currentTargetInt.IsValid)
 			{
-				SoundDefOf.TurretAcquireTarget.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
+				SoundDefOf.TurretAcquireTarget.PlayOneShot(new TargetInfo(base.Position, base.Map));
 			}
-			if (!this.currentTargetInt.IsValid)
+			if (currentTargetInt.IsValid)
 			{
-				this.ResetCurrentTarget();
-				return;
+				if (def.building.turretBurstWarmupTime > 0f)
+				{
+					burstWarmupTicksLeft = def.building.turretBurstWarmupTime.SecondsToTicks();
+				}
+				else if (canBeginBurstImmediately)
+				{
+					BeginBurst();
+				}
+				else
+				{
+					burstWarmupTicksLeft = 1;
+				}
 			}
-			if (this.def.building.turretBurstWarmupTime > 0f)
+			else
 			{
-				this.burstWarmupTicksLeft = this.def.building.turretBurstWarmupTime.SecondsToTicks();
-				return;
+				ResetCurrentTarget();
 			}
-			if (canBeginBurstImmediately)
-			{
-				this.BeginBurst();
-				return;
-			}
-			this.burstWarmupTicksLeft = 1;
 		}
 
-		
 		protected LocalTargetInfo TryFindNewTarget()
 		{
-			IAttackTargetSearcher attackTargetSearcher = this.TargSearcher();
+			IAttackTargetSearcher attackTargetSearcher = TargSearcher();
 			Faction faction = attackTargetSearcher.Thing.Faction;
-			float range = this.AttackVerb.verbProps.range;
-			Building t;
-			if (Rand.Value < 0.5f && this.AttackVerb.ProjectileFliesOverhead() && faction.HostileTo(Faction.OfPlayer) && base.Map.listerBuildings.allBuildingsColonist.Where(delegate(Building x)
+			float range = AttackVerb.verbProps.range;
+			if (Rand.Value < 0.5f && AttackVerb.ProjectileFliesOverhead() && faction.HostileTo(Faction.OfPlayer) && base.Map.listerBuildings.allBuildingsColonist.Where(delegate(Building x)
 			{
-				float num = this.AttackVerb.verbProps.EffectiveMinRange(x, this);
-				float num2 = (float)x.Position.DistanceToSquared(this.Position);
+				float num = AttackVerb.verbProps.EffectiveMinRange(x, this);
+				float num2 = x.Position.DistanceToSquared(base.Position);
 				return num2 > num * num && num2 < range * range;
-			}).TryRandomElement(out t))
+			}).TryRandomElement(out Building result))
 			{
-				return t;
+				return result;
 			}
 			TargetScanFlags targetScanFlags = TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable;
-			if (!this.AttackVerb.ProjectileFliesOverhead())
+			if (!AttackVerb.ProjectileFliesOverhead())
 			{
 				targetScanFlags |= TargetScanFlags.NeedLOSToAll;
 				targetScanFlags |= TargetScanFlags.LOSBlockableByGas;
 			}
-			if (this.AttackVerb.IsIncendiary())
+			if (AttackVerb.IsIncendiary())
 			{
 				targetScanFlags |= TargetScanFlags.NeedNonBurning;
 			}
-			return (Thing)AttackTargetFinder.BestShootTargetFromCurrentPosition(attackTargetSearcher, targetScanFlags, new Predicate<Thing>(this.IsValidTarget), 0f, 9999f);
+			return (Thing)AttackTargetFinder.BestShootTargetFromCurrentPosition(attackTargetSearcher, targetScanFlags, IsValidTarget);
 		}
 
-		
 		private IAttackTargetSearcher TargSearcher()
 		{
-			if (this.mannableComp != null && this.mannableComp.MannedNow)
+			if (mannableComp != null && mannableComp.MannedNow)
 			{
-				return this.mannableComp.ManningPawn;
+				return mannableComp.ManningPawn;
 			}
 			return this;
 		}
 
-		
 		private bool IsValidTarget(Thing t)
 		{
 			Pawn pawn = t as Pawn;
 			if (pawn != null)
 			{
-				if (this.AttackVerb.ProjectileFliesOverhead())
+				if (AttackVerb.ProjectileFliesOverhead())
 				{
 					RoofDef roofDef = base.Map.roofGrid.RoofAt(t.Position);
 					if (roofDef != null && roofDef.isThickRoof)
@@ -422,7 +405,7 @@ namespace RimWorld
 						return false;
 					}
 				}
-				if (this.mannableComp == null)
+				if (mannableComp == null)
 				{
 					return !GenAI.MachinesLike(base.Faction, pawn);
 				}
@@ -434,30 +417,26 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected void BeginBurst()
 		{
-			this.AttackVerb.TryStartCastOn(this.CurrentTarget, false, true);
-			base.OnAttackedTarget(this.CurrentTarget);
+			AttackVerb.TryStartCastOn(CurrentTarget);
+			OnAttackedTarget(CurrentTarget);
 		}
 
-		
 		protected void BurstComplete()
 		{
-			this.burstCooldownTicksLeft = this.BurstCooldownTime().SecondsToTicks();
+			burstCooldownTicksLeft = BurstCooldownTime().SecondsToTicks();
 		}
 
-		
 		protected float BurstCooldownTime()
 		{
-			if (this.def.building.turretBurstCooldownTime >= 0f)
+			if (def.building.turretBurstCooldownTime >= 0f)
 			{
-				return this.def.building.turretBurstCooldownTime;
+				return def.building.turretBurstCooldownTime;
 			}
-			return this.AttackVerb.verbProps.defaultCooldownTime;
+			return AttackVerb.verbProps.defaultCooldownTime;
 		}
 
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -466,19 +445,19 @@ namespace RimWorld
 			{
 				stringBuilder.AppendLine(inspectString);
 			}
-			if (this.AttackVerb.verbProps.minRange > 0f)
+			if (AttackVerb.verbProps.minRange > 0f)
 			{
-				stringBuilder.AppendLine("MinimumRange".Translate() + ": " + this.AttackVerb.verbProps.minRange.ToString("F0"));
+				stringBuilder.AppendLine("MinimumRange".Translate() + ": " + AttackVerb.verbProps.minRange.ToString("F0"));
 			}
-			if (base.Spawned && this.IsMortarOrProjectileFliesOverhead && base.Position.Roofed(base.Map))
+			if (base.Spawned && IsMortarOrProjectileFliesOverhead && base.Position.Roofed(base.Map))
 			{
 				stringBuilder.AppendLine("CannotFire".Translate() + ": " + "Roofed".Translate().CapitalizeFirst());
 			}
-			else if (base.Spawned && this.burstCooldownTicksLeft > 0 && this.BurstCooldownTime() > 5f)
+			else if (base.Spawned && burstCooldownTicksLeft > 0 && BurstCooldownTime() > 5f)
 			{
-				stringBuilder.AppendLine("CanFireIn".Translate() + ": " + this.burstCooldownTicksLeft.ToStringSecondsFromTicks());
+				stringBuilder.AppendLine("CanFireIn".Translate() + ": " + burstCooldownTicksLeft.ToStringSecondsFromTicks());
 			}
-			CompChangeableProjectile compChangeableProjectile = this.gun.TryGetComp<CompChangeableProjectile>();
+			CompChangeableProjectile compChangeableProjectile = gun.TryGetComp<CompChangeableProjectile>();
 			if (compChangeableProjectile != null)
 			{
 				if (compChangeableProjectile.Loaded)
@@ -493,217 +472,159 @@ namespace RimWorld
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		
 		public override void Draw()
 		{
-			this.top.DrawTurret();
+			top.DrawTurret();
 			base.Draw();
 		}
 
-		
 		public override void DrawExtraSelectionOverlays()
 		{
-			float range = this.AttackVerb.verbProps.range;
+			float range = AttackVerb.verbProps.range;
 			if (range < 90f)
 			{
 				GenDraw.DrawRadiusRing(base.Position, range);
 			}
-			float num = this.AttackVerb.verbProps.EffectiveMinRange(true);
+			float num = AttackVerb.verbProps.EffectiveMinRange(allowAdjacentShot: true);
 			if (num < 90f && num > 0.1f)
 			{
 				GenDraw.DrawRadiusRing(base.Position, num);
 			}
-			if (this.WarmingUp)
+			if (WarmingUp)
 			{
-				int degreesWide = (int)((float)this.burstWarmupTicksLeft * 0.5f);
-				GenDraw.DrawAimPie(this, this.CurrentTarget, degreesWide, (float)this.def.size.x * 0.5f);
+				int degreesWide = (int)((float)burstWarmupTicksLeft * 0.5f);
+				GenDraw.DrawAimPie(this, CurrentTarget, degreesWide, (float)def.size.x * 0.5f);
 			}
-			if (this.forcedTarget.IsValid && (!this.forcedTarget.HasThing || this.forcedTarget.Thing.Spawned))
+			if (forcedTarget.IsValid && (!forcedTarget.HasThing || forcedTarget.Thing.Spawned))
 			{
-				Vector3 vector;
-				if (this.forcedTarget.HasThing)
-				{
-					vector = this.forcedTarget.Thing.TrueCenter();
-				}
-				else
-				{
-					vector = this.forcedTarget.Cell.ToVector3Shifted();
-				}
+				Vector3 b = (!forcedTarget.HasThing) ? forcedTarget.Cell.ToVector3Shifted() : forcedTarget.Thing.TrueCenter();
 				Vector3 a = this.TrueCenter();
-				vector.y = AltitudeLayer.MetaOverlays.AltitudeFor();
-				a.y = vector.y;
-				GenDraw.DrawLineBetween(a, vector, Building_TurretGun.ForcedTargetLineMat);
+				b.y = AltitudeLayer.MetaOverlays.AltitudeFor();
+				a.y = b.y;
+				GenDraw.DrawLineBetween(a, b, ForcedTargetLineMat);
 			}
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (this.CanExtractShell)
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				CompChangeableProjectile compChangeableProjectile = this.gun.TryGetComp<CompChangeableProjectile>();
-				yield return new Command_Action
-				{
-					defaultLabel = "CommandExtractShell".Translate(),
-					defaultDesc = "CommandExtractShellDesc".Translate(),
-					icon = compChangeableProjectile.LoadedShell.uiIcon,
-					iconAngle = compChangeableProjectile.LoadedShell.uiIconAngle,
-					iconOffset = compChangeableProjectile.LoadedShell.uiIconOffset,
-					iconDrawScale = GenUI.IconDrawScale(compChangeableProjectile.LoadedShell),
-					action = delegate
-					{
-						this.ExtractShell();
-					}
-				};
+				yield return gizmo;
 			}
-			CompChangeableProjectile compChangeableProjectile2 = this.gun.TryGetComp<CompChangeableProjectile>();
+			if (CanExtractShell)
+			{
+				CompChangeableProjectile compChangeableProjectile = gun.TryGetComp<CompChangeableProjectile>();
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "CommandExtractShell".Translate();
+				command_Action.defaultDesc = "CommandExtractShellDesc".Translate();
+				command_Action.icon = compChangeableProjectile.LoadedShell.uiIcon;
+				command_Action.iconAngle = compChangeableProjectile.LoadedShell.uiIconAngle;
+				command_Action.iconOffset = compChangeableProjectile.LoadedShell.uiIconOffset;
+				command_Action.iconDrawScale = GenUI.IconDrawScale(compChangeableProjectile.LoadedShell);
+				command_Action.action = delegate
+				{
+					ExtractShell();
+				};
+				yield return command_Action;
+			}
+			CompChangeableProjectile compChangeableProjectile2 = gun.TryGetComp<CompChangeableProjectile>();
 			if (compChangeableProjectile2 != null)
 			{
 				StorageSettings storeSettings = compChangeableProjectile2.GetStoreSettings();
-				foreach (Gizmo gizmo2 in StorageSettingsClipboard.CopyPasteGizmosFor(storeSettings))
+				foreach (Gizmo item in StorageSettingsClipboard.CopyPasteGizmosFor(storeSettings))
 				{
-					yield return gizmo2;
+					yield return item;
 				}
-				enumerator = null;
 			}
-			if (this.CanSetForcedTarget)
+			if (CanSetForcedTarget)
 			{
 				Command_VerbTarget command_VerbTarget = new Command_VerbTarget();
 				command_VerbTarget.defaultLabel = "CommandSetForceAttackTarget".Translate();
 				command_VerbTarget.defaultDesc = "CommandSetForceAttackTargetDesc".Translate();
-				command_VerbTarget.icon = ContentFinder<Texture2D>.Get("UI/Commands/Attack", true);
-				command_VerbTarget.verb = this.AttackVerb;
+				command_VerbTarget.icon = ContentFinder<Texture2D>.Get("UI/Commands/Attack");
+				command_VerbTarget.verb = AttackVerb;
 				command_VerbTarget.hotKey = KeyBindingDefOf.Misc4;
 				command_VerbTarget.drawRadius = false;
-				if (base.Spawned && this.IsMortarOrProjectileFliesOverhead && base.Position.Roofed(base.Map))
+				if (base.Spawned && IsMortarOrProjectileFliesOverhead && base.Position.Roofed(base.Map))
 				{
 					command_VerbTarget.Disable("CannotFire".Translate() + ": " + "Roofed".Translate().CapitalizeFirst());
 				}
 				yield return command_VerbTarget;
 			}
-			if (this.forcedTarget.IsValid)
+			if (forcedTarget.IsValid)
 			{
-				Command_Action command_Action = new Command_Action();
-				command_Action.defaultLabel = "CommandStopForceAttack".Translate();
-				command_Action.defaultDesc = "CommandStopForceAttackDesc".Translate();
-				command_Action.icon = ContentFinder<Texture2D>.Get("UI/Commands/Halt", true);
-				command_Action.action = delegate
+				Command_Action command_Action2 = new Command_Action();
+				command_Action2.defaultLabel = "CommandStopForceAttack".Translate();
+				command_Action2.defaultDesc = "CommandStopForceAttackDesc".Translate();
+				command_Action2.icon = ContentFinder<Texture2D>.Get("UI/Commands/Halt");
+				command_Action2.action = delegate
 				{
-					this.ResetForcedTarget();
-					SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+					ResetForcedTarget();
+					SoundDefOf.Tick_Low.PlayOneShotOnCamera();
 				};
-				if (!this.forcedTarget.IsValid)
+				if (!forcedTarget.IsValid)
 				{
-					command_Action.Disable("CommandStopAttackFailNotForceAttacking".Translate());
+					command_Action2.Disable("CommandStopAttackFailNotForceAttacking".Translate());
 				}
-				command_Action.hotKey = KeyBindingDefOf.Misc5;
-				yield return command_Action;
+				command_Action2.hotKey = KeyBindingDefOf.Misc5;
+				yield return command_Action2;
 			}
-			if (this.CanToggleHoldFire)
+			if (CanToggleHoldFire)
 			{
-				yield return new Command_Toggle
+				Command_Toggle command_Toggle = new Command_Toggle();
+				command_Toggle.defaultLabel = "CommandHoldFire".Translate();
+				command_Toggle.defaultDesc = "CommandHoldFireDesc".Translate();
+				command_Toggle.icon = ContentFinder<Texture2D>.Get("UI/Commands/HoldFire");
+				command_Toggle.hotKey = KeyBindingDefOf.Misc6;
+				command_Toggle.toggleAction = delegate
 				{
-					defaultLabel = "CommandHoldFire".Translate(),
-					defaultDesc = "CommandHoldFireDesc".Translate(),
-					icon = ContentFinder<Texture2D>.Get("UI/Commands/HoldFire", true),
-					hotKey = KeyBindingDefOf.Misc6,
-					toggleAction = delegate
+					holdFire = !holdFire;
+					if (holdFire)
 					{
-						this.holdFire = !this.holdFire;
-						if (this.holdFire)
-						{
-							this.ResetForcedTarget();
-						}
-					},
-					isActive = (() => this.holdFire)
+						ResetForcedTarget();
+					}
 				};
+				command_Toggle.isActive = (() => holdFire);
+				yield return command_Toggle;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		private void ExtractShell()
 		{
-			GenPlace.TryPlaceThing(this.gun.TryGetComp<CompChangeableProjectile>().RemoveShell(), base.Position, base.Map, ThingPlaceMode.Near, null, null, default(Rot4));
+			GenPlace.TryPlaceThing(gun.TryGetComp<CompChangeableProjectile>().RemoveShell(), base.Position, base.Map, ThingPlaceMode.Near);
 		}
 
-		
 		private void ResetForcedTarget()
 		{
-			this.forcedTarget = LocalTargetInfo.Invalid;
-			this.burstWarmupTicksLeft = 0;
-			if (this.burstCooldownTicksLeft <= 0)
+			forcedTarget = LocalTargetInfo.Invalid;
+			burstWarmupTicksLeft = 0;
+			if (burstCooldownTicksLeft <= 0)
 			{
-				this.TryStartShootSomething(false);
+				TryStartShootSomething(canBeginBurstImmediately: false);
 			}
 		}
 
-		
 		private void ResetCurrentTarget()
 		{
-			this.currentTargetInt = LocalTargetInfo.Invalid;
-			this.burstWarmupTicksLeft = 0;
+			currentTargetInt = LocalTargetInfo.Invalid;
+			burstWarmupTicksLeft = 0;
 		}
 
-		
 		public void MakeGun()
 		{
-			this.gun = ThingMaker.MakeThing(this.def.building.turretGunDef, null);
-			this.UpdateGunVerbs();
+			gun = ThingMaker.MakeThing(def.building.turretGunDef);
+			UpdateGunVerbs();
 		}
 
-		
 		private void UpdateGunVerbs()
 		{
-			List<Verb> allVerbs = this.gun.TryGetComp<CompEquippable>().AllVerbs;
+			List<Verb> allVerbs = gun.TryGetComp<CompEquippable>().AllVerbs;
 			for (int i = 0; i < allVerbs.Count; i++)
 			{
 				Verb verb = allVerbs[i];
 				verb.caster = this;
-				verb.castCompleteCallback = new Action(this.BurstComplete);
+				verb.castCompleteCallback = BurstComplete;
 			}
 		}
-
-		
-		protected int burstCooldownTicksLeft;
-
-		
-		protected int burstWarmupTicksLeft;
-
-		
-		protected LocalTargetInfo currentTargetInt = LocalTargetInfo.Invalid;
-
-		
-		private bool holdFire;
-
-		
-		public Thing gun;
-
-		
-		protected TurretTop top;
-
-		
-		protected CompPowerTrader powerComp;
-
-		
-		protected CompCanBeDormant dormantComp;
-
-		
-		protected CompInitiatable initiatableComp;
-
-		
-		protected CompMannable mannableComp;
-
-		
-		protected Effecter progressBarEffecter;
-
-		
-		private const int TryStartShootSomethingIntervalTicks = 10;
-
-		
-		public static Material ForcedTargetLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
 	}
 }

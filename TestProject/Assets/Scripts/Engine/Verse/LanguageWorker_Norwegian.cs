@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class LanguageWorker_Norwegian : LanguageWorker
 	{
-		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -19,7 +15,6 @@ namespace Verse
 			return "et " + str;
 		}
 
-		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -39,14 +34,11 @@ namespace Verse
 				}
 				return str + "en";
 			}
-			else
+			if (c == 'e')
 			{
-				if (c == 'e')
-				{
-					return str + "t";
-				}
-				return str + "et";
+				return str + "t";
 			}
+			return str + "et";
 		}
 	}
 }

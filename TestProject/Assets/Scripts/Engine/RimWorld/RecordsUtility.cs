@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class RecordsUtility
 	{
-		
 		public static void Notify_PawnKilled(Pawn killed, Pawn killer)
 		{
 			killer.records.Increment(RecordDefOf.Kills);
@@ -26,7 +23,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void Notify_PawnDowned(Pawn downed, Pawn instigator)
 		{
 			instigator.records.Increment(RecordDefOf.PawnsDowned);
@@ -45,26 +41,28 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void Notify_BillDone(Pawn billDoer, List<Thing> products)
 		{
 			for (int i = 0; i < products.Count; i++)
 			{
-				if (products[i].def.IsNutritionGivingIngestible && products[i].def.ingestible.preferability >= FoodPreferability.MealAwful)
+				if (products[i].def.IsNutritionGivingIngestible && (int)products[i].def.ingestible.preferability >= 6)
 				{
 					billDoer.records.Increment(RecordDefOf.MealsCooked);
 				}
-				else if (RecordsUtility.ShouldIncrementThingsCrafted(products[i]))
+				else if (ShouldIncrementThingsCrafted(products[i]))
 				{
 					billDoer.records.Increment(RecordDefOf.ThingsCrafted);
 				}
 			}
 		}
 
-		
 		private static bool ShouldIncrementThingsCrafted(Thing crafted)
 		{
-			return crafted.def.IsApparel || crafted.def.IsWeapon || crafted.def.HasComp(typeof(CompArt)) || crafted.def.HasComp(typeof(CompQuality));
+			if (!crafted.def.IsApparel && !crafted.def.IsWeapon && !crafted.def.HasComp(typeof(CompArt)))
+			{
+				return crafted.def.HasComp(typeof(CompQuality));
+			}
+			return true;
 		}
 	}
 }

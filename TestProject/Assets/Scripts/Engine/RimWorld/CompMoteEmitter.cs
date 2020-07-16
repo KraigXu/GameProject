@@ -1,78 +1,63 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompMoteEmitter : ThingComp
 	{
-		
-		
-		private CompProperties_MoteEmitter Props
-		{
-			get
-			{
-				return (CompProperties_MoteEmitter)this.props;
-			}
-		}
+		public int ticksSinceLastEmitted;
 
-		
+		protected Mote mote;
+
+		private CompProperties_MoteEmitter Props => (CompProperties_MoteEmitter)props;
+
 		public override void CompTick()
 		{
-			CompPowerTrader comp = this.parent.GetComp<CompPowerTrader>();
+			CompPowerTrader comp = parent.GetComp<CompPowerTrader>();
 			if (comp != null && !comp.PowerOn)
 			{
 				return;
 			}
-			CompSendSignalOnCountdown comp2 = this.parent.GetComp<CompSendSignalOnCountdown>();
+			CompSendSignalOnCountdown comp2 = parent.GetComp<CompSendSignalOnCountdown>();
 			if (comp2 != null && comp2.ticksLeft <= 0)
 			{
 				return;
 			}
-			CompInitiatable comp3 = this.parent.GetComp<CompInitiatable>();
+			CompInitiatable comp3 = parent.GetComp<CompInitiatable>();
 			if (comp3 != null && !comp3.Initiated)
 			{
 				return;
 			}
-			if (this.Props.emissionInterval != -1 && !this.Props.maintain)
+			if (Props.emissionInterval != -1 && !Props.maintain)
 			{
-				if (this.ticksSinceLastEmitted >= this.Props.emissionInterval)
+				if (ticksSinceLastEmitted >= Props.emissionInterval)
 				{
-					this.Emit();
-					this.ticksSinceLastEmitted = 0;
+					Emit();
+					ticksSinceLastEmitted = 0;
 				}
 				else
 				{
-					this.ticksSinceLastEmitted++;
+					ticksSinceLastEmitted++;
 				}
 			}
-			else if (this.mote == null)
+			else if (mote == null)
 			{
-				this.Emit();
+				Emit();
 			}
-			if (this.Props.maintain && this.mote != null)
+			if (Props.maintain && mote != null)
 			{
-				this.mote.Maintain();
+				mote.Maintain();
 			}
 		}
 
-		
 		protected void Emit()
 		{
-			this.mote = MoteMaker.MakeStaticMote(this.parent.DrawPos + this.Props.offset, this.parent.Map, this.Props.mote, 1f);
+			mote = MoteMaker.MakeStaticMote(parent.DrawPos + Props.offset, parent.Map, Props.mote);
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.ticksSinceLastEmitted, ((this.Props.saveKeysPrefix != null) ? (this.Props.saveKeysPrefix + "_") : "") + "ticksSinceLastEmitted", 0, false);
+			Scribe_Values.Look(ref ticksSinceLastEmitted, ((Props.saveKeysPrefix != null) ? (Props.saveKeysPrefix + "_") : "") + "ticksSinceLastEmitted", 0);
 		}
-
-		
-		public int ticksSinceLastEmitted;
-
-		
-		protected Mote mote;
 	}
 }

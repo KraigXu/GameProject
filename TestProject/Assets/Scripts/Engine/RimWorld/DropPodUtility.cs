@@ -1,110 +1,83 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DropPodUtility
 	{
-		
+		private static List<List<Thing>> tempList = new List<List<Thing>>();
+
 		public static void MakeDropPodAt(IntVec3 c, Map map, ActiveDropPodInfo info)
 		{
-			ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDefOf.ActiveDropPod, null);
+			ActiveDropPod activeDropPod = (ActiveDropPod)ThingMaker.MakeThing(ThingDefOf.ActiveDropPod);
 			activeDropPod.Contents = info;
 			SkyfallerMaker.SpawnSkyfaller(ThingDefOf.DropPodIncoming, activeDropPod, c, map);
-			IEnumerator<Thing> enumerator = ((IEnumerable<Thing>)activeDropPod.Contents.innerContainer).GetEnumerator();
+			foreach (Thing item in (IEnumerable<Thing>)activeDropPod.Contents.innerContainer)
 			{
-				while (enumerator.MoveNext())
+				Pawn pawn;
+				if ((pawn = (item as Pawn)) != null && pawn.IsWorldPawn())
 				{
-					Pawn pawn;
-					if ((pawn = (enumerator.Current as Pawn)) != null && pawn.IsWorldPawn())
-					{
-						Find.WorldPawns.RemovePawn(pawn);
-						Pawn_PsychicEntropyTracker psychicEntropy = pawn.psychicEntropy;
-						if (psychicEntropy != null)
-						{
-							psychicEntropy.SetInitialPsyfocusLevel();
-						}
-					}
+					Find.WorldPawns.RemovePawn(pawn);
+					pawn.psychicEntropy?.SetInitialPsyfocusLevel();
 				}
 			}
 		}
 
-		
 		public static void DropThingsNear(IntVec3 dropCenter, Map map, IEnumerable<Thing> things, int openDelay = 110, bool canInstaDropDuringInit = false, bool leaveSlag = false, bool canRoofPunch = true, bool forbid = true)
 		{
-			DropPodUtility.tempList.Clear();
-			foreach (Thing item in things)
+			tempList.Clear();
+			foreach (Thing thing in things)
 			{
 				List<Thing> list = new List<Thing>();
-				list.Add(item);
-				DropPodUtility.tempList.Add(list);
+				list.Add(thing);
+				tempList.Add(list);
 			}
-			DropPodUtility.DropThingGroupsNear(dropCenter, map, DropPodUtility.tempList, openDelay, canInstaDropDuringInit, leaveSlag, canRoofPunch, forbid);
-			DropPodUtility.tempList.Clear();
+			DropThingGroupsNear(dropCenter, map, tempList, openDelay, canInstaDropDuringInit, leaveSlag, canRoofPunch, forbid);
+			tempList.Clear();
 		}
 
-		
 		public static void DropThingGroupsNear_NewTmp(IntVec3 dropCenter, Map map, List<List<Thing>> thingsGroups, int openDelay = 110, bool instaDrop = false, bool leaveSlag = false, bool canRoofPunch = true, bool forbid = true, bool allowFogged = true)
 		{
-
-			foreach (List<Thing> list in thingsGroups)
+			foreach (List<Thing> thingsGroup in thingsGroups)
 			{
-				IntVec3 intVec;
-				if (!DropCellFinder.TryFindDropSpotNear(dropCenter, map, out intVec, allowFogged, canRoofPunch, true, null) && (canRoofPunch || !DropCellFinder.TryFindDropSpotNear(dropCenter, map, out intVec, allowFogged, true, true, null)))
+				if (!DropCellFinder.TryFindDropSpotNear(dropCenter, map, out IntVec3 result, allowFogged, canRoofPunch) && (canRoofPunch || !DropCellFinder.TryFindDropSpotNear(dropCenter, map, out result, allowFogged, canRoofPunch: true)))
 				{
-					Log.Warning(string.Concat(new object[]
-					{
-						"DropThingsNear failed to find a place to drop ",
-						list.FirstOrDefault<Thing>(),
-						" near ",
-						dropCenter,
-						". Dropping on random square instead."
-					}), false);
-					Predicate<IntVec3> validator = (((IntVec3 c) => c.Walkable(map)));
-
-					intVec = CellFinderLoose.RandomCellWith(validator, map, 1000);
+					Log.Warning("DropThingsNear failed to find a place to drop " + thingsGroup.FirstOrDefault() + " near " + dropCenter + ". Dropping on random square instead.");
+					result = CellFinderLoose.RandomCellWith((IntVec3 c) => c.Walkable(map), map);
 				}
 				if (forbid)
 				{
-					for (int i = 0; i < list.Count; i++)
+					for (int i = 0; i < thingsGroup.Count; i++)
 					{
-						list[i].SetForbidden(true, false);
+						thingsGroup[i].SetForbidden(value: true, warnOnFail: false);
 					}
 				}
 				if (instaDrop)
 				{
-					List<Thing>.Enumerator enumerator2 = list.GetEnumerator();
+					foreach (Thing item in thingsGroup)
 					{
-						while (enumerator2.MoveNext())
-						{
-							Thing thing = enumerator2.Current;
-							GenPlace.TryPlaceThing(thing, intVec, map, ThingPlaceMode.Near, null, null, default(Rot4));
-						}
-						continue;
+						GenPlace.TryPlaceThing(item, result, map, ThingPlaceMode.Near);
 					}
 				}
-				ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
-				foreach (Thing item in list)
+				else
 				{
-					activeDropPodInfo.innerContainer.TryAdd(item, true);
+					ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
+					foreach (Thing item2 in thingsGroup)
+					{
+						activeDropPodInfo.innerContainer.TryAdd(item2);
+					}
+					activeDropPodInfo.openDelay = openDelay;
+					activeDropPodInfo.leaveSlag = leaveSlag;
+					MakeDropPodAt(result, map, activeDropPodInfo);
 				}
-				activeDropPodInfo.openDelay = openDelay;
-				activeDropPodInfo.leaveSlag = leaveSlag;
-				DropPodUtility.MakeDropPodAt(intVec, map, activeDropPodInfo);
 			}
 		}
 
-		
 		public static void DropThingGroupsNear(IntVec3 dropCenter, Map map, List<List<Thing>> thingsGroups, int openDelay = 110, bool instaDrop = false, bool leaveSlag = false, bool canRoofPunch = true, bool forbid = true)
 		{
-			DropPodUtility.DropThingGroupsNear_NewTmp(dropCenter, map, thingsGroups, openDelay, instaDrop, leaveSlag, canRoofPunch, forbid, true);
+			DropThingGroupsNear_NewTmp(dropCenter, map, thingsGroups, openDelay, instaDrop, leaveSlag, canRoofPunch, forbid);
 		}
-
-		
-		private static List<List<Thing>> tempList = new List<List<Thing>>();
 	}
 }

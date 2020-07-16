@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class BillUtility
 	{
-		
+		public static Bill Clipboard;
+
 		public static void TryDrawIngredientSearchRadiusOnMap(this Bill bill, IntVec3 center)
 		{
 			if (bill.ingredientSearchRadius < GenRadial.MaxRadialPatternRadius)
@@ -17,7 +17,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static Bill MakeNewBill(this RecipeDef recipe)
 		{
 			if (recipe.UsesUnfinishedThing)
@@ -27,105 +26,88 @@ namespace RimWorld
 			return new Bill_Production(recipe);
 		}
 
-		
 		public static IEnumerable<IBillGiver> GlobalBillGivers()
 		{
 			foreach (Map map in Find.Maps)
 			{
-				foreach (Thing thing in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.PotentialBillGiver)))
+				foreach (Thing item in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.PotentialBillGiver)))
 				{
-					IBillGiver billGiver = thing as IBillGiver;
+					IBillGiver billGiver = item as IBillGiver;
 					if (billGiver == null)
 					{
-						Log.ErrorOnce("Found non-bill-giver tagged as PotentialBillGiver", 13389774, false);
+						Log.ErrorOnce("Found non-bill-giver tagged as PotentialBillGiver", 13389774);
 					}
 					else
 					{
 						yield return billGiver;
 					}
 				}
-				List<Thing>.Enumerator enumerator2 = default(List<Thing>.Enumerator);
-				foreach (Thing outerThing in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.MinifiedThing)))
+				foreach (Thing item2 in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.MinifiedThing)))
 				{
-					IBillGiver billGiver2 = outerThing.GetInnerIfMinified() as IBillGiver;
+					IBillGiver billGiver2 = item2.GetInnerIfMinified() as IBillGiver;
 					if (billGiver2 != null)
 					{
 						yield return billGiver2;
 					}
 				}
-				enumerator2 = default(List<Thing>.Enumerator);
-				
 			}
-			List<Map>.Enumerator enumerator = default(List<Map>.Enumerator);
 			foreach (Caravan caravan in Find.WorldObjects.Caravans)
 			{
-				foreach (Thing outerThing2 in caravan.AllThings)
+				foreach (Thing allThing in caravan.AllThings)
 				{
-					IBillGiver billGiver3 = outerThing2.GetInnerIfMinified() as IBillGiver;
+					IBillGiver billGiver3 = allThing.GetInnerIfMinified() as IBillGiver;
 					if (billGiver3 != null)
 					{
 						yield return billGiver3;
 					}
 				}
-				IEnumerator<Thing> enumerator4 = null;
 			}
-			List<Caravan>.Enumerator enumerator3 = default(List<Caravan>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public static IEnumerable<Bill> GlobalBills()
 		{
-			foreach (IBillGiver billGiver in BillUtility.GlobalBillGivers())
+			foreach (IBillGiver item in GlobalBillGivers())
 			{
-				foreach (Bill bill in billGiver.BillStack)
+				foreach (Bill item2 in item.BillStack)
 				{
-					yield return bill;
+					yield return item2;
 				}
-				IEnumerator<Bill> enumerator2 = null;
 			}
-			IEnumerator<IBillGiver> enumerator = null;
-			if (BillUtility.Clipboard != null)
+			if (Clipboard != null)
 			{
-				yield return BillUtility.Clipboard;
+				yield return Clipboard;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static void Notify_ZoneStockpileRemoved(Zone_Stockpile stockpile)
 		{
-			foreach (Bill bill in BillUtility.GlobalBills())
+			foreach (Bill item in GlobalBills())
 			{
-				bill.ValidateSettings();
+				item.ValidateSettings();
 			}
 		}
 
-		
 		public static void Notify_ColonistUnavailable(Pawn pawn)
 		{
 			try
 			{
-				foreach (Bill bill in BillUtility.GlobalBills())
+				foreach (Bill item in GlobalBills())
 				{
-					bill.ValidateSettings();
+					item.ValidateSettings();
 				}
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Could not notify bills: " + arg, false);
+				Log.Error("Could not notify bills: " + arg);
 			}
 		}
 
-		
 		public static WorkGiverDef GetWorkgiver(this IBillGiver billGiver)
 		{
 			Thing thing = billGiver as Thing;
 			if (thing == null)
 			{
-				Log.ErrorOnce(string.Format("Attempting to get the workgiver for a non-Thing IBillGiver {0}", billGiver.ToString()), 96810282, false);
+				Log.ErrorOnce($"Attempting to get the workgiver for a non-Thing IBillGiver {billGiver.ToString()}", 96810282);
 				return null;
 			}
 			List<WorkGiverDef> allDefsListForReading = DefDatabase<WorkGiverDef>.AllDefsListForReading;
@@ -138,11 +120,8 @@ namespace RimWorld
 					return workGiverDef;
 				}
 			}
-			Log.ErrorOnce(string.Format("Can't find a WorkGiver for a BillGiver {0}", thing.ToString()), 57348705, false);
+			Log.ErrorOnce($"Can't find a WorkGiver for a BillGiver {thing.ToString()}", 57348705);
 			return null;
 		}
-
-		
-		public static Bill Clipboard;
 	}
 }

@@ -1,52 +1,57 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class NamePlayerFactionAndSettlementUtility
 	{
-		
+		private const float MinDaysPassedToNameFaction = 4.3f;
+
+		private const float MinDaysPassedToNameSettlement = 4.3f;
+
+		private const int SoonTicks = 30000;
+
 		public static bool CanNameFactionNow()
 		{
-			return NamePlayerFactionAndSettlementUtility.CanNameFaction(Find.TickManager.TicksGame);
+			return CanNameFaction(Find.TickManager.TicksGame);
 		}
 
-		
 		public static bool CanNameSettlementNow(Settlement factionBase)
 		{
-			return NamePlayerFactionAndSettlementUtility.CanNameSettlement(factionBase, Find.TickManager.TicksGame - factionBase.creationGameTicks);
+			return CanNameSettlement(factionBase, Find.TickManager.TicksGame - factionBase.creationGameTicks);
 		}
 
-		
 		public static bool CanNameFactionSoon()
 		{
-			return NamePlayerFactionAndSettlementUtility.CanNameFaction(Find.TickManager.TicksGame + 30000);
+			return CanNameFaction(Find.TickManager.TicksGame + 30000);
 		}
 
-		
 		public static bool CanNameSettlementSoon(Settlement factionBase)
 		{
-			return NamePlayerFactionAndSettlementUtility.CanNameSettlement(factionBase, Find.TickManager.TicksGame - factionBase.creationGameTicks + 30000);
+			return CanNameSettlement(factionBase, Find.TickManager.TicksGame - factionBase.creationGameTicks + 30000);
 		}
 
-		
 		private static bool CanNameFaction(int ticksPassed)
 		{
-			return !Faction.OfPlayer.HasName && (float)ticksPassed / 60000f >= 4.3f && NamePlayerFactionAndSettlementUtility.CanNameAnythingNow();
+			if (!Faction.OfPlayer.HasName && (float)ticksPassed / 60000f >= 4.3f)
+			{
+				return CanNameAnythingNow();
+			}
+			return false;
 		}
 
-		
 		private static bool CanNameSettlement(Settlement factionBase, int ticksPassed)
 		{
-			return factionBase.Faction == Faction.OfPlayer && !factionBase.namedByPlayer && (float)ticksPassed / 60000f >= 4.3f && factionBase.HasMap && factionBase.Map.dangerWatcher.DangerRating != StoryDanger.High && factionBase.Map.mapPawns.FreeColonistsSpawnedCount != 0 && NamePlayerFactionAndSettlementUtility.CanNameAnythingNow();
+			if (factionBase.Faction == Faction.OfPlayer && !factionBase.namedByPlayer && (float)ticksPassed / 60000f >= 4.3f && factionBase.HasMap && factionBase.Map.dangerWatcher.DangerRating != StoryDanger.High && factionBase.Map.mapPawns.FreeColonistsSpawnedCount != 0)
+			{
+				return CanNameAnythingNow();
+			}
+			return false;
 		}
 
-		
 		private static bool CanNameAnythingNow()
 		{
 			if (Find.AnyPlayerHomeMap == null || Find.CurrentMap == null || !Find.CurrentMap.IsPlayerHome || Find.GameEnder.gameEnding)
@@ -70,16 +75,11 @@ namespace RimWorld
 					}
 				}
 			}
-			return flag && flag2;
+			if (!flag || !flag2)
+			{
+				return false;
+			}
+			return true;
 		}
-
-		
-		private const float MinDaysPassedToNameFaction = 4.3f;
-
-		
-		private const float MinDaysPassedToNameSettlement = 4.3f;
-
-		
-		private const int SoonTicks = 30000;
 	}
 }

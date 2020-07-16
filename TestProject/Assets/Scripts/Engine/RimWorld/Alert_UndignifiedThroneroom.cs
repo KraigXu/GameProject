@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,64 +5,53 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_UndignifiedThroneroom : Alert
 	{
-		
-		public Alert_UndignifiedThroneroom()
-		{
-			this.defaultLabel = "UndignifiedThroneroom".Translate();
-			this.defaultExplanation = "UndignifiedThroneroomDesc".Translate();
-		}
+		private List<Pawn> targetsResult = new List<Pawn>();
 
-		
-		
 		public List<Pawn> Targets
 		{
 			get
 			{
-				this.targetsResult.Clear();
+				targetsResult.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
-					foreach (Pawn pawn in maps[i].mapPawns.FreeColonists)
+					foreach (Pawn freeColonist in maps[i].mapPawns.FreeColonists)
 					{
-						if (pawn.royalty != null && pawn.royalty.GetUnmetThroneroomRequirements(true, false).Any<string>())
+						if (freeColonist.royalty != null && freeColonist.royalty.GetUnmetThroneroomRequirements().Any())
 						{
-							this.targetsResult.Add(pawn);
+							targetsResult.Add(freeColonist);
 						}
 					}
 				}
-				return this.targetsResult;
+				return targetsResult;
 			}
 		}
 
-		
-		public override AlertReport GetReport()
+		public Alert_UndignifiedThroneroom()
 		{
-			return AlertReport.CulpritsAre(this.Targets);
+			defaultLabel = "UndignifiedThroneroom".Translate();
+			defaultExplanation = "UndignifiedThroneroomDesc".Translate();
 		}
 
-		
+		public override AlertReport GetReport()
+		{
+			return AlertReport.CulpritsAre(Targets);
+		}
+
 		public override TaggedString GetExplanation()
 		{
-			return this.defaultExplanation + "\n" + this.Targets.Select(delegate(Pawn t)
+			return defaultExplanation + "\n" + Targets.Select(delegate(Pawn t)
 			{
 				RoyalTitle royalTitle = t.royalty.HighestTitleWithThroneRoomRequirements();
 				RoyalTitleDef royalTitleDef = royalTitle.RoomRequirementGracePeriodActive(t) ? royalTitle.def.GetPreviousTitle(royalTitle.faction) : royalTitle.def;
-				string[] array = t.royalty.GetUnmetThroneroomRequirements(false, false).ToArray<string>();
-				string[] array2 = t.royalty.GetUnmetThroneroomRequirements(true, true).ToArray<string>();
+				string[] array = t.royalty.GetUnmetThroneroomRequirements(includeOnGracePeriod: false).ToArray();
+				string[] array2 = t.royalty.GetUnmetThroneroomRequirements(includeOnGracePeriod: true, onlyOnGracePeriod: true).ToArray();
 				StringBuilder stringBuilder = new StringBuilder();
 				if (array.Length != 0)
 				{
-					stringBuilder.Append(string.Concat(new string[]
-					{
-						t.LabelShort,
-						" (",
-						royalTitleDef.GetLabelFor(t.gender),
-						"):\n",
-						array.ToLineList("- ")
-					}));
+					stringBuilder.Append(t.LabelShort + " (" + royalTitleDef.GetLabelFor(t.gender) + "):\n" + array.ToLineList("- "));
 				}
 				if (array2.Length != 0)
 				{
@@ -74,10 +62,7 @@ namespace RimWorld
 					stringBuilder.Append(t.LabelShort + " (" + royalTitle.def.GetLabelFor(t.gender) + ", " + "RoomRequirementGracePeriodDesc".Translate(royalTitle.RoomRequirementGracePeriodDaysLeft.ToString("0.0")) + ")" + ":\n" + array2.ToLineList("- "));
 				}
 				return stringBuilder.ToString();
-			}).ToLineList("\n", false);
+			}).ToLineList("\n");
 		}
-
-		
-		private List<Pawn> targetsResult = new List<Pawn>();
 	}
 }

@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PawnsArrivalModeWorker_CenterDrop : PawnsArrivalModeWorker
 	{
-		
+		public const int PodOpenDelay = 520;
+
 		public override void Arrive(List<Pawn> pawns, IncidentParms parms)
 		{
 			PawnsArrivalModeWorkerUtility.DropInDropPodsNearSpawnCenter(parms, pawns);
 		}
 
-		
 		public override void TravelingTransportPodsArrived(List<ActiveDropPodInfo> dropPods, Map map)
 		{
-			IntVec3 near;
-			if (!DropCellFinder.TryFindRaidDropCenterClose(out near, map, true, true, true, -1))
+			if (!DropCellFinder.TryFindRaidDropCenterClose(out IntVec3 spot, map))
 			{
-				near = DropCellFinder.FindRaidDropCenterDistant_NewTemp(map, false);
+				spot = DropCellFinder.FindRaidDropCenterDistant_NewTemp(map);
 			}
-			TransportPodsArrivalActionUtility.DropTravelingTransportPods(dropPods, near, map);
+			TransportPodsArrivalActionUtility.DropTravelingTransportPods(dropPods, spot, map);
 		}
 
-		
 		public override bool TryResolveRaidSpawnCenter(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -42,7 +38,7 @@ namespace RimWorld
 				{
 					parms.spawnCenter = DropCellFinder.TradeDropSpot(map);
 				}
-				else if (!DropCellFinder.TryFindRaidDropCenterClose(out parms.spawnCenter, map, !flag && flag2, !flag, true, -1))
+				else if (!DropCellFinder.TryFindRaidDropCenterClose(out parms.spawnCenter, map, !flag && flag2, !flag))
 				{
 					parms.raidArrivalMode = PawnsArrivalModeDefOf.EdgeDrop;
 					return parms.raidArrivalMode.Worker.TryResolveRaidSpawnCenter(parms);
@@ -50,8 +46,5 @@ namespace RimWorld
 			}
 			return true;
 		}
-
-		
-		public const int PodOpenDelay = 520;
 	}
 }

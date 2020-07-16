@@ -1,55 +1,65 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_RequirementsToAcceptBedroom : QuestPart_RequirementsToAccept
 	{
-		
+		public List<Pawn> targetPawns = new List<Pawn>();
+
+		public MapParent mapParent;
+
+		private List<Thing> tmpOccupiedBeds = new List<Thing>();
+
+		private List<Pawn> culpritsResult = new List<Pawn>();
+
+		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks => CulpritsAre().Select(delegate(Pawn p)
+		{
+			RoyalTitle royalTitle = p.royalty.HighestTitleWithBedroomRequirements();
+			return new Dialog_InfoCard.Hyperlink(royalTitle.def, royalTitle.faction);
+		});
+
 		public override AcceptanceReport CanAccept()
 		{
-			int num = this.CulpritsAre().Count<Pawn>();
+			int num = CulpritsAre().Count();
 			if (num > 0)
 			{
-				return ((num > 1) ? "QuestBedroomRequirementsUnsatisfied" : "QuestBedroomRequirementsUnsatisfiedSingle").Translate() + " " + (from p in this.CulpritsAre()
-				select p.royalty.MainTitle().GetLabelFor(p).CapitalizeFirst() + " " + p.LabelShort).ToCommaList(true) + ".";
+				return ((num > 1) ? "QuestBedroomRequirementsUnsatisfied" : "QuestBedroomRequirementsUnsatisfiedSingle").Translate() + " " + (from p in CulpritsAre()
+					select p.royalty.MainTitle().GetLabelFor(p).CapitalizeFirst() + " " + p.LabelShort).ToCommaList(useAnd: true) + ".";
 			}
 			return true;
 		}
 
-		
 		private List<Pawn> CulpritsAre()
 		{
-			this.culpritsResult.Clear();
-			if (this.targetPawns.Any<Pawn>())
+			culpritsResult.Clear();
+			if (targetPawns.Any())
 			{
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
+				foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_Colonist in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
 				{
-					if (pawn.royalty != null && pawn.royalty.HighestTitleWithBedroomRequirements() != null && (!pawn.royalty.HasPersonalBedroom() || pawn.royalty.GetUnmetBedroomRequirements(true, false).Any<string>()))
+					if (allMapsCaravansAndTravelingTransportPods_Alive_Colonist.royalty != null && allMapsCaravansAndTravelingTransportPods_Alive_Colonist.royalty.HighestTitleWithBedroomRequirements() != null && (!allMapsCaravansAndTravelingTransportPods_Alive_Colonist.royalty.HasPersonalBedroom() || allMapsCaravansAndTravelingTransportPods_Alive_Colonist.royalty.GetUnmetBedroomRequirements().Any()))
 					{
-						this.culpritsResult.Add(pawn);
+						culpritsResult.Add(allMapsCaravansAndTravelingTransportPods_Alive_Colonist);
 					}
 				}
 			}
-			this.tmpOccupiedBeds.Clear();
-			List<Thing> list = this.mapParent.Map.listerThings.ThingsInGroup(ThingRequestGroup.Bed);
-			foreach (Pawn pawn2 in this.targetPawns)
+			tmpOccupiedBeds.Clear();
+			List<Thing> list = mapParent.Map.listerThings.ThingsInGroup(ThingRequestGroup.Bed);
+			foreach (Pawn targetPawn in targetPawns)
 			{
-				RoyalTitle royalTitle = pawn2.royalty.HighestTitleWithBedroomRequirements();
+				RoyalTitle royalTitle = targetPawn.royalty.HighestTitleWithBedroomRequirements();
 				if (royalTitle != null)
 				{
 					Thing thing = null;
 					for (int i = 0; i < list.Count; i++)
 					{
 						Thing thing2 = list[i];
-						if (thing2.Faction == Faction.OfPlayer && thing2.GetRoom(RegionType.Set_Passable) != null && !this.tmpOccupiedBeds.Contains(thing2))
+						if (thing2.Faction == Faction.OfPlayer && thing2.GetRoom() != null && !tmpOccupiedBeds.Contains(thing2))
 						{
 							CompAssignableToPawn compAssignableToPawn = thing2.TryGetComp<CompAssignableToPawn>();
-							if (compAssignableToPawn != null && compAssignableToPawn.AssignedPawnsForReading.Count <= 0 && RoyalTitleUtility.BedroomSatisfiesRequirements(thing2.GetRoom(RegionType.Set_Passable), royalTitle))
+							if (compAssignableToPawn != null && compAssignableToPawn.AssignedPawnsForReading.Count <= 0 && RoyalTitleUtility.BedroomSatisfiesRequirements(thing2.GetRoom(), royalTitle))
 							{
 								thing = thing2;
 								break;
@@ -58,60 +68,32 @@ namespace RimWorld
 					}
 					if (thing != null)
 					{
-						this.tmpOccupiedBeds.Add(thing);
+						tmpOccupiedBeds.Add(thing);
 					}
 					else
 					{
-						this.culpritsResult.Add(pawn2);
+						culpritsResult.Add(targetPawn);
 					}
 				}
 			}
-			this.tmpOccupiedBeds.Clear();
-			return this.culpritsResult;
+			tmpOccupiedBeds.Clear();
+			return culpritsResult;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Collections.Look<Pawn>(ref this.targetPawns, "targetPawns", LookMode.Reference, Array.Empty<object>());
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Collections.Look(ref targetPawns, "targetPawns", LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.targetPawns.RemoveAll((Pawn x) => x == null);
+				targetPawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
-		
-		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
-		{
-			get
-			{
-				return this.CulpritsAre().Select(delegate(Pawn p)
-				{
-					RoyalTitle royalTitle = p.royalty.HighestTitleWithBedroomRequirements();
-					return new Dialog_InfoCard.Hyperlink(royalTitle.def, royalTitle.faction, -1);
-				});
-			}
-		}
-
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.targetPawns.Replace(replace, with);
+			targetPawns.Replace(replace, with);
 		}
-
-		
-		public List<Pawn> targetPawns = new List<Pawn>();
-
-		
-		public MapParent mapParent;
-
-		
-		private List<Thing> tmpOccupiedBeds = new List<Thing>();
-
-		
-		private List<Pawn> culpritsResult = new List<Pawn>();
 	}
 }

@@ -1,83 +1,78 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompGatherSpot : ThingComp
 	{
-		
-		
-		
+		private bool active = true;
+
 		public bool Active
 		{
 			get
 			{
-				return this.active;
+				return active;
 			}
 			set
 			{
-				if (value == this.active)
+				if (value == active)
 				{
 					return;
 				}
-				this.active = value;
-				if (this.parent.Spawned)
+				active = value;
+				if (parent.Spawned)
 				{
-					if (this.active)
+					if (active)
 					{
-						this.parent.Map.gatherSpotLister.RegisterActivated(this);
-						return;
+						parent.Map.gatherSpotLister.RegisterActivated(this);
 					}
-					this.parent.Map.gatherSpotLister.RegisterDeactivated(this);
+					else
+					{
+						parent.Map.gatherSpotLister.RegisterDeactivated(this);
+					}
 				}
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<bool>(ref this.active, "active", false, false);
+			Scribe_Values.Look(ref active, "active", defaultValue: false);
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			if (this.parent.Faction != Faction.OfPlayer && !respawningAfterLoad)
+			if (parent.Faction != Faction.OfPlayer && !respawningAfterLoad)
 			{
-				this.active = false;
+				active = false;
 			}
-			if (this.Active)
+			if (Active)
 			{
-				this.parent.Map.gatherSpotLister.RegisterActivated(this);
+				parent.Map.gatherSpotLister.RegisterActivated(this);
 			}
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
-			if (this.Active)
+			if (Active)
 			{
 				map.gatherSpotLister.RegisterDeactivated(this);
 			}
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			Command_Toggle command_Toggle = new Command_Toggle();
 			command_Toggle.hotKey = KeyBindingDefOf.Command_TogglePower;
 			command_Toggle.defaultLabel = "CommandGatherSpotToggleLabel".Translate();
 			command_Toggle.icon = TexCommand.GatherSpotActive;
-			command_Toggle.isActive = (() => this.Active);
+			command_Toggle.isActive = (() => Active);
 			command_Toggle.toggleAction = delegate
 			{
-				this.Active = !this.Active;
+				Active = !Active;
 			};
-			if (this.Active)
+			if (Active)
 			{
 				command_Toggle.defaultDesc = "CommandGatherSpotToggleDescActive".Translate();
 			}
@@ -86,10 +81,6 @@ namespace RimWorld
 				command_Toggle.defaultDesc = "CommandGatherSpotToggleDescInactive".Translate();
 			}
 			yield return command_Toggle;
-			yield break;
 		}
-
-		
-		private bool active = true;
 	}
 }

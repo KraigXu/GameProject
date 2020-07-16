@@ -1,25 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class MapMeshFlagUtility
 	{
-		
+		public static List<MapMeshFlag> allFlags;
+
 		static MapMeshFlagUtility()
 		{
-			foreach (object obj in Enum.GetValues(typeof(MapMeshFlag)))
+			allFlags = new List<MapMeshFlag>();
+			foreach (MapMeshFlag value in Enum.GetValues(typeof(MapMeshFlag)))
 			{
-				MapMeshFlag mapMeshFlag = (MapMeshFlag)obj;
-				if (mapMeshFlag != MapMeshFlag.None)
+				if (value != 0)
 				{
-					MapMeshFlagUtility.allFlags.Add(mapMeshFlag);
+					allFlags.Add(value);
 				}
 			}
 		}
-
-		
-		public static List<MapMeshFlag> allFlags = new List<MapMeshFlag>();
 	}
 }

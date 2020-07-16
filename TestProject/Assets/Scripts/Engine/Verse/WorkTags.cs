@@ -1,48 +1,28 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	[Flags]
 	public enum WorkTags
 	{
-		
-		None = 0,
-		
-		ManualDumb = 2,
-		
-		ManualSkilled = 4,
-		
-		Violent = 8,
-		
-		Caring = 16,
-		
-		Social = 32,
-		
-		Commoner = 64,
-		
-		Intellectual = 128,
-		
-		Animals = 256,
-		
-		Artistic = 512,
-		
-		Crafting = 1024,
-		
-		Cooking = 2048,
-		
-		Firefighting = 4096,
-		
-		Cleaning = 8192,
-		
-		Hauling = 16384,
-		
-		PlantWork = 32768,
-		
-		Mining = 65536,
-		
-		Hunting = 131072,
-		
-		AllWork = 262144
+		None = 0x0,
+		ManualDumb = 0x2,
+		ManualSkilled = 0x4,
+		Violent = 0x8,
+		Caring = 0x10,
+		Social = 0x20,
+		Commoner = 0x40,
+		Intellectual = 0x80,
+		Animals = 0x100,
+		Artistic = 0x200,
+		Crafting = 0x400,
+		Cooking = 0x800,
+		Firefighting = 0x1000,
+		Cleaning = 0x2000,
+		Hauling = 0x4000,
+		PlantWork = 0x8000,
+		Mining = 0x10000,
+		Hunting = 0x20000,
+		AllWork = 0x40000
 	}
 }

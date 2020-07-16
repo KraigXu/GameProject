@@ -1,52 +1,32 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ImmediateWindow : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return this.windowRect.size;
-			}
-		}
+		public Action doWindowFunc;
 
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public override Vector2 InitialSize => windowRect.size;
 
-		
+		protected override float Margin => 0f;
+
 		public ImmediateWindow()
 		{
-			this.doCloseButton = false;
-			this.doCloseX = false;
-			this.soundAppear = null;
-			this.soundClose = null;
-			this.closeOnClickedOutside = false;
-			this.closeOnAccept = false;
-			this.closeOnCancel = false;
-			this.focusWhenOpened = false;
-			this.preventCameraMotion = false;
+			doCloseButton = false;
+			doCloseX = false;
+			soundAppear = null;
+			soundClose = null;
+			closeOnClickedOutside = false;
+			closeOnAccept = false;
+			closeOnCancel = false;
+			focusWhenOpened = false;
+			preventCameraMotion = false;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
-			this.doWindowFunc();
+			doWindowFunc();
 		}
-
-		
-		public Action doWindowFunc;
 	}
 }

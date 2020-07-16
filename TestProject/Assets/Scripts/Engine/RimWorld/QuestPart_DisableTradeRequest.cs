@@ -1,57 +1,52 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DisableTradeRequest : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Settlement settlement;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-				
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.settlement != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.settlement;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (settlement != null)
+				{
+					yield return settlement;
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-		
-				IEnumerator<Faction> enumerator = null;
-				if (this.settlement.Faction != null)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return this.settlement.Faction;
+					yield return involvedFaction;
 				}
-				yield break;
-				yield break;
+				if (settlement.Faction != null)
+				{
+					yield return settlement.Faction;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
-				TradeRequestComp component = this.settlement.GetComponent<TradeRequestComp>();
+				TradeRequestComp component = settlement.GetComponent<TradeRequestComp>();
 				if (component != null && component.ActiveRequest)
 				{
 					component.Disable();
@@ -59,34 +54,22 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<Settlement>(ref this.settlement, "settlement", false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref settlement, "settlement");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.settlement = Find.WorldObjects.Settlements.Where(delegate(Settlement x)
+			inSignal = "DebugSignal" + Rand.Int;
+			settlement = Find.WorldObjects.Settlements.Where((Settlement x) => x.GetComponent<TradeRequestComp>()?.ActiveRequest ?? false).RandomElementWithFallback();
+			if (settlement == null)
 			{
-				TradeRequestComp component = x.GetComponent<TradeRequestComp>();
-				return component != null && component.ActiveRequest;
-			}).RandomElementWithFallback(null);
-			if (this.settlement == null)
-			{
-				this.settlement = Find.WorldObjects.Settlements.RandomElementWithFallback(null);
+				settlement = Find.WorldObjects.Settlements.RandomElementWithFallback();
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public Settlement settlement;
 	}
 }

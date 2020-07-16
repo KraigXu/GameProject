@@ -1,98 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class DamageWorker_Blunt : DamageWorker_AddInjury
 	{
-		
 		protected override BodyPartRecord ChooseHitPart(DamageInfo dinfo, Pawn pawn)
 		{
-			return pawn.health.hediffSet.GetRandomNotMissingPart(dinfo.Def, dinfo.Height, BodyPartDepth.Outside, null);
+			return pawn.health.hediffSet.GetRandomNotMissingPart(dinfo.Def, dinfo.Height, BodyPartDepth.Outside);
 		}
 
-		
-		protected override void ApplySpecialEffectsToPart(Pawn pawn, float totalDamage, DamageInfo dinfo, DamageWorker.DamageResult result)
+		protected override void ApplySpecialEffectsToPart(Pawn pawn, float totalDamage, DamageInfo dinfo, DamageResult result)
 		{
-			bool flag = Rand.Chance(this.def.bluntInnerHitChance);
-			float num = flag ? this.def.bluntInnerHitDamageFractionToConvert.RandomInRange : 0f;
+			bool flag = Rand.Chance(def.bluntInnerHitChance);
+			float num = flag ? def.bluntInnerHitDamageFractionToConvert.RandomInRange : 0f;
 			float num2 = totalDamage * (1f - num);
-			DamageInfo lastInfo = dinfo;
-			for (;;)
+			while (true)
 			{
-				num2 -= base.FinalizeAndAddInjury(pawn, num2, lastInfo, result);
-				if (!pawn.health.hediffSet.PartIsMissing(lastInfo.HitPart) || num2 <= 1f)
+				num2 -= FinalizeAndAddInjury(pawn, num2, dinfo, result);
+				if (!pawn.health.hediffSet.PartIsMissing(dinfo.HitPart) || num2 <= 1f)
 				{
 					break;
 				}
-				BodyPartRecord parent = lastInfo.HitPart.parent;
+				BodyPartRecord parent = dinfo.HitPart.parent;
 				if (parent == null)
 				{
 					break;
 				}
-				lastInfo.SetHitPart(parent);
+				dinfo.SetHitPart(parent);
 			}
-			if (flag && !lastInfo.HitPart.def.IsSolid(lastInfo.HitPart, pawn.health.hediffSet.hediffs) && lastInfo.HitPart.depth == BodyPartDepth.Outside)
+			if (flag && !dinfo.HitPart.def.IsSolid(dinfo.HitPart, pawn.health.hediffSet.hediffs) && dinfo.HitPart.depth == BodyPartDepth.Outside && (from x in pawn.health.hediffSet.GetNotMissingParts()
+				where x.parent == dinfo.HitPart && x.def.IsSolid(x, pawn.health.hediffSet.hediffs) && x.depth == BodyPartDepth.Inside
+				select x).TryRandomElementByWeight((BodyPartRecord x) => x.coverageAbs, out BodyPartRecord result2))
 			{
-				BodyPartRecord hitPart;
-				if ((from x in pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null)
-				where x.parent == lastInfo.HitPart && x.def.IsSolid(x, pawn.health.hediffSet.hediffs) && x.depth == BodyPartDepth.Inside
-				select x).TryRandomElementByWeight((BodyPartRecord x) => x.coverageAbs, out hitPart))
-				{
-					DamageInfo lastInfo2 = lastInfo;
-					lastInfo2.SetHitPart(hitPart);
-					float totalDamage2 = totalDamage * num + totalDamage * this.def.bluntInnerHitDamageFractionToAdd.RandomInRange;
-					base.FinalizeAndAddInjury(pawn, totalDamage2, lastInfo2, result);
-				}
+				DamageInfo dinfo2 = dinfo;
+				dinfo2.SetHitPart(result2);
+				float totalDamage2 = totalDamage * num + totalDamage * def.bluntInnerHitDamageFractionToAdd.RandomInRange;
+				FinalizeAndAddInjury(pawn, totalDamage2, dinfo2, result);
 			}
-			if (!pawn.Dead)
+			if (pawn.Dead)
 			{
-				SimpleCurve simpleCurve = null;
-				if (lastInfo.HitPart.parent == null)
+				return;
+			}
+			SimpleCurve simpleCurve = null;
+			if (dinfo.HitPart.parent == null)
+			{
+				simpleCurve = def.bluntStunChancePerDamagePctOfCorePartToBodyCurve;
+			}
+			else
+			{
+				foreach (BodyPartRecord item in pawn.RaceProps.body.GetPartsWithTag(BodyPartTagDefOf.ConsciousnessSource))
 				{
-					simpleCurve = this.def.bluntStunChancePerDamagePctOfCorePartToBodyCurve;
-				}
-				else
-				{
-					foreach (BodyPartRecord lhs in pawn.RaceProps.body.GetPartsWithTag(BodyPartTagDefOf.ConsciousnessSource))
+					if (InSameBranch(item, dinfo.HitPart))
 					{
-						if (this.InSameBranch(lhs, lastInfo.HitPart))
-						{
-							simpleCurve = this.def.bluntStunChancePerDamagePctOfCorePartToHeadCurve;
-							break;
-						}
+						simpleCurve = def.bluntStunChancePerDamagePctOfCorePartToHeadCurve;
+						break;
 					}
 				}
-				if (simpleCurve != null)
+			}
+			if (simpleCurve != null)
+			{
+				float x2 = totalDamage / pawn.def.race.body.corePart.def.GetMaxHealth(pawn);
+				if (Rand.Chance(simpleCurve.Evaluate(x2)))
 				{
-					float x2 = totalDamage / pawn.def.race.body.corePart.def.GetMaxHealth(pawn);
-					if (Rand.Chance(simpleCurve.Evaluate(x2)))
-					{
-						DamageInfo dinfo2 = dinfo;
-						dinfo2.Def = DamageDefOf.Stun;
-						dinfo2.SetAmount((float)this.def.bluntStunDuration.SecondsToTicks() / 30f);
-						pawn.TakeDamage(dinfo2);
-					}
+					DamageInfo dinfo3 = dinfo;
+					dinfo3.Def = DamageDefOf.Stun;
+					dinfo3.SetAmount((float)def.bluntStunDuration.SecondsToTicks() / 30f);
+					pawn.TakeDamage(dinfo3);
 				}
 			}
 		}
 
-		
 		[DebugOutput]
 		public static void StunChances()
 		{
 			Func<ThingDef, float, bool, string> bluntBodyStunChance = delegate(ThingDef d, float dam, bool onHead)
 			{
-				SimpleCurve simpleCurve = onHead ? DamageDefOf.Blunt.bluntStunChancePerDamagePctOfCorePartToHeadCurve : DamageDefOf.Blunt.bluntStunChancePerDamagePctOfCorePartToBodyCurve;
-				Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(d.race.AnyPawnKind, Find.FactionManager.FirstFactionOfDef(d.race.AnyPawnKind.defaultFactionType), PawnGenerationContext.NonPlayer, -1, true, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
-				float x = dam / d.race.body.corePart.def.GetMaxHealth(pawn);
-				Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
-				return Mathf.Clamp01(simpleCurve.Evaluate(x)).ToStringPercent();
+				SimpleCurve obj = onHead ? DamageDefOf.Blunt.bluntStunChancePerDamagePctOfCorePartToHeadCurve : DamageDefOf.Blunt.bluntStunChancePerDamagePctOfCorePartToBodyCurve;
+				Pawn pawn2 = PawnGenerator.GeneratePawn(new PawnGenerationRequest(d.race.AnyPawnKind, Find.FactionManager.FirstFactionOfDef(d.race.AnyPawnKind.defaultFactionType), PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: true));
+				float x = dam / d.race.body.corePart.def.GetMaxHealth(pawn2);
+				Find.WorldPawns.PassToWorld(pawn2, PawnDiscardDecideMode.Discard);
+				return Mathf.Clamp01(obj.Evaluate(x)).ToStringPercent();
 			};
 			List<TableDataGetter<ThingDef>> list = new List<TableDataGetter<ThingDef>>();
 			list.Add(new TableDataGetter<ThingDef>("defName", (ThingDef d) => d.defName));
@@ -101,33 +93,26 @@ namespace Verse
 			list.Add(new TableDataGetter<ThingDef>("body size\n* health scale", (ThingDef d) => (d.race.baseHealthScale * d.race.baseBodySize).ToString("F2")));
 			list.Add(new TableDataGetter<ThingDef>("core part\nhealth", delegate(ThingDef d)
 			{
-				Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(d.race.AnyPawnKind, Find.FactionManager.FirstFactionOfDef(d.race.AnyPawnKind.defaultFactionType), PawnGenerationContext.NonPlayer, -1, true, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
+				Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(d.race.AnyPawnKind, Find.FactionManager.FirstFactionOfDef(d.race.AnyPawnKind.defaultFactionType), PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: true));
 				float maxHealth = d.race.body.corePart.def.GetMaxHealth(pawn);
 				Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
 				return maxHealth;
 			}));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n5", (ThingDef d) => bluntBodyStunChance(d, 5f, false)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n10", (ThingDef d) => bluntBodyStunChance(d, 10f, false)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n15", (ThingDef d) => bluntBodyStunChance(d, 15f, false)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n20", (ThingDef d) => bluntBodyStunChance(d, 20f, false)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n5", (ThingDef d) => bluntBodyStunChance(d, 5f, true)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n10", (ThingDef d) => bluntBodyStunChance(d, 10f, true)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n15", (ThingDef d) => bluntBodyStunChance(d, 15f, true)));
-			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n20", (ThingDef d) => bluntBodyStunChance(d, 20f, true)));
-			DebugTables.MakeTablesDialog<ThingDef>(from d in DefDatabase<ThingDef>.AllDefs
-			where d.category == ThingCategory.Pawn
-			select d, list.ToArray());
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n5", (ThingDef d) => bluntBodyStunChance(d, 5f, arg3: false)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n10", (ThingDef d) => bluntBodyStunChance(d, 10f, arg3: false)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n15", (ThingDef d) => bluntBodyStunChance(d, 15f, arg3: false)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nbody\n20", (ThingDef d) => bluntBodyStunChance(d, 20f, arg3: false)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n5", (ThingDef d) => bluntBodyStunChance(d, 5f, arg3: true)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n10", (ThingDef d) => bluntBodyStunChance(d, 10f, arg3: true)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n15", (ThingDef d) => bluntBodyStunChance(d, 15f, arg3: true)));
+			list.Add(new TableDataGetter<ThingDef>("stun\nchance\nhead\n20", (ThingDef d) => bluntBodyStunChance(d, 20f, arg3: true)));
+			DebugTables.MakeTablesDialog(DefDatabase<ThingDef>.AllDefs.Where((ThingDef d) => d.category == ThingCategory.Pawn), list.ToArray());
 		}
 
-		
 		private bool InSameBranch(BodyPartRecord lhs, BodyPartRecord rhs)
 		{
-			while (lhs.parent != null)
+			while (lhs.parent != null && lhs.parent.parent != null)
 			{
-				if (lhs.parent.parent == null)
-				{
-					break;
-				}
 				lhs = lhs.parent;
 			}
 			while (rhs.parent != null && rhs.parent.parent != null)

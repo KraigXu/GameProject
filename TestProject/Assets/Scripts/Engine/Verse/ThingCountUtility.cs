@@ -1,12 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class ThingCountUtility
 	{
-		
 		public static int CountOf(List<ThingCount> list, Thing thing)
 		{
 			int num = 0;
@@ -20,7 +17,6 @@ namespace Verse
 			return num;
 		}
 
-		
 		public static void AddToList(List<ThingCount> list, Thing thing, int countToAdd)
 		{
 			for (int i = 0; i < list.Count; i++)

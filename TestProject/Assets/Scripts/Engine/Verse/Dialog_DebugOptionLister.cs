@@ -1,135 +1,123 @@
-﻿using System;
-using System.Linq;
 using RimWorld.Planet;
+using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class Dialog_DebugOptionLister : Dialog_OptionLister
 	{
-		
+		private const float DebugOptionsGap = 7f;
+
 		public Dialog_DebugOptionLister()
 		{
-			this.forcePause = true;
+			forcePause = true;
 		}
 
-		
 		protected bool DebugAction(string label, Action action)
 		{
 			bool result = false;
-			if (!base.FilterAllows(label))
+			if (!FilterAllows(label))
 			{
 				GUI.color = new Color(1f, 1f, 1f, 0.3f);
 			}
-			if (this.listing.ButtonDebug(label))
+			if (listing.ButtonDebug(label))
 			{
-				this.Close(true);
+				Close();
 				action();
 				result = true;
 			}
 			GUI.color = Color.white;
 			if (Event.current.type == EventType.Layout)
 			{
-				this.totalOptionsHeight += 24f;
+				totalOptionsHeight += 24f;
 			}
 			return result;
 		}
 
-		
 		protected void DebugToolMap(string label, Action toolAction)
 		{
-			if (WorldRendererUtility.WorldRenderedNow)
+			if (!WorldRendererUtility.WorldRenderedNow)
 			{
-				return;
-			}
-			if (!base.FilterAllows(label))
-			{
-				GUI.color = new Color(1f, 1f, 1f, 0.3f);
-			}
-			if (this.listing.ButtonDebug(label))
-			{
-				this.Close(true);
-				DebugTools.curTool = new DebugTool(label, toolAction, null);
-			}
-			GUI.color = Color.white;
-			if (Event.current.type == EventType.Layout)
-			{
-				this.totalOptionsHeight += 24f;
+				if (!FilterAllows(label))
+				{
+					GUI.color = new Color(1f, 1f, 1f, 0.3f);
+				}
+				if (listing.ButtonDebug(label))
+				{
+					Close();
+					DebugTools.curTool = new DebugTool(label, toolAction);
+				}
+				GUI.color = Color.white;
+				if (Event.current.type == EventType.Layout)
+				{
+					totalOptionsHeight += 24f;
+				}
 			}
 		}
 
-		
 		protected void DebugToolMapForPawns(string label, Action<Pawn> pawnAction)
 		{
-			this.DebugToolMap(label, delegate
+			DebugToolMap(label, delegate
 			{
 				if (UI.MouseCell().InBounds(Find.CurrentMap))
 				{
-					foreach (Pawn obj in (from t in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell())
-					where t is Pawn
-					select t).Cast<Pawn>().ToList<Pawn>())
+					foreach (Pawn item in (from t in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell())
+						where t is Pawn
+						select t).Cast<Pawn>().ToList())
 					{
-						pawnAction(obj);
+						pawnAction(item);
 					}
 				}
 			});
 		}
 
-		
 		protected void DebugToolWorld(string label, Action toolAction)
 		{
-			if (!WorldRendererUtility.WorldRenderedNow)
+			if (WorldRendererUtility.WorldRenderedNow)
 			{
-				return;
-			}
-			if (!base.FilterAllows(label))
-			{
-				GUI.color = new Color(1f, 1f, 1f, 0.3f);
-			}
-			if (this.listing.ButtonDebug(label))
-			{
-				this.Close(true);
-				DebugTools.curTool = new DebugTool(label, toolAction, null);
-			}
-			GUI.color = Color.white;
-			if (Event.current.type == EventType.Layout)
-			{
-				this.totalOptionsHeight += 24f;
+				if (!FilterAllows(label))
+				{
+					GUI.color = new Color(1f, 1f, 1f, 0.3f);
+				}
+				if (listing.ButtonDebug(label))
+				{
+					Close();
+					DebugTools.curTool = new DebugTool(label, toolAction);
+				}
+				GUI.color = Color.white;
+				if (Event.current.type == EventType.Layout)
+				{
+					totalOptionsHeight += 24f;
+				}
 			}
 		}
 
-		
 		protected void CheckboxLabeledDebug(string label, ref bool checkOn)
 		{
-			if (!base.FilterAllows(label))
+			if (!FilterAllows(label))
 			{
 				GUI.color = new Color(1f, 1f, 1f, 0.3f);
 			}
-			this.listing.LabelCheckboxDebug(label, ref checkOn);
+			listing.LabelCheckboxDebug(label, ref checkOn);
 			GUI.color = Color.white;
 			if (Event.current.type == EventType.Layout)
 			{
-				this.totalOptionsHeight += 24f;
+				totalOptionsHeight += 24f;
 			}
 		}
 
-		
 		protected void DoLabel(string label)
 		{
 			Text.Font = GameFont.Small;
-			this.listing.Label(label, -1f, null);
-			this.totalOptionsHeight += Text.CalcHeight(label, 300f) + 2f;
+			listing.Label(label);
+			totalOptionsHeight += Text.CalcHeight(label, 300f) + 2f;
 		}
 
-		
 		protected void DoGap()
 		{
-			this.listing.Gap(7f);
-			this.totalOptionsHeight += 7f;
+			listing.Gap(7f);
+			totalOptionsHeight += 7f;
 		}
-
-		
-		private const float DebugOptionsGap = 7f;
 	}
 }

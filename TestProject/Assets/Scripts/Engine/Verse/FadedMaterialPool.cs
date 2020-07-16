@@ -1,62 +1,115 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
 
 namespace Verse
 {
-	
 	public static class FadedMaterialPool
 	{
-		
-		
-		public static int TotalMaterialCount
+		private struct FadedMatRequest : IEquatable<FadedMatRequest>
 		{
-			get
+			private Material mat;
+
+			private int alphaIndex;
+
+			public FadedMatRequest(Material mat, int alphaIndex)
 			{
-				return FadedMaterialPool.cachedMats.Count;
+				this.mat = mat;
+				this.alphaIndex = alphaIndex;
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (obj != null && obj is FadedMatRequest)
+				{
+					return Equals((FadedMatRequest)obj);
+				}
+				return false;
+			}
+
+			public bool Equals(FadedMatRequest other)
+			{
+				if (mat == other.mat)
+				{
+					return alphaIndex == other.alphaIndex;
+				}
+				return false;
+			}
+
+			public override int GetHashCode()
+			{
+				return Gen.HashCombineInt(mat.GetHashCode(), alphaIndex);
+			}
+
+			public static bool operator ==(FadedMatRequest lhs, FadedMatRequest rhs)
+			{
+				return lhs.Equals(rhs);
+			}
+
+			public static bool operator !=(FadedMatRequest lhs, FadedMatRequest rhs)
+			{
+				return !(lhs == rhs);
 			}
 		}
 
-		
-		
+		private class FadedMatRequestComparer : IEqualityComparer<FadedMatRequest>
+		{
+			public static readonly FadedMatRequestComparer Instance = new FadedMatRequestComparer();
+
+			public bool Equals(FadedMatRequest x, FadedMatRequest y)
+			{
+				return x.Equals(y);
+			}
+
+			public int GetHashCode(FadedMatRequest obj)
+			{
+				return obj.GetHashCode();
+			}
+		}
+
+		private static Dictionary<FadedMatRequest, Material> cachedMats = new Dictionary<FadedMatRequest, Material>(FadedMatRequestComparer.Instance);
+
+		private const int NumFadeSteps = 30;
+
+		public static int TotalMaterialCount => cachedMats.Count;
+
 		public static long TotalMaterialBytes
 		{
 			get
 			{
 				long num = 0L;
-				foreach (KeyValuePair<FadedMaterialPool.FadedMatRequest, Material> keyValuePair in FadedMaterialPool.cachedMats)
+				foreach (KeyValuePair<FadedMatRequest, Material> cachedMat in cachedMats)
 				{
-					num += Profiler.GetRuntimeMemorySizeLong(keyValuePair.Value);
+					num += Profiler.GetRuntimeMemorySizeLong(cachedMat.Value);
 				}
 				return num;
 			}
 		}
 
-		
 		public static Material FadedVersionOf(Material sourceMat, float alpha)
 		{
-			int num = FadedMaterialPool.IndexFromAlpha(alpha);
-			if (num == 0)
+			int num = IndexFromAlpha(alpha);
+			switch (num)
 			{
+			case 0:
 				return BaseContent.ClearMat;
-			}
-			if (num == 29)
-			{
+			case 29:
 				return sourceMat;
-			}
-			FadedMaterialPool.FadedMatRequest key = new FadedMaterialPool.FadedMatRequest(sourceMat, num);
-			Material material;
-			if (!FadedMaterialPool.cachedMats.TryGetValue(key, out material))
+			default:
 			{
-				material = MaterialAllocator.Create(sourceMat);
-				material.color = new Color(1f, 1f, 1f, (float)FadedMaterialPool.IndexFromAlpha(alpha) / 30f);
-				FadedMaterialPool.cachedMats.Add(key, material);
+				FadedMatRequest key = new FadedMatRequest(sourceMat, num);
+				if (!cachedMats.TryGetValue(key, out Material value))
+				{
+					value = MaterialAllocator.Create(sourceMat);
+					value.color = new Color(1f, 1f, 1f, (float)IndexFromAlpha(alpha) / 30f);
+					cachedMats.Add(key, value);
+				}
+				return value;
 			}
-			return material;
+			}
 		}
 
-		
 		private static int IndexFromAlpha(float alpha)
 		{
 			int num = Mathf.FloorToInt(alpha * 30f);
@@ -65,78 +118,6 @@ namespace Verse
 				num = 29;
 			}
 			return num;
-		}
-
-		
-		private static Dictionary<FadedMaterialPool.FadedMatRequest, Material> cachedMats = new Dictionary<FadedMaterialPool.FadedMatRequest, Material>(FadedMaterialPool.FadedMatRequestComparer.Instance);
-
-		
-		private const int NumFadeSteps = 30;
-
-		
-		private struct FadedMatRequest : IEquatable<FadedMaterialPool.FadedMatRequest>
-		{
-			
-			public FadedMatRequest(Material mat, int alphaIndex)
-			{
-				this.mat = mat;
-				this.alphaIndex = alphaIndex;
-			}
-
-			
-			public override bool Equals(object obj)
-			{
-				return obj != null && obj is FadedMaterialPool.FadedMatRequest && this.Equals((FadedMaterialPool.FadedMatRequest)obj);
-			}
-
-			
-			public bool Equals(FadedMaterialPool.FadedMatRequest other)
-			{
-				return this.mat == other.mat && this.alphaIndex == other.alphaIndex;
-			}
-
-			
-			public override int GetHashCode()
-			{
-				return Gen.HashCombineInt(this.mat.GetHashCode(), this.alphaIndex);
-			}
-
-			
-			public static bool operator ==(FadedMaterialPool.FadedMatRequest lhs, FadedMaterialPool.FadedMatRequest rhs)
-			{
-				return lhs.Equals(rhs);
-			}
-
-			
-			public static bool operator !=(FadedMaterialPool.FadedMatRequest lhs, FadedMaterialPool.FadedMatRequest rhs)
-			{
-				return !(lhs == rhs);
-			}
-
-			
-			private Material mat;
-
-			
-			private int alphaIndex;
-		}
-
-		
-		private class FadedMatRequestComparer : IEqualityComparer<FadedMaterialPool.FadedMatRequest>
-		{
-			
-			public bool Equals(FadedMaterialPool.FadedMatRequest x, FadedMaterialPool.FadedMatRequest y)
-			{
-				return x.Equals(y);
-			}
-
-			
-			public int GetHashCode(FadedMaterialPool.FadedMatRequest obj)
-			{
-				return obj.GetHashCode();
-			}
-
-			
-			public static readonly FadedMaterialPool.FadedMatRequestComparer Instance = new FadedMaterialPool.FadedMatRequestComparer();
 		}
 	}
 }

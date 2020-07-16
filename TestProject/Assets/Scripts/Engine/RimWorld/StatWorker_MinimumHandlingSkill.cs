@@ -1,26 +1,21 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatWorker_MinimumHandlingSkill : StatWorker
 	{
-		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
-			return this.ValueFromReq(req);
+			return ValueFromReq(req);
 		}
 
-		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			float wildness = ((ThingDef)req.Def).race.wildness;
-			return "Wildness".Translate() + " " + wildness.ToStringPercent() + ": " + this.ValueFromReq(req).ToString("F0");
+			return "Wildness".Translate() + " " + wildness.ToStringPercent() + ": " + ValueFromReq(req).ToString("F0");
 		}
 
-		
 		private float ValueFromReq(StatRequest req)
 		{
 			float wildness = ((ThingDef)req.Def).race.wildness;

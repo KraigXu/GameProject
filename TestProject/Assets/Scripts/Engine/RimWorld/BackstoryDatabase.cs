@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -6,24 +5,27 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class BackstoryDatabase
 	{
-		
+		public static Dictionary<string, Backstory> allBackstories = new Dictionary<string, Backstory>();
+
+		private static Dictionary<Pair<BackstorySlot, BackstoryCategoryFilter>, List<Backstory>> shuffleableBackstoryList = new Dictionary<Pair<BackstorySlot, BackstoryCategoryFilter>, List<Backstory>>();
+
+		private static Regex regex = new Regex("^[^0-9]*");
+
 		public static void Clear()
 		{
-			BackstoryDatabase.allBackstories.Clear();
+			allBackstories.Clear();
 		}
 
-		
 		public static void ReloadAllBackstories()
 		{
-			foreach (Backstory backstory in DirectXmlLoader.LoadXmlDataInResourcesFolder<Backstory>("Backstories/Shuffled"))
+			foreach (Backstory item in DirectXmlLoader.LoadXmlDataInResourcesFolder<Backstory>("Backstories/Shuffled"))
 			{
 				DeepProfiler.Start("Backstory.PostLoad");
 				try
 				{
-					backstory.PostLoad();
+					item.PostLoad();
 				}
 				finally
 				{
@@ -32,20 +34,20 @@ namespace RimWorld
 				DeepProfiler.Start("Backstory.ResolveReferences");
 				try
 				{
-					backstory.ResolveReferences();
+					item.ResolveReferences();
 				}
 				finally
 				{
 					DeepProfiler.End();
 				}
-				foreach (string str in backstory.ConfigErrors(false))
+				foreach (string item2 in item.ConfigErrors(ignoreNoSpawnCategories: false))
 				{
-					Log.Error(backstory.title + ": " + str, false);
+					Log.Error(item.title + ": " + item2);
 				}
 				DeepProfiler.Start("AddBackstory");
 				try
 				{
-					BackstoryDatabase.AddBackstory(backstory);
+					AddBackstory(item);
 				}
 				finally
 				{
@@ -55,96 +57,73 @@ namespace RimWorld
 			SolidBioDatabase.LoadAllBios();
 		}
 
-		
 		public static void AddBackstory(Backstory bs)
 		{
-			if (!BackstoryDatabase.allBackstories.ContainsKey(bs.identifier))
+			if (allBackstories.ContainsKey(bs.identifier))
 			{
-				BackstoryDatabase.allBackstories.Add(bs.identifier, bs);
-				BackstoryDatabase.shuffleableBackstoryList.Clear();
-				return;
+				if (bs == allBackstories[bs.identifier])
+				{
+					Log.Error("Tried to add the same backstory twice " + bs.identifier);
+				}
+				else
+				{
+					Log.Error("Backstory " + bs.title + " has same unique save key " + bs.identifier + " as old backstory " + allBackstories[bs.identifier].title);
+				}
 			}
-			if (bs == BackstoryDatabase.allBackstories[bs.identifier])
+			else
 			{
-				Log.Error("Tried to add the same backstory twice " + bs.identifier, false);
-				return;
+				allBackstories.Add(bs.identifier, bs);
+				shuffleableBackstoryList.Clear();
 			}
-			Log.Error(string.Concat(new string[]
-			{
-				"Backstory ",
-				bs.title,
-				" has same unique save key ",
-				bs.identifier,
-				" as old backstory ",
-				BackstoryDatabase.allBackstories[bs.identifier].title
-			}), false);
 		}
 
-		
 		public static bool TryGetWithIdentifier(string identifier, out Backstory bs, bool closestMatchWarning = true)
 		{
-			identifier = BackstoryDatabase.GetIdentifierClosestMatch(identifier, closestMatchWarning);
-			return BackstoryDatabase.allBackstories.TryGetValue(identifier, out bs);
+			identifier = GetIdentifierClosestMatch(identifier, closestMatchWarning);
+			return allBackstories.TryGetValue(identifier, out bs);
 		}
 
-		
 		public static string GetIdentifierClosestMatch(string identifier, bool closestMatchWarning = true)
 		{
-			if (BackstoryDatabase.allBackstories.ContainsKey(identifier))
+			if (allBackstories.ContainsKey(identifier))
 			{
 				return identifier;
 			}
-			string b = BackstoryDatabase.StripNumericSuffix(identifier);
-			foreach (KeyValuePair<string, Backstory> keyValuePair in BackstoryDatabase.allBackstories)
+			string b = StripNumericSuffix(identifier);
+			foreach (KeyValuePair<string, Backstory> allBackstory in allBackstories)
 			{
-				Backstory value = keyValuePair.Value;
-				if (BackstoryDatabase.StripNumericSuffix(value.identifier) == b)
+				Backstory value = allBackstory.Value;
+				if (StripNumericSuffix(value.identifier) == b)
 				{
 					if (closestMatchWarning)
 					{
-						Log.Warning("Couldn't find exact match for backstory " + identifier + ", using closest match " + value.identifier, false);
+						Log.Warning("Couldn't find exact match for backstory " + identifier + ", using closest match " + value.identifier);
 					}
 					return value.identifier;
 				}
 			}
-			Log.Warning("Couldn't find exact match for backstory " + identifier + ", or any close match.", false);
+			Log.Warning("Couldn't find exact match for backstory " + identifier + ", or any close match.");
 			return identifier;
 		}
 
-		
 		public static Backstory RandomBackstory(BackstorySlot slot)
 		{
-			return (from bs in BackstoryDatabase.allBackstories
-			where bs.Value.slot == slot
-			select bs).RandomElement<KeyValuePair<string, Backstory>>().Value;
+			return allBackstories.Where((KeyValuePair<string, Backstory> bs) => bs.Value.slot == slot).RandomElement().Value;
 		}
 
-		
 		public static List<Backstory> ShuffleableBackstoryList(BackstorySlot slot, BackstoryCategoryFilter group)
 		{
 			Pair<BackstorySlot, BackstoryCategoryFilter> key = new Pair<BackstorySlot, BackstoryCategoryFilter>(slot, group);
-			if (!BackstoryDatabase.shuffleableBackstoryList.ContainsKey(key))
+			if (!shuffleableBackstoryList.ContainsKey(key))
 			{
-				BackstoryDatabase.shuffleableBackstoryList[key] = (from bs in BackstoryDatabase.allBackstories.Values
-				where bs.shuffleable && bs.slot == slot && @group.Matches(bs)
-				select bs).ToList<Backstory>();
+				shuffleableBackstoryList[key] = allBackstories.Values.Where((Backstory bs) => bs.shuffleable && bs.slot == slot && group.Matches(bs)).ToList();
 			}
-			return BackstoryDatabase.shuffleableBackstoryList[key];
+			return shuffleableBackstoryList[key];
 		}
 
-		
 		public static string StripNumericSuffix(string key)
 		{
-			return BackstoryDatabase.regex.Match(key).Captures[0].Value;
+			return regex.Match(key).Captures[0].Value;
 		}
-
-		
-		public static Dictionary<string, Backstory> allBackstories = new Dictionary<string, Backstory>();
-
-		
-		private static Dictionary<Pair<BackstorySlot, BackstoryCategoryFilter>, List<Backstory>> shuffleableBackstoryList = new Dictionary<Pair<BackstorySlot, BackstoryCategoryFilter>, List<Backstory>>();
-
-		
-		private static Regex regex = new Regex("^[^0-9]*");
 	}
 }

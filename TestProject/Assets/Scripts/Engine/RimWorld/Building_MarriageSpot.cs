@@ -1,13 +1,10 @@
-﻿using System;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Building_MarriageSpot : Building
 	{
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -16,20 +13,18 @@ namespace RimWorld
 			{
 				stringBuilder.AppendLine();
 			}
-			stringBuilder.Append(this.UsableNowStatus());
+			stringBuilder.Append(UsableNowStatus());
 			return stringBuilder.ToString();
 		}
 
-		
 		private string UsableNowStatus()
 		{
-			if (!this.AnyCoupleForWhichIsValid())
+			if (!AnyCoupleForWhichIsValid())
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				Pair<Pawn, Pawn> pair;
-				if (this.TryFindAnyFiancesCouple(out pair))
+				if (TryFindAnyFiancesCouple(out Pair<Pawn, Pawn> fiances))
 				{
-					if (!MarriageSpotUtility.IsValidMarriageSpotFor(base.Position, pair.First, pair.Second, stringBuilder))
+					if (!MarriageSpotUtility.IsValidMarriageSpotFor(base.Position, fiances.First, fiances.Second, stringBuilder))
 					{
 						return "MarriageSpotNotUsable".Translate(stringBuilder);
 					}
@@ -42,25 +37,23 @@ namespace RimWorld
 			return "MarriageSpotUsable".Translate();
 		}
 
-		
 		private bool AnyCoupleForWhichIsValid()
 		{
 			return base.Map.mapPawns.FreeColonistsSpawned.Any(delegate(Pawn p)
 			{
 				Pawn firstDirectRelationPawn = p.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance, (Pawn x) => x.Spawned);
-				return firstDirectRelationPawn != null && MarriageSpotUtility.IsValidMarriageSpotFor(base.Position, p, firstDirectRelationPawn, null);
+				return firstDirectRelationPawn != null && MarriageSpotUtility.IsValidMarriageSpotFor(base.Position, p, firstDirectRelationPawn);
 			});
 		}
 
-		
 		private bool TryFindAnyFiancesCouple(out Pair<Pawn, Pawn> fiances)
 		{
-			foreach (Pawn pawn in base.Map.mapPawns.FreeColonistsSpawned)
+			foreach (Pawn item in base.Map.mapPawns.FreeColonistsSpawned)
 			{
-				Pawn firstDirectRelationPawn = pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance, (Pawn x) => x.Spawned);
+				Pawn firstDirectRelationPawn = item.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Fiance, (Pawn x) => x.Spawned);
 				if (firstDirectRelationPawn != null)
 				{
-					fiances = new Pair<Pawn, Pawn>(pawn, firstDirectRelationPawn);
+					fiances = new Pair<Pawn, Pawn>(item, firstDirectRelationPawn);
 					return true;
 				}
 			}

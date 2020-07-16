@@ -1,124 +1,106 @@
-﻿using System;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Jetter : Thing
 	{
-		
+		private enum JetterState
+		{
+			Resting,
+			WickBurning,
+			Jetting
+		}
+
+		private JetterState JState;
+
+		private int WickTicksLeft;
+
+		private int TicksUntilMove;
+
+		protected Sustainer wickSoundSustainer;
+
+		protected Sustainer jetSoundSustainer;
+
+		private const int TicksBeforeBeginAccelerate = 25;
+
+		private const int TicksBetweenMoves = 3;
+
 		public override void Tick()
 		{
-			if (this.JState == Jetter.JetterState.WickBurning)
+			if (JState == JetterState.WickBurning)
 			{
 				base.Map.overlayDrawer.DrawOverlay(this, OverlayTypes.BurningWick);
-				this.WickTicksLeft--;
-				if (this.WickTicksLeft == 0)
+				WickTicksLeft--;
+				if (WickTicksLeft == 0)
 				{
-					this.StartJetting();
-					return;
+					StartJetting();
 				}
 			}
-			else if (this.JState == Jetter.JetterState.Jetting)
+			else if (JState == JetterState.Jetting)
 			{
-				this.TicksUntilMove--;
-				if (this.TicksUntilMove <= 0)
+				TicksUntilMove--;
+				if (TicksUntilMove <= 0)
 				{
-					this.MoveJetter();
-					this.TicksUntilMove = 3;
+					MoveJetter();
+					TicksUntilMove = 3;
 				}
 			}
 		}
 
-		
 		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			base.PostApplyDamage(dinfo, totalDamageDealt);
-			if (!base.Destroyed && dinfo.Def.harmsHealth && this.JState == Jetter.JetterState.Resting)
+			if (!base.Destroyed && dinfo.Def.harmsHealth && JState == JetterState.Resting)
 			{
-				this.StartWick();
+				StartWick();
 			}
 		}
 
-		
 		protected void StartWick()
 		{
-			this.JState = Jetter.JetterState.WickBurning;
-			this.WickTicksLeft = 25;
+			JState = JetterState.WickBurning;
+			WickTicksLeft = 25;
 			SoundDefOf.MetalHitImportant.PlayOneShot(this);
-			this.wickSoundSustainer = SoundDefOf.HissSmall.TrySpawnSustainer(this);
+			wickSoundSustainer = SoundDefOf.HissSmall.TrySpawnSustainer(this);
 		}
 
-		
 		protected void StartJetting()
 		{
-			this.JState = Jetter.JetterState.Jetting;
-			this.TicksUntilMove = 3;
-			this.wickSoundSustainer.End();
-			this.wickSoundSustainer = null;
-			this.wickSoundSustainer = SoundDefOf.HissJet.TrySpawnSustainer(this);
+			JState = JetterState.Jetting;
+			TicksUntilMove = 3;
+			wickSoundSustainer.End();
+			wickSoundSustainer = null;
+			wickSoundSustainer = SoundDefOf.HissJet.TrySpawnSustainer(this);
 		}
 
-		
 		protected void MoveJetter()
 		{
 			IntVec3 intVec = base.Position + base.Rotation.FacingCell;
 			if (!intVec.Walkable(base.Map) || base.Map.thingGrid.CellContains(intVec, ThingCategory.Pawn) || intVec.GetEdifice(base.Map) != null)
 			{
-				this.Destroy(DestroyMode.Vanish);
-				GenExplosion.DoExplosion(base.Position, base.Map, 2.9f, DamageDefOf.Bomb, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
-				return;
+				Destroy();
+				GenExplosion.DoExplosion(base.Position, base.Map, 2.9f, DamageDefOf.Bomb, null);
 			}
-			base.Position = intVec;
+			else
+			{
+				base.Position = intVec;
+			}
 		}
 
-		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.Destroy(mode);
-			if (this.wickSoundSustainer != null)
+			if (wickSoundSustainer != null)
 			{
-				this.wickSoundSustainer.End();
-				this.wickSoundSustainer = null;
+				wickSoundSustainer.End();
+				wickSoundSustainer = null;
 			}
-			if (this.jetSoundSustainer != null)
+			if (jetSoundSustainer != null)
 			{
-				this.jetSoundSustainer.End();
-				this.jetSoundSustainer = null;
+				jetSoundSustainer.End();
+				jetSoundSustainer = null;
 			}
-		}
-
-		
-		private Jetter.JetterState JState;
-
-		
-		private int WickTicksLeft;
-
-		
-		private int TicksUntilMove;
-
-		
-		protected Sustainer wickSoundSustainer;
-
-		
-		protected Sustainer jetSoundSustainer;
-
-		
-		private const int TicksBeforeBeginAccelerate = 25;
-
-		
-		private const int TicksBetweenMoves = 3;
-
-		
-		private enum JetterState
-		{
-			
-			Resting,
-			
-			WickBurning,
-			
-			Jetting
 		}
 	}
 }

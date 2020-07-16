@@ -1,119 +1,135 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtDef : Def
 	{
-		
-		
+		public Type thoughtClass;
+
+		public Type workerClass;
+
+		public List<ThoughtStage> stages = new List<ThoughtStage>();
+
+		public int stackLimit = 1;
+
+		public float stackedEffectMultiplier = 0.75f;
+
+		public float durationDays;
+
+		public bool invert;
+
+		public bool validWhileDespawned;
+
+		public ThoughtDef nextThought;
+
+		public List<TraitDef> nullifyingTraits;
+
+		public List<TaleDef> nullifyingOwnTales;
+
+		public List<TraitDef> requiredTraits;
+
+		public int requiredTraitsDegree = int.MinValue;
+
+		public StatDef effectMultiplyingStat;
+
+		public HediffDef hediff;
+
+		public GameConditionDef gameCondition;
+
+		public bool nullifiedIfNotColonist;
+
+		public ThoughtDef thoughtToMake;
+
+		[NoTranslate]
+		private string icon;
+
+		public bool showBubble;
+
+		public int stackLimitForSameOtherPawn = -1;
+
+		public float lerpOpinionToZeroAfterDurationPct = 0.7f;
+
+		public float maxCumulatedOpinionOffset = float.MaxValue;
+
+		public TaleDef taleDef;
+
+		[Unsaved(false)]
+		private ThoughtWorker workerInt;
+
+		[Unsaved(false)]
+		private BoolUnknown isMemoryCached = BoolUnknown.Unknown;
+
+		private Texture2D iconInt;
+
 		public string Label
 		{
 			get
 			{
-				if (!this.label.NullOrEmpty())
+				if (!label.NullOrEmpty())
 				{
-					return this.label;
+					return label;
 				}
-				if (!this.stages.NullOrEmpty<ThoughtStage>())
+				if (!stages.NullOrEmpty())
 				{
-					if (!this.stages[0].label.NullOrEmpty())
+					if (!stages[0].label.NullOrEmpty())
 					{
-						return this.stages[0].label;
+						return stages[0].label;
 					}
-					if (!this.stages[0].labelSocial.NullOrEmpty())
+					if (!stages[0].labelSocial.NullOrEmpty())
 					{
-						return this.stages[0].labelSocial;
+						return stages[0].labelSocial;
 					}
 				}
-				Log.Error("Cannot get good label for ThoughtDef " + this.defName, false);
-				return this.defName;
+				Log.Error("Cannot get good label for ThoughtDef " + defName);
+				return defName;
 			}
 		}
 
-		
-		
-		public int DurationTicks
-		{
-			get
-			{
-				return (int)(this.durationDays * 60000f);
-			}
-		}
+		public int DurationTicks => (int)(durationDays * 60000f);
 
-		
-		
 		public bool IsMemory
 		{
 			get
 			{
-				if (this.isMemoryCached == BoolUnknown.Unknown)
+				if (isMemoryCached == BoolUnknown.Unknown)
 				{
-					this.isMemoryCached = ((this.durationDays > 0f || typeof(Thought_Memory).IsAssignableFrom(this.thoughtClass)) ? BoolUnknown.True : BoolUnknown.False);
+					isMemoryCached = ((!(durationDays > 0f) && !typeof(Thought_Memory).IsAssignableFrom(thoughtClass)) ? BoolUnknown.False : BoolUnknown.True);
 				}
-				return this.isMemoryCached == BoolUnknown.True;
+				return isMemoryCached == BoolUnknown.True;
 			}
 		}
 
-		
-		
-		public bool IsSituational
-		{
-			get
-			{
-				return this.Worker != null;
-			}
-		}
+		public bool IsSituational => Worker != null;
 
-		
-		
-		public bool IsSocial
-		{
-			get
-			{
-				return typeof(ISocialThought).IsAssignableFrom(this.ThoughtClass);
-			}
-		}
+		public bool IsSocial => typeof(ISocialThought).IsAssignableFrom(ThoughtClass);
 
-		
-		
-		public bool RequiresSpecificTraitsDegree
-		{
-			get
-			{
-				return this.requiredTraitsDegree != int.MinValue;
-			}
-		}
+		public bool RequiresSpecificTraitsDegree => requiredTraitsDegree != int.MinValue;
 
-		
-		
 		public ThoughtWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null && this.workerClass != null)
+				if (workerInt == null && workerClass != null)
 				{
-					this.workerInt = (ThoughtWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.def = this;
+					workerInt = (ThoughtWorker)Activator.CreateInstance(workerClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
-		
 		public Type ThoughtClass
 		{
 			get
 			{
-				if (this.thoughtClass != null)
+				if (thoughtClass != null)
 				{
-					return this.thoughtClass;
+					return thoughtClass;
 				}
-				if (this.IsMemory)
+				if (IsMemory)
 				{
 					return typeof(Thought_Memory);
 				}
@@ -121,153 +137,59 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public Texture2D Icon
 		{
 			get
 			{
-				if (this.iconInt == null)
+				if (iconInt == null)
 				{
-					if (this.icon == null)
+					if (icon == null)
 					{
 						return null;
 					}
-					this.iconInt = ContentFinder<Texture2D>.Get(this.icon, true);
+					iconInt = ContentFinder<Texture2D>.Get(icon);
 				}
-				return this.iconInt;
+				return iconInt;
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			if (this.stages.NullOrEmpty<ThoughtStage>())
+			if (stages.NullOrEmpty())
 			{
 				yield return "no stages";
 			}
-			if (this.workerClass != null && this.nextThought != null)
+			if (workerClass != null && nextThought != null)
 			{
 				yield return "has a nextThought but also has a workerClass. nextThought only works for memories";
 			}
-			if (this.IsMemory && this.workerClass != null)
+			if (IsMemory && workerClass != null)
 			{
 				yield return "has a workerClass but is a memory. workerClass only works for situational thoughts, not memories";
 			}
-			if (!this.IsMemory && this.workerClass == null && this.IsSituational)
+			if (!IsMemory && workerClass == null && IsSituational)
 			{
 				yield return "is a situational thought but has no workerClass. Situational thoughts require workerClasses to analyze the situation";
 			}
-			int num;
-			for (int i = 0; i < this.stages.Count; i = num + 1)
+			for (int i = 0; i < stages.Count; i++)
 			{
-				if (this.stages[i] != null)
+				if (stages[i] != null)
 				{
-					foreach (string text2 in this.stages[i].ConfigErrors())
+					foreach (string item2 in stages[i].ConfigErrors())
 					{
-						yield return text2;
+						yield return item2;
 					}
-					enumerator = null;
 				}
-				num = i;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static ThoughtDef Named(string defName)
 		{
-			return DefDatabase<ThoughtDef>.GetNamed(defName, true);
+			return DefDatabase<ThoughtDef>.GetNamed(defName);
 		}
-
-		
-		public Type thoughtClass;
-
-		
-		public Type workerClass;
-
-		
-		public List<ThoughtStage> stages = new List<ThoughtStage>();
-
-		
-		public int stackLimit = 1;
-
-		
-		public float stackedEffectMultiplier = 0.75f;
-
-		
-		public float durationDays;
-
-		
-		public bool invert;
-
-		
-		public bool validWhileDespawned;
-
-		
-		public ThoughtDef nextThought;
-
-		
-		public List<TraitDef> nullifyingTraits;
-
-		
-		public List<TaleDef> nullifyingOwnTales;
-
-		
-		public List<TraitDef> requiredTraits;
-
-		
-		public int requiredTraitsDegree = int.MinValue;
-
-		
-		public StatDef effectMultiplyingStat;
-
-		
-		public HediffDef hediff;
-
-		
-		public GameConditionDef gameCondition;
-
-		
-		public bool nullifiedIfNotColonist;
-
-		
-		public ThoughtDef thoughtToMake;
-
-		
-		[NoTranslate]
-		private string icon;
-
-		
-		public bool showBubble;
-
-		
-		public int stackLimitForSameOtherPawn = -1;
-
-		
-		public float lerpOpinionToZeroAfterDurationPct = 0.7f;
-
-		
-		public float maxCumulatedOpinionOffset = float.MaxValue;
-
-		
-		public TaleDef taleDef;
-
-		
-		[Unsaved(false)]
-		private ThoughtWorker workerInt;
-
-		
-		[Unsaved(false)]
-		private BoolUnknown isMemoryCached = BoolUnknown.Unknown;
-
-		
-		private Texture2D iconInt;
 	}
 }

@@ -1,60 +1,40 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public struct EdgeSpan
 	{
-		
-		
-		public bool IsValid
-		{
-			get
-			{
-				return this.length > 0;
-			}
-		}
+		public IntVec3 root;
 
-		
-		
+		public SpanDirection dir;
+
+		public int length;
+
+		public bool IsValid => length > 0;
+
 		public IEnumerable<IntVec3> Cells
 		{
 			get
 			{
-				int num;
-				for (int i = 0; i < this.length; i = num + 1)
+				for (int i = 0; i < length; i++)
 				{
-					if (this.dir == SpanDirection.North)
+					if (dir == SpanDirection.North)
 					{
-						yield return new IntVec3(this.root.x, 0, this.root.z + i);
+						yield return new IntVec3(root.x, 0, root.z + i);
 					}
-					else if (this.dir == SpanDirection.East)
+					else if (dir == SpanDirection.East)
 					{
-						yield return new IntVec3(this.root.x + i, 0, this.root.z);
+						yield return new IntVec3(root.x + i, 0, root.z);
 					}
-					num = i;
 				}
-				yield break;
 			}
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"(root=",
-				this.root,
-				", dir=",
-				this.dir.ToString(),
-				" + length=",
-				this.length,
-				")"
-			});
+			return "(root=" + root + ", dir=" + dir.ToString() + " + length=" + length + ")";
 		}
 
-		
 		public EdgeSpan(IntVec3 root, SpanDirection dir, int length)
 		{
 			this.root = root;
@@ -62,24 +42,14 @@ namespace Verse
 			this.length = length;
 		}
 
-		
 		public ulong UniqueHashCode()
 		{
-			ulong num = this.root.UniqueHashCode();
-			if (this.dir == SpanDirection.East)
+			ulong num = root.UniqueHashCode();
+			if (dir == SpanDirection.East)
 			{
-				num += 17592186044416UL;
+				num += 17592186044416L;
 			}
-			return num + (ulong)(281474976710656L * (long)this.length);
+			return (ulong)((long)num + 281474976710656L * length);
 		}
-
-		
-		public IntVec3 root;
-
-		
-		public SpanDirection dir;
-
-		
-		public int length;
 	}
 }

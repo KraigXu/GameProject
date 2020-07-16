@@ -1,20 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_PlanRemove : Designator_Plan
 	{
-		
-		public Designator_PlanRemove() : base(DesignateMode.Remove)
+		public Designator_PlanRemove()
+			: base(DesignateMode.Remove)
 		{
-			this.defaultLabel = "DesignatorPlanRemove".Translate();
-			this.defaultDesc = "DesignatorPlanRemoveDesc".Translate();
-			this.icon = ContentFinder<Texture2D>.Get("UI/Designators/PlanOff", true);
-			this.soundSucceeded = SoundDefOf.Designate_PlanRemove;
-			this.hotKey = KeyBindingDefOf.Misc8;
+			defaultLabel = "DesignatorPlanRemove".Translate();
+			defaultDesc = "DesignatorPlanRemoveDesc".Translate();
+			icon = ContentFinder<Texture2D>.Get("UI/Designators/PlanOff");
+			soundSucceeded = SoundDefOf.Designate_PlanRemove;
+			hotKey = KeyBindingDefOf.Misc8;
 		}
 	}
 }

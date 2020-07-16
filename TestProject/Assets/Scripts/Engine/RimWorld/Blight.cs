@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,26 +6,44 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Blight : Thing
 	{
-		
-		
-		
+		private float severity = 0.2f;
+
+		private int lastPlantHarmTick;
+
+		private float lastMapMeshUpdateSeverity;
+
+		private const float InitialSeverity = 0.2f;
+
+		private const float SeverityPerDay = 1f;
+
+		private const int DamagePerDay = 5;
+
+		private const float MinSeverityToReproduce = 0.28f;
+
+		private const float ReproduceMTBHoursAtMinSeverity = 16.8f;
+
+		private const float ReproduceMTBHoursAtMaxSeverity = 2.1f;
+
+		private const float ReproductionRadius = 4f;
+
+		private static FloatRange SizeRange = new FloatRange(0.6f, 1f);
+
+		private static Color32[] workingColors = new Color32[4];
+
 		public float Severity
 		{
 			get
 			{
-				return this.severity;
+				return severity;
 			}
 			set
 			{
-				this.severity = Mathf.Clamp01(value);
+				severity = Mathf.Clamp01(value);
 			}
 		}
 
-		
-		
 		public Plant Plant
 		{
 			get
@@ -38,186 +56,136 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		protected float ReproduceMTBHours
 		{
 			get
 			{
-				if (this.severity < 0.28f)
+				if (severity < 0.28f)
 				{
 					return -1f;
 				}
-				return GenMath.LerpDouble(0.28f, 1f, 16.8f, 2.1f, this.severity);
+				return GenMath.LerpDouble(0.28f, 1f, 16.8f, 2.1f, severity);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.severity, "severity", 0f, false);
-			Scribe_Values.Look<int>(ref this.lastPlantHarmTick, "lastPlantHarmTick", 0, false);
+			Scribe_Values.Look(ref severity, "severity", 0f);
+			Scribe_Values.Look(ref lastPlantHarmTick, "lastPlantHarmTick", 0);
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			if (!respawningAfterLoad)
 			{
-				this.lastPlantHarmTick = Find.TickManager.TicksGame;
+				lastPlantHarmTick = Find.TickManager.TicksGame;
 			}
-			this.lastMapMeshUpdateSeverity = this.Severity;
+			lastMapMeshUpdateSeverity = Severity;
 		}
 
-		
 		public override void TickLong()
 		{
-			this.CheckHarmPlant();
-			if (this.DestroyIfNoPlantHere())
+			CheckHarmPlant();
+			if (!DestroyIfNoPlantHere())
 			{
-				return;
-			}
-			this.Severity += 0.0333333351f;
-			float reproduceMTBHours = this.ReproduceMTBHours;
-			if (reproduceMTBHours > 0f && Rand.MTBEventOccurs(reproduceMTBHours, 2500f, 2000f))
-			{
-				this.TryReproduceNow();
-			}
-			if (Mathf.Abs(this.Severity - this.lastMapMeshUpdateSeverity) >= 0.05f)
-			{
-				base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.Things);
-				this.lastMapMeshUpdateSeverity = this.Severity;
+				Severity += 71f / (678f * (float)Math.PI);
+				float reproduceMTBHours = ReproduceMTBHours;
+				if (reproduceMTBHours > 0f && Rand.MTBEventOccurs(reproduceMTBHours, 2500f, 2000f))
+				{
+					TryReproduceNow();
+				}
+				if (Mathf.Abs(Severity - lastMapMeshUpdateSeverity) >= 0.05f)
+				{
+					base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.Things);
+					lastMapMeshUpdateSeverity = Severity;
+				}
 			}
 		}
 
-		
 		public void Notify_PlantDeSpawned()
 		{
-			this.DestroyIfNoPlantHere();
+			DestroyIfNoPlantHere();
 		}
 
-		
 		private bool DestroyIfNoPlantHere()
 		{
 			if (base.Destroyed)
 			{
 				return true;
 			}
-			if (this.Plant == null)
+			if (Plant == null)
 			{
-				this.Destroy(DestroyMode.Vanish);
+				Destroy();
 				return true;
 			}
 			return false;
 		}
 
-		
 		private void CheckHarmPlant()
 		{
 			int ticksGame = Find.TickManager.TicksGame;
-			if (ticksGame - this.lastPlantHarmTick >= 60000)
+			if (ticksGame - lastPlantHarmTick < 60000)
 			{
-				List<Thing> thingList = base.Position.GetThingList(base.Map);
-				for (int i = 0; i < thingList.Count; i++)
-				{
-					Plant plant = thingList[i] as Plant;
-					if (plant != null)
-					{
-						this.HarmPlant(plant);
-					}
-				}
-				this.lastPlantHarmTick = ticksGame;
+				return;
 			}
+			List<Thing> thingList = base.Position.GetThingList(base.Map);
+			for (int i = 0; i < thingList.Count; i++)
+			{
+				Plant plant = thingList[i] as Plant;
+				if (plant != null)
+				{
+					HarmPlant(plant);
+				}
+			}
+			lastPlantHarmTick = ticksGame;
 		}
 
-		
 		private void HarmPlant(Plant plant)
 		{
 			bool isCrop = plant.IsCrop;
 			IntVec3 position = base.Position;
 			Map map = base.Map;
-			plant.TakeDamage(new DamageInfo(DamageDefOf.Rotting, 5f, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+			plant.TakeDamage(new DamageInfo(DamageDefOf.Rotting, 5f));
 			if (plant.Destroyed && isCrop && MessagesRepeatAvoider.MessageShowAllowed("MessagePlantDiedOfBlight-" + plant.def.defName, 240f))
 			{
-				Messages.Message("MessagePlantDiedOfBlight".Translate(plant.Label, plant).CapitalizeFirst(), new TargetInfo(position, map, false), MessageTypeDefOf.NegativeEvent, true);
+				Messages.Message("MessagePlantDiedOfBlight".Translate(plant.Label, plant).CapitalizeFirst(), new TargetInfo(position, map), MessageTypeDefOf.NegativeEvent);
 			}
 		}
 
-		
 		public void TryReproduceNow()
 		{
 			GenRadial.ProcessEquidistantCells(base.Position, 4f, delegate(List<IntVec3> cells)
 			{
-				IntVec3 c;
-				if ((from x in cells
-				where BlightUtility.GetFirstBlightableNowPlant(x, base.Map) != null
-				select x).TryRandomElement(out c))
+				if (cells.Where((IntVec3 x) => BlightUtility.GetFirstBlightableNowPlant(x, base.Map) != null).TryRandomElement(out IntVec3 result))
 				{
-					BlightUtility.GetFirstBlightableNowPlant(c, base.Map).CropBlighted();
+					BlightUtility.GetFirstBlightableNowPlant(result, base.Map).CropBlighted();
 					return true;
 				}
 				return false;
 			}, base.Map);
 		}
 
-		
 		public override void Print(SectionLayer layer)
 		{
-			Plant plant = this.Plant;
+			Plant plant = Plant;
 			if (plant != null)
 			{
-				PlantUtility.SetWindExposureColors(Blight.workingColors, plant);
+				PlantUtility.SetWindExposureColors(workingColors, plant);
 			}
 			else
 			{
-				Blight.workingColors[0].a = (Blight.workingColors[1].a = (Blight.workingColors[2].a = (Blight.workingColors[3].a = 0)));
+				workingColors[0].a = (workingColors[1].a = (workingColors[2].a = (workingColors[3].a = 0)));
 			}
-			float num = Blight.SizeRange.LerpThroughRange(this.severity);
+			float num = SizeRange.LerpThroughRange(severity);
 			if (plant != null)
 			{
 				float a = plant.Graphic.drawSize.x * plant.def.plant.visualSizeRange.LerpThroughRange(plant.Growth);
 				num *= Mathf.Min(a, 1f);
 			}
 			num = Mathf.Clamp(num, 0.5f, 0.9f);
-			Printer_Plane.PrintPlane(layer, this.TrueCenter(), this.def.graphic.drawSize * num, this.Graphic.MatAt(base.Rotation, this), 0f, false, null, Blight.workingColors, 0.1f, 0f);
+			Printer_Plane.PrintPlane(layer, this.TrueCenter(), def.graphic.drawSize * num, Graphic.MatAt(base.Rotation, this), 0f, flipUv: false, null, workingColors, 0.1f);
 		}
-
-		
-		private float severity = 0.2f;
-
-		
-		private int lastPlantHarmTick;
-
-		
-		private float lastMapMeshUpdateSeverity;
-
-		
-		private const float InitialSeverity = 0.2f;
-
-		
-		private const float SeverityPerDay = 1f;
-
-		
-		private const int DamagePerDay = 5;
-
-		
-		private const float MinSeverityToReproduce = 0.28f;
-
-		
-		private const float ReproduceMTBHoursAtMinSeverity = 16.8f;
-
-		
-		private const float ReproduceMTBHoursAtMaxSeverity = 2.1f;
-
-		
-		private const float ReproductionRadius = 4f;
-
-		
-		private static FloatRange SizeRange = new FloatRange(0.6f, 1f);
-
-		
-		private static Color32[] workingColors = new Color32[4];
 	}
 }

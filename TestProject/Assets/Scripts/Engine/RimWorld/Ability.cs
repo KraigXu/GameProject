@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,252 +6,190 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class Ability : IVerbOwner, IExposable
 	{
-		
-		
-		public Verb verb
+		public Pawn pawn;
+
+		public AbilityDef def;
+
+		public List<AbilityComp> comps;
+
+		protected Command gizmo;
+
+		private VerbTracker verbTracker;
+
+		private int cooldownTicks;
+
+		private int cooldownTicksDuration;
+
+		private Mote warmupMote;
+
+		private List<CompAbilityEffect> effectComps;
+
+		public Verb verb => verbTracker.PrimaryVerb;
+
+		public List<Tool> Tools
+		{
+			get;
+			private set;
+		}
+
+		public Thing ConstantCaster => pawn;
+
+		public List<VerbProperties> VerbProperties => new List<VerbProperties>
+		{
+			def.verbProperties
+		};
+
+		public ImplementOwnerTypeDef ImplementOwnerTypeDef => ImplementOwnerTypeDefOf.NativeVerb;
+
+		public int CooldownTicksRemaining => cooldownTicks;
+
+		public int CooldownTicksTotal => cooldownTicksDuration;
+
+		public VerbTracker VerbTracker
 		{
 			get
 			{
-				return this.verbTracker.PrimaryVerb;
+				if (verbTracker == null)
+				{
+					verbTracker = new VerbTracker(this);
+				}
+				return verbTracker;
 			}
 		}
 
-		
-		public string UniqueVerbOwnerID()
+		public bool HasCooldown => def.cooldownTicksRange != default(IntRange);
+
+		public virtual bool CanCast => cooldownTicks <= 0;
+
+		public virtual bool CanQueueCast
 		{
-			return "Ability_" + this.def.label + this.pawn.ThingID;
+			get
+			{
+				if (HasCooldown)
+				{
+					if (pawn.jobs.curJob != null && pawn.jobs.curJob.verbToUse == verb)
+					{
+						return false;
+					}
+					return !pawn.jobs.jobQueue.Where((QueuedJob qj) => qj.job.verbToUse == verb).Any();
+				}
+				return true;
+			}
 		}
 
-		
+		public List<CompAbilityEffect> EffectComps
+		{
+			get
+			{
+				if (effectComps == null)
+				{
+					effectComps = CompsOfType<CompAbilityEffect>().ToList();
+				}
+				return effectComps;
+			}
+		}
+
+		public string UniqueVerbOwnerID()
+		{
+			return "Ability_" + def.label + pawn.ThingID;
+		}
+
 		public bool VerbsStillUsableBy(Pawn p)
 		{
 			return true;
 		}
 
-		
-		
-		
-		public List<Tool> Tools { get; private set; }
-
-		
-		
-		public Thing ConstantCaster
-		{
-			get
-			{
-				return this.pawn;
-			}
-		}
-
-		
-		
-		public List<VerbProperties> VerbProperties
-		{
-			get
-			{
-				return new List<VerbProperties>
-				{
-					this.def.verbProperties
-				};
-			}
-		}
-
-		
-		
-		public ImplementOwnerTypeDef ImplementOwnerTypeDef
-		{
-			get
-			{
-				return ImplementOwnerTypeDefOf.NativeVerb;
-			}
-		}
-
-		
-		
-		public int CooldownTicksRemaining
-		{
-			get
-			{
-				return this.cooldownTicks;
-			}
-		}
-
-		
-		
-		public int CooldownTicksTotal
-		{
-			get
-			{
-				return this.cooldownTicksDuration;
-			}
-		}
-
-		
-		
-		public VerbTracker VerbTracker
-		{
-			get
-			{
-				if (this.verbTracker == null)
-				{
-					this.verbTracker = new VerbTracker(this);
-				}
-				return this.verbTracker;
-			}
-		}
-
-		
-		
-		public bool HasCooldown
-		{
-			get
-			{
-				return this.def.cooldownTicksRange != default(IntRange);
-			}
-		}
-
-		
-		
-		public virtual bool CanCast
-		{
-			get
-			{
-				return this.cooldownTicks <= 0;
-			}
-		}
-
-		
-		
-		public virtual bool CanQueueCast
-		{
-			get
-			{
-				return !this.HasCooldown || ((this.pawn.jobs.curJob == null || this.pawn.jobs.curJob.verbToUse != this.verb) && !(from qj in this.pawn.jobs.jobQueue
-				where qj.job.verbToUse == this.verb
-				select qj).Any<QueuedJob>());
-			}
-		}
-
-		
-		
-		public List<CompAbilityEffect> EffectComps
-		{
-			get
-			{
-				if (this.effectComps == null)
-				{
-					this.effectComps = this.CompsOfType<CompAbilityEffect>().ToList<CompAbilityEffect>();
-				}
-				return this.effectComps;
-			}
-		}
-
-		
 		public Ability(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public Ability(Pawn pawn, AbilityDef def)
 		{
 			this.pawn = pawn;
 			this.def = def;
-			this.Initialize();
+			Initialize();
 		}
 
-		
 		public virtual bool CanApplyOn(LocalTargetInfo target)
 		{
-			List<CompAbilityEffect>.Enumerator enumerator = this.effectComps.GetEnumerator();
+			foreach (CompAbilityEffect effectComp in effectComps)
 			{
-				while (enumerator.MoveNext())
+				if (!effectComp.CanApplyOn(target, null))
 				{
-					if (!enumerator.Current.CanApplyOn(target, null))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 			return true;
 		}
 
-		
 		public virtual bool Activate(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			if (!this.EffectComps.Any<CompAbilityEffect>())
+			if (!EffectComps.Any())
 			{
 				return false;
 			}
-			this.ApplyEffects(this.EffectComps, this.GetAffectedTargets(target), dest);
-			Find.BattleLog.Add(new BattleLogEntry_AbilityUsed(this.pawn, target.Thing, this.def, RulePackDefOf.Event_AbilityUsed));
+			ApplyEffects(EffectComps, GetAffectedTargets(target), dest);
+			Find.BattleLog.Add(new BattleLogEntry_AbilityUsed(pawn, target.Thing, def, RulePackDefOf.Event_AbilityUsed));
 			return true;
 		}
 
-		
 		public IEnumerable<LocalTargetInfo> GetAffectedTargets(LocalTargetInfo target)
 		{
-			if (this.def.HasAreaOfEffect && this.def.canUseAoeToGetTargets)
+			if (def.HasAreaOfEffect && def.canUseAoeToGetTargets)
 			{
-				foreach (LocalTargetInfo localTargetInfo in from t in GenRadial.RadialDistinctThingsAround(target.Cell, this.pawn.Map, this.def.EffectRadius, true)
-				where this.verb.targetParams.CanTarget(t)
-				select new LocalTargetInfo(t))
+				foreach (LocalTargetInfo item in from t in GenRadial.RadialDistinctThingsAround(target.Cell, pawn.Map, def.EffectRadius, useCenter: true)
+					where verb.targetParams.CanTarget(t)
+					select new LocalTargetInfo(t))
 				{
-					yield return localTargetInfo;
+					yield return item;
 				}
-				IEnumerator<LocalTargetInfo> enumerator = null;
 			}
 			else
 			{
 				yield return target;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public virtual void QueueCastingJob(LocalTargetInfo target, LocalTargetInfo destination)
 		{
-			if (!this.CanQueueCast || !this.CanApplyOn(target))
+			if (CanQueueCast && CanApplyOn(target))
 			{
-				return;
+				Job job = JobMaker.MakeJob(def.jobDef ?? JobDefOf.CastAbilityOnThing);
+				job.verbToUse = verb;
+				job.targetA = target;
+				job.targetB = destination;
+				pawn.jobs.TryTakeOrderedJob(job);
 			}
-			Job job = JobMaker.MakeJob(this.def.jobDef ?? JobDefOf.CastAbilityOnThing);
-			job.verbToUse = this.verb;
-			job.targetA = target;
-			job.targetB = destination;
-			this.pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
 		}
 
-		
 		public virtual bool GizmoDisabled(out string reason)
 		{
-			if (!this.CanCast)
+			if (!CanCast)
 			{
-				reason = "AbilityOnCooldown".Translate(this.cooldownTicks.ToStringTicksToPeriod(true, false, false, true));
+				reason = "AbilityOnCooldown".Translate(cooldownTicks.ToStringTicksToPeriod(allowSeconds: true, shortForm: false, canUseDecimals: false));
 				return true;
 			}
-			if (!this.CanQueueCast)
+			if (!CanQueueCast)
 			{
 				reason = "AbilityAlreadyQueued".Translate();
 				return true;
 			}
-			if (!this.pawn.Drafted && this.def.disableGizmoWhileUndrafted)
+			if (!pawn.Drafted && def.disableGizmoWhileUndrafted)
 			{
 				reason = "AbilityDisabledUndrafted".Translate();
 				return true;
 			}
-			if (this.pawn.Downed)
+			if (pawn.Downed)
 			{
-				reason = "CommandDisabledUnconscious".TranslateWithBackup("CommandCallRoyalAidUnconscious").Formatted(this.pawn);
+				reason = "CommandDisabledUnconscious".TranslateWithBackup("CommandCallRoyalAidUnconscious").Formatted(pawn);
 				return true;
 			}
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				if (this.comps[i].GizmoDisabled(out reason))
+				if (comps[i].GizmoDisabled(out reason))
 				{
 					return true;
 				}
@@ -260,200 +198,148 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public virtual void AbilityTick()
 		{
-			this.VerbTracker.VerbsTick();
-			if (this.def.warmupMote != null && this.verb.WarmingUp)
+			VerbTracker.VerbsTick();
+			if (def.warmupMote != null && verb.WarmingUp)
 			{
-				if (this.warmupMote == null || this.warmupMote.Destroyed)
+				if (warmupMote == null || warmupMote.Destroyed)
 				{
-					this.warmupMote = MoteMaker.MakeStaticMote(this.pawn.DrawPos + this.def.moteDrawOffset, this.pawn.Map, this.def.warmupMote, 1f);
+					warmupMote = MoteMaker.MakeStaticMote(pawn.DrawPos + def.moteDrawOffset, pawn.Map, def.warmupMote);
 				}
 				else
 				{
-					this.warmupMote.Maintain();
+					warmupMote.Maintain();
 				}
 			}
-			if (this.verb.WarmingUp && !this.CanApplyOn(this.verb.CurrentTarget))
+			if (verb.WarmingUp && !CanApplyOn(verb.CurrentTarget))
 			{
-				Stance_Warmup warmupStance = this.verb.WarmupStance;
-				if (warmupStance != null)
-				{
-					warmupStance.Interrupt();
-				}
-				this.verb.Reset();
+				verb.WarmupStance?.Interrupt();
+				verb.Reset();
 			}
-			if (this.cooldownTicks > 0)
+			if (cooldownTicks > 0)
 			{
-				this.cooldownTicks--;
-				if (this.cooldownTicks == 0 && this.def.sendLetterOnCooldownComplete)
+				cooldownTicks--;
+				if (cooldownTicks == 0 && def.sendLetterOnCooldownComplete)
 				{
-					Find.LetterStack.ReceiveLetter("AbilityReadyLabel".Translate(this.def.LabelCap), "AbilityReadyText".Translate(this.pawn, this.def.label), LetterDefOf.NeutralEvent, new LookTargets(this.pawn), null, null, null, null);
+					Find.LetterStack.ReceiveLetter("AbilityReadyLabel".Translate(def.LabelCap), "AbilityReadyText".Translate(pawn, def.label), LetterDefOf.NeutralEvent, new LookTargets(pawn));
 				}
 			}
 		}
 
-		
 		public void DrawEffectPreviews(LocalTargetInfo target)
 		{
-			for (int i = 0; i < this.EffectComps.Count; i++)
+			for (int i = 0; i < EffectComps.Count; i++)
 			{
-				this.EffectComps[i].DrawEffectPreview(target);
+				EffectComps[i].DrawEffectPreview(target);
 			}
 		}
 
-		
 		public virtual IEnumerable<Command> GetGizmos()
 		{
-			if (this.gizmo == null)
+			if (gizmo == null)
 			{
-				this.gizmo = (Command)Activator.CreateInstance(this.def.gizmoClass, new object[]
-				{
-					this
-				});
+				gizmo = (Command)Activator.CreateInstance(def.gizmoClass, this);
 			}
-			yield return this.gizmo;
-			if (Prefs.DevMode && this.cooldownTicks > 0)
+			yield return gizmo;
+			if (Prefs.DevMode && cooldownTicks > 0)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "Reset cooldown";
+				command_Action.action = delegate
 				{
-					defaultLabel = "Reset cooldown",
-					action = delegate
-					{
-						this.cooldownTicks = 0;
-					}
+					cooldownTicks = 0;
 				};
+				yield return command_Action;
 			}
-			yield break;
 		}
 
-		
 		private void ApplyEffects(IEnumerable<CompAbilityEffect> effects, IEnumerable<LocalTargetInfo> targets, LocalTargetInfo dest)
 		{
 			foreach (LocalTargetInfo target in targets)
 			{
-				this.ApplyEffects(effects, target, dest);
+				ApplyEffects(effects, target, dest);
 			}
-			if (this.HasCooldown)
+			if (HasCooldown)
 			{
-				this.StartCooldown(this.def.cooldownTicksRange.RandomInRange);
+				StartCooldown(def.cooldownTicksRange.RandomInRange);
 			}
 		}
 
-		
 		public void StartCooldown(int ticks)
 		{
-			this.cooldownTicksDuration = ticks;
-			this.cooldownTicks = this.cooldownTicksDuration;
+			cooldownTicksDuration = ticks;
+			cooldownTicks = cooldownTicksDuration;
 		}
 
-		
 		protected virtual void ApplyEffects(IEnumerable<CompAbilityEffect> effects, LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			foreach (CompAbilityEffect compAbilityEffect in effects)
+			foreach (CompAbilityEffect effect in effects)
 			{
-				compAbilityEffect.Apply(target, dest);
+				effect.Apply(target, dest);
 			}
 		}
 
-		
 		public IEnumerable<T> CompsOfType<T>() where T : AbilityComp
 		{
-			if (this.comps == null)
+			if (comps == null)
 			{
 				return null;
 			}
-			return (from c in this.comps
-			where c is T
-			select c).Cast<T>();
+			return comps.Where((AbilityComp c) => c is T).Cast<T>();
 		}
 
-		
 		public T CompOfType<T>() where T : AbilityComp
 		{
-			if (this.comps == null)
+			if (comps == null)
 			{
-				return default(T);
+				return null;
 			}
-			return this.comps.FirstOrDefault((AbilityComp c) => c is T) as T;
+			return comps.FirstOrDefault((AbilityComp c) => c is T) as T;
 		}
 
-		
 		public void Initialize()
 		{
-			if (this.def.comps.Any<AbilityCompProperties>())
+			if (def.comps.Any())
 			{
-				this.comps = new List<AbilityComp>();
-				for (int i = 0; i < this.def.comps.Count; i++)
+				comps = new List<AbilityComp>();
+				for (int i = 0; i < def.comps.Count; i++)
 				{
 					AbilityComp abilityComp = null;
 					try
 					{
-						abilityComp = (AbilityComp)Activator.CreateInstance(this.def.comps[i].compClass);
+						abilityComp = (AbilityComp)Activator.CreateInstance(def.comps[i].compClass);
 						abilityComp.parent = this;
-						this.comps.Add(abilityComp);
-						abilityComp.Initialize(this.def.comps[i]);
+						comps.Add(abilityComp);
+						abilityComp.Initialize(def.comps[i]);
 					}
 					catch (Exception arg)
 					{
-						Log.Error("Could not instantiate or initialize an AbilityComp: " + arg, false);
-						this.comps.Remove(abilityComp);
+						Log.Error("Could not instantiate or initialize an AbilityComp: " + arg);
+						comps.Remove(abilityComp);
 					}
 				}
 			}
-			Verb_CastAbility verb_CastAbility = this.VerbTracker.PrimaryVerb as Verb_CastAbility;
+			Verb_CastAbility verb_CastAbility = VerbTracker.PrimaryVerb as Verb_CastAbility;
 			if (verb_CastAbility != null)
 			{
 				verb_CastAbility.ability = this;
 			}
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Defs.Look<AbilityDef>(ref this.def, "def");
-			if (this.def == null)
+			Scribe_Defs.Look(ref def, "def");
+			if (def != null)
 			{
-				return;
-			}
-			Scribe_Deep.Look<VerbTracker>(ref this.verbTracker, "verbTracker", new object[]
-			{
-				this
-			});
-			Scribe_Values.Look<int>(ref this.cooldownTicks, "cooldownTicks", 0, false);
-			Scribe_Values.Look<int>(ref this.cooldownTicksDuration, "cooldownTicksDuration", 0, false);
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
-			{
-				this.Initialize();
+				Scribe_Deep.Look(ref verbTracker, "verbTracker", this);
+				Scribe_Values.Look(ref cooldownTicks, "cooldownTicks", 0);
+				Scribe_Values.Look(ref cooldownTicksDuration, "cooldownTicksDuration", 0);
+				if (Scribe.mode == LoadSaveMode.PostLoadInit)
+				{
+					Initialize();
+				}
 			}
 		}
-
-		
-		public Pawn pawn;
-
-		
-		public AbilityDef def;
-
-		
-		public List<AbilityComp> comps;
-
-		
-		protected Command gizmo;
-
-		
-		private VerbTracker verbTracker;
-
-		
-		private int cooldownTicks;
-
-		
-		private int cooldownTicksDuration;
-
-		
-		private Mote warmupMote;
-
-		
-		private List<CompAbilityEffect> effectComps;
 	}
 }

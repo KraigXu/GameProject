@@ -264,7 +264,7 @@ namespace Invector.vCharacterController
             Vector2 position = FightingController.Instance.PlayerCamera.WorldToScreenPoint(damage.hitPosition);
             // position = new Vector2(position.x, Screen.height - position.y);
             textRect.anchoredPosition = position;
-            textRect.DOAnchorPosY(position.y + 10, 3);
+            //textRect.DOAnchorPosY(position.y + 10, 3);
         }
     }
 }

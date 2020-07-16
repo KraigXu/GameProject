@@ -1,93 +1,64 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompSpawnerItems : ThingComp
 	{
-		
-		
-		public CompProperties_SpawnerItems Props
-		{
-			get
-			{
-				return (CompProperties_SpawnerItems)this.props;
-			}
-		}
+		private int ticksPassed;
 
-		
-		
-		public bool Active
-		{
-			get
-			{
-				CompCanBeDormant comp = this.parent.GetComp<CompCanBeDormant>();
-				return comp == null || comp.Awake;
-			}
-		}
+		public CompProperties_SpawnerItems Props => (CompProperties_SpawnerItems)props;
 
-		
+		public bool Active => parent.GetComp<CompCanBeDormant>()?.Awake ?? true;
+
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			yield return new Command_Action
+			Command_Action command_Action = new Command_Action();
+			command_Action.defaultLabel = "DEV: Spawn items";
+			command_Action.action = delegate
 			{
-				defaultLabel = "DEV: Spawn items",
-				action = delegate
-				{
-					this.SpawnItems();
-				}
+				SpawnItems();
 			};
-			yield break;
+			yield return command_Action;
 		}
 
-		
 		private void SpawnItems()
 		{
-			ThingDef thingDef;
-			if (this.Props.MatchingItems.TryRandomElement(out thingDef))
+			if (Props.MatchingItems.TryRandomElement(out ThingDef result))
 			{
-				int stackCount = Mathf.CeilToInt(this.Props.approxMarketValuePerDay / thingDef.BaseMarketValue);
-				Thing thing = ThingMaker.MakeThing(thingDef, null);
+				int stackCount = Mathf.CeilToInt(Props.approxMarketValuePerDay / result.BaseMarketValue);
+				Thing thing = ThingMaker.MakeThing(result);
 				thing.stackCount = stackCount;
-				GenPlace.TryPlaceThing(thing, this.parent.Position, this.parent.Map, ThingPlaceMode.Near, null, null, default(Rot4));
+				GenPlace.TryPlaceThing(thing, parent.Position, parent.Map, ThingPlaceMode.Near);
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
-			if (!this.Active)
+			if (Active)
 			{
-				return;
-			}
-			this.ticksPassed += 250;
-			if (this.ticksPassed >= this.Props.spawnInterval)
-			{
-				this.SpawnItems();
-				this.ticksPassed -= this.Props.spawnInterval;
+				ticksPassed += 250;
+				if (ticksPassed >= Props.spawnInterval)
+				{
+					SpawnItems();
+					ticksPassed -= Props.spawnInterval;
+				}
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ticksPassed, "ticksPassed", 0, false);
+			Scribe_Values.Look(ref ticksPassed, "ticksPassed", 0);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.Active)
+			if (Active)
 			{
-				return "NextSpawnedResourceIn".Translate() + ": " + (this.Props.spawnInterval - this.ticksPassed).ToStringTicksToPeriod(true, false, true, true);
+				return "NextSpawnedResourceIn".Translate() + ": " + (Props.spawnInterval - ticksPassed).ToStringTicksToPeriod();
 			}
 			return null;
 		}
-
-		
-		private int ticksPassed;
 	}
 }

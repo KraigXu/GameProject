@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,17 +6,23 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_ResourcePod : ThingSetMaker
 	{
-		
+		private const int MaxStacks = 7;
+
+		private const float MaxMarketValue = 40f;
+
+		private const float MinMoney = 150f;
+
+		private const float MaxMoney = 600f;
+
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			ThingDef thingDef = ThingSetMaker_ResourcePod.RandomPodContentsDef(false);
+			ThingDef thingDef = RandomPodContentsDef();
 			float num = Rand.Range(150f, 600f);
 			do
 			{
-				Thing thing = ThingMaker.MakeThing(thingDef, null);
+				Thing thing = ThingMaker.MakeThing(thingDef);
 				int num2 = Rand.Range(20, 40);
 				if (num2 > thing.def.stackLimit)
 				{
@@ -35,77 +40,52 @@ namespace RimWorld
 				outThings.Add(thing);
 				num -= (float)num2 * thingDef.BaseMarketValue;
 			}
-			while (outThings.Count < 7 && num > thingDef.BaseMarketValue);
+			while (outThings.Count < 7 && !(num <= thingDef.BaseMarketValue));
 		}
 
-		
 		private static IEnumerable<ThingDef> PossiblePodContentsDefs()
 		{
-			return from d in DefDatabase<ThingDef>.AllDefs
-			where d.category == ThingCategory.Item && d.tradeability.TraderCanSell() && d.equipmentType == EquipmentType.None && d.BaseMarketValue >= 1f && d.BaseMarketValue < 40f && !d.HasComp(typeof(CompHatcher))
-			select d;
+			return DefDatabase<ThingDef>.AllDefs.Where((ThingDef d) => d.category == ThingCategory.Item && d.tradeability.TraderCanSell() && d.equipmentType == EquipmentType.None && d.BaseMarketValue >= 1f && d.BaseMarketValue < 40f && !d.HasComp(typeof(CompHatcher)));
 		}
 
-		
 		public static ThingDef RandomPodContentsDef(bool mustBeResource = false)
 		{
-			IEnumerable<ThingDef> source = ThingSetMaker_ResourcePod.PossiblePodContentsDefs();
+			IEnumerable<ThingDef> source = PossiblePodContentsDefs();
 			if (mustBeResource)
 			{
-				source = from x in source
-				where x.stackLimit > 1
-				select x;
+				source = source.Where((ThingDef x) => x.stackLimit > 1);
 			}
-			int numMeats = (from x in source
-			where x.IsMeat
-			select x).Count<ThingDef>();
-			int numLeathers = (from x in source
-			where x.IsLeather
-			select x).Count<ThingDef>();
+			int numMeats = source.Where((ThingDef x) => x.IsMeat).Count();
+			int numLeathers = source.Where((ThingDef x) => x.IsLeather).Count();
 			return source.RandomElementByWeight((ThingDef d) => ThingSetMakerUtility.AdjustedBigCategoriesSelectionWeight(d, numMeats, numLeathers));
 		}
 
-		
 		[DebugOutput("Incidents", false)]
 		private static void PodContentsPossibleDefs()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("ThingDefs that can go in the resource pod crash incident.");
-			foreach (ThingDef thingDef in ThingSetMaker_ResourcePod.PossiblePodContentsDefs())
+			foreach (ThingDef item in PossiblePodContentsDefs())
 			{
-				stringBuilder.AppendLine(thingDef.defName);
+				stringBuilder.AppendLine(item.defName);
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
 
-		
 		[DebugOutput("Incidents", false)]
 		private static void PodContentsTest()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			for (int i = 0; i < 100; i++)
 			{
-				stringBuilder.AppendLine(ThingSetMaker_ResourcePod.RandomPodContentsDef(false).LabelCap);
+				stringBuilder.AppendLine(RandomPodContentsDef().LabelCap);
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
-			return ThingSetMaker_ResourcePod.PossiblePodContentsDefs();
+			return PossiblePodContentsDefs();
 		}
-
-		
-		private const int MaxStacks = 7;
-
-		
-		private const float MaxMarketValue = 40f;
-
-		
-		private const float MinMoney = 150f;
-
-		
-		private const float MaxMoney = 600f;
 	}
 }

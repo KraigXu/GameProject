@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class RestraintsUtility
 	{
-		
 		public static bool InRestraints(Pawn pawn)
 		{
 			if (!pawn.Spawned)
@@ -19,13 +16,24 @@ namespace RimWorld
 				return false;
 			}
 			Lord lord = pawn.GetLord();
-			return (lord == null || lord.LordJob == null || !lord.LordJob.NeverInRestraints) && (pawn.guest == null || !pawn.guest.Released);
+			if (lord != null && lord.LordJob != null && lord.LordJob.NeverInRestraints)
+			{
+				return false;
+			}
+			if (pawn.guest != null && pawn.guest.Released)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool ShouldShowRestraintsInfo(Pawn pawn)
 		{
-			return pawn.IsPrisonerOfColony && RestraintsUtility.InRestraints(pawn);
+			if (pawn.IsPrisonerOfColony)
+			{
+				return InRestraints(pawn);
+			}
+			return false;
 		}
 	}
 }

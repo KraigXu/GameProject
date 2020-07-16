@@ -1,47 +1,27 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_AreaBuildRoof : Designator_Area
 	{
-		
-		
-		public override int DraggableDimensions
-		{
-			get
-			{
-				return 2;
-			}
-		}
+		public override int DraggableDimensions => 2;
 
-		
-		
-		public override bool DragDrawMeasurements
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool DragDrawMeasurements => true;
 
-		
 		public Designator_AreaBuildRoof()
 		{
-			this.defaultLabel = "DesignatorAreaBuildRoofExpand".Translate();
-			this.defaultDesc = "DesignatorAreaBuildRoofExpandDesc".Translate();
-			this.icon = ContentFinder<Texture2D>.Get("UI/Designators/BuildRoofArea", true);
-			this.hotKey = KeyBindingDefOf.Misc9;
-			this.soundDragSustain = SoundDefOf.Designate_DragAreaAdd;
-			this.soundDragChanged = null;
-			this.soundSucceeded = SoundDefOf.Designate_ZoneAdd;
-			this.useMouseIcon = true;
-			this.tutorTag = "AreaBuildRoofExpand";
+			defaultLabel = "DesignatorAreaBuildRoofExpand".Translate();
+			defaultDesc = "DesignatorAreaBuildRoofExpandDesc".Translate();
+			icon = ContentFinder<Texture2D>.Get("UI/Designators/BuildRoofArea");
+			hotKey = KeyBindingDefOf.Misc9;
+			soundDragSustain = SoundDefOf.Designate_DragAreaAdd;
+			soundDragChanged = null;
+			soundSucceeded = SoundDefOf.Designate_ZoneAdd;
+			useMouseIcon = true;
+			tutorTag = "AreaBuildRoofExpand";
 		}
 
-		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -55,28 +35,25 @@ namespace RimWorld
 			return !base.Map.areaManager.BuildRoof[c];
 		}
 
-		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
 			base.Map.areaManager.BuildRoof[c] = true;
 			base.Map.areaManager.NoRoof[c] = false;
 		}
 
-		
 		public override bool ShowWarningForCell(IntVec3 c)
 		{
-			foreach (Thing thing in base.Map.thingGrid.ThingsAt(c))
+			foreach (Thing item in base.Map.thingGrid.ThingsAt(c))
 			{
-				if (thing.def.plant != null && thing.def.plant.interferesWithRoof)
+				if (item.def.plant != null && item.def.plant.interferesWithRoof)
 				{
-					Messages.Message("MessageRoofIncompatibleWithPlant".Translate(thing), MessageTypeDefOf.CautionInput, false);
+					Messages.Message("MessageRoofIncompatibleWithPlant".Translate(item), MessageTypeDefOf.CautionInput, historical: false);
 					return true;
 				}
 			}
 			return false;
 		}
 
-		
 		public override void SelectedUpdate()
 		{
 			GenUI.RenderMouseoverBracket();

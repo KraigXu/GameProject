@@ -1,79 +1,74 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_FoodRestrictionTracker : IExposable
 	{
-		
-		
-		
+		public Pawn pawn;
+
+		private FoodRestriction curRestriction;
+
 		public FoodRestriction CurrentFoodRestriction
 		{
 			get
 			{
-				if (this.curRestriction == null)
+				if (curRestriction == null)
 				{
-					this.curRestriction = Current.Game.foodRestrictionDatabase.DefaultFoodRestriction();
+					curRestriction = Current.Game.foodRestrictionDatabase.DefaultFoodRestriction();
 				}
-				return this.curRestriction;
+				return curRestriction;
 			}
 			set
 			{
-				this.curRestriction = value;
+				curRestriction = value;
 			}
 		}
 
-		
-		
 		public bool Configurable
 		{
 			get
 			{
-				return this.pawn.RaceProps.Humanlike && !this.pawn.Destroyed && (this.pawn.Faction == Faction.OfPlayer || this.pawn.HostFaction == Faction.OfPlayer);
+				if (pawn.RaceProps.Humanlike && !pawn.Destroyed)
+				{
+					if (pawn.Faction != Faction.OfPlayer)
+					{
+						return pawn.HostFaction == Faction.OfPlayer;
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public Pawn_FoodRestrictionTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public Pawn_FoodRestrictionTracker()
 		{
 		}
 
-		
 		public FoodRestriction GetCurrentRespectedRestriction(Pawn getter = null)
 		{
-			if (!this.Configurable)
+			if (!Configurable)
 			{
 				return null;
 			}
-			if (this.pawn.Faction != Faction.OfPlayer && (getter == null || getter.Faction != Faction.OfPlayer))
+			if (pawn.Faction != Faction.OfPlayer && (getter == null || getter.Faction != Faction.OfPlayer))
 			{
 				return null;
 			}
-			if (this.pawn.InMentalState)
+			if (pawn.InMentalState)
 			{
 				return null;
 			}
-			return this.CurrentFoodRestriction;
+			return CurrentFoodRestriction;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_References.Look<FoodRestriction>(ref this.curRestriction, "curRestriction", false);
+			Scribe_References.Look(ref curRestriction, "curRestriction");
 		}
-
-		
-		public Pawn pawn;
-
-		
-		private FoodRestriction curRestriction;
 	}
 }

@@ -1,22 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_ZoneAddStockpile_Dumping : Designator_ZoneAddStockpile
 	{
-		
 		public Designator_ZoneAddStockpile_Dumping()
 		{
-			this.preset = StorageSettingsPreset.DumpingStockpile;
-			this.defaultLabel = this.preset.PresetName();
-			this.defaultDesc = "DesignatorZoneCreateStorageDumpingDesc".Translate();
-			this.icon = ContentFinder<Texture2D>.Get("UI/Designators/ZoneCreate_Stockpile", true);
+			preset = StorageSettingsPreset.DumpingStockpile;
+			defaultLabel = preset.PresetName();
+			defaultDesc = "DesignatorZoneCreateStorageDumpingDesc".Translate();
+			icon = ContentFinder<Texture2D>.Get("UI/Designators/ZoneCreate_Stockpile");
 		}
 
-		
 		protected override void FinalizeDesignationSucceeded()
 		{
 			base.FinalizeDesignationSucceeded();

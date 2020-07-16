@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,57 +5,55 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class WildAnimalSpawner
 	{
-		
-		
+		private Map map;
+
+		private const int AnimalCheckInterval = 1213;
+
+		private const float BaseAnimalSpawnChancePerInterval = 0.0269555561f;
+
 		private float DesiredAnimalDensity
 		{
 			get
 			{
-				float num = this.map.Biome.animalDensity;
+				float animalDensity = map.Biome.animalDensity;
+				float num = 0f;
 				float num2 = 0f;
-				float num3 = 0f;
-				foreach (PawnKindDef pawnKindDef in this.map.Biome.AllWildAnimals)
+				foreach (PawnKindDef allWildAnimal in map.Biome.AllWildAnimals)
 				{
-					float num4 = this.map.Biome.CommonalityOfAnimal(pawnKindDef);
-					num3 += num4;
-					if (this.map.mapTemperature.SeasonAcceptableFor(pawnKindDef.race))
+					float num3 = map.Biome.CommonalityOfAnimal(allWildAnimal);
+					num2 += num3;
+					if (map.mapTemperature.SeasonAcceptableFor(allWildAnimal.race))
 					{
-						num2 += num4;
+						num += num3;
 					}
 				}
-				num *= num2 / num3;
-				num *= this.map.gameConditionManager.AggregateAnimalDensityFactor(this.map);
-				return num;
+				animalDensity *= num / num2;
+				return animalDensity * map.gameConditionManager.AggregateAnimalDensityFactor(map);
 			}
 		}
 
-		
-		
 		private float DesiredTotalAnimalWeight
 		{
 			get
 			{
-				float desiredAnimalDensity = this.DesiredAnimalDensity;
+				float desiredAnimalDensity = DesiredAnimalDensity;
 				if (desiredAnimalDensity == 0f)
 				{
 					return 0f;
 				}
 				float num = 10000f / desiredAnimalDensity;
-				return (float)this.map.Area / num;
+				return (float)map.Area / num;
 			}
 		}
 
-		
-		
 		private float CurrentTotalAnimalWeight
 		{
 			get
 			{
 				float num = 0f;
-				List<Pawn> allPawnsSpawned = this.map.mapPawns.AllPawnsSpawned;
+				List<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
 				for (int i = 0; i < allPawnsSpawned.Count; i++)
 				{
 					if (allPawnsSpawned[i].Faction == null)
@@ -68,78 +65,46 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		public bool AnimalEcosystemFull
-		{
-			get
-			{
-				return this.CurrentTotalAnimalWeight >= this.DesiredTotalAnimalWeight;
-			}
-		}
+		public bool AnimalEcosystemFull => CurrentTotalAnimalWeight >= DesiredTotalAnimalWeight;
 
-		
 		public WildAnimalSpawner(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public void WildAnimalSpawnerTick()
 		{
-			if (Find.TickManager.TicksGame % 1213 == 0 && !this.AnimalEcosystemFull && Rand.Chance(0.0269555561f * this.DesiredAnimalDensity))
+			if (Find.TickManager.TicksGame % 1213 == 0 && !AnimalEcosystemFull && Rand.Chance(0.0269555561f * DesiredAnimalDensity))
 			{
-				TraverseParms traverseParms = TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false);
-				IntVec3 loc;
-				if (RCellFinder.TryFindRandomPawnEntryCell(out loc, this.map, CellFinder.EdgeRoadChance_Animal, true, (IntVec3 cell) => this.map.reachability.CanReachMapEdge(cell, traverseParms)))
+				TraverseParms traverseParms = TraverseParms.For(TraverseMode.NoPassClosedDoors);
+				if (RCellFinder.TryFindRandomPawnEntryCell(out IntVec3 result, map, CellFinder.EdgeRoadChance_Animal, allowFogged: true, (IntVec3 cell) => map.reachability.CanReachMapEdge(cell, traverseParms)))
 				{
-					this.SpawnRandomWildAnimalAt(loc);
+					SpawnRandomWildAnimalAt(result);
 				}
 			}
 		}
 
-		
 		public bool SpawnRandomWildAnimalAt(IntVec3 loc)
 		{
-			PawnKindDef pawnKindDef = (from a in this.map.Biome.AllWildAnimals
-			where this.map.mapTemperature.SeasonAcceptableFor(a.race)
-			select a).RandomElementByWeight((PawnKindDef def) => this.map.Biome.CommonalityOfAnimal(def) / def.wildGroupSize.Average);
+			PawnKindDef pawnKindDef = map.Biome.AllWildAnimals.Where((PawnKindDef a) => map.mapTemperature.SeasonAcceptableFor(a.race)).RandomElementByWeight((PawnKindDef def) => map.Biome.CommonalityOfAnimal(def) / def.wildGroupSize.Average);
 			if (pawnKindDef == null)
 			{
-				Log.Error("No spawnable animals right now.", false);
+				Log.Error("No spawnable animals right now.");
 				return false;
 			}
 			int randomInRange = pawnKindDef.wildGroupSize.RandomInRange;
-			int radius = Mathf.CeilToInt(Mathf.Sqrt((float)pawnKindDef.wildGroupSize.max));
+			int radius = Mathf.CeilToInt(Mathf.Sqrt(pawnKindDef.wildGroupSize.max));
 			for (int i = 0; i < randomInRange; i++)
 			{
-				IntVec3 loc2 = CellFinder.RandomClosewalkCellNear(loc, this.map, radius, null);
-				GenSpawn.Spawn(PawnGenerator.GeneratePawn(pawnKindDef, null), loc2, this.map, WipeMode.Vanish);
+				IntVec3 loc2 = CellFinder.RandomClosewalkCellNear(loc, map, radius);
+				GenSpawn.Spawn(PawnGenerator.GeneratePawn(pawnKindDef), loc2, map);
 			}
 			return true;
 		}
 
-		
 		public string DebugString()
 		{
-			return string.Concat(new object[]
-			{
-				"DesiredTotalAnimalWeight: ",
-				this.DesiredTotalAnimalWeight,
-				"\nCurrentTotalAnimalWeight: ",
-				this.CurrentTotalAnimalWeight,
-				"\nDesiredAnimalDensity: ",
-				this.DesiredAnimalDensity
-			});
+			return "DesiredTotalAnimalWeight: " + DesiredTotalAnimalWeight + "\nCurrentTotalAnimalWeight: " + CurrentTotalAnimalWeight + "\nDesiredAnimalDensity: " + DesiredAnimalDensity;
 		}
-
-		
-		private Map map;
-
-		
-		private const int AnimalCheckInterval = 1213;
-
-		
-		private const float BaseAnimalSpawnChancePerInterval = 0.0269555561f;
 	}
 }

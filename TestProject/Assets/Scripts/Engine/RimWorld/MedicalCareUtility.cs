@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,25 +6,30 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class MedicalCareUtility
 	{
-		
+		private static Texture2D[] careTextures;
+
+		public const float CareSetterHeight = 28f;
+
+		public const float CareSetterWidth = 140f;
+
+		private static bool medicalCarePainting;
+
 		public static void Reset()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
 			{
-				MedicalCareUtility.careTextures = new Texture2D[5];
-				MedicalCareUtility.careTextures[0] = ContentFinder<Texture2D>.Get("UI/Icons/Medical/NoCare", true);
-				MedicalCareUtility.careTextures[1] = ContentFinder<Texture2D>.Get("UI/Icons/Medical/NoMeds", true);
-				MedicalCareUtility.careTextures[2] = ThingDefOf.MedicineHerbal.uiIcon;
-				MedicalCareUtility.careTextures[3] = ThingDefOf.MedicineIndustrial.uiIcon;
-				MedicalCareUtility.careTextures[4] = ThingDefOf.MedicineUltratech.uiIcon;
+				careTextures = new Texture2D[5];
+				careTextures[0] = ContentFinder<Texture2D>.Get("UI/Icons/Medical/NoCare");
+				careTextures[1] = ContentFinder<Texture2D>.Get("UI/Icons/Medical/NoMeds");
+				careTextures[2] = ThingDefOf.MedicineHerbal.uiIcon;
+				careTextures[3] = ThingDefOf.MedicineIndustrial.uiIcon;
+				careTextures[4] = ThingDefOf.MedicineUltratech.uiIcon;
 			});
 		}
 
-		
 		public static void MedicalCareSetter(Rect rect, ref MedicalCareCategory medCare)
 		{
 			Rect rect2 = new Rect(rect.x, rect.y, rect.width / 5f, rect.height);
@@ -33,16 +38,16 @@ namespace RimWorld
 				MedicalCareCategory mc = (MedicalCareCategory)i;
 				Widgets.DrawHighlightIfMouseover(rect2);
 				MouseoverSounds.DoRegion(rect2);
-				GUI.DrawTexture(rect2, MedicalCareUtility.careTextures[i]);
-				Widgets.DraggableResult draggableResult = Widgets.ButtonInvisibleDraggable(rect2, false);
+				GUI.DrawTexture(rect2, careTextures[i]);
+				Widgets.DraggableResult draggableResult = Widgets.ButtonInvisibleDraggable(rect2);
 				if (draggableResult == Widgets.DraggableResult.Dragged)
 				{
-					MedicalCareUtility.medicalCarePainting = true;
+					medicalCarePainting = true;
 				}
-				if ((MedicalCareUtility.medicalCarePainting && Mouse.IsOver(rect2) && medCare != mc) || draggableResult.AnyPressed())
+				if ((medicalCarePainting && Mouse.IsOver(rect2) && medCare != mc) || draggableResult.AnyPressed())
 				{
 					medCare = mc;
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
 				}
 				if (medCare == mc)
 				{
@@ -56,17 +61,15 @@ namespace RimWorld
 			}
 			if (!Input.GetMouseButton(0))
 			{
-				MedicalCareUtility.medicalCarePainting = false;
+				medicalCarePainting = false;
 			}
 		}
 
-		
 		public static string GetLabel(this MedicalCareCategory cat)
 		{
 			return ("MedicalCareCategory_" + cat).Translate();
 		}
 
-		
 		public static bool AllowsMedicine(this MedicalCareCategory cat, ThingDef meds)
 		{
 			switch (cat)
@@ -76,9 +79,9 @@ namespace RimWorld
 			case MedicalCareCategory.NoMeds:
 				return false;
 			case MedicalCareCategory.HerbalOrWorse:
-				return meds.GetStatValueAbstract(StatDefOf.MedicalPotency, null) <= ThingDefOf.MedicineHerbal.GetStatValueAbstract(StatDefOf.MedicalPotency, null);
+				return meds.GetStatValueAbstract(StatDefOf.MedicalPotency) <= ThingDefOf.MedicineHerbal.GetStatValueAbstract(StatDefOf.MedicalPotency);
 			case MedicalCareCategory.NormalOrWorse:
-				return meds.GetStatValueAbstract(StatDefOf.MedicalPotency, null) <= ThingDefOf.MedicineIndustrial.GetStatValueAbstract(StatDefOf.MedicalPotency, null);
+				return meds.GetStatValueAbstract(StatDefOf.MedicalPotency) <= ThingDefOf.MedicineIndustrial.GetStatValueAbstract(StatDefOf.MedicalPotency);
 			case MedicalCareCategory.Best:
 				return true;
 			default:
@@ -86,23 +89,19 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void MedicalCareSelectButton(Rect rect, Pawn pawn)
 		{
-			Widgets.Dropdown<Pawn, MedicalCareCategory>(rect, pawn, new Func<Pawn, MedicalCareCategory>(MedicalCareUtility.MedicalCareSelectButton_GetMedicalCare), new Func<Pawn, IEnumerable<Widgets.DropdownMenuElement<MedicalCareCategory>>>(MedicalCareUtility.MedicalCareSelectButton_GenerateMenu), null, MedicalCareUtility.careTextures[(int)pawn.playerSettings.medCare], null, null, null, true);
+			Widgets.Dropdown(rect, pawn, MedicalCareSelectButton_GetMedicalCare, MedicalCareSelectButton_GenerateMenu, null, careTextures[(uint)pawn.playerSettings.medCare], null, null, null, paintable: true);
 		}
 
-		
 		private static MedicalCareCategory MedicalCareSelectButton_GetMedicalCare(Pawn pawn)
 		{
 			return pawn.playerSettings.medCare;
 		}
 
-		
 		private static IEnumerable<Widgets.DropdownMenuElement<MedicalCareCategory>> MedicalCareSelectButton_GenerateMenu(Pawn p)
 		{
-			int num;
-			for (int i = 0; i < 5; i = num + 1)
+			for (int i = 0; i < 5; i++)
 			{
 				MedicalCareCategory mc = (MedicalCareCategory)i;
 				yield return new Widgets.DropdownMenuElement<MedicalCareCategory>
@@ -110,24 +109,10 @@ namespace RimWorld
 					option = new FloatMenuOption(mc.GetLabel(), delegate
 					{
 						p.playerSettings.medCare = mc;
-					}, MenuOptionPriority.Default, null, null, 0f, null, null),
+					}),
 					payload = mc
 				};
-				num = i;
 			}
-			yield break;
 		}
-
-		
-		private static Texture2D[] careTextures;
-
-		
-		public const float CareSetterHeight = 28f;
-
-		
-		public const float CareSetterWidth = 140f;
-
-		
-		private static bool medicalCarePainting;
 	}
 }

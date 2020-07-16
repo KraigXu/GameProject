@@ -1,57 +1,46 @@
-﻿using System;
+using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class InspirationHandler : IExposable
 	{
-		
-		
-		public bool Inspired
-		{
-			get
-			{
-				return this.curState != null;
-			}
-		}
+		public Pawn pawn;
 
-		
-		
-		public Inspiration CurState
-		{
-			get
-			{
-				return this.curState;
-			}
-		}
+		private Inspiration curState;
 
-		
-		
+		private const int CheckStartInspirationIntervalTicks = 100;
+
+		private const float MinMood = 0.5f;
+
+		private const float StartInspirationMTBDaysAtMaxMood = 10f;
+
+		public bool Inspired => curState != null;
+
+		public Inspiration CurState => curState;
+
 		public InspirationDef CurStateDef
 		{
 			get
 			{
-				if (this.curState == null)
+				if (curState == null)
 				{
 					return null;
 				}
-				return this.curState.def;
+				return curState.def;
 			}
 		}
 
-		
-		
 		private float StartInspirationMTBDays
 		{
 			get
 			{
-				if (this.pawn.needs.mood == null)
+				if (pawn.needs.mood == null)
 				{
 					return -1f;
 				}
-				float curLevel = this.pawn.needs.mood.CurLevel;
+				float curLevel = pawn.needs.mood.CurLevel;
 				if (curLevel < 0.5f)
 				{
 					return -1f;
@@ -60,135 +49,103 @@ namespace RimWorld
 			}
 		}
 
-		
 		public InspirationHandler(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<Inspiration>(ref this.curState, "curState", Array.Empty<object>());
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.curState != null)
+			Scribe_Deep.Look(ref curState, "curState");
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && curState != null)
 			{
-				this.curState.pawn = this.pawn;
+				curState.pawn = pawn;
 			}
 		}
 
-		
 		public void InspirationHandlerTick()
 		{
-			if (this.curState != null)
+			if (curState != null)
 			{
-				this.curState.InspirationTick();
+				curState.InspirationTick();
 			}
-			if (this.pawn.IsHashIntervalTick(100))
+			if (pawn.IsHashIntervalTick(100))
 			{
-				this.CheckStartRandomInspiration();
+				CheckStartRandomInspiration();
 			}
 		}
 
-		
 		[Obsolete("Will be removed in a future game release and replaced with TryStartInspiration_NewTemp.")]
 		public bool TryStartInspiration(InspirationDef def)
 		{
-			return this.TryStartInspiration_NewTemp(def, null);
+			return TryStartInspiration_NewTemp(def);
 		}
 
-		
 		public bool TryStartInspiration_NewTemp(InspirationDef def, string reason = null)
 		{
-			if (this.Inspired)
+			if (Inspired)
 			{
 				return false;
 			}
-			if (!def.Worker.InspirationCanOccur(this.pawn))
+			if (!def.Worker.InspirationCanOccur(pawn))
 			{
 				return false;
 			}
-			this.curState = (Inspiration)Activator.CreateInstance(def.inspirationClass);
-			this.curState.def = def;
-			this.curState.pawn = this.pawn;
-			this.curState.reason = reason;
-			this.curState.PostStart();
+			curState = (Inspiration)Activator.CreateInstance(def.inspirationClass);
+			curState.def = def;
+			curState.pawn = pawn;
+			curState.reason = reason;
+			curState.PostStart();
 			return true;
 		}
 
-		
 		public void EndInspiration(Inspiration inspiration)
 		{
-			if (inspiration == null)
+			if (inspiration != null)
 			{
-				return;
+				if (curState != inspiration)
+				{
+					Log.Error("Tried to end inspiration " + inspiration.ToStringSafe() + " but current inspiration is " + curState.ToStringSafe());
+					return;
+				}
+				curState = null;
+				inspiration.PostEnd();
 			}
-			if (this.curState != inspiration)
-			{
-				Log.Error("Tried to end inspiration " + inspiration.ToStringSafe<Inspiration>() + " but current inspiration is " + this.curState.ToStringSafe<Inspiration>(), false);
-				return;
-			}
-			this.curState = null;
-			inspiration.PostEnd();
 		}
 
-		
 		public void EndInspiration(InspirationDef inspirationDef)
 		{
-			if (this.curState != null && this.curState.def == inspirationDef)
+			if (curState != null && curState.def == inspirationDef)
 			{
-				this.EndInspiration(this.curState);
+				EndInspiration(curState);
 			}
 		}
 
-		
 		public void Reset()
 		{
-			this.curState = null;
+			curState = null;
 		}
 
-		
 		private void CheckStartRandomInspiration()
 		{
-			if (this.Inspired)
+			if (Inspired)
 			{
 				return;
 			}
-			float startInspirationMTBDays = this.StartInspirationMTBDays;
-			if (startInspirationMTBDays < 0f)
+			float startInspirationMTBDays = StartInspirationMTBDays;
+			if (!(startInspirationMTBDays < 0f) && Rand.MTBEventOccurs(startInspirationMTBDays, 60000f, 100f))
 			{
-				return;
-			}
-			if (Rand.MTBEventOccurs(startInspirationMTBDays, 60000f, 100f))
-			{
-				InspirationDef randomAvailableInspirationDef = this.GetRandomAvailableInspirationDef();
+				InspirationDef randomAvailableInspirationDef = GetRandomAvailableInspirationDef();
 				if (randomAvailableInspirationDef != null)
 				{
-					this.TryStartInspiration_NewTemp(randomAvailableInspirationDef, "LetterInspirationBeginThanksToHighMoodPart".Translate());
+					TryStartInspiration_NewTemp(randomAvailableInspirationDef, "LetterInspirationBeginThanksToHighMoodPart".Translate());
 				}
 			}
 		}
 
-		
 		private InspirationDef GetRandomAvailableInspirationDef()
 		{
-			return (from x in DefDatabase<InspirationDef>.AllDefsListForReading
-			where x.Worker.InspirationCanOccur(this.pawn)
-			select x).RandomElementByWeightWithFallback((InspirationDef x) => x.Worker.CommonalityFor(this.pawn), null);
+			return DefDatabase<InspirationDef>.AllDefsListForReading.Where((InspirationDef x) => x.Worker.InspirationCanOccur(pawn)).RandomElementByWeightWithFallback((InspirationDef x) => x.Worker.CommonalityFor(pawn));
 		}
-
-		
-		public Pawn pawn;
-
-		
-		private Inspiration curState;
-
-		
-		private const int CheckStartInspirationIntervalTicks = 100;
-
-		
-		private const float MinMood = 0.5f;
-
-		
-		private const float StartInspirationMTBDaysAtMaxMood = 10f;
 	}
 }

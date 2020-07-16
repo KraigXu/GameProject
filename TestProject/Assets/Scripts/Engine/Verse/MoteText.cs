@@ -1,55 +1,37 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class MoteText : MoteThrown
 	{
-		
-		
+		public string text;
+
+		public Color textColor = Color.white;
+
+		public float overrideTimeBeforeStartFadeout = -1f;
+
 		protected float TimeBeforeStartFadeout
 		{
 			get
 			{
-				if (this.overrideTimeBeforeStartFadeout < 0f)
+				if (!(overrideTimeBeforeStartFadeout >= 0f))
 				{
 					return base.SolidTime;
 				}
-				return this.overrideTimeBeforeStartFadeout;
+				return overrideTimeBeforeStartFadeout;
 			}
 		}
 
-		
-		
-		protected override bool EndOfLife
-		{
-			get
-			{
-				return base.AgeSecs >= this.TimeBeforeStartFadeout + this.def.mote.fadeOutTime;
-			}
-		}
+		protected override bool EndOfLife => base.AgeSecs >= TimeBeforeStartFadeout + def.mote.fadeOutTime;
 
-		
 		public override void Draw()
 		{
 		}
 
-		
 		public override void DrawGUIOverlay()
 		{
-			float a = 1f - (base.AgeSecs - this.TimeBeforeStartFadeout) / this.def.mote.fadeOutTime;
-			Color color = new Color(this.textColor.r, this.textColor.g, this.textColor.b, a);
-			GenMapUI.DrawText(new Vector2(this.exactPosition.x, this.exactPosition.z), this.text, color);
+			float a = 1f - (base.AgeSecs - TimeBeforeStartFadeout) / def.mote.fadeOutTime;
+			GenMapUI.DrawText(textColor: new Color(textColor.r, textColor.g, textColor.b, a), worldPos: new Vector2(exactPosition.x, exactPosition.z), text: text);
 		}
-
-		
-		public string text;
-
-		
-		public Color textColor = Color.white;
-
-		
-		public float overrideTimeBeforeStartFadeout = -1f;
 	}
 }

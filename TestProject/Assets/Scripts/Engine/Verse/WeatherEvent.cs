@@ -1,27 +1,19 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class WeatherEvent
 	{
-		
-		
-		public abstract bool Expired { get; }
+		protected Map map;
 
-		
-		
-		public bool CurrentlyAffectsSky
+		public abstract bool Expired
 		{
-			get
-			{
-				return this.SkyTargetLerpFactor > 0f;
-			}
+			get;
 		}
 
-		
-		
+		public bool CurrentlyAffectsSky => SkyTargetLerpFactor > 0f;
+
 		public virtual SkyTarget SkyTarget
 		{
 			get
@@ -30,44 +22,21 @@ namespace Verse
 			}
 		}
 
-		
-		
-		public virtual float SkyTargetLerpFactor
-		{
-			get
-			{
-				return -1f;
-			}
-		}
+		public virtual float SkyTargetLerpFactor => -1f;
 
-		
-		
-		public virtual Vector2? OverrideShadowVector
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public virtual Vector2? OverrideShadowVector => null;
 
-		
 		public WeatherEvent(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public abstract void FireEvent();
 
-		
 		public abstract void WeatherEventTick();
 
-		
 		public virtual void WeatherEventDraw()
 		{
 		}
-
-		
-		protected Map map;
 	}
 }

@@ -1,191 +1,156 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class MainButtonDef : Def
 	{
-		
-		
+		public Type workerClass = typeof(MainButtonWorker_ToggleTab);
+
+		public Type tabWindowClass;
+
+		public bool buttonVisible = true;
+
+		public int order;
+
+		public KeyCode defaultHotKey;
+
+		public bool canBeTutorDenied = true;
+
+		public bool validWithoutMap;
+
+		public bool minimized;
+
+		public string iconPath;
+
+		[Unsaved(false)]
+		public KeyBindingDef hotKey;
+
+		[Unsaved(false)]
+		public string cachedTutorTag;
+
+		[Unsaved(false)]
+		public string cachedHighlightTagClosed;
+
+		[Unsaved(false)]
+		private MainButtonWorker workerInt;
+
+		[Unsaved(false)]
+		private MainTabWindow tabWindowInt;
+
+		[Unsaved(false)]
+		private string cachedShortenedLabelCap;
+
+		[Unsaved(false)]
+		private float cachedLabelCapWidth = -1f;
+
+		[Unsaved(false)]
+		private float cachedShortenedLabelCapWidth = -1f;
+
+		[Unsaved(false)]
+		private Texture2D icon;
+
+		public const int ButtonHeight = 35;
+
 		public MainButtonWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (MainButtonWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.def = this;
+					workerInt = (MainButtonWorker)Activator.CreateInstance(workerClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
-		
 		public MainTabWindow TabWindow
 		{
 			get
 			{
-				if (this.tabWindowInt == null && this.tabWindowClass != null)
+				if (tabWindowInt == null && tabWindowClass != null)
 				{
-					this.tabWindowInt = (MainTabWindow)Activator.CreateInstance(this.tabWindowClass);
-					this.tabWindowInt.def = this;
+					tabWindowInt = (MainTabWindow)Activator.CreateInstance(tabWindowClass);
+					tabWindowInt.def = this;
 				}
-				return this.tabWindowInt;
+				return tabWindowInt;
 			}
 		}
 
-		
-		
 		public string ShortenedLabelCap
 		{
 			get
 			{
-				if (this.cachedShortenedLabelCap == null)
+				if (cachedShortenedLabelCap == null)
 				{
-					this.cachedShortenedLabelCap = base.LabelCap.Shorten();
+					cachedShortenedLabelCap = base.LabelCap.Shorten();
 				}
-				return this.cachedShortenedLabelCap;
+				return cachedShortenedLabelCap;
 			}
 		}
 
-		
-		
 		public float LabelCapWidth
 		{
 			get
 			{
-				if (this.cachedLabelCapWidth < 0f)
+				if (cachedLabelCapWidth < 0f)
 				{
 					GameFont font = Text.Font;
 					Text.Font = GameFont.Small;
-					this.cachedLabelCapWidth = Text.CalcSize(base.LabelCap).x;
+					cachedLabelCapWidth = Text.CalcSize(base.LabelCap).x;
 					Text.Font = font;
 				}
-				return this.cachedLabelCapWidth;
+				return cachedLabelCapWidth;
 			}
 		}
 
-		
-		
 		public float ShortenedLabelCapWidth
 		{
 			get
 			{
-				if (this.cachedShortenedLabelCapWidth < 0f)
+				if (cachedShortenedLabelCapWidth < 0f)
 				{
 					GameFont font = Text.Font;
 					Text.Font = GameFont.Small;
-					this.cachedShortenedLabelCapWidth = Text.CalcSize(this.ShortenedLabelCap).x;
+					cachedShortenedLabelCapWidth = Text.CalcSize(ShortenedLabelCap).x;
 					Text.Font = font;
 				}
-				return this.cachedShortenedLabelCapWidth;
+				return cachedShortenedLabelCapWidth;
 			}
 		}
 
-		
-		
 		public Texture2D Icon
 		{
 			get
 			{
-				if (this.icon == null && this.iconPath != null)
+				if (icon == null && iconPath != null)
 				{
-					this.icon = ContentFinder<Texture2D>.Get(this.iconPath, true);
+					icon = ContentFinder<Texture2D>.Get(iconPath);
 				}
-				return this.icon;
+				return icon;
 			}
 		}
 
-		
 		public override void PostLoad()
 		{
 			base.PostLoad();
-			this.cachedHighlightTagClosed = "MainTab-" + this.defName + "-Closed";
+			cachedHighlightTagClosed = "MainTab-" + defName + "-Closed";
 		}
 
-		
 		public void Notify_SwitchedMap()
 		{
-			if (this.tabWindowInt != null)
+			if (tabWindowInt != null)
 			{
-				Find.WindowStack.TryRemove(this.tabWindowInt, true);
-				this.tabWindowInt = null;
+				Find.WindowStack.TryRemove(tabWindowInt);
+				tabWindowInt = null;
 			}
 		}
 
-		
 		public void Notify_ClearingAllMapsMemory()
 		{
-			this.tabWindowInt = null;
+			tabWindowInt = null;
 		}
-
-		
-		public Type workerClass = typeof(MainButtonWorker_ToggleTab);
-
-		
-		public Type tabWindowClass;
-
-		
-		public bool buttonVisible = true;
-
-		
-		public int order;
-
-		
-		public KeyCode defaultHotKey;
-
-		
-		public bool canBeTutorDenied = true;
-
-		
-		public bool validWithoutMap;
-
-		
-		public bool minimized;
-
-		
-		public string iconPath;
-
-		
-		[Unsaved(false)]
-		public KeyBindingDef hotKey;
-
-		
-		[Unsaved(false)]
-		public string cachedTutorTag;
-
-		
-		[Unsaved(false)]
-		public string cachedHighlightTagClosed;
-
-		
-		[Unsaved(false)]
-		private MainButtonWorker workerInt;
-
-		
-		[Unsaved(false)]
-		private MainTabWindow tabWindowInt;
-
-		
-		[Unsaved(false)]
-		private string cachedShortenedLabelCap;
-
-		
-		[Unsaved(false)]
-		private float cachedLabelCapWidth = -1f;
-
-		
-		[Unsaved(false)]
-		private float cachedShortenedLabelCapWidth = -1f;
-
-		
-		[Unsaved(false)]
-		private Texture2D icon;
-
-		
-		public const int ButtonHeight = 35;
 	}
 }

@@ -1,105 +1,77 @@
-﻿using System;
-using System.IO;
 using RimWorld;
+using System.IO;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct SaveFileInfo
 	{
-		
-		
-		public bool Valid
-		{
-			get
-			{
-				return this.gameVersion != null;
-			}
-		}
+		private FileInfo fileInfo;
 
-		
-		
-		public FileInfo FileInfo
-		{
-			get
-			{
-				return this.fileInfo;
-			}
-		}
+		private string gameVersion;
 
-		
-		
+		public static readonly Color UnimportantTextColor = new Color(1f, 1f, 1f, 0.5f);
+
+		public bool Valid => gameVersion != null;
+
+		public FileInfo FileInfo => fileInfo;
+
 		public string GameVersion
 		{
 			get
 			{
-				if (!this.Valid)
+				if (!Valid)
 				{
 					return "???";
 				}
-				return this.gameVersion;
+				return gameVersion;
 			}
 		}
 
-		
-		
 		public Color VersionColor
 		{
 			get
 			{
-				if (!this.Valid)
+				if (!Valid)
 				{
 					return ColoredText.RedReadable;
 				}
-				if (VersionControl.MajorFromVersionString(this.gameVersion) == VersionControl.CurrentMajor && VersionControl.MinorFromVersionString(this.gameVersion) == VersionControl.CurrentMinor)
+				if (VersionControl.MajorFromVersionString(gameVersion) != VersionControl.CurrentMajor || VersionControl.MinorFromVersionString(gameVersion) != VersionControl.CurrentMinor)
 				{
-					return SaveFileInfo.UnimportantTextColor;
+					if (BackCompatibility.IsSaveCompatibleWith(gameVersion))
+					{
+						return Color.yellow;
+					}
+					return ColoredText.RedReadable;
 				}
-				if (BackCompatibility.IsSaveCompatibleWith(this.gameVersion))
-				{
-					return Color.yellow;
-				}
-				return ColoredText.RedReadable;
+				return UnimportantTextColor;
 			}
 		}
 
-		
-		
 		public TipSignal CompatibilityTip
 		{
 			get
 			{
-				if (!this.Valid)
+				if (!Valid)
 				{
 					return "SaveIsUnknownFormat".Translate();
 				}
-				if ((VersionControl.MajorFromVersionString(this.gameVersion) != VersionControl.CurrentMajor || VersionControl.MinorFromVersionString(this.gameVersion) != VersionControl.CurrentMinor) && !BackCompatibility.IsSaveCompatibleWith(this.gameVersion))
+				if ((VersionControl.MajorFromVersionString(gameVersion) != VersionControl.CurrentMajor || VersionControl.MinorFromVersionString(gameVersion) != VersionControl.CurrentMinor) && !BackCompatibility.IsSaveCompatibleWith(gameVersion))
 				{
-					return "SaveIsFromDifferentGameVersion".Translate(VersionControl.CurrentVersionString, this.gameVersion);
+					return "SaveIsFromDifferentGameVersion".Translate(VersionControl.CurrentVersionString, gameVersion);
 				}
-				if (VersionControl.BuildFromVersionString(this.gameVersion) != VersionControl.CurrentBuild)
+				if (VersionControl.BuildFromVersionString(gameVersion) != VersionControl.CurrentBuild)
 				{
-					return "SaveIsFromDifferentGameBuild".Translate(VersionControl.CurrentVersionString, this.gameVersion);
+					return "SaveIsFromDifferentGameBuild".Translate(VersionControl.CurrentVersionString, gameVersion);
 				}
 				return "SaveIsFromThisGameBuild".Translate();
 			}
 		}
 
-		
 		public SaveFileInfo(FileInfo fileInfo)
 		{
 			this.fileInfo = fileInfo;
-			this.gameVersion = ScribeMetaHeaderUtility.GameVersionOf(fileInfo);
+			gameVersion = ScribeMetaHeaderUtility.GameVersionOf(fileInfo);
 		}
-
-		
-		private FileInfo fileInfo;
-
-		
-		private string gameVersion;
-
-		
-		public static readonly Color UnimportantTextColor = new Color(1f, 1f, 1f, 0.5f);
 	}
 }

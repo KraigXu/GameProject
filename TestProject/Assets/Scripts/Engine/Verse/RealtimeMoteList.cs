@@ -1,39 +1,32 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class RealtimeMoteList
 	{
-		
+		public List<Mote> allMotes = new List<Mote>();
+
 		public void Clear()
 		{
-			this.allMotes.Clear();
+			allMotes.Clear();
 		}
 
-		
 		public void MoteSpawned(Mote newMote)
 		{
-			this.allMotes.Add(newMote);
+			allMotes.Add(newMote);
 		}
 
-		
 		public void MoteDespawned(Mote oldMote)
 		{
-			this.allMotes.Remove(oldMote);
+			allMotes.Remove(oldMote);
 		}
 
-		
 		public void MoteListUpdate()
 		{
-			for (int i = this.allMotes.Count - 1; i >= 0; i--)
+			for (int num = allMotes.Count - 1; num >= 0; num--)
 			{
-				this.allMotes[i].RealtimeUpdate();
+				allMotes[num].RealtimeUpdate();
 			}
 		}
-
-		
-		public List<Mote> allMotes = new List<Mote>();
 	}
 }

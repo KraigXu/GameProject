@@ -1,23 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_ConstructDeliverResourcesToFrames : WorkGiver_ConstructDeliverResources
 	{
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForGroup(ThingRequestGroup.BuildingFrame);
-			}
-		}
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.BuildingFrame);
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (t.Faction != pawn.Faction)
@@ -33,12 +22,12 @@ namespace RimWorld
 			{
 				return GenConstruct.HandleBlockingThingJob(frame, pawn, forced);
 			}
-			bool checkSkills = this.def.workType == WorkTypeDefOf.Construction;
+			bool checkSkills = def.workType == WorkTypeDefOf.Construction;
 			if (!GenConstruct.CanConstruct(frame, pawn, checkSkills, forced))
 			{
 				return null;
 			}
-			return base.ResourceDeliverJobFor(pawn, frame, true);
+			return ResourceDeliverJobFor(pawn, frame);
 		}
 	}
 }

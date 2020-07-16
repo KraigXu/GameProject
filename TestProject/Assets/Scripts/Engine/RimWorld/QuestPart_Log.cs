@@ -1,41 +1,34 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Log : QuestPart
 	{
-		
+		public string inSignal;
+
+		public string message;
+
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
-				Log.Message(signal.args.GetFormattedText(this.message), false);
+				Log.Message(signal.args.GetFormattedText(message));
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<string>(ref this.message, "message", null, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref message, "message");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.message = "Dev: Test";
+			inSignal = "DebugSignal" + Rand.Int;
+			message = "Dev: Test";
 		}
-
-		
-		public string inSignal;
-
-		
-		public string message;
 	}
 }

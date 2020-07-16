@@ -1,54 +1,65 @@
-﻿using System;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class FeatureWorker
 	{
-		
+		public FeatureDef def;
+
+		protected static bool[] visited;
+
+		protected static int[] groupSize;
+
+		protected static int[] groupID;
+
+		private static List<int> tmpNeighbors = new List<int>();
+
+		private static HashSet<int> tmpTilesForTextDrawPosCalculationSet = new HashSet<int>();
+
+		private static List<int> tmpEdgeTiles = new List<int>();
+
+		private static List<Pair<int, int>> tmpTraversedTiles = new List<Pair<int, int>>();
+
 		public abstract void GenerateWhereAppropriate();
 
-		
 		protected void AddFeature(List<int> members, List<int> tilesForTextDrawPosCalculation)
 		{
 			WorldFeature worldFeature = new WorldFeature();
 			worldFeature.uniqueID = Find.UniqueIDsManager.GetNextWorldFeatureID();
-			worldFeature.def = this.def;
-			worldFeature.name = NameGenerator.GenerateName(this.def.nameMaker, from x in Find.WorldFeatures.features
-			select x.name, false, "r_name");
+			worldFeature.def = def;
+			worldFeature.name = NameGenerator.GenerateName(def.nameMaker, Find.WorldFeatures.features.Select((WorldFeature x) => x.name), appendNumberIfNameUsed: false, "r_name");
 			WorldGrid worldGrid = Find.WorldGrid;
 			for (int i = 0; i < members.Count; i++)
 			{
 				worldGrid[members[i]].feature = worldFeature;
 			}
-			this.AssignBestDrawPos(worldFeature, tilesForTextDrawPosCalculation);
+			AssignBestDrawPos(worldFeature, tilesForTextDrawPosCalculation);
 			Find.WorldFeatures.features.Add(worldFeature);
 		}
 
-		
 		private void AssignBestDrawPos(WorldFeature newFeature, List<int> tilesForTextDrawPosCalculation)
 		{
 			WorldGrid worldGrid = Find.WorldGrid;
-			FeatureWorker.tmpEdgeTiles.Clear();
-			FeatureWorker.tmpTilesForTextDrawPosCalculationSet.Clear();
-			FeatureWorker.tmpTilesForTextDrawPosCalculationSet.AddRange(tilesForTextDrawPosCalculation);
-			Vector3 vector = Vector3.zero;
+			tmpEdgeTiles.Clear();
+			tmpTilesForTextDrawPosCalculationSet.Clear();
+			tmpTilesForTextDrawPosCalculationSet.AddRange(tilesForTextDrawPosCalculation);
+			Vector3 zero = Vector3.zero;
 			for (int i = 0; i < tilesForTextDrawPosCalculation.Count; i++)
 			{
 				int num = tilesForTextDrawPosCalculation[i];
-				vector += worldGrid.GetTileCenter(num);
+				zero += worldGrid.GetTileCenter(num);
 				bool flag = worldGrid.IsOnEdge(num);
 				if (!flag)
 				{
-					worldGrid.GetTileNeighbors(num, FeatureWorker.tmpNeighbors);
-					for (int j = 0; j < FeatureWorker.tmpNeighbors.Count; j++)
+					worldGrid.GetTileNeighbors(num, tmpNeighbors);
+					for (int j = 0; j < tmpNeighbors.Count; j++)
 					{
-						if (!FeatureWorker.tmpTilesForTextDrawPosCalculationSet.Contains(FeatureWorker.tmpNeighbors[j]))
+						if (!tmpTilesForTextDrawPosCalculationSet.Contains(tmpNeighbors[j]))
 						{
 							flag = true;
 							break;
@@ -57,32 +68,32 @@ namespace RimWorld
 				}
 				if (flag)
 				{
-					FeatureWorker.tmpEdgeTiles.Add(num);
+					tmpEdgeTiles.Add(num);
 				}
 			}
-			vector /= (float)tilesForTextDrawPosCalculation.Count;
-			if (!FeatureWorker.tmpEdgeTiles.Any<int>())
+			zero /= (float)tilesForTextDrawPosCalculation.Count;
+			if (!tmpEdgeTiles.Any())
 			{
-				FeatureWorker.tmpEdgeTiles.Add(tilesForTextDrawPosCalculation.RandomElement<int>());
+				tmpEdgeTiles.Add(tilesForTextDrawPosCalculation.RandomElement());
 			}
 			int bestTileDist = 0;
-			FeatureWorker.tmpTraversedTiles.Clear();
-			Find.WorldFloodFiller.FloodFill(-1, (int x) => FeatureWorker.tmpTilesForTextDrawPosCalculationSet.Contains(x), delegate(int tile, int traversalDist)
+			tmpTraversedTiles.Clear();
+			Find.WorldFloodFiller.FloodFill(-1, (int x) => tmpTilesForTextDrawPosCalculationSet.Contains(x), delegate(int tile, int traversalDist)
 			{
-				FeatureWorker.tmpTraversedTiles.Add(new Pair<int, int>(tile, traversalDist));
+				tmpTraversedTiles.Add(new Pair<int, int>(tile, traversalDist));
 				bestTileDist = traversalDist;
 				return false;
-			}, int.MaxValue, FeatureWorker.tmpEdgeTiles);
+			}, int.MaxValue, tmpEdgeTiles);
 			int num2 = -1;
 			float num3 = -1f;
-			for (int k = 0; k < FeatureWorker.tmpTraversedTiles.Count; k++)
+			for (int k = 0; k < tmpTraversedTiles.Count; k++)
 			{
-				if (FeatureWorker.tmpTraversedTiles[k].Second == bestTileDist)
+				if (tmpTraversedTiles[k].Second == bestTileDist)
 				{
-					float sqrMagnitude = (worldGrid.GetTileCenter(FeatureWorker.tmpTraversedTiles[k].First) - vector).sqrMagnitude;
+					float sqrMagnitude = (worldGrid.GetTileCenter(tmpTraversedTiles[k].First) - zero).sqrMagnitude;
 					if (num2 == -1 || sqrMagnitude < num3)
 					{
-						num2 = FeatureWorker.tmpTraversedTiles[k].First;
+						num2 = tmpTraversedTiles[k].First;
 						num3 = sqrMagnitude;
 					}
 				}
@@ -92,58 +103,32 @@ namespace RimWorld
 			newFeature.maxDrawSizeInTiles = maxDrawSizeInTiles;
 		}
 
-		
 		protected static void ClearVisited()
 		{
-			FeatureWorker.ClearOrCreate<bool>(ref FeatureWorker.visited);
+			ClearOrCreate(ref visited);
 		}
 
-		
 		protected static void ClearGroupSizes()
 		{
-			FeatureWorker.ClearOrCreate<int>(ref FeatureWorker.groupSize);
+			ClearOrCreate(ref groupSize);
 		}
 
-		
 		protected static void ClearGroupIDs()
 		{
-			FeatureWorker.ClearOrCreate<int>(ref FeatureWorker.groupID);
+			ClearOrCreate(ref groupID);
 		}
 
-		
 		private static void ClearOrCreate<T>(ref T[] array)
 		{
 			int tilesCount = Find.WorldGrid.TilesCount;
 			if (array == null || array.Length != tilesCount)
 			{
 				array = new T[tilesCount];
-				return;
 			}
-			Array.Clear(array, 0, array.Length);
+			else
+			{
+				Array.Clear(array, 0, array.Length);
+			}
 		}
-
-		
-		public FeatureDef def;
-
-		
-		protected static bool[] visited;
-
-		
-		protected static int[] groupSize;
-
-		
-		protected static int[] groupID;
-
-		
-		private static List<int> tmpNeighbors = new List<int>();
-
-		
-		private static HashSet<int> tmpTilesForTextDrawPosCalculationSet = new HashSet<int>();
-
-		
-		private static List<int> tmpEdgeTiles = new List<int>();
-
-		
-		private static List<Pair<int, int>> tmpTraversedTiles = new List<Pair<int, int>>();
 	}
 }

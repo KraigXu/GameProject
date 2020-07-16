@@ -1,17 +1,28 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class UI_BackgroundMain : UIMenuBackground
 	{
-		
+		private Color curColor = new Color(1f, 1f, 1f, 0f);
+
+		private Texture2D overlayImage;
+
+		public Texture2D overrideBGImage;
+
+		private bool fadeIn;
+
+		private const float DeltaAlpha = 0.04f;
+
+		private static readonly Vector2 BGPlanetSize = new Vector2(2048f, 1280f);
+
+		private static readonly Texture2D BGPlanet = ContentFinder<Texture2D>.Get("UI/HeroArt/BGPlanet");
+
 		public override void BackgroundOnGUI()
 		{
-			Vector2 vector = (this.overrideBGImage != null) ? new Vector2((float)this.overrideBGImage.width, (float)this.overrideBGImage.height) : UI_BackgroundMain.BGPlanetSize;
+			Vector2 vector = (overrideBGImage != null) ? new Vector2(overrideBGImage.width, overrideBGImage.height) : BGPlanetSize;
 			bool flag = true;
 			if ((float)UI.screenWidth > (float)UI.screenHeight * (vector.x / vector.y))
 			{
@@ -20,75 +31,51 @@ namespace RimWorld
 			Rect rect;
 			if (flag)
 			{
-				float height = (float)UI.screenHeight;
+				float height = UI.screenHeight;
 				float num = (float)UI.screenHeight * (vector.x / vector.y);
 				rect = new Rect((float)(UI.screenWidth / 2) - num / 2f, 0f, num, height);
 			}
 			else
 			{
-				float width = (float)UI.screenWidth;
+				float width = UI.screenWidth;
 				float num2 = (float)UI.screenWidth * (vector.y / vector.x);
 				rect = new Rect(0f, (float)(UI.screenHeight / 2) - num2 / 2f, width, num2);
 			}
-			GUI.DrawTexture(rect, this.overrideBGImage ?? UI_BackgroundMain.BGPlanet, ScaleMode.ScaleToFit);
-			this.DoOverlay(rect);
+			GUI.DrawTexture(rect, overrideBGImage ?? BGPlanet, ScaleMode.ScaleToFit);
+			DoOverlay(rect);
 		}
 
-		
 		private void DoOverlay(Rect bgRect)
 		{
-			if (this.overlayImage != null)
+			if (overlayImage != null)
 			{
-				if (this.fadeIn && this.curColor.a < 1f)
+				if (fadeIn && curColor.a < 1f)
 				{
-					this.curColor.a = this.curColor.a + 0.04f;
+					curColor.a += 0.04f;
 				}
-				else if (this.curColor.a > 0f)
+				else if (curColor.a > 0f)
 				{
-					this.curColor.a = this.curColor.a - 0.04f;
+					curColor.a -= 0.04f;
 				}
-				this.curColor.a = Mathf.Clamp01(this.curColor.a);
-				GUI.color = this.curColor;
-				GUI.DrawTexture(bgRect, this.overlayImage, ScaleMode.ScaleAndCrop);
+				curColor.a = Mathf.Clamp01(curColor.a);
+				GUI.color = curColor;
+				GUI.DrawTexture(bgRect, overlayImage, ScaleMode.ScaleAndCrop);
 				GUI.color = Color.white;
 			}
 		}
 
-		
 		public void FadeOut()
 		{
-			this.fadeIn = false;
+			fadeIn = false;
 		}
 
-		
 		public void SetOverlayImage(Texture2D texture)
 		{
 			if (texture != null)
 			{
-				this.overlayImage = texture;
-				this.fadeIn = true;
+				overlayImage = texture;
+				fadeIn = true;
 			}
 		}
-
-		
-		private Color curColor = new Color(1f, 1f, 1f, 0f);
-
-		
-		private Texture2D overlayImage;
-
-		
-		public Texture2D overrideBGImage;
-
-		
-		private bool fadeIn;
-
-		
-		private const float DeltaAlpha = 0.04f;
-
-		
-		private static readonly Vector2 BGPlanetSize = new Vector2(2048f, 1280f);
-
-		
-		private static readonly Texture2D BGPlanet = ContentFinder<Texture2D>.Get("UI/HeroArt/BGPlanet", true);
 	}
 }

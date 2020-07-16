@@ -1,153 +1,125 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnSkinColors
 	{
-		
-		public static bool IsDarkSkin(Color color)
-		{
-			Color skinColor = PawnSkinColors.GetSkinColor(0.5f);
-			return color.r + color.g + color.b <= skinColor.r + skinColor.g + skinColor.b + 0.01f;
-		}
-
-		
-		public static Color GetSkinColor(float melanin)
-		{
-			int skinDataIndexOfMelanin = PawnSkinColors.GetSkinDataIndexOfMelanin(melanin);
-			if (skinDataIndexOfMelanin == PawnSkinColors.SkinColors.Length - 1)
-			{
-				return PawnSkinColors.SkinColors[skinDataIndexOfMelanin].color;
-			}
-			float t = Mathf.InverseLerp(PawnSkinColors.SkinColors[skinDataIndexOfMelanin].melanin, PawnSkinColors.SkinColors[skinDataIndexOfMelanin + 1].melanin, melanin);
-			return Color.Lerp(PawnSkinColors.SkinColors[skinDataIndexOfMelanin].color, PawnSkinColors.SkinColors[skinDataIndexOfMelanin + 1].color, t);
-		}
-
-		
-		public static float RandomMelanin(Faction fac)
-		{
-			float num;
-			if (fac == null)
-			{
-				num = Rand.Value;
-			}
-			else
-			{
-				num = Rand.Range(Mathf.Clamp01(fac.centralMelanin - fac.def.geneticVariance), Mathf.Clamp01(fac.centralMelanin + fac.def.geneticVariance));
-			}
-			int num2 = 0;
-			int num3 = 0;
-			while (num3 < PawnSkinColors.SkinColors.Length && num >= PawnSkinColors.SkinColors[num3].selector)
-			{
-				num2 = num3;
-				num3++;
-			}
-			if (num2 == PawnSkinColors.SkinColors.Length - 1)
-			{
-				return PawnSkinColors.SkinColors[num2].melanin;
-			}
-			float t = Mathf.InverseLerp(PawnSkinColors.SkinColors[num2].selector, PawnSkinColors.SkinColors[num2 + 1].selector, num);
-			return Mathf.Lerp(PawnSkinColors.SkinColors[num2].melanin, PawnSkinColors.SkinColors[num2 + 1].melanin, t);
-		}
-
-		
-		public static float GetMelaninCommonalityFactor(float melanin)
-		{
-			int skinDataIndexOfMelanin = PawnSkinColors.GetSkinDataIndexOfMelanin(melanin);
-			if (skinDataIndexOfMelanin == PawnSkinColors.SkinColors.Length - 1)
-			{
-				return PawnSkinColors.GetSkinDataCommonalityFactor(skinDataIndexOfMelanin);
-			}
-			float t = Mathf.InverseLerp(PawnSkinColors.SkinColors[skinDataIndexOfMelanin].melanin, PawnSkinColors.SkinColors[skinDataIndexOfMelanin + 1].melanin, melanin);
-			return Mathf.Lerp(PawnSkinColors.GetSkinDataCommonalityFactor(skinDataIndexOfMelanin), PawnSkinColors.GetSkinDataCommonalityFactor(skinDataIndexOfMelanin + 1), t);
-		}
-
-		
-		public static float GetRandomMelaninSimilarTo(float value, float clampMin = 0f, float clampMax = 1f)
-		{
-			return Mathf.Clamp01(Mathf.Clamp(Rand.Gaussian(value, 0.05f), clampMin, clampMax));
-		}
-
-		
-		private static float GetSkinDataCommonalityFactor(int skinDataIndex)
-		{
-			float num = 0f;
-			for (int i = 0; i < PawnSkinColors.SkinColors.Length; i++)
-			{
-				num = Mathf.Max(num, PawnSkinColors.GetTotalAreaWhereClosestToSelector(i));
-			}
-			return PawnSkinColors.GetTotalAreaWhereClosestToSelector(skinDataIndex) / num;
-		}
-
-		
-		private static float GetTotalAreaWhereClosestToSelector(int skinDataIndex)
-		{
-			float num = 0f;
-			if (skinDataIndex == 0)
-			{
-				num += PawnSkinColors.SkinColors[skinDataIndex].selector;
-			}
-			else if (PawnSkinColors.SkinColors.Length > 1)
-			{
-				num += (PawnSkinColors.SkinColors[skinDataIndex].selector - PawnSkinColors.SkinColors[skinDataIndex - 1].selector) / 2f;
-			}
-			if (skinDataIndex == PawnSkinColors.SkinColors.Length - 1)
-			{
-				num += 1f - PawnSkinColors.SkinColors[skinDataIndex].selector;
-			}
-			else if (PawnSkinColors.SkinColors.Length > 1)
-			{
-				num += (PawnSkinColors.SkinColors[skinDataIndex + 1].selector - PawnSkinColors.SkinColors[skinDataIndex].selector) / 2f;
-			}
-			return num;
-		}
-
-		
-		private static int GetSkinDataIndexOfMelanin(float melanin)
-		{
-			int result = 0;
-			int num = 0;
-			while (num < PawnSkinColors.SkinColors.Length && melanin >= PawnSkinColors.SkinColors[num].melanin)
-			{
-				result = num;
-				num++;
-			}
-			return result;
-		}
-
-		
-		private static readonly PawnSkinColors.SkinColorData[] SkinColors = new PawnSkinColors.SkinColorData[]
-		{
-			new PawnSkinColors.SkinColorData(0f, 0f, new Color(0.9490196f, 0.929411769f, 0.8784314f)),
-			new PawnSkinColors.SkinColorData(0.25f, 0.2f, new Color(1f, 0.9372549f, 0.8352941f)),
-			new PawnSkinColors.SkinColorData(0.5f, 0.7f, new Color(1f, 0.9372549f, 0.7411765f)),
-			new PawnSkinColors.SkinColorData(0.75f, 0.8f, new Color(0.894117653f, 0.619607866f, 0.3529412f)),
-			new PawnSkinColors.SkinColorData(0.9f, 0.9f, new Color(0.509803951f, 0.356862754f, 0.1882353f)),
-			new PawnSkinColors.SkinColorData(1f, 1f, new Color(0.3882353f, 0.274509817f, 0.141176477f))
-		};
-
-		
 		private struct SkinColorData
 		{
-			
+			public float melanin;
+
+			public float selector;
+
+			public Color color;
+
 			public SkinColorData(float melanin, float selector, Color color)
 			{
 				this.melanin = melanin;
 				this.selector = selector;
 				this.color = color;
 			}
+		}
 
-			
-			public float melanin;
+		private static readonly SkinColorData[] SkinColors = new SkinColorData[6]
+		{
+			new SkinColorData(0f, 0f, new Color(242f / 255f, 79f / 85f, 224f / 255f)),
+			new SkinColorData(0.25f, 0.2f, new Color(1f, 239f / 255f, 71f / 85f)),
+			new SkinColorData(0.5f, 0.7f, new Color(1f, 239f / 255f, 63f / 85f)),
+			new SkinColorData(0.75f, 0.8f, new Color(76f / 85f, 158f / 255f, 0.3529412f)),
+			new SkinColorData(0.9f, 0.9f, new Color(26f / 51f, 91f / 255f, 16f / 85f)),
+			new SkinColorData(1f, 1f, new Color(33f / 85f, 14f / 51f, 12f / 85f))
+		};
 
-			
-			public float selector;
+		public static bool IsDarkSkin(Color color)
+		{
+			Color skinColor = GetSkinColor(0.5f);
+			return color.r + color.g + color.b <= skinColor.r + skinColor.g + skinColor.b + 0.01f;
+		}
 
-			
-			public Color color;
+		public static Color GetSkinColor(float melanin)
+		{
+			int skinDataIndexOfMelanin = GetSkinDataIndexOfMelanin(melanin);
+			if (skinDataIndexOfMelanin == SkinColors.Length - 1)
+			{
+				return SkinColors[skinDataIndexOfMelanin].color;
+			}
+			float t = Mathf.InverseLerp(SkinColors[skinDataIndexOfMelanin].melanin, SkinColors[skinDataIndexOfMelanin + 1].melanin, melanin);
+			return Color.Lerp(SkinColors[skinDataIndexOfMelanin].color, SkinColors[skinDataIndexOfMelanin + 1].color, t);
+		}
+
+		public static float RandomMelanin(Faction fac)
+		{
+			float num = (fac != null) ? Rand.Range(Mathf.Clamp01(fac.centralMelanin - fac.def.geneticVariance), Mathf.Clamp01(fac.centralMelanin + fac.def.geneticVariance)) : Rand.Value;
+			int num2 = 0;
+			for (int i = 0; i < SkinColors.Length && num >= SkinColors[i].selector; i++)
+			{
+				num2 = i;
+			}
+			if (num2 == SkinColors.Length - 1)
+			{
+				return SkinColors[num2].melanin;
+			}
+			float t = Mathf.InverseLerp(SkinColors[num2].selector, SkinColors[num2 + 1].selector, num);
+			return Mathf.Lerp(SkinColors[num2].melanin, SkinColors[num2 + 1].melanin, t);
+		}
+
+		public static float GetMelaninCommonalityFactor(float melanin)
+		{
+			int skinDataIndexOfMelanin = GetSkinDataIndexOfMelanin(melanin);
+			if (skinDataIndexOfMelanin == SkinColors.Length - 1)
+			{
+				return GetSkinDataCommonalityFactor(skinDataIndexOfMelanin);
+			}
+			float t = Mathf.InverseLerp(SkinColors[skinDataIndexOfMelanin].melanin, SkinColors[skinDataIndexOfMelanin + 1].melanin, melanin);
+			return Mathf.Lerp(GetSkinDataCommonalityFactor(skinDataIndexOfMelanin), GetSkinDataCommonalityFactor(skinDataIndexOfMelanin + 1), t);
+		}
+
+		public static float GetRandomMelaninSimilarTo(float value, float clampMin = 0f, float clampMax = 1f)
+		{
+			return Mathf.Clamp01(Mathf.Clamp(Rand.Gaussian(value, 0.05f), clampMin, clampMax));
+		}
+
+		private static float GetSkinDataCommonalityFactor(int skinDataIndex)
+		{
+			float num = 0f;
+			for (int i = 0; i < SkinColors.Length; i++)
+			{
+				num = Mathf.Max(num, GetTotalAreaWhereClosestToSelector(i));
+			}
+			return GetTotalAreaWhereClosestToSelector(skinDataIndex) / num;
+		}
+
+		private static float GetTotalAreaWhereClosestToSelector(int skinDataIndex)
+		{
+			float num = 0f;
+			if (skinDataIndex == 0)
+			{
+				num += SkinColors[skinDataIndex].selector;
+			}
+			else if (SkinColors.Length > 1)
+			{
+				num += (SkinColors[skinDataIndex].selector - SkinColors[skinDataIndex - 1].selector) / 2f;
+			}
+			if (skinDataIndex == SkinColors.Length - 1)
+			{
+				num += 1f - SkinColors[skinDataIndex].selector;
+			}
+			else if (SkinColors.Length > 1)
+			{
+				num += (SkinColors[skinDataIndex + 1].selector - SkinColors[skinDataIndex].selector) / 2f;
+			}
+			return num;
+		}
+
+		private static int GetSkinDataIndexOfMelanin(float melanin)
+		{
+			int result = 0;
+			for (int i = 0; i < SkinColors.Length && melanin >= SkinColors[i].melanin; i++)
+			{
+				result = i;
+			}
+			return result;
 		}
 	}
 }

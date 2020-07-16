@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PlaceWorker_PreventInteractionSpotOverlap : PlaceWorker
 	{
-		
 		public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thingToPlace = null)
 		{
 			ThingDef thingDef = checkingDef as ThingDef;
@@ -24,18 +21,18 @@ namespace RimWorld
 					c.z += j;
 					if (c.InBounds(map))
 					{
-						foreach (Thing thing in map.thingGrid.ThingsListAtFast(c))
+						foreach (Thing item in map.thingGrid.ThingsListAtFast(c))
 						{
-							if (thing != thingToIgnore)
+							if (item != thingToIgnore)
 							{
-								ThingDef thingDef2 = thing.def;
-								if (thing.def.entityDefToBuild != null)
+								ThingDef thingDef2 = item.def;
+								if (item.def.entityDefToBuild != null)
 								{
-									thingDef2 = (thing.def.entityDefToBuild as ThingDef);
+									thingDef2 = (item.def.entityDefToBuild as ThingDef);
 								}
-								if (thingDef2 != null && thingDef2.hasInteractionCell && ThingUtility.InteractionCellWhenAt(thingDef2, thing.Position, thing.Rotation, thing.Map) == intVec)
+								if (thingDef2 != null && thingDef2.hasInteractionCell && ThingUtility.InteractionCellWhenAt(thingDef2, item.Position, item.Rotation, item.Map) == intVec)
 								{
-									return new AcceptanceReport(((thing.def.entityDefToBuild == null) ? "InteractionSpotOverlaps" : "InteractionSpotWillOverlap").Translate(thing.LabelNoCount, thing));
+									return new AcceptanceReport(((item.def.entityDefToBuild == null) ? "InteractionSpotOverlaps" : "InteractionSpotWillOverlap").Translate(item.LabelNoCount, item));
 								}
 							}
 						}

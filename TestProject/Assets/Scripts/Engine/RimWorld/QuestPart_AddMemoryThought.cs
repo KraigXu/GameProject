@@ -1,87 +1,73 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_AddMemoryThought : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public ThoughtDef def;
+
+		public Pawn pawn;
+
+		public Pawn otherPawn;
+
+		public bool addToLookTargets = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.pawn != null && this.addToLookTargets)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.pawn;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (pawn != null && addToLookTargets)
+				{
+					yield return pawn;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.pawn != null && this.pawn.needs != null)
+			if (signal.tag == inSignal && pawn != null && pawn.needs != null)
 			{
-				this.pawn.needs.mood.thoughts.memories.TryGainMemory(this.def, this.otherPawn);
+				pawn.needs.mood.thoughts.memories.TryGainMemory(def, otherPawn);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<bool>(ref this.addToLookTargets, "addToLookTargets", false, false);
-			Scribe_Defs.Look<ThoughtDef>(ref this.def, "def");
-			Scribe_References.Look<Pawn>(ref this.pawn, "pawn", false);
-			Scribe_References.Look<Pawn>(ref this.otherPawn, "otherPawn", false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref addToLookTargets, "addToLookTargets", defaultValue: false);
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_References.Look(ref pawn, "pawn");
+			Scribe_References.Look(ref otherPawn, "otherPawn");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.def = (ThoughtDefOf.DecreeMet ?? ThoughtDefOf.DebugGood);
-			this.pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>();
+			def = (ThoughtDefOf.DecreeMet ?? ThoughtDefOf.DebugGood);
+			pawn = PawnsFinder.AllMaps_FreeColonists.FirstOrDefault();
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.pawn == replace)
+			if (pawn == replace)
 			{
-				this.pawn = with;
+				pawn = with;
 			}
-			if (this.otherPawn == replace)
+			if (otherPawn == replace)
 			{
-				this.otherPawn = with;
+				otherPawn = with;
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public ThoughtDef def;
-
-		
-		public Pawn pawn;
-
-		
-		public Pawn otherPawn;
-
-		
-		public bool addToLookTargets = true;
 	}
 }

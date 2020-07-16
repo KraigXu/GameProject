@@ -1,14 +1,13 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_CaravanArrivalTributeCollector : IncidentWorker_TraderCaravanArrival
 	{
-		
+		public const string TributeCollectorTraderKindCategory = "TributeCollector";
+
 		protected override bool TryResolveParmsGeneral(IncidentParms parms)
 		{
 			if (!base.TryResolveParmsGeneral(parms))
@@ -17,35 +16,31 @@ namespace RimWorld
 			}
 			Map map = (Map)parms.target;
 			parms.faction = Faction.Empire;
-			parms.traderKind = (from t in DefDatabase<TraderKindDef>.AllDefsListForReading
-			where t.category == "TributeCollector"
-			select t).RandomElementByWeight((TraderKindDef t) => this.TraderKindCommonality(t, map, parms.faction));
+			parms.traderKind = DefDatabase<TraderKindDef>.AllDefsListForReading.Where((TraderKindDef t) => t.category == "TributeCollector").RandomElementByWeight((TraderKindDef t) => TraderKindCommonality(t, map, parms.faction));
 			return true;
 		}
 
-		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
-			return base.CanFireNowSub(parms) && this.FactionCanBeGroupSource(Faction.Empire, (Map)parms.target, false);
+			if (!base.CanFireNowSub(parms))
+			{
+				return false;
+			}
+			return FactionCanBeGroupSource(Faction.Empire, (Map)parms.target);
 		}
 
-		
 		protected override float TraderKindCommonality(TraderKindDef traderKind, Map map, Faction faction)
 		{
 			return traderKind.CalculatedCommonality;
 		}
 
-		
 		protected override void SendLetter(IncidentParms parms, List<Pawn> pawns, TraderKindDef traderKind)
 		{
-			TaggedString baseLetterLabel = "LetterLabelTributeCollectorArrival".Translate().CapitalizeFirst();
-			TaggedString taggedString = "LetterTributeCollectorArrival".Translate(parms.faction.Named("FACTION")).CapitalizeFirst();
-			taggedString += "\n\n" + "LetterCaravanArrivalCommonWarning".Translate();
-			PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(pawns, ref baseLetterLabel, ref taggedString, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), true, true);
-			base.SendStandardLetter(baseLetterLabel, taggedString, LetterDefOf.PositiveEvent, parms, pawns[0], Array.Empty<NamedArgument>());
+			TaggedString letterLabel = "LetterLabelTributeCollectorArrival".Translate().CapitalizeFirst();
+			TaggedString letterText = "LetterTributeCollectorArrival".Translate(parms.faction.Named("FACTION")).CapitalizeFirst();
+			letterText += "\n\n" + "LetterCaravanArrivalCommonWarning".Translate();
+			PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(pawns, ref letterLabel, ref letterText, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), informEvenIfSeenBefore: true);
+			SendStandardLetter(letterLabel, letterText, LetterDefOf.PositiveEvent, parms, pawns[0]);
 		}
-
-		
-		public const string TributeCollectorTraderKindCategory = "TributeCollector";
 	}
 }

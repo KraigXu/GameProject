@@ -1,63 +1,19 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompShearable : CompHasGatherableBodyResource
 	{
-		
-		
-		protected override int GatherResourcesIntervalDays
-		{
-			get
-			{
-				return this.Props.shearIntervalDays;
-			}
-		}
+		protected override int GatherResourcesIntervalDays => Props.shearIntervalDays;
 
-		
-		
-		protected override int ResourceAmount
-		{
-			get
-			{
-				return this.Props.woolAmount;
-			}
-		}
+		protected override int ResourceAmount => Props.woolAmount;
 
-		
-		
-		protected override ThingDef ResourceDef
-		{
-			get
-			{
-				return this.Props.woolDef;
-			}
-		}
+		protected override ThingDef ResourceDef => Props.woolDef;
 
-		
-		
-		protected override string SaveKey
-		{
-			get
-			{
-				return "woolGrowth";
-			}
-		}
+		protected override string SaveKey => "woolGrowth";
 
-		
-		
-		public CompProperties_Shearable Props
-		{
-			get
-			{
-				return (CompProperties_Shearable)this.props;
-			}
-		}
+		public CompProperties_Shearable Props => (CompProperties_Shearable)props;
 
-		
-		
 		protected override bool Active
 		{
 			get
@@ -66,15 +22,18 @@ namespace RimWorld
 				{
 					return false;
 				}
-				Pawn pawn = this.parent as Pawn;
-				return pawn == null || pawn.ageTracker.CurLifeStage.shearable;
+				Pawn pawn = parent as Pawn;
+				if (pawn != null && !pawn.ageTracker.CurLifeStage.shearable)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return null;
 			}

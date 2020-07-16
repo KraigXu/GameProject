@@ -1,14 +1,10 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ITab_Pawn_Character : ITab
 	{
-		
-		
 		private Pawn PawnToShowInfoAbout
 		{
 			get
@@ -28,43 +24,32 @@ namespace RimWorld
 				}
 				if (pawn == null)
 				{
-					Log.Error("Character tab found no selected pawn to display.", false);
+					Log.Error("Character tab found no selected pawn to display.");
 					return null;
 				}
 				return pawn;
 			}
 		}
 
-		
-		
-		public override bool IsVisible
-		{
-			get
-			{
-				return this.PawnToShowInfoAbout.story != null;
-			}
-		}
+		public override bool IsVisible => PawnToShowInfoAbout.story != null;
 
-		
 		public ITab_Pawn_Character()
 		{
-			this.labelKey = "TabCharacter";
-			this.tutorTag = "Character";
+			labelKey = "TabCharacter";
+			tutorTag = "Character";
 		}
 
-		
 		protected override void UpdateSize()
 		{
 			base.UpdateSize();
-			this.size = CharacterCardUtility.PawnCardSize(this.PawnToShowInfoAbout) + new Vector2(17f, 17f) * 2f;
+			size = CharacterCardUtility.PawnCardSize(PawnToShowInfoAbout) + new Vector2(17f, 17f) * 2f;
 		}
 
-		
 		protected override void FillTab()
 		{
-			this.UpdateSize();
-			Vector2 vector = CharacterCardUtility.PawnCardSize(this.PawnToShowInfoAbout);
-			CharacterCardUtility.DrawCharacterCard(new Rect(17f, 17f, vector.x, vector.y), this.PawnToShowInfoAbout, null, default(Rect));
+			UpdateSize();
+			Vector2 vector = CharacterCardUtility.PawnCardSize(PawnToShowInfoAbout);
+			CharacterCardUtility.DrawCharacterCard(new Rect(17f, 17f, vector.x, vector.y), PawnToShowInfoAbout);
 		}
 	}
 }

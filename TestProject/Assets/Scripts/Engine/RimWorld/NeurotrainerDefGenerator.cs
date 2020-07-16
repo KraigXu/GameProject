@@ -1,30 +1,33 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class NeurotrainerDefGenerator
 	{
-		
+		public static string NeurotrainerDefPrefix = "Neurotrainer";
+
+		public static string PsytrainerDefPrefix = "Psytrainer";
+
+		private const int MaxAbilityLevel = 6;
+
 		public static IEnumerable<ThingDef> ImpliedThingDefs()
 		{
-			foreach (AbilityDef abilityDef in DefDatabase<AbilityDef>.AllDefs)
+			foreach (AbilityDef allDef in DefDatabase<AbilityDef>.AllDefs)
 			{
-				if (typeof(Psycast).IsAssignableFrom(abilityDef.abilityClass))
+				if (typeof(Psycast).IsAssignableFrom(allDef.abilityClass))
 				{
-					ThingDef thingDef = NeurotrainerDefGenerator.BaseNeurotrainer();
-					thingDef.defName = NeurotrainerDefGenerator.PsytrainerDefPrefix + "_" + abilityDef.defName;
-					thingDef.label = "PsycastNeurotrainerLabel".Translate(abilityDef.label);
+					ThingDef thingDef = BaseNeurotrainer();
+					thingDef.defName = PsytrainerDefPrefix + "_" + allDef.defName;
+					thingDef.label = "PsycastNeurotrainerLabel".Translate(allDef.label);
 					thingDef.description = "PsycastNeurotrainerDescription".Translate();
 					thingDef.comps.Add(new CompProperties_Neurotrainer
 					{
 						compClass = typeof(CompNeurotrainer),
 						useJob = JobDefOf.UseNeurotrainer,
-						useLabel = "PsycastNeurotrainerUseLabel".Translate(abilityDef.label),
-						ability = abilityDef
+						useLabel = "PsycastNeurotrainerUseLabel".Translate(allDef.label),
+						ability = allDef
 					});
 					thingDef.comps.Add(new CompProperties_UseEffect
 					{
@@ -33,7 +36,7 @@ namespace RimWorld
 					thingDef.statBases.Add(new StatModifier
 					{
 						stat = StatDefOf.MarketValue,
-						value = Mathf.Round(Mathf.Lerp(100f, 1000f, (float)abilityDef.level / 6f))
+						value = Mathf.Round(Mathf.Lerp(100f, 1000f, (float)allDef.level / 6f))
 					});
 					thingDef.thingCategories = new List<ThingCategoryDef>
 					{
@@ -43,27 +46,26 @@ namespace RimWorld
 					{
 						"RewardStandardLowFreq"
 					};
-					thingDef.modContentPack = abilityDef.modContentPack;
+					thingDef.modContentPack = allDef.modContentPack;
 					thingDef.descriptionHyperlinks = new List<DefHyperlink>
 					{
-						new DefHyperlink(abilityDef)
+						new DefHyperlink(allDef)
 					};
 					yield return thingDef;
 				}
 			}
-			IEnumerator<AbilityDef> enumerator = null;
-			foreach (SkillDef skillDef in DefDatabase<SkillDef>.AllDefs)
+			foreach (SkillDef allDef2 in DefDatabase<SkillDef>.AllDefs)
 			{
-				ThingDef thingDef2 = NeurotrainerDefGenerator.BaseNeurotrainer();
-				thingDef2.defName = NeurotrainerDefGenerator.NeurotrainerDefPrefix + "_" + skillDef.defName;
-				thingDef2.label = "SkillNeurotrainerLabel".Translate(skillDef.label);
+				ThingDef thingDef2 = BaseNeurotrainer();
+				thingDef2.defName = NeurotrainerDefPrefix + "_" + allDef2.defName;
+				thingDef2.label = "SkillNeurotrainerLabel".Translate(allDef2.label);
 				thingDef2.description = "SkillNeurotrainerDescription".Translate();
 				thingDef2.comps.Add(new CompProperties_Neurotrainer
 				{
 					compClass = typeof(CompNeurotrainer),
 					useJob = JobDefOf.UseNeurotrainer,
-					useLabel = "SkillNeurotrainerUseLabel".Translate(skillDef.label),
-					skill = skillDef
+					useLabel = "SkillNeurotrainerUseLabel".Translate(allDef2.label),
+					skill = allDef2
 				});
 				thingDef2.comps.Add(new CompProperties_UseEffect
 				{
@@ -83,15 +85,11 @@ namespace RimWorld
 					"RewardStandardHighFreq",
 					"SkillNeurotrainer"
 				};
-				thingDef2.modContentPack = skillDef.modContentPack;
+				thingDef2.modContentPack = allDef2.modContentPack;
 				yield return thingDef2;
 			}
-			IEnumerator<SkillDef> enumerator2 = null;
-			yield break;
-			yield break;
 		}
 
-		
 		private static ThingDef BaseNeurotrainer()
 		{
 			return new ThingDef
@@ -154,14 +152,5 @@ namespace RimWorld
 				forceDebugSpawnable = true
 			};
 		}
-
-		
-		public static string NeurotrainerDefPrefix = "Neurotrainer";
-
-		
-		public static string PsytrainerDefPrefix = "Psytrainer";
-
-		
-		private const int MaxAbilityLevel = 6;
 	}
 }

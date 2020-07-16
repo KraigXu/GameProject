@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,32 +5,59 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class PowerNet
 	{
-		
-		
-		public Map Map
-		{
-			get
-			{
-				return this.powerNetManager.map;
-			}
-		}
+		public PowerNetManager powerNetManager;
 
-		
-		
+		public bool hasPowerSource;
+
+		public List<CompPower> connectors = new List<CompPower>();
+
+		public List<CompPower> transmitters = new List<CompPower>();
+
+		public List<CompPowerTrader> powerComps = new List<CompPowerTrader>();
+
+		public List<CompPowerBattery> batteryComps = new List<CompPowerBattery>();
+
+		private float debugLastCreatedEnergy;
+
+		private float debugLastRawStoredEnergy;
+
+		private float debugLastApparentStoredEnergy;
+
+		private const int MaxRestartTryInterval = 200;
+
+		private const int MinRestartTryInterval = 30;
+
+		private const float RestartMinFraction = 0.05f;
+
+		private const int ShutdownInterval = 20;
+
+		private const float ShutdownMinFraction = 0.05f;
+
+		private const float MinStoredEnergyToTurnOn = 5f;
+
+		private static List<CompPowerTrader> partsWantingPowerOn = new List<CompPowerTrader>();
+
+		private static List<CompPowerTrader> potentialShutdownParts = new List<CompPowerTrader>();
+
+		private List<CompPowerBattery> givingBats = new List<CompPowerBattery>();
+
+		private static List<CompPowerBattery> batteriesShuffled = new List<CompPowerBattery>();
+
+		public Map Map => powerNetManager.map;
+
 		public bool HasActivePowerSource
 		{
 			get
 			{
-				if (!this.hasPowerSource)
+				if (!hasPowerSource)
 				{
 					return false;
 				}
-				for (int i = 0; i < this.transmitters.Count; i++)
+				for (int i = 0; i < transmitters.Count; i++)
 				{
-					if (this.IsActivePowerSource(this.transmitters[i]))
+					if (IsActivePowerSource(transmitters[i]))
 					{
 						return true;
 					}
@@ -40,41 +66,53 @@ namespace RimWorld
 			}
 		}
 
-		
 		public PowerNet(IEnumerable<CompPower> newTransmitters)
 		{
-			foreach (CompPower compPower in newTransmitters)
+			foreach (CompPower newTransmitter in newTransmitters)
 			{
-				this.transmitters.Add(compPower);
-				compPower.transNet = this;
-				this.RegisterAllComponentsOf(compPower.parent);
-				if (compPower.connectChildren != null)
+				transmitters.Add(newTransmitter);
+				newTransmitter.transNet = this;
+				RegisterAllComponentsOf(newTransmitter.parent);
+				if (newTransmitter.connectChildren != null)
 				{
-					List<CompPower> connectChildren = compPower.connectChildren;
+					List<CompPower> connectChildren = newTransmitter.connectChildren;
 					for (int i = 0; i < connectChildren.Count; i++)
 					{
-						this.RegisterConnector(connectChildren[i]);
+						RegisterConnector(connectChildren[i]);
 					}
 				}
 			}
-			this.hasPowerSource = false;
-			for (int j = 0; j < this.transmitters.Count; j++)
+			hasPowerSource = false;
+			int num = 0;
+			while (true)
 			{
-				if (this.IsPowerSource(this.transmitters[j]))
+				if (num < transmitters.Count)
 				{
-					this.hasPowerSource = true;
-					return;
+					if (IsPowerSource(transmitters[num]))
+					{
+						break;
+					}
+					num++;
+					continue;
 				}
+				return;
 			}
+			hasPowerSource = true;
 		}
 
-		
 		private bool IsPowerSource(CompPower cp)
 		{
-			return cp is CompPowerBattery || (cp is CompPowerTrader && cp.Props.basePowerConsumption < 0f);
+			if (cp is CompPowerBattery)
+			{
+				return true;
+			}
+			if (cp is CompPowerTrader && cp.Props.basePowerConsumption < 0f)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		private bool IsActivePowerSource(CompPower cp)
 		{
 			CompPowerBattery compPowerBattery = cp as CompPowerBattery;
@@ -83,71 +121,72 @@ namespace RimWorld
 				return true;
 			}
 			CompPowerTrader compPowerTrader = cp as CompPowerTrader;
-			return compPowerTrader != null && compPowerTrader.PowerOutput > 0f;
+			if (compPowerTrader != null && compPowerTrader.PowerOutput > 0f)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public void RegisterConnector(CompPower b)
 		{
-			if (this.connectors.Contains(b))
+			if (connectors.Contains(b))
 			{
-				Log.Error("PowerNet registered connector it already had: " + b, false);
+				Log.Error("PowerNet registered connector it already had: " + b);
 				return;
 			}
-			this.connectors.Add(b);
-			this.RegisterAllComponentsOf(b.parent);
+			connectors.Add(b);
+			RegisterAllComponentsOf(b.parent);
 		}
 
-		
 		public void DeregisterConnector(CompPower b)
 		{
-			this.connectors.Remove(b);
-			this.DeregisterAllComponentsOf(b.parent);
+			connectors.Remove(b);
+			DeregisterAllComponentsOf(b.parent);
 		}
 
-		
 		private void RegisterAllComponentsOf(ThingWithComps parentThing)
 		{
 			CompPowerTrader comp = parentThing.GetComp<CompPowerTrader>();
 			if (comp != null)
 			{
-				if (this.powerComps.Contains(comp))
+				if (powerComps.Contains(comp))
 				{
-					Log.Error("PowerNet adding powerComp " + comp + " which it already has.", false);
+					Log.Error("PowerNet adding powerComp " + comp + " which it already has.");
 				}
 				else
 				{
-					this.powerComps.Add(comp);
+					powerComps.Add(comp);
 				}
 			}
 			CompPowerBattery comp2 = parentThing.GetComp<CompPowerBattery>();
 			if (comp2 != null)
 			{
-				if (this.batteryComps.Contains(comp2))
+				if (batteryComps.Contains(comp2))
 				{
-					Log.Error("PowerNet adding batteryComp " + comp2 + " which it already has.", false);
-					return;
+					Log.Error("PowerNet adding batteryComp " + comp2 + " which it already has.");
 				}
-				this.batteryComps.Add(comp2);
+				else
+				{
+					batteryComps.Add(comp2);
+				}
 			}
 		}
 
-		
 		private void DeregisterAllComponentsOf(ThingWithComps parentThing)
 		{
 			CompPowerTrader comp = parentThing.GetComp<CompPowerTrader>();
 			if (comp != null)
 			{
-				this.powerComps.Remove(comp);
+				powerComps.Remove(comp);
 			}
 			CompPowerBattery comp2 = parentThing.GetComp<CompPowerBattery>();
 			if (comp2 != null)
 			{
-				this.batteryComps.Remove(comp2);
+				batteryComps.Remove(comp2);
 			}
 		}
 
-		
 		public float CurrentEnergyGainRate()
 		{
 			if (DebugSettings.unlimitedPower)
@@ -155,67 +194,57 @@ namespace RimWorld
 				return 100000f;
 			}
 			float num = 0f;
-			for (int i = 0; i < this.powerComps.Count; i++)
+			for (int i = 0; i < powerComps.Count; i++)
 			{
-				if (this.powerComps[i].PowerOn)
+				if (powerComps[i].PowerOn)
 				{
-					num += this.powerComps[i].EnergyOutputPerTick;
+					num += powerComps[i].EnergyOutputPerTick;
 				}
 			}
 			return num;
 		}
 
-		
 		public float CurrentStoredEnergy()
 		{
 			float num = 0f;
-			for (int i = 0; i < this.batteryComps.Count; i++)
+			for (int i = 0; i < batteryComps.Count; i++)
 			{
-				num += this.batteryComps[i].StoredEnergy;
+				num += batteryComps[i].StoredEnergy;
 			}
 			return num;
 		}
 
-		
 		public void PowerNetTick()
 		{
-			float num = this.CurrentEnergyGainRate();
-			float num2 = this.CurrentStoredEnergy();
-			if (num2 + num >= -1E-07f && !this.Map.gameConditionManager.ElectricityDisabled)
+			float num = CurrentEnergyGainRate();
+			float num2 = CurrentStoredEnergy();
+			if (num2 + num >= -1E-07f && !Map.gameConditionManager.ElectricityDisabled)
 			{
-				float num3;
-				if (this.batteryComps.Count > 0 && num2 >= 0.1f)
-				{
-					num3 = num2 - 5f;
-				}
-				else
-				{
-					num3 = num2;
-				}
+				float num3 = (batteryComps.Count <= 0 || !(num2 >= 0.1f)) ? num2 : (num2 - 5f);
 				if (num3 + num >= 0f)
 				{
-					PowerNet.partsWantingPowerOn.Clear();
-					for (int i = 0; i < this.powerComps.Count; i++)
+					partsWantingPowerOn.Clear();
+					for (int i = 0; i < powerComps.Count; i++)
 					{
-						if (!this.powerComps[i].PowerOn && FlickUtility.WantsToBeOn(this.powerComps[i].parent) && !this.powerComps[i].parent.IsBrokenDown())
+						if (!powerComps[i].PowerOn && FlickUtility.WantsToBeOn(powerComps[i].parent) && !powerComps[i].parent.IsBrokenDown())
 						{
-							PowerNet.partsWantingPowerOn.Add(this.powerComps[i]);
+							partsWantingPowerOn.Add(powerComps[i]);
 						}
 					}
-					if (PowerNet.partsWantingPowerOn.Count > 0)
+					if (partsWantingPowerOn.Count > 0)
 					{
-						int num4 = 200 / PowerNet.partsWantingPowerOn.Count;
+						int num4 = 200 / partsWantingPowerOn.Count;
 						if (num4 < 30)
 						{
 							num4 = 30;
 						}
 						if (Find.TickManager.TicksGame % num4 == 0)
 						{
-							int num5 = Mathf.Max(1, Mathf.RoundToInt((float)PowerNet.partsWantingPowerOn.Count * 0.05f));
+							int num5 = Mathf.Max(1, Mathf.RoundToInt((float)partsWantingPowerOn.Count * 0.05f));
 							for (int j = 0; j < num5; j++)
 							{
-								CompPowerTrader compPowerTrader = PowerNet.partsWantingPowerOn.RandomElement<CompPowerTrader>();
-								if (!compPowerTrader.PowerOn && num + num2 >= -(compPowerTrader.EnergyOutputPerTick + 1E-07f))
+								CompPowerTrader compPowerTrader = partsWantingPowerOn.RandomElement();
+								if (!compPowerTrader.PowerOn && num + num2 >= 0f - (compPowerTrader.EnergyOutputPerTick + 1E-07f))
 								{
 									compPowerTrader.PowerOn = true;
 									num += compPowerTrader.EnergyOutputPerTick;
@@ -224,55 +253,57 @@ namespace RimWorld
 						}
 					}
 				}
-				this.ChangeStoredEnergy(num);
-				return;
+				ChangeStoredEnergy(num);
 			}
-			if (Find.TickManager.TicksGame % 20 == 0)
+			else
 			{
-				PowerNet.potentialShutdownParts.Clear();
-				for (int k = 0; k < this.powerComps.Count; k++)
+				if (Find.TickManager.TicksGame % 20 != 0)
 				{
-					if (this.powerComps[k].PowerOn && this.powerComps[k].EnergyOutputPerTick < 0f)
+					return;
+				}
+				potentialShutdownParts.Clear();
+				for (int k = 0; k < powerComps.Count; k++)
+				{
+					if (powerComps[k].PowerOn && powerComps[k].EnergyOutputPerTick < 0f)
 					{
-						PowerNet.potentialShutdownParts.Add(this.powerComps[k]);
+						potentialShutdownParts.Add(powerComps[k]);
 					}
 				}
-				if (PowerNet.potentialShutdownParts.Count > 0)
+				if (potentialShutdownParts.Count > 0)
 				{
-					int num6 = Mathf.Max(1, Mathf.RoundToInt((float)PowerNet.potentialShutdownParts.Count * 0.05f));
+					int num6 = Mathf.Max(1, Mathf.RoundToInt((float)potentialShutdownParts.Count * 0.05f));
 					for (int l = 0; l < num6; l++)
 					{
-						PowerNet.potentialShutdownParts.RandomElement<CompPowerTrader>().PowerOn = false;
+						potentialShutdownParts.RandomElement().PowerOn = false;
 					}
 				}
 			}
 		}
 
-		
 		private void ChangeStoredEnergy(float extra)
 		{
 			if (extra > 0f)
 			{
-				this.DistributeEnergyAmongBatteries(extra);
+				DistributeEnergyAmongBatteries(extra);
 				return;
 			}
-			float num = -extra;
-			this.givingBats.Clear();
-			for (int i = 0; i < this.batteryComps.Count; i++)
+			float num = 0f - extra;
+			givingBats.Clear();
+			for (int i = 0; i < batteryComps.Count; i++)
 			{
-				if (this.batteryComps[i].StoredEnergy > 1E-07f)
+				if (batteryComps[i].StoredEnergy > 1E-07f)
 				{
-					this.givingBats.Add(this.batteryComps[i]);
+					givingBats.Add(batteryComps[i]);
 				}
 			}
-			float a = num / (float)this.givingBats.Count;
+			float a = num / (float)givingBats.Count;
 			int num2 = 0;
 			while (num > 1E-07f)
 			{
-				for (int j = 0; j < this.givingBats.Count; j++)
+				for (int j = 0; j < givingBats.Count; j++)
 				{
-					float num3 = Mathf.Min(a, this.givingBats[j].StoredEnergy);
-					this.givingBats[j].DrawPower(num3);
+					float num3 = Mathf.Min(a, givingBats[j].StoredEnergy);
+					givingBats[j].DrawPower(num3);
 					num -= num3;
 					if (num < 1E-07f)
 					{
@@ -287,156 +318,92 @@ namespace RimWorld
 			}
 			if (num > 1E-07f)
 			{
-				Log.Warning("Drew energy from a PowerNet that didn't have it.", false);
+				Log.Warning("Drew energy from a PowerNet that didn't have it.");
 			}
 		}
 
-		
 		private void DistributeEnergyAmongBatteries(float energy)
 		{
-			if (energy <= 0f || !this.batteryComps.Any<CompPowerBattery>())
+			if (energy <= 0f || !batteryComps.Any())
 			{
 				return;
 			}
-			PowerNet.batteriesShuffled.Clear();
-			PowerNet.batteriesShuffled.AddRange(this.batteryComps);
-			PowerNet.batteriesShuffled.Shuffle<CompPowerBattery>();
+			batteriesShuffled.Clear();
+			batteriesShuffled.AddRange(batteryComps);
+			batteriesShuffled.Shuffle();
 			int num = 0;
-			for (;;)
+			do
 			{
 				num++;
 				if (num > 10000)
 				{
+					Log.Error("Too many iterations.");
 					break;
 				}
 				float num2 = float.MaxValue;
-				for (int i = 0; i < PowerNet.batteriesShuffled.Count; i++)
+				for (int i = 0; i < batteriesShuffled.Count; i++)
 				{
-					num2 = Mathf.Min(num2, PowerNet.batteriesShuffled[i].AmountCanAccept);
+					num2 = Mathf.Min(num2, batteriesShuffled[i].AmountCanAccept);
 				}
-				if (energy < num2 * (float)PowerNet.batteriesShuffled.Count)
+				if (energy >= num2 * (float)batteriesShuffled.Count)
 				{
-					goto IL_101;
-				}
-				for (int j = PowerNet.batteriesShuffled.Count - 1; j >= 0; j--)
-				{
-					float amountCanAccept = PowerNet.batteriesShuffled[j].AmountCanAccept;
-					bool flag = amountCanAccept <= 0f || amountCanAccept == num2;
-					if (num2 > 0f)
+					for (int num3 = batteriesShuffled.Count - 1; num3 >= 0; num3--)
 					{
-						PowerNet.batteriesShuffled[j].AddEnergy(num2);
-						energy -= num2;
+						float amountCanAccept = batteriesShuffled[num3].AmountCanAccept;
+						bool num4 = amountCanAccept <= 0f || amountCanAccept == num2;
+						if (num2 > 0f)
+						{
+							batteriesShuffled[num3].AddEnergy(num2);
+							energy -= num2;
+						}
+						if (num4)
+						{
+							batteriesShuffled.RemoveAt(num3);
+						}
 					}
-					if (flag)
-					{
-						PowerNet.batteriesShuffled.RemoveAt(j);
-					}
+					continue;
 				}
-				if (energy < 0.0005f || !PowerNet.batteriesShuffled.Any<CompPowerBattery>())
+				float amount = energy / (float)batteriesShuffled.Count;
+				for (int j = 0; j < batteriesShuffled.Count; j++)
 				{
-					goto IL_15C;
+					batteriesShuffled[j].AddEnergy(amount);
 				}
+				energy = 0f;
+				break;
 			}
-			Log.Error("Too many iterations.", false);
-			goto IL_15C;
-			IL_101:
-			float amount = energy / (float)PowerNet.batteriesShuffled.Count;
-			for (int k = 0; k < PowerNet.batteriesShuffled.Count; k++)
-			{
-				PowerNet.batteriesShuffled[k].AddEnergy(amount);
-			}
-			energy = 0f;
-			IL_15C:
-			PowerNet.batteriesShuffled.Clear();
+			while (!(energy < 0.0005f) && batteriesShuffled.Any());
+			batteriesShuffled.Clear();
 		}
 
-		
 		public string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("POWERNET:");
-			stringBuilder.AppendLine("  Created energy: " + this.debugLastCreatedEnergy);
-			stringBuilder.AppendLine("  Raw stored energy: " + this.debugLastRawStoredEnergy);
-			stringBuilder.AppendLine("  Apparent stored energy: " + this.debugLastApparentStoredEnergy);
-			stringBuilder.AppendLine("  hasPowerSource: " + this.hasPowerSource.ToString());
+			stringBuilder.AppendLine("  Created energy: " + debugLastCreatedEnergy);
+			stringBuilder.AppendLine("  Raw stored energy: " + debugLastRawStoredEnergy);
+			stringBuilder.AppendLine("  Apparent stored energy: " + debugLastApparentStoredEnergy);
+			stringBuilder.AppendLine("  hasPowerSource: " + hasPowerSource.ToString());
 			stringBuilder.AppendLine("  Connectors: ");
-			foreach (CompPower compPower in this.connectors)
+			foreach (CompPower connector in connectors)
 			{
-				stringBuilder.AppendLine("      " + compPower.parent);
+				stringBuilder.AppendLine("      " + connector.parent);
 			}
 			stringBuilder.AppendLine("  Transmitters: ");
-			foreach (CompPower compPower2 in this.transmitters)
+			foreach (CompPower transmitter in transmitters)
 			{
-				stringBuilder.AppendLine("      " + compPower2.parent);
+				stringBuilder.AppendLine("      " + transmitter.parent);
 			}
 			stringBuilder.AppendLine("  powerComps: ");
-			foreach (CompPowerTrader compPowerTrader in this.powerComps)
+			foreach (CompPowerTrader powerComp in powerComps)
 			{
-				stringBuilder.AppendLine("      " + compPowerTrader.parent);
+				stringBuilder.AppendLine("      " + powerComp.parent);
 			}
 			stringBuilder.AppendLine("  batteryComps: ");
-			foreach (CompPowerBattery compPowerBattery in this.batteryComps)
+			foreach (CompPowerBattery batteryComp in batteryComps)
 			{
-				stringBuilder.AppendLine("      " + compPowerBattery.parent);
+				stringBuilder.AppendLine("      " + batteryComp.parent);
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		public PowerNetManager powerNetManager;
-
-		
-		public bool hasPowerSource;
-
-		
-		public List<CompPower> connectors = new List<CompPower>();
-
-		
-		public List<CompPower> transmitters = new List<CompPower>();
-
-		
-		public List<CompPowerTrader> powerComps = new List<CompPowerTrader>();
-
-		
-		public List<CompPowerBattery> batteryComps = new List<CompPowerBattery>();
-
-		
-		private float debugLastCreatedEnergy;
-
-		
-		private float debugLastRawStoredEnergy;
-
-		
-		private float debugLastApparentStoredEnergy;
-
-		
-		private const int MaxRestartTryInterval = 200;
-
-		
-		private const int MinRestartTryInterval = 30;
-
-		
-		private const float RestartMinFraction = 0.05f;
-
-		
-		private const int ShutdownInterval = 20;
-
-		
-		private const float ShutdownMinFraction = 0.05f;
-
-		
-		private const float MinStoredEnergyToTurnOn = 5f;
-
-		
-		private static List<CompPowerTrader> partsWantingPowerOn = new List<CompPowerTrader>();
-
-		
-		private static List<CompPowerTrader> potentialShutdownParts = new List<CompPowerTrader>();
-
-		
-		private List<CompPowerBattery> givingBats = new List<CompPowerBattery>();
-
-		
-		private static List<CompPowerBattery> batteriesShuffled = new List<CompPowerBattery>();
 	}
 }

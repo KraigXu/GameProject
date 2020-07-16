@@ -1,18 +1,15 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class ColorsFromSpectrum
 	{
-		
 		public static Color Get(IList<Color> spectrum, float val)
 		{
 			if (spectrum.Count == 0)
 			{
-				Log.Warning("Color spectrum empty.", false);
+				Log.Warning("Color spectrum empty.");
 				return Color.white;
 			}
 			if (spectrum.Count == 1)

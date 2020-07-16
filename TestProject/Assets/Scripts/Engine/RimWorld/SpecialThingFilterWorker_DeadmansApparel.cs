@@ -1,22 +1,21 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SpecialThingFilterWorker_DeadmansApparel : SpecialThingFilterWorker
 	{
-		
 		public override bool Matches(Thing t)
 		{
-			Apparel apparel = t as Apparel;
-			return apparel != null && apparel.WornByCorpse;
+			return (t as Apparel)?.WornByCorpse ?? false;
 		}
 
-		
 		public override bool CanEverMatch(ThingDef def)
 		{
-			return def.IsApparel && def.apparel.careIfWornByCorpse;
+			if (def.IsApparel)
+			{
+				return def.apparel.careIfWornByCorpse;
+			}
+			return false;
 		}
 	}
 }

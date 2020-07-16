@@ -1,35 +1,24 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Designator_ZoneAddStockpile : Designator_ZoneAdd
 	{
-		
-		
-		protected override string NewZoneLabel
-		{
-			get
-			{
-				return this.preset.PresetName();
-			}
-		}
+		protected StorageSettingsPreset preset;
 
-		
+		protected override string NewZoneLabel => preset.PresetName();
+
 		protected override Zone MakeNewZone()
 		{
-			return new Zone_Stockpile(this.preset, Find.CurrentMap.zoneManager);
+			return new Zone_Stockpile(preset, Find.CurrentMap.zoneManager);
 		}
 
-		
 		public Designator_ZoneAddStockpile()
 		{
-			this.zoneTypeToPlace = typeof(Zone_Stockpile);
+			zoneTypeToPlace = typeof(Zone_Stockpile);
 		}
 
-		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			AcceptanceReport result = base.CanDesignateCell(c);
@@ -52,14 +41,10 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected override void FinalizeDesignationSucceeded()
 		{
 			base.FinalizeDesignationSucceeded();
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Stockpiles, KnowledgeAmount.Total);
 		}
-
-		
-		protected StorageSettingsPreset preset;
 	}
 }

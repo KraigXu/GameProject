@@ -1,81 +1,65 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public static class ThingCategoryNodeDatabase
 	{
-		
-		
-		public static TreeNode_ThingCategory RootNode
-		{
-			get
-			{
-				return ThingCategoryNodeDatabase.rootNode;
-			}
-		}
+		public static bool initialized;
 
-		
+		private static TreeNode_ThingCategory rootNode;
+
+		public static List<TreeNode_ThingCategory> allThingCategoryNodes;
+
+		public static TreeNode_ThingCategory RootNode => rootNode;
+
 		public static void Clear()
 		{
-			ThingCategoryNodeDatabase.rootNode = null;
-			ThingCategoryNodeDatabase.initialized = false;
+			rootNode = null;
+			initialized = false;
 		}
 
-		
 		public static void FinalizeInit()
 		{
-			ThingCategoryNodeDatabase.rootNode = ThingCategoryDefOf.Root.treeNode;
-			foreach (ThingCategoryDef thingCategoryDef in DefDatabase<ThingCategoryDef>.AllDefs)
+			rootNode = ThingCategoryDefOf.Root.treeNode;
+			foreach (ThingCategoryDef allDef in DefDatabase<ThingCategoryDef>.AllDefs)
 			{
-				if (thingCategoryDef.parent != null)
+				if (allDef.parent != null)
 				{
-					thingCategoryDef.parent.childCategories.Add(thingCategoryDef);
+					allDef.parent.childCategories.Add(allDef);
 				}
 			}
-			ThingCategoryNodeDatabase.SetNestLevelRecursive(ThingCategoryNodeDatabase.rootNode, 0);
-			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs)
+			SetNestLevelRecursive(rootNode, 0);
+			foreach (ThingDef allDef2 in DefDatabase<ThingDef>.AllDefs)
 			{
-				if (thingDef.thingCategories != null)
+				if (allDef2.thingCategories != null)
 				{
-					foreach (ThingCategoryDef thingCategoryDef2 in thingDef.thingCategories)
+					foreach (ThingCategoryDef thingCategory in allDef2.thingCategories)
 					{
-						thingCategoryDef2.childThingDefs.Add(thingDef);
+						thingCategory.childThingDefs.Add(allDef2);
 					}
 				}
 			}
-			foreach (SpecialThingFilterDef specialThingFilterDef in DefDatabase<SpecialThingFilterDef>.AllDefs)
+			foreach (SpecialThingFilterDef allDef3 in DefDatabase<SpecialThingFilterDef>.AllDefs)
 			{
-				specialThingFilterDef.parentCategory.childSpecialFilters.Add(specialThingFilterDef);
+				allDef3.parentCategory.childSpecialFilters.Add(allDef3);
 			}
-			if (ThingCategoryNodeDatabase.rootNode.catDef.childCategories.Any<ThingCategoryDef>())
+			if (rootNode.catDef.childCategories.Any())
 			{
-				ThingCategoryNodeDatabase.rootNode.catDef.childCategories[0].treeNode.SetOpen(-1, true);
+				rootNode.catDef.childCategories[0].treeNode.SetOpen(-1, val: true);
 			}
-			ThingCategoryNodeDatabase.allThingCategoryNodes = ThingCategoryNodeDatabase.rootNode.ChildCategoryNodesAndThis.ToList<TreeNode_ThingCategory>();
-			ThingCategoryNodeDatabase.initialized = true;
+			allThingCategoryNodes = rootNode.ChildCategoryNodesAndThis.ToList();
+			initialized = true;
 		}
 
-		
 		private static void SetNestLevelRecursive(TreeNode_ThingCategory node, int nestDepth)
 		{
-			foreach (ThingCategoryDef thingCategoryDef in node.catDef.childCategories)
+			foreach (ThingCategoryDef childCategory in node.catDef.childCategories)
 			{
-				thingCategoryDef.treeNode.nestDepth = nestDepth;
-				ThingCategoryNodeDatabase.SetNestLevelRecursive(thingCategoryDef.treeNode, nestDepth + 1);
+				childCategory.treeNode.nestDepth = nestDepth;
+				SetNestLevelRecursive(childCategory.treeNode, nestDepth + 1);
 			}
 		}
-
-		
-		public static bool initialized;
-
-		
-		private static TreeNode_ThingCategory rootNode;
-
-		
-		public static List<TreeNode_ThingCategory> allThingCategoryNodes;
 	}
 }

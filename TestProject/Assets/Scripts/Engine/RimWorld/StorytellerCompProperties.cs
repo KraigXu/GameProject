@@ -1,34 +1,46 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerCompProperties
 	{
-		
-		
+		[TranslationHandle]
+		public Type compClass;
+
+		public float minDaysPassed;
+
+		public List<IncidentTargetTagDef> allowedTargetTags;
+
+		public List<IncidentTargetTagDef> disallowedTargetTags;
+
+		public float minIncChancePopulationIntentFactor = 0.05f;
+
+		public List<string> enableIfAnyModActive;
+
+		public List<string> disableIfAnyModActive;
+
 		public bool Enabled
 		{
 			get
 			{
-				if (!this.enableIfAnyModActive.NullOrEmpty<string>())
+				if (!enableIfAnyModActive.NullOrEmpty())
 				{
-					for (int i = 0; i < this.enableIfAnyModActive.Count; i++)
+					for (int i = 0; i < enableIfAnyModActive.Count; i++)
 					{
-						if (ModsConfig.IsActive(this.enableIfAnyModActive[i]))
+						if (ModsConfig.IsActive(enableIfAnyModActive[i]))
 						{
 							return true;
 						}
 					}
 					return false;
 				}
-				if (!this.disableIfAnyModActive.NullOrEmpty<string>())
+				if (!disableIfAnyModActive.NullOrEmpty())
 				{
-					for (int j = 0; j < this.disableIfAnyModActive.Count; j++)
+					for (int j = 0; j < disableIfAnyModActive.Count; j++)
 					{
-						if (ModsConfig.IsActive(this.disableIfAnyModActive[j]))
+						if (ModsConfig.IsActive(disableIfAnyModActive[j]))
 						{
 							return false;
 						}
@@ -38,56 +50,29 @@ namespace RimWorld
 			}
 		}
 
-		
 		public StorytellerCompProperties()
 		{
 		}
 
-		
 		public StorytellerCompProperties(Type compClass)
 		{
 			this.compClass = compClass;
 		}
 
-		
 		public virtual IEnumerable<string> ConfigErrors(StorytellerDef parentDef)
 		{
-			if (this.compClass == null)
+			if (compClass == null)
 			{
 				yield return "a StorytellerCompProperties has null compClass.";
 			}
-			if (!this.enableIfAnyModActive.NullOrEmpty<string>() && !this.disableIfAnyModActive.NullOrEmpty<string>())
+			if (!enableIfAnyModActive.NullOrEmpty() && !disableIfAnyModActive.NullOrEmpty())
 			{
 				yield return "enableIfAnyModActive and disableIfAnyModActive can't be used simultaneously";
 			}
-			yield break;
 		}
 
-		
 		public virtual void ResolveReferences(StorytellerDef parentDef)
 		{
 		}
-
-		
-		[TranslationHandle]
-		public Type compClass;
-
-		
-		public float minDaysPassed;
-
-		
-		public List<IncidentTargetTagDef> allowedTargetTags;
-
-		
-		public List<IncidentTargetTagDef> disallowedTargetTags;
-
-		
-		public float minIncChancePopulationIntentFactor = 0.05f;
-
-		
-		public List<string> enableIfAnyModActive;
-
-		
-		public List<string> disableIfAnyModActive;
 	}
 }

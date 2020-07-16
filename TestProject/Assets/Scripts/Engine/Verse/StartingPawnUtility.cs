@@ -1,71 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Verse
 {
-	
 	public static class StartingPawnUtility
 	{
-		
-		
-		private static List<Pawn> StartingAndOptionalPawns
-		{
-			get
-			{
-				return Find.GameInitData.startingAndOptionalPawns;
-			}
-		}
+		private static List<Pawn> StartingAndOptionalPawns => Find.GameInitData.startingAndOptionalPawns;
 
-		
 		public static void ClearAllStartingPawns()
 		{
-			for (int i = StartingPawnUtility.StartingAndOptionalPawns.Count - 1; i >= 0; i--)
+			for (int num = StartingAndOptionalPawns.Count - 1; num >= 0; num--)
 			{
-				StartingPawnUtility.StartingAndOptionalPawns[i].relations.ClearAllRelations();
+				StartingAndOptionalPawns[num].relations.ClearAllRelations();
 				if (Find.World != null)
 				{
-					PawnUtility.DestroyStartingColonistFamily(StartingPawnUtility.StartingAndOptionalPawns[i]);
-					PawnComponentsUtility.RemoveComponentsOnDespawned(StartingPawnUtility.StartingAndOptionalPawns[i]);
-					Find.WorldPawns.PassToWorld(StartingPawnUtility.StartingAndOptionalPawns[i], PawnDiscardDecideMode.Discard);
+					PawnUtility.DestroyStartingColonistFamily(StartingAndOptionalPawns[num]);
+					PawnComponentsUtility.RemoveComponentsOnDespawned(StartingAndOptionalPawns[num]);
+					Find.WorldPawns.PassToWorld(StartingAndOptionalPawns[num], PawnDiscardDecideMode.Discard);
 				}
-				StartingPawnUtility.StartingAndOptionalPawns.RemoveAt(i);
+				StartingAndOptionalPawns.RemoveAt(num);
 			}
 		}
 
-		
 		public static Pawn RandomizeInPlace(Pawn p)
 		{
-			return StartingPawnUtility.RegenerateStartingPawnInPlace(StartingPawnUtility.StartingAndOptionalPawns.IndexOf(p));
+			return RegenerateStartingPawnInPlace(StartingAndOptionalPawns.IndexOf(p));
 		}
 
-		
 		private static Pawn RegenerateStartingPawnInPlace(int index)
 		{
-			Pawn pawn = StartingPawnUtility.StartingAndOptionalPawns[index];
+			Pawn pawn = StartingAndOptionalPawns[index];
 			PawnUtility.TryDestroyStartingColonistFamily(pawn);
 			pawn.relations.ClearAllRelations();
 			PawnComponentsUtility.RemoveComponentsOnDespawned(pawn);
 			Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
-			StartingPawnUtility.StartingAndOptionalPawns[index] = null;
-			for (int i = 0; i < StartingPawnUtility.StartingAndOptionalPawns.Count; i++)
+			StartingAndOptionalPawns[index] = null;
+			for (int i = 0; i < StartingAndOptionalPawns.Count; i++)
 			{
-				if (StartingPawnUtility.StartingAndOptionalPawns[i] != null)
+				if (StartingAndOptionalPawns[i] != null)
 				{
-					PawnUtility.TryDestroyStartingColonistFamily(StartingPawnUtility.StartingAndOptionalPawns[i]);
+					PawnUtility.TryDestroyStartingColonistFamily(StartingAndOptionalPawns[i]);
 				}
 			}
-			Pawn pawn2 = StartingPawnUtility.NewGeneratedStartingPawn();
-			StartingPawnUtility.StartingAndOptionalPawns[index] = pawn2;
+			Pawn pawn2 = NewGeneratedStartingPawn();
+			StartingAndOptionalPawns[index] = pawn2;
 			return pawn2;
 		}
 
-		
 		public static Pawn NewGeneratedStartingPawn()
 		{
-			PawnGenerationRequest request = new PawnGenerationRequest(Faction.OfPlayer.def.basicMemberKind, Faction.OfPlayer, PawnGenerationContext.PlayerStarter, -1, true, false, false, false, true, TutorSystem.TutorialMode, 20f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null);
+			PawnGenerationRequest request = new PawnGenerationRequest(Faction.OfPlayer.def.basicMemberKind, Faction.OfPlayer, PawnGenerationContext.PlayerStarter, -1, forceGenerateNewPawn: true, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, TutorSystem.TutorialMode, 20f);
 			Pawn pawn = null;
 			try
 			{
@@ -73,7 +60,7 @@ namespace Verse
 			}
 			catch (Exception arg)
 			{
-				Log.Error("There was an exception thrown by the PawnGenerator during generating a starting pawn. Trying one more time...\nException: " + arg, false);
+				Log.Error("There was an exception thrown by the PawnGenerator during generating a starting pawn. Trying one more time...\nException: " + arg);
 				pawn = PawnGenerator.GeneratePawn(request);
 			}
 			pawn.relations.everSeenByPlayer = true;
@@ -81,10 +68,9 @@ namespace Verse
 			return pawn;
 		}
 
-		
 		public static bool WorkTypeRequirementsSatisfied()
 		{
-			if (StartingPawnUtility.StartingAndOptionalPawns.Count == 0)
+			if (StartingAndOptionalPawns.Count == 0)
 			{
 				return false;
 			}
@@ -92,61 +78,56 @@ namespace Verse
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				WorkTypeDef workTypeDef = allDefsListForReading[i];
-				if (workTypeDef.requireCapableColonist)
+				if (!workTypeDef.requireCapableColonist)
 				{
-					bool flag = false;
-					for (int j = 0; j < Find.GameInitData.startingPawnCount; j++)
+					continue;
+				}
+				bool flag = false;
+				for (int j = 0; j < Find.GameInitData.startingPawnCount; j++)
+				{
+					if (!StartingAndOptionalPawns[j].WorkTypeIsDisabled(workTypeDef))
 					{
-						if (!StartingPawnUtility.StartingAndOptionalPawns[j].WorkTypeIsDisabled(workTypeDef))
-						{
-							flag = true;
-							break;
-						}
-					}
-					if (!flag)
-					{
-						return false;
+						flag = true;
+						break;
 					}
 				}
-			}
-			if (TutorSystem.TutorialMode)
-			{
-				if (StartingPawnUtility.StartingAndOptionalPawns.Take(Find.GameInitData.startingPawnCount).Any((Pawn p) => p.WorkTagIsDisabled(WorkTags.Violent)))
+				if (!flag)
 				{
 					return false;
 				}
 			}
+			if (TutorSystem.TutorialMode && StartingAndOptionalPawns.Take(Find.GameInitData.startingPawnCount).Any((Pawn p) => p.WorkTagIsDisabled(WorkTags.Violent)))
+			{
+				return false;
+			}
 			return true;
 		}
 
-		
 		public static IEnumerable<WorkTypeDef> RequiredWorkTypesDisabledForEveryone()
 		{
 			List<WorkTypeDef> workTypes = DefDatabase<WorkTypeDef>.AllDefsListForReading;
-			int num;
-			for (int i = 0; i < workTypes.Count; i = num + 1)
+			for (int i = 0; i < workTypes.Count; i++)
 			{
 				WorkTypeDef workTypeDef = workTypes[i];
-				if (workTypeDef.requireCapableColonist)
+				if (!workTypeDef.requireCapableColonist)
 				{
-					bool flag = false;
-					List<Pawn> startingAndOptionalPawns = StartingPawnUtility.StartingAndOptionalPawns;
-					for (int j = 0; j < Find.GameInitData.startingPawnCount; j++)
+					continue;
+				}
+				bool flag = false;
+				List<Pawn> startingAndOptionalPawns = StartingAndOptionalPawns;
+				for (int j = 0; j < Find.GameInitData.startingPawnCount; j++)
+				{
+					if (!startingAndOptionalPawns[j].WorkTypeIsDisabled(workTypeDef))
 					{
-						if (!startingAndOptionalPawns[j].WorkTypeIsDisabled(workTypeDef))
-						{
-							flag = true;
-							break;
-						}
-					}
-					if (!flag)
-					{
-						yield return workTypeDef;
+						flag = true;
+						break;
 					}
 				}
-				num = i;
+				if (!flag)
+				{
+					yield return workTypeDef;
+				}
 			}
-			yield break;
 		}
 	}
 }

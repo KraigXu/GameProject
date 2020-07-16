@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,191 +6,174 @@ using UnityEngine;
 
 namespace Verse
 {
-	
 	public class TreeNode_Editor : TreeNode
 	{
-		
-		
-		public object ParentObj
-		{
-			get
-			{
-				return ((TreeNode_Editor)this.parentNode).obj;
-			}
-		}
+		public object obj;
 
-		
-		
+		public FieldInfo owningField;
+
+		public int owningIndex = -1;
+
+		private MethodInfo editWidgetsMethod;
+
+		public EditTreeNodeType nodeType;
+
+		private int indexToDelete = -1;
+
+		public object ParentObj => ((TreeNode_Editor)parentNode).obj;
+
 		public Type ObjectType
 		{
 			get
 			{
-				if (this.owningField != null)
+				if (owningField != null)
 				{
-					return this.owningField.FieldType;
+					return owningField.FieldType;
 				}
-				if (this.IsListItem)
+				if (IsListItem)
 				{
-					return this.ListRootObject.GetType().GetGenericArguments()[0];
+					return ListRootObject.GetType().GetGenericArguments()[0];
 				}
-				if (this.obj != null)
+				if (obj != null)
 				{
-					return this.obj.GetType();
+					return obj.GetType();
 				}
 				throw new InvalidOperationException();
 			}
 		}
 
-		
-		
-		
 		public object Value
 		{
 			get
 			{
-				if (this.owningField != null)
+				if (owningField != null)
 				{
-					return this.owningField.GetValue(this.ParentObj);
+					return owningField.GetValue(ParentObj);
 				}
-				if (this.IsListItem)
+				if (IsListItem)
 				{
-					return this.ListRootObject.GetType().GetProperty("Item").GetValue(this.ListRootObject, new object[]
+					return ListRootObject.GetType().GetProperty("Item").GetValue(ListRootObject, new object[1]
 					{
-						this.owningIndex
+						owningIndex
 					});
 				}
 				throw new InvalidOperationException();
 			}
 			set
 			{
-				if (this.owningField != null)
+				if (owningField != null)
 				{
-					this.owningField.SetValue(this.ParentObj, value);
+					owningField.SetValue(ParentObj, value);
 				}
-				if (this.IsListItem)
+				if (IsListItem)
 				{
-					this.ListRootObject.GetType().GetProperty("Item").SetValue(this.ListRootObject, value, new object[]
+					ListRootObject.GetType().GetProperty("Item").SetValue(ListRootObject, value, new object[1]
 					{
-						this.owningIndex
+						owningIndex
 					});
 				}
 			}
 		}
 
-		
-		
-		public bool IsListItem
-		{
-			get
-			{
-				return this.owningIndex >= 0;
-			}
-		}
+		public bool IsListItem => owningIndex >= 0;
 
-		
-		
-		private object ListRootObject
-		{
-			get
-			{
-				return this.ParentObj;
-			}
-		}
+		private object ListRootObject => ParentObj;
 
-		
-		
 		public override bool Openable
 		{
 			get
 			{
-				return this.obj != null && this.nodeType != EditTreeNodeType.TerminalValue && (this.nodeType != EditTreeNodeType.ListRoot || (int)this.obj.GetType().GetProperty("Count").GetValue(this.obj, null) != 0);
+				if (obj == null)
+				{
+					return false;
+				}
+				if (nodeType == EditTreeNodeType.TerminalValue)
+				{
+					return false;
+				}
+				if (nodeType == EditTreeNodeType.ListRoot && (int)obj.GetType().GetProperty("Count").GetValue(obj, null) == 0)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public bool HasContentLines
-		{
-			get
-			{
-				return this.nodeType != EditTreeNodeType.TerminalValue;
-			}
-		}
+		public bool HasContentLines => nodeType != EditTreeNodeType.TerminalValue;
 
-		
-		
 		public bool HasNewButton
 		{
 			get
 			{
-				return (this.nodeType == EditTreeNodeType.ComplexObject && this.obj == null) || (this.owningField != null && this.owningField.FieldType.HasAttribute<EditorReplaceableAttribute>());
+				if (nodeType == EditTreeNodeType.ComplexObject && obj == null)
+				{
+					return true;
+				}
+				if (owningField != null && owningField.FieldType.HasAttribute<EditorReplaceableAttribute>())
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public bool HasDeleteButton
 		{
 			get
 			{
-				return this.IsListItem || (this.owningField != null && this.owningField.FieldType.HasAttribute<EditorNullableAttribute>());
+				if (IsListItem)
+				{
+					return true;
+				}
+				if (owningField != null && owningField.FieldType.HasAttribute<EditorNullableAttribute>())
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public string ExtraInfoText
 		{
 			get
 			{
-				if (this.obj == null)
+				if (obj == null)
 				{
 					return "null";
 				}
-				if (this.obj.GetType().HasAttribute<EditorShowClassNameAttribute>())
+				if (obj.GetType().HasAttribute<EditorShowClassNameAttribute>())
 				{
-					return this.obj.GetType().Name;
+					return obj.GetType().Name;
 				}
-				if (this.obj.GetType().IsGenericType && this.obj.GetType().GetGenericTypeDefinition() == typeof(List<>))
+				if (obj.GetType().IsGenericType && obj.GetType().GetGenericTypeDefinition() == typeof(List<>))
 				{
-					int num = (int)this.obj.GetType().GetProperty("Count").GetValue(this.obj, null);
-					return string.Concat(new string[]
-					{
-						"(",
-						num.ToString(),
-						" ",
-						(num == 1) ? "element" : "elements",
-						")"
-					});
+					int num = (int)obj.GetType().GetProperty("Count").GetValue(obj, null);
+					return "(" + num.ToString() + " " + ((num == 1) ? "element" : "elements") + ")";
 				}
 				return "";
 			}
 		}
 
-		
-		
 		public string LabelText
 		{
 			get
 			{
-				if (this.owningField != null)
+				if (owningField != null)
 				{
-					return this.owningField.Name;
+					return owningField.Name;
 				}
-				if (this.IsListItem)
+				if (IsListItem)
 				{
-					return this.owningIndex.ToString();
+					return owningIndex.ToString();
 				}
-				return this.ObjectType.Name;
+				return ObjectType.Name;
 			}
 		}
 
-		
 		private TreeNode_Editor()
 		{
 		}
 
-		
 		public static TreeNode_Editor NewRootNode(object rootObj)
 		{
 			if (rootObj.GetType().IsValueEditable())
@@ -206,7 +189,6 @@ namespace Verse
 			return treeNode_Editor;
 		}
 
-		
 		public static TreeNode_Editor NewChildNodeFromField(TreeNode_Editor parent, FieldInfo fieldInfo)
 		{
 			TreeNode_Editor treeNode_Editor = new TreeNode_Editor();
@@ -222,7 +204,6 @@ namespace Verse
 			return treeNode_Editor;
 		}
 
-		
 		private static TreeNode_Editor NewChildNodeFromListItem(TreeNode_Editor parent, int listIndex)
 		{
 			TreeNode_Editor treeNode_Editor = new TreeNode_Editor();
@@ -233,179 +214,155 @@ namespace Verse
 			Type type = obj.GetType();
 			if (!type.GetGenericArguments()[0].IsValueEditable())
 			{
-				object value = type.GetProperty("Item").GetValue(obj, new object[]
+				object obj2 = treeNode_Editor.obj = type.GetProperty("Item").GetValue(obj, new object[1]
 				{
 					listIndex
 				});
-				treeNode_Editor.obj = value;
 				treeNode_Editor.RebuildChildNodes();
 			}
 			treeNode_Editor.InitiallyCacheData();
 			return treeNode_Editor;
 		}
 
-		
 		private void InitiallyCacheData()
 		{
-			if (this.obj != null && this.obj.GetType().IsGenericType && this.obj.GetType().GetGenericTypeDefinition() == typeof(List<>))
+			if (obj != null && obj.GetType().IsGenericType && obj.GetType().GetGenericTypeDefinition() == typeof(List<>))
 			{
-				this.nodeType = EditTreeNodeType.ListRoot;
+				nodeType = EditTreeNodeType.ListRoot;
 			}
-			else if (this.ObjectType.IsValueEditable())
+			else if (ObjectType.IsValueEditable())
 			{
-				this.nodeType = EditTreeNodeType.TerminalValue;
+				nodeType = EditTreeNodeType.TerminalValue;
 			}
 			else
 			{
-				this.nodeType = EditTreeNodeType.ComplexObject;
+				nodeType = EditTreeNodeType.ComplexObject;
 			}
-			if (this.obj != null)
+			if (obj != null)
 			{
-				this.editWidgetsMethod = this.obj.GetType().GetMethod("DoEditWidgets");
+				editWidgetsMethod = obj.GetType().GetMethod("DoEditWidgets");
 			}
 		}
-
 
 		public void RebuildChildNodes()
 		{
-			if (this.obj == null)
+			if (obj == null)
 			{
 				return;
 			}
-			this.children = new List<TreeNode>();
-			Type objType = this.obj.GetType();
+			children = new List<TreeNode>();
+			Type objType = obj.GetType();
 			if (objType.IsGenericType && objType.GetGenericTypeDefinition() == typeof(List<>))
 			{
-				int num = (int)objType.GetProperty("Count").GetValue(this.obj, null);
+				int num = (int)objType.GetProperty("Count").GetValue(obj, null);
 				for (int i = 0; i < num; i++)
 				{
-					TreeNode_Editor item = TreeNode_Editor.NewChildNodeFromListItem(this, i);
-					this.children.Add(item);
+					TreeNode_Editor item = NewChildNodeFromListItem(this, i);
+					children.Add(item);
 				}
-				return;
 			}
-			IEnumerable<FieldInfo> fields = this.obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-			Func<FieldInfo, int> keySelector=f=> this.InheritanceDistanceBetween(objType, f.DeclaringType);
-			foreach (FieldInfo fieldInfo in fields.OrderByDescending(keySelector))
+			else
 			{
-				if (fieldInfo.GetCustomAttributes(typeof(UnsavedAttribute), true).Length == 0 && fieldInfo.GetCustomAttributes(typeof(EditorHiddenAttribute), true).Length == 0)
+				foreach (FieldInfo item3 in from f in obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+					orderby InheritanceDistanceBetween(objType, f.DeclaringType) descending
+					select f)
 				{
-					TreeNode_Editor item2 = TreeNode_Editor.NewChildNodeFromField(this, fieldInfo);
-					this.children.Add(item2);
+					if (item3.GetCustomAttributes(typeof(UnsavedAttribute), inherit: true).Length == 0 && item3.GetCustomAttributes(typeof(EditorHiddenAttribute), inherit: true).Length == 0)
+					{
+						TreeNode_Editor item2 = NewChildNodeFromField(this, item3);
+						children.Add(item2);
+					}
 				}
 			}
 		}
 
-		
 		private int InheritanceDistanceBetween(Type childType, Type parentType)
 		{
 			Type type = childType;
 			int num = 0;
-			while (!(type == parentType))
+			do
 			{
+				if (type == parentType)
+				{
+					return num;
+				}
 				type = type.BaseType;
 				num++;
-				if (type == null)
-				{
-					Log.Error(childType + " is not a subclass of " + parentType, false);
-					return -1;
-				}
 			}
-			return num;
+			while (!(type == null));
+			Log.Error(childType + " is not a subclass of " + parentType);
+			return -1;
 		}
 
-		
 		public void CheckLatentDelete()
 		{
-			if (this.indexToDelete >= 0)
+			if (indexToDelete >= 0)
 			{
-				this.obj.GetType().GetMethod("RemoveAt").Invoke(this.obj, new object[]
+				obj.GetType().GetMethod("RemoveAt").Invoke(obj, new object[1]
 				{
-					this.indexToDelete
+					indexToDelete
 				});
-				this.RebuildChildNodes();
-				this.indexToDelete = -1;
+				RebuildChildNodes();
+				indexToDelete = -1;
 			}
 		}
 
-		
 		public void Delete()
 		{
-			if (this.owningField != null)
+			if (owningField != null)
 			{
-				this.owningField.SetValue(this.obj, null);
+				owningField.SetValue(obj, null);
 				return;
 			}
-			if (this.IsListItem)
+			if (IsListItem)
 			{
-				((TreeNode_Editor)this.parentNode).indexToDelete = this.owningIndex;
+				((TreeNode_Editor)parentNode).indexToDelete = owningIndex;
 				return;
 			}
 			throw new InvalidOperationException();
 		}
 
-		
 		public void DoSpecialPreElements(Listing_TreeDefs listing)
 		{
-			if (this.obj == null)
+			if (obj != null)
 			{
-				return;
-			}
-			if (this.editWidgetsMethod != null)
-			{
-				WidgetRow widgetRow = listing.StartWidgetsRow(this.nestDepth);
-				this.editWidgetsMethod.Invoke(this.obj, new object[]
+				if (editWidgetsMethod != null)
 				{
-					widgetRow
-				});
-			}
-			Editable editable = this.obj as Editable;
-			if (editable != null)
-			{
-				GUI.color = new Color(1f, 0.5f, 0.5f, 1f);
-				foreach (string text in editable.ConfigErrors())
-				{
-					listing.InfoText(text, this.nestDepth);
+					WidgetRow widgetRow = listing.StartWidgetsRow(nestDepth);
+					editWidgetsMethod.Invoke(obj, new object[1]
+					{
+						widgetRow
+					});
 				}
-				GUI.color = Color.white;
+				Editable editable = obj as Editable;
+				if (editable != null)
+				{
+					GUI.color = new Color(1f, 0.5f, 0.5f, 1f);
+					foreach (string item in editable.ConfigErrors())
+					{
+						listing.InfoText(item, nestDepth);
+					}
+					GUI.color = Color.white;
+				}
 			}
 		}
 
-		
 		public override string ToString()
 		{
 			string text = "EditTreeNode(";
-			if (this.ParentObj != null)
+			if (ParentObj != null)
 			{
-				text = text + " owningObj=" + this.ParentObj;
+				text = text + " owningObj=" + ParentObj;
 			}
-			if (this.owningField != null)
+			if (owningField != null)
 			{
-				text = text + " owningField=" + this.owningField;
+				text = text + " owningField=" + owningField;
 			}
-			if (this.owningIndex >= 0)
+			if (owningIndex >= 0)
 			{
-				text = text + " owningIndex=" + this.owningIndex;
+				text = text + " owningIndex=" + owningIndex;
 			}
 			return text + ")";
 		}
-
-		
-		public object obj;
-
-		
-		public FieldInfo owningField;
-
-		
-		public int owningIndex = -1;
-
-		
-		private MethodInfo editWidgetsMethod;
-
-		
-		public EditTreeNodeType nodeType;
-
-		
-		private int indexToDelete = -1;
 	}
 }

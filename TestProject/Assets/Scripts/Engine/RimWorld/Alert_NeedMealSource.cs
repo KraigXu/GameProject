@@ -1,20 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedMealSource : Alert
 	{
-		
 		public Alert_NeedMealSource()
 		{
-			this.defaultLabel = "NeedMealSource".Translate();
-			this.defaultExplanation = "NeedMealSourceDesc".Translate();
+			defaultLabel = "NeedMealSource".Translate();
+			defaultExplanation = "NeedMealSourceDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (GenDate.DaysPassed < 2)
@@ -24,7 +20,7 @@ namespace RimWorld
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				if (this.NeedMealSource(maps[i]))
+				if (NeedMealSource(maps[i]))
 				{
 					return true;
 				}
@@ -32,7 +28,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private bool NeedMealSource(Map map)
 		{
 			if (!map.IsPlayerHome)

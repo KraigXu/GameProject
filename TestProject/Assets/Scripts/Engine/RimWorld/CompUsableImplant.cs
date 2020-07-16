@@ -1,15 +1,12 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompUsableImplant : CompUsable
 	{
-		
 		protected override string FloatMenuOptionLabel(Pawn pawn)
 		{
-			CompUseEffect_InstallImplant compUseEffect_InstallImplant = this.parent.TryGetComp<CompUseEffect_InstallImplant>();
+			CompUseEffect_InstallImplant compUseEffect_InstallImplant = parent.TryGetComp<CompUseEffect_InstallImplant>();
 			if (compUseEffect_InstallImplant != null)
 			{
 				Hediff_ImplantWithLevel hediff_ImplantWithLevel = compUseEffect_InstallImplant.GetExistingImplant(pawn) as Hediff_ImplantWithLevel;
@@ -21,30 +18,30 @@ namespace RimWorld
 			return base.FloatMenuOptionLabel(pawn);
 		}
 
-		
 		public override void TryStartUseJob(Pawn pawn, LocalTargetInfo extraTarget)
 		{
-			CompUseEffect_InstallImplant useEffectImplant = this.parent.TryGetComp<CompUseEffect_InstallImplant>();
+			CompUseEffect_InstallImplant useEffectImplant = parent.TryGetComp<CompUseEffect_InstallImplant>();
 			Hediff_ImplantWithLevel hediff_ImplantWithLevel = useEffectImplant.GetExistingImplant(pawn) as Hediff_ImplantWithLevel;
 			TaggedString text = CompRoyalImplant.CheckForViolations(pawn, useEffectImplant.Props.hediffDef, (hediff_ImplantWithLevel != null && useEffectImplant.Props.canUpgrade) ? 1 : 0);
 			if (!text.NullOrEmpty())
 			{
 				Find.WindowStack.Add(new Dialog_MessageBox(text, "Yes".Translate(), delegate
 				{
-					this.UseJobInternal(pawn, extraTarget, useEffectImplant.Props.hediffDef);
-				}, "No".Translate(), null, null, false, null, null));
-				return;
+					UseJobInternal(pawn, extraTarget, useEffectImplant.Props.hediffDef);
+				}, "No".Translate()));
 			}
-			this.UseJobInternal(pawn, extraTarget, useEffectImplant.Props.hediffDef);
+			else
+			{
+				UseJobInternal(pawn, extraTarget, useEffectImplant.Props.hediffDef);
+			}
 		}
 
-		
 		private void UseJobInternal(Pawn pawn, LocalTargetInfo extraTarget, HediffDef hediff)
 		{
 			base.TryStartUseJob(pawn, extraTarget);
-			if (hediff == HediffDefOf.PsychicAmplifier && pawn.GetStatValue(StatDefOf.PsychicSensitivity, true) < 1.401298E-45f)
+			if (hediff == HediffDefOf.PsychicAmplifier && pawn.GetStatValue(StatDefOf.PsychicSensitivity) < float.Epsilon)
 			{
-				Messages.Message("MessagePsylinkNoSensitivity".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.CautionInput, false);
+				Messages.Message("MessagePsylinkNoSensitivity".Translate(pawn.Named("PAWN")), pawn, MessageTypeDefOf.CautionInput, historical: false);
 			}
 		}
 	}

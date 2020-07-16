@@ -1,13 +1,22 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenPart_ConfigPage_ConfigureStartingPawns : ScenPart_ConfigPage
 	{
-		
+		public int pawnCount = 3;
+
+		public int pawnChoiceCount = 10;
+
+		private string pawnCountBuffer;
+
+		private string pawnCountChoiceBuffer;
+
+		private const int MaxPawnCount = 10;
+
+		private const int MaxPawnChoiceCount = 10;
+
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
 			base.DoEditInterface(listing);
@@ -18,76 +27,47 @@ namespace RimWorld
 			rect.xMax -= 4f;
 			Widgets.Label(rect, "ScenPart_StartWithPawns_OutOf".Translate());
 			Text.Anchor = TextAnchor.UpperLeft;
-			Widgets.TextFieldNumeric<int>(scenPartRect, ref this.pawnCount, ref this.pawnCountBuffer, 1f, 10f);
+			Widgets.TextFieldNumeric(scenPartRect, ref pawnCount, ref pawnCountBuffer, 1f, 10f);
 			scenPartRect.y += ScenPart.RowHeight;
-			Widgets.TextFieldNumeric<int>(scenPartRect, ref this.pawnChoiceCount, ref this.pawnCountChoiceBuffer, (float)this.pawnCount, 10f);
+			Widgets.TextFieldNumeric(scenPartRect, ref pawnChoiceCount, ref pawnCountChoiceBuffer, pawnCount, 10f);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.pawnCount, "pawnCount", 0, false);
-			Scribe_Values.Look<int>(ref this.pawnChoiceCount, "pawnChoiceCount", 0, false);
+			Scribe_Values.Look(ref pawnCount, "pawnCount", 0);
+			Scribe_Values.Look(ref pawnChoiceCount, "pawnChoiceCount", 0);
 		}
 
-		
 		public override string Summary(Scenario scen)
 		{
-			return "ScenPart_StartWithPawns".Translate(this.pawnCount, this.pawnChoiceCount);
+			return "ScenPart_StartWithPawns".Translate(pawnCount, pawnChoiceCount);
 		}
 
-		
 		public override void Randomize()
 		{
-			this.pawnCount = Rand.RangeInclusive(1, 6);
-			this.pawnChoiceCount = 10;
+			pawnCount = Rand.RangeInclusive(1, 6);
+			pawnChoiceCount = 10;
 		}
 
-		
 		public override void PostWorldGenerate()
 		{
-			Find.GameInitData.startingPawnCount = this.pawnCount;
+			Find.GameInitData.startingPawnCount = pawnCount;
 			int num = 0;
 			do
 			{
 				StartingPawnUtility.ClearAllStartingPawns();
-				for (int i = 0; i < this.pawnCount; i++)
+				for (int i = 0; i < pawnCount; i++)
 				{
 					Find.GameInitData.startingAndOptionalPawns.Add(StartingPawnUtility.NewGeneratedStartingPawn());
 				}
 				num++;
-				if (num > 20)
-				{
-					break;
-				}
 			}
-			while (!StartingPawnUtility.WorkTypeRequirementsSatisfied());
-			IL_62:
-			while (Find.GameInitData.startingAndOptionalPawns.Count < this.pawnChoiceCount)
+			while (num <= 20 && !StartingPawnUtility.WorkTypeRequirementsSatisfied());
+			while (Find.GameInitData.startingAndOptionalPawns.Count < pawnChoiceCount)
 			{
 				Find.GameInitData.startingAndOptionalPawns.Add(StartingPawnUtility.NewGeneratedStartingPawn());
 			}
-			return;
-			goto IL_62;
 		}
-
-		
-		public int pawnCount = 3;
-
-		
-		public int pawnChoiceCount = 10;
-
-		
-		private string pawnCountBuffer;
-
-		
-		private string pawnCountChoiceBuffer;
-
-		
-		private const int MaxPawnCount = 10;
-
-		
-		private const int MaxPawnChoiceCount = 10;
 	}
 }

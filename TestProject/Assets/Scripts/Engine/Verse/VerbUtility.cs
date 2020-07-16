@@ -1,74 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class VerbUtility
 	{
-		
+		public struct VerbPropertiesWithSource
+		{
+			public VerbProperties verbProps;
+
+			public Tool tool;
+
+			public ManeuverDef maneuver;
+
+			public ToolCapacityDef ToolCapacity
+			{
+				get
+				{
+					if (maneuver == null)
+					{
+						return null;
+					}
+					return maneuver.requiredCapacity;
+				}
+			}
+
+			public VerbPropertiesWithSource(VerbProperties verbProps)
+			{
+				this.verbProps = verbProps;
+				tool = null;
+				maneuver = null;
+			}
+
+			public VerbPropertiesWithSource(VerbProperties verbProps, Tool tool, ManeuverDef maneuver)
+			{
+				this.verbProps = verbProps;
+				this.tool = tool;
+				this.maneuver = maneuver;
+			}
+		}
+
 		public static ThingDef GetProjectile(this Verb verb)
 		{
-			Verb_LaunchProjectile verb_LaunchProjectile = verb as Verb_LaunchProjectile;
-			if (verb_LaunchProjectile == null)
-			{
-				return null;
-			}
-			return verb_LaunchProjectile.Projectile;
+			return (verb as Verb_LaunchProjectile)?.Projectile;
 		}
 
-		
 		public static DamageDef GetDamageDef(this Verb verb)
 		{
-			if (!verb.verbProps.LaunchesProjectile)
+			if (verb.verbProps.LaunchesProjectile)
 			{
-				return verb.verbProps.meleeDamageDef;
+				return verb.GetProjectile()?.projectile.damageDef;
 			}
-			ThingDef projectile = verb.GetProjectile();
-			if (projectile != null)
-			{
-				return projectile.projectile.damageDef;
-			}
-			return null;
+			return verb.verbProps.meleeDamageDef;
 		}
 
-		
 		public static bool IsIncendiary(this Verb verb)
 		{
-			ThingDef projectile = verb.GetProjectile();
-			return projectile != null && projectile.projectile.ai_IsIncendiary;
+			return verb.GetProjectile()?.projectile.ai_IsIncendiary ?? false;
 		}
 
-		
 		public static bool ProjectileFliesOverhead(this Verb verb)
 		{
-			ThingDef projectile = verb.GetProjectile();
-			return projectile != null && projectile.projectile.flyOverhead;
+			return verb.GetProjectile()?.projectile.flyOverhead ?? false;
 		}
 
-		
 		public static bool HarmsHealth(this Verb verb)
 		{
-			DamageDef damageDef = verb.GetDamageDef();
-			return damageDef != null && damageDef.harmsHealth;
+			return verb.GetDamageDef()?.harmsHealth ?? false;
 		}
 
-		
 		public static bool IsEMP(this Verb verb)
 		{
 			return verb.GetDamageDef() == DamageDefOf.EMP;
 		}
 
-		
 		public static bool UsesExplosiveProjectiles(this Verb verb)
 		{
 			ThingDef projectile = verb.GetProjectile();
-			return projectile != null && projectile.projectile.explosionRadius > 0f;
+			if (projectile != null)
+			{
+				return projectile.projectile.explosionRadius > 0f;
+			}
+			return false;
 		}
 
-		
 		public static List<Verb> GetConcreteExampleVerbs(Def def, ThingDef stuff = null)
 		{
 			List<Verb> result = null;
@@ -76,18 +92,7 @@ namespace Verse
 			if (thingDef != null)
 			{
 				Thing concreteExample = thingDef.GetConcreteExample(stuff);
-				if (concreteExample is Pawn)
-				{
-					result = ((Pawn)concreteExample).VerbTracker.AllVerbs;
-				}
-				else if (concreteExample is ThingWithComps)
-				{
-					result = ((ThingWithComps)concreteExample).GetComp<CompEquippable>().AllVerbs;
-				}
-				else
-				{
-					result = null;
-				}
+				result = ((concreteExample is Pawn) ? ((Pawn)concreteExample).VerbTracker.AllVerbs : ((!(concreteExample is ThingWithComps)) ? null : ((ThingWithComps)concreteExample).GetComp<CompEquippable>().AllVerbs));
 			}
 			HediffDef hediffDef = def as HediffDef;
 			if (hediffDef != null)
@@ -97,10 +102,9 @@ namespace Verse
 			return result;
 		}
 
-		
 		public static float CalculateAdjustedForcedMiss(float forcedMiss, IntVec3 vector)
 		{
-			float num = (float)vector.LengthHorizontalSquared;
+			float num = vector.LengthHorizontalSquared;
 			if (num < 9f)
 			{
 				return 0f;
@@ -116,7 +120,6 @@ namespace Verse
 			return forcedMiss;
 		}
 
-		
 		public static float InterceptChanceFactorFromDistance(Vector3 origin, IntVec3 c)
 		{
 			float num = (c.ToVector3Shifted() - origin).MagnitudeHorizontalSquared();
@@ -131,36 +134,27 @@ namespace Verse
 			return Mathf.InverseLerp(25f, 144f, num);
 		}
 
-		
-		public static IEnumerable<VerbUtility.VerbPropertiesWithSource> GetAllVerbProperties(List<VerbProperties> verbProps, List<Tool> tools)
+		public static IEnumerable<VerbPropertiesWithSource> GetAllVerbProperties(List<VerbProperties> verbProps, List<Tool> tools)
 		{
 			if (verbProps != null)
 			{
-				int num;
-				for (int i = 0; i < verbProps.Count; i = num + 1)
+				for (int j = 0; j < verbProps.Count; j++)
 				{
-					yield return new VerbUtility.VerbPropertiesWithSource(verbProps[i]);
-					num = i;
+					yield return new VerbPropertiesWithSource(verbProps[j]);
 				}
 			}
 			if (tools != null)
 			{
-				int num;
-				for (int i = 0; i < tools.Count; i = num + 1)
+				for (int j = 0; j < tools.Count; j++)
 				{
-					foreach (ManeuverDef maneuverDef in tools[i].Maneuvers)
+					foreach (ManeuverDef maneuver in tools[j].Maneuvers)
 					{
-						yield return new VerbUtility.VerbPropertiesWithSource(maneuverDef.verb, tools[i], maneuverDef);
+						yield return new VerbPropertiesWithSource(maneuver.verb, tools[j], maneuver);
 					}
-					IEnumerator<ManeuverDef> enumerator = null;
-					num = i;
 				}
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static bool AllowAdjacentShot(LocalTargetInfo target, Thing caster)
 		{
 			if (!(caster is Pawn))
@@ -168,13 +162,16 @@ namespace Verse
 				return true;
 			}
 			Pawn pawn = target.Thing as Pawn;
-			return pawn == null || !pawn.HostileTo(caster) || pawn.Downed;
+			if (pawn != null && pawn.HostileTo(caster))
+			{
+				return pawn.Downed;
+			}
+			return true;
 		}
 
-		
 		public static VerbSelectionCategory GetSelectionCategory(this Verb v, Pawn p, float highestWeight)
 		{
-			float num = VerbUtility.InitialVerbWeight(v, p);
+			float num = InitialVerbWeight(v, p);
 			if (num >= highestWeight * 0.95f)
 			{
 				return VerbSelectionCategory.Best;
@@ -186,33 +183,31 @@ namespace Verse
 			return VerbSelectionCategory.Mid;
 		}
 
-		
 		public static float InitialVerbWeight(Verb v, Pawn p)
 		{
-			return VerbUtility.DPS(v, p) * VerbUtility.AdditionalSelectionFactor(v);
+			return DPS(v, p) * AdditionalSelectionFactor(v);
 		}
 
-		
 		public static float DPS(Verb v, Pawn p)
 		{
 			return v.verbProps.AdjustedMeleeDamageAmount(v, p) * (1f + v.verbProps.AdjustedArmorPenetration(v, p)) * v.verbProps.accuracyTouch / v.verbProps.AdjustedFullCycleTime(v, p);
 		}
 
-		
 		private static float AdditionalSelectionFactor(Verb v)
 		{
 			float num = (v.tool != null) ? v.tool.chanceFactor : 1f;
-			if (v.verbProps.meleeDamageDef != null && !v.verbProps.meleeDamageDef.additionalHediffs.NullOrEmpty<DamageDefAdditionalHediff>())
+			if (v.verbProps.meleeDamageDef != null && !v.verbProps.meleeDamageDef.additionalHediffs.NullOrEmpty())
 			{
-				foreach (DamageDefAdditionalHediff damageDefAdditionalHediff in v.verbProps.meleeDamageDef.additionalHediffs)
+				foreach (DamageDefAdditionalHediff additionalHediff in v.verbProps.meleeDamageDef.additionalHediffs)
 				{
+					_ = additionalHediff;
 					num += 0.1f;
 				}
+				return num;
 			}
 			return num;
 		}
 
-		
 		public static float FinalSelectionWeight(Verb verb, Pawn p, List<Verb> allMeleeVerbs, float highestWeight)
 		{
 			VerbSelectionCategory selectionCategory = verb.GetSelectionCategory(p, highestWeight);
@@ -221,60 +216,14 @@ namespace Verse
 				return 0f;
 			}
 			int num = 0;
-			List<Verb>.Enumerator enumerator = allMeleeVerbs.GetEnumerator();
+			foreach (Verb allMeleeVerb in allMeleeVerbs)
 			{
-				while (enumerator.MoveNext())
+				if (allMeleeVerb.GetSelectionCategory(p, highestWeight) == selectionCategory)
 				{
-					if (enumerator.Current.GetSelectionCategory(p, highestWeight) == selectionCategory)
-					{
-						num++;
-					}
+					num++;
 				}
 			}
 			return 1f / (float)num * ((selectionCategory == VerbSelectionCategory.Mid) ? 0.25f : 0.75f);
-		}
-
-		
-		public struct VerbPropertiesWithSource
-		{
-			
-			
-			public ToolCapacityDef ToolCapacity
-			{
-				get
-				{
-					if (this.maneuver == null)
-					{
-						return null;
-					}
-					return this.maneuver.requiredCapacity;
-				}
-			}
-
-			
-			public VerbPropertiesWithSource(VerbProperties verbProps)
-			{
-				this.verbProps = verbProps;
-				this.tool = null;
-				this.maneuver = null;
-			}
-
-			
-			public VerbPropertiesWithSource(VerbProperties verbProps, Tool tool, ManeuverDef maneuver)
-			{
-				this.verbProps = verbProps;
-				this.tool = tool;
-				this.maneuver = maneuver;
-			}
-
-			
-			public VerbProperties verbProps;
-
-			
-			public Tool tool;
-
-			
-			public ManeuverDef maneuver;
 		}
 	}
 }

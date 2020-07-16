@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -6,140 +6,59 @@ using Verse.Steam;
 
 namespace RimWorld
 {
-	
 	public static class VersionControl
 	{
-		
-		
-		public static Version CurrentVersion
-		{
-			get
-			{
-				return VersionControl.version;
-			}
-		}
+		private static Version version;
 
-		
-		
-		public static string CurrentVersionString
-		{
-			get
-			{
-				return VersionControl.versionString;
-			}
-		}
+		private static string versionStringWithoutBuild;
 
-		
-		
-		public static string CurrentVersionStringWithoutBuild
-		{
-			get
-			{
-				return VersionControl.versionStringWithoutBuild;
-			}
-		}
+		private static string versionString;
 
-		
-		
-		public static string CurrentVersionStringWithRev
-		{
-			get
-			{
-				return VersionControl.versionStringWithRev;
-			}
-		}
+		private static string versionStringWithRev;
 
-		
-		
-		public static int CurrentMajor
-		{
-			get
-			{
-				return VersionControl.version.Major;
-			}
-		}
+		private static DateTime buildDate;
 
-		
-		
-		public static int CurrentMinor
-		{
-			get
-			{
-				return VersionControl.version.Minor;
-			}
-		}
+		public static Version CurrentVersion => version;
 
-		
-		
-		public static int CurrentBuild
-		{
-			get
-			{
-				return VersionControl.version.Build;
-			}
-		}
+		public static string CurrentVersionString => versionString;
 
-		
-		
-		public static int CurrentRevision
-		{
-			get
-			{
-				return VersionControl.version.Revision;
-			}
-		}
+		public static string CurrentVersionStringWithoutBuild => versionStringWithoutBuild;
 
-		
-		
-		public static DateTime CurrentBuildDate
-		{
-			get
-			{
-				return VersionControl.buildDate;
-			}
-		}
+		public static string CurrentVersionStringWithRev => versionStringWithRev;
 
-		
+		public static int CurrentMajor => version.Major;
+
+		public static int CurrentMinor => version.Minor;
+
+		public static int CurrentBuild => version.Build;
+
+		public static int CurrentRevision => version.Revision;
+
+		public static DateTime CurrentBuildDate => buildDate;
+
 		static VersionControl()
 		{
 			Version version = Assembly.GetExecutingAssembly().GetName().Version;
-			VersionControl.buildDate = new DateTime(2000, 1, 1).AddDays((double)version.Build);
+			buildDate = new DateTime(2000, 1, 1).AddDays(version.Build);
 			int build = version.Build - 4805;
 			int revision = version.Revision * 2 / 60;
 			VersionControl.version = new Version(version.Major, version.Minor, build, revision);
-			VersionControl.versionStringWithRev = string.Concat(new object[]
-			{
-				VersionControl.version.Major,
-				".",
-				VersionControl.version.Minor,
-				".",
-				VersionControl.version.Build,
-				" rev",
-				VersionControl.version.Revision
-			});
-			VersionControl.versionString = string.Concat(new object[]
-			{
-				VersionControl.version.Major,
-				".",
-				VersionControl.version.Minor,
-				".",
-				VersionControl.version.Build
-			});
-			VersionControl.versionStringWithoutBuild = VersionControl.version.Major + "." + VersionControl.version.Minor;
+			versionStringWithRev = VersionControl.version.Major + "." + VersionControl.version.Minor + "." + VersionControl.version.Build + " rev" + VersionControl.version.Revision;
+			versionString = VersionControl.version.Major + "." + VersionControl.version.Minor + "." + VersionControl.version.Build;
+			versionStringWithoutBuild = VersionControl.version.Major + "." + VersionControl.version.Minor;
 		}
 
-		
 		public static void DrawInfoInCorner()
 		{
 			Text.Font = GameFont.Small;
 			GUI.color = new Color(1f, 1f, 1f, 0.5f);
-			string text = "VersionIndicator".Translate(VersionControl.versionString);
-			string versionExtraInfo = VersionControl.GetVersionExtraInfo();
+			string text = "VersionIndicator".Translate(versionString);
+			string versionExtraInfo = GetVersionExtraInfo();
 			if (!versionExtraInfo.NullOrEmpty())
 			{
 				text = text + " (" + versionExtraInfo + ")";
 			}
-			text += "\n" + "CompiledOn".Translate(VersionControl.buildDate.ToString("MMM d yyyy"));
+			text += "\n" + "CompiledOn".Translate(buildDate.ToString("MMM d yyyy"));
 			if (SteamManager.Initialized)
 			{
 				text += "\n" + "LoggedIntoSteamAs".Translate(SteamUtility.SteamPersonaName);
@@ -152,7 +71,6 @@ namespace RimWorld
 			component.DrawAt(rect2);
 		}
 
-		
 		private static string GetVersionExtraInfo()
 		{
 			string text = "";
@@ -167,19 +85,20 @@ namespace RimWorld
 			return text;
 		}
 
-		
 		public static void LogVersionNumber()
 		{
-			Log.Message("RimWorld " + VersionControl.versionStringWithRev, false);
+			Log.Message("RimWorld " + versionStringWithRev);
 		}
 
-		
 		public static bool IsCompatible(Version v)
 		{
-			return v.Major == VersionControl.CurrentMajor && v.Minor == VersionControl.CurrentMinor;
+			if (v.Major == CurrentMajor)
+			{
+				return v.Minor == CurrentMinor;
+			}
+			return false;
 		}
 
-		
 		public static bool TryParseVersionString(string str, out Version version)
 		{
 			version = null;
@@ -187,22 +106,18 @@ namespace RimWorld
 			{
 				return false;
 			}
-			string[] array = str.Split(new char[]
-			{
-				'.'
-			});
+			string[] array = str.Split('.');
 			if (array.Length < 2)
 			{
 				return false;
 			}
 			for (int i = 0; i < 2; i++)
 			{
-				int num;
-				if (!int.TryParse(array[i], out num))
+				if (!int.TryParse(array[i], out int result))
 				{
 					return false;
 				}
-				if (num < 0)
+				if (result < 0)
 				{
 					return false;
 				}
@@ -211,73 +126,53 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static int BuildFromVersionString(string str)
 		{
-			str = VersionControl.VersionStringWithoutRev(str);
+			str = VersionStringWithoutRev(str);
 			int result = 0;
-			string[] array = str.Split(new char[]
-			{
-				'.'
-			});
+			string[] array = str.Split('.');
 			if (array.Length < 3 || !int.TryParse(array[2], out result))
 			{
-				Log.Warning("Could not get build from version string " + str, false);
+				Log.Warning("Could not get build from version string " + str);
 			}
 			return result;
 		}
 
-		
 		public static int MinorFromVersionString(string str)
 		{
-			str = VersionControl.VersionStringWithoutRev(str);
+			str = VersionStringWithoutRev(str);
 			int result = 0;
-			string[] array = str.Split(new char[]
-			{
-				'.'
-			});
+			string[] array = str.Split('.');
 			if (array.Length < 2 || !int.TryParse(array[1], out result))
 			{
-				Log.Warning("Could not get minor version from version string " + str, false);
+				Log.Warning("Could not get minor version from version string " + str);
 			}
 			return result;
 		}
 
-		
 		public static int MajorFromVersionString(string str)
 		{
-			str = VersionControl.VersionStringWithoutRev(str);
+			str = VersionStringWithoutRev(str);
 			int result = 0;
-			if (!int.TryParse(str.Split(new char[]
+			if (!int.TryParse(str.Split('.')[0], out result))
 			{
-				'.'
-			})[0], out result))
-			{
-				Log.Warning("Could not get major version from version string " + str, false);
+				Log.Warning("Could not get major version from version string " + str);
 			}
 			return result;
 		}
 
-		
 		public static string VersionStringWithoutRev(string str)
 		{
-			return str.Split(new char[]
-			{
-				' '
-			})[0];
+			return str.Split(' ')[0];
 		}
 
-		
 		public static Version VersionFromString(string str)
 		{
 			if (str.NullOrEmpty())
 			{
 				throw new ArgumentException("str");
 			}
-			string[] array = str.Split(new char[]
-			{
-				'.'
-			});
+			string[] array = str.Split('.');
 			if (array.Length > 3)
 			{
 				throw new ArgumentException("str");
@@ -287,70 +182,49 @@ namespace RimWorld
 			int build = 0;
 			for (int i = 0; i < 3; i++)
 			{
-				int num;
-				if (!int.TryParse(array[i], out num))
+				if (!int.TryParse(array[i], out int result))
 				{
 					throw new ArgumentException("str");
 				}
-				if (num < 0)
+				if (result < 0)
 				{
 					throw new ArgumentException("str");
 				}
 				switch (i)
 				{
 				case 0:
-					major = num;
+					major = result;
 					break;
 				case 1:
-					minor = num;
+					minor = result;
 					break;
 				case 2:
-					build = num;
+					build = result;
 					break;
 				}
 			}
 			return new Version(major, minor, build);
 		}
 
-		
 		public static bool IsWellFormattedVersionString(string str)
 		{
-			string[] array = str.Split(new char[]
-			{
-				'.'
-			});
+			string[] array = str.Split('.');
 			if (array.Length != 2)
 			{
 				return false;
 			}
 			for (int i = 0; i < 2; i++)
 			{
-				int num;
-				if (!int.TryParse(array[i], out num))
+				if (!int.TryParse(array[i], out int result))
 				{
 					return false;
 				}
-				if (num < 0)
+				if (result < 0)
 				{
 					return false;
 				}
 			}
 			return true;
 		}
-
-		
-		private static Version version;
-
-		
-		private static string versionStringWithoutBuild;
-
-		
-		private static string versionString;
-
-		
-		private static string versionStringWithRev;
-
-		
-		private static DateTime buildDate;
 	}
 }

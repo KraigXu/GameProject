@@ -1,70 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_UnusableMeditationFocus : Alert
 	{
-		
-		
+		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
+
+		private List<string> pawnEntries = new List<string>();
+
 		private List<GlobalTargetInfo> Targets
 		{
 			get
 			{
-				this.targets.Clear();
-				this.pawnEntries.Clear();
-				foreach (Pawn pawn in PawnsFinder.HomeMaps_FreeColonistsSpawned)
+				targets.Clear();
+				pawnEntries.Clear();
+				foreach (Pawn item in PawnsFinder.HomeMaps_FreeColonistsSpawned)
 				{
-					if (pawn.timetable != null && pawn.timetable.CurrentAssignment == TimeAssignmentDefOf.Meditate && pawn.psychicEntropy.IsCurrentlyMeditating && !MeditationFocusDefOf.Natural.CanPawnUse(pawn))
+					if (item.timetable != null && item.timetable.CurrentAssignment == TimeAssignmentDefOf.Meditate && item.psychicEntropy.IsCurrentlyMeditating && !MeditationFocusDefOf.Natural.CanPawnUse(item))
 					{
-						JobDriver_Meditate jobDriver_Meditate = pawn.jobs.curDriver as JobDriver_Meditate;
+						JobDriver_Meditate jobDriver_Meditate = item.jobs.curDriver as JobDriver_Meditate;
 						if (jobDriver_Meditate != null && !(jobDriver_Meditate.Focus != null) && !(jobDriver_Meditate is JobDriver_Reign))
 						{
-							foreach (Thing thing in GenRadial.RadialDistinctThingsAround(pawn.Position, pawn.Map, MeditationUtility.FocusObjectSearchRadius, false))
+							foreach (Thing item2 in GenRadial.RadialDistinctThingsAround(item.Position, item.Map, MeditationUtility.FocusObjectSearchRadius, useCenter: false))
 							{
-								if (thing.def == ThingDefOf.Plant_TreeAnima || thing.def == ThingDefOf.AnimusStone || thing.def == ThingDefOf.NatureShrine_Small || thing.def == ThingDefOf.NatureShrine_Large)
+								if (item2.def == ThingDefOf.Plant_TreeAnima || item2.def == ThingDefOf.AnimusStone || item2.def == ThingDefOf.NatureShrine_Small || item2.def == ThingDefOf.NatureShrine_Large)
 								{
-									this.targets.Add(pawn);
-									this.pawnEntries.Add(pawn.LabelShort + " (" + thing.LabelShort + ")");
+									targets.Add(item);
+									pawnEntries.Add(item.LabelShort + " (" + item2.LabelShort + ")");
 									break;
 								}
 							}
 						}
 					}
 				}
-				return this.targets;
+				return targets;
 			}
 		}
 
-		
 		public Alert_UnusableMeditationFocus()
 		{
-			this.defaultLabel = "UnusableMeditationFocusAlert".Translate();
+			defaultLabel = "UnusableMeditationFocusAlert".Translate();
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
-			return "UnusableMeditationFocusAlertDesc".Translate(this.pawnEntries.ToLineList("  - "));
+			return "UnusableMeditationFocusAlertDesc".Translate(pawnEntries.ToLineList("  - "));
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
 			{
 				return false;
 			}
-			return AlertReport.CulpritsAre(this.Targets);
+			return AlertReport.CulpritsAre(Targets);
 		}
-
-		
-		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
-
-		
-		private List<string> pawnEntries = new List<string>();
 	}
 }

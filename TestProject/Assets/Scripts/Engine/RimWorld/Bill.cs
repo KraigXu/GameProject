@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -7,217 +7,171 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public abstract class Bill : IExposable, ILoadReferenceable
 	{
-		
-		
-		public Map Map
-		{
-			get
-			{
-				return this.billStack.billGiver.Map;
-			}
-		}
+		[Unsaved(false)]
+		public BillStack billStack;
 
-		
-		
-		public virtual string Label
-		{
-			get
-			{
-				return this.recipe.label;
-			}
-		}
+		private int loadID = -1;
 
-		
-		
-		public virtual string LabelCap
-		{
-			get
-			{
-				return this.Label.CapitalizeFirst(this.recipe);
-			}
-		}
+		public RecipeDef recipe;
 
-		
-		
-		public virtual bool CheckIngredientsIfSociallyProper
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public bool suspended;
 
-		
-		
-		public virtual bool CompletableEver
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public ThingFilter ingredientFilter;
 
-		
-		
-		protected virtual string StatusString
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public float ingredientSearchRadius = 999f;
 
-		
-		
-		protected virtual float StatusLineMinHeight
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public IntRange allowedSkillRange = new IntRange(0, 20);
 
-		
-		
-		protected virtual bool CanCopy
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public Pawn pawnRestriction;
 
-		
-		
+		public bool deleted;
+
+		public int lastIngredientSearchFailTicks = -99999;
+
+		public const int MaxIngredientSearchRadius = 999;
+
+		public const float ButSize = 24f;
+
+		private const float InterfaceBaseHeight = 53f;
+
+		private const float InterfaceStatusLineHeight = 17f;
+
+		public Map Map => billStack.billGiver.Map;
+
+		public virtual string Label => recipe.label;
+
+		public virtual string LabelCap => Label.CapitalizeFirst(recipe);
+
+		public virtual bool CheckIngredientsIfSociallyProper => true;
+
+		public virtual bool CompletableEver => true;
+
+		protected virtual string StatusString => null;
+
+		protected virtual float StatusLineMinHeight => 0f;
+
+		protected virtual bool CanCopy => true;
+
 		public bool DeletedOrDereferenced
 		{
 			get
 			{
-				if (this.deleted)
+				if (deleted)
 				{
 					return true;
 				}
-				Thing thing = this.billStack.billGiver as Thing;
-				return thing != null && thing.Destroyed;
+				Thing thing = billStack.billGiver as Thing;
+				if (thing != null && thing.Destroyed)
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public Bill()
 		{
 		}
 
-		
 		public Bill(RecipeDef recipe)
 		{
 			this.recipe = recipe;
-			this.ingredientFilter = new ThingFilter();
-			this.ingredientFilter.CopyAllowancesFrom(recipe.defaultIngredientFilter);
-			this.InitializeAfterClone();
+			ingredientFilter = new ThingFilter();
+			ingredientFilter.CopyAllowancesFrom(recipe.defaultIngredientFilter);
+			InitializeAfterClone();
 		}
 
-		
 		public void InitializeAfterClone()
 		{
-			this.loadID = Find.UniqueIDsManager.GetNextBillID();
+			loadID = Find.UniqueIDsManager.GetNextBillID();
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.loadID, "loadID", 0, false);
-			Scribe_Defs.Look<RecipeDef>(ref this.recipe, "recipe");
-			Scribe_Values.Look<bool>(ref this.suspended, "suspended", false, false);
-			Scribe_Values.Look<float>(ref this.ingredientSearchRadius, "ingredientSearchRadius", 999f, false);
-			Scribe_Values.Look<IntRange>(ref this.allowedSkillRange, "allowedSkillRange", default(IntRange), false);
-			Scribe_References.Look<Pawn>(ref this.pawnRestriction, "pawnRestriction", false);
-			if (Scribe.mode == LoadSaveMode.Saving && this.recipe.fixedIngredientFilter != null)
+			Scribe_Values.Look(ref loadID, "loadID", 0);
+			Scribe_Defs.Look(ref recipe, "recipe");
+			Scribe_Values.Look(ref suspended, "suspended", defaultValue: false);
+			Scribe_Values.Look(ref ingredientSearchRadius, "ingredientSearchRadius", 999f);
+			Scribe_Values.Look(ref allowedSkillRange, "allowedSkillRange");
+			Scribe_References.Look(ref pawnRestriction, "pawnRestriction");
+			if (Scribe.mode == LoadSaveMode.Saving && recipe.fixedIngredientFilter != null)
 			{
-				foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs)
+				foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
 				{
-					if (!this.recipe.fixedIngredientFilter.Allows(thingDef))
+					if (!recipe.fixedIngredientFilter.Allows(allDef))
 					{
-						this.ingredientFilter.SetAllow(thingDef, false);
+						ingredientFilter.SetAllow(allDef, allow: false);
 					}
 				}
 			}
-			Scribe_Deep.Look<ThingFilter>(ref this.ingredientFilter, "ingredientFilter", Array.Empty<object>());
+			Scribe_Deep.Look(ref ingredientFilter, "ingredientFilter");
 		}
 
-		
 		public virtual bool PawnAllowedToStartAnew(Pawn p)
 		{
-			if (this.pawnRestriction != null)
+			if (pawnRestriction != null)
 			{
-				return this.pawnRestriction == p;
+				return pawnRestriction == p;
 			}
-			if (this.recipe.workSkill != null)
+			if (recipe.workSkill != null)
 			{
-				int level = p.skills.GetSkill(this.recipe.workSkill).Level;
-				if (level < this.allowedSkillRange.min)
+				int level = p.skills.GetSkill(recipe.workSkill).Level;
+				if (level < allowedSkillRange.min)
 				{
-					JobFailReason.Is("UnderAllowedSkill".Translate(this.allowedSkillRange.min), this.Label);
+					JobFailReason.Is("UnderAllowedSkill".Translate(allowedSkillRange.min), Label);
 					return false;
 				}
-				if (level > this.allowedSkillRange.max)
+				if (level > allowedSkillRange.max)
 				{
-					JobFailReason.Is("AboveAllowedSkill".Translate(this.allowedSkillRange.max), this.Label);
+					JobFailReason.Is("AboveAllowedSkill".Translate(allowedSkillRange.max), Label);
 					return false;
 				}
 			}
 			return true;
 		}
 
-		
 		public virtual void Notify_PawnDidWork(Pawn p)
 		{
 		}
 
-		
 		public virtual void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
 		{
 		}
 
-		
 		public abstract bool ShouldDoNow();
 
-		
 		public virtual void Notify_DoBillStarted(Pawn billDoer)
 		{
 		}
 
-		
 		protected virtual void DoConfigInterface(Rect rect, Color baseColor)
 		{
 			rect.yMin += 29f;
 			float y = rect.center.y;
-			Widgets.InfoCardButton(rect.xMax - (rect.yMax - y) - 12f, y - 12f, this.recipe);
+			Widgets.InfoCardButton(rect.xMax - (rect.yMax - y) - 12f, y - 12f, recipe);
 		}
 
-		
 		public virtual void DoStatusLineInterface(Rect rect)
 		{
 		}
 
-		
 		public Rect DoInterface(float x, float y, float width, int index)
 		{
 			Rect rect = new Rect(x, y, width, 53f);
 			float num = 0f;
-			if (!this.StatusString.NullOrEmpty())
+			if (!StatusString.NullOrEmpty())
 			{
-				num = Mathf.Max(17f, this.StatusLineMinHeight);
+				num = Mathf.Max(17f, StatusLineMinHeight);
 			}
 			rect.height += num;
-			Color white = Color.white;
-			if (!this.ShouldDoNow())
+			Color color = Color.white;
+			if (!ShouldDoNow())
 			{
-				white = new Color(1f, 0.7f, 0.7f, 0.7f);
+				color = new Color(1f, 0.7f, 0.7f, 0.7f);
 			}
-			GUI.color = white;
+			GUI.color = color;
 			Text.Font = GameFont.Small;
 			if (index % 2 == 0)
 			{
@@ -225,67 +179,67 @@ namespace RimWorld
 			}
 			GUI.BeginGroup(rect);
 			Rect rect2 = new Rect(0f, 0f, 24f, 24f);
-			if (this.billStack.IndexOf(this) > 0)
+			if (billStack.IndexOf(this) > 0)
 			{
-				if (Widgets.ButtonImage(rect2, TexButton.ReorderUp, white, true))
+				if (Widgets.ButtonImage(rect2, TexButton.ReorderUp, color))
 				{
-					this.billStack.Reorder(this, -1);
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+					billStack.Reorder(this, -1);
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
 				}
 				TooltipHandler.TipRegionByKey(rect2, "ReorderBillUpTip");
 			}
-			if (this.billStack.IndexOf(this) < this.billStack.Count - 1)
+			if (billStack.IndexOf(this) < billStack.Count - 1)
 			{
 				Rect rect3 = new Rect(0f, 24f, 24f, 24f);
-				if (Widgets.ButtonImage(rect3, TexButton.ReorderDown, white, true))
+				if (Widgets.ButtonImage(rect3, TexButton.ReorderDown, color))
 				{
-					this.billStack.Reorder(this, 1);
-					SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+					billStack.Reorder(this, 1);
+					SoundDefOf.Tick_Low.PlayOneShotOnCamera();
 				}
 				TooltipHandler.TipRegionByKey(rect3, "ReorderBillDownTip");
 			}
-			Widgets.Label(new Rect(28f, 0f, rect.width - 48f - 20f, rect.height + 5f), this.LabelCap);
-			this.DoConfigInterface(rect.AtZero(), white);
+			Widgets.Label(new Rect(28f, 0f, rect.width - 48f - 20f, rect.height + 5f), LabelCap);
+			DoConfigInterface(rect.AtZero(), color);
 			Rect rect4 = new Rect(rect.width - 24f, 0f, 24f, 24f);
-			if (Widgets.ButtonImage(rect4, TexButton.DeleteX, white, white * GenUI.SubtleMouseoverColor, true))
+			if (Widgets.ButtonImage(rect4, TexButton.DeleteX, color, color * GenUI.SubtleMouseoverColor))
 			{
-				this.billStack.Delete(this);
-				SoundDefOf.Click.PlayOneShotOnCamera(null);
+				billStack.Delete(this);
+				SoundDefOf.Click.PlayOneShotOnCamera();
 			}
 			TooltipHandler.TipRegionByKey(rect4, "DeleteBillTip");
-			Rect rect6;
-			if (this.CanCopy)
+			Rect rect5;
+			if (!CanCopy)
 			{
-				Rect rect5 = new Rect(rect4);
-				rect5.x -= rect5.width + 4f;
-				if (Widgets.ButtonImageFitted(rect5, TexButton.Copy, white))
-				{
-					BillUtility.Clipboard = this.Clone();
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-				}
-				TooltipHandler.TipRegionByKey(rect5, "CopyBillTip");
-				rect6 = new Rect(rect5);
+				rect5 = new Rect(rect4);
 			}
 			else
 			{
-				rect6 = new Rect(rect4);
+				Rect rect6 = new Rect(rect4);
+				rect6.x -= rect6.width + 4f;
+				if (Widgets.ButtonImageFitted(rect6, TexButton.Copy, color))
+				{
+					BillUtility.Clipboard = Clone();
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
+				}
+				TooltipHandler.TipRegionByKey(rect6, "CopyBillTip");
+				rect5 = new Rect(rect6);
 			}
-			rect6.x -= rect6.width + 4f;
-			if (Widgets.ButtonImage(rect6, TexButton.Suspend, white, true))
+			rect5.x -= rect5.width + 4f;
+			if (Widgets.ButtonImage(rect5, TexButton.Suspend, color))
 			{
-				this.suspended = !this.suspended;
-				SoundDefOf.Click.PlayOneShotOnCamera(null);
+				suspended = !suspended;
+				SoundDefOf.Click.PlayOneShotOnCamera();
 			}
-			TooltipHandler.TipRegionByKey(rect6, "SuspendBillTip");
-			if (!this.StatusString.NullOrEmpty())
+			TooltipHandler.TipRegionByKey(rect5, "SuspendBillTip");
+			if (!StatusString.NullOrEmpty())
 			{
 				Text.Font = GameFont.Tiny;
 				Rect rect7 = new Rect(24f, rect.height - num, rect.width - 24f, num);
-				Widgets.Label(rect7, this.StatusString);
-				this.DoStatusLineInterface(rect7);
+				Widgets.Label(rect7, StatusString);
+				DoStatusLineInterface(rect7);
 			}
 			GUI.EndGroup();
-			if (this.suspended)
+			if (suspended)
 			{
 				Text.Font = GameFont.Medium;
 				Text.Anchor = TextAnchor.MiddleCenter;
@@ -300,148 +254,96 @@ namespace RimWorld
 			return rect;
 		}
 
-		
 		public bool IsFixedOrAllowedIngredient(Thing thing)
 		{
-			for (int i = 0; i < this.recipe.ingredients.Count; i++)
+			for (int i = 0; i < recipe.ingredients.Count; i++)
 			{
-				IngredientCount ingredientCount = this.recipe.ingredients[i];
+				IngredientCount ingredientCount = recipe.ingredients[i];
 				if (ingredientCount.IsFixedIngredient && ingredientCount.filter.Allows(thing))
 				{
 					return true;
 				}
 			}
-			return this.recipe.fixedIngredientFilter.Allows(thing) && this.ingredientFilter.Allows(thing);
+			if (recipe.fixedIngredientFilter.Allows(thing))
+			{
+				return ingredientFilter.Allows(thing);
+			}
+			return false;
 		}
 
-		
 		public bool IsFixedOrAllowedIngredient(ThingDef def)
 		{
-			for (int i = 0; i < this.recipe.ingredients.Count; i++)
+			for (int i = 0; i < recipe.ingredients.Count; i++)
 			{
-				IngredientCount ingredientCount = this.recipe.ingredients[i];
+				IngredientCount ingredientCount = recipe.ingredients[i];
 				if (ingredientCount.IsFixedIngredient && ingredientCount.filter.Allows(def))
 				{
 					return true;
 				}
 			}
-			return this.recipe.fixedIngredientFilter.Allows(def) && this.ingredientFilter.Allows(def);
+			if (recipe.fixedIngredientFilter.Allows(def))
+			{
+				return ingredientFilter.Allows(def);
+			}
+			return false;
 		}
 
-		
 		public static void CreateNoPawnsWithSkillDialog(RecipeDef recipe)
 		{
-			string text = "RecipeRequiresSkills".Translate(recipe.LabelCap);
-			text += "\n\n";
-			text += recipe.MinSkillString;
-			Find.WindowStack.Add(new Dialog_MessageBox(text, null, null, null, null, null, false, null, null));
+			string str = "RecipeRequiresSkills".Translate(recipe.LabelCap);
+			str += "\n\n";
+			str += recipe.MinSkillString;
+			Find.WindowStack.Add(new Dialog_MessageBox(str));
 		}
 
-		
 		public virtual BillStoreModeDef GetStoreMode()
 		{
 			return BillStoreModeDefOf.BestStockpile;
 		}
 
-		
 		public virtual Zone_Stockpile GetStoreZone()
 		{
 			return null;
 		}
 
-		
 		public virtual void SetStoreMode(BillStoreModeDef mode, Zone_Stockpile zone = null)
 		{
-			Log.ErrorOnce("Tried to set store mode of a non-production bill", 27190980, false);
+			Log.ErrorOnce("Tried to set store mode of a non-production bill", 27190980);
 		}
 
-		
 		public virtual Bill Clone()
 		{
-			Bill bill = (Bill)Activator.CreateInstance(base.GetType());
-			bill.recipe = this.recipe;
-			bill.suspended = this.suspended;
-			bill.ingredientFilter = new ThingFilter();
-			bill.ingredientFilter.CopyAllowancesFrom(this.ingredientFilter);
-			bill.ingredientSearchRadius = this.ingredientSearchRadius;
-			bill.allowedSkillRange = this.allowedSkillRange;
-			bill.pawnRestriction = this.pawnRestriction;
-			return bill;
+			Bill obj = (Bill)Activator.CreateInstance(GetType());
+			obj.recipe = recipe;
+			obj.suspended = suspended;
+			obj.ingredientFilter = new ThingFilter();
+			obj.ingredientFilter.CopyAllowancesFrom(ingredientFilter);
+			obj.ingredientSearchRadius = ingredientSearchRadius;
+			obj.allowedSkillRange = allowedSkillRange;
+			obj.pawnRestriction = pawnRestriction;
+			return obj;
 		}
 
-		
 		public virtual void ValidateSettings()
 		{
-			if (this.pawnRestriction != null && (this.pawnRestriction.Dead || this.pawnRestriction.Faction != Faction.OfPlayer || this.pawnRestriction.IsKidnapped()))
+			if (pawnRestriction != null && (pawnRestriction.Dead || pawnRestriction.Faction != Faction.OfPlayer || pawnRestriction.IsKidnapped()))
 			{
 				if (this != BillUtility.Clipboard)
 				{
-					Messages.Message("MessageBillValidationPawnUnavailable".Translate(this.pawnRestriction.LabelShortCap, this.Label, this.billStack.billGiver.LabelShort), this.billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent, true);
+					Messages.Message("MessageBillValidationPawnUnavailable".Translate(pawnRestriction.LabelShortCap, Label, billStack.billGiver.LabelShort), billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent);
 				}
-				this.pawnRestriction = null;
-				return;
+				pawnRestriction = null;
 			}
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return string.Concat(new object[]
-			{
-				"Bill_",
-				this.recipe.defName,
-				"_",
-				this.loadID
-			});
+			return "Bill_" + recipe.defName + "_" + loadID;
 		}
 
-		
 		public override string ToString()
 		{
-			return this.GetUniqueLoadID();
+			return GetUniqueLoadID();
 		}
-
-		
-		[Unsaved(false)]
-		public BillStack billStack;
-
-		
-		private int loadID = -1;
-
-		
-		public RecipeDef recipe;
-
-		
-		public bool suspended;
-
-		
-		public ThingFilter ingredientFilter;
-
-		
-		public float ingredientSearchRadius = 999f;
-
-		
-		public IntRange allowedSkillRange = new IntRange(0, 20);
-
-		
-		public Pawn pawnRestriction;
-
-		
-		public bool deleted;
-
-		
-		public int lastIngredientSearchFailTicks = -99999;
-
-		
-		public const int MaxIngredientSearchRadius = 999;
-
-		
-		public const float ButSize = 24f;
-
-		
-		private const float InterfaceBaseHeight = 53f;
-
-		
-		private const float InterfaceStatusLineHeight = 17f;
 	}
 }

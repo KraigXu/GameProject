@@ -1,161 +1,124 @@
-﻿using System;
 using RimWorld;
+using System;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class DiaOption
 	{
-		
-		
-		public static DiaOption DefaultOK
-		{
-			get
-			{
-				return new DiaOption("OK".Translate())
-				{
-					resolveTree = true
-				};
-			}
-		}
+		public Window dialog;
 
-		
-		
-		protected Dialog_NodeTree OwningDialog
-		{
-			get
-			{
-				return (Dialog_NodeTree)this.dialog;
-			}
-		}
+		protected string text;
 
-		
+		public DiaNode link;
+
+		public Func<DiaNode> linkLateBind;
+
+		public bool resolveTree;
+
+		public Action action;
+
+		public bool disabled;
+
+		public string disabledReason;
+
+		public SoundDef clickSound = SoundDefOf.PageChange;
+
+		public Dialog_InfoCard.Hyperlink hyperlink;
+
+		protected readonly Color DisabledOptionColor = new Color(0.5f, 0.5f, 0.5f);
+
+		public static DiaOption DefaultOK => new DiaOption("OK".Translate())
+		{
+			resolveTree = true
+		};
+
+		protected Dialog_NodeTree OwningDialog => (Dialog_NodeTree)dialog;
+
 		public DiaOption()
 		{
-			this.text = "OK".Translate();
+			text = "OK".Translate();
 		}
 
-		
 		public DiaOption(string text)
 		{
 			this.text = text;
 		}
 
-		
 		public DiaOption(Dialog_InfoCard.Hyperlink hyperlink)
 		{
 			this.hyperlink = hyperlink;
-			this.text = "ViewHyperlink".Translate(hyperlink.Label);
+			text = "ViewHyperlink".Translate(hyperlink.Label);
 		}
 
-		
 		public DiaOption(DiaOptionMold def)
 		{
-			this.text = def.Text;
+			text = def.Text;
 			DiaNodeMold diaNodeMold = def.RandomLinkNode();
 			if (diaNodeMold != null)
 			{
-				this.link = new DiaNode(diaNodeMold);
+				link = new DiaNode(diaNodeMold);
 			}
 		}
 
-		
 		public void Disable(string newDisabledReason)
 		{
-			this.disabled = true;
-			this.disabledReason = newDisabledReason;
+			disabled = true;
+			disabledReason = newDisabledReason;
 		}
 
-		
 		public void SetText(string newText)
 		{
-			this.text = newText;
+			text = newText;
 		}
 
-		
 		public float OptOnGUI(Rect rect, bool active = true)
 		{
 			Color textColor = Widgets.NormalOptionColor;
 			string text = this.text;
-			if (this.disabled)
+			if (disabled)
 			{
-				textColor = this.DisabledOptionColor;
-				if (this.disabledReason != null)
+				textColor = DisabledOptionColor;
+				if (disabledReason != null)
 				{
-					text = text + " (" + this.disabledReason + ")";
+					text = text + " (" + disabledReason + ")";
 				}
 			}
 			rect.height = Text.CalcHeight(text, rect.width);
-			if (this.hyperlink.def != null)
+			if (hyperlink.def != null)
 			{
-				Widgets.HyperlinkWithIcon(rect, this.hyperlink, text, 2f, 6f);
+				Widgets.HyperlinkWithIcon(rect, hyperlink, text);
 			}
-			else if (Widgets.ButtonText(rect, text, false, !this.disabled, textColor, active && !this.disabled))
+			else if (Widgets.ButtonText(rect, text, drawBackground: false, !disabled, textColor, active && !disabled))
 			{
-				this.Activate();
+				Activate();
 			}
 			return rect.height;
 		}
 
-		
 		protected void Activate()
 		{
-			if (this.clickSound != null && !this.resolveTree)
+			if (clickSound != null && !resolveTree)
 			{
-				this.clickSound.PlayOneShotOnCamera(null);
+				clickSound.PlayOneShotOnCamera();
 			}
-			if (this.resolveTree)
+			if (resolveTree)
 			{
-				this.OwningDialog.Close(true);
+				OwningDialog.Close();
 			}
-			if (this.action != null)
+			if (action != null)
 			{
-				this.action();
+				action();
 			}
-			if (this.linkLateBind != null)
+			if (linkLateBind != null)
 			{
-				this.OwningDialog.GotoNode(this.linkLateBind());
-				return;
+				OwningDialog.GotoNode(linkLateBind());
 			}
-			if (this.link != null)
+			else if (link != null)
 			{
-				this.OwningDialog.GotoNode(this.link);
+				OwningDialog.GotoNode(link);
 			}
 		}
-
-		
-		public Window dialog;
-
-		
-		protected string text;
-
-		
-		public DiaNode link;
-
-		
-		public Func<DiaNode> linkLateBind;
-
-		
-		public bool resolveTree;
-
-		
-		public Action action;
-
-		
-		public bool disabled;
-
-		
-		public string disabledReason;
-
-		
-		public SoundDef clickSound = SoundDefOf.PageChange;
-
-		
-		public Dialog_InfoCard.Hyperlink hyperlink;
-
-		
-		protected readonly Color DisabledOptionColor = new Color(0.5f, 0.5f, 0.5f);
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,19 +5,27 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_Techprints : ThingSetMaker
 	{
-		
+		private float marketValueFactor = 1f;
+
+		private static readonly SimpleCurve ResearchableProjectsCountToSelectionWeightCurve = new SimpleCurve
+		{
+			new CurvePoint(4f, 1f),
+			new CurvePoint(0f, 5f)
+		};
+
+		private static List<ThingDef> tmpGenerated = new List<ThingDef>();
+
 		public override float ExtraSelectionWeightFactor(ThingSetMakerParams parms)
 		{
 			int num = 0;
 			bool flag = false;
-			foreach (ResearchProjectDef researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefs)
+			foreach (ResearchProjectDef allDef in DefDatabase<ResearchProjectDef>.AllDefs)
 			{
-				if (!researchProjectDef.IsFinished && researchProjectDef.PrerequisitesCompleted)
+				if (!allDef.IsFinished && allDef.PrerequisitesCompleted)
 				{
-					if (!researchProjectDef.TechprintRequirementMet && !PlayerItemAccessibilityUtility.PlayerOrQuestRewardHas(researchProjectDef.Techprint, researchProjectDef.techprintCount - researchProjectDef.TechprintsApplied))
+					if (!allDef.TechprintRequirementMet && !PlayerItemAccessibilityUtility.PlayerOrQuestRewardHas(allDef.Techprint, allDef.techprintCount - allDef.TechprintsApplied))
 					{
 						flag = true;
 					}
@@ -32,80 +39,57 @@ namespace RimWorld
 			{
 				return 1f;
 			}
-			return (float)Mathf.RoundToInt(ThingSetMaker_Techprints.ResearchableProjectsCountToSelectionWeightCurve.Evaluate((float)num));
+			return Mathf.RoundToInt(ResearchableProjectsCountToSelectionWeightCurve.Evaluate(num));
 		}
 
-		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
-			ThingDef thingDef;
-			return (parms.countRange == null || parms.countRange.Value.max > 0) && TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out thingDef, null, (parms.totalMarketValueRange == null) ? float.MaxValue : (parms.totalMarketValueRange.Value.max * this.marketValueFactor));
+			if (parms.countRange.HasValue && parms.countRange.Value.max <= 0)
+			{
+				return false;
+			}
+			ThingDef result;
+			return TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out result, null, (!parms.totalMarketValueRange.HasValue) ? float.MaxValue : (parms.totalMarketValueRange.Value.max * marketValueFactor));
 		}
 
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			ThingSetMaker_Techprints.tmpGenerated.Clear();
-			ThingDef thingDef3;
-			if (parms.countRange != null)
+			tmpGenerated.Clear();
+			ThingDef result3;
+			if (parms.countRange.HasValue)
 			{
 				int num = Mathf.Max(parms.countRange.Value.RandomInRange, 1);
 				for (int i = 0; i < num; i++)
 				{
-					ThingDef thingDef;
-					if (!TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out thingDef, ThingSetMaker_Techprints.tmpGenerated, 3.40282347E+38f))
+					if (!TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out ThingDef result, tmpGenerated))
 					{
 						break;
 					}
-					ThingSetMaker_Techprints.tmpGenerated.Add(thingDef);
-					outThings.Add(ThingMaker.MakeThing(thingDef, null));
+					tmpGenerated.Add(result);
+					outThings.Add(ThingMaker.MakeThing(result));
 				}
 			}
-			else if (parms.totalMarketValueRange != null)
+			else if (parms.totalMarketValueRange.HasValue)
 			{
-				float num2 = parms.totalMarketValueRange.Value.RandomInRange * this.marketValueFactor;
-				float num3 = 0f;
-				ThingDef thingDef2;
-				while (TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out thingDef2, ThingSetMaker_Techprints.tmpGenerated, num2 - num3) || (!ThingSetMaker_Techprints.tmpGenerated.Any<ThingDef>() && TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out thingDef2, ThingSetMaker_Techprints.tmpGenerated, 3.40282347E+38f)))
+				float num2 = parms.totalMarketValueRange.Value.RandomInRange * marketValueFactor;
+				ThingDef result2;
+				for (float num3 = 0f; TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out result2, tmpGenerated, num2 - num3) || (!tmpGenerated.Any() && TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out result2, tmpGenerated)); num3 += result2.BaseMarketValue)
 				{
-					ThingSetMaker_Techprints.tmpGenerated.Add(thingDef2);
-					outThings.Add(ThingMaker.MakeThing(thingDef2, null));
-					num3 += thingDef2.BaseMarketValue;
+					tmpGenerated.Add(result2);
+					outThings.Add(ThingMaker.MakeThing(result2));
 				}
 			}
-			else if (TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out thingDef3, ThingSetMaker_Techprints.tmpGenerated, 3.40282347E+38f))
+			else if (TechprintUtility.TryGetTechprintDefToGenerate(parms.makingFaction, out result3, tmpGenerated))
 			{
-				ThingSetMaker_Techprints.tmpGenerated.Add(thingDef3);
-				outThings.Add(ThingMaker.MakeThing(thingDef3, null));
+				tmpGenerated.Add(result3);
+				outThings.Add(ThingMaker.MakeThing(result3));
 			}
-			ThingSetMaker_Techprints.tmpGenerated.Clear();
+			tmpGenerated.Clear();
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
-			return from x in DefDatabase<ThingDef>.AllDefs
-			where x.HasComp(typeof(CompTechprint))
-			select x;
+			return DefDatabase<ThingDef>.AllDefs.Where((ThingDef x) => x.HasComp(typeof(CompTechprint)));
 		}
-
-		
-		private float marketValueFactor = 1f;
-
-		
-		private static readonly SimpleCurve ResearchableProjectsCountToSelectionWeightCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(4f, 1f),
-				true
-			},
-			{
-				new CurvePoint(0f, 5f),
-				true
-			}
-		};
-
-		
-		private static List<ThingDef> tmpGenerated = new List<ThingDef>();
 	}
 }

@@ -1,150 +1,67 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Verse
 {
-	
 	public static class WorkTypeDefsUtility
 	{
-		
-		
-		public static IEnumerable<WorkTypeDef> WorkTypeDefsInPriorityOrder
-		{
-			get
-			{
-				return from wt in DefDatabase<WorkTypeDef>.AllDefs
-				orderby wt.naturalPriority descending
-				select wt;
-			}
-		}
+		public static IEnumerable<WorkTypeDef> WorkTypeDefsInPriorityOrder => DefDatabase<WorkTypeDef>.AllDefs.OrderByDescending((WorkTypeDef wt) => wt.naturalPriority);
 
-		
 		public static string LabelTranslated(this WorkTags tags)
 		{
-			if (tags <= WorkTags.Artistic)
+			switch (tags)
 			{
-				if (tags <= WorkTags.Social)
-				{
-					if (tags <= WorkTags.Violent)
-					{
-						switch (tags)
-						{
-						case WorkTags.None:
-							return "WorkTagNone".Translate();
-						case (WorkTags)1:
-						case (WorkTags)3:
-							break;
-						case WorkTags.ManualDumb:
-							return "WorkTagManualDumb".Translate();
-						case WorkTags.ManualSkilled:
-							return "WorkTagManualSkilled".Translate();
-						default:
-							if (tags == WorkTags.Violent)
-							{
-								return "WorkTagViolent".Translate();
-							}
-							break;
-						}
-					}
-					else
-					{
-						if (tags == WorkTags.Caring)
-						{
-							return "WorkTagCaring".Translate();
-						}
-						if (tags == WorkTags.Social)
-						{
-							return "WorkTagSocial".Translate();
-						}
-					}
-				}
-				else if (tags <= WorkTags.Intellectual)
-				{
-					if (tags == WorkTags.Commoner)
-					{
-						return "WorkTagCommoner".Translate();
-					}
-					if (tags == WorkTags.Intellectual)
-					{
-						return "WorkTagIntellectual".Translate();
-					}
-				}
-				else
-				{
-					if (tags == WorkTags.Animals)
-					{
-						return "WorkTagAnimals".Translate();
-					}
-					if (tags == WorkTags.Artistic)
-					{
-						return "WorkTagArtistic".Translate();
-					}
-				}
+			case WorkTags.None:
+				return "WorkTagNone".Translate();
+			case WorkTags.Intellectual:
+				return "WorkTagIntellectual".Translate();
+			case WorkTags.ManualDumb:
+				return "WorkTagManualDumb".Translate();
+			case WorkTags.ManualSkilled:
+				return "WorkTagManualSkilled".Translate();
+			case WorkTags.Violent:
+				return "WorkTagViolent".Translate();
+			case WorkTags.Caring:
+				return "WorkTagCaring".Translate();
+			case WorkTags.Social:
+				return "WorkTagSocial".Translate();
+			case WorkTags.Commoner:
+				return "WorkTagCommoner".Translate();
+			case WorkTags.Animals:
+				return "WorkTagAnimals".Translate();
+			case WorkTags.Artistic:
+				return "WorkTagArtistic".Translate();
+			case WorkTags.Crafting:
+				return "WorkTagCrafting".Translate();
+			case WorkTags.Cooking:
+				return "WorkTagCooking".Translate();
+			case WorkTags.Firefighting:
+				return "WorkTagFirefighting".Translate();
+			case WorkTags.Cleaning:
+				return "WorkTagCleaning".Translate();
+			case WorkTags.Hauling:
+				return "WorkTagHauling".Translate();
+			case WorkTags.PlantWork:
+				return "WorkTagPlantWork".Translate();
+			case WorkTags.Mining:
+				return "WorkTagMining".Translate();
+			case WorkTags.Hunting:
+				return "WorkTagHunting".Translate();
+			case WorkTags.AllWork:
+				return "WorkTagAllWork".Translate();
+			default:
+				Log.Error("Unknown or mixed worktags for naming: " + (int)tags);
+				return "Worktag";
 			}
-			else if (tags <= WorkTags.Cleaning)
-			{
-				if (tags <= WorkTags.Cooking)
-				{
-					if (tags == WorkTags.Crafting)
-					{
-						return "WorkTagCrafting".Translate();
-					}
-					if (tags == WorkTags.Cooking)
-					{
-						return "WorkTagCooking".Translate();
-					}
-				}
-				else
-				{
-					if (tags == WorkTags.Firefighting)
-					{
-						return "WorkTagFirefighting".Translate();
-					}
-					if (tags == WorkTags.Cleaning)
-					{
-						return "WorkTagCleaning".Translate();
-					}
-				}
-			}
-			else if (tags <= WorkTags.PlantWork)
-			{
-				if (tags == WorkTags.Hauling)
-				{
-					return "WorkTagHauling".Translate();
-				}
-				if (tags == WorkTags.PlantWork)
-				{
-					return "WorkTagPlantWork".Translate();
-				}
-			}
-			else
-			{
-				if (tags == WorkTags.Mining)
-				{
-					return "WorkTagMining".Translate();
-				}
-				if (tags == WorkTags.Hunting)
-				{
-					return "WorkTagHunting".Translate();
-				}
-				if (tags == WorkTags.AllWork)
-				{
-					return "WorkTagAllWork".Translate();
-				}
-			}
-			Log.Error("Unknown or mixed worktags for naming: " + (int)tags, false);
-			return "Worktag";
 		}
 
-		
 		public static bool OverlapsWithOnAnyWorkType(this WorkTags a, WorkTags b)
 		{
 			List<WorkTypeDef> allDefsListForReading = DefDatabase<WorkTypeDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				WorkTypeDef workTypeDef = allDefsListForReading[i];
-				if ((workTypeDef.workTags & a) != WorkTags.None && (workTypeDef.workTags & b) != WorkTags.None)
+				if ((workTypeDef.workTags & a) != 0 && (workTypeDef.workTags & b) != 0)
 				{
 					return true;
 				}

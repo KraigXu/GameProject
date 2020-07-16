@@ -1,99 +1,31 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Tradeable_RoyalFavor : Tradeable
 	{
-		
-		
-		public override bool IsFavor
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool IsFavor => true;
 
-		
-		
-		public override bool IsCurrency
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool IsCurrency => true;
 
-		
-		
-		public override bool TraderWillTrade
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool TraderWillTrade => true;
 
-		
-		
-		public override bool IsThing
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool IsThing => false;
 
-		
-		
-		public override bool Interactive
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool Interactive => false;
 
-		
-		
-		public override Thing AnyThing
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public override Thing AnyThing => null;
 
-		
-		
-		public override string Label
-		{
-			get
-			{
-				return TradeSession.trader.Faction.def.royalFavorLabel;
-			}
-		}
+		public override string Label => TradeSession.trader.Faction.def.royalFavorLabel;
 
-		
-		
-		public override string TipDescription
-		{
-			get
-			{
-				return "RoyalFavorDescription".Translate(TradeSession.trader.Faction.Named("FACTION"));
-			}
-		}
+		public override string TipDescription => "RoyalFavorDescription".Translate(TradeSession.trader.Faction.Named("FACTION"));
 
-		
 		public override int CostToInt(float cost)
 		{
 			return Mathf.CeilToInt(cost);
 		}
 
-		
 		public override void ResolveTrade()
 		{
 			if (base.ActionToDo == TradeAction.PlayerBuys)
@@ -102,7 +34,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void DrawIcon(Rect iconRect)
 		{
 			Faction faction = TradeSession.trader.Faction;
@@ -111,7 +42,6 @@ namespace RimWorld
 			GUI.color = Color.white;
 		}
 
-		
 		public override int CountHeldBy(Transactor trans)
 		{
 			if (trans == Transactor.Trader)
@@ -121,7 +51,6 @@ namespace RimWorld
 			return 0;
 		}
 
-		
 		public override int GetHashCode()
 		{
 			return 0;

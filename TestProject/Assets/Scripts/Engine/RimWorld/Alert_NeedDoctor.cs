@@ -1,36 +1,27 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedDoctor : Alert
 	{
-		
-		public Alert_NeedDoctor()
-		{
-			this.defaultLabel = "NeedDoctor".Translate();
-			this.defaultPriority = AlertPriority.High;
-		}
+		private List<Pawn> patientsResult = new List<Pawn>();
 
-		
-		
 		private List<Pawn> Patients
 		{
 			get
 			{
-				this.patientsResult.Clear();
+				patientsResult.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
 					if (maps[i].IsPlayerHome)
 					{
 						bool flag = false;
-						foreach (Pawn pawn in maps[i].mapPawns.FreeColonistsSpawned)
+						foreach (Pawn item in maps[i].mapPawns.FreeColonistsSpawned)
 						{
-							if (!pawn.Downed && pawn.workSettings != null && pawn.workSettings.WorkIsActive(WorkTypeDefOf.Doctor))
+							if (!item.Downed && item.workSettings != null && item.workSettings.WorkIsActive(WorkTypeDefOf.Doctor))
 							{
 								flag = true;
 								break;
@@ -38,42 +29,43 @@ namespace RimWorld
 						}
 						if (!flag)
 						{
-							foreach (Pawn pawn2 in maps[i].mapPawns.FreeColonistsSpawned)
+							foreach (Pawn item2 in maps[i].mapPawns.FreeColonistsSpawned)
 							{
-								if ((pawn2.Downed && pawn2.needs.food.CurCategory < HungerCategory.Fed && pawn2.InBed()) || HealthAIUtility.ShouldBeTendedNowByPlayer(pawn2))
+								if ((item2.Downed && (int)item2.needs.food.CurCategory < 0 && item2.InBed()) || HealthAIUtility.ShouldBeTendedNowByPlayer(item2))
 								{
-									this.patientsResult.Add(pawn2);
+									patientsResult.Add(item2);
 								}
 							}
 						}
 					}
 				}
-				return this.patientsResult;
+				return patientsResult;
 			}
 		}
 
-		
+		public Alert_NeedDoctor()
+		{
+			defaultLabel = "NeedDoctor".Translate();
+			defaultPriority = AlertPriority.High;
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.Patients)
+			foreach (Pawn patient in Patients)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + patient.NameShortColored.Resolve());
 			}
 			return "NeedDoctorDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (Find.AnyPlayerHomeMap == null)
 			{
 				return false;
 			}
-			return AlertReport.CulpritsAre(this.Patients);
+			return AlertReport.CulpritsAre(Patients);
 		}
-
-		
-		private List<Pawn> patientsResult = new List<Pawn>();
 	}
 }

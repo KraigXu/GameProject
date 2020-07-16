@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public static class TemperatureDisplayModeExtension
 	{
-		
 		public static string ToStringHuman(this TemperatureDisplayMode mode)
 		{
 			switch (mode)

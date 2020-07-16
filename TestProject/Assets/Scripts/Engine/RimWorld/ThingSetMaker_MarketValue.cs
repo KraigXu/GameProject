@@ -1,99 +1,94 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_MarketValue : ThingSetMaker
 	{
-		
+		private int nextSeed;
+
 		public ThingSetMaker_MarketValue()
 		{
-			this.nextSeed = Rand.Int;
+			nextSeed = Rand.Int;
 		}
 
-		
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
-			if (!this.AllowedThingDefs(parms).Any<ThingDef>())
+			if (!AllowedThingDefs(parms).Any())
 			{
 				return false;
 			}
-			if (parms.countRange != null && parms.countRange.Value.max <= 0)
+			if (parms.countRange.HasValue && parms.countRange.Value.max <= 0)
 			{
 				return false;
 			}
-			if (parms.totalMarketValueRange == null || parms.totalMarketValueRange.Value.max <= 0f)
+			if (!parms.totalMarketValueRange.HasValue || parms.totalMarketValueRange.Value.max <= 0f)
 			{
 				return false;
 			}
-			float maxValue;
-			if (parms.maxTotalMass != null)
+			float totalMarketValue;
+			if (parms.maxTotalMass.HasValue)
 			{
 				float? maxTotalMass = parms.maxTotalMass;
-				maxValue = float.MaxValue;
-				if (!(maxTotalMass.GetValueOrDefault() == maxValue & maxTotalMass != null) && !ThingSetMakerUtility.PossibleToWeighNoMoreThan(this.AllowedThingDefs(parms), parms.techLevel ?? TechLevel.Undefined, parms.maxTotalMass.Value, (parms.countRange != null) ? parms.countRange.Value.min : 1))
+				totalMarketValue = float.MaxValue;
+				if (!(maxTotalMass == totalMarketValue) && !ThingSetMakerUtility.PossibleToWeighNoMoreThan(AllowedThingDefs(parms), parms.techLevel ?? TechLevel.Undefined, parms.maxTotalMass.Value, (!parms.countRange.HasValue) ? 1 : parms.countRange.Value.min))
 				{
 					return false;
 				}
 			}
-			return this.GeneratePossibleDefs(parms, out maxValue, this.nextSeed).Any<ThingStuffPairWithQuality>();
+			if (!GeneratePossibleDefs(parms, out totalMarketValue, nextSeed).Any())
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			float maxMass = parms.maxTotalMass ?? float.MaxValue;
-			float totalValue;
-			List<ThingStuffPairWithQuality> list = this.GeneratePossibleDefs(parms, out totalValue, this.nextSeed);
+			float totalMarketValue;
+			List<ThingStuffPairWithQuality> list = GeneratePossibleDefs(parms, out totalMarketValue, nextSeed);
 			for (int i = 0; i < list.Count; i++)
 			{
 				outThings.Add(list[i].MakeThing());
 			}
-			ThingSetMakerByTotalStatUtility.IncreaseStackCountsToTotalValue_NewTemp(outThings, totalValue, (Thing x) => x.MarketValue, maxMass, true);
-			this.nextSeed++;
+			ThingSetMakerByTotalStatUtility.IncreaseStackCountsToTotalValue_NewTemp(outThings, totalMarketValue, (Thing x) => x.MarketValue, maxMass, satisfyMinRewardCount: true);
+			nextSeed++;
 		}
 
-		
 		protected virtual IEnumerable<ThingDef> AllowedThingDefs(ThingSetMakerParams parms)
 		{
 			return ThingSetMakerUtility.GetAllowedThingDefs(parms);
 		}
 
-		
 		private float GetSingleThingValue(ThingStuffPairWithQuality thingStuffPair)
 		{
 			return thingStuffPair.GetStatValue(StatDefOf.MarketValue);
 		}
 
-		
 		private float GetMinValue(ThingStuffPairWithQuality thingStuffPair)
 		{
 			return thingStuffPair.GetStatValue(StatDefOf.MarketValue) * (float)thingStuffPair.thing.minRewardCount;
 		}
 
-		
 		private float GetMaxValue(ThingStuffPairWithQuality thingStuffPair)
 		{
 			return thingStuffPair.GetStatValue(StatDefOf.MarketValue) * (float)thingStuffPair.thing.stackLimit;
 		}
 
-		
 		private List<ThingStuffPairWithQuality> GeneratePossibleDefs(ThingSetMakerParams parms, out float totalMarketValue, int seed)
 		{
 			Rand.PushState(seed);
-			List<ThingStuffPairWithQuality> result = this.GeneratePossibleDefs(parms, out totalMarketValue);
+			List<ThingStuffPairWithQuality> result = GeneratePossibleDefs(parms, out totalMarketValue);
 			Rand.PopState();
 			return result;
 		}
 
-		
 		private List<ThingStuffPairWithQuality> GeneratePossibleDefs(ThingSetMakerParams parms, out float totalMarketValue)
 		{
-			IEnumerable<ThingDef> enumerable = this.AllowedThingDefs(parms);
-			if (!enumerable.Any<ThingDef>())
+			IEnumerable<ThingDef> enumerable = AllowedThingDefs(parms);
+			if (!enumerable.Any())
 			{
 				totalMarketValue = 0f;
 				return new List<ThingStuffPairWithQuality>();
@@ -104,40 +99,19 @@ namespace RimWorld
 			float maxMass = parms.maxTotalMass ?? float.MaxValue;
 			QualityGenerator qualityGenerator = parms.qualityGenerator ?? QualityGenerator.BaseGen;
 			totalMarketValue = floatRange.RandomInRange;
-			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp3(countRange, totalMarketValue, enumerable, techLevel, qualityGenerator, new Func<ThingStuffPairWithQuality, float>(this.GetMinValue), new Func<ThingStuffPairWithQuality, float>(this.GetMaxValue), new Func<ThingStuffPairWithQuality, float>(this.GetSingleThingValue), null, 100, maxMass, parms.allowNonStackableDuplicates.GetValueOrDefault(true), totalMarketValue * (parms.minSingleItemMarketValuePct ?? 0f));
+			return ThingSetMakerByTotalStatUtility.GenerateDefsWithPossibleTotalValue_NewTmp3(countRange, totalMarketValue, enumerable, techLevel, qualityGenerator, GetMinValue, GetMaxValue, GetSingleThingValue, null, 100, maxMass, parms.allowNonStackableDuplicates.GetValueOrDefault(true), totalMarketValue * (parms.minSingleItemMarketValuePct ?? 0f));
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
-			foreach (ThingDef thingDef in this.AllowedThingDefs(parms))
+			foreach (ThingDef item in AllowedThingDefs(parms))
 			{
-				if (parms.maxTotalMass != null)
+				if ((!parms.maxTotalMass.HasValue || parms.maxTotalMass == float.MaxValue || !(ThingSetMakerUtility.GetMinMass(item, techLevel) > parms.maxTotalMass)) && (!parms.totalMarketValueRange.HasValue || parms.totalMarketValueRange.Value.max == float.MaxValue || !(ThingSetMakerUtility.GetMinMarketValue(item, techLevel) > parms.totalMarketValueRange.Value.max)))
 				{
-					float? maxTotalMass = parms.maxTotalMass;
-					float maxValue = float.MaxValue;
-					if (!(maxTotalMass.GetValueOrDefault() == maxValue & maxTotalMass != null))
-					{
-						float minMass = ThingSetMakerUtility.GetMinMass(thingDef, techLevel);
-						maxTotalMass = parms.maxTotalMass;
-						if (minMass > maxTotalMass.GetValueOrDefault() & maxTotalMass != null)
-						{
-							continue;
-						}
-					}
-				}
-				if (parms.totalMarketValueRange == null || parms.totalMarketValueRange.Value.max == 3.40282347E+38f || ThingSetMakerUtility.GetMinMarketValue(thingDef, techLevel) <= parms.totalMarketValueRange.Value.max)
-				{
-					yield return thingDef;
+					yield return item;
 				}
 			}
-			IEnumerator<ThingDef> enumerator = null;
-			yield break;
-			yield break;
 		}
-
-		
-		private int nextSeed;
 	}
 }

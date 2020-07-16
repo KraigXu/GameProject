@@ -1,116 +1,125 @@
-﻿using System;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Quest : IExposable, ILoadReferenceable, ISignalReceiver
 	{
-		
-		
-		public List<QuestPart> PartsListForReading
-		{
-			get
-			{
-				return this.parts;
-			}
-		}
+		public int id;
 
-		
-		
-		public int TicksSinceAppeared
-		{
-			get
-			{
-				return Find.TickManager.TicksGame - this.appearanceTick;
-			}
-		}
+		private List<QuestPart> parts = new List<QuestPart>();
 
-		
-		
+		public string name;
+
+		public TaggedString description;
+
+		public float points;
+
+		public int challengeRating = -1;
+
+		public List<string> tags = new List<string>();
+
+		public string lastSlateStateDebug;
+
+		public QuestScriptDef root;
+
+		public int appearanceTick = -1;
+
+		public int acceptanceTick = -1;
+
+		public bool initiallyAccepted;
+
+		public bool dismissed;
+
+		public bool hiddenInUI;
+
+		public int ticksUntilAcceptanceExpiry = -1;
+
+		private Pawn accepterPawn;
+
+		private string accepterPawnLabel;
+
+		public List<string> signalsReceivedDebug;
+
+		private bool ended;
+
+		private QuestEndOutcome endOutcome;
+
+		private bool cleanedUp;
+
+		public int cleanupTick = -1;
+
+		public const int MaxSignalsReceivedDebugCount = 25;
+
+		private const int RemoveAllQuestPartsAfterTicksSinceCleanup = 1800000;
+
+		public List<QuestPart> PartsListForReading => parts;
+
+		public int TicksSinceAppeared => Find.TickManager.TicksGame - appearanceTick;
+
 		public int TicksSinceAccepted
 		{
 			get
 			{
-				if (this.acceptanceTick >= 0)
+				if (acceptanceTick >= 0)
 				{
-					return Find.TickManager.TicksGame - this.acceptanceTick;
+					return Find.TickManager.TicksGame - acceptanceTick;
 				}
 				return -1;
 			}
 		}
 
-		
-		
 		public int TicksSinceCleanup
 		{
 			get
 			{
-				if (!this.cleanedUp)
+				if (!cleanedUp)
 				{
 					return -1;
 				}
-				return Find.TickManager.TicksGame - this.cleanupTick;
+				return Find.TickManager.TicksGame - cleanupTick;
 			}
 		}
 
-		
-		
 		public string AccepterPawnLabelCap
 		{
 			get
 			{
-				if (this.accepterPawn == null)
+				if (accepterPawn == null)
 				{
-					return this.accepterPawnLabel;
+					return accepterPawnLabel;
 				}
-				return this.accepterPawn.LabelCap;
+				return accepterPawn.LabelCap;
 			}
 		}
 
-		
-		
-		public string InitiateSignal
-		{
-			get
-			{
-				return "Quest" + this.id + ".Initiate";
-			}
-		}
+		public string InitiateSignal => "Quest" + id + ".Initiate";
 
-		
-		
 		public bool EverAccepted
 		{
 			get
 			{
-				return this.initiallyAccepted || this.acceptanceTick >= 0;
+				if (!initiallyAccepted)
+				{
+					return acceptanceTick >= 0;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public Pawn AccepterPawn
-		{
-			get
-			{
-				return this.accepterPawn;
-			}
-		}
+		public Pawn AccepterPawn => accepterPawn;
 
-		
-		
 		public bool RequiresAccepter
 		{
 			get
 			{
-				for (int i = 0; i < this.parts.Count; i++)
+				for (int i = 0; i < parts.Count; i++)
 				{
-					if (this.parts[i].RequiresAccepter)
+					if (parts[i].RequiresAccepter)
 					{
 						return true;
 					}
@@ -119,102 +128,65 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public QuestState State
 		{
 			get
 			{
-				if (this.ticksUntilAcceptanceExpiry == 0)
+				if (ticksUntilAcceptanceExpiry == 0)
 				{
 					return QuestState.EndedOfferExpired;
 				}
-				if (this.ended)
+				if (ended)
 				{
-					if (this.endOutcome == QuestEndOutcome.Success)
+					if (endOutcome == QuestEndOutcome.Success)
 					{
 						return QuestState.EndedSuccess;
 					}
-					if (this.endOutcome == QuestEndOutcome.Fail)
+					if (endOutcome == QuestEndOutcome.Fail)
 					{
 						return QuestState.EndedFailed;
 					}
-					if (this.endOutcome == QuestEndOutcome.InvalidPreAcceptance)
+					if (endOutcome == QuestEndOutcome.InvalidPreAcceptance)
 					{
 						return QuestState.EndedInvalid;
 					}
 					return QuestState.EndedUnknownOutcome;
 				}
-				else
+				if (acceptanceTick < 0)
 				{
-					if (this.acceptanceTick < 0)
-					{
-						return QuestState.NotYetAccepted;
-					}
-					return QuestState.Ongoing;
+					return QuestState.NotYetAccepted;
 				}
+				return QuestState.Ongoing;
 			}
 		}
 
-		
-		
-		public IEnumerable<GlobalTargetInfo> QuestLookTargets
-		{
-			get
-			{
-				return this.parts.SelectMany((QuestPart x) => x.QuestLookTargets).Distinct<GlobalTargetInfo>();
-			}
-		}
+		public IEnumerable<GlobalTargetInfo> QuestLookTargets => parts.SelectMany((QuestPart x) => x.QuestLookTargets).Distinct();
 
-		
-		
-		public IEnumerable<GlobalTargetInfo> QuestSelectTargets
-		{
-			get
-			{
-				return this.parts.SelectMany((QuestPart x) => x.QuestSelectTargets).Distinct<GlobalTargetInfo>();
-			}
-		}
+		public IEnumerable<GlobalTargetInfo> QuestSelectTargets => parts.SelectMany((QuestPart x) => x.QuestSelectTargets).Distinct();
 
-		
-		
-		public IEnumerable<Faction> InvolvedFactions
-		{
-			get
-			{
-				return this.parts.SelectMany((QuestPart x) => x.InvolvedFactions).Distinct<Faction>();
-			}
-		}
+		public IEnumerable<Faction> InvolvedFactions => parts.SelectMany((QuestPart x) => x.InvolvedFactions).Distinct();
 
-		
-		
-		public IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
-		{
-			get
-			{
-				return this.parts.SelectMany((QuestPart x) => x.Hyperlinks).Distinct<Dialog_InfoCard.Hyperlink>();
-			}
-		}
+		public IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks => parts.SelectMany((QuestPart x) => x.Hyperlinks).Distinct();
 
-		
-		
 		public bool Historical
 		{
 			get
 			{
-				return this.State != QuestState.NotYetAccepted && this.State != QuestState.Ongoing;
+				if (State != 0)
+				{
+					return State != QuestState.Ongoing;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public bool IncreasesPopulation
 		{
 			get
 			{
-				for (int i = 0; i < this.parts.Count; i++)
+				for (int i = 0; i < parts.Count; i++)
 				{
-					if (this.parts[i].IncreasesPopulation)
+					if (parts[i].IncreasesPopulation)
 					{
 						return true;
 					}
@@ -223,7 +195,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static Quest MakeRaw()
 		{
 			return new Quest
@@ -234,149 +205,139 @@ namespace RimWorld
 			};
 		}
 
-		
 		public void QuestTick()
 		{
-			if (this.Historical)
+			if (Historical)
 			{
-				if (!this.cleanedUp)
+				if (!cleanedUp)
 				{
-					this.CleanupQuestParts();
+					CleanupQuestParts();
 				}
-				if (this.TicksSinceCleanup >= 1800000)
+				if (TicksSinceCleanup >= 1800000)
 				{
-					this.parts.Clear();
+					parts.Clear();
 				}
 				return;
 			}
-			if (this.ticksUntilAcceptanceExpiry > 0 && this.State == QuestState.NotYetAccepted)
+			if (ticksUntilAcceptanceExpiry > 0 && State == QuestState.NotYetAccepted)
 			{
-				this.ticksUntilAcceptanceExpiry--;
-				if (this.ticksUntilAcceptanceExpiry == 0 && !this.cleanedUp)
+				ticksUntilAcceptanceExpiry--;
+				if (ticksUntilAcceptanceExpiry == 0 && !cleanedUp)
 				{
-					this.CleanupQuestParts();
+					CleanupQuestParts();
 				}
 			}
-			if (!this.Historical)
+			if (Historical)
 			{
-				for (int i = 0; i < this.parts.Count; i++)
+				return;
+			}
+			for (int i = 0; i < parts.Count; i++)
+			{
+				QuestPartActivable questPartActivable = parts[i] as QuestPartActivable;
+				if (questPartActivable != null && questPartActivable.State == QuestPartState.Enabled)
 				{
-					QuestPartActivable questPartActivable = this.parts[i] as QuestPartActivable;
-					if (questPartActivable != null && questPartActivable.State == QuestPartState.Enabled)
+					try
 					{
-						try
-						{
-							questPartActivable.QuestPartTick();
-						}
-						catch (Exception arg)
-						{
-							Log.Error("Exception ticking QuestPart: " + arg, false);
-						}
-						if (this.Historical)
-						{
-							break;
-						}
+						questPartActivable.QuestPartTick();
+					}
+					catch (Exception arg)
+					{
+						Log.Error("Exception ticking QuestPart: " + arg);
+					}
+					if (Historical)
+					{
+						break;
 					}
 				}
 			}
 		}
 
-		
 		public void AddPart(QuestPart part)
 		{
-			if (this.parts.Contains(part))
+			if (parts.Contains(part))
 			{
-				Log.Error("Tried to add the same QuestPart twice: " + part.ToStringSafe<QuestPart>() + ", quest=" + this.ToStringSafe<Quest>(), false);
+				Log.Error("Tried to add the same QuestPart twice: " + part.ToStringSafe() + ", quest=" + this.ToStringSafe());
 				return;
 			}
 			part.quest = this;
-			this.parts.Add(part);
+			parts.Add(part);
 		}
 
-		
 		public void RemovePart(QuestPart part)
 		{
-			if (!this.parts.Contains(part))
+			if (!parts.Contains(part))
 			{
-				Log.Error("Tried to remove QuestPart which doesn't exist: " + part.ToStringSafe<QuestPart>() + ", quest=" + this.ToStringSafe<Quest>(), false);
+				Log.Error("Tried to remove QuestPart which doesn't exist: " + part.ToStringSafe() + ", quest=" + this.ToStringSafe());
 				return;
 			}
 			part.quest = null;
-			this.parts.Remove(part);
+			parts.Remove(part);
 		}
 
-		
 		public void Accept(Pawn by)
 		{
-			if (this.State != QuestState.NotYetAccepted)
+			if (State == QuestState.NotYetAccepted)
 			{
-				return;
+				for (int i = 0; i < parts.Count; i++)
+				{
+					parts[i].PreQuestAccept();
+				}
+				acceptanceTick = Find.TickManager.TicksGame;
+				accepterPawn = by;
+				dismissed = false;
+				Initiate();
 			}
-			for (int i = 0; i < this.parts.Count; i++)
-			{
-				this.parts[i].PreQuestAccept();
-			}
-			this.acceptanceTick = Find.TickManager.TicksGame;
-			this.accepterPawn = by;
-			this.dismissed = false;
-			this.Initiate();
 		}
 
-		
 		public void End(QuestEndOutcome outcome, bool sendLetter = true)
 		{
-			if (this.Historical)
+			if (Historical)
 			{
-				Log.Error("Tried to resolve a historical quest. id=" + this.id, false);
+				Log.Error("Tried to resolve a historical quest. id=" + id);
 				return;
 			}
-			this.ended = true;
-			this.endOutcome = outcome;
-			this.CleanupQuestParts();
-			if (!this.EverAccepted && this.State == QuestState.EndedOfferExpired)
-			{
-				return;
-			}
-			if (sendLetter)
+			ended = true;
+			endOutcome = outcome;
+			CleanupQuestParts();
+			if ((EverAccepted || State != QuestState.EndedOfferExpired) && sendLetter)
 			{
 				string key = null;
 				string key2 = null;
 				LetterDef textLetterDef = null;
-				switch (this.State)
+				switch (State)
 				{
-				case QuestState.EndedUnknownOutcome:
-					key2 = "LetterQuestConcludedLabel";
-					key = "LetterQuestCompletedConcluded";
-					textLetterDef = LetterDefOf.NeutralEvent;
-					SoundDefOf.Quest_Concluded.PlayOneShotOnCamera(null);
+				case QuestState.EndedFailed:
+					key2 = "LetterQuestFailedLabel";
+					key = "LetterQuestCompletedFail";
+					textLetterDef = LetterDefOf.NegativeEvent;
+					SoundDefOf.Quest_Failed.PlayOneShotOnCamera();
 					break;
 				case QuestState.EndedSuccess:
 					key2 = "LetterQuestCompletedLabel";
 					key = "LetterQuestCompletedSuccess";
 					textLetterDef = LetterDefOf.PositiveEvent;
-					SoundDefOf.Quest_Succeded.PlayOneShotOnCamera(null);
+					SoundDefOf.Quest_Succeded.PlayOneShotOnCamera();
 					break;
-				case QuestState.EndedFailed:
-					key2 = "LetterQuestFailedLabel";
-					key = "LetterQuestCompletedFail";
-					textLetterDef = LetterDefOf.NegativeEvent;
-					SoundDefOf.Quest_Failed.PlayOneShotOnCamera(null);
+				case QuestState.EndedUnknownOutcome:
+					key2 = "LetterQuestConcludedLabel";
+					key = "LetterQuestCompletedConcluded";
+					textLetterDef = LetterDefOf.NeutralEvent;
+					SoundDefOf.Quest_Concluded.PlayOneShotOnCamera();
 					break;
 				}
-				Find.LetterStack.ReceiveLetter(key2.Translate(), key.Translate(this.name.CapitalizeFirst()), textLetterDef, null, null, this, null, null);
+				Find.LetterStack.ReceiveLetter(key2.Translate(), key.Translate(name.CapitalizeFirst()), textLetterDef, null, null, this);
 			}
 		}
 
-		
 		public bool QuestReserves(Pawn p)
 		{
-			if (this.Historical)
+			if (Historical)
 			{
 				return false;
 			}
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				if (this.parts[i].QuestPartReserves(p))
+				if (parts[i].QuestPartReserves(p))
 				{
 					return true;
 				}
@@ -384,248 +345,164 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public void SetInitiallyAccepted()
 		{
-			this.acceptanceTick = Find.TickManager.TicksGame;
-			this.ticksUntilAcceptanceExpiry = -1;
-			this.initiallyAccepted = true;
+			acceptanceTick = Find.TickManager.TicksGame;
+			ticksUntilAcceptanceExpiry = -1;
+			initiallyAccepted = true;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.id, "id", 0, false);
-			Scribe_Values.Look<string>(ref this.name, "name", null, false);
-			Scribe_Values.Look<int>(ref this.appearanceTick, "appearanceTick", -1, false);
-			Scribe_Values.Look<int>(ref this.acceptanceTick, "acceptanceTick", -1, false);
-			Scribe_Values.Look<int>(ref this.ticksUntilAcceptanceExpiry, "ticksUntilAcceptanceExpiry", -1, false);
-			Scribe_References.Look<Pawn>(ref this.accepterPawn, "acceptedBy", false);
-			Scribe_Values.Look<string>(ref this.accepterPawnLabel, "acceptedByLabel", null, false);
-			Scribe_Values.Look<bool>(ref this.ended, "ended", false, false);
-			Scribe_Values.Look<QuestEndOutcome>(ref this.endOutcome, "endOutcome", QuestEndOutcome.Unknown, false);
-			Scribe_Values.Look<bool>(ref this.cleanedUp, "cleanedUp", false, false);
-			Scribe_Values.Look<int>(ref this.cleanupTick, "cleanupTick", -1, false);
-			Scribe_Values.Look<bool>(ref this.initiallyAccepted, "initiallyAccepted", false, false);
-			Scribe_Values.Look<bool>(ref this.dismissed, "dismissed", false, false);
-			Scribe_Values.Look<bool>(ref this.hiddenInUI, "hiddenInUI", false, false);
-			Scribe_Values.Look<int>(ref this.challengeRating, "challengeRating", 0, false);
-			Scribe_Values.Look<TaggedString>(ref this.description, "description", default(TaggedString), false);
-			Scribe_Values.Look<string>(ref this.lastSlateStateDebug, "lastSlateStateDebug", null, false);
-			Scribe_Defs.Look<QuestScriptDef>(ref this.root, "root");
-			Scribe_Collections.Look<string>(ref this.signalsReceivedDebug, "signalsReceivedDebug", LookMode.Undefined, Array.Empty<object>());
-			Scribe_Collections.Look<QuestPart>(ref this.parts, "parts", LookMode.Deep, Array.Empty<object>());
-			Scribe_Collections.Look<string>(ref this.tags, "tags", LookMode.Value, Array.Empty<object>());
+			Scribe_Values.Look(ref id, "id", 0);
+			Scribe_Values.Look(ref name, "name");
+			Scribe_Values.Look(ref appearanceTick, "appearanceTick", -1);
+			Scribe_Values.Look(ref acceptanceTick, "acceptanceTick", -1);
+			Scribe_Values.Look(ref ticksUntilAcceptanceExpiry, "ticksUntilAcceptanceExpiry", -1);
+			Scribe_References.Look(ref accepterPawn, "acceptedBy");
+			Scribe_Values.Look(ref accepterPawnLabel, "acceptedByLabel");
+			Scribe_Values.Look(ref ended, "ended", defaultValue: false);
+			Scribe_Values.Look(ref endOutcome, "endOutcome", QuestEndOutcome.Unknown);
+			Scribe_Values.Look(ref cleanedUp, "cleanedUp", defaultValue: false);
+			Scribe_Values.Look(ref cleanupTick, "cleanupTick", -1);
+			Scribe_Values.Look(ref initiallyAccepted, "initiallyAccepted", defaultValue: false);
+			Scribe_Values.Look(ref dismissed, "dismissed", defaultValue: false);
+			Scribe_Values.Look(ref hiddenInUI, "hiddenInUI", defaultValue: false);
+			Scribe_Values.Look(ref challengeRating, "challengeRating", 0);
+			Scribe_Values.Look(ref description, "description");
+			Scribe_Values.Look(ref lastSlateStateDebug, "lastSlateStateDebug");
+			Scribe_Defs.Look(ref root, "root");
+			Scribe_Collections.Look(ref signalsReceivedDebug, "signalsReceivedDebug", LookMode.Undefined);
+			Scribe_Collections.Look(ref parts, "parts", LookMode.Deep);
+			Scribe_Collections.Look(ref tags, "tags", LookMode.Value);
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				if (this.parts.RemoveAll((QuestPart x) => x == null) != 0)
+				if (parts.RemoveAll((QuestPart x) => x == null) != 0)
 				{
-					Log.Error("Some quest parts were null after loading.", false);
+					Log.Error("Some quest parts were null after loading.");
 				}
-				for (int i = 0; i < this.parts.Count; i++)
+				for (int i = 0; i < parts.Count; i++)
 				{
-					this.parts[i].quest = this;
+					parts[i].quest = this;
 				}
 			}
 		}
 
-		
 		public void Notify_PawnDiscarded(Pawn pawn)
 		{
-			if (this.accepterPawn == pawn)
+			if (accepterPawn == pawn)
 			{
-				this.accepterPawn = null;
-				this.accepterPawnLabel = pawn.LabelCap;
+				accepterPawn = null;
+				accepterPawnLabel = pawn.LabelCap;
 			}
 		}
 
-		
 		public void Notify_SignalReceived(Signal signal)
 		{
-			if (!signal.tag.StartsWith("Quest" + this.id + "."))
+			if (signal.tag.StartsWith("Quest" + id + "."))
 			{
-				return;
-			}
-			for (int i = 0; i < this.parts.Count; i++)
-			{
-				try
+				for (int i = 0; i < parts.Count; i++)
 				{
-					bool flag;
-					switch (this.parts[i].signalListenMode)
+					try
 					{
-					case QuestPart.SignalListenMode.OngoingOnly:
-						flag = (this.State == QuestState.Ongoing);
-						break;
-					case QuestPart.SignalListenMode.NotYetAcceptedOnly:
-						flag = (this.State == QuestState.NotYetAccepted);
-						break;
-					case QuestPart.SignalListenMode.OngoingOrNotYetAccepted:
-						flag = (this.State == QuestState.Ongoing || this.State == QuestState.NotYetAccepted);
-						break;
-					case QuestPart.SignalListenMode.HistoricalOnly:
-						flag = this.Historical;
-						break;
-					case QuestPart.SignalListenMode.Always:
-						flag = true;
-						break;
-					default:
-						flag = false;
-						break;
+						bool flag;
+						switch (parts[i].signalListenMode)
+						{
+						case QuestPart.SignalListenMode.OngoingOnly:
+							flag = (State == QuestState.Ongoing);
+							break;
+						case QuestPart.SignalListenMode.NotYetAcceptedOnly:
+							flag = (State == QuestState.NotYetAccepted);
+							break;
+						case QuestPart.SignalListenMode.OngoingOrNotYetAccepted:
+							flag = (State == QuestState.Ongoing || State == QuestState.NotYetAccepted);
+							break;
+						case QuestPart.SignalListenMode.HistoricalOnly:
+							flag = Historical;
+							break;
+						case QuestPart.SignalListenMode.Always:
+							flag = true;
+							break;
+						default:
+							flag = false;
+							break;
+						}
+						if (flag)
+						{
+							parts[i].Notify_QuestSignalReceived(signal);
+						}
 					}
-					if (flag)
+					catch (Exception arg)
 					{
-						this.parts[i].Notify_QuestSignalReceived(signal);
+						Log.Error("Error while processing a quest signal: " + arg);
 					}
-				}
-				catch (Exception arg)
-				{
-					Log.Error("Error while processing a quest signal: " + arg, false);
 				}
 			}
 		}
 
-		
 		public void Initiate()
 		{
-			Find.SignalManager.SendSignal(new Signal(this.InitiateSignal));
+			Find.SignalManager.SendSignal(new Signal(InitiateSignal));
 		}
 
-		
 		public void CleanupQuestParts()
 		{
-			if (this.cleanedUp)
+			if (!cleanedUp)
 			{
-				return;
+				cleanupTick = Find.TickManager.TicksGame;
+				for (int i = 0; i < parts.Count; i++)
+				{
+					try
+					{
+						parts[i].Notify_PreCleanup();
+					}
+					catch (Exception arg)
+					{
+						Log.Error("Error in QuestPart Notify_PreCleanup: " + arg);
+					}
+				}
+				for (int j = 0; j < parts.Count; j++)
+				{
+					try
+					{
+						parts[j].Cleanup();
+					}
+					catch (Exception arg2)
+					{
+						Log.Error("Error in QuestPart cleanup: " + arg2);
+					}
+				}
+				cleanedUp = true;
 			}
-			this.cleanupTick = Find.TickManager.TicksGame;
-			for (int i = 0; i < this.parts.Count; i++)
-			{
-				try
-				{
-					this.parts[i].Notify_PreCleanup();
-				}
-				catch (Exception arg)
-				{
-					Log.Error("Error in QuestPart Notify_PreCleanup: " + arg, false);
-				}
-			}
-			for (int j = 0; j < this.parts.Count; j++)
-			{
-				try
-				{
-					this.parts[j].Cleanup();
-				}
-				catch (Exception arg2)
-				{
-					Log.Error("Error in QuestPart cleanup: " + arg2, false);
-				}
-			}
-			this.cleanedUp = true;
 		}
 
-		
 		public void Notify_ThingsProduced(Pawn worker, List<Thing> things)
 		{
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				this.parts[i].Notify_ThingsProduced(worker, things);
+				parts[i].Notify_ThingsProduced(worker, things);
 			}
 		}
 
-		
 		public void Notify_PlantHarvested(Pawn worker, Thing harvested)
 		{
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				this.parts[i].Notify_PlantHarvested(worker, harvested);
+				parts[i].Notify_PlantHarvested(worker, harvested);
 			}
 		}
 
-		
 		public void Notify_PawnKilled(Pawn pawn, DamageInfo? dinfo)
 		{
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				this.parts[i].Notify_PawnKilled(pawn, dinfo);
+				parts[i].Notify_PawnKilled(pawn, dinfo);
 			}
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return "Quest_" + this.id;
+			return "Quest_" + id;
 		}
-
-		
-		public int id;
-
-		
-		private List<QuestPart> parts = new List<QuestPart>();
-
-		
-		public string name;
-
-		
-		public TaggedString description;
-
-		
-		public float points;
-
-		
-		public int challengeRating = -1;
-
-		
-		public List<string> tags = new List<string>();
-
-		
-		public string lastSlateStateDebug;
-
-		
-		public QuestScriptDef root;
-
-		
-		public int appearanceTick = -1;
-
-		
-		public int acceptanceTick = -1;
-
-		
-		public bool initiallyAccepted;
-
-		
-		public bool dismissed;
-
-		
-		public bool hiddenInUI;
-
-		
-		public int ticksUntilAcceptanceExpiry = -1;
-
-		
-		private Pawn accepterPawn;
-
-		
-		private string accepterPawnLabel;
-
-		
-		public List<string> signalsReceivedDebug;
-
-		
-		private bool ended;
-
-		
-		private QuestEndOutcome endOutcome;
-
-		
-		private bool cleanedUp;
-
-		
-		public int cleanupTick = -1;
-
-		
-		public const int MaxSignalsReceivedDebugCount = 25;
-
-		
-		private const int RemoveAllQuestPartsAfterTicksSinceCleanup = 1800000;
 	}
 }

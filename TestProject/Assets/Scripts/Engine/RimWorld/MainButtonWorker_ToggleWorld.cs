@@ -1,40 +1,37 @@
-﻿using System;
 using RimWorld.Planet;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class MainButtonWorker_ToggleWorld : MainButtonWorker
 	{
-		
+		public bool resetViewNextTime = true;
+
 		public override void Activate()
 		{
 			if (Find.World.renderer.wantedMode == WorldRenderMode.None)
 			{
 				Find.World.renderer.wantedMode = WorldRenderMode.Planet;
-				if (this.resetViewNextTime)
+				if (resetViewNextTime)
 				{
-					this.resetViewNextTime = false;
+					resetViewNextTime = false;
 					Find.World.UI.Reset();
 				}
 				LessonAutoActivator.TeachOpportunity(ConceptDefOf.FormCaravan, OpportunityType.Important);
-				Find.MainTabsRoot.EscapeCurrentTab(false);
-				SoundDefOf.TabOpen.PlayOneShotOnCamera(null);
-				return;
+				Find.MainTabsRoot.EscapeCurrentTab(playSound: false);
+				SoundDefOf.TabOpen.PlayOneShotOnCamera();
 			}
-			if (Find.MainTabsRoot.OpenTab != null && Find.MainTabsRoot.OpenTab != MainButtonDefOf.Inspect)
+			else if (Find.MainTabsRoot.OpenTab != null && Find.MainTabsRoot.OpenTab != MainButtonDefOf.Inspect)
 			{
-				Find.MainTabsRoot.EscapeCurrentTab(false);
-				SoundDefOf.TabOpen.PlayOneShotOnCamera(null);
-				return;
+				Find.MainTabsRoot.EscapeCurrentTab(playSound: false);
+				SoundDefOf.TabOpen.PlayOneShotOnCamera();
 			}
-			Find.World.renderer.wantedMode = WorldRenderMode.None;
-			SoundDefOf.TabClose.PlayOneShotOnCamera(null);
+			else
+			{
+				Find.World.renderer.wantedMode = WorldRenderMode.None;
+				SoundDefOf.TabClose.PlayOneShotOnCamera();
+			}
 		}
-
-		
-		public bool resetViewNextTime = true;
 	}
 }

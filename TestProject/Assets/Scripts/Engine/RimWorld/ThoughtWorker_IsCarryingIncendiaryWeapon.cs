@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_IsCarryingIncendiaryWeapon : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (p.equipment.Primary == null)

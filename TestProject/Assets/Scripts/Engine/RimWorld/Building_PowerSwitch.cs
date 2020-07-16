@@ -1,65 +1,47 @@
-﻿using System;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class Building_PowerSwitch : Building
 	{
-		
-		
-		public override bool TransmitsPowerNow
-		{
-			get
-			{
-				return FlickUtility.WantsToBeOn(this);
-			}
-		}
+		private bool wantsOnOld = true;
 
-		
-		
-		public override Graphic Graphic
-		{
-			get
-			{
-				return this.flickableComp.CurrentGraphic;
-			}
-		}
+		private CompFlickable flickableComp;
 
-		
+		public override bool TransmitsPowerNow => FlickUtility.WantsToBeOn(this);
+
+		public override Graphic Graphic => flickableComp.CurrentGraphic;
+
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.flickableComp = base.GetComp<CompFlickable>();
+			flickableComp = GetComp<CompFlickable>();
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.flickableComp == null)
+				if (flickableComp == null)
 				{
-					this.flickableComp = base.GetComp<CompFlickable>();
+					flickableComp = GetComp<CompFlickable>();
 				}
-				this.wantsOnOld = !FlickUtility.WantsToBeOn(this);
-				this.UpdatePowerGrid();
+				wantsOnOld = !FlickUtility.WantsToBeOn(this);
+				UpdatePowerGrid();
 			}
 		}
 
-		
 		protected override void ReceiveCompSignal(string signal)
 		{
 			if (signal == "FlickedOff" || signal == "FlickedOn" || signal == "ScheduledOn" || signal == "ScheduledOff")
 			{
-				this.UpdatePowerGrid();
+				UpdatePowerGrid();
 			}
 		}
 
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -80,23 +62,16 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		
 		private void UpdatePowerGrid()
 		{
-			if (FlickUtility.WantsToBeOn(this) != this.wantsOnOld)
+			if (FlickUtility.WantsToBeOn(this) != wantsOnOld)
 			{
 				if (base.Spawned)
 				{
 					base.Map.powerNetManager.Notfiy_TransmitterTransmitsPowerNowChanged(base.PowerComp);
 				}
-				this.wantsOnOld = FlickUtility.WantsToBeOn(this);
+				wantsOnOld = FlickUtility.WantsToBeOn(this);
 			}
 		}
-
-		
-		private bool wantsOnOld = true;
-
-		
-		private CompFlickable flickableComp;
 	}
 }

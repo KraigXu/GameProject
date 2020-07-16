@@ -1,177 +1,180 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public sealed class TickManager : IExposable
 	{
-		
-		
-		public int TicksGame
-		{
-			get
-			{
-				return this.ticksGameInt;
-			}
-		}
+		private int ticksGameInt;
 
-		
-		
+		public int gameStartAbsTick;
+
+		private float realTimeToTickThrough;
+
+		private TimeSpeed curTimeSpeed = TimeSpeed.Normal;
+
+		public TimeSpeed prePauseTimeSpeed;
+
+		private int startingYearInt = 5500;
+
+		private Stopwatch clock = new Stopwatch();
+
+		private TickList tickListNormal = new TickList(TickerType.Normal);
+
+		private TickList tickListRare = new TickList(TickerType.Rare);
+
+		private TickList tickListLong = new TickList(TickerType.Long);
+
+		public TimeSlower slower = new TimeSlower();
+
+		private int lastAutoScreenshot;
+
+		private float WorstAllowedFPS = 22f;
+
+		private int lastNothingHappeningCheckTick = -1;
+
+		private bool nothingHappeningCached;
+
+		public int TicksGame => ticksGameInt;
+
 		public int TicksAbs
 		{
 			get
 			{
-				if (this.gameStartAbsTick == 0)
+				if (gameStartAbsTick == 0)
 				{
-					Log.ErrorOnce("Accessing TicksAbs but gameStartAbsTick is not set yet (you most likely want to use GenTicks.TicksAbs instead).", 1049580013, false);
-					return this.ticksGameInt;
+					Log.ErrorOnce("Accessing TicksAbs but gameStartAbsTick is not set yet (you most likely want to use GenTicks.TicksAbs instead).", 1049580013);
+					return ticksGameInt;
 				}
-				return this.ticksGameInt + this.gameStartAbsTick;
+				return ticksGameInt + gameStartAbsTick;
 			}
 		}
 
-		
-		
-		public int StartingYear
-		{
-			get
-			{
-				return this.startingYearInt;
-			}
-		}
+		public int StartingYear => startingYearInt;
 
-		
-		
 		public float TickRateMultiplier
 		{
 			get
 			{
-				if (this.slower.ForcedNormalSpeed)
+				if (slower.ForcedNormalSpeed)
 				{
-					if (this.curTimeSpeed == TimeSpeed.Paused)
+					if (curTimeSpeed == TimeSpeed.Paused)
 					{
 						return 0f;
 					}
 					return 1f;
 				}
-				else
+				switch (curTimeSpeed)
 				{
-					switch (this.curTimeSpeed)
+				case TimeSpeed.Paused:
+					return 0f;
+				case TimeSpeed.Normal:
+					return 1f;
+				case TimeSpeed.Fast:
+					return 3f;
+				case TimeSpeed.Superfast:
+					if (Find.Maps.Count == 0)
 					{
-					case TimeSpeed.Paused:
-						return 0f;
-					case TimeSpeed.Normal:
-						return 1f;
-					case TimeSpeed.Fast:
-						return 3f;
-					case TimeSpeed.Superfast:
-						if (Find.Maps.Count == 0)
-						{
-							return 120f;
-						}
-						if (this.NothingHappeningInGame())
-						{
-							return 12f;
-						}
-						return 6f;
-					case TimeSpeed.Ultrafast:
-						if (Find.Maps.Count == 0)
-						{
-							return 150f;
-						}
-						return 15f;
-					default:
-						return -1f;
+						return 120f;
 					}
+					if (NothingHappeningInGame())
+					{
+						return 12f;
+					}
+					return 6f;
+				case TimeSpeed.Ultrafast:
+					if (Find.Maps.Count == 0)
+					{
+						return 150f;
+					}
+					return 15f;
+				default:
+					return -1f;
 				}
 			}
 		}
 
-		
-		
 		private float CurTimePerTick
 		{
 			get
 			{
-				if (this.TickRateMultiplier == 0f)
+				if (TickRateMultiplier == 0f)
 				{
 					return 0f;
 				}
-				return 1f / (60f * this.TickRateMultiplier);
+				return 1f / (60f * TickRateMultiplier);
 			}
 		}
 
-		
-		
 		public bool Paused
 		{
 			get
 			{
-				return this.curTimeSpeed == TimeSpeed.Paused || Find.WindowStack.WindowsForcePause || LongEventHandler.ForcePause;
+				if (curTimeSpeed != 0 && !Find.WindowStack.WindowsForcePause)
+				{
+					return LongEventHandler.ForcePause;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public bool NotPlaying
 		{
 			get
 			{
-				return Find.MainTabsRoot.OpenTab == MainButtonDefOf.Menu;
+				if (Find.MainTabsRoot.OpenTab == MainButtonDefOf.Menu)
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		
 		public TimeSpeed CurTimeSpeed
 		{
 			get
 			{
-				return this.curTimeSpeed;
+				return curTimeSpeed;
 			}
 			set
 			{
-				this.curTimeSpeed = value;
+				curTimeSpeed = value;
 			}
 		}
 
-		
 		public void TogglePaused()
 		{
-			if (this.curTimeSpeed != TimeSpeed.Paused)
+			if (curTimeSpeed != 0)
 			{
-				this.prePauseTimeSpeed = this.curTimeSpeed;
-				this.curTimeSpeed = TimeSpeed.Paused;
-				return;
+				prePauseTimeSpeed = curTimeSpeed;
+				curTimeSpeed = TimeSpeed.Paused;
 			}
-			if (this.prePauseTimeSpeed != this.curTimeSpeed)
+			else if (prePauseTimeSpeed != curTimeSpeed)
 			{
-				this.curTimeSpeed = this.prePauseTimeSpeed;
-				return;
+				curTimeSpeed = prePauseTimeSpeed;
 			}
-			this.curTimeSpeed = TimeSpeed.Normal;
+			else
+			{
+				curTimeSpeed = TimeSpeed.Normal;
+			}
 		}
 
-		
 		public void Pause()
 		{
-			if (this.curTimeSpeed != TimeSpeed.Paused)
+			if (curTimeSpeed != 0)
 			{
-				this.TogglePaused();
+				TogglePaused();
 			}
 		}
 
-		
 		private bool NothingHappeningInGame()
 		{
-			if (this.lastNothingHappeningCheckTick != this.TicksGame)
+			if (lastNothingHappeningCheckTick != TicksGame)
 			{
-				this.nothingHappeningCached = true;
+				nothingHappeningCached = true;
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
@@ -181,60 +184,48 @@ namespace Verse
 						Pawn pawn = list[j];
 						if (pawn.HostFaction == null && pawn.RaceProps.Humanlike && pawn.Awake())
 						{
-							this.nothingHappeningCached = false;
+							nothingHappeningCached = false;
 							break;
 						}
 					}
-					if (!this.nothingHappeningCached)
+					if (!nothingHappeningCached)
 					{
 						break;
 					}
 				}
-				if (this.nothingHappeningCached)
+				if (nothingHappeningCached)
 				{
 					for (int k = 0; k < maps.Count; k++)
 					{
-						if (maps[k].IsPlayerHome && maps[k].dangerWatcher.DangerRating >= StoryDanger.Low)
+						if (maps[k].IsPlayerHome && (int)maps[k].dangerWatcher.DangerRating >= 1)
 						{
-							this.nothingHappeningCached = false;
+							nothingHappeningCached = false;
 							break;
 						}
 					}
 				}
-				this.lastNothingHappeningCheckTick = this.TicksGame;
+				lastNothingHappeningCheckTick = TicksGame;
 			}
-			return this.nothingHappeningCached;
+			return nothingHappeningCached;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ticksGameInt, "ticksGame", 0, false);
-			Scribe_Values.Look<int>(ref this.gameStartAbsTick, "gameStartAbsTick", 0, false);
-			Scribe_Values.Look<int>(ref this.startingYearInt, "startingYear", 0, false);
+			Scribe_Values.Look(ref ticksGameInt, "ticksGame", 0);
+			Scribe_Values.Look(ref gameStartAbsTick, "gameStartAbsTick", 0);
+			Scribe_Values.Look(ref startingYearInt, "startingYear", 0);
 		}
 
-		
 		public void RegisterAllTickabilityFor(Thing t)
 		{
-			TickList tickList = this.TickListFor(t);
-			if (tickList != null)
-			{
-				tickList.RegisterThing(t);
-			}
+			TickListFor(t)?.RegisterThing(t);
 		}
 
-		
 		public void DeRegisterAllTickabilityFor(Thing t)
 		{
-			TickList tickList = this.TickListFor(t);
-			if (tickList != null)
-			{
-				tickList.DeregisterThing(t);
-			}
+			TickListFor(t)?.DeregisterThing(t);
 		}
 
-		
 		private TickList TickListFor(Thing t)
 		{
 			switch (t.def.tickerType)
@@ -242,52 +233,51 @@ namespace Verse
 			case TickerType.Never:
 				return null;
 			case TickerType.Normal:
-				return this.tickListNormal;
+				return tickListNormal;
 			case TickerType.Rare:
-				return this.tickListRare;
+				return tickListRare;
 			case TickerType.Long:
-				return this.tickListLong;
+				return tickListLong;
 			default:
 				throw new InvalidOperationException();
 			}
 		}
 
-		
 		public void TickManagerUpdate()
 		{
-			if (!this.Paused)
+			if (Paused)
 			{
-				float curTimePerTick = this.CurTimePerTick;
-				if (Mathf.Abs(Time.deltaTime - curTimePerTick) < curTimePerTick * 0.1f)
+				return;
+			}
+			float curTimePerTick = CurTimePerTick;
+			if (Mathf.Abs(Time.deltaTime - curTimePerTick) < curTimePerTick * 0.1f)
+			{
+				realTimeToTickThrough += curTimePerTick;
+			}
+			else
+			{
+				realTimeToTickThrough += Time.deltaTime;
+			}
+			int num = 0;
+			float tickRateMultiplier = TickRateMultiplier;
+			clock.Reset();
+			clock.Start();
+			while (realTimeToTickThrough > 0f && (float)num < tickRateMultiplier * 2f)
+			{
+				DoSingleTick();
+				realTimeToTickThrough -= curTimePerTick;
+				num++;
+				if (Paused || (float)clock.ElapsedMilliseconds > 1000f / WorstAllowedFPS)
 				{
-					this.realTimeToTickThrough += curTimePerTick;
+					break;
 				}
-				else
-				{
-					this.realTimeToTickThrough += Time.deltaTime;
-				}
-				int num = 0;
-				float tickRateMultiplier = this.TickRateMultiplier;
-				this.clock.Reset();
-				this.clock.Start();
-				while (this.realTimeToTickThrough > 0f && (float)num < tickRateMultiplier * 2f)
-				{
-					this.DoSingleTick();
-					this.realTimeToTickThrough -= curTimePerTick;
-					num++;
-					if (this.Paused || (float)this.clock.ElapsedMilliseconds > 1000f / this.WorstAllowedFPS)
-					{
-						break;
-					}
-				}
-				if (this.realTimeToTickThrough > 0f)
-				{
-					this.realTimeToTickThrough = 0f;
-				}
+			}
+			if (realTimeToTickThrough > 0f)
+			{
+				realTimeToTickThrough = 0f;
 			}
 		}
 
-		
 		public void DoSingleTick()
 		{
 			List<Map> maps = Find.Maps;
@@ -297,23 +287,23 @@ namespace Verse
 			}
 			if (!DebugSettings.fastEcology)
 			{
-				this.ticksGameInt++;
+				ticksGameInt++;
 			}
 			else
 			{
-				this.ticksGameInt += 2000;
+				ticksGameInt += 2000;
 			}
-			Shader.SetGlobalFloat(ShaderPropertyIDs.GameSeconds, this.TicksGame.TicksToSeconds());
-			this.tickListNormal.Tick();
-			this.tickListRare.Tick();
-			this.tickListLong.Tick();
+			Shader.SetGlobalFloat(ShaderPropertyIDs.GameSeconds, TicksGame.TicksToSeconds());
+			tickListNormal.Tick();
+			tickListRare.Tick();
+			tickListLong.Tick();
 			try
 			{
 				Find.DateNotifier.DateNotifierTick();
 			}
 			catch (Exception ex)
 			{
-				Log.Error(ex.ToString(), false);
+				Log.Error(ex.ToString());
 			}
 			try
 			{
@@ -321,7 +311,7 @@ namespace Verse
 			}
 			catch (Exception ex2)
 			{
-				Log.Error(ex2.ToString(), false);
+				Log.Error(ex2.ToString());
 			}
 			try
 			{
@@ -329,7 +319,7 @@ namespace Verse
 			}
 			catch (Exception ex3)
 			{
-				Log.Error(ex3.ToString(), false);
+				Log.Error(ex3.ToString());
 			}
 			try
 			{
@@ -337,7 +327,7 @@ namespace Verse
 			}
 			catch (Exception ex4)
 			{
-				Log.Error(ex4.ToString(), false);
+				Log.Error(ex4.ToString());
 			}
 			try
 			{
@@ -345,7 +335,7 @@ namespace Verse
 			}
 			catch (Exception ex5)
 			{
-				Log.Error(ex5.ToString(), false);
+				Log.Error(ex5.ToString());
 			}
 			try
 			{
@@ -353,7 +343,7 @@ namespace Verse
 			}
 			catch (Exception ex6)
 			{
-				Log.Error(ex6.ToString(), false);
+				Log.Error(ex6.ToString());
 			}
 			try
 			{
@@ -361,7 +351,7 @@ namespace Verse
 			}
 			catch (Exception ex7)
 			{
-				Log.Error(ex7.ToString(), false);
+				Log.Error(ex7.ToString());
 			}
 			try
 			{
@@ -369,7 +359,7 @@ namespace Verse
 			}
 			catch (Exception ex8)
 			{
-				Log.Error(ex8.ToString(), false);
+				Log.Error(ex8.ToString());
 			}
 			try
 			{
@@ -377,7 +367,7 @@ namespace Verse
 			}
 			catch (Exception ex9)
 			{
-				Log.Error(ex9.ToString(), false);
+				Log.Error(ex9.ToString());
 			}
 			for (int j = 0; j < maps.Count; j++)
 			{
@@ -389,7 +379,7 @@ namespace Verse
 			}
 			catch (Exception ex10)
 			{
-				Log.Error(ex10.ToString(), false);
+				Log.Error(ex10.ToString());
 			}
 			GameComponentUtility.GameComponentTick();
 			try
@@ -398,7 +388,7 @@ namespace Verse
 			}
 			catch (Exception ex11)
 			{
-				Log.Error(ex11.ToString(), false);
+				Log.Error(ex11.ToString());
 			}
 			try
 			{
@@ -406,12 +396,12 @@ namespace Verse
 			}
 			catch (Exception ex12)
 			{
-				Log.Error(ex12.ToString(), false);
+				Log.Error(ex12.ToString());
 			}
-			if (DebugViewSettings.logHourlyScreenshot && Find.TickManager.TicksGame >= this.lastAutoScreenshot + 2500)
+			if (DebugViewSettings.logHourlyScreenshot && Find.TickManager.TicksGame >= lastAutoScreenshot + 2500)
 			{
 				ScreenshotTaker.QueueSilentScreenshot();
-				this.lastAutoScreenshot = Find.TickManager.TicksGame / 2500 * 2500;
+				lastAutoScreenshot = Find.TickManager.TicksGame / 2500 * 2500;
 			}
 			try
 			{
@@ -419,75 +409,27 @@ namespace Verse
 			}
 			catch (Exception ex13)
 			{
-				Log.Error(ex13.ToString(), false);
+				Log.Error(ex13.ToString());
 			}
 			UnityEngine.Debug.developerConsoleVisible = false;
 		}
 
-		
 		public void RemoveAllFromMap(Map map)
 		{
-			this.tickListNormal.RemoveWhere((Thing x) => x.Map == map);
-			this.tickListRare.RemoveWhere((Thing x) => x.Map == map);
-			this.tickListLong.RemoveWhere((Thing x) => x.Map == map);
+			tickListNormal.RemoveWhere((Thing x) => x.Map == map);
+			tickListRare.RemoveWhere((Thing x) => x.Map == map);
+			tickListLong.RemoveWhere((Thing x) => x.Map == map);
 		}
 
-		
 		public void DebugSetTicksGame(int newTicksGame)
 		{
-			this.ticksGameInt = newTicksGame;
+			ticksGameInt = newTicksGame;
 		}
 
-		
 		public void Notify_GeneratedPotentiallyHostileMap()
 		{
-			this.Pause();
-			this.slower.SignalForceNormalSpeedShort();
+			Pause();
+			slower.SignalForceNormalSpeedShort();
 		}
-
-		
-		private int ticksGameInt;
-
-		
-		public int gameStartAbsTick;
-
-		
-		private float realTimeToTickThrough;
-
-		
-		private TimeSpeed curTimeSpeed = TimeSpeed.Normal;
-
-		
-		public TimeSpeed prePauseTimeSpeed;
-
-		
-		private int startingYearInt = 5500;
-
-		
-		private Stopwatch clock = new Stopwatch();
-
-		
-		private TickList tickListNormal = new TickList(TickerType.Normal);
-
-		
-		private TickList tickListRare = new TickList(TickerType.Rare);
-
-		
-		private TickList tickListLong = new TickList(TickerType.Long);
-
-		
-		public TimeSlower slower = new TimeSlower();
-
-		
-		private int lastAutoScreenshot;
-
-		
-		private float WorstAllowedFPS = 22f;
-
-		
-		private int lastNothingHappeningCheckTick = -1;
-
-		
-		private bool nothingHappeningCached;
 	}
 }

@@ -1,78 +1,58 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Building_Grave : Building_Casket, IStoreSettingsParent, IHaulDestination
 	{
-		
-		
+		private StorageSettings storageSettings;
+
+		private Graphic cachedGraphicFull;
+
 		public Pawn AssignedPawn
 		{
 			get
 			{
-				if (this.CompAssignableToPawn == null || !this.CompAssignableToPawn.AssignedPawnsForReading.Any<Pawn>())
+				if (CompAssignableToPawn == null || !CompAssignableToPawn.AssignedPawnsForReading.Any())
 				{
 					return null;
 				}
-				return this.CompAssignableToPawn.AssignedPawnsForReading[0];
+				return CompAssignableToPawn.AssignedPawnsForReading[0];
 			}
 		}
 
-		
-		
-		public CompAssignableToPawn_Grave CompAssignableToPawn
-		{
-			get
-			{
-				return base.GetComp<CompAssignableToPawn_Grave>();
-			}
-		}
+		public CompAssignableToPawn_Grave CompAssignableToPawn => GetComp<CompAssignableToPawn_Grave>();
 
-		
-		
 		public override Graphic Graphic
 		{
 			get
 			{
-				if (!this.HasCorpse)
+				if (HasCorpse)
 				{
-					return base.Graphic;
+					if (def.building.fullGraveGraphicData == null)
+					{
+						return base.Graphic;
+					}
+					if (cachedGraphicFull == null)
+					{
+						cachedGraphicFull = def.building.fullGraveGraphicData.GraphicColoredFor(this);
+					}
+					return cachedGraphicFull;
 				}
-				if (this.def.building.fullGraveGraphicData == null)
-				{
-					return base.Graphic;
-				}
-				if (this.cachedGraphicFull == null)
-				{
-					this.cachedGraphicFull = this.def.building.fullGraveGraphicData.GraphicColoredFor(this);
-				}
-				return this.cachedGraphicFull;
+				return base.Graphic;
 			}
 		}
 
-		
-		
-		public bool HasCorpse
-		{
-			get
-			{
-				return this.Corpse != null;
-			}
-		}
+		public bool HasCorpse => Corpse != null;
 
-		
-		
 		public Corpse Corpse
 		{
 			get
 			{
-				for (int i = 0; i < this.innerContainer.Count; i++)
+				for (int i = 0; i < innerContainer.Count; i++)
 				{
-					Corpse corpse = this.innerContainer[i] as Corpse;
+					Corpse corpse = innerContainer[i] as Corpse;
 					if (corpse != null)
 					{
 						return corpse;
@@ -82,50 +62,44 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool StorageTabVisible
 		{
 			get
 			{
-				return this.AssignedPawn == null && !this.HasCorpse;
+				if (AssignedPawn == null)
+				{
+					return !HasCorpse;
+				}
+				return false;
 			}
 		}
 
-		
 		public StorageSettings GetStoreSettings()
 		{
-			return this.storageSettings;
+			return storageSettings;
 		}
 
-		
 		public StorageSettings GetParentStoreSettings()
 		{
-			return this.def.building.fixedStorageSettings;
+			return def.building.fixedStorageSettings;
 		}
 
-		
 		public override void PostMake()
 		{
 			base.PostMake();
-			this.storageSettings = new StorageSettings(this);
-			if (this.def.building.defaultStorageSettings != null)
+			storageSettings = new StorageSettings(this);
+			if (def.building.defaultStorageSettings != null)
 			{
-				this.storageSettings.CopyFrom(this.def.building.defaultStorageSettings);
+				storageSettings.CopyFrom(def.building.defaultStorageSettings);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Deep.Look<StorageSettings>(ref this.storageSettings, "storageSettings", new object[]
-			{
-				this
-			});
+			Scribe_Deep.Look(ref storageSettings, "storageSettings", this);
 		}
 
-		
 		public override void EjectContents()
 		{
 			base.EjectContents();
@@ -135,55 +109,48 @@ namespace RimWorld
 			}
 		}
 
-		
 		public virtual void Notify_CorpseBuried(Pawn worker)
 		{
-			CompArt comp = base.GetComp<CompArt>();
+			CompArt comp = GetComp<CompArt>();
 			if (comp != null && !comp.Active)
 			{
 				comp.JustCreatedBy(worker);
-				comp.InitializeArt(this.Corpse.InnerPawn);
+				comp.InitializeArt(Corpse.InnerPawn);
 			}
 			base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.Things | MapMeshFlag.Buildings);
 			worker.records.Increment(RecordDefOf.CorpsesBuried);
-			TaleRecorder.RecordTale(TaleDefOf.BuriedCorpse, new object[]
-			{
-				worker,
-				(this.Corpse != null) ? this.Corpse.InnerPawn : null
-			});
+			TaleRecorder.RecordTale(TaleDefOf.BuriedCorpse, worker, (Corpse != null) ? Corpse.InnerPawn : null);
 		}
 
-		
 		public override bool Accepts(Thing thing)
 		{
 			if (!base.Accepts(thing))
 			{
 				return false;
 			}
-			if (this.HasCorpse)
+			if (HasCorpse)
 			{
 				return false;
 			}
-			if (this.AssignedPawn != null)
+			if (AssignedPawn != null)
 			{
 				Corpse corpse = thing as Corpse;
 				if (corpse == null)
 				{
 					return false;
 				}
-				if (corpse.InnerPawn != this.AssignedPawn)
+				if (corpse.InnerPawn != AssignedPawn)
 				{
 					return false;
 				}
 			}
-			else if (!this.storageSettings.AllowedToAccept(thing))
+			else if (!storageSettings.AllowedToAccept(thing))
 			{
 				return false;
 			}
 			return true;
 		}
 
-		
 		public override bool TryAcceptThing(Thing thing, bool allowSpecialEffects = true)
 		{
 			if (base.TryAcceptThing(thing, allowSpecialEffects))
@@ -202,51 +169,42 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (this.StorageTabVisible)
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				foreach (Gizmo gizmo2 in StorageSettingsClipboard.CopyPasteGizmosFor(this.storageSettings))
-				{
-					yield return gizmo2;
-				}
-				enumerator = null;
+				yield return gizmo;
 			}
-			yield break;
-			yield break;
+			if (StorageTabVisible)
+			{
+				foreach (Gizmo item in StorageSettingsClipboard.CopyPasteGizmosFor(storageSettings))
+				{
+					yield return item;
+				}
+			}
 		}
 
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append(base.GetInspectString());
-			if (this.HasCorpse)
+			if (HasCorpse)
 			{
 				if (base.Tile != -1)
 				{
-					string value = GenDate.DateFullStringAt((long)GenDate.TickGameToAbs(this.Corpse.timeOfDeath), Find.WorldGrid.LongLatOf(base.Tile));
+					string value = GenDate.DateFullStringAt(GenDate.TickGameToAbs(Corpse.timeOfDeath), Find.WorldGrid.LongLatOf(base.Tile));
 					stringBuilder.AppendLine();
 					stringBuilder.Append("DiedOn".Translate(value));
 				}
 			}
-			else if (this.AssignedPawn != null)
+			else if (AssignedPawn != null)
 			{
 				stringBuilder.AppendLine();
 				stringBuilder.Append("AssignedColonist".Translate());
 				stringBuilder.Append(": ");
-				stringBuilder.Append(this.AssignedPawn.LabelCap);
+				stringBuilder.Append(AssignedPawn.LabelCap);
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		private StorageSettings storageSettings;
-
-		
-		private Graphic cachedGraphicFull;
 	}
 }

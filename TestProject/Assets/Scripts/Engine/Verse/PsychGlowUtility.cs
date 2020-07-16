@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public static class PsychGlowUtility
 	{
-		
 		public static string GetLabel(this PsychGlow gl)
 		{
 			switch (gl)

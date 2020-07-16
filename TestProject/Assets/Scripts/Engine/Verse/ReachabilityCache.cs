@@ -1,160 +1,147 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class ReachabilityCache
 	{
-		
-		
-		public int Count
+		private struct CachedEntry : IEquatable<CachedEntry>
 		{
-			get
+			public int FirstRoomID
 			{
-				return this.cacheDict.Count;
+				get;
+				private set;
 			}
-		}
 
-		
-		public BoolUnknown CachedResultFor(Room A, Room B, TraverseParms traverseParams)
-		{
-			bool flag;
-			if (!this.cacheDict.TryGetValue(new ReachabilityCache.CachedEntry(A.ID, B.ID, traverseParams), out flag))
+			public int SecondRoomID
 			{
-				return BoolUnknown.Unknown;
+				get;
+				private set;
 			}
-			if (!flag)
+
+			public TraverseParms TraverseParms
 			{
-				return BoolUnknown.False;
+				get;
+				private set;
 			}
-			return BoolUnknown.True;
-		}
 
-		
-		public void AddCachedResult(Room A, Room B, TraverseParms traverseParams, bool reachable)
-		{
-			ReachabilityCache.CachedEntry key = new ReachabilityCache.CachedEntry(A.ID, B.ID, traverseParams);
-			if (!this.cacheDict.ContainsKey(key))
-			{
-				this.cacheDict.Add(key, reachable);
-			}
-		}
-
-		
-		public void Clear()
-		{
-			this.cacheDict.Clear();
-		}
-
-		
-		public void ClearFor(Pawn p)
-		{
-			ReachabilityCache.tmpCachedEntries.Clear();
-			foreach (KeyValuePair<ReachabilityCache.CachedEntry, bool> keyValuePair in this.cacheDict)
-			{
-				if (keyValuePair.Key.TraverseParms.pawn == p)
-				{
-					ReachabilityCache.tmpCachedEntries.Add(keyValuePair.Key);
-				}
-			}
-			for (int i = 0; i < ReachabilityCache.tmpCachedEntries.Count; i++)
-			{
-				this.cacheDict.Remove(ReachabilityCache.tmpCachedEntries[i]);
-			}
-			ReachabilityCache.tmpCachedEntries.Clear();
-		}
-
-		
-		public void ClearForHostile(Thing hostileTo)
-		{
-			ReachabilityCache.tmpCachedEntries.Clear();
-			foreach (KeyValuePair<ReachabilityCache.CachedEntry, bool> keyValuePair in this.cacheDict)
-			{
-				Pawn pawn = keyValuePair.Key.TraverseParms.pawn;
-				if (pawn != null && pawn.HostileTo(hostileTo))
-				{
-					ReachabilityCache.tmpCachedEntries.Add(keyValuePair.Key);
-				}
-			}
-			for (int i = 0; i < ReachabilityCache.tmpCachedEntries.Count; i++)
-			{
-				this.cacheDict.Remove(ReachabilityCache.tmpCachedEntries[i]);
-			}
-			ReachabilityCache.tmpCachedEntries.Clear();
-		}
-
-		
-		private Dictionary<ReachabilityCache.CachedEntry, bool> cacheDict = new Dictionary<ReachabilityCache.CachedEntry, bool>();
-
-		
-		private static List<ReachabilityCache.CachedEntry> tmpCachedEntries = new List<ReachabilityCache.CachedEntry>();
-
-		
-		private struct CachedEntry : IEquatable<ReachabilityCache.CachedEntry>
-		{
-			
-			
-			
-			public int FirstRoomID { get; private set; }
-
-			
-			
-			
-			public int SecondRoomID { get; private set; }
-
-			
-			
-			
-			public TraverseParms TraverseParms { get; private set; }
-
-			
 			public CachedEntry(int firstRoomID, int secondRoomID, TraverseParms traverseParms)
 			{
-				this = default(ReachabilityCache.CachedEntry);
+				this = default(CachedEntry);
 				if (firstRoomID < secondRoomID)
 				{
-					this.FirstRoomID = firstRoomID;
-					this.SecondRoomID = secondRoomID;
+					FirstRoomID = firstRoomID;
+					SecondRoomID = secondRoomID;
 				}
 				else
 				{
-					this.FirstRoomID = secondRoomID;
-					this.SecondRoomID = firstRoomID;
+					FirstRoomID = secondRoomID;
+					SecondRoomID = firstRoomID;
 				}
-				this.TraverseParms = traverseParms;
+				TraverseParms = traverseParms;
 			}
 
-			
-			public static bool operator ==(ReachabilityCache.CachedEntry lhs, ReachabilityCache.CachedEntry rhs)
+			public static bool operator ==(CachedEntry lhs, CachedEntry rhs)
 			{
 				return lhs.Equals(rhs);
 			}
 
-			
-			public static bool operator !=(ReachabilityCache.CachedEntry lhs, ReachabilityCache.CachedEntry rhs)
+			public static bool operator !=(CachedEntry lhs, CachedEntry rhs)
 			{
 				return !lhs.Equals(rhs);
 			}
 
-			
 			public override bool Equals(object obj)
 			{
-				return obj is ReachabilityCache.CachedEntry && this.Equals((ReachabilityCache.CachedEntry)obj);
+				if (!(obj is CachedEntry))
+				{
+					return false;
+				}
+				return Equals((CachedEntry)obj);
 			}
 
-			
-			public bool Equals(ReachabilityCache.CachedEntry other)
+			public bool Equals(CachedEntry other)
 			{
-				return this.FirstRoomID == other.FirstRoomID && this.SecondRoomID == other.SecondRoomID && this.TraverseParms == other.TraverseParms;
+				if (FirstRoomID == other.FirstRoomID && SecondRoomID == other.SecondRoomID)
+				{
+					return TraverseParms == other.TraverseParms;
+				}
+				return false;
 			}
 
-			
 			public override int GetHashCode()
 			{
-				return Gen.HashCombineStruct<TraverseParms>(Gen.HashCombineInt(this.FirstRoomID, this.SecondRoomID), this.TraverseParms);
+				return Gen.HashCombineStruct(Gen.HashCombineInt(FirstRoomID, SecondRoomID), TraverseParms);
 			}
+		}
+
+		private Dictionary<CachedEntry, bool> cacheDict = new Dictionary<CachedEntry, bool>();
+
+		private static List<CachedEntry> tmpCachedEntries = new List<CachedEntry>();
+
+		public int Count => cacheDict.Count;
+
+		public BoolUnknown CachedResultFor(Room A, Room B, TraverseParms traverseParams)
+		{
+			if (cacheDict.TryGetValue(new CachedEntry(A.ID, B.ID, traverseParams), out bool value))
+			{
+				if (!value)
+				{
+					return BoolUnknown.False;
+				}
+				return BoolUnknown.True;
+			}
+			return BoolUnknown.Unknown;
+		}
+
+		public void AddCachedResult(Room A, Room B, TraverseParms traverseParams, bool reachable)
+		{
+			CachedEntry key = new CachedEntry(A.ID, B.ID, traverseParams);
+			if (!cacheDict.ContainsKey(key))
+			{
+				cacheDict.Add(key, reachable);
+			}
+		}
+
+		public void Clear()
+		{
+			cacheDict.Clear();
+		}
+
+		public void ClearFor(Pawn p)
+		{
+			tmpCachedEntries.Clear();
+			foreach (KeyValuePair<CachedEntry, bool> item in cacheDict)
+			{
+				if (item.Key.TraverseParms.pawn == p)
+				{
+					tmpCachedEntries.Add(item.Key);
+				}
+			}
+			for (int i = 0; i < tmpCachedEntries.Count; i++)
+			{
+				cacheDict.Remove(tmpCachedEntries[i]);
+			}
+			tmpCachedEntries.Clear();
+		}
+
+		public void ClearForHostile(Thing hostileTo)
+		{
+			tmpCachedEntries.Clear();
+			foreach (KeyValuePair<CachedEntry, bool> item in cacheDict)
+			{
+				Pawn pawn = item.Key.TraverseParms.pawn;
+				if (pawn != null && pawn.HostileTo(hostileTo))
+				{
+					tmpCachedEntries.Add(item.Key);
+				}
+			}
+			for (int i = 0; i < tmpCachedEntries.Count; i++)
+			{
+				cacheDict.Remove(tmpCachedEntries[i]);
+			}
+			tmpCachedEntries.Clear();
 		}
 	}
 }

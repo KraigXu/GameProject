@@ -1,98 +1,76 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public class PawnCapacityDef : Def
 	{
-		
-		
+		public int listOrder;
+
+		public Type workerClass = typeof(PawnCapacityWorker);
+
+		[MustTranslate]
+		public string labelMechanoids = "";
+
+		[MustTranslate]
+		public string labelAnimals = "";
+
+		public bool showOnHumanlikes = true;
+
+		public bool showOnAnimals = true;
+
+		public bool showOnMechanoids = true;
+
+		public bool lethalFlesh;
+
+		public bool lethalMechanoids;
+
+		public float minForCapable;
+
+		public float minValue;
+
+		public bool zeroIfCannotBeAwake;
+
+		public bool showOnCaravanHealthTab;
+
+		[Unsaved(false)]
+		private PawnCapacityWorker workerInt;
+
 		public PawnCapacityWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (PawnCapacityWorker)Activator.CreateInstance(this.workerClass);
+					workerInt = (PawnCapacityWorker)Activator.CreateInstance(workerClass);
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
 		public string GetLabelFor(Pawn pawn)
 		{
-			return this.GetLabelFor(pawn.RaceProps.IsFlesh, pawn.RaceProps.Humanlike);
+			return GetLabelFor(pawn.RaceProps.IsFlesh, pawn.RaceProps.Humanlike);
 		}
 
-		
 		public string GetLabelFor(bool isFlesh, bool isHumanlike)
 		{
 			if (isHumanlike)
 			{
-				return this.label;
+				return label;
 			}
 			if (isFlesh)
 			{
-				if (!this.labelAnimals.NullOrEmpty())
+				if (!labelAnimals.NullOrEmpty())
 				{
-					return this.labelAnimals;
+					return labelAnimals;
 				}
-				return this.label;
+				return label;
 			}
-			else
+			if (!labelMechanoids.NullOrEmpty())
 			{
-				if (!this.labelMechanoids.NullOrEmpty())
-				{
-					return this.labelMechanoids;
-				}
-				return this.label;
+				return labelMechanoids;
 			}
+			return label;
 		}
-
-		
-		public int listOrder;
-
-		
-		public Type workerClass = typeof(PawnCapacityWorker);
-
-		
-		[MustTranslate]
-		public string labelMechanoids = "";
-
-		
-		[MustTranslate]
-		public string labelAnimals = "";
-
-		
-		public bool showOnHumanlikes = true;
-
-		
-		public bool showOnAnimals = true;
-
-		
-		public bool showOnMechanoids = true;
-
-		
-		public bool lethalFlesh;
-
-		
-		public bool lethalMechanoids;
-
-		
-		public float minForCapable;
-
-		
-		public float minValue;
-
-		
-		public bool zeroIfCannotBeAwake;
-
-		
-		public bool showOnCaravanHealthTab;
-
-		
-		[Unsaved(false)]
-		private PawnCapacityWorker workerInt;
 	}
 }

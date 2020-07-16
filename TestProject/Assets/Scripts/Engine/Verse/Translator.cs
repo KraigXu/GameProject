@@ -1,34 +1,29 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Verse
 {
-	
 	public static class Translator
 	{
-		
 		public static bool CanTranslate(this string key)
 		{
-			return LanguageDatabase.activeLanguage.HaveTextForKey(key, false);
+			return LanguageDatabase.activeLanguage.HaveTextForKey(key);
 		}
 
-		
 		public static TaggedString TranslateWithBackup(this string key, TaggedString backupKey)
 		{
-			TaggedString result;
-			if (key.TryTranslate(out result))
+			if (key.TryTranslate(out TaggedString result))
 			{
 				return result;
 			}
-            if (backupKey.TryTranslate(out result))
-            {
-                return result;
-            }
-            return key.Translate();
+			if (TryTranslate(backupKey, out result))
+			{
+				return result;
+			}
+			return key.Translate();
 		}
 
-		
 		public static bool TryTranslate(this string key, out TaggedString result)
 		{
 			if (key.NullOrEmpty())
@@ -38,7 +33,7 @@ namespace Verse
 			}
 			if (LanguageDatabase.activeLanguage == null)
 			{
-				Log.Error("No active language! Cannot translate from key " + key + ".", false);
+				Log.Error("No active language! Cannot translate from key " + key + ".");
 				result = key;
 				return true;
 			}
@@ -49,51 +44,26 @@ namespace Verse
 			result = key;
 			return false;
 		}
-
-		public static bool TryTranslate(this TaggedString key, out TaggedString result)
-		{
-			if (key.NullOrEmpty())
-			{
-				result = key;
-				return false;
-			}
-			if (LanguageDatabase.activeLanguage == null)
-			{
-				Log.Error("No active language! Cannot translate from key " + key + ".", false);
-				result = key;
-				return true;
-			}
-			if (LanguageDatabase.activeLanguage.TryGetTextFromKey(key, out result))
-			{
-				return true;
-			}
-			result = key;
-			return false;
-		}
-
 
 		public static string TranslateSimple(this string key)
 		{
 			return key.Translate();
 		}
 
-		
 		public static TaggedString Translate(this string key)
 		{
-			TaggedString taggedString;
-			if (key.TryTranslate(out taggedString))
+			if (key.TryTranslate(out TaggedString result))
 			{
-				return taggedString;
+				return result;
 			}
-			LanguageDatabase.defaultLanguage.TryGetTextFromKey(key, out taggedString);
+			LanguageDatabase.defaultLanguage.TryGetTextFromKey(key, out result);
 			if (Prefs.DevMode)
 			{
-				taggedString = Translator.PseudoTranslated(taggedString);
+				return PseudoTranslated(result);
 			}
-			return taggedString;
+			return result;
 		}
 
-		
 		[Obsolete("Use TranslatorFormattedStringExtensions")]
 		public static string Translate(this string key, params object[] args)
 		{
@@ -103,42 +73,40 @@ namespace Verse
 			}
 			if (LanguageDatabase.activeLanguage == null)
 			{
-				Log.Error("No active language! Cannot translate from key " + key + ".", false);
+				Log.Error("No active language! Cannot translate from key " + key + ".");
 				return key;
 			}
-			TaggedString taggedString;
-			if (!LanguageDatabase.activeLanguage.TryGetTextFromKey(key, out taggedString))
+			if (!LanguageDatabase.activeLanguage.TryGetTextFromKey(key, out TaggedString translated))
 			{
-				LanguageDatabase.defaultLanguage.TryGetTextFromKey(key, out taggedString);
+				LanguageDatabase.defaultLanguage.TryGetTextFromKey(key, out translated);
 				if (Prefs.DevMode)
 				{
-					taggedString = Translator.PseudoTranslated(taggedString);
+					translated = PseudoTranslated(translated);
 				}
 			}
-			string result = taggedString;
+			string result = translated;
 			try
 			{
-				result = string.Format(taggedString, args);
+				result = string.Format(translated, args);
+				return result;
 			}
 			catch (Exception arg)
 			{
-				Log.ErrorOnce("Exception translating '" + taggedString + "': " + arg, Gen.HashCombineInt(key.GetHashCode(), 394878901), false);
+				Log.ErrorOnce((string)("Exception translating '" + translated + "': ") + arg, Gen.HashCombineInt(key.GetHashCode(), 394878901));
+				return result;
 			}
-			return result;
 		}
 
-		
 		public static bool TryGetTranslatedStringsForFile(string fileName, out List<string> stringList)
 		{
 			if (!LanguageDatabase.activeLanguage.TryGetStringsFromFile(fileName, out stringList) && !LanguageDatabase.defaultLanguage.TryGetStringsFromFile(fileName, out stringList))
 			{
-				Log.Error("No string files for " + fileName + ".", false);
+				Log.Error("No string files for " + fileName + ".");
 				return false;
 			}
 			return true;
 		}
 
-		
 		private static string PseudoTranslated(string original)
 		{
 			if (original == null)
@@ -151,106 +119,108 @@ namespace Verse
 			}
 			bool flag = false;
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (char c in original)
+			for (int i = 0; i < original.Length; i++)
 			{
-				if (c == '{')
+				char c = original[i];
+				switch (c)
 				{
+				case '{':
 					flag = true;
 					stringBuilder.Append(c);
-				}
-				else if (c == '}')
-				{
+					continue;
+				case '}':
 					flag = false;
 					stringBuilder.Append(c);
+					continue;
 				}
-				else if (!flag)
+				if (!flag)
 				{
-					string value;
+					string text = null;
 					switch (c)
 					{
 					case 'a':
-						value = "à";
+						text = "à";
 						break;
 					case 'b':
-						value = "þ";
+						text = "þ";
 						break;
 					case 'c':
-						value = "ç";
+						text = "ç";
 						break;
 					case 'd':
-						value = "ð";
+						text = "ð";
 						break;
 					case 'e':
-						value = "è";
+						text = "è";
 						break;
 					case 'f':
-						value = "Ƒ";
+						text = "Ƒ";
 						break;
 					case 'g':
-						value = "ğ";
+						text = "ğ";
 						break;
 					case 'h':
-						value = "ĥ";
+						text = "ĥ";
 						break;
 					case 'i':
-						value = "ì";
+						text = "ì";
 						break;
 					case 'j':
-						value = "ĵ";
+						text = "ĵ";
 						break;
 					case 'k':
-						value = "к";
+						text = "к";
 						break;
 					case 'l':
-						value = "ſ";
+						text = "ſ";
 						break;
 					case 'm':
-						value = "ṁ";
+						text = "ṁ";
 						break;
 					case 'n':
-						value = "ƞ";
+						text = "ƞ";
 						break;
 					case 'o':
-						value = "ò";
+						text = "ò";
 						break;
 					case 'p':
-						value = "ṗ";
+						text = "ṗ";
 						break;
 					case 'q':
-						value = "q";
+						text = "q";
 						break;
 					case 'r':
-						value = "ṟ";
+						text = "ṟ";
 						break;
 					case 's':
-						value = "ș";
+						text = "ș";
 						break;
 					case 't':
-						value = "ṭ";
+						text = "ṭ";
 						break;
 					case 'u':
-						value = "ù";
+						text = "ù";
 						break;
 					case 'v':
-						value = "ṽ";
+						text = "ṽ";
 						break;
 					case 'w':
-						value = "ẅ";
+						text = "ẅ";
 						break;
 					case 'x':
-						value = "ẋ";
+						text = "ẋ";
 						break;
 					case 'y':
-						value = "ý";
+						text = "ý";
 						break;
 					case 'z':
-						value = "ž";
+						text = "ž";
 						break;
 					default:
-						value = (c.ToString() ?? "");
+						text = (c.ToString() ?? "");
 						break;
 					}
-					stringBuilder.Append(value);
+					stringBuilder.Append(text);
 				}
 				else
 				{

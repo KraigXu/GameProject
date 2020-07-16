@@ -1,22 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public static class TabDrawer
 	{
-		
+		private const float MaxTabWidth = 200f;
+
+		public const float TabHeight = 32f;
+
+		public const float TabHoriztonalOverlap = 10f;
+
+		private static List<TabRecord> tmpTabs = new List<TabRecord>();
+
 		public static TabRecord DrawTabs(Rect baseRect, List<TabRecord> tabs, int rows)
 		{
 			if (rows <= 1)
 			{
-				return TabDrawer.DrawTabs(baseRect, tabs, 200f);
+				return DrawTabs(baseRect, tabs);
 			}
-			int num = Mathf.FloorToInt((float)(tabs.Count / rows));
+			int num = Mathf.FloorToInt(tabs.Count / rows);
 			int num2 = 0;
 			TabRecord result = null;
 			Rect rect = baseRect;
@@ -27,12 +33,12 @@ namespace Verse
 			for (int i = 0; i < rows; i++)
 			{
 				int num3 = (i == 0) ? (tabs.Count - (rows - 1) * num) : num;
-				TabDrawer.tmpTabs.Clear();
+				tmpTabs.Clear();
 				for (int j = num2; j < num2 + num3; j++)
 				{
-					TabDrawer.tmpTabs.Add(tabs[j]);
+					tmpTabs.Add(tabs[j]);
 				}
-				TabRecord tabRecord = TabDrawer.DrawTabs(baseRect, TabDrawer.tmpTabs, baseRect.width);
+				TabRecord tabRecord = DrawTabs(baseRect, tmpTabs, baseRect.width);
 				if (tabRecord != null)
 				{
 					result = tabRecord;
@@ -40,11 +46,10 @@ namespace Verse
 				baseRect.yMin += 31f;
 				num2 += num3;
 			}
-			TabDrawer.tmpTabs.Clear();
+			tmpTabs.Clear();
 			return result;
 		}
 
-		
 		public static TabRecord DrawTabs(Rect baseRect, List<TabRecord> tabs, float maxTabWidth = 200f)
 		{
 			TabRecord tabRecord = null;
@@ -62,14 +67,14 @@ namespace Verse
 			Text.Anchor = TextAnchor.MiddleCenter;
 			Text.Font = GameFont.Small;
 			Func<TabRecord, Rect> func = (TabRecord tab) => new Rect((float)tabs.IndexOf(tab) * (tabWidth - 10f), 1f, tabWidth, 32f);
-			List<TabRecord> list = tabs.ListFullCopy<TabRecord>();
+			List<TabRecord> list = tabs.ListFullCopy();
 			if (tabRecord2 != null)
 			{
 				list.Remove(tabRecord2);
 				list.Add(tabRecord2);
 			}
 			TabRecord tabRecord3 = null;
-			List<TabRecord> list2 = list.ListFullCopy<TabRecord>();
+			List<TabRecord> list2 = list.ListFullCopy();
 			list2.Reverse();
 			for (int i = 0; i < list2.Count; i++)
 			{
@@ -80,21 +85,21 @@ namespace Verse
 					tabRecord3 = tabRecord4;
 				}
 				MouseoverSounds.DoRegion(rect, SoundDefOf.Mouseover_Tab);
-				if (Widgets.ButtonInvisible(rect, true))
+				if (Widgets.ButtonInvisible(rect))
 				{
 					tabRecord = tabRecord4;
 				}
 			}
-			foreach (TabRecord tabRecord5 in list)
+			foreach (TabRecord item in list)
 			{
-				Rect rect2 = func(tabRecord5);
-				tabRecord5.Draw(rect2);
+				Rect rect2 = func(item);
+				item.Draw(rect2);
 			}
 			Text.Anchor = TextAnchor.UpperLeft;
 			GUI.EndGroup();
 			if (tabRecord != null && tabRecord != tabRecord2)
 			{
-				SoundDefOf.RowTabSelect.PlayOneShotOnCamera(null);
+				SoundDefOf.RowTabSelect.PlayOneShotOnCamera();
 				if (tabRecord.clickedAction != null)
 				{
 					tabRecord.clickedAction();
@@ -102,17 +107,5 @@ namespace Verse
 			}
 			return tabRecord;
 		}
-
-		
-		private const float MaxTabWidth = 200f;
-
-		
-		public const float TabHeight = 32f;
-
-		
-		public const float TabHoriztonalOverlap = 10f;
-
-		
-		private static List<TabRecord> tmpTabs = new List<TabRecord>();
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,314 +6,232 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class AbilityDef : Def
 	{
-		
-		
-		public float EntropyGain
-		{
-			get
-			{
-				return this.statBases.GetStatValueFromList(StatDefOf.Ability_EntropyGain, 0f);
-			}
-		}
+		public Type abilityClass = typeof(Ability);
 
-		
-		
-		public float PsyfocusCost
-		{
-			get
-			{
-				return this.statBases.GetStatValueFromList(StatDefOf.Ability_PsyfocusCost, 0f);
-			}
-		}
+		public Type gizmoClass = typeof(Command_Ability);
 
-		
-		
-		public float EffectRadius
-		{
-			get
-			{
-				return this.statBases.GetStatValueFromList(StatDefOf.Ability_EffectRadius, 0f);
-			}
-		}
+		public List<AbilityCompProperties> comps = new List<AbilityCompProperties>();
 
-		
-		
-		public float EffectDuration
-		{
-			get
-			{
-				return this.statBases.GetStatValueFromList(StatDefOf.Ability_Duration, 0f);
-			}
-		}
+		public List<StatModifier> statBases;
 
-		
-		
-		public bool HasAreaOfEffect
-		{
-			get
-			{
-				return this.EffectRadius > float.Epsilon;
-			}
-		}
+		public VerbProperties verbProperties;
 
-		
-		
+		public KeyBindingDef hotKey;
+
+		public JobDef jobDef;
+
+		public ThingDef warmupMote;
+
+		public Vector3 moteDrawOffset;
+
+		public bool canUseAoeToGetTargets = true;
+
+		public bool targetRequired = true;
+
+		public int level;
+
+		public IntRange cooldownTicksRange;
+
+		public bool sendLetterOnCooldownComplete;
+
+		public bool displayGizmoWhileUndrafted;
+
+		public bool disableGizmoWhileUndrafted = true;
+
+		public float detectionChanceOverride = -1f;
+
+		public string iconPath;
+
+		public Texture2D uiIcon = BaseContent.BadTex;
+
+		private string cachedTooltip;
+
+		private List<string> cachedTargets;
+
+		private int requiredPsyfocusBandCached = -1;
+
+		public float EntropyGain => statBases.GetStatValueFromList(StatDefOf.Ability_EntropyGain, 0f);
+
+		public float PsyfocusCost => statBases.GetStatValueFromList(StatDefOf.Ability_PsyfocusCost, 0f);
+
+		public float EffectRadius => statBases.GetStatValueFromList(StatDefOf.Ability_EffectRadius, 0f);
+
+		public float EffectDuration => statBases.GetStatValueFromList(StatDefOf.Ability_Duration, 0f);
+
+		public bool HasAreaOfEffect => EffectRadius > float.Epsilon;
+
 		public float DetectionChance
 		{
 			get
 			{
-				if (this.detectionChanceOverride < 0f)
+				if (!(detectionChanceOverride >= 0f))
 				{
 					return this.GetStatValueAbstract(StatDefOf.Ability_DetectChancePerEntropy);
 				}
-				return this.detectionChanceOverride;
+				return detectionChanceOverride;
 			}
 		}
 
-		
-		
 		public int RequiredPsyfocusBand
 		{
 			get
 			{
-				if (this.requiredPsyfocusBandCached == -1)
+				if (requiredPsyfocusBandCached == -1)
 				{
-					this.requiredPsyfocusBandCached = Pawn_PsychicEntropyTracker.MaxAbilityLevelPerPsyfocusBand.Count - 1;
+					requiredPsyfocusBandCached = Pawn_PsychicEntropyTracker.MaxAbilityLevelPerPsyfocusBand.Count - 1;
 					for (int i = 0; i < Pawn_PsychicEntropyTracker.MaxAbilityLevelPerPsyfocusBand.Count; i++)
 					{
 						int num = Pawn_PsychicEntropyTracker.MaxAbilityLevelPerPsyfocusBand[i];
-						if (this.level <= num)
+						if (level <= num)
 						{
-							this.requiredPsyfocusBandCached = i;
+							requiredPsyfocusBandCached = i;
 							break;
 						}
 					}
 				}
-				return this.requiredPsyfocusBandCached;
+				return requiredPsyfocusBandCached;
 			}
 		}
 
-		
-		
 		public IEnumerable<string> StatSummary
 		{
 			get
 			{
-				if (this.PsyfocusCost > 1.401298E-45f)
+				if (PsyfocusCost > float.Epsilon)
 				{
-					yield return "AbilityPsyfocusCost".Translate() + ": " + this.PsyfocusCost.ToStringPercent();
+					yield return "AbilityPsyfocusCost".Translate() + ": " + PsyfocusCost.ToStringPercent();
 				}
-				if (this.EntropyGain > 1.401298E-45f)
+				if (EntropyGain > float.Epsilon)
 				{
-					yield return "AbilityEntropyGain".Translate() + ": " + this.EntropyGain;
+					yield return (string)("AbilityEntropyGain".Translate() + ": ") + EntropyGain;
 				}
-				if (this.verbProperties.warmupTime > 1.401298E-45f)
+				if (verbProperties.warmupTime > float.Epsilon)
 				{
-					yield return "AbilityCastingTime".Translate() + ": " + this.verbProperties.warmupTime + "LetterSecond".Translate();
+					yield return (string)("AbilityCastingTime".Translate() + ": ") + verbProperties.warmupTime + "LetterSecond".Translate();
 				}
-				if (this.EffectDuration > 1.401298E-45f)
+				if (EffectDuration > float.Epsilon)
 				{
-					yield return "AbilityDuration".Translate() + ": " + this.EffectDuration.SecondsToTicks().ToStringTicksToPeriod(true, false, true, true);
+					yield return "AbilityDuration".Translate() + ": " + EffectDuration.SecondsToTicks().ToStringTicksToPeriod();
 				}
-				if (this.HasAreaOfEffect)
+				if (HasAreaOfEffect)
 				{
-					yield return "AbilityEffectRadius".Translate() + ": " + Mathf.Ceil(this.EffectRadius);
+					yield return (string)("AbilityEffectRadius".Translate() + ": ") + Mathf.Ceil(EffectRadius);
 				}
-				yield break;
 			}
 		}
 
-		
 		public override void PostLoad()
 		{
-			if (!string.IsNullOrEmpty(this.iconPath))
+			if (!string.IsNullOrEmpty(iconPath))
 			{
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{
-					this.uiIcon = ContentFinder<Texture2D>.Get(this.iconPath, true);
+					uiIcon = ContentFinder<Texture2D>.Get(iconPath);
 				});
 			}
 		}
 
-		
 		public string GetTooltip(Pawn pawn = null)
 		{
-			if (this.cachedTooltip == null)
+			if (cachedTooltip == null)
 			{
-				this.cachedTooltip = base.LabelCap + ((this.level > 0) ? ("\n" + "Level".Translate() + " " + this.level) : "") + "\n\n" + this.description;
-				string text = this.StatSummary.ToLineList(null, false);
+				cachedTooltip = base.LabelCap + ((level > 0) ? ((string)("\n" + "Level".Translate() + " ") + level) : "") + "\n\n" + description;
+				string text = StatSummary.ToLineList();
 				if (!text.NullOrEmpty())
 				{
-					this.cachedTooltip = this.cachedTooltip + "\n\n" + text;
+					cachedTooltip = cachedTooltip + "\n\n" + text;
 				}
 			}
-			if (pawn != null && ModsConfig.RoyaltyActive && this.abilityClass == typeof(Psycast) && this.level > 0)
+			if (pawn != null && ModsConfig.RoyaltyActive && abilityClass == typeof(Psycast) && level > 0)
 			{
 				Faction first = Faction.GetMinTitleForImplantAllFactions(HediffDefOf.PsychicAmplifier).First;
 				if (first != null)
 				{
-					RoyalTitleDef minTitleForImplant = first.GetMinTitleForImplant(HediffDefOf.PsychicAmplifier, this.level);
+					RoyalTitleDef minTitleForImplant = first.GetMinTitleForImplant(HediffDefOf.PsychicAmplifier, level);
 					RoyalTitleDef currentTitle = pawn.royalty.GetCurrentTitle(first);
-					if (minTitleForImplant != null && (currentTitle == null || currentTitle.seniority < minTitleForImplant.seniority) && this.DetectionChance > 0f)
+					if (minTitleForImplant != null && (currentTitle == null || currentTitle.seniority < minTitleForImplant.seniority) && DetectionChance > 0f)
 					{
 						return cachedTooltip + "\n\n" + ColoredText.Colorize("PsycastIsIllegal".Translate(pawn.Named("PAWN"), minTitleForImplant.GetLabelCapFor(pawn).Named("TITLE")), ColoredText.WarningColor);
 					}
 				}
 			}
-			return this.cachedTooltip;
+			return cachedTooltip;
 		}
 
-		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			if (this.cachedTargets == null)
+			if (cachedTargets == null)
 			{
-				this.cachedTargets = new List<string>();
-				if (this.verbProperties.targetParams.canTargetPawns && this.verbProperties.targetParams.canTargetSelf)
+				cachedTargets = new List<string>();
+				if (verbProperties.targetParams.canTargetPawns && verbProperties.targetParams.canTargetSelf)
 				{
-					this.cachedTargets.Add("TargetSelf".Translate());
+					cachedTargets.Add("TargetSelf".Translate());
 				}
-				if (this.verbProperties.targetParams.canTargetLocations)
+				if (verbProperties.targetParams.canTargetLocations)
 				{
-					this.cachedTargets.Add("TargetGround".Translate());
+					cachedTargets.Add("TargetGround".Translate());
 				}
-				if (this.verbProperties.targetParams.canTargetPawns && this.verbProperties.targetParams.canTargetHumans)
+				if (verbProperties.targetParams.canTargetPawns && verbProperties.targetParams.canTargetHumans)
 				{
-					this.cachedTargets.Add("TargetHuman".Translate());
+					cachedTargets.Add("TargetHuman".Translate());
 				}
-				if (this.verbProperties.targetParams.canTargetPawns && this.verbProperties.targetParams.canTargetAnimals)
+				if (verbProperties.targetParams.canTargetPawns && verbProperties.targetParams.canTargetAnimals)
 				{
-					this.cachedTargets.Add("TargetAnimal".Translate());
+					cachedTargets.Add("TargetAnimal".Translate());
 				}
 			}
-			int num = this.comps.OfType<CompProperties_AbilityEffect>().Sum((CompProperties_AbilityEffect e) => e.goodwillImpact);
+			int num = comps.OfType<CompProperties_AbilityEffect>().Sum((CompProperties_AbilityEffect e) => e.goodwillImpact);
 			if (num != 0)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_GoodwillImpact, (float)num, req, ToStringNumberSense.Undefined, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_GoodwillImpact, num, req);
 			}
-			if (this.level != 0)
+			if (level != 0)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_RequiredPsylink, (float)this.level, req, ToStringNumberSense.Undefined, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_RequiredPsylink, level, req);
 			}
-			yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_CastingTime, this.verbProperties.warmupTime, req, ToStringNumberSense.Undefined, null, false);
-			yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_Range, this.verbProperties.range, req, ToStringNumberSense.Undefined, null, false);
-			yield return new StatDrawEntry(StatCategoryDefOf.Ability, "Target".Translate(), this.cachedTargets.ToCommaList(false).CapitalizeFirst(), "AbilityTargetDesc".Translate(), 1001, null, null, false);
-			yield return new StatDrawEntry(StatCategoryDefOf.Ability, "AbilityRequiresLOS".Translate(), this.verbProperties.requireLineOfSight ? "Yes".Translate() : "No".Translate(), "", 1000, null, null, false);
-			yield break;
+			yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_CastingTime, verbProperties.warmupTime, req);
+			yield return new StatDrawEntry(StatCategoryDefOf.Ability, StatDefOf.Ability_Range, verbProperties.range, req);
+			yield return new StatDrawEntry(StatCategoryDefOf.Ability, "Target".Translate(), cachedTargets.ToCommaList().CapitalizeFirst(), "AbilityTargetDesc".Translate(), 1001);
+			yield return new StatDrawEntry(StatCategoryDefOf.Ability, "AbilityRequiresLOS".Translate(), verbProperties.requireLineOfSight ? "Yes".Translate() : "No".Translate(), "", 1000);
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
-			IEnumerator<string> enumerator = null;
-			if (this.abilityClass == null)
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (abilityClass == null)
 			{
 				yield return "abilityClass is null";
 			}
-			if (this.verbProperties == null)
+			if (verbProperties == null)
 			{
 				yield return "verbProperties are null";
 			}
-			if (this.label.NullOrEmpty())
+			if (label.NullOrEmpty())
 			{
 				yield return "no label";
 			}
-			if (this.statBases != null)
+			if (statBases != null)
 			{
-				List<StatModifier>.Enumerator enumerator2 = this.statBases.GetEnumerator();
+				foreach (StatModifier statBase in statBases)
 				{
-					while (enumerator2.MoveNext())
+					if (statBases.Count((StatModifier st) => st.stat == statBase.stat) > 1)
 					{
-						StatModifier statBase = enumerator2.Current;
-						if (this.statBases.Count((StatModifier st) => st.stat == statBase.stat) > 1)
-						{
-							yield return "defines the stat base " + statBase.stat + " more than once.";
-						}
+						yield return "defines the stat base " + statBase.stat + " more than once.";
 					}
 				}
 			}
-			int num;
-			for (int i = 0; i < this.comps.Count; i = num + 1)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				foreach (string text2 in this.comps[i].ConfigErrors(this))
+				foreach (string item2 in comps[i].ConfigErrors(this))
 				{
-					yield return text2;
+					yield return item2;
 				}
-				enumerator = null;
-				num = i;
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public Type abilityClass = typeof(Ability);
-
-		
-		public Type gizmoClass = typeof(Command_Ability);
-
-		
-		public List<AbilityCompProperties> comps = new List<AbilityCompProperties>();
-
-		
-		public List<StatModifier> statBases;
-
-		
-		public VerbProperties verbProperties;
-
-		
-		public KeyBindingDef hotKey;
-
-		
-		public JobDef jobDef;
-
-		
-		public ThingDef warmupMote;
-
-		
-		public Vector3 moteDrawOffset;
-
-		
-		public bool canUseAoeToGetTargets = true;
-
-		
-		public bool targetRequired = true;
-
-		
-		public int level;
-
-		
-		public IntRange cooldownTicksRange;
-
-		
-		public bool sendLetterOnCooldownComplete;
-
-		
-		public bool displayGizmoWhileUndrafted;
-
-		
-		public bool disableGizmoWhileUndrafted = true;
-
-		
-		public float detectionChanceOverride = -1f;
-
-		
-		public string iconPath;
-
-		
-		public Texture2D uiIcon = BaseContent.BadTex;
-
-		
-		private string cachedTooltip;
-
-		
-		private List<string> cachedTargets;
-
-		
-		private int requiredPsyfocusBandCached = -1;
 	}
 }

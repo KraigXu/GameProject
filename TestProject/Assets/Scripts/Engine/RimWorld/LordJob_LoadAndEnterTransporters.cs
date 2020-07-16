@@ -1,61 +1,37 @@
-﻿using System;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordJob_LoadAndEnterTransporters : LordJob
 	{
-		
-		
-		public override bool AllowStartNewGatherings
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public int transportersGroup = -1;
 
-		
-		
-		public override bool AddFleeToil
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool AllowStartNewGatherings => false;
 
-		
+		public override bool AddFleeToil => false;
+
 		public LordJob_LoadAndEnterTransporters()
 		{
 		}
 
-		
 		public LordJob_LoadAndEnterTransporters(int transportersGroup)
 		{
 			this.transportersGroup = transportersGroup;
 		}
 
-		
 		public override void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.transportersGroup, "transportersGroup", 0, false);
+			Scribe_Values.Look(ref transportersGroup, "transportersGroup", 0);
 		}
 
-		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
-			LordToil_LoadAndEnterTransporters startingToil = new LordToil_LoadAndEnterTransporters(this.transportersGroup);
-			stateGraph.StartingToil = startingToil;
+			LordToil_LoadAndEnterTransporters lordToil_LoadAndEnterTransporters = (LordToil_LoadAndEnterTransporters)(stateGraph.StartingToil = new LordToil_LoadAndEnterTransporters(transportersGroup));
 			LordToil_End toil = new LordToil_End();
 			stateGraph.AddToil(toil);
 			return stateGraph;
 		}
-
-		
-		public int transportersGroup = -1;
 	}
 }

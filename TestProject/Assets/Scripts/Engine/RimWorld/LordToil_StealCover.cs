@@ -1,47 +1,20 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class LordToil_StealCover : LordToil_DoOpportunisticTaskOrCover
 	{
-		
-		
-		protected override DutyDef DutyDef
-		{
-			get
-			{
-				return DutyDefOf.Steal;
-			}
-		}
+		protected override DutyDef DutyDef => DutyDefOf.Steal;
 
-		
-		
-		public override bool ForceHighStoryDanger
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool ForceHighStoryDanger => true;
 
-		
-		
-		public override bool AllowSelfTend
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool AllowSelfTend => false;
 
-		
 		protected override bool TryFindGoodOpportunisticTaskTarget(Pawn pawn, out Thing target, List<Thing> alreadyTakenTargets)
 		{
-			if (pawn.mindState.duty != null && pawn.mindState.duty.def == this.DutyDef && pawn.carryTracker.CarriedThing != null)
+			if (pawn.mindState.duty != null && pawn.mindState.duty.def == DutyDef && pawn.carryTracker.CarriedThing != null)
 			{
 				target = pawn.carryTracker.CarriedThing;
 				return true;

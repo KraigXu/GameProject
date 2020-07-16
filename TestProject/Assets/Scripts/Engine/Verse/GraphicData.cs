@@ -1,244 +1,177 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class GraphicData
 	{
-		
-		
-		public bool Linked
-		{
-			get
-			{
-				return this.linkType > LinkDrawerType.None;
-			}
-		}
+		[NoTranslate]
+		public string texPath;
 
-		
-		
+		public Type graphicClass;
+
+		public ShaderTypeDef shaderType;
+
+		public List<ShaderParameter> shaderParameters;
+
+		public Color color = Color.white;
+
+		public Color colorTwo = Color.white;
+
+		public Vector2 drawSize = Vector2.one;
+
+		public Vector3 drawOffset = Vector3.zero;
+
+		public Vector3? drawOffsetNorth;
+
+		public Vector3? drawOffsetEast;
+
+		public Vector3? drawOffsetSouth;
+
+		public Vector3? drawOffsetWest;
+
+		public float onGroundRandomRotateAngle;
+
+		public bool drawRotated = true;
+
+		public bool allowFlip = true;
+
+		public float flipExtraRotation;
+
+		public ShadowData shadowData;
+
+		public DamageGraphicData damageData;
+
+		public LinkDrawerType linkType;
+
+		public LinkFlags linkFlags;
+
+		[Unsaved(false)]
+		private Graphic cachedGraphic;
+
+		public bool Linked => linkType != LinkDrawerType.None;
+
 		public Graphic Graphic
 		{
 			get
 			{
-				if (this.cachedGraphic == null)
+				if (cachedGraphic == null)
 				{
-					this.Init();
+					Init();
 				}
-				return this.cachedGraphic;
+				return cachedGraphic;
 			}
 		}
 
-		
 		public void CopyFrom(GraphicData other)
 		{
-			this.texPath = other.texPath;
-			this.graphicClass = other.graphicClass;
-			this.shaderType = other.shaderType;
-			this.color = other.color;
-			this.colorTwo = other.colorTwo;
-			this.drawSize = other.drawSize;
-			this.drawOffset = other.drawOffset;
-			this.drawOffsetNorth = other.drawOffsetNorth;
-			this.drawOffsetEast = other.drawOffsetEast;
-			this.drawOffsetSouth = other.drawOffsetSouth;
-			this.drawOffsetWest = other.drawOffsetSouth;
-			this.onGroundRandomRotateAngle = other.onGroundRandomRotateAngle;
-			this.drawRotated = other.drawRotated;
-			this.allowFlip = other.allowFlip;
-			this.flipExtraRotation = other.flipExtraRotation;
-			this.shadowData = other.shadowData;
-			this.damageData = other.damageData;
-			this.linkType = other.linkType;
-			this.linkFlags = other.linkFlags;
-			this.cachedGraphic = null;
+			texPath = other.texPath;
+			graphicClass = other.graphicClass;
+			shaderType = other.shaderType;
+			color = other.color;
+			colorTwo = other.colorTwo;
+			drawSize = other.drawSize;
+			drawOffset = other.drawOffset;
+			drawOffsetNorth = other.drawOffsetNorth;
+			drawOffsetEast = other.drawOffsetEast;
+			drawOffsetSouth = other.drawOffsetSouth;
+			drawOffsetWest = other.drawOffsetSouth;
+			onGroundRandomRotateAngle = other.onGroundRandomRotateAngle;
+			drawRotated = other.drawRotated;
+			allowFlip = other.allowFlip;
+			flipExtraRotation = other.flipExtraRotation;
+			shadowData = other.shadowData;
+			damageData = other.damageData;
+			linkType = other.linkType;
+			linkFlags = other.linkFlags;
+			cachedGraphic = null;
 		}
 
-		
 		private void Init()
 		{
-			if (this.graphicClass == null)
+			if (graphicClass == null)
 			{
-				this.cachedGraphic = null;
+				cachedGraphic = null;
 				return;
 			}
-			ShaderTypeDef cutout = this.shaderType;
+			ShaderTypeDef cutout = shaderType;
 			if (cutout == null)
 			{
 				cutout = ShaderTypeDefOf.Cutout;
 			}
 			Shader shader = cutout.Shader;
-			this.cachedGraphic = GraphicDatabase.Get(this.graphicClass, this.texPath, shader, this.drawSize, this.color, this.colorTwo, this, this.shaderParameters);
-			if (this.onGroundRandomRotateAngle > 0.01f)
+			cachedGraphic = GraphicDatabase.Get(graphicClass, texPath, shader, drawSize, color, colorTwo, this, shaderParameters);
+			if (onGroundRandomRotateAngle > 0.01f)
 			{
-				this.cachedGraphic = new Graphic_RandomRotated(this.cachedGraphic, this.onGroundRandomRotateAngle);
+				cachedGraphic = new Graphic_RandomRotated(cachedGraphic, onGroundRandomRotateAngle);
 			}
-			if (this.Linked)
+			if (Linked)
 			{
-				this.cachedGraphic = GraphicUtility.WrapLinked(this.cachedGraphic, this.linkType);
+				cachedGraphic = GraphicUtility.WrapLinked(cachedGraphic, linkType);
 			}
 		}
 
-		
 		public void ResolveReferencesSpecial()
 		{
-			if (this.damageData != null)
+			if (damageData != null)
 			{
-				this.damageData.ResolveReferencesSpecial();
+				damageData.ResolveReferencesSpecial();
 			}
 		}
 
-		
 		public Vector3 DrawOffsetForRot(Rot4 rot)
 		{
 			switch (rot.AsInt)
 			{
 			case 0:
-			{
-				Vector3? vector = this.drawOffsetNorth;
-				if (vector == null)
-				{
-					return this.drawOffset;
-				}
-				return vector.GetValueOrDefault();
-			}
+				return drawOffsetNorth ?? drawOffset;
 			case 1:
-			{
-				Vector3? vector = this.drawOffsetEast;
-				if (vector == null)
-				{
-					return this.drawOffset;
-				}
-				return vector.GetValueOrDefault();
-			}
+				return drawOffsetEast ?? drawOffset;
 			case 2:
-			{
-				Vector3? vector = this.drawOffsetSouth;
-				if (vector == null)
-				{
-					return this.drawOffset;
-				}
-				return vector.GetValueOrDefault();
-			}
+				return drawOffsetSouth ?? drawOffset;
 			case 3:
-			{
-				Vector3? vector = this.drawOffsetWest;
-				if (vector == null)
-				{
-					return this.drawOffset;
-				}
-				return vector.GetValueOrDefault();
-			}
+				return drawOffsetWest ?? drawOffset;
 			default:
-				return this.drawOffset;
+				return drawOffset;
 			}
 		}
 
-		
 		public Graphic GraphicColoredFor(Thing t)
 		{
-			if (t.DrawColor.IndistinguishableFrom(this.Graphic.Color) && t.DrawColorTwo.IndistinguishableFrom(this.Graphic.ColorTwo))
+			if (t.DrawColor.IndistinguishableFrom(Graphic.Color) && t.DrawColorTwo.IndistinguishableFrom(Graphic.ColorTwo))
 			{
-				return this.Graphic;
+				return Graphic;
 			}
-			return this.Graphic.GetColoredVersion(this.Graphic.Shader, t.DrawColor, t.DrawColorTwo);
+			return Graphic.GetColoredVersion(Graphic.Shader, t.DrawColor, t.DrawColorTwo);
 		}
 
-		
 		internal IEnumerable<string> ConfigErrors(ThingDef thingDef)
 		{
-			if (this.graphicClass == null)
+			if (graphicClass == null)
 			{
 				yield return "graphicClass is null";
 			}
-			if (this.texPath.NullOrEmpty())
+			if (texPath.NullOrEmpty())
 			{
 				yield return "texPath is null or empty";
 			}
 			if (thingDef != null)
 			{
-				if (thingDef.drawerType == DrawerType.RealtimeOnly && this.Linked)
+				if (thingDef.drawerType == DrawerType.RealtimeOnly && Linked)
 				{
 					yield return "does not add to map mesh but has a link drawer. Link drawers can only work on the map mesh.";
 				}
-				if (!thingDef.rotatable && (this.drawOffsetNorth != null || this.drawOffsetEast != null || this.drawOffsetSouth != null || this.drawOffsetWest != null))
+				if (!thingDef.rotatable && (drawOffsetNorth.HasValue || drawOffsetEast.HasValue || drawOffsetSouth.HasValue || drawOffsetWest.HasValue))
 				{
 					yield return "not rotatable but has rotational draw offset(s).";
 				}
 			}
-			if ((this.shaderType == ShaderTypeDefOf.Cutout || this.shaderType == ShaderTypeDefOf.CutoutComplex) && thingDef.mote != null && (thingDef.mote.fadeInTime > 0f || thingDef.mote.fadeOutTime > 0f))
+			if ((shaderType == ShaderTypeDefOf.Cutout || shaderType == ShaderTypeDefOf.CutoutComplex) && thingDef.mote != null && (thingDef.mote.fadeInTime > 0f || thingDef.mote.fadeOutTime > 0f))
 			{
 				yield return "mote fades but uses cutout shader type. It will abruptly disappear when opacity falls under the cutout threshold.";
 			}
-			yield break;
 		}
-
-		
-		[NoTranslate]
-		public string texPath;
-
-		
-		public Type graphicClass;
-
-		
-		public ShaderTypeDef shaderType;
-
-		
-		public List<ShaderParameter> shaderParameters;
-
-		
-		public Color color = Color.white;
-
-		
-		public Color colorTwo = Color.white;
-
-		
-		public Vector2 drawSize = Vector2.one;
-
-		
-		public Vector3 drawOffset = Vector3.zero;
-
-		
-		public Vector3? drawOffsetNorth;
-
-		
-		public Vector3? drawOffsetEast;
-
-		
-		public Vector3? drawOffsetSouth;
-
-		
-		public Vector3? drawOffsetWest;
-
-		
-		public float onGroundRandomRotateAngle;
-
-		
-		public bool drawRotated = true;
-
-		
-		public bool allowFlip = true;
-
-		
-		public float flipExtraRotation;
-
-		
-		public ShadowData shadowData;
-
-		
-		public DamageGraphicData damageData;
-
-		
-		public LinkDrawerType linkType;
-
-		
-		public LinkFlags linkFlags;
-
-		
-		[Unsaved(false)]
-		private Graphic cachedGraphic;
 	}
 }

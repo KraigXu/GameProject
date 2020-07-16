@@ -1,132 +1,124 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public class DesignationDragger
 	{
-		
-		
-		public bool Dragging
-		{
-			get
-			{
-				return this.dragging;
-			}
-		}
+		private bool dragging;
 
-		
-		
-		private Designator SelDes
-		{
-			get
-			{
-				return Find.DesignatorManager.SelectedDesignator;
-			}
-		}
+		private IntVec3 startDragCell;
 
-		
-		
+		private int lastFrameDragCellsDrawn;
+
+		private Sustainer sustainer;
+
+		private float lastDragRealTime = -1000f;
+
+		private List<IntVec3> dragCells = new List<IntVec3>();
+
+		private string failureReasonInt;
+
+		private int lastUpdateFrame = -1;
+
+		private const int MaxSquareWidth = 50;
+
+		public bool Dragging => dragging;
+
+		private Designator SelDes => Find.DesignatorManager.SelectedDesignator;
+
 		public List<IntVec3> DragCells
 		{
 			get
 			{
-				this.UpdateDragCellsIfNeeded();
-				return this.dragCells;
+				UpdateDragCellsIfNeeded();
+				return dragCells;
 			}
 		}
 
-		
-		
 		public string FailureReason
 		{
 			get
 			{
-				this.UpdateDragCellsIfNeeded();
-				return this.failureReasonInt;
+				UpdateDragCellsIfNeeded();
+				return failureReasonInt;
 			}
 		}
 
-		
 		public void StartDrag()
 		{
-			this.dragging = true;
-			this.startDragCell = UI.MouseCell();
+			dragging = true;
+			startDragCell = UI.MouseCell();
 		}
 
-		
 		public void EndDrag()
 		{
-			this.dragging = false;
-			this.lastDragRealTime = -99999f;
-			this.lastFrameDragCellsDrawn = 0;
-			if (this.sustainer != null)
+			dragging = false;
+			lastDragRealTime = -99999f;
+			lastFrameDragCellsDrawn = 0;
+			if (sustainer != null)
 			{
-				this.sustainer.End();
-				this.sustainer = null;
+				sustainer.End();
+				sustainer = null;
 			}
 		}
 
-		
 		public void DraggerUpdate()
 		{
-			if (this.dragging)
+			if (!dragging)
 			{
-				List<IntVec3> list = this.DragCells;
-				this.SelDes.RenderHighlight(list);
-				if (list.Count != this.lastFrameDragCellsDrawn)
+				return;
+			}
+			List<IntVec3> list = DragCells;
+			SelDes.RenderHighlight(list);
+			if (list.Count != lastFrameDragCellsDrawn)
+			{
+				lastDragRealTime = Time.realtimeSinceStartup;
+				lastFrameDragCellsDrawn = list.Count;
+				if (SelDes.soundDragChanged != null)
 				{
-					this.lastDragRealTime = Time.realtimeSinceStartup;
-					this.lastFrameDragCellsDrawn = list.Count;
-					if (this.SelDes.soundDragChanged != null)
-					{
-						this.SelDes.soundDragChanged.PlayOneShotOnCamera(null);
-					}
+					SelDes.soundDragChanged.PlayOneShotOnCamera();
 				}
-				if (this.sustainer == null || this.sustainer.Ended)
+			}
+			if (sustainer == null || sustainer.Ended)
+			{
+				if (SelDes.soundDragSustain != null)
 				{
-					if (this.SelDes.soundDragSustain != null)
-					{
-						this.sustainer = this.SelDes.soundDragSustain.TrySpawnSustainer(SoundInfo.OnCamera(MaintenanceType.PerFrame));
-						return;
-					}
+					sustainer = SelDes.soundDragSustain.TrySpawnSustainer(SoundInfo.OnCamera(MaintenanceType.PerFrame));
 				}
-				else
-				{
-					this.sustainer.externalParams["TimeSinceDrag"] = Time.realtimeSinceStartup - this.lastDragRealTime;
-					this.sustainer.Maintain();
-				}
+			}
+			else
+			{
+				sustainer.externalParams["TimeSinceDrag"] = Time.realtimeSinceStartup - lastDragRealTime;
+				sustainer.Maintain();
 			}
 		}
 
-		
 		public void DraggerOnGUI()
 		{
-			if (this.dragging && this.SelDes != null && this.SelDes.DragDrawMeasurements)
+			if (dragging && SelDes != null && SelDes.DragDrawMeasurements)
 			{
-				IntVec3 intVec = this.startDragCell - UI.MouseCell();
+				IntVec3 intVec = startDragCell - UI.MouseCell();
 				intVec.x = Mathf.Abs(intVec.x) + 1;
 				intVec.z = Mathf.Abs(intVec.z) + 1;
 				if (intVec.x >= 3)
 				{
-					Vector2 screenPos = (this.startDragCell.ToUIPosition() + UI.MouseCell().ToUIPosition()) / 2f;
-					screenPos.y = this.startDragCell.ToUIPosition().y;
+					Vector2 screenPos = (startDragCell.ToUIPosition() + UI.MouseCell().ToUIPosition()) / 2f;
+					screenPos.y = startDragCell.ToUIPosition().y;
 					Widgets.DrawNumberOnMap(screenPos, intVec.x, Color.white);
 				}
 				if (intVec.z >= 3)
 				{
-					Vector2 screenPos2 = (this.startDragCell.ToUIPosition() + UI.MouseCell().ToUIPosition()) / 2f;
-					screenPos2.x = this.startDragCell.ToUIPosition().x;
+					Vector2 screenPos2 = (startDragCell.ToUIPosition() + UI.MouseCell().ToUIPosition()) / 2f;
+					screenPos2.x = startDragCell.ToUIPosition().x;
 					Widgets.DrawNumberOnMap(screenPos2, intVec.z, Color.white);
 				}
 			}
 		}
 
-		
 		[Obsolete]
 		private void DrawNumber(Vector2 screenPos, int number)
 		{
@@ -138,19 +130,18 @@ namespace Verse
 			Widgets.Label(rect, number.ToStringCached());
 		}
 
-		
 		private void UpdateDragCellsIfNeeded()
 		{
-			if (Time.frameCount == this.lastUpdateFrame)
+			if (Time.frameCount == lastUpdateFrame)
 			{
 				return;
 			}
-			this.lastUpdateFrame = Time.frameCount;
-			this.dragCells.Clear();
-			this.failureReasonInt = null;
-			IntVec3 intVec = this.startDragCell;
+			lastUpdateFrame = Time.frameCount;
+			dragCells.Clear();
+			failureReasonInt = null;
+			IntVec3 intVec = startDragCell;
 			IntVec3 intVec2 = UI.MouseCell();
-			if (this.SelDes.DraggableDimensions == 1)
+			if (SelDes.DraggableDimensions == 1)
 			{
 				bool flag = true;
 				if (Mathf.Abs(intVec.x - intVec2.x) < Mathf.Abs(intVec.z - intVec2.z))
@@ -168,7 +159,7 @@ namespace Verse
 					}
 					for (int i = intVec.x; i <= intVec2.x; i++)
 					{
-						this.TryAddDragCell(new IntVec3(i, intVec.y, z));
+						TryAddDragCell(new IntVec3(i, intVec.y, z));
 					}
 				}
 				else
@@ -182,92 +173,64 @@ namespace Verse
 					}
 					for (int j = intVec.z; j <= intVec2.z; j++)
 					{
-						this.TryAddDragCell(new IntVec3(x, intVec.y, j));
+						TryAddDragCell(new IntVec3(x, intVec.y, j));
 					}
 				}
 			}
-			if (this.SelDes.DraggableDimensions == 2)
+			if (SelDes.DraggableDimensions != 2)
 			{
-				IntVec3 intVec5 = intVec;
-				IntVec3 intVec6 = intVec2;
-				if (intVec6.x > intVec5.x + 50)
-				{
-					intVec6.x = intVec5.x + 50;
-				}
-				if (intVec6.z > intVec5.z + 50)
-				{
-					intVec6.z = intVec5.z + 50;
-				}
-				if (intVec6.x < intVec5.x)
-				{
-					if (intVec6.x < intVec5.x - 50)
-					{
-						intVec6.x = intVec5.x - 50;
-					}
-					int x2 = intVec5.x;
-					intVec5 = new IntVec3(intVec6.x, intVec5.y, intVec5.z);
-					intVec6 = new IntVec3(x2, intVec6.y, intVec6.z);
-				}
-				if (intVec6.z < intVec5.z)
-				{
-					if (intVec6.z < intVec5.z - 50)
-					{
-						intVec6.z = intVec5.z - 50;
-					}
-					int z2 = intVec5.z;
-					intVec5 = new IntVec3(intVec5.x, intVec5.y, intVec6.z);
-					intVec6 = new IntVec3(intVec6.x, intVec6.y, z2);
-				}
-				for (int k = intVec5.x; k <= intVec6.x; k++)
-				{
-					for (int l = intVec5.z; l <= intVec6.z; l++)
-					{
-						this.TryAddDragCell(new IntVec3(k, intVec5.y, l));
-					}
-				}
-			}
-		}
-
-		
-		private void TryAddDragCell(IntVec3 c)
-		{
-			AcceptanceReport acceptanceReport = this.SelDes.CanDesignateCell(c);
-			if (acceptanceReport.Accepted)
-			{
-				this.dragCells.Add(c);
 				return;
 			}
-			if (!acceptanceReport.Reason.NullOrEmpty())
+			IntVec3 intVec5 = intVec;
+			IntVec3 intVec6 = intVec2;
+			if (intVec6.x > intVec5.x + 50)
 			{
-				this.failureReasonInt = acceptanceReport.Reason;
+				intVec6.x = intVec5.x + 50;
+			}
+			if (intVec6.z > intVec5.z + 50)
+			{
+				intVec6.z = intVec5.z + 50;
+			}
+			if (intVec6.x < intVec5.x)
+			{
+				if (intVec6.x < intVec5.x - 50)
+				{
+					intVec6.x = intVec5.x - 50;
+				}
+				int x2 = intVec5.x;
+				intVec5 = new IntVec3(intVec6.x, intVec5.y, intVec5.z);
+				intVec6 = new IntVec3(x2, intVec6.y, intVec6.z);
+			}
+			if (intVec6.z < intVec5.z)
+			{
+				if (intVec6.z < intVec5.z - 50)
+				{
+					intVec6.z = intVec5.z - 50;
+				}
+				int z2 = intVec5.z;
+				intVec5 = new IntVec3(intVec5.x, intVec5.y, intVec6.z);
+				intVec6 = new IntVec3(intVec6.x, intVec6.y, z2);
+			}
+			for (int k = intVec5.x; k <= intVec6.x; k++)
+			{
+				for (int l = intVec5.z; l <= intVec6.z; l++)
+				{
+					TryAddDragCell(new IntVec3(k, intVec5.y, l));
+				}
 			}
 		}
 
-		
-		private bool dragging;
-
-		
-		private IntVec3 startDragCell;
-
-		
-		private int lastFrameDragCellsDrawn;
-
-		
-		private Sustainer sustainer;
-
-		
-		private float lastDragRealTime = -1000f;
-
-		
-		private List<IntVec3> dragCells = new List<IntVec3>();
-
-		
-		private string failureReasonInt;
-
-		
-		private int lastUpdateFrame = -1;
-
-		
-		private const int MaxSquareWidth = 50;
+		private void TryAddDragCell(IntVec3 c)
+		{
+			AcceptanceReport acceptanceReport = SelDes.CanDesignateCell(c);
+			if (acceptanceReport.Accepted)
+			{
+				dragCells.Add(c);
+			}
+			else if (!acceptanceReport.Reason.NullOrEmpty())
+			{
+				failureReasonInt = acceptanceReport.Reason;
+			}
+		}
 	}
 }

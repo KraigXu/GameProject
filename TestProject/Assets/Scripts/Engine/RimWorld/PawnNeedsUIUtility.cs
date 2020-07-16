@@ -1,19 +1,15 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnNeedsUIUtility
 	{
-		
 		public static void SortInDisplayOrder(List<Need> needs)
 		{
 			needs.Sort((Need a, Need b) => b.def.listPriority.CompareTo(a.def.listPriority));
 		}
 
-		
 		public static Thought GetLeadingThoughtInGroup(List<Thought> thoughtsInGroup)
 		{
 			Thought result = null;
@@ -29,15 +25,14 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		public static void GetThoughtGroupsInDisplayOrder(Need_Mood mood, List<Thought> outThoughtGroupsPresent)
 		{
 			mood.thoughts.GetDistinctMoodThoughtGroups(outThoughtGroupsPresent);
-			for (int i = outThoughtGroupsPresent.Count - 1; i >= 0; i--)
+			for (int num = outThoughtGroupsPresent.Count - 1; num >= 0; num--)
 			{
-				if (!outThoughtGroupsPresent[i].VisibleInNeedsTab)
+				if (!outThoughtGroupsPresent[num].VisibleInNeedsTab)
 				{
-					outThoughtGroupsPresent.RemoveAt(i);
+					outThoughtGroupsPresent.RemoveAt(num);
 				}
 			}
 			outThoughtGroupsPresent.SortByDescending((Thought t) => mood.thoughts.MoodOffsetOfGroup(t), (Thought t) => t.GetHashCode());

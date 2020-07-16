@@ -1,69 +1,61 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public struct QualityRange : IEquatable<QualityRange>
 	{
-		
-		
-		public static QualityRange All
-		{
-			get
-			{
-				return new QualityRange(QualityCategory.Awful, QualityCategory.Legendary);
-			}
-		}
+		public QualityCategory min;
 
-		
+		public QualityCategory max;
+
+		public static QualityRange All => new QualityRange(QualityCategory.Awful, QualityCategory.Legendary);
+
 		public QualityRange(QualityCategory min, QualityCategory max)
 		{
 			this.min = min;
 			this.max = max;
 		}
 
-		
 		public bool Includes(QualityCategory p)
 		{
-			return p >= this.min && p <= this.max;
+			if ((int)p >= (int)min)
+			{
+				return (int)p <= (int)max;
+			}
+			return false;
 		}
 
-		
 		public static bool operator ==(QualityRange a, QualityRange b)
 		{
-			return a.min == b.min && a.max == b.max;
+			if (a.min == b.min)
+			{
+				return a.max == b.max;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(QualityRange a, QualityRange b)
 		{
 			return !(a == b);
 		}
 
-		
 		public static QualityRange FromString(string s)
 		{
-			string[] array = s.Split(new char[]
-			{
-				'~'
-			});
+			string[] array = s.Split('~');
 			return new QualityRange(ParseHelper.FromString<QualityCategory>(array[0]), ParseHelper.FromString<QualityCategory>(array[1]));
 		}
 
-		
 		public override string ToString()
 		{
-			return this.min.ToString() + "~" + this.max.ToString();
+			return min.ToString() + "~" + max.ToString();
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombineStruct<QualityCategory>(this.min.GetHashCode(), this.max);
+			return Gen.HashCombineStruct(min.GetHashCode(), max);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
 			if (!(obj is QualityRange))
@@ -71,19 +63,20 @@ namespace RimWorld
 				return false;
 			}
 			QualityRange qualityRange = (QualityRange)obj;
-			return qualityRange.min == this.min && qualityRange.max == this.max;
+			if (qualityRange.min == min)
+			{
+				return qualityRange.max == max;
+			}
+			return false;
 		}
 
-		
 		public bool Equals(QualityRange other)
 		{
-			return other.min == this.min && other.max == this.max;
+			if (other.min == min)
+			{
+				return other.max == max;
+			}
+			return false;
 		}
-
-		
-		public QualityCategory min;
-
-		
-		public QualityCategory max;
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Linq;
 using UnityEngine;
 using Verse;
@@ -7,167 +6,156 @@ using Verse.Steam;
 
 namespace RimWorld
 {
-	
 	public class Page_ScenarioEditor : Page
 	{
-		
-		
-		public override string PageTitle
-		{
-			get
-			{
-				return "ScenarioEditor".Translate();
-			}
-		}
+		private Scenario curScen;
 
-		
-		
-		public Scenario EditingScenario
-		{
-			get
-			{
-				return this.curScen;
-			}
-		}
+		private Vector2 infoScrollPosition = Vector2.zero;
 
-		
+		private string seed;
+
+		private bool seedIsValid = true;
+
+		private bool editMode;
+
+		public override string PageTitle => "ScenarioEditor".Translate();
+
+		public Scenario EditingScenario => curScen;
+
 		public Page_ScenarioEditor(Scenario scen)
 		{
 			if (scen != null)
 			{
-				this.curScen = scen;
-				this.seedIsValid = false;
-				return;
-			}
-			this.RandomizeSeedAndScenario();
-		}
-
-		
-		public override void PreOpen()
-		{
-			base.PreOpen();
-			this.infoScrollPosition = Vector2.zero;
-		}
-
-		
-		public override void DoWindowContents(Rect rect)
-		{
-			base.DrawPageTitle(rect);
-			Rect mainRect = base.GetMainRect(rect, 0f, false);
-			GUI.BeginGroup(mainRect);
-			Rect rect2 = new Rect(0f, 0f, mainRect.width * 0.35f, mainRect.height).Rounded();
-			this.DoConfigControls(rect2);
-			Rect rect3 = new Rect(rect2.xMax + 17f, 0f, mainRect.width - rect2.width - 17f, mainRect.height).Rounded();
-			if (!this.editMode)
-			{
-				ScenarioUI.DrawScenarioInfo(rect3, this.curScen, ref this.infoScrollPosition);
+				curScen = scen;
+				seedIsValid = false;
 			}
 			else
 			{
-				ScenarioUI.DrawScenarioEditInterface(rect3, this.curScen, ref this.infoScrollPosition);
+				RandomizeSeedAndScenario();
+			}
+		}
+
+		public override void PreOpen()
+		{
+			base.PreOpen();
+			infoScrollPosition = Vector2.zero;
+		}
+
+		public override void DoWindowContents(Rect rect)
+		{
+			DrawPageTitle(rect);
+			Rect mainRect = GetMainRect(rect);
+			GUI.BeginGroup(mainRect);
+			Rect rect2 = new Rect(0f, 0f, mainRect.width * 0.35f, mainRect.height).Rounded();
+			DoConfigControls(rect2);
+			Rect rect3 = new Rect(rect2.xMax + 17f, 0f, mainRect.width - rect2.width - 17f, mainRect.height).Rounded();
+			if (!editMode)
+			{
+				ScenarioUI.DrawScenarioInfo(rect3, curScen, ref infoScrollPosition);
+			}
+			else
+			{
+				ScenarioUI.DrawScenarioEditInterface(rect3, curScen, ref infoScrollPosition);
 			}
 			GUI.EndGroup();
-			base.DoBottomButtons(rect, null, null, null, true, true);
+			DoBottomButtons(rect);
 		}
 
-		
 		private void RandomizeSeedAndScenario()
 		{
-			this.seed = GenText.RandomSeedString();
-			this.curScen = ScenarioMaker.GenerateNewRandomScenario(this.seed);
+			seed = GenText.RandomSeedString();
+			curScen = ScenarioMaker.GenerateNewRandomScenario(seed);
 		}
 
-		
 		private void DoConfigControls(Rect rect)
 		{
 			Listing_Standard listing_Standard = new Listing_Standard();
 			listing_Standard.ColumnWidth = 200f;
 			listing_Standard.Begin(rect);
-			if (listing_Standard.ButtonText("Load".Translate(), null))
+			if (listing_Standard.ButtonText("Load".Translate()))
 			{
 				Find.WindowStack.Add(new Dialog_ScenarioList_Load(delegate(Scenario loadedScen)
 				{
-					this.curScen = loadedScen;
-					this.seedIsValid = false;
+					curScen = loadedScen;
+					seedIsValid = false;
 				}));
 			}
-			if (listing_Standard.ButtonText("Save".Translate(), null) && Page_ScenarioEditor.CheckAllPartsCompatible(this.curScen))
+			if (listing_Standard.ButtonText("Save".Translate()) && CheckAllPartsCompatible(curScen))
 			{
-				Find.WindowStack.Add(new Dialog_ScenarioList_Save(this.curScen));
+				Find.WindowStack.Add(new Dialog_ScenarioList_Save(curScen));
 			}
-			if (listing_Standard.ButtonText("RandomizeSeed".Translate(), null))
+			if (listing_Standard.ButtonText("RandomizeSeed".Translate()))
 			{
-				SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
-				this.RandomizeSeedAndScenario();
-				this.seedIsValid = true;
+				SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
+				RandomizeSeedAndScenario();
+				seedIsValid = true;
 			}
-			if (this.seedIsValid)
+			if (seedIsValid)
 			{
-				listing_Standard.Label("Seed".Translate().CapitalizeFirst(), -1f, null);
-				string a = listing_Standard.TextEntry(this.seed, 1);
-				if (a != this.seed)
+				listing_Standard.Label("Seed".Translate().CapitalizeFirst());
+				string a = listing_Standard.TextEntry(seed);
+				if (a != seed)
 				{
-					this.seed = a;
-					this.curScen = ScenarioMaker.GenerateNewRandomScenario(this.seed);
+					seed = a;
+					curScen = ScenarioMaker.GenerateNewRandomScenario(seed);
 				}
 			}
 			else
 			{
 				listing_Standard.Gap(Text.LineHeight + Text.LineHeight + 2f);
 			}
-			listing_Standard.CheckboxLabeled("EditMode".Translate().CapitalizeFirst(), ref this.editMode, null);
-			if (this.editMode)
+			listing_Standard.CheckboxLabeled("EditMode".Translate().CapitalizeFirst(), ref editMode);
+			if (editMode)
 			{
-				this.seedIsValid = false;
-				if (listing_Standard.ButtonText("AddPart".Translate(), null))
+				seedIsValid = false;
+				if (listing_Standard.ButtonText("AddPart".Translate()))
 				{
-					this.OpenAddScenPartMenu();
+					OpenAddScenPartMenu();
 				}
-				if (SteamManager.Initialized && (this.curScen.Category == ScenarioCategory.CustomLocal || this.curScen.Category == ScenarioCategory.SteamWorkshop) && listing_Standard.ButtonText(Workshop.UploadButtonLabel(this.curScen.GetPublishedFileId()), null) && Page_ScenarioEditor.CheckAllPartsCompatible(this.curScen))
+				if (SteamManager.Initialized && (curScen.Category == ScenarioCategory.CustomLocal || curScen.Category == ScenarioCategory.SteamWorkshop) && listing_Standard.ButtonText(Workshop.UploadButtonLabel(curScen.GetPublishedFileId())) && CheckAllPartsCompatible(curScen))
 				{
-					AcceptanceReport acceptanceReport = this.curScen.TryUploadReport();
+					AcceptanceReport acceptanceReport = curScen.TryUploadReport();
 					if (!acceptanceReport.Accepted)
 					{
-						Messages.Message(acceptanceReport.Reason, MessageTypeDefOf.RejectInput, false);
+						Messages.Message(acceptanceReport.Reason, MessageTypeDefOf.RejectInput, historical: false);
 					}
 					else
 					{
-						SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+						SoundDefOf.Tick_High.PlayOneShotOnCamera();
 						Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmSteamWorkshopUpload".Translate(), delegate
 						{
-							SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+							SoundDefOf.Tick_High.PlayOneShotOnCamera();
 							Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmContentAuthor".Translate(), delegate
 							{
-								SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-								Workshop.Upload(this.curScen);
-							}, true, null));
-						}, true, null));
+								SoundDefOf.Tick_High.PlayOneShotOnCamera();
+								Workshop.Upload(curScen);
+							}, destructive: true));
+						}, destructive: true));
 					}
 				}
 			}
 			listing_Standard.End();
 		}
 
-		
 		private static bool CheckAllPartsCompatible(Scenario scen)
 		{
-			foreach (ScenPart scenPart in scen.AllParts)
+			foreach (ScenPart allPart in scen.AllParts)
 			{
 				int num = 0;
-				foreach (ScenPart scenPart2 in scen.AllParts)
+				foreach (ScenPart allPart2 in scen.AllParts)
 				{
-					if (scenPart2.def == scenPart.def)
+					if (allPart2.def == allPart.def)
 					{
 						num++;
 					}
-					if (num > scenPart.def.maxUses)
+					if (num > allPart.def.maxUses)
 					{
-						Messages.Message("TooMany".Translate(scenPart.def.maxUses) + ": " + scenPart.def.label, MessageTypeDefOf.RejectInput, false);
+						Messages.Message("TooMany".Translate(allPart.def.maxUses) + ": " + allPart.def.label, MessageTypeDefOf.RejectInput, historical: false);
 						return false;
 					}
-					if (scenPart != scenPart2 && !scenPart.CanCoexistWith(scenPart2))
+					if (allPart != allPart2 && !allPart.CanCoexistWith(allPart2))
 					{
-						Messages.Message("Incompatible".Translate() + ": " + scenPart.def.label + ", " + scenPart2.def.label, MessageTypeDefOf.RejectInput, false);
+						Messages.Message("Incompatible".Translate() + ": " + allPart.def.label + ", " + allPart2.def.label, MessageTypeDefOf.RejectInput, historical: false);
 						return false;
 					}
 				}
@@ -175,58 +163,44 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		private void OpenAddScenPartMenu()
 		{
-			FloatMenuUtility.MakeMenu<ScenPartDef>(from p in ScenarioMaker.AddableParts(this.curScen)
-			where p.category != ScenPartCategory.Fixed
-			orderby p.label
-			select p, (ScenPartDef p) => p.LabelCap, (ScenPartDef p) => delegate
+			FloatMenuUtility.MakeMenu(from p in ScenarioMaker.AddableParts(curScen)
+				where p.category != ScenPartCategory.Fixed
+				orderby p.label
+				select p, (ScenPartDef p) => p.LabelCap, delegate(ScenPartDef p)
 			{
-				this.AddScenPart(p);
+				Page_ScenarioEditor page_ScenarioEditor = this;
+				return delegate
+				{
+					page_ScenarioEditor.AddScenPart(p);
+				};
 			});
 		}
 
-		
 		private void AddScenPart(ScenPartDef def)
 		{
 			ScenPart scenPart = ScenarioMaker.MakeScenPart(def);
 			scenPart.Randomize();
-			this.curScen.parts.Add(scenPart);
+			curScen.parts.Add(scenPart);
 		}
 
-		
 		protected override bool CanDoNext()
 		{
 			if (!base.CanDoNext())
 			{
 				return false;
 			}
-			if (this.curScen == null)
+			if (curScen == null)
 			{
 				return false;
 			}
-			if (!Page_ScenarioEditor.CheckAllPartsCompatible(this.curScen))
+			if (!CheckAllPartsCompatible(curScen))
 			{
 				return false;
 			}
-			Page_SelectScenario.BeginScenarioConfiguration(this.curScen, this);
+			Page_SelectScenario.BeginScenarioConfiguration(curScen, this);
 			return true;
 		}
-
-		
-		private Scenario curScen;
-
-		
-		private Vector2 infoScrollPosition = Vector2.zero;
-
-		
-		private string seed;
-
-		
-		private bool seedIsValid = true;
-
-		
-		private bool editMode;
 	}
 }

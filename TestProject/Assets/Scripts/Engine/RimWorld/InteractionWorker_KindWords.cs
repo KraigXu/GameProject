@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class InteractionWorker_KindWords : InteractionWorker
 	{
-		
 		public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
 		{
 			if (initiator.story.traits.HasTrait(TraitDefOf.Kind))

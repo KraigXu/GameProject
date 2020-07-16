@@ -1,96 +1,124 @@
-﻿using System;
-using System.Collections;
+using RimWorld.QuestGen;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
-using RimWorld.QuestGen;
 
 namespace Verse
 {
-	
 	public static class DirectXmlToObject
 	{
-		
+		private struct FieldAliasCache : IEquatable<FieldAliasCache>
+		{
+			public Type type;
+
+			public string fieldName;
+
+			public FieldAliasCache(Type type, string fieldName)
+			{
+				this.type = type;
+				this.fieldName = fieldName.ToLower();
+			}
+
+			public bool Equals(FieldAliasCache other)
+			{
+				if (type == other.type)
+				{
+					return string.Equals(fieldName, other.fieldName);
+				}
+				return false;
+			}
+		}
+
+		public static Stack<Type> currentlyInstantiatingObjectOfType = new Stack<Type>();
+
+		public const string DictionaryKeyName = "key";
+
+		public const string DictionaryValueName = "value";
+
+		public const string LoadDataFromXmlCustomMethodName = "LoadDataFromXmlCustom";
+
+		public const string PostLoadMethodName = "PostLoad";
+
+		public const string ObjectFromXmlMethodName = "ObjectFromXmlReflection";
+
+		public const string ListFromXmlMethodName = "ListFromXmlReflection";
+
+		public const string DictionaryFromXmlMethodName = "DictionaryFromXmlReflection";
+
+		private static Dictionary<Type, Func<XmlNode, object>> listFromXmlMethods = new Dictionary<Type, Func<XmlNode, object>>();
+
+		private static Dictionary<Type, Func<XmlNode, object>> dictionaryFromXmlMethods = new Dictionary<Type, Func<XmlNode, object>>();
+
+		private static readonly Type[] tmpOneTypeArray = new Type[1];
+
+		private static readonly Dictionary<Type, Func<XmlNode, bool, object>> objectFromXmlMethods = new Dictionary<Type, Func<XmlNode, bool, object>>();
+
+		private static Dictionary<FieldAliasCache, FieldInfo> fieldAliases = new Dictionary<FieldAliasCache, FieldInfo>(EqualityComparer<FieldAliasCache>.Default);
+
+		private static Dictionary<Type, Dictionary<string, FieldInfo>> fieldInfoLookup = new Dictionary<Type, Dictionary<string, FieldInfo>>();
+
 		public static Func<XmlNode, bool, object> GetObjectFromXmlMethod(Type type)
 		{
-			Func<XmlNode, bool, object> func;
-			if (!DirectXmlToObject.objectFromXmlMethods.TryGetValue(type, out func))
+			if (!objectFromXmlMethods.TryGetValue(type, out Func<XmlNode, bool, object> value))
 			{
 				MethodInfo method = typeof(DirectXmlToObject).GetMethod("ObjectFromXmlReflection", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-				DirectXmlToObject.tmpOneTypeArray[0] = type;
-				func = (Func<XmlNode, bool, object>)Delegate.CreateDelegate(typeof(Func<XmlNode, bool, object>), method.MakeGenericMethod(DirectXmlToObject.tmpOneTypeArray));
-				DirectXmlToObject.objectFromXmlMethods.Add(type, func);
+				tmpOneTypeArray[0] = type;
+				value = (Func<XmlNode, bool, object>)Delegate.CreateDelegate(typeof(Func<XmlNode, bool, object>), method.MakeGenericMethod(tmpOneTypeArray));
+				objectFromXmlMethods.Add(type, value);
 			}
-			return func;
+			return value;
 		}
 
-		
 		private static object ObjectFromXmlReflection<T>(XmlNode xmlRoot, bool doPostLoad)
 		{
-			return DirectXmlToObject.ObjectFromXml<T>(xmlRoot, doPostLoad);
+			return ObjectFromXml<T>(xmlRoot, doPostLoad);
 		}
 
-		
 		public static T ObjectFromXml<T>(XmlNode xmlRoot, bool doPostLoad)
 		{
-			MethodInfo methodInfo = DirectXmlToObject.CustomDataLoadMethodOf(typeof(T));
+			MethodInfo methodInfo = CustomDataLoadMethodOf(typeof(T));
 			if (methodInfo != null)
 			{
 				xmlRoot = XmlInheritance.GetResolvedNodeFor(xmlRoot);
-				Type type = DirectXmlToObject.ClassTypeOf<T>(xmlRoot);
-				DirectXmlToObject.currentlyInstantiatingObjectOfType.Push(type);
-				T t;
+				Type type = ClassTypeOf<T>(xmlRoot);
+				currentlyInstantiatingObjectOfType.Push(type);
+				T val;
 				try
 				{
-					t = (T)((object)Activator.CreateInstance(type));
+					val = (T)Activator.CreateInstance(type);
 				}
 				finally
 				{
-					DirectXmlToObject.currentlyInstantiatingObjectOfType.Pop();
+					currentlyInstantiatingObjectOfType.Pop();
 				}
 				try
 				{
-					methodInfo.Invoke(t, new object[]
+					methodInfo.Invoke(val, new object[1]
 					{
 						xmlRoot
 					});
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Exception in custom XML loader for ",
-						typeof(T),
-						". Node is:\n ",
-						xmlRoot.OuterXml,
-						"\n\nException is:\n ",
-						ex.ToString()
-					}), false);
-					t = default(T);
+					Log.Error("Exception in custom XML loader for " + typeof(T) + ". Node is:\n " + xmlRoot.OuterXml + "\n\nException is:\n " + ex.ToString());
+					val = default(T);
 				}
 				if (doPostLoad)
 				{
-					DirectXmlToObject.TryDoPostLoad(t);
+					TryDoPostLoad(val);
 				}
-				return t;
+				return val;
 			}
 			if (typeof(ISlateRef).IsAssignableFrom(typeof(T)))
 			{
 				try
 				{
-					return ParseHelper.FromString<T>(DirectXmlToObject.InnerTextWithReplacedNewlinesOrXML(xmlRoot));
+					return ParseHelper.FromString<T>(InnerTextWithReplacedNewlinesOrXML(xmlRoot));
 				}
 				catch (Exception ex2)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Exception parsing ",
-						xmlRoot.OuterXml,
-						" to type ",
-						typeof(T),
-						": ",
-						ex2
-					}), false);
+					Log.Error("Exception parsing " + xmlRoot.OuterXml + " to type " + typeof(T) + ": " + ex2);
 				}
 				return default(T);
 			}
@@ -98,300 +126,249 @@ namespace Verse
 			{
 				if (typeof(T) != typeof(string))
 				{
-					Log.Error("CDATA can only be used for strings. Bad xml: " + xmlRoot.OuterXml, false);
+					Log.Error("CDATA can only be used for strings. Bad xml: " + xmlRoot.OuterXml);
 					return default(T);
 				}
-				return (T)((object)xmlRoot.FirstChild.Value);
+				return (T)(object)xmlRoot.FirstChild.Value;
 			}
-			else
+			if (xmlRoot.ChildNodes.Count == 1 && xmlRoot.FirstChild.NodeType == XmlNodeType.Text)
 			{
-				if (xmlRoot.ChildNodes.Count == 1 && xmlRoot.FirstChild.NodeType == XmlNodeType.Text)
-				{
-					try
-					{
-						return ParseHelper.FromString<T>(xmlRoot.InnerText);
-					}
-					catch (Exception ex3)
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Exception parsing ",
-							xmlRoot.OuterXml,
-							" to type ",
-							typeof(T),
-							": ",
-							ex3
-						}), false);
-					}
-					return default(T);
-				}
-				if (Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
-				{
-                    List<T> list = DirectXmlToObject.ListFromXml<T>(xmlRoot);
-                    int num = 0;
-                    foreach (T t2 in list)
-                    {
-                        int num2 = (int)((object)t2);
-                        num |= num2;
-                    }
-                    return (T)((object)num);
-                }
-				if (typeof(T).HasGenericDefinition(typeof(List<>)))
-				{
-					Func<XmlNode, object> func = null;
-					if (!DirectXmlToObject.listFromXmlMethods.TryGetValue(typeof(T), out func))
-					{
-						MethodInfo method = typeof(DirectXmlToObject).GetMethod("ListFromXmlReflection", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-						Type[] genericArguments = typeof(T).GetGenericArguments();
-						func = (Func<XmlNode, object>)Delegate.CreateDelegate(typeof(Func<XmlNode, object>), method.MakeGenericMethod(genericArguments));
-						DirectXmlToObject.listFromXmlMethods.Add(typeof(T), func);
-					}
-					return (T)((object)func(xmlRoot));
-				}
-				if (typeof(T).HasGenericDefinition(typeof(Dictionary<, >)))
-				{
-					Func<XmlNode, object> func2 = null;
-					if (!DirectXmlToObject.dictionaryFromXmlMethods.TryGetValue(typeof(T), out func2))
-					{
-						MethodInfo method2 = typeof(DirectXmlToObject).GetMethod("DictionaryFromXmlReflection", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-						Type[] genericArguments2 = typeof(T).GetGenericArguments();
-						func2 = (Func<XmlNode, object>)Delegate.CreateDelegate(typeof(Func<XmlNode, object>), method2.MakeGenericMethod(genericArguments2));
-						DirectXmlToObject.dictionaryFromXmlMethods.Add(typeof(T), func2);
-					}
-					return (T)((object)func2(xmlRoot));
-				}
-				if (!xmlRoot.HasChildNodes)
-				{
-					if (typeof(T) == typeof(string))
-					{
-						return (T)((object)"");
-					}
-					XmlAttribute xmlAttribute = xmlRoot.Attributes["IsNull"];
-					if (xmlAttribute != null && xmlAttribute.Value.ToUpperInvariant() == "TRUE")
-					{
-						return default(T);
-					}
-					if (typeof(T).IsGenericType)
-					{
-						Type genericTypeDefinition = typeof(T).GetGenericTypeDefinition();
-                        if (genericTypeDefinition == typeof(List<>) || genericTypeDefinition == typeof(HashSet<>) || genericTypeDefinition == typeof(Dictionary<,>))
-                        {
-                            return Activator.CreateInstance<T>();
-                        }
-                    }
-				}
-				xmlRoot = XmlInheritance.GetResolvedNodeFor(xmlRoot);
-				Type type2 = DirectXmlToObject.ClassTypeOf<T>(xmlRoot);
-				Type type3 = Nullable.GetUnderlyingType(type2) ?? type2;
-				DirectXmlToObject.currentlyInstantiatingObjectOfType.Push(type3);
-				T t3;
 				try
 				{
-					t3 = (T)((object)Activator.CreateInstance(type3));
+					return ParseHelper.FromString<T>(xmlRoot.InnerText);
+				}
+				catch (Exception ex3)
+				{
+					Log.Error("Exception parsing " + xmlRoot.OuterXml + " to type " + typeof(T) + ": " + ex3);
+				}
+				return default(T);
+			}
+			if (Attribute.IsDefined(typeof(T), typeof(FlagsAttribute)))
+			{
+				List<T> list = ListFromXml<T>(xmlRoot);
+				int num = 0;
+				foreach (T item in list)
+				{
+					int num2 = (int)(object)item;
+					num |= num2;
+				}
+				return (T)(object)num;
+			}
+			if (typeof(T).HasGenericDefinition(typeof(List<>)))
+			{
+				Func<XmlNode, object> value = null;
+				if (!listFromXmlMethods.TryGetValue(typeof(T), out value))
+				{
+					MethodInfo method = typeof(DirectXmlToObject).GetMethod("ListFromXmlReflection", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+					Type[] genericArguments = typeof(T).GetGenericArguments();
+					value = (Func<XmlNode, object>)Delegate.CreateDelegate(typeof(Func<XmlNode, object>), method.MakeGenericMethod(genericArguments));
+					listFromXmlMethods.Add(typeof(T), value);
+				}
+				return (T)value(xmlRoot);
+			}
+			if (typeof(T).HasGenericDefinition(typeof(Dictionary<, >)))
+			{
+				Func<XmlNode, object> value2 = null;
+				if (!dictionaryFromXmlMethods.TryGetValue(typeof(T), out value2))
+				{
+					MethodInfo method2 = typeof(DirectXmlToObject).GetMethod("DictionaryFromXmlReflection", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+					Type[] genericArguments2 = typeof(T).GetGenericArguments();
+					value2 = (Func<XmlNode, object>)Delegate.CreateDelegate(typeof(Func<XmlNode, object>), method2.MakeGenericMethod(genericArguments2));
+					dictionaryFromXmlMethods.Add(typeof(T), value2);
+				}
+				return (T)value2(xmlRoot);
+			}
+			if (!xmlRoot.HasChildNodes)
+			{
+				if (typeof(T) == typeof(string))
+				{
+					return (T)(object)"";
+				}
+				XmlAttribute xmlAttribute = xmlRoot.Attributes["IsNull"];
+				if (xmlAttribute != null && xmlAttribute.Value.ToUpperInvariant() == "TRUE")
+				{
+					return default(T);
+				}
+				if (typeof(T).IsGenericType)
+				{
+					Type genericTypeDefinition = typeof(T).GetGenericTypeDefinition();
+					if (genericTypeDefinition == typeof(List<>) || genericTypeDefinition == typeof(HashSet<>) || genericTypeDefinition == typeof(Dictionary<, >))
+					{
+						return Activator.CreateInstance<T>();
+					}
+				}
+			}
+			xmlRoot = XmlInheritance.GetResolvedNodeFor(xmlRoot);
+			Type type2 = ClassTypeOf<T>(xmlRoot);
+			Type type3 = Nullable.GetUnderlyingType(type2) ?? type2;
+			currentlyInstantiatingObjectOfType.Push(type3);
+			T val2;
+			try
+			{
+				val2 = (T)Activator.CreateInstance(type3);
+			}
+			finally
+			{
+				currentlyInstantiatingObjectOfType.Pop();
+			}
+			HashSet<string> hashSet = null;
+			if (xmlRoot.ChildNodes.Count > 1)
+			{
+				hashSet = new HashSet<string>();
+			}
+			for (int i = 0; i < xmlRoot.ChildNodes.Count; i++)
+			{
+				XmlNode xmlNode = xmlRoot.ChildNodes[i];
+				if (xmlNode is XmlComment)
+				{
+					continue;
+				}
+				if (xmlRoot.ChildNodes.Count > 1)
+				{
+					if (hashSet.Contains(xmlNode.Name))
+					{
+						Log.Error("XML " + typeof(T) + " defines the same field twice: " + xmlNode.Name + ".\n\nField contents: " + xmlNode.InnerText + ".\n\nWhole XML:\n\n" + xmlRoot.OuterXml);
+					}
+					else
+					{
+						hashSet.Add(xmlNode.Name);
+					}
+				}
+				FieldInfo value3 = null;
+				DeepProfiler.Start("GetFieldInfoForType");
+				try
+				{
+					value3 = GetFieldInfoForType(val2.GetType(), xmlNode.Name, xmlRoot);
 				}
 				finally
 				{
-					DirectXmlToObject.currentlyInstantiatingObjectOfType.Pop();
+					DeepProfiler.End();
 				}
-				HashSet<string> hashSet = null;
-				if (xmlRoot.ChildNodes.Count > 1)
+				if (value3 == null)
 				{
-					hashSet = new HashSet<string>();
-				}
-				for (int i = 0; i < xmlRoot.ChildNodes.Count; i++)
-				{
-					XmlNode xmlNode = xmlRoot.ChildNodes[i];
-					if (!(xmlNode is XmlComment))
+					DeepProfiler.Start("Field search");
+					try
 					{
-						if (xmlRoot.ChildNodes.Count > 1)
+						FieldAliasCache key = new FieldAliasCache(val2.GetType(), xmlNode.Name);
+						if (!fieldAliases.TryGetValue(key, out value3))
 						{
-							if (hashSet.Contains(xmlNode.Name))
+							FieldInfo[] fields = val2.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+							foreach (FieldInfo fieldInfo in fields)
 							{
-								Log.Error(string.Concat(new object[]
+								object[] customAttributes = fieldInfo.GetCustomAttributes(typeof(LoadAliasAttribute), inherit: true);
+								for (int k = 0; k < customAttributes.Length; k++)
 								{
-									"XML ",
-									typeof(T),
-									" defines the same field twice: ",
-									xmlNode.Name,
-									".\n\nField contents: ",
-									xmlNode.InnerText,
-									".\n\nWhole XML:\n\n",
-									xmlRoot.OuterXml
-								}), false);
-							}
-							else
-							{
-								hashSet.Add(xmlNode.Name);
-							}
-						}
-						FieldInfo fieldInfo = null;
-						DeepProfiler.Start("GetFieldInfoForType");
-						try
-						{
-							fieldInfo = DirectXmlToObject.GetFieldInfoForType(t3.GetType(), xmlNode.Name, xmlRoot);
-						}
-						finally
-						{
-							DeepProfiler.End();
-						}
-						if (fieldInfo == null)
-						{
-							DeepProfiler.Start("Field search");
-							try
-							{
-								DirectXmlToObject.FieldAliasCache key = new DirectXmlToObject.FieldAliasCache(t3.GetType(), xmlNode.Name);
-								if (!DirectXmlToObject.fieldAliases.TryGetValue(key, out fieldInfo))
-								{
-									foreach (FieldInfo fieldInfo2 in t3.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+									if (((LoadAliasAttribute)customAttributes[k]).alias.EqualsIgnoreCase(xmlNode.Name))
 									{
-										object[] customAttributes = fieldInfo2.GetCustomAttributes(typeof(LoadAliasAttribute), true);
-										for (int k = 0; k < customAttributes.Length; k++)
-										{
-											if (((LoadAliasAttribute)customAttributes[k]).alias.EqualsIgnoreCase(xmlNode.Name))
-											{
-												fieldInfo = fieldInfo2;
-												break;
-											}
-										}
-										if (fieldInfo != null)
-										{
-											break;
-										}
+										value3 = fieldInfo;
+										break;
 									}
-									DirectXmlToObject.fieldAliases.Add(key, fieldInfo);
+								}
+								if (value3 != null)
+								{
+									break;
 								}
 							}
-							finally
-							{
-								DeepProfiler.End();
-							}
+							fieldAliases.Add(key, value3);
 						}
-						if (fieldInfo != null && fieldInfo.TryGetAttribute<UnsavedAttribute>() != null && !fieldInfo.TryGetAttribute<UnsavedAttribute>().allowLoading)
+					}
+					finally
+					{
+						DeepProfiler.End();
+					}
+				}
+				if (value3 != null && value3.TryGetAttribute<UnsavedAttribute>() != null && !value3.TryGetAttribute<UnsavedAttribute>().allowLoading)
+				{
+					Log.Error("XML error: " + xmlNode.OuterXml + " corresponds to a field in type " + val2.GetType().Name + " which has an Unsaved attribute. Context: " + xmlRoot.OuterXml);
+					continue;
+				}
+				if (value3 == null)
+				{
+					DeepProfiler.Start("Field search 2");
+					try
+					{
+						bool flag = false;
+						XmlAttribute xmlAttribute2 = xmlNode.Attributes?["IgnoreIfNoMatchingField"];
+						if (xmlAttribute2 != null && xmlAttribute2.Value.ToUpperInvariant() == "TRUE")
 						{
-							Log.Error(string.Concat(new string[]
-							{
-								"XML error: ",
-								xmlNode.OuterXml,
-								" corresponds to a field in type ",
-								t3.GetType().Name,
-								" which has an Unsaved attribute. Context: ",
-								xmlRoot.OuterXml
-							}), false);
+							flag = true;
 						}
 						else
 						{
-							if (fieldInfo == null)
+							object[] customAttributes = val2.GetType().GetCustomAttributes(typeof(IgnoreSavedElementAttribute), inherit: true);
+							for (int j = 0; j < customAttributes.Length; j++)
 							{
-								DeepProfiler.Start("Field search 2");
-								try
+								if (string.Equals(((IgnoreSavedElementAttribute)customAttributes[j]).elementToIgnore, xmlNode.Name, StringComparison.OrdinalIgnoreCase))
 								{
-									bool flag = false;
-									XmlAttributeCollection attributes = xmlNode.Attributes;
-									XmlAttribute xmlAttribute2 = (attributes != null) ? attributes["IgnoreIfNoMatchingField"] : null;
-									if (xmlAttribute2 != null && xmlAttribute2.Value.ToUpperInvariant() == "TRUE")
-									{
-										flag = true;
-									}
-									else
-									{
-										object[] customAttributes = t3.GetType().GetCustomAttributes(typeof(IgnoreSavedElementAttribute), true);
-										for (int j = 0; j < customAttributes.Length; j++)
-										{
-											if (string.Equals(((IgnoreSavedElementAttribute)customAttributes[j]).elementToIgnore, xmlNode.Name, StringComparison.OrdinalIgnoreCase))
-											{
-												flag = true;
-												break;
-											}
-										}
-									}
-									if (flag)
-									{
-										goto IL_958;
-									}
-									Log.Error(string.Concat(new string[]
-									{
-										"XML error: ",
-										xmlNode.OuterXml,
-										" doesn't correspond to any field in type ",
-										t3.GetType().Name,
-										". Context: ",
-										xmlRoot.OuterXml
-									}), false);
-									goto IL_958;
-								}
-								finally
-								{
-									DeepProfiler.End();
-								}
-							}
-							if (typeof(Def).IsAssignableFrom(fieldInfo.FieldType))
-							{
-								if (xmlNode.InnerText.NullOrEmpty())
-								{
-									fieldInfo.SetValue(t3, null);
-								}
-								else
-								{
-									XmlAttribute xmlAttribute3 = xmlNode.Attributes["MayRequire"];
-									DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(t3, fieldInfo, xmlNode.InnerText, (xmlAttribute3 != null) ? xmlAttribute3.Value.ToLower() : null, null);
-								}
-							}
-							else
-							{
-								object value = null;
-								try
-								{
-									value = DirectXmlToObject.GetObjectFromXmlMethod(fieldInfo.FieldType)(xmlNode, doPostLoad);
-								}
-								catch (Exception ex4)
-								{
-									Log.Error("Exception loading from " + xmlNode.ToString() + ": " + ex4.ToString(), false);
-									goto IL_958;
-								}
-								if (!typeof(T).IsValueType)
-								{
-									fieldInfo.SetValue(t3, value);
-								}
-								else
-								{
-									object obj = t3;
-									fieldInfo.SetValue(obj, value);
-									t3 = (T)((object)obj);
+									flag = true;
+									break;
 								}
 							}
 						}
+						if (!flag)
+						{
+							Log.Error("XML error: " + xmlNode.OuterXml + " doesn't correspond to any field in type " + val2.GetType().Name + ". Context: " + xmlRoot.OuterXml);
+						}
 					}
-					IL_958:;
+					finally
+					{
+						DeepProfiler.End();
+					}
+					continue;
 				}
-				if (doPostLoad)
+				if (typeof(Def).IsAssignableFrom(value3.FieldType))
 				{
-					DirectXmlToObject.TryDoPostLoad(t3);
+					if (xmlNode.InnerText.NullOrEmpty())
+					{
+						value3.SetValue(val2, null);
+						continue;
+					}
+					XmlAttribute xmlAttribute3 = xmlNode.Attributes["MayRequire"];
+					DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(val2, value3, xmlNode.InnerText, xmlAttribute3?.Value.ToLower());
+					continue;
 				}
-				return t3;
+				object obj = null;
+				try
+				{
+					obj = GetObjectFromXmlMethod(value3.FieldType)(xmlNode, doPostLoad);
+				}
+				catch (Exception ex4)
+				{
+					Log.Error("Exception loading from " + xmlNode.ToString() + ": " + ex4.ToString());
+					continue;
+				}
+				if (!typeof(T).IsValueType)
+				{
+					value3.SetValue(val2, obj);
+					continue;
+				}
+				object obj2 = val2;
+				value3.SetValue(obj2, obj);
+				val2 = (T)obj2;
 			}
-			T result;
-			return result;
+			if (doPostLoad)
+			{
+				TryDoPostLoad(val2);
+			}
+			return val2;
 		}
 
-		
 		private static Type ClassTypeOf<T>(XmlNode xmlRoot)
 		{
 			XmlAttribute xmlAttribute = xmlRoot.Attributes["Class"];
-			if (xmlAttribute == null)
+			if (xmlAttribute != null)
 			{
-				return typeof(T);
+				Type typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(xmlAttribute.Value, typeof(T).Namespace);
+				if (typeInAnyAssembly == null)
+				{
+					Log.Error("Could not find type named " + xmlAttribute.Value + " from node " + xmlRoot.OuterXml);
+					return typeof(T);
+				}
+				return typeInAnyAssembly;
 			}
-			Type typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(xmlAttribute.Value, typeof(T).Namespace);
-			if (typeInAnyAssembly == null)
-			{
-				typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(xmlAttribute.Value, typeof(T).Namespace);
-				Log.Error("Could not find type named " + xmlAttribute.Value + " from node " + xmlRoot.OuterXml, false);
-				return typeof(T);
-			}
-			return typeInAnyAssembly;
+			return typeof(T);
 		}
 
-		
 		private static void TryDoPostLoad(object obj)
 		{
 			DeepProfiler.Start("TryDoPostLoad");
@@ -405,13 +382,7 @@ namespace Verse
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception while executing PostLoad on ",
-					obj.ToStringSafe<object>(),
-					": ",
-					ex
-				}), false);
+				Log.Error("Exception while executing PostLoad on " + obj.ToStringSafe() + ": " + ex);
 			}
 			finally
 			{
@@ -419,28 +390,25 @@ namespace Verse
 			}
 		}
 
-		
 		private static object ListFromXmlReflection<T>(XmlNode listRootNode)
 		{
-			return DirectXmlToObject.ListFromXml<T>(listRootNode);
+			return ListFromXml<T>(listRootNode);
 		}
 
-		
 		private static List<T> ListFromXml<T>(XmlNode listRootNode)
 		{
 			List<T> list = new List<T>();
 			try
 			{
 				bool flag = typeof(Def).IsAssignableFrom(typeof(T));
-				foreach (object obj in listRootNode.ChildNodes)
+				foreach (XmlNode childNode in listRootNode.ChildNodes)
 				{
-					XmlNode xmlNode = (XmlNode)obj;
-					if (DirectXmlToObject.ValidateListNode(xmlNode, listRootNode, typeof(T)))
+					if (ValidateListNode(childNode, listRootNode, typeof(T)))
 					{
-						XmlAttribute xmlAttribute = xmlNode.Attributes["MayRequire"];
+						XmlAttribute xmlAttribute = childNode.Attributes["MayRequire"];
 						if (flag)
 						{
-							DirectXmlCrossRefLoader.RegisterListWantsCrossRef<T>(list, xmlNode.InnerText, listRootNode.Name, (xmlAttribute != null) ? xmlAttribute.Value : null);
+							DirectXmlCrossRefLoader.RegisterListWantsCrossRef(list, childNode.InnerText, listRootNode.Name, xmlAttribute?.Value);
 						}
 						else
 						{
@@ -448,98 +416,71 @@ namespace Verse
 							{
 								if (xmlAttribute == null || xmlAttribute.Value.NullOrEmpty() || ModsConfig.IsActive(xmlAttribute.Value))
 								{
-									list.Add(DirectXmlToObject.ObjectFromXml<T>(xmlNode, true));
+									list.Add(ObjectFromXml<T>(childNode, doPostLoad: true));
 								}
 							}
 							catch (Exception ex)
 							{
-								Log.Error(string.Concat(new object[]
-								{
-									"Exception loading list element from XML: ",
-									ex,
-									"\nXML:\n",
-									listRootNode.OuterXml
-								}), false);
+								Log.Error("Exception loading list element from XML: " + ex + "\nXML:\n" + listRootNode.OuterXml);
 							}
 						}
 					}
 				}
+				return list;
 			}
 			catch (Exception ex2)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception loading list from XML: ",
-					ex2,
-					"\nXML:\n",
-					listRootNode.OuterXml
-				}), false);
+				Log.Error("Exception loading list from XML: " + ex2 + "\nXML:\n" + listRootNode.OuterXml);
+				return list;
 			}
-			return list;
 		}
 
-		
 		private static object DictionaryFromXmlReflection<K, V>(XmlNode dictRootNode)
 		{
-			return DirectXmlToObject.DictionaryFromXml<K, V>(dictRootNode);
+			return DictionaryFromXml<K, V>(dictRootNode);
 		}
 
-		
 		private static Dictionary<K, V> DictionaryFromXml<K, V>(XmlNode dictRootNode)
 		{
 			Dictionary<K, V> dictionary = new Dictionary<K, V>();
 			try
 			{
-				bool flag = typeof(Def).IsAssignableFrom(typeof(K));
-				bool flag2 = typeof(Def).IsAssignableFrom(typeof(V));
-				if (!flag && !flag2)
+				bool num = typeof(Def).IsAssignableFrom(typeof(K));
+				bool flag = typeof(Def).IsAssignableFrom(typeof(V));
+				if (!num && !flag)
 				{
-					IEnumerator enumerator = dictRootNode.ChildNodes.GetEnumerator();
+					foreach (XmlNode childNode in dictRootNode.ChildNodes)
 					{
-						while (enumerator.MoveNext())
+						if (ValidateListNode(childNode, dictRootNode, typeof(KeyValuePair<K, V>)))
 						{
-							object obj = enumerator.Current;
-							XmlNode xmlNode = (XmlNode)obj;
-							if (DirectXmlToObject.ValidateListNode(xmlNode, dictRootNode, typeof(KeyValuePair<K, V>)))
-							{
-								K key = DirectXmlToObject.ObjectFromXml<K>(xmlNode["key"], true);
-								V value = DirectXmlToObject.ObjectFromXml<V>(xmlNode["value"], true);
-								dictionary.Add(key, value);
-							}
+							K key = ObjectFromXml<K>(childNode["key"], doPostLoad: true);
+							V value = ObjectFromXml<V>(childNode["value"], doPostLoad: true);
+							dictionary.Add(key, value);
 						}
-						goto IL_114;
 					}
+					return dictionary;
 				}
-				foreach (object obj2 in dictRootNode.ChildNodes)
+				foreach (XmlNode childNode2 in dictRootNode.ChildNodes)
 				{
-					XmlNode xmlNode2 = (XmlNode)obj2;
-					if (DirectXmlToObject.ValidateListNode(xmlNode2, dictRootNode, typeof(KeyValuePair<K, V>)))
+					if (ValidateListNode(childNode2, dictRootNode, typeof(KeyValuePair<K, V>)))
 					{
-						DirectXmlCrossRefLoader.RegisterDictionaryWantsCrossRef<K, V>(dictionary, xmlNode2, dictRootNode.Name);
+						DirectXmlCrossRefLoader.RegisterDictionaryWantsCrossRef(dictionary, childNode2, dictRootNode.Name);
 					}
 				}
-				IL_114:;
+				return dictionary;
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Malformed dictionary XML. Node: ",
-					dictRootNode.OuterXml,
-					".\n\nException: ",
-					ex
-				}), false);
+				Log.Error("Malformed dictionary XML. Node: " + dictRootNode.OuterXml + ".\n\nException: " + ex);
+				return dictionary;
 			}
-			return dictionary;
 		}
 
-		
 		private static MethodInfo CustomDataLoadMethodOf(Type type)
 		{
 			return type.GetMethod("LoadDataFromXmlCustom", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 		}
 
-		
 		private static bool ValidateListNode(XmlNode listEntryNode, XmlNode listRootNode, Type listItemType)
 		{
 			if (listEntryNode is XmlComment)
@@ -548,41 +489,40 @@ namespace Verse
 			}
 			if (listEntryNode is XmlText)
 			{
-				Log.Error("XML format error: Raw text found inside a list element. Did you mean to surround it with list item <li> tags? " + listRootNode.OuterXml, false);
+				Log.Error("XML format error: Raw text found inside a list element. Did you mean to surround it with list item <li> tags? " + listRootNode.OuterXml);
 				return false;
 			}
-			if (listEntryNode.Name != "li" && DirectXmlToObject.CustomDataLoadMethodOf(listItemType) == null)
+			if (listEntryNode.Name != "li" && CustomDataLoadMethodOf(listItemType) == null)
 			{
-				Log.Error("XML format error: List item found with name that is not <li>, and which does not have a custom XML loader method, in " + listRootNode.OuterXml, false);
+				Log.Error("XML format error: List item found with name that is not <li>, and which does not have a custom XML loader method, in " + listRootNode.OuterXml);
 				return false;
 			}
 			return true;
 		}
 
-		
 		private static FieldInfo GetFieldInfoForType(Type type, string token, XmlNode debugXmlNode)
 		{
-			Dictionary<string, FieldInfo> dictionary = DirectXmlToObject.fieldInfoLookup.TryGetValue(type, null);
+			Dictionary<string, FieldInfo> dictionary = fieldInfoLookup.TryGetValue(type);
 			if (dictionary == null)
 			{
 				dictionary = new Dictionary<string, FieldInfo>();
-				DirectXmlToObject.fieldInfoLookup[type] = dictionary;
+				fieldInfoLookup[type] = dictionary;
 			}
-			FieldInfo fieldInfo = dictionary.TryGetValue(token, null);
+			FieldInfo fieldInfo = dictionary.TryGetValue(token);
 			if (fieldInfo == null && !dictionary.ContainsKey(token))
 			{
-				fieldInfo = DirectXmlToObject.SearchTypeHierarchy(type, token, BindingFlags.Default);
+				fieldInfo = SearchTypeHierarchy(type, token, BindingFlags.Default);
 				if (fieldInfo == null)
 				{
-					fieldInfo = DirectXmlToObject.SearchTypeHierarchy(type, token, BindingFlags.IgnoreCase);
+					fieldInfo = SearchTypeHierarchy(type, token, BindingFlags.IgnoreCase);
 					if (fieldInfo != null && !type.HasAttribute<CaseInsensitiveXMLParsing>())
 					{
-						string text = string.Format("Attempt to use string {0} to refer to field {1} in type {2}; xml tags are now case-sensitive", token, fieldInfo.Name, type);
+						string text = $"Attempt to use string {token} to refer to field {fieldInfo.Name} in type {type}; xml tags are now case-sensitive";
 						if (debugXmlNode != null)
 						{
 							text = text + ". XML: " + debugXmlNode.OuterXml;
 						}
-						Log.Error(text, false);
+						Log.Error(text);
 					}
 				}
 				dictionary[token] = fieldInfo;
@@ -590,23 +530,21 @@ namespace Verse
 			return fieldInfo;
 		}
 
-		
 		private static FieldInfo SearchTypeHierarchy(Type type, string token, BindingFlags extraFlags)
 		{
-			FieldInfo field;
-			for (;;)
+			FieldInfo fieldInfo = null;
+			while (true)
 			{
-				field = type.GetField(token, extraFlags | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				if (!(field == null) || !(type.BaseType != typeof(object)))
+				fieldInfo = type.GetField(token, extraFlags | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				if (!(fieldInfo == null) || !(type.BaseType != typeof(object)))
 				{
 					break;
 				}
 				type = type.BaseType;
 			}
-			return field;
+			return fieldInfo;
 		}
 
-		
 		public static string InnerTextWithReplacedNewlinesOrXML(XmlNode xmlNode)
 		{
 			if (xmlNode.ChildNodes.Count == 1 && xmlNode.FirstChild.NodeType == XmlNodeType.Text)
@@ -614,71 +552,6 @@ namespace Verse
 				return xmlNode.InnerText.Replace("\\n", "\n");
 			}
 			return xmlNode.InnerXml;
-		}
-
-		
-		public static Stack<Type> currentlyInstantiatingObjectOfType = new Stack<Type>();
-
-		
-		public const string DictionaryKeyName = "key";
-
-		
-		public const string DictionaryValueName = "value";
-
-		
-		public const string LoadDataFromXmlCustomMethodName = "LoadDataFromXmlCustom";
-
-		
-		public const string PostLoadMethodName = "PostLoad";
-
-		
-		public const string ObjectFromXmlMethodName = "ObjectFromXmlReflection";
-
-		
-		public const string ListFromXmlMethodName = "ListFromXmlReflection";
-
-		
-		public const string DictionaryFromXmlMethodName = "DictionaryFromXmlReflection";
-
-		
-		private static Dictionary<Type, Func<XmlNode, object>> listFromXmlMethods = new Dictionary<Type, Func<XmlNode, object>>();
-
-		
-		private static Dictionary<Type, Func<XmlNode, object>> dictionaryFromXmlMethods = new Dictionary<Type, Func<XmlNode, object>>();
-
-		
-		private static readonly Type[] tmpOneTypeArray = new Type[1];
-
-		
-		private static readonly Dictionary<Type, Func<XmlNode, bool, object>> objectFromXmlMethods = new Dictionary<Type, Func<XmlNode, bool, object>>();
-
-		
-		private static Dictionary<DirectXmlToObject.FieldAliasCache, FieldInfo> fieldAliases = new Dictionary<DirectXmlToObject.FieldAliasCache, FieldInfo>(EqualityComparer<DirectXmlToObject.FieldAliasCache>.Default);
-
-		
-		private static Dictionary<Type, Dictionary<string, FieldInfo>> fieldInfoLookup = new Dictionary<Type, Dictionary<string, FieldInfo>>();
-
-		
-		private struct FieldAliasCache : IEquatable<DirectXmlToObject.FieldAliasCache>
-		{
-			
-			public FieldAliasCache(Type type, string fieldName)
-			{
-				this.type = type;
-				this.fieldName = fieldName.ToLower();
-			}
-
-			
-			public bool Equals(DirectXmlToObject.FieldAliasCache other)
-			{
-				return this.type == other.type && string.Equals(this.fieldName, other.fieldName);
-			}
-
-			
-			public Type type;
-
-			
-			public string fieldName;
 		}
 	}
 }

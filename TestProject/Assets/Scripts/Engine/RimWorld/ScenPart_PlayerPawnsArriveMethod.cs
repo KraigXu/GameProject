@@ -1,105 +1,90 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenPart_PlayerPawnsArriveMethod : ScenPart
 	{
-		
+		private PlayerPawnsArriveMethod method;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<PlayerPawnsArriveMethod>(ref this.method, "method", PlayerPawnsArriveMethod.Standing, false);
+			Scribe_Values.Look(ref method, "method", PlayerPawnsArriveMethod.Standing);
 		}
 
-		
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
-			if (Widgets.ButtonText(listing.GetScenPartRect(this, ScenPart.RowHeight), this.method.ToStringHuman(), true, true, true))
+			if (Widgets.ButtonText(listing.GetScenPartRect(this, ScenPart.RowHeight), method.ToStringHuman()))
 			{
 				List<FloatMenuOption> list = new List<FloatMenuOption>();
-				foreach (object obj in Enum.GetValues(typeof(PlayerPawnsArriveMethod)))
+				foreach (PlayerPawnsArriveMethod value in Enum.GetValues(typeof(PlayerPawnsArriveMethod)))
 				{
-					PlayerPawnsArriveMethod localM2 = (PlayerPawnsArriveMethod)obj;
-					PlayerPawnsArriveMethod localM = localM2;
+					PlayerPawnsArriveMethod localM = value;
 					list.Add(new FloatMenuOption(localM.ToStringHuman(), delegate
 					{
-						this.method = localM;
-					}, MenuOptionPriority.Default, null, null, 0f, null, null));
+						method = localM;
+					}));
 				}
 				Find.WindowStack.Add(new FloatMenu(list));
 			}
 		}
 
-		
 		public override string Summary(Scenario scen)
 		{
-			if (this.method == PlayerPawnsArriveMethod.DropPods)
+			if (method == PlayerPawnsArriveMethod.DropPods)
 			{
 				return "ScenPart_ArriveInDropPods".Translate();
 			}
 			return null;
 		}
 
-		
 		public override void Randomize()
 		{
-			this.method = ((Rand.Value < 0.5f) ? PlayerPawnsArriveMethod.DropPods : PlayerPawnsArriveMethod.Standing);
+			method = ((Rand.Value < 0.5f) ? PlayerPawnsArriveMethod.DropPods : PlayerPawnsArriveMethod.Standing);
 		}
 
-		
 		public override void GenerateIntoMap(Map map)
 		{
-			if (Find.GameInitData == null)
+			if (Find.GameInitData != null)
 			{
-				return;
-			}
-			List<List<Thing>> list = new List<List<Thing>>();
-			foreach (Pawn item in Find.GameInitData.startingAndOptionalPawns)
-			{
-				list.Add(new List<Thing>
+				List<List<Thing>> list = new List<List<Thing>>();
+				foreach (Pawn startingAndOptionalPawn in Find.GameInitData.startingAndOptionalPawns)
 				{
-					item
-				});
-			}
-			List<Thing> list2 = new List<Thing>();
-			foreach (ScenPart scenPart in Find.Scenario.AllParts)
-			{
-				list2.AddRange(scenPart.PlayerStartingThings());
-			}
-			int num = 0;
-			foreach (Thing thing in list2)
-			{
-				if (thing.def.CanHaveFaction)
-				{
-					thing.SetFactionDirect(Faction.OfPlayer);
+					List<Thing> list2 = new List<Thing>();
+					list2.Add(startingAndOptionalPawn);
+					list.Add(list2);
 				}
-				list[num].Add(thing);
-				num++;
-				if (num >= list.Count)
+				List<Thing> list3 = new List<Thing>();
+				foreach (ScenPart allPart in Find.Scenario.AllParts)
 				{
-					num = 0;
+					list3.AddRange(allPart.PlayerStartingThings());
 				}
+				int num = 0;
+				foreach (Thing item in list3)
+				{
+					if (item.def.CanHaveFaction)
+					{
+						item.SetFactionDirect(Faction.OfPlayer);
+					}
+					list[num].Add(item);
+					num++;
+					if (num >= list.Count)
+					{
+						num = 0;
+					}
+				}
+				DropPodUtility.DropThingGroupsNear_NewTmp(MapGenerator.PlayerStartSpot, map, list, 110, Find.GameInitData.QuickStarted || method != PlayerPawnsArriveMethod.DropPods, leaveSlag: true, canRoofPunch: true, forbid: true, allowFogged: false);
 			}
-			DropPodUtility.DropThingGroupsNear_NewTmp(MapGenerator.PlayerStartSpot, map, list, 110, Find.GameInitData.QuickStarted || this.method != PlayerPawnsArriveMethod.DropPods, true, true, true, false);
 		}
 
-		
 		public override void PostMapGenerate(Map map)
 		{
-			if (Find.GameInitData == null)
-			{
-				return;
-			}
-			if (this.method == PlayerPawnsArriveMethod.DropPods)
+			if (Find.GameInitData != null && method == PlayerPawnsArriveMethod.DropPods)
 			{
 				PawnUtility.GiveAllStartingPlayerPawnsThought(ThoughtDefOf.CrashedTogether);
 			}
 		}
-
-		
-		private PlayerPawnsArriveMethod method;
 	}
 }

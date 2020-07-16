@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,50 +5,30 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordToil_ExitMapAndEscortCarriers : LordToil
 	{
-		
-		
-		public override bool AllowSatisfyLongNeeds
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool AllowSatisfyLongNeeds => false;
 
-		
-		
-		public override bool AllowSelfTend
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool AllowSelfTend => false;
 
-		
 		public override void UpdateAllDuties()
 		{
-			Pawn trader;
-			this.UpdateTraderDuty(out trader);
-			this.UpdateCarriersDuties(trader);
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			UpdateTraderDuty(out Pawn trader);
+			UpdateCarriersDuties(trader);
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn p = this.lord.ownedPawns[i];
+				Pawn p = lord.ownedPawns[i];
 				TraderCaravanRole traderCaravanRole = p.GetTraderCaravanRole();
 				if (traderCaravanRole != TraderCaravanRole.Carrier && traderCaravanRole != TraderCaravanRole.Trader)
 				{
-					this.UpdateDutyForChattelOrGuard(p, trader);
+					UpdateDutyForChattelOrGuard(p, trader);
 				}
 			}
 		}
 
-		
 		private void UpdateTraderDuty(out Pawn trader)
 		{
-			trader = TraderCaravanUtility.FindTrader(this.lord);
+			trader = TraderCaravanUtility.FindTrader(lord);
 			if (trader != null)
 			{
 				trader.mindState.duty = new PawnDuty(DutyDefOf.ExitMapBestAndDefendSelf);
@@ -58,28 +37,24 @@ namespace RimWorld
 			}
 		}
 
-		
 		private void UpdateCarriersDuties(Pawn trader)
 		{
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn pawn = this.lord.ownedPawns[i];
+				Pawn pawn = lord.ownedPawns[i];
 				if (pawn.GetTraderCaravanRole() == TraderCaravanRole.Carrier)
 				{
 					if (trader != null)
 					{
 						pawn.mindState.duty = new PawnDuty(DutyDefOf.Follow, trader, 5f);
+						continue;
 					}
-					else
-					{
-						pawn.mindState.duty = new PawnDuty(DutyDefOf.ExitMapBest);
-						pawn.mindState.duty.locomotion = LocomotionUrgency.Jog;
-					}
+					pawn.mindState.duty = new PawnDuty(DutyDefOf.ExitMapBest);
+					pawn.mindState.duty.locomotion = LocomotionUrgency.Jog;
 				}
 			}
 		}
 
-		
 		private void UpdateDutyForChattelOrGuard(Pawn p, Pawn trader)
 		{
 			if (p.GetTraderCaravanRole() == TraderCaravanRole.Chattel)
@@ -87,17 +62,15 @@ namespace RimWorld
 				if (trader != null)
 				{
 					p.mindState.duty = new PawnDuty(DutyDefOf.Escort, trader, 14f);
-					return;
 				}
-				if (!this.TryToDefendClosestCarrier(p, 14f))
+				else if (!TryToDefendClosestCarrier(p, 14f))
 				{
 					p.mindState.duty = new PawnDuty(DutyDefOf.ExitMapBestAndDefendSelf);
 					p.mindState.duty.radius = 10f;
 					p.mindState.duty.locomotion = LocomotionUrgency.Jog;
-					return;
 				}
 			}
-			else if (!this.TryToDefendClosestCarrier(p, 26f))
+			else if (!TryToDefendClosestCarrier(p, 26f))
 			{
 				if (trader != null)
 				{
@@ -110,20 +83,19 @@ namespace RimWorld
 			}
 		}
 
-		
 		private bool TryToDefendClosestCarrier(Pawn p, float escortRadius)
 		{
-			Pawn closestCarrier = this.GetClosestCarrier(p);
-			Thing thing = GenClosest.ClosestThingReachable(p.Position, p.Map, ThingRequest.ForGroup(ThingRequestGroup.Corpse), PathEndMode.ClosestTouch, TraverseParms.For(p, Danger.Deadly, TraverseMode.ByPawn, false), 20f, delegate(Thing x)
+			Pawn closestCarrier = GetClosestCarrier(p);
+			Thing thing = GenClosest.ClosestThingReachable(p.Position, p.Map, ThingRequest.ForGroup(ThingRequestGroup.Corpse), PathEndMode.ClosestTouch, TraverseParms.For(p), 20f, delegate(Thing x)
 			{
 				Pawn innerPawn = ((Corpse)x).InnerPawn;
 				return innerPawn.Faction == p.Faction && innerPawn.RaceProps.packAnimal;
-			}, null, 0, 15, false, RegionType.Set_Passable, false);
-			Thing thing2 = GenClosest.ClosestThingReachable(p.Position, p.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.ClosestTouch, TraverseParms.For(p, Danger.Deadly, TraverseMode.ByPawn, false), 20f, delegate(Thing x)
+			}, null, 0, 15);
+			Thing thing2 = GenClosest.ClosestThingReachable(p.Position, p.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.ClosestTouch, TraverseParms.For(p), 20f, delegate(Thing x)
 			{
 				Pawn pawn = (Pawn)x;
 				return pawn.Downed && pawn.Faction == p.Faction && pawn.GetTraderCaravanRole() == TraderCaravanRole.Carrier;
-			}, null, 0, 15, false, RegionType.Set_Passable, false);
+			}, null, 0, 15);
 			Thing thing3 = null;
 			if (closestCarrier != null)
 			{
@@ -146,7 +118,7 @@ namespace RimWorld
 				p.mindState.duty = new PawnDuty(DutyDefOf.Escort, thing3, escortRadius);
 				return true;
 			}
-			if (!GenHostility.AnyHostileActiveThreatTo(base.Map, this.lord.faction, true))
+			if (!GenHostility.AnyHostileActiveThreatTo(base.Map, lord.faction, countDormantPawnsAsHostile: true))
 			{
 				return false;
 			}
@@ -154,18 +126,20 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool IsDefendingPosition(Pawn pawn)
 		{
-			return pawn.mindState.duty != null && pawn.mindState.duty.def == DutyDefOf.Defend;
+			if (pawn.mindState.duty != null)
+			{
+				return pawn.mindState.duty.def == DutyDefOf.Defend;
+			}
+			return false;
 		}
 
-		
 		public static bool IsAnyDefendingPosition(List<Pawn> pawns)
 		{
 			for (int i = 0; i < pawns.Count; i++)
 			{
-				if (LordToil_ExitMapAndEscortCarriers.IsDefendingPosition(pawns[i]))
+				if (IsDefendingPosition(pawns[i]))
 				{
 					return true;
 				}
@@ -173,17 +147,16 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private Pawn GetClosestCarrier(Pawn closestTo)
 		{
 			Pawn pawn = null;
 			float num = 0f;
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				Pawn pawn2 = this.lord.ownedPawns[i];
+				Pawn pawn2 = lord.ownedPawns[i];
 				if (pawn2.GetTraderCaravanRole() == TraderCaravanRole.Carrier)
 				{
-					float num2 = (float)pawn2.Position.DistanceToSquared(closestTo.Position);
+					float num2 = pawn2.Position.DistanceToSquared(closestTo.Position);
 					if (pawn == null || num2 < num)
 					{
 						pawn = pawn2;

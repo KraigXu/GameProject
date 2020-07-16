@@ -1,80 +1,75 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Lesson_Note : Lesson
 	{
-		
-		
-		public bool Expiring
-		{
-			get
-			{
-				return this.expiryTime < float.MaxValue;
-			}
-		}
+		public ConceptDef def;
 
-		
-		
+		public bool doFadeIn = true;
+
+		private float expiryTime = float.MaxValue;
+
+		private const float RectWidth = 500f;
+
+		private const float TextWidth = 432f;
+
+		private const float FadeInDuration = 0.4f;
+
+		private const float DoneButPad = 8f;
+
+		private const float DoneButSize = 32f;
+
+		private const float ExpiryDuration = 2.1f;
+
+		private const float ExpiryFadeTime = 1.1f;
+
+		public bool Expiring => expiryTime < float.MaxValue;
+
 		public Rect MainRect
 		{
 			get
 			{
-				float height = Text.CalcHeight(this.def.HelpTextAdjusted, 432f) + 20f;
+				float height = Text.CalcHeight(def.HelpTextAdjusted, 432f) + 20f;
 				return new Rect(Messages.MessagesTopLeftStandard.x, 0f, 500f, height);
 			}
 		}
 
-		
-		
-		public override float MessagesYOffset
-		{
-			get
-			{
-				return this.MainRect.height;
-			}
-		}
+		public override float MessagesYOffset => MainRect.height;
 
-		
 		public Lesson_Note()
 		{
 		}
 
-		
 		public Lesson_Note(ConceptDef concept)
 		{
-			this.def = concept;
+			def = concept;
 		}
 
-		
 		public override void ExposeData()
 		{
-			Scribe_Defs.Look<ConceptDef>(ref this.def, "def");
+			Scribe_Defs.Look(ref def, "def");
 		}
 
-		
 		public override void OnActivated()
 		{
 			base.OnActivated();
-			SoundDefOf.TutorMessageAppear.PlayOneShotOnCamera(null);
+			SoundDefOf.TutorMessageAppear.PlayOneShotOnCamera();
 		}
 
-		
 		public override void LessonOnGUI()
 		{
-			Rect mainRect = this.MainRect;
+			Rect mainRect = MainRect;
 			float alpha = 1f;
-			if (this.doFadeIn)
+			if (doFadeIn)
 			{
 				alpha = Mathf.Clamp01(base.AgeSeconds / 0.4f);
 			}
-			if (this.Expiring)
+			if (Expiring)
 			{
-				float num = this.expiryTime - Time.timeSinceLevelLoad;
+				float num = expiryTime - Time.timeSinceLevelLoad;
 				if (num < 1.1f)
 				{
 					alpha = num / 1.1f;
@@ -84,86 +79,46 @@ namespace RimWorld
 			{
 				Rect rect = mainRect.AtZero();
 				Text.Font = GameFont.Small;
-				if (!this.Expiring)
+				if (!Expiring)
 				{
-					this.def.HighlightAllTags();
+					def.HighlightAllTags();
 				}
-				if (this.doFadeIn || this.Expiring)
+				if (doFadeIn || Expiring)
 				{
 					GUI.color = new Color(1f, 1f, 1f, alpha);
 				}
 				Widgets.DrawWindowBackgroundTutor(rect);
 				Rect rect2 = rect.ContractedBy(10f);
 				rect2.width = 432f;
-				Widgets.Label(rect2, this.def.HelpTextAdjusted);
+				Widgets.Label(rect2, def.HelpTextAdjusted);
 				Rect butRect = new Rect(rect.xMax - 32f - 8f, rect.y + 8f, 32f, 32f);
-				Texture2D tex;
-				if (this.Expiring)
+				Texture2D tex = (!Expiring) ? TexButton.CloseXBig : Widgets.CheckboxOnTex;
+				if (Widgets.ButtonImage(butRect, tex, new Color(0.95f, 0.95f, 0.95f), new Color(71f / 85f, 2f / 3f, 14f / 51f)))
 				{
-					tex = Widgets.CheckboxOnTex;
+					SoundDefOf.Click.PlayOneShotOnCamera();
+					CloseButtonClicked();
 				}
-				else
+				if (Time.timeSinceLevelLoad > expiryTime)
 				{
-					tex = TexButton.CloseXBig;
-				}
-				if (Widgets.ButtonImage(butRect, tex, new Color(0.95f, 0.95f, 0.95f), new Color(0.8352941f, 0.6666667f, 0.274509817f), true))
-				{
-					SoundDefOf.Click.PlayOneShotOnCamera(null);
-					this.CloseButtonClicked();
-				}
-				if (Time.timeSinceLevelLoad > this.expiryTime)
-				{
-					this.CloseButtonClicked();
+					CloseButtonClicked();
 				}
 				GUI.color = Color.white;
-			}, false, false, alpha);
+			}, doBackground: false, absorbInputAroundWindow: false, alpha);
 		}
 
-		
 		private void CloseButtonClicked()
 		{
-			KnowledgeAmount know = this.def.noteTeaches ? KnowledgeAmount.NoteTaught : KnowledgeAmount.NoteClosed;
-			PlayerKnowledgeDatabase.KnowledgeDemonstrated(this.def, know);
+			KnowledgeAmount know = def.noteTeaches ? KnowledgeAmount.NoteTaught : KnowledgeAmount.NoteClosed;
+			PlayerKnowledgeDatabase.KnowledgeDemonstrated(def, know);
 			Find.ActiveLesson.Deactivate();
 		}
 
-		
 		public override void Notify_KnowledgeDemonstrated(ConceptDef conc)
 		{
-			if (this.def == conc && PlayerKnowledgeDatabase.GetKnowledge(conc) > 0.2f && !this.Expiring)
+			if (def == conc && PlayerKnowledgeDatabase.GetKnowledge(conc) > 0.2f && !Expiring)
 			{
-				this.expiryTime = Time.timeSinceLevelLoad + 2.1f;
+				expiryTime = Time.timeSinceLevelLoad + 2.1f;
 			}
 		}
-
-		
-		public ConceptDef def;
-
-		
-		public bool doFadeIn = true;
-
-		
-		private float expiryTime = float.MaxValue;
-
-		
-		private const float RectWidth = 500f;
-
-		
-		private const float TextWidth = 432f;
-
-		
-		private const float FadeInDuration = 0.4f;
-
-		
-		private const float DoneButPad = 8f;
-
-		
-		private const float DoneButSize = 32f;
-
-		
-		private const float ExpiryDuration = 2.1f;
-
-		
-		private const float ExpiryFadeTime = 1.1f;
 	}
 }

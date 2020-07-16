@@ -1,98 +1,96 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse.Grammar;
 
 namespace Verse
 {
-	
 	public class RulePackDef : Def
 	{
-		
-		
+		public List<RulePackDef> include;
+
+		private RulePack rulePack;
+
+		[Unsaved(false)]
+		private List<Rule> cachedRules;
+
+		[Unsaved(false)]
+		private List<Rule> cachedUntranslatedRules;
+
 		public List<Rule> RulesPlusIncludes
 		{
 			get
 			{
-				if (this.cachedRules == null)
+				if (cachedRules == null)
 				{
-					this.cachedRules = new List<Rule>();
-					if (this.rulePack != null)
+					cachedRules = new List<Rule>();
+					if (rulePack != null)
 					{
-						this.cachedRules.AddRange(this.rulePack.Rules);
+						cachedRules.AddRange(rulePack.Rules);
 					}
-					if (this.include != null)
+					if (include != null)
 					{
-						for (int i = 0; i < this.include.Count; i++)
+						for (int i = 0; i < include.Count; i++)
 						{
-							this.cachedRules.AddRange(this.include[i].RulesPlusIncludes);
+							cachedRules.AddRange(include[i].RulesPlusIncludes);
 						}
 					}
 				}
-				return this.cachedRules;
+				return cachedRules;
 			}
 		}
 
-		
-		
 		public List<Rule> UntranslatedRulesPlusIncludes
 		{
 			get
 			{
-				if (this.cachedUntranslatedRules == null)
+				if (cachedUntranslatedRules == null)
 				{
-					this.cachedUntranslatedRules = new List<Rule>();
-					if (this.rulePack != null)
+					cachedUntranslatedRules = new List<Rule>();
+					if (rulePack != null)
 					{
-						this.cachedUntranslatedRules.AddRange(this.rulePack.UntranslatedRules);
+						cachedUntranslatedRules.AddRange(rulePack.UntranslatedRules);
 					}
-					if (this.include != null)
+					if (include != null)
 					{
-						for (int i = 0; i < this.include.Count; i++)
+						for (int i = 0; i < include.Count; i++)
 						{
-							this.cachedUntranslatedRules.AddRange(this.include[i].UntranslatedRulesPlusIncludes);
+							cachedUntranslatedRules.AddRange(include[i].UntranslatedRulesPlusIncludes);
 						}
 					}
 				}
-				return this.cachedUntranslatedRules;
+				return cachedUntranslatedRules;
 			}
 		}
 
-		
-		
 		public List<Rule> RulesImmediate
 		{
 			get
 			{
-				if (this.rulePack == null)
+				if (rulePack == null)
 				{
 					return null;
 				}
-				return this.rulePack.Rules;
+				return rulePack.Rules;
 			}
 		}
 
-		
-		
 		public List<Rule> UntranslatedRulesImmediate
 		{
 			get
 			{
-				if (this.rulePack == null)
+				if (rulePack == null)
 				{
 					return null;
 				}
-				return this.rulePack.UntranslatedRules;
+				return rulePack.UntranslatedRules;
 			}
 		}
 
-		
-		
 		public string FirstRuleKeyword
 		{
 			get
 			{
-				List<Rule> rulesPlusIncludes = this.RulesPlusIncludes;
-				if (!rulesPlusIncludes.Any<Rule>())
+				List<Rule> rulesPlusIncludes = RulesPlusIncludes;
+				if (!rulesPlusIncludes.Any())
 				{
 					return "none";
 				}
@@ -100,14 +98,12 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public string FirstUntranslatedRuleKeyword
 		{
 			get
 			{
-				List<Rule> untranslatedRulesPlusIncludes = this.UntranslatedRulesPlusIncludes;
-				if (!untranslatedRulesPlusIncludes.Any<Rule>())
+				List<Rule> untranslatedRulesPlusIncludes = UntranslatedRulesPlusIncludes;
+				if (!untranslatedRulesPlusIncludes.Any())
 				{
 					return "none";
 				}
@@ -115,48 +111,28 @@ namespace Verse
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			if (this.include != null)
+			if (include == null)
 			{
-				int num;
-				for (int i = 0; i < this.include.Count; i = num + 1)
+				yield break;
+			}
+			for (int i = 0; i < include.Count; i++)
+			{
+				if (include[i].include != null && include[i].include.Contains(this))
 				{
-					if (this.include[i].include != null && this.include[i].include.Contains(this))
-					{
-						yield return "includes other RulePackDef which includes it: " + this.include[i].defName;
-					}
-					num = i;
+					yield return "includes other RulePackDef which includes it: " + include[i].defName;
 				}
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static RulePackDef Named(string defName)
 		{
-			return DefDatabase<RulePackDef>.GetNamed(defName, true);
+			return DefDatabase<RulePackDef>.GetNamed(defName);
 		}
-
-		
-		public List<RulePackDef> include;
-
-		
-		private RulePack rulePack;
-
-		
-		[Unsaved(false)]
-		private List<Rule> cachedRules;
-
-		
-		[Unsaved(false)]
-		private List<Rule> cachedUntranslatedRules;
 	}
 }

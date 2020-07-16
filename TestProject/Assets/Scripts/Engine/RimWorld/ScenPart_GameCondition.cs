@@ -1,82 +1,66 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenPart_GameCondition : ScenPart
 	{
-		
-		
-		public override string Label
-		{
-			get
-			{
-				return this.def.gameCondition.LabelCap;
-			}
-		}
+		private float durationDays;
 
-		
+		private string durationDaysBuf;
+
+		public override string Label => def.gameCondition.LabelCap;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.durationDays, "durationDayS", 0f, false);
+			Scribe_Values.Look(ref durationDays, "durationDayS", 0f);
 		}
 
-		
 		public override string Summary(Scenario scen)
 		{
-			return this.def.gameCondition.LabelCap + ": " + this.def.gameCondition.description + " (" + ((int)(this.durationDays * 60000f)).ToStringTicksToDays("F1") + ")";
+			return def.gameCondition.LabelCap + ": " + def.gameCondition.description + " (" + ((int)(durationDays * 60000f)).ToStringTicksToDays() + ")";
 		}
 
-		
 		public override void Randomize()
 		{
-			this.durationDays = Mathf.Round(this.def.durationRandomRange.RandomInRange);
+			durationDays = Mathf.Round(def.durationRandomRange.RandomInRange);
 		}
 
-		
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
-			Widgets.TextFieldNumericLabeled<float>(listing.GetScenPartRect(this, ScenPart.RowHeight), "durationDays".Translate(), ref this.durationDays, ref this.durationDaysBuf, 0f, 1E+09f);
+			Widgets.TextFieldNumericLabeled(listing.GetScenPartRect(this, ScenPart.RowHeight), "durationDays".Translate(), ref durationDays, ref durationDaysBuf);
 		}
 
-		
 		public override void GenerateIntoMap(Map map)
 		{
-			if (!this.def.gameConditionTargetsWorld)
+			if (!def.gameConditionTargetsWorld)
 			{
-				map.gameConditionManager.RegisterCondition(this.MakeCondition());
+				map.gameConditionManager.RegisterCondition(MakeCondition());
 			}
 		}
 
-		
 		public override void PostWorldGenerate()
 		{
-			if (this.def.gameConditionTargetsWorld)
+			if (def.gameConditionTargetsWorld)
 			{
-				Find.World.gameConditionManager.RegisterCondition(this.MakeCondition());
+				Find.World.gameConditionManager.RegisterCondition(MakeCondition());
 			}
 		}
 
-		
 		private GameCondition MakeCondition()
 		{
-			return GameConditionMaker.MakeCondition(this.def.gameCondition, (int)(this.durationDays * 60000f));
+			return GameConditionMaker.MakeCondition(def.gameCondition, (int)(durationDays * 60000f));
 		}
 
-		
 		public override bool CanCoexistWith(ScenPart other)
 		{
 			ScenPart_GameCondition scenPart_GameCondition = other as ScenPart_GameCondition;
-			return scenPart_GameCondition == null || scenPart_GameCondition.def.gameCondition.CanCoexistWith(this.def.gameCondition);
+			if (scenPart_GameCondition != null && !scenPart_GameCondition.def.gameCondition.CanCoexistWith(def.gameCondition))
+			{
+				return false;
+			}
+			return true;
 		}
-
-		
-		private float durationDays;
-
-		
-		private string durationDaysBuf;
 	}
 }

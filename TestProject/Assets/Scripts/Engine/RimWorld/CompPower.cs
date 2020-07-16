@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,275 +5,225 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public abstract class CompPower : ThingComp
 	{
-		
-		
-		public bool TransmitsPowerNow
-		{
-			get
-			{
-				return ((Building)this.parent).TransmitsPowerNow;
-			}
-		}
+		public PowerNet transNet;
 
-		
-		
+		public CompPower connectParent;
+
+		public List<CompPower> connectChildren;
+
+		private static List<PowerNet> recentlyConnectedNets = new List<PowerNet>();
+
+		private static CompPower lastManualReconnector = null;
+
+		public static readonly float WattsToWattDaysPerTick = 1.66666669E-05f;
+
+		public bool TransmitsPowerNow => ((Building)parent).TransmitsPowerNow;
+
 		public PowerNet PowerNet
 		{
 			get
 			{
-				if (this.transNet != null)
+				if (transNet != null)
 				{
-					return this.transNet;
+					return transNet;
 				}
-				if (this.connectParent != null)
+				if (connectParent != null)
 				{
-					return this.connectParent.transNet;
+					return connectParent.transNet;
 				}
 				return null;
 			}
 		}
 
-		
-		
-		public CompProperties_Power Props
-		{
-			get
-			{
-				return (CompProperties_Power)this.props;
-			}
-		}
+		public CompProperties_Power Props => (CompProperties_Power)props;
 
-		
 		public virtual void ResetPowerVars()
 		{
-			this.transNet = null;
-			this.connectParent = null;
-			this.connectChildren = null;
-			CompPower.recentlyConnectedNets.Clear();
-			CompPower.lastManualReconnector = null;
+			transNet = null;
+			connectParent = null;
+			connectChildren = null;
+			recentlyConnectedNets.Clear();
+			lastManualReconnector = null;
 		}
 
-		
 		public virtual void SetUpPowerVars()
 		{
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Thing thing = null;
-			if (Scribe.mode == LoadSaveMode.Saving && this.connectParent != null)
+			Thing refee = null;
+			if (Scribe.mode == LoadSaveMode.Saving && connectParent != null)
 			{
-				thing = this.connectParent.parent;
+				refee = connectParent.parent;
 			}
-			Scribe_References.Look<Thing>(ref thing, "parentThing", false);
-			if (thing != null)
+			Scribe_References.Look(ref refee, "parentThing");
+			if (refee != null)
 			{
-				this.connectParent = ((ThingWithComps)thing).GetComp<CompPower>();
+				connectParent = ((ThingWithComps)refee).GetComp<CompPower>();
 			}
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.connectParent != null)
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && connectParent != null)
 			{
-				this.ConnectToTransmitter(this.connectParent, true);
+				ConnectToTransmitter(connectParent, reconnectingAfterLoading: true);
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			if (this.Props.transmitsPower || this.parent.def.ConnectToPower)
+			if (Props.transmitsPower || parent.def.ConnectToPower)
 			{
-				this.parent.Map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.PowerGrid, true, false);
-				if (this.Props.transmitsPower)
+				parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlag.PowerGrid, regenAdjacentCells: true, regenAdjacentSections: false);
+				if (Props.transmitsPower)
 				{
-					this.parent.Map.powerNetManager.Notify_TransmitterSpawned(this);
+					parent.Map.powerNetManager.Notify_TransmitterSpawned(this);
 				}
-				if (this.parent.def.ConnectToPower)
+				if (parent.def.ConnectToPower)
 				{
-					this.parent.Map.powerNetManager.Notify_ConnectorWantsConnect(this);
+					parent.Map.powerNetManager.Notify_ConnectorWantsConnect(this);
 				}
-				this.SetUpPowerVars();
+				SetUpPowerVars();
 			}
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
-			if (this.Props.transmitsPower || this.parent.def.ConnectToPower)
+			if (!Props.transmitsPower && !parent.def.ConnectToPower)
 			{
-				if (this.Props.transmitsPower)
-				{
-					if (this.connectChildren != null)
-					{
-						for (int i = 0; i < this.connectChildren.Count; i++)
-						{
-							this.connectChildren[i].LostConnectParent();
-						}
-					}
-					map.powerNetManager.Notify_TransmitterDespawned(this);
-				}
-				if (this.parent.def.ConnectToPower)
-				{
-					map.powerNetManager.Notify_ConnectorDespawned(this);
-				}
-				map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.PowerGrid, true, false);
+				return;
 			}
+			if (Props.transmitsPower)
+			{
+				if (connectChildren != null)
+				{
+					for (int i = 0; i < connectChildren.Count; i++)
+					{
+						connectChildren[i].LostConnectParent();
+					}
+				}
+				map.powerNetManager.Notify_TransmitterDespawned(this);
+			}
+			if (parent.def.ConnectToPower)
+			{
+				map.powerNetManager.Notify_ConnectorDespawned(this);
+			}
+			map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlag.PowerGrid, regenAdjacentCells: true, regenAdjacentSections: false);
 		}
 
-		
 		public virtual void LostConnectParent()
 		{
-			this.connectParent = null;
-			if (this.parent.Spawned)
+			connectParent = null;
+			if (parent.Spawned)
 			{
-				this.parent.Map.powerNetManager.Notify_ConnectorWantsConnect(this);
+				parent.Map.powerNetManager.Notify_ConnectorWantsConnect(this);
 			}
 		}
 
-		
 		public override void PostPrintOnto(SectionLayer layer)
 		{
 			base.PostPrintOnto(layer);
-			if (this.connectParent != null)
+			if (connectParent != null)
 			{
-				PowerNetGraphics.PrintWirePieceConnecting(layer, this.parent, this.connectParent.parent, false);
+				PowerNetGraphics.PrintWirePieceConnecting(layer, parent, connectParent.parent, forPowerOverlay: false);
 			}
 		}
 
-		
 		public override void CompPrintForPowerGrid(SectionLayer layer)
 		{
-			if (this.TransmitsPowerNow)
+			if (TransmitsPowerNow)
 			{
-				PowerOverlayMats.LinkedOverlayGraphic.Print(layer, this.parent);
+				PowerOverlayMats.LinkedOverlayGraphic.Print(layer, parent);
 			}
-			if (this.parent.def.ConnectToPower)
+			if (parent.def.ConnectToPower)
 			{
-				PowerNetGraphics.PrintOverlayConnectorBaseFor(layer, this.parent);
+				PowerNetGraphics.PrintOverlayConnectorBaseFor(layer, parent);
 			}
-			if (this.connectParent != null)
+			if (connectParent != null)
 			{
-				PowerNetGraphics.PrintWirePieceConnecting(layer, this.parent, this.connectParent.parent, true);
+				PowerNetGraphics.PrintWirePieceConnecting(layer, parent, connectParent.parent, forPowerOverlay: true);
 			}
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (this.connectParent != null && this.parent.Faction == Faction.OfPlayer)
+			foreach (Gizmo item in base.CompGetGizmosExtra())
 			{
-				yield return new Command_Action
-				{
-					action = delegate
-					{
-						SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
-						this.TryManualReconnect();
-					},
-					hotKey = KeyBindingDefOf.Misc2,
-					defaultDesc = "CommandTryReconnectDesc".Translate(),
-					icon = ContentFinder<Texture2D>.Get("UI/Commands/TryReconnect", true),
-					defaultLabel = "CommandTryReconnectLabel".Translate()
-				};
+				yield return item;
 			}
-			yield break;
-			yield break;
+			if (connectParent != null && parent.Faction == Faction.OfPlayer)
+			{
+				Command_Action command_Action = new Command_Action();
+				command_Action.action = delegate
+				{
+					SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
+					TryManualReconnect();
+				};
+				command_Action.hotKey = KeyBindingDefOf.Misc2;
+				command_Action.defaultDesc = "CommandTryReconnectDesc".Translate();
+				command_Action.icon = ContentFinder<Texture2D>.Get("UI/Commands/TryReconnect");
+				command_Action.defaultLabel = "CommandTryReconnectLabel".Translate();
+				yield return command_Action;
+			}
 		}
 
-		
 		private void TryManualReconnect()
 		{
-			if (CompPower.lastManualReconnector != this)
+			if (lastManualReconnector != this)
 			{
-				CompPower.recentlyConnectedNets.Clear();
-				CompPower.lastManualReconnector = this;
+				recentlyConnectedNets.Clear();
+				lastManualReconnector = this;
 			}
-			if (this.PowerNet != null)
+			if (PowerNet != null)
 			{
-				CompPower.recentlyConnectedNets.Add(this.PowerNet);
+				recentlyConnectedNets.Add(PowerNet);
 			}
-			CompPower compPower = PowerConnectionMaker.BestTransmitterForConnector(this.parent.Position, this.parent.Map, CompPower.recentlyConnectedNets);
+			CompPower compPower = PowerConnectionMaker.BestTransmitterForConnector(parent.Position, parent.Map, recentlyConnectedNets);
 			if (compPower == null)
 			{
-				CompPower.recentlyConnectedNets.Clear();
-				compPower = PowerConnectionMaker.BestTransmitterForConnector(this.parent.Position, this.parent.Map, null);
+				recentlyConnectedNets.Clear();
+				compPower = PowerConnectionMaker.BestTransmitterForConnector(parent.Position, parent.Map);
 			}
 			if (compPower != null)
 			{
 				PowerConnectionMaker.DisconnectFromPowerNet(this);
-				this.ConnectToTransmitter(compPower, false);
+				ConnectToTransmitter(compPower);
 				for (int i = 0; i < 5; i++)
 				{
 					MoteMaker.ThrowMetaPuff(compPower.parent.Position.ToVector3Shifted(), compPower.parent.Map);
 				}
-				this.parent.Map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.PowerGrid);
-				this.parent.Map.mapDrawer.MapMeshDirty(this.parent.Position, MapMeshFlag.Things);
+				parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlag.PowerGrid);
+				parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlag.Things);
 			}
 		}
 
-		
 		public void ConnectToTransmitter(CompPower transmitter, bool reconnectingAfterLoading = false)
 		{
-			if (this.connectParent != null && (!reconnectingAfterLoading || this.connectParent != transmitter))
+			if (connectParent != null && (!reconnectingAfterLoading || connectParent != transmitter))
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Tried to connect ",
-					this,
-					" to transmitter ",
-					transmitter,
-					" but it's already connected to ",
-					this.connectParent,
-					"."
-				}), false);
+				Log.Error("Tried to connect " + this + " to transmitter " + transmitter + " but it's already connected to " + connectParent + ".");
 				return;
 			}
-			this.connectParent = transmitter;
-			if (this.connectParent.connectChildren == null)
+			connectParent = transmitter;
+			if (connectParent.connectChildren == null)
 			{
-				this.connectParent.connectChildren = new List<CompPower>();
+				connectParent.connectChildren = new List<CompPower>();
 			}
 			transmitter.connectChildren.Add(this);
-			PowerNet powerNet = this.PowerNet;
-			if (powerNet != null)
-			{
-				powerNet.RegisterConnector(this);
-			}
+			PowerNet?.RegisterConnector(this);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.PowerNet == null)
+			if (PowerNet == null)
 			{
 				return "PowerNotConnected".Translate();
 			}
-			string value = (this.PowerNet.CurrentEnergyGainRate() / CompPower.WattsToWattDaysPerTick).ToString("F0");
-			string value2 = this.PowerNet.CurrentStoredEnergy().ToString("F0");
+			string value = (PowerNet.CurrentEnergyGainRate() / WattsToWattDaysPerTick).ToString("F0");
+			string value2 = PowerNet.CurrentStoredEnergy().ToString("F0");
 			return "PowerConnectedRateStored".Translate(value, value2);
 		}
-
-		
-		public PowerNet transNet;
-
-		
-		public CompPower connectParent;
-
-		
-		public List<CompPower> connectChildren;
-
-		
-		private static List<PowerNet> recentlyConnectedNets = new List<PowerNet>();
-
-		
-		private static CompPower lastManualReconnector = null;
-
-		
-		public static readonly float WattsToWattDaysPerTick = 1.66666669E-05f;
 	}
 }

@@ -1,80 +1,56 @@
-﻿using System;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 
 namespace Verse
 {
-	
 	public static class DirectXmlSaveLoadUtility
 	{
-		
+		public const BindingFlags FieldGetFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
 		public static string GetXPath(this XmlNode node)
 		{
 			string text = "";
 			while (node != null)
 			{
-				XmlNodeType nodeType = node.NodeType;
-				if (nodeType != XmlNodeType.Element)
+				switch (node.NodeType)
 				{
-					if (nodeType != XmlNodeType.Attribute)
-					{
-						if (nodeType == XmlNodeType.Document)
-						{
-							return text;
-						}
-						text = "/?" + text;
-						node = node.ParentNode;
-					}
-					else
-					{
-						text = "/@" + node.Name + text;
-						node = ((XmlAttribute)node).OwnerElement;
-					}
-				}
-				else
+				case XmlNodeType.Element:
 				{
-					bool flag;
-					int elementIndexForXPath = DirectXmlSaveLoadUtility.GetElementIndexForXPath((XmlElement)node, out flag);
-					if (flag || node.Name == "li")
-					{
-						text = string.Concat(new object[]
-						{
-							"/",
-							node.Name,
-							"[",
-							elementIndexForXPath,
-							"]",
-							text
-						});
-					}
-					else
-					{
-						text = "/" + node.Name + text;
-					}
+					bool multiple;
+					int elementIndexForXPath = GetElementIndexForXPath((XmlElement)node, out multiple);
+					text = ((!multiple && !(node.Name == "li")) ? ("/" + node.Name + text) : ("/" + node.Name + "[" + elementIndexForXPath + "]" + text));
 					node = node.ParentNode;
+					break;
+				}
+				case XmlNodeType.Attribute:
+					text = "/@" + node.Name + text;
+					node = ((XmlAttribute)node).OwnerElement;
+					break;
+				case XmlNodeType.Document:
+					return text;
+				default:
+					text = "/?" + text;
+					node = node.ParentNode;
+					break;
 				}
 			}
 			return text;
 		}
 
-		
 		public static string GetInnerXml(this XElement element)
 		{
 			if (element == null)
 			{
 				return "";
 			}
-			string result;
-			XmlReader xmlReader = element.CreateReader();
+			using (XmlReader xmlReader = element.CreateReader())
 			{
 				xmlReader.MoveToContent();
-				result = xmlReader.ReadInnerXml();
+				return xmlReader.ReadInnerXml();
 			}
-			return result;
 		}
 
-		
 		private static int GetElementIndexForXPath(XmlElement element, out bool multiple)
 		{
 			multiple = false;
@@ -87,22 +63,20 @@ namespace Verse
 			{
 				return 1;
 			}
-			foreach (object obj in parentNode.ChildNodes)
+			foreach (XmlNode childNode in parentNode.ChildNodes)
 			{
-				XmlNode xmlNode = (XmlNode)obj;
-				if (xmlNode is XmlElement && xmlNode.Name == element.Name && xmlNode != element)
+				if (childNode is XmlElement && childNode.Name == element.Name && childNode != element)
 				{
 					multiple = true;
 					break;
 				}
 			}
 			int num = 1;
-			foreach (object obj2 in parentNode.ChildNodes)
+			foreach (XmlNode childNode2 in parentNode.ChildNodes)
 			{
-				XmlNode xmlNode2 = (XmlNode)obj2;
-				if (xmlNode2 is XmlElement && xmlNode2.Name == element.Name)
+				if (childNode2 is XmlElement && childNode2.Name == element.Name)
 				{
-					if (xmlNode2 == element)
+					if (childNode2 == element)
 					{
 						return num;
 					}
@@ -111,8 +85,5 @@ namespace Verse
 			}
 			return 1;
 		}
-
-		
-		public const BindingFlags FieldGetFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 	}
 }

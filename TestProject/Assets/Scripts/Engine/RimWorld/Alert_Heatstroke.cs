@@ -1,58 +1,50 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_Heatstroke : Alert
 	{
-		
-		public Alert_Heatstroke()
-		{
-			this.defaultLabel = "AlertHeatstroke".Translate();
-			this.defaultPriority = AlertPriority.High;
-		}
+		private List<Pawn> heatstrokePawnsResult = new List<Pawn>();
 
-		
-		
 		private List<Pawn> HeatstrokePawns
 		{
 			get
 			{
-				this.heatstrokePawnsResult.Clear();
+				heatstrokePawnsResult.Clear();
 				List<Pawn> list = PawnsFinder.AllMaps_SpawnedPawnsInFaction(Faction.OfPlayer);
 				for (int i = 0; i < list.Count; i++)
 				{
 					Pawn pawn = list[i];
-					if (pawn.health != null && !pawn.RaceProps.Animal && pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Heatstroke, true) != null)
+					if (pawn.health != null && !pawn.RaceProps.Animal && pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Heatstroke, mustBeVisible: true) != null)
 					{
-						this.heatstrokePawnsResult.Add(pawn);
+						heatstrokePawnsResult.Add(pawn);
 					}
 				}
-				return this.heatstrokePawnsResult;
+				return heatstrokePawnsResult;
 			}
 		}
 
-		
+		public Alert_Heatstroke()
+		{
+			defaultLabel = "AlertHeatstroke".Translate();
+			defaultPriority = AlertPriority.High;
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.HeatstrokePawns)
+			foreach (Pawn heatstrokePawn in HeatstrokePawns)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + heatstrokePawn.NameShortColored.Resolve());
 			}
 			return string.Format("AlertHeatstrokeDesc".Translate(), stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.HeatstrokePawns);
+			return AlertReport.CulpritsAre(HeatstrokePawns);
 		}
-
-		
-		private List<Pawn> heatstrokePawnsResult = new List<Pawn>();
 	}
 }

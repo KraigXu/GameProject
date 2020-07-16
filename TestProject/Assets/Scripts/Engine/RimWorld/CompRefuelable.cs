@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,396 +5,311 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class CompRefuelable : ThingComp
 	{
-		
-		
-		
+		private float fuel;
+
+		private float configuredTargetFuelLevel = -1f;
+
+		public bool allowAutoRefuel = true;
+
+		private CompFlickable flickComp;
+
+		public const string RefueledSignal = "Refueled";
+
+		public const string RanOutOfFuelSignal = "RanOutOfFuel";
+
+		private static readonly Texture2D SetTargetFuelLevelCommand = ContentFinder<Texture2D>.Get("UI/Commands/SetTargetFuelLevel");
+
+		private static readonly Vector2 FuelBarSize = new Vector2(1f, 0.2f);
+
+		private static readonly Material FuelBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.6f, 0.56f, 0.13f));
+
+		private static readonly Material FuelBarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.3f, 0.3f, 0.3f));
+
 		public float TargetFuelLevel
 		{
 			get
 			{
-				if (this.configuredTargetFuelLevel >= 0f)
+				if (configuredTargetFuelLevel >= 0f)
 				{
-					return this.configuredTargetFuelLevel;
+					return configuredTargetFuelLevel;
 				}
-				if (this.Props.targetFuelLevelConfigurable)
+				if (Props.targetFuelLevelConfigurable)
 				{
-					return this.Props.initialConfigurableTargetFuelLevel;
+					return Props.initialConfigurableTargetFuelLevel;
 				}
-				return this.Props.fuelCapacity;
+				return Props.fuelCapacity;
 			}
 			set
 			{
-				this.configuredTargetFuelLevel = Mathf.Clamp(value, 0f, this.Props.fuelCapacity);
+				configuredTargetFuelLevel = Mathf.Clamp(value, 0f, Props.fuelCapacity);
 			}
 		}
 
-		
-		
-		public CompProperties_Refuelable Props
-		{
-			get
-			{
-				return (CompProperties_Refuelable)this.props;
-			}
-		}
+		public CompProperties_Refuelable Props => (CompProperties_Refuelable)props;
 
-		
-		
-		public float Fuel
-		{
-			get
-			{
-				return this.fuel;
-			}
-		}
+		public float Fuel => fuel;
 
-		
-		
-		public float FuelPercentOfTarget
-		{
-			get
-			{
-				return this.fuel / this.TargetFuelLevel;
-			}
-		}
+		public float FuelPercentOfTarget => fuel / TargetFuelLevel;
 
-		
-		
-		public float FuelPercentOfMax
-		{
-			get
-			{
-				return this.fuel / this.Props.fuelCapacity;
-			}
-		}
+		public float FuelPercentOfMax => fuel / Props.fuelCapacity;
 
-		
-		
-		public bool IsFull
-		{
-			get
-			{
-				return this.TargetFuelLevel - this.fuel < 1f;
-			}
-		}
+		public bool IsFull => TargetFuelLevel - fuel < 1f;
 
-		
-		
 		public bool HasFuel
 		{
 			get
 			{
-				return this.fuel > 0f && this.fuel >= this.Props.minimumFueledThreshold;
+				if (fuel > 0f)
+				{
+					return fuel >= Props.minimumFueledThreshold;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		private float ConsumptionRatePerTick
-		{
-			get
-			{
-				return this.Props.fuelConsumptionRate / 60000f;
-			}
-		}
+		private float ConsumptionRatePerTick => Props.fuelConsumptionRate / 60000f;
 
-		
-		
 		public bool ShouldAutoRefuelNow
 		{
 			get
 			{
-				return this.FuelPercentOfTarget <= this.Props.autoRefuelPercent && !this.IsFull && this.TargetFuelLevel > 0f && this.ShouldAutoRefuelNowIgnoringFuelPct;
+				if (FuelPercentOfTarget <= Props.autoRefuelPercent && !IsFull && TargetFuelLevel > 0f)
+				{
+					return ShouldAutoRefuelNowIgnoringFuelPct;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public bool ShouldAutoRefuelNowIgnoringFuelPct
 		{
 			get
 			{
-				return !this.parent.IsBurning() && (this.flickComp == null || this.flickComp.SwitchIsOn) && this.parent.Map.designationManager.DesignationOn(this.parent, DesignationDefOf.Flick) == null && this.parent.Map.designationManager.DesignationOn(this.parent, DesignationDefOf.Deconstruct) == null;
+				if (!parent.IsBurning() && (flickComp == null || flickComp.SwitchIsOn) && parent.Map.designationManager.DesignationOn(parent, DesignationDefOf.Flick) == null)
+				{
+					return parent.Map.designationManager.DesignationOn(parent, DesignationDefOf.Deconstruct) == null;
+				}
+				return false;
 			}
 		}
 
-		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.allowAutoRefuel = this.Props.initialAllowAutoRefuel;
-			this.fuel = this.Props.fuelCapacity * this.Props.initialFuelPercent;
-			this.flickComp = this.parent.GetComp<CompFlickable>();
+			allowAutoRefuel = Props.initialAllowAutoRefuel;
+			fuel = Props.fuelCapacity * Props.initialFuelPercent;
+			flickComp = parent.GetComp<CompFlickable>();
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.fuel, "fuel", 0f, false);
-			Scribe_Values.Look<float>(ref this.configuredTargetFuelLevel, "configuredTargetFuelLevel", -1f, false);
-			Scribe_Values.Look<bool>(ref this.allowAutoRefuel, "allowAutoRefuel", false, false);
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && !this.Props.showAllowAutoRefuelToggle)
+			Scribe_Values.Look(ref fuel, "fuel", 0f);
+			Scribe_Values.Look(ref configuredTargetFuelLevel, "configuredTargetFuelLevel", -1f);
+			Scribe_Values.Look(ref allowAutoRefuel, "allowAutoRefuel", defaultValue: false);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && !Props.showAllowAutoRefuelToggle)
 			{
-				this.allowAutoRefuel = this.Props.initialAllowAutoRefuel;
+				allowAutoRefuel = Props.initialAllowAutoRefuel;
 			}
 		}
 
-		
 		public override void PostDraw()
 		{
 			base.PostDraw();
-			if (!this.allowAutoRefuel)
+			if (!allowAutoRefuel)
 			{
-				this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.ForbiddenRefuel);
+				parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.ForbiddenRefuel);
 			}
-			else if (!this.HasFuel && this.Props.drawOutOfFuelOverlay)
+			else if (!HasFuel && Props.drawOutOfFuelOverlay)
 			{
-				this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.OutOfFuel);
+				parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.OutOfFuel);
 			}
-			if (this.Props.drawFuelGaugeInMap)
+			if (Props.drawFuelGaugeInMap)
 			{
 				GenDraw.FillableBarRequest r = default(GenDraw.FillableBarRequest);
-				r.center = this.parent.DrawPos + Vector3.up * 0.1f;
-				r.size = CompRefuelable.FuelBarSize;
-				r.fillPercent = this.FuelPercentOfMax;
-				r.filledMat = CompRefuelable.FuelBarFilledMat;
-				r.unfilledMat = CompRefuelable.FuelBarUnfilledMat;
+				r.center = parent.DrawPos + Vector3.up * 0.1f;
+				r.size = FuelBarSize;
+				r.fillPercent = FuelPercentOfMax;
+				r.filledMat = FuelBarFilledMat;
+				r.unfilledMat = FuelBarUnfilledMat;
 				r.margin = 0.15f;
-				Rot4 rotation = this.parent.Rotation;
+				Rot4 rotation = parent.Rotation;
 				rotation.Rotate(RotationDirection.Clockwise);
 				r.rotation = rotation;
 				GenDraw.DrawFillableBar(r);
 			}
 		}
 
-		
 		public override void PostDestroy(DestroyMode mode, Map previousMap)
 		{
 			base.PostDestroy(mode, previousMap);
-			if (previousMap != null && this.Props.fuelFilter.AllowedDefCount == 1 && this.Props.initialFuelPercent == 0f)
+			if (previousMap != null && Props.fuelFilter.AllowedDefCount == 1 && Props.initialFuelPercent == 0f)
 			{
-				ThingDef thingDef = this.Props.fuelFilter.AllowedThingDefs.First<ThingDef>();
-				int i = GenMath.RoundRandom(1f * this.fuel);
-				while (i > 0)
+				ThingDef thingDef = Props.fuelFilter.AllowedThingDefs.First();
+				int num = GenMath.RoundRandom(1f * fuel);
+				while (num > 0)
 				{
-					Thing thing = ThingMaker.MakeThing(thingDef, null);
-					thing.stackCount = Mathf.Min(i, thingDef.stackLimit);
-					i -= thing.stackCount;
-					GenPlace.TryPlaceThing(thing, this.parent.Position, previousMap, ThingPlaceMode.Near, null, null, default(Rot4));
+					Thing thing = ThingMaker.MakeThing(thingDef);
+					thing.stackCount = Mathf.Min(num, thingDef.stackLimit);
+					num -= thing.stackCount;
+					GenPlace.TryPlaceThing(thing, parent.Position, previousMap, ThingPlaceMode.Near);
 				}
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			string text = string.Concat(new string[]
+			string text = Props.FuelLabel + ": " + fuel.ToStringDecimalIfSmall() + " / " + Props.fuelCapacity.ToStringDecimalIfSmall();
+			if (!Props.consumeFuelOnlyWhenUsed && HasFuel)
 			{
-				this.Props.FuelLabel,
-				": ",
-				this.fuel.ToStringDecimalIfSmall(),
-				" / ",
-				this.Props.fuelCapacity.ToStringDecimalIfSmall()
-			});
-			if (!this.Props.consumeFuelOnlyWhenUsed && this.HasFuel)
-			{
-				int numTicks = (int)(this.fuel / this.Props.fuelConsumptionRate * 60000f);
-				text = text + " (" + numTicks.ToStringTicksToPeriod(true, false, true, true) + ")";
+				int numTicks = (int)(fuel / Props.fuelConsumptionRate * 60000f);
+				text = text + " (" + numTicks.ToStringTicksToPeriod() + ")";
 			}
-			if (!this.HasFuel && !this.Props.outOfFuelMessage.NullOrEmpty())
+			if (!HasFuel && !Props.outOfFuelMessage.NullOrEmpty())
 			{
-				text += string.Format("\n{0} ({1}x {2})", this.Props.outOfFuelMessage, this.GetFuelCountToFullyRefuel(), this.Props.fuelFilter.AnyAllowedDef.label);
+				text += $"\n{Props.outOfFuelMessage} ({GetFuelCountToFullyRefuel()}x {Props.fuelFilter.AnyAllowedDef.label})";
 			}
-			if (this.Props.targetFuelLevelConfigurable)
+			if (Props.targetFuelLevelConfigurable)
 			{
-				text += "\n" + "ConfiguredTargetFuelLevel".Translate(this.TargetFuelLevel.ToStringDecimalIfSmall());
+				text += "\n" + "ConfiguredTargetFuelLevel".Translate(TargetFuelLevel.ToStringDecimalIfSmall());
 			}
 			return text;
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (!this.Props.consumeFuelOnlyWhenUsed && (this.flickComp == null || this.flickComp.SwitchIsOn))
+			if (!Props.consumeFuelOnlyWhenUsed && (flickComp == null || flickComp.SwitchIsOn))
 			{
-				this.ConsumeFuel(this.ConsumptionRatePerTick);
+				ConsumeFuel(ConsumptionRatePerTick);
 			}
-			if (this.Props.fuelConsumptionPerTickInRain > 0f && this.parent.Spawned && this.parent.Map.weatherManager.RainRate > 0.4f && !this.parent.Map.roofGrid.Roofed(this.parent.Position))
+			if (Props.fuelConsumptionPerTickInRain > 0f && parent.Spawned && parent.Map.weatherManager.RainRate > 0.4f && !parent.Map.roofGrid.Roofed(parent.Position))
 			{
-				this.ConsumeFuel(this.Props.fuelConsumptionPerTickInRain);
+				ConsumeFuel(Props.fuelConsumptionPerTickInRain);
 			}
 		}
 
-		
 		public void ConsumeFuel(float amount)
 		{
-			if (this.fuel <= 0f)
+			if (fuel <= 0f)
 			{
 				return;
 			}
-			this.fuel -= amount;
-			if (this.fuel <= 0f)
+			fuel -= amount;
+			if (fuel <= 0f)
 			{
-				this.fuel = 0f;
-				if (this.Props.destroyOnNoFuel)
+				fuel = 0f;
+				if (Props.destroyOnNoFuel)
 				{
-					this.parent.Destroy(DestroyMode.Vanish);
+					parent.Destroy();
 				}
-				this.parent.BroadcastCompSignal("RanOutOfFuel");
+				parent.BroadcastCompSignal("RanOutOfFuel");
 			}
 		}
 
-		
 		public void Refuel(List<Thing> fuelThings)
 		{
-			if (this.Props.atomicFueling)
+			if (Props.atomicFueling && fuelThings.Sum((Thing t) => t.stackCount) < GetFuelCountToFullyRefuel())
 			{
-				if (fuelThings.Sum((Thing t) => t.stackCount) < this.GetFuelCountToFullyRefuel())
-				{
-					Log.ErrorOnce("Error refueling; not enough fuel available for proper atomic refuel", 19586442, false);
-					return;
-				}
+				Log.ErrorOnce("Error refueling; not enough fuel available for proper atomic refuel", 19586442);
+				return;
 			}
-			int num = this.GetFuelCountToFullyRefuel();
+			int num = GetFuelCountToFullyRefuel();
 			while (num > 0 && fuelThings.Count > 0)
 			{
-				Thing thing = fuelThings.Pop<Thing>();
+				Thing thing = fuelThings.Pop();
 				int num2 = Mathf.Min(num, thing.stackCount);
-				this.Refuel((float)num2);
-				thing.SplitOff(num2).Destroy(DestroyMode.Vanish);
+				Refuel(num2);
+				thing.SplitOff(num2).Destroy();
 				num -= num2;
 			}
 		}
 
-		
 		public void Refuel(float amount)
 		{
-			this.fuel += amount * this.Props.FuelMultiplierCurrentDifficulty;
-			if (this.fuel > this.Props.fuelCapacity)
+			fuel += amount * Props.FuelMultiplierCurrentDifficulty;
+			if (fuel > Props.fuelCapacity)
 			{
-				this.fuel = this.Props.fuelCapacity;
+				fuel = Props.fuelCapacity;
 			}
-			this.parent.BroadcastCompSignal("Refueled");
+			parent.BroadcastCompSignal("Refueled");
 		}
 
-		
 		public void Notify_UsedThisTick()
 		{
-			this.ConsumeFuel(this.ConsumptionRatePerTick);
+			ConsumeFuel(ConsumptionRatePerTick);
 		}
 
-		
 		public int GetFuelCountToFullyRefuel()
 		{
-			if (this.Props.atomicFueling)
+			if (Props.atomicFueling)
 			{
-				return Mathf.CeilToInt(this.Props.fuelCapacity / this.Props.FuelMultiplierCurrentDifficulty);
+				return Mathf.CeilToInt(Props.fuelCapacity / Props.FuelMultiplierCurrentDifficulty);
 			}
-			return Mathf.Max(Mathf.CeilToInt((this.TargetFuelLevel - this.fuel) / this.Props.FuelMultiplierCurrentDifficulty), 1);
+			return Mathf.Max(Mathf.CeilToInt((TargetFuelLevel - fuel) / Props.FuelMultiplierCurrentDifficulty), 1);
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (this.Props.targetFuelLevelConfigurable)
+			if (Props.targetFuelLevelConfigurable)
 			{
-				yield return new Command_SetTargetFuelLevel
-				{
-					refuelable = this,
-					defaultLabel = "CommandSetTargetFuelLevel".Translate(),
-					defaultDesc = "CommandSetTargetFuelLevelDesc".Translate(),
-					icon = CompRefuelable.SetTargetFuelLevelCommand
-				};
+				Command_SetTargetFuelLevel command_SetTargetFuelLevel = new Command_SetTargetFuelLevel();
+				command_SetTargetFuelLevel.refuelable = this;
+				command_SetTargetFuelLevel.defaultLabel = "CommandSetTargetFuelLevel".Translate();
+				command_SetTargetFuelLevel.defaultDesc = "CommandSetTargetFuelLevelDesc".Translate();
+				command_SetTargetFuelLevel.icon = SetTargetFuelLevelCommand;
+				yield return command_SetTargetFuelLevel;
 			}
-			if (this.Props.showFuelGizmo && Find.Selector.SingleSelectedThing == this.parent)
+			if (Props.showFuelGizmo && Find.Selector.SingleSelectedThing == parent)
 			{
-				yield return new Gizmo_RefuelableFuelStatus
-				{
-					refuelable = this
-				};
+				Gizmo_RefuelableFuelStatus gizmo_RefuelableFuelStatus = new Gizmo_RefuelableFuelStatus();
+				gizmo_RefuelableFuelStatus.refuelable = this;
+				yield return gizmo_RefuelableFuelStatus;
 			}
-			if (this.Props.showAllowAutoRefuelToggle)
+			if (Props.showAllowAutoRefuelToggle)
 			{
-				yield return new Command_Toggle
+				Command_Toggle command_Toggle = new Command_Toggle();
+				command_Toggle.defaultLabel = "CommandToggleAllowAutoRefuel".Translate();
+				command_Toggle.defaultDesc = "CommandToggleAllowAutoRefuelDesc".Translate();
+				command_Toggle.hotKey = KeyBindingDefOf.Command_ItemForbid;
+				command_Toggle.icon = (allowAutoRefuel ? TexCommand.ForbidOff : TexCommand.ForbidOn);
+				command_Toggle.isActive = (() => allowAutoRefuel);
+				command_Toggle.toggleAction = delegate
 				{
-					defaultLabel = "CommandToggleAllowAutoRefuel".Translate(),
-					defaultDesc = "CommandToggleAllowAutoRefuelDesc".Translate(),
-					hotKey = KeyBindingDefOf.Command_ItemForbid,
-					icon = (this.allowAutoRefuel ? TexCommand.ForbidOff : TexCommand.ForbidOn),
-					isActive = (() => this.allowAutoRefuel),
-					toggleAction = delegate
-					{
-						this.allowAutoRefuel = !this.allowAutoRefuel;
-					}
+					allowAutoRefuel = !allowAutoRefuel;
 				};
+				yield return command_Toggle;
 			}
 			if (Prefs.DevMode)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "Debug: Set fuel to 0";
+				command_Action.action = delegate
 				{
-					defaultLabel = "Debug: Set fuel to 0",
-					action = delegate
-					{
-						this.fuel = 0f;
-						this.parent.BroadcastCompSignal("Refueled");
-					}
+					fuel = 0f;
+					parent.BroadcastCompSignal("Refueled");
 				};
-				yield return new Command_Action
+				yield return command_Action;
+				Command_Action command_Action2 = new Command_Action();
+				command_Action2.defaultLabel = "Debug: Set fuel to 0.1";
+				command_Action2.action = delegate
 				{
-					defaultLabel = "Debug: Set fuel to 0.1",
-					action = delegate
-					{
-						this.fuel = 0.1f;
-						this.parent.BroadcastCompSignal("Refueled");
-					}
+					fuel = 0.1f;
+					parent.BroadcastCompSignal("Refueled");
 				};
-				yield return new Command_Action
+				yield return command_Action2;
+				Command_Action command_Action3 = new Command_Action();
+				command_Action3.defaultLabel = "Debug: Set fuel to max";
+				command_Action3.action = delegate
 				{
-					defaultLabel = "Debug: Set fuel to max",
-					action = delegate
-					{
-						this.fuel = this.Props.fuelCapacity;
-						this.parent.BroadcastCompSignal("Refueled");
-					}
+					fuel = Props.fuelCapacity;
+					parent.BroadcastCompSignal("Refueled");
 				};
+				yield return command_Action3;
 			}
-			yield break;
 		}
-
-		
-		private float fuel;
-
-		
-		private float configuredTargetFuelLevel = -1f;
-
-		
-		public bool allowAutoRefuel = true;
-
-		
-		private CompFlickable flickComp;
-
-		
-		public const string RefueledSignal = "Refueled";
-
-		
-		public const string RanOutOfFuelSignal = "RanOutOfFuel";
-
-		
-		private static readonly Texture2D SetTargetFuelLevelCommand = ContentFinder<Texture2D>.Get("UI/Commands/SetTargetFuelLevel", true);
-
-		
-		private static readonly Vector2 FuelBarSize = new Vector2(1f, 0.2f);
-
-		
-		private static readonly Material FuelBarFilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.6f, 0.56f, 0.13f), false);
-
-		
-		private static readonly Material FuelBarUnfilledMat = SolidColorMaterials.SimpleSolidColorMaterial(new Color(0.3f, 0.3f, 0.3f), false);
 	}
 }

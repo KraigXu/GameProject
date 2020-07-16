@@ -1,76 +1,59 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompFoodPoisonable : ThingComp
 	{
-		
-		
-		public float PoisonPercent
-		{
-			get
-			{
-				return this.poisonPct;
-			}
-		}
+		private float poisonPct;
 
-		
+		public FoodPoisonCause cause;
+
+		public float PoisonPercent => poisonPct;
+
 		public void SetPoisoned(FoodPoisonCause newCause)
 		{
-			this.poisonPct = 1f;
-			this.cause = newCause;
+			poisonPct = 1f;
+			cause = newCause;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.poisonPct, "poisonPct", 0f, false);
-			Scribe_Values.Look<FoodPoisonCause>(ref this.cause, "cause", FoodPoisonCause.Unknown, false);
+			Scribe_Values.Look(ref poisonPct, "poisonPct", 0f);
+			Scribe_Values.Look(ref cause, "cause", FoodPoisonCause.Unknown);
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
 			base.PostSplitOff(piece);
 			CompFoodPoisonable compFoodPoisonable = piece.TryGetComp<CompFoodPoisonable>();
-			compFoodPoisonable.poisonPct = this.poisonPct;
-			compFoodPoisonable.cause = this.cause;
+			compFoodPoisonable.poisonPct = poisonPct;
+			compFoodPoisonable.cause = cause;
 		}
 
-		
 		public override void PreAbsorbStack(Thing otherStack, int count)
 		{
 			base.PreAbsorbStack(otherStack, count);
 			CompFoodPoisonable compFoodPoisonable = otherStack.TryGetComp<CompFoodPoisonable>();
-			if (this.cause == FoodPoisonCause.Unknown && compFoodPoisonable.cause != FoodPoisonCause.Unknown)
+			if (cause == FoodPoisonCause.Unknown && compFoodPoisonable.cause != 0)
 			{
-				this.cause = compFoodPoisonable.cause;
+				cause = compFoodPoisonable.cause;
 			}
-			else if (compFoodPoisonable.cause != FoodPoisonCause.Unknown || this.cause != FoodPoisonCause.Unknown)
+			else if (compFoodPoisonable.cause != 0 || cause != 0)
 			{
-				float num = this.poisonPct * (float)this.parent.stackCount;
+				float num = poisonPct * (float)parent.stackCount;
 				float num2 = compFoodPoisonable.poisonPct * (float)count;
-				this.cause = ((num > num2) ? this.cause : compFoodPoisonable.cause);
+				cause = ((num > num2) ? cause : compFoodPoisonable.cause);
 			}
-			this.poisonPct = GenMath.WeightedAverage(this.poisonPct, (float)this.parent.stackCount, compFoodPoisonable.poisonPct, (float)count);
+			poisonPct = GenMath.WeightedAverage(poisonPct, parent.stackCount, compFoodPoisonable.poisonPct, count);
 		}
 
-		
 		public override void PostIngested(Pawn ingester)
 		{
-			if (Rand.Chance(this.poisonPct * FoodUtility.GetFoodPoisonChanceFactor(ingester)))
+			if (Rand.Chance(poisonPct * FoodUtility.GetFoodPoisonChanceFactor(ingester)))
 			{
-				FoodUtility.AddFoodPoisoningHediff(ingester, this.parent, this.cause);
+				FoodUtility.AddFoodPoisoningHediff(ingester, parent, cause);
 			}
 		}
-
-		
-		private float poisonPct;
-
-		
-		public FoodPoisonCause cause;
 	}
 }

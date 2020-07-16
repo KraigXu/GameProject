@@ -1,158 +1,160 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
-using Verse;
 
-public abstract class ThingComp
+namespace Verse
 {
-	public ThingWithComps parent;
-
-	public CompProperties props;
-
-	public IThingHolder ParentHolder => parent.ParentHolder;
-
-	public virtual void Initialize(CompProperties props)
+	public abstract class ThingComp
 	{
-		this.props = props;
-	}
+		public ThingWithComps parent;
 
-	public virtual void ReceiveCompSignal(string signal)
-	{
-	}
+		public CompProperties props;
 
-	public virtual void PostExposeData()
-	{
-	}
+		public IThingHolder ParentHolder => parent.ParentHolder;
 
-	public virtual void PostSpawnSetup(bool respawningAfterLoad)
-	{
-	}
+		public virtual void Initialize(CompProperties props)
+		{
+			this.props = props;
+		}
 
-	public virtual void PostDeSpawn(Map map)
-	{
-	}
+		public virtual void ReceiveCompSignal(string signal)
+		{
+		}
 
-	public virtual void PostDestroy(DestroyMode mode, Map previousMap)
-	{
-	}
+		public virtual void PostExposeData()
+		{
+		}
 
-	public virtual void PostPostMake()
-	{
-	}
+		public virtual void PostSpawnSetup(bool respawningAfterLoad)
+		{
+		}
 
-	public virtual void CompTick()
-	{
-	}
+		public virtual void PostDeSpawn(Map map)
+		{
+		}
 
-	public virtual void CompTickRare()
-	{
-	}
+		public virtual void PostDestroy(DestroyMode mode, Map previousMap)
+		{
+		}
 
-	public virtual void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
-	{
-		absorbed = false;
-	}
+		public virtual void PostPostMake()
+		{
+		}
 
-	public virtual void PostPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
-	{
-	}
+		public virtual void CompTick()
+		{
+		}
 
-	public virtual void PostDraw()
-	{
-	}
+		public virtual void CompTickRare()
+		{
+		}
 
-	public virtual void PostDrawExtraSelectionOverlays()
-	{
-	}
+		public virtual void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
+		{
+			absorbed = false;
+		}
 
-	public virtual void PostPrintOnto(SectionLayer layer)
-	{
-	}
+		public virtual void PostPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
+		{
+		}
 
-	public virtual void CompPrintForPowerGrid(SectionLayer layer)
-	{
-	}
+		public virtual void PostDraw()
+		{
+		}
 
-	public virtual void PreAbsorbStack(Thing otherStack, int count)
-	{
-	}
+		public virtual void PostDrawExtraSelectionOverlays()
+		{
+		}
 
-	public virtual void PostSplitOff(Thing piece)
-	{
-	}
+		public virtual void PostPrintOnto(SectionLayer layer)
+		{
+		}
 
-	public virtual string TransformLabel(string label)
-	{
-		return label;
-	}
+		public virtual void CompPrintForPowerGrid(SectionLayer layer)
+		{
+		}
 
-	public virtual IEnumerable<Gizmo> CompGetGizmosExtra()
-	{
-		yield break;
-	}
+		public virtual void PreAbsorbStack(Thing otherStack, int count)
+		{
+		}
 
-	public virtual bool AllowStackWith(Thing other)
-	{
-		return true;
-	}
+		public virtual void PostSplitOff(Thing piece)
+		{
+		}
 
-	public virtual string CompInspectStringExtra()
-	{
-		return null;
-	}
+		public virtual string TransformLabel(string label)
+		{
+			return label;
+		}
 
-	public virtual string GetDescriptionPart()
-	{
-		return null;
-	}
+		public virtual IEnumerable<Gizmo> CompGetGizmosExtra()
+		{
+			yield break;
+		}
 
-	public virtual IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
-	{
-		yield break;
-	}
+		public virtual bool AllowStackWith(Thing other)
+		{
+			return true;
+		}
 
-	public virtual void PrePreTraded(TradeAction action, Pawn playerNegotiator, ITrader trader)
-	{
-	}
+		public virtual string CompInspectStringExtra()
+		{
+			return null;
+		}
 
-	public virtual void PrePostIngested(Pawn ingester)
-	{
-	}
+		public virtual string GetDescriptionPart()
+		{
+			return null;
+		}
 
-	public virtual void PostIngested(Pawn ingester)
-	{
-	}
+		public virtual IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
+		{
+			yield break;
+		}
 
-	public virtual void PostPostGeneratedForTrader(TraderKindDef trader, int forTile, Faction forFaction)
-	{
-	}
+		public virtual void PrePreTraded(TradeAction action, Pawn playerNegotiator, ITrader trader)
+		{
+		}
 
-	public virtual void Notify_SignalReceived(RimWorld.Signal signal)
-	{
-	}
+		public virtual void PrePostIngested(Pawn ingester)
+		{
+		}
 
-	public virtual void Notify_LordDestroyed()
-	{
-	}
+		public virtual void PostIngested(Pawn ingester)
+		{
+		}
 
-	public virtual void DrawGUIOverlay()
-	{
-	}
+		public virtual void PostPostGeneratedForTrader(TraderKindDef trader, int forTile, Faction forFaction)
+		{
+		}
 
-	public virtual IEnumerable<StatDrawEntry> SpecialDisplayStats()
-	{
-		return null;
-	}
+		public virtual void Notify_SignalReceived(Signal signal)
+		{
+		}
 
-	public virtual void Notify_Equipped(Pawn pawn)
-	{
-	}
+		public virtual void Notify_LordDestroyed()
+		{
+		}
 
-	public virtual void Notify_UsedWeapon(Pawn pawn)
-	{
-	}
+		public virtual void DrawGUIOverlay()
+		{
+		}
 
-	public override string ToString()
-	{
-		return GetType().Name + "(parent=" + parent + " at=" + ((parent != null) ? parent.Position : IntVec3.Invalid) + ")";
+		public virtual IEnumerable<StatDrawEntry> SpecialDisplayStats()
+		{
+			return null;
+		}
+
+		public virtual void Notify_Equipped(Pawn pawn)
+		{
+		}
+
+		public virtual void Notify_UsedWeapon(Pawn pawn)
+		{
+		}
+
+		public override string ToString()
+		{
+			return GetType().Name + "(parent=" + parent + " at=" + ((parent != null) ? parent.Position : IntVec3.Invalid) + ")";
+		}
 	}
 }

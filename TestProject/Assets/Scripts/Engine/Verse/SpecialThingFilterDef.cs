@@ -1,64 +1,50 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class SpecialThingFilterDef : Def
 	{
-		
-		
+		public ThingCategoryDef parentCategory;
+
+		public string saveKey;
+
+		public bool allowedByDefault;
+
+		public bool configurable = true;
+
+		public Type workerClass;
+
+		[Unsaved(false)]
+		private SpecialThingFilterWorker workerInt;
+
 		public SpecialThingFilterWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (SpecialThingFilterWorker)Activator.CreateInstance(this.workerClass);
+					workerInt = (SpecialThingFilterWorker)Activator.CreateInstance(workerClass);
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			if (this.workerClass == null)
+			if (workerClass == null)
 			{
-				yield return "SpecialThingFilterDef " + this.defName + " has no worker class.";
+				yield return "SpecialThingFilterDef " + defName + " has no worker class.";
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static SpecialThingFilterDef Named(string defName)
 		{
-			return DefDatabase<SpecialThingFilterDef>.GetNamed(defName, true);
+			return DefDatabase<SpecialThingFilterDef>.GetNamed(defName);
 		}
-
-		
-		public ThingCategoryDef parentCategory;
-
-		
-		public string saveKey;
-
-		
-		public bool allowedByDefault;
-
-		
-		public bool configurable = true;
-
-		
-		public Type workerClass;
-
-		
-		[Unsaved(false)]
-		private SpecialThingFilterWorker workerInt;
 	}
 }

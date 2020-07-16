@@ -1,117 +1,99 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class Tale_DoublePawn : Tale
 	{
-		
-		
-		public override Pawn DominantPawn
-		{
-			get
-			{
-				return this.firstPawnData.pawn;
-			}
-		}
+		public TaleData_Pawn firstPawnData;
 
-		
-		
+		public TaleData_Pawn secondPawnData;
+
+		public override Pawn DominantPawn => firstPawnData.pawn;
+
 		public override string ShortSummary
 		{
 			get
 			{
-				string text = this.def.LabelCap + ": " + this.firstPawnData.name;
-				if (this.secondPawnData != null)
+				string text = (string)(def.LabelCap + ": ") + firstPawnData.name;
+				if (secondPawnData != null)
 				{
-					text = text + ", " + this.secondPawnData.name;
+					text = text + ", " + secondPawnData.name;
 				}
 				return text;
 			}
 		}
 
-		
 		public Tale_DoublePawn()
 		{
 		}
 
-		
 		public Tale_DoublePawn(Pawn firstPawn, Pawn secondPawn)
 		{
-			this.firstPawnData = TaleData_Pawn.GenerateFrom(firstPawn);
+			firstPawnData = TaleData_Pawn.GenerateFrom(firstPawn);
 			if (secondPawn != null)
 			{
-				this.secondPawnData = TaleData_Pawn.GenerateFrom(secondPawn);
+				secondPawnData = TaleData_Pawn.GenerateFrom(secondPawn);
 			}
 			if (firstPawn.SpawnedOrAnyParentSpawned)
 			{
-				this.surroundings = TaleData_Surroundings.GenerateFrom(firstPawn.PositionHeld, firstPawn.MapHeld);
+				surroundings = TaleData_Surroundings.GenerateFrom(firstPawn.PositionHeld, firstPawn.MapHeld);
 			}
 		}
 
-		
 		public override bool Concerns(Thing th)
 		{
-			return (this.secondPawnData != null && this.secondPawnData.pawn == th) || base.Concerns(th) || this.firstPawnData.pawn == th;
+			if (secondPawnData != null && secondPawnData.pawn == th)
+			{
+				return true;
+			}
+			if (!base.Concerns(th))
+			{
+				return firstPawnData.pawn == th;
+			}
+			return true;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Deep.Look<TaleData_Pawn>(ref this.firstPawnData, "firstPawnData", Array.Empty<object>());
-			Scribe_Deep.Look<TaleData_Pawn>(ref this.secondPawnData, "secondPawnData", Array.Empty<object>());
+			Scribe_Deep.Look(ref firstPawnData, "firstPawnData");
+			Scribe_Deep.Look(ref secondPawnData, "secondPawnData");
 		}
 
-		
 		protected override IEnumerable<Rule> SpecialTextGenerationRules()
 		{
-			if (this.def.firstPawnSymbol.NullOrEmpty() || this.def.secondPawnSymbol.NullOrEmpty())
+			if (def.firstPawnSymbol.NullOrEmpty() || def.secondPawnSymbol.NullOrEmpty())
 			{
-				Log.Error(this.def + " uses DoublePawn tale class but firstPawnSymbol and secondPawnSymbol are not both set", false);
+				Log.Error(def + " uses DoublePawn tale class but firstPawnSymbol and secondPawnSymbol are not both set");
 			}
-			foreach (Rule rule in this.firstPawnData.GetRules("ANYPAWN"))
+			foreach (Rule rule in firstPawnData.GetRules("ANYPAWN"))
 			{
 				yield return rule;
 			}
-			IEnumerator<Rule> enumerator = null;
-			foreach (Rule rule2 in this.firstPawnData.GetRules(this.def.firstPawnSymbol))
+			foreach (Rule rule2 in firstPawnData.GetRules(def.firstPawnSymbol))
 			{
 				yield return rule2;
 			}
-			enumerator = null;
-			if (this.secondPawnData != null)
+			if (secondPawnData != null)
 			{
-				foreach (Rule rule3 in this.firstPawnData.GetRules("ANYPAWN"))
+				foreach (Rule rule3 in firstPawnData.GetRules("ANYPAWN"))
 				{
 					yield return rule3;
 				}
-				enumerator = null;
-				foreach (Rule rule4 in this.secondPawnData.GetRules(this.def.secondPawnSymbol))
+				foreach (Rule rule4 in secondPawnData.GetRules(def.secondPawnSymbol))
 				{
 					yield return rule4;
 				}
-				enumerator = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public override void GenerateTestData()
 		{
 			base.GenerateTestData();
-			this.firstPawnData = TaleData_Pawn.GenerateRandom();
-			this.secondPawnData = TaleData_Pawn.GenerateRandom();
+			firstPawnData = TaleData_Pawn.GenerateRandom();
+			secondPawnData = TaleData_Pawn.GenerateRandom();
 		}
-
-		
-		public TaleData_Pawn firstPawnData;
-
-		
-		public TaleData_Pawn secondPawnData;
 	}
 }

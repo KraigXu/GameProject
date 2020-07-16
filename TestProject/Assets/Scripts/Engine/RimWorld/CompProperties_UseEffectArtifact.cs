@@ -1,18 +1,14 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompProperties_UseEffectArtifact : CompProperties_UseEffect
 	{
-		
+		public SoundDef sound;
+
 		public CompProperties_UseEffectArtifact()
 		{
-			this.compClass = typeof(CompUseEffect_Artifact);
+			compClass = typeof(CompUseEffect_Artifact);
 		}
-
-		
-		public SoundDef sound;
 	}
 }

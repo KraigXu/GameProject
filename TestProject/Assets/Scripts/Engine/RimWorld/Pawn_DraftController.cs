@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,110 +5,104 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class Pawn_DraftController : IExposable
 	{
-		
-		
-		
+		public Pawn pawn;
+
+		private bool draftedInt;
+
+		private bool fireAtWillInt = true;
+
+		private AutoUndrafter autoUndrafter;
+
 		public bool Drafted
 		{
 			get
 			{
-				return this.draftedInt;
+				return draftedInt;
 			}
 			set
 			{
-				if (value == this.draftedInt)
+				if (value == draftedInt)
 				{
 					return;
 				}
-				this.pawn.mindState.priorityWork.ClearPrioritizedWorkAndJobQueue();
-				this.fireAtWillInt = true;
-				this.draftedInt = value;
-				if (!value && this.pawn.Spawned)
+				pawn.mindState.priorityWork.ClearPrioritizedWorkAndJobQueue();
+				fireAtWillInt = true;
+				draftedInt = value;
+				if (!value && pawn.Spawned)
 				{
-					this.pawn.Map.pawnDestinationReservationManager.ReleaseAllClaimedBy(this.pawn);
+					pawn.Map.pawnDestinationReservationManager.ReleaseAllClaimedBy(pawn);
 				}
-				this.pawn.jobs.ClearQueuedJobs(true);
-				if (this.pawn.jobs.curJob != null && this.pawn.jobs.IsCurrentJobPlayerInterruptible())
+				pawn.jobs.ClearQueuedJobs();
+				if (pawn.jobs.curJob != null && pawn.jobs.IsCurrentJobPlayerInterruptible())
 				{
-					this.pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+					pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
 				}
-				if (this.draftedInt)
+				if (draftedInt)
 				{
-					Lord lord = this.pawn.GetLord();
+					Lord lord = pawn.GetLord();
 					if (lord != null && lord.LordJob is LordJob_VoluntarilyJoinable)
 					{
-						lord.Notify_PawnLost(this.pawn, PawnLostCondition.Drafted, null);
+						lord.Notify_PawnLost(pawn, PawnLostCondition.Drafted);
 					}
-					this.autoUndrafter.Notify_Drafted();
+					autoUndrafter.Notify_Drafted();
 				}
-				else if (this.pawn.playerSettings != null)
+				else if (pawn.playerSettings != null)
 				{
-					this.pawn.playerSettings.animalsReleased = false;
+					pawn.playerSettings.animalsReleased = false;
 				}
-				foreach (Pawn pawn in PawnUtility.SpawnedMasteredPawns(this.pawn))
+				foreach (Pawn item in PawnUtility.SpawnedMasteredPawns(pawn))
 				{
-					pawn.jobs.Notify_MasterDraftedOrUndrafted();
+					item.jobs.Notify_MasterDraftedOrUndrafted();
 				}
 			}
 		}
 
-		
-		
-		
 		public bool FireAtWill
 		{
 			get
 			{
-				return this.fireAtWillInt;
+				return fireAtWillInt;
 			}
 			set
 			{
-				this.fireAtWillInt = value;
-				if (!this.fireAtWillInt && this.pawn.stances.curStance is Stance_Warmup)
+				fireAtWillInt = value;
+				if (!fireAtWillInt && pawn.stances.curStance is Stance_Warmup)
 				{
-					this.pawn.stances.CancelBusyStanceSoft();
+					pawn.stances.CancelBusyStanceSoft();
 				}
 			}
 		}
 
-		
 		public Pawn_DraftController(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.autoUndrafter = new AutoUndrafter(pawn);
+			autoUndrafter = new AutoUndrafter(pawn);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<bool>(ref this.draftedInt, "drafted", false, false);
-			Scribe_Values.Look<bool>(ref this.fireAtWillInt, "fireAtWill", true, false);
-			Scribe_Deep.Look<AutoUndrafter>(ref this.autoUndrafter, "autoUndrafter", new object[]
-			{
-				this.pawn
-			});
+			Scribe_Values.Look(ref draftedInt, "drafted", defaultValue: false);
+			Scribe_Values.Look(ref fireAtWillInt, "fireAtWill", defaultValue: true);
+			Scribe_Deep.Look(ref autoUndrafter, "autoUndrafter", pawn);
 		}
 
-		
 		public void DraftControllerTick()
 		{
-			this.autoUndrafter.AutoUndraftTick();
+			autoUndrafter.AutoUndraftTick();
 		}
 
-		
 		internal IEnumerable<Gizmo> GetGizmos()
 		{
 			Command_Toggle command_Toggle = new Command_Toggle();
 			command_Toggle.hotKey = KeyBindingDefOf.Command_ColonistDraft;
-			command_Toggle.isActive = (() => this.Drafted);
+			command_Toggle.isActive = (() => Drafted);
 			command_Toggle.toggleAction = delegate
 			{
-				this.Drafted = !this.Drafted;
+				Drafted = !Drafted;
 				PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Drafting, KnowledgeAmount.SpecificInteraction);
-				if (this.Drafted)
+				if (Drafted)
 				{
 					LessonAutoActivator.TeachOpportunity(ConceptDefOf.QueueOrders, OpportunityType.GoodToKnow);
 				}
@@ -118,15 +111,15 @@ namespace RimWorld
 			command_Toggle.icon = TexCommand.Draft;
 			command_Toggle.turnOnSound = SoundDefOf.DraftOn;
 			command_Toggle.turnOffSound = SoundDefOf.DraftOff;
-			if (!this.Drafted)
+			if (!Drafted)
 			{
 				command_Toggle.defaultLabel = "CommandDraftLabel".Translate();
 			}
-			if (this.pawn.Downed)
+			if (pawn.Downed)
 			{
-				command_Toggle.Disable("IsIncapped".Translate(this.pawn.LabelShort, this.pawn));
+				command_Toggle.Disable("IsIncapped".Translate(pawn.LabelShort, pawn));
 			}
-			if (!this.Drafted)
+			if (!Drafted)
 			{
 				command_Toggle.tutorTag = "Draft";
 			}
@@ -135,41 +128,26 @@ namespace RimWorld
 				command_Toggle.tutorTag = "Undraft";
 			}
 			yield return command_Toggle;
-			if (this.Drafted && this.pawn.equipment.Primary != null && this.pawn.equipment.Primary.def.IsRangedWeapon)
+			if (Drafted && pawn.equipment.Primary != null && pawn.equipment.Primary.def.IsRangedWeapon)
 			{
-				yield return new Command_Toggle
+				Command_Toggle command_Toggle2 = new Command_Toggle();
+				command_Toggle2.hotKey = KeyBindingDefOf.Misc6;
+				command_Toggle2.isActive = (() => FireAtWill);
+				command_Toggle2.toggleAction = delegate
 				{
-					hotKey = KeyBindingDefOf.Misc6,
-					isActive = (() => this.FireAtWill),
-					toggleAction = delegate
-					{
-						this.FireAtWill = !this.FireAtWill;
-					},
-					icon = TexCommand.FireAtWill,
-					defaultLabel = "CommandFireAtWillLabel".Translate(),
-					defaultDesc = "CommandFireAtWillDesc".Translate(),
-					tutorTag = "FireAtWillToggle"
+					FireAtWill = !FireAtWill;
 				};
+				command_Toggle2.icon = TexCommand.FireAtWill;
+				command_Toggle2.defaultLabel = "CommandFireAtWillLabel".Translate();
+				command_Toggle2.defaultDesc = "CommandFireAtWillDesc".Translate();
+				command_Toggle2.tutorTag = "FireAtWillToggle";
+				yield return command_Toggle2;
 			}
-			yield break;
 		}
 
-		
 		internal void Notify_PrimaryWeaponChanged()
 		{
-			this.fireAtWillInt = true;
+			fireAtWillInt = true;
 		}
-
-		
-		public Pawn pawn;
-
-		
-		private bool draftedInt;
-
-		
-		private bool fireAtWillInt = true;
-
-		
-		private AutoUndrafter autoUndrafter;
 	}
 }

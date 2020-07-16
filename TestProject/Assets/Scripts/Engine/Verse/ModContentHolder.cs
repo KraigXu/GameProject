@@ -1,115 +1,92 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ModContentHolder<T> where T : class
 	{
-		
+		private ModContentPack mod;
+
+		public Dictionary<string, T> contentList = new Dictionary<string, T>();
+
+		public List<IDisposable> extraDisposables = new List<IDisposable>();
+
 		public ModContentHolder(ModContentPack mod)
 		{
 			this.mod = mod;
 		}
 
-		
 		public void ClearDestroy()
 		{
 			if (typeof(UnityEngine.Object).IsAssignableFrom(typeof(T)))
 			{
-				foreach (T localObj2 in this.contentList.Values)
+				foreach (T value in contentList.Values)
 				{
-					T localObj = localObj2;
+					T localObj = value;
 					LongEventHandler.ExecuteWhenFinished(delegate
 					{
-						UnityEngine.Object.Destroy((UnityEngine.Object)((object)localObj));
+						UnityEngine.Object.Destroy((UnityEngine.Object)(object)localObj);
 					});
 				}
 			}
-			for (int i = 0; i < this.extraDisposables.Count; i++)
+			for (int i = 0; i < extraDisposables.Count; i++)
 			{
-				this.extraDisposables[i].Dispose();
+				extraDisposables[i].Dispose();
 			}
-			this.extraDisposables.Clear();
-			this.contentList.Clear();
+			extraDisposables.Clear();
+			contentList.Clear();
 		}
 
-		
 		public void ReloadAll()
 		{
-			foreach (Pair<string, LoadedContentItem<T>> pair in ModContentLoader<T>.LoadAllForMod(this.mod))
+			foreach (Pair<string, LoadedContentItem<T>> item in ModContentLoader<T>.LoadAllForMod(mod))
 			{
-				string text = pair.First;
-				text = text.Replace('\\', '/');
-				string text2 = GenFilePaths.ContentPath<T>();
-				if (text.StartsWith(text2))
+				string first = item.First;
+				first = first.Replace('\\', '/');
+				string text = GenFilePaths.ContentPath<T>();
+				if (first.StartsWith(text))
 				{
-					text = text.Substring(text2.Length);
+					first = first.Substring(text.Length);
 				}
-				if (text.EndsWith(Path.GetExtension(text)))
+				if (first.EndsWith(Path.GetExtension(first)))
 				{
-					text = text.Substring(0, text.Length - Path.GetExtension(text).Length);
+					first = first.Substring(0, first.Length - Path.GetExtension(first).Length);
 				}
-				if (this.contentList.ContainsKey(text))
+				if (contentList.ContainsKey(first))
 				{
-					Log.Warning(string.Concat(new object[]
-					{
-						"Tried to load duplicate ",
-						typeof(T),
-						" with path: ",
-						pair.Second.internalFile,
-						" and internal path: ",
-						text
-					}), false);
+					Log.Warning("Tried to load duplicate " + typeof(T) + " with path: " + item.Second.internalFile + " and internal path: " + first);
 				}
 				else
 				{
-					this.contentList.Add(text, pair.Second.contentItem);
-					if (pair.Second.extraDisposable != null)
+					contentList.Add(first, item.Second.contentItem);
+					if (item.Second.extraDisposable != null)
 					{
-						this.extraDisposables.Add(pair.Second.extraDisposable);
+						extraDisposables.Add(item.Second.extraDisposable);
 					}
 				}
 			}
 		}
 
-		
 		public T Get(string path)
 		{
-			T result;
-			if (this.contentList.TryGetValue(path, out result))
+			if (contentList.TryGetValue(path, out T value))
 			{
-				return result;
+				return value;
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		public IEnumerable<T> GetAllUnderPath(string pathRoot)
 		{
-			foreach (KeyValuePair<string, T> keyValuePair in this.contentList)
+			foreach (KeyValuePair<string, T> content in contentList)
 			{
-				if (keyValuePair.Key.StartsWith(pathRoot))
+				if (content.Key.StartsWith(pathRoot))
 				{
-					yield return keyValuePair.Value;
+					yield return content.Value;
 				}
 			}
-			Dictionary<string, T>.Enumerator enumerator = default(Dictionary<string, T>.Enumerator);
-			yield break;
-			yield break;
 		}
-
-		
-		private ModContentPack mod;
-
-		
-		public Dictionary<string, T> contentList = new Dictionary<string, T>();
-
-		
-		public List<IDisposable> extraDisposables = new List<IDisposable>();
-
-
-    }
+	}
 }

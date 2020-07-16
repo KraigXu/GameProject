@@ -1,23 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_ConstructDeliverResourcesToBlueprints : WorkGiver_ConstructDeliverResources
 	{
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForGroup(ThingRequestGroup.Blueprint);
-			}
-		}
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.Blueprint);
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			if (t.Faction != pawn.Faction)
@@ -33,7 +22,7 @@ namespace RimWorld
 			{
 				return GenConstruct.HandleBlockingThingJob(blueprint, pawn, forced);
 			}
-			bool flag = this.def.workType == WorkTypeDefOf.Construction;
+			bool flag = def.workType == WorkTypeDefOf.Construction;
 			if (!GenConstruct.CanConstruct(blueprint, pawn, flag, forced))
 			{
 				return null;
@@ -42,19 +31,19 @@ namespace RimWorld
 			{
 				return null;
 			}
-			Job job = base.RemoveExistingFloorJob(pawn, blueprint);
+			Job job = RemoveExistingFloorJob(pawn, blueprint);
 			if (job != null)
 			{
 				return job;
 			}
-			Job job2 = base.ResourceDeliverJobFor(pawn, blueprint, true);
+			Job job2 = ResourceDeliverJobFor(pawn, blueprint);
 			if (job2 != null)
 			{
 				return job2;
 			}
-			if (this.def.workType != WorkTypeDefOf.Hauling)
+			if (def.workType != WorkTypeDefOf.Hauling)
 			{
-				Job job3 = this.NoCostFrameMakeJobFor(pawn, blueprint);
+				Job job3 = NoCostFrameMakeJobFor(pawn, blueprint);
 				if (job3 != null)
 				{
 					return job3;
@@ -63,7 +52,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		private Job NoCostFrameMakeJobFor(Pawn pawn, IConstructible c)
 		{
 			if (c is Blueprint_Install)

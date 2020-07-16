@@ -1,57 +1,50 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Instruction_FinishConstruction : Lesson_Instruction
 	{
-		
-		
+		private int initialBlueprintsCount = -1;
+
 		protected override float ProgressPercent
 		{
 			get
 			{
-				if (this.initialBlueprintsCount < 0)
+				if (initialBlueprintsCount < 0)
 				{
-					this.initialBlueprintsCount = this.ConstructionNeeders().Count<Thing>();
+					initialBlueprintsCount = ConstructionNeeders().Count();
 				}
-				if (this.initialBlueprintsCount == 0)
+				if (initialBlueprintsCount == 0)
 				{
 					return 1f;
 				}
-				return 1f - (float)this.ConstructionNeeders().Count<Thing>() / (float)this.initialBlueprintsCount;
+				return 1f - (float)ConstructionNeeders().Count() / (float)initialBlueprintsCount;
 			}
 		}
 
-		
 		private IEnumerable<Thing> ConstructionNeeders()
 		{
 			return from b in base.Map.listerThings.ThingsInGroup(ThingRequestGroup.Blueprint).Concat(base.Map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingFrame))
-			where b.Faction == Faction.OfPlayer
-			select b;
+				where b.Faction == Faction.OfPlayer
+				select b;
 		}
 
-		
 		public override void LessonUpdate()
 		{
 			base.LessonUpdate();
-			if (this.ConstructionNeeders().Count<Thing>() < 3)
+			if (ConstructionNeeders().Count() < 3)
 			{
-				foreach (Thing thing in this.ConstructionNeeders())
+				foreach (Thing item in ConstructionNeeders())
 				{
-					GenDraw.DrawArrowPointingAt(thing.DrawPos, false);
+					GenDraw.DrawArrowPointingAt(item.DrawPos);
 				}
 			}
-			if (this.ProgressPercent > 0.9999f)
+			if (ProgressPercent > 0.9999f)
 			{
 				Find.ActiveLesson.Deactivate();
 			}
 		}
-
-		
-		private int initialBlueprintsCount = -1;
 	}
 }

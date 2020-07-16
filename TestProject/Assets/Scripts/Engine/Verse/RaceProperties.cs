@@ -1,179 +1,252 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class RaceProperties
 	{
-		
-		
-		public bool Humanlike
-		{
-			get
-			{
-				return this.intelligence >= Intelligence.Humanlike;
-			}
-		}
+		public Intelligence intelligence;
 
-		
-		
-		public bool ToolUser
-		{
-			get
-			{
-				return this.intelligence >= Intelligence.ToolUser;
-			}
-		}
+		private FleshTypeDef fleshType;
 
-		
-		
+		private ThingDef bloodDef;
+
+		public bool hasGenders = true;
+
+		public bool needsRest = true;
+
+		public ThinkTreeDef thinkTreeMain;
+
+		public ThinkTreeDef thinkTreeConstant;
+
+		public PawnNameCategory nameCategory;
+
+		public FoodTypeFlags foodType;
+
+		public BodyDef body;
+
+		public Type deathActionWorkerClass;
+
+		public List<AnimalBiomeRecord> wildBiomes;
+
+		public SimpleCurve ageGenerationCurve;
+
+		public bool makesFootprints;
+
+		public int executionRange = 2;
+
+		public float lifeExpectancy = 10f;
+
+		public List<HediffGiverSetDef> hediffGiverSets;
+
+		public bool herdAnimal;
+
+		public bool packAnimal;
+
+		public bool predator;
+
+		public float maxPreyBodySize = 99999f;
+
+		public float wildness;
+
+		public float petness;
+
+		public float nuzzleMtbHours = -1f;
+
+		public float manhunterOnDamageChance;
+
+		public float manhunterOnTameFailChance;
+
+		public bool canBePredatorPrey = true;
+
+		public bool herdMigrationAllowed = true;
+
+		public List<ThingDef> willNeverEat;
+
+		public float gestationPeriodDays = 10f;
+
+		public SimpleCurve litterSizeCurve;
+
+		public float mateMtbHours = 12f;
+
+		[NoTranslate]
+		public List<string> untrainableTags;
+
+		[NoTranslate]
+		public List<string> trainableTags;
+
+		public TrainabilityDef trainability;
+
+		private RulePackDef nameGenerator;
+
+		private RulePackDef nameGeneratorFemale;
+
+		public float nameOnTameChance;
+
+		public float nameOnNuzzleChance;
+
+		public float baseBodySize = 1f;
+
+		public float baseHealthScale = 1f;
+
+		public float baseHungerRate = 1f;
+
+		public List<LifeStageAge> lifeStageAges = new List<LifeStageAge>();
+
+		[MustTranslate]
+		public string meatLabel;
+
+		public Color meatColor = Color.white;
+
+		public float meatMarketValue = 2f;
+
+		public ThingDef useMeatFrom;
+
+		public ThingDef useLeatherFrom;
+
+		public ThingDef leatherDef;
+
+		public ShadowData specialShadowData;
+
+		public IntRange soundCallIntervalRange = new IntRange(2000, 4000);
+
+		public SoundDef soundMeleeHitPawn;
+
+		public SoundDef soundMeleeHitBuilding;
+
+		public SoundDef soundMeleeMiss;
+
+		public SoundDef soundMeleeDodge;
+
+		[Unsaved(false)]
+		private DeathActionWorker deathActionWorkerInt;
+
+		[Unsaved(false)]
+		public ThingDef meatDef;
+
+		[Unsaved(false)]
+		public ThingDef corpseDef;
+
+		[Unsaved(false)]
+		private PawnKindDef cachedAnyPawnKind;
+
+		public bool Humanlike => (int)intelligence >= 2;
+
+		public bool ToolUser => (int)intelligence >= 1;
+
 		public bool Animal
 		{
 			get
 			{
-				return !this.ToolUser && this.IsFlesh;
+				if (!ToolUser)
+				{
+					return IsFlesh;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public bool EatsFood
-		{
-			get
-			{
-				return this.foodType > FoodTypeFlags.None;
-			}
-		}
+		public bool EatsFood => foodType != FoodTypeFlags.None;
 
-		
-		
 		public float FoodLevelPercentageWantEat
 		{
 			get
 			{
-				switch (this.ResolvedDietCategory)
+				switch (ResolvedDietCategory)
 				{
 				case DietCategory.NeverEats:
 					return 0.3f;
-				case DietCategory.Herbivorous:
-					return 0.45f;
-				case DietCategory.Dendrovorous:
-					return 0.45f;
-				case DietCategory.Ovivorous:
-					return 0.4f;
 				case DietCategory.Omnivorous:
 					return 0.3f;
 				case DietCategory.Carnivorous:
 					return 0.3f;
+				case DietCategory.Ovivorous:
+					return 0.4f;
+				case DietCategory.Herbivorous:
+					return 0.45f;
+				case DietCategory.Dendrovorous:
+					return 0.45f;
 				default:
 					throw new InvalidOperationException();
 				}
 			}
 		}
 
-		
-		
 		public DietCategory ResolvedDietCategory
 		{
 			get
 			{
-				if (!this.EatsFood)
+				if (!EatsFood)
 				{
 					return DietCategory.NeverEats;
 				}
-				if (this.Eats(FoodTypeFlags.Tree))
+				if (Eats(FoodTypeFlags.Tree))
 				{
 					return DietCategory.Dendrovorous;
 				}
-				if (this.Eats(FoodTypeFlags.Meat))
+				if (Eats(FoodTypeFlags.Meat))
 				{
-					if (this.Eats(FoodTypeFlags.VegetableOrFruit) || this.Eats(FoodTypeFlags.Plant))
+					if (Eats(FoodTypeFlags.VegetableOrFruit) || Eats(FoodTypeFlags.Plant))
 					{
 						return DietCategory.Omnivorous;
 					}
 					return DietCategory.Carnivorous;
 				}
-				else
+				if (Eats(FoodTypeFlags.AnimalProduct))
 				{
-					if (this.Eats(FoodTypeFlags.AnimalProduct))
-					{
-						return DietCategory.Ovivorous;
-					}
-					return DietCategory.Herbivorous;
+					return DietCategory.Ovivorous;
 				}
+				return DietCategory.Herbivorous;
 			}
 		}
 
-		
-		
 		public DeathActionWorker DeathActionWorker
 		{
 			get
 			{
-				if (this.deathActionWorkerInt == null)
+				if (deathActionWorkerInt == null)
 				{
-					if (this.deathActionWorkerClass != null)
+					if (deathActionWorkerClass != null)
 					{
-						this.deathActionWorkerInt = (DeathActionWorker)Activator.CreateInstance(this.deathActionWorkerClass);
+						deathActionWorkerInt = (DeathActionWorker)Activator.CreateInstance(deathActionWorkerClass);
 					}
 					else
 					{
-						this.deathActionWorkerInt = new DeathActionWorker_Simple();
+						deathActionWorkerInt = new DeathActionWorker_Simple();
 					}
 				}
-				return this.deathActionWorkerInt;
+				return deathActionWorkerInt;
 			}
 		}
 
-		
-		
 		public FleshTypeDef FleshType
 		{
 			get
 			{
-				if (this.fleshType != null)
+				if (fleshType != null)
 				{
-					return this.fleshType;
+					return fleshType;
 				}
 				return FleshTypeDefOf.Normal;
 			}
 		}
 
-		
-		
-		public bool IsMechanoid
-		{
-			get
-			{
-				return this.FleshType == FleshTypeDefOf.Mechanoid;
-			}
-		}
+		public bool IsMechanoid => FleshType == FleshTypeDefOf.Mechanoid;
 
-		
-		
-		public bool IsFlesh
-		{
-			get
-			{
-				return this.FleshType != FleshTypeDefOf.Mechanoid;
-			}
-		}
+		public bool IsFlesh => FleshType != FleshTypeDefOf.Mechanoid;
 
-		
-		
 		public ThingDef BloodDef
 		{
 			get
 			{
-				if (this.bloodDef != null)
+				if (bloodDef != null)
 				{
-					return this.bloodDef;
+					return bloodDef;
 				}
-				if (this.IsFlesh)
+				if (IsFlesh)
 				{
 					return ThingDefOf.Filth_Blood;
 				}
@@ -181,224 +254,213 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public bool CanDoHerdMigration
 		{
 			get
 			{
-				return this.Animal && this.herdMigrationAllowed;
+				if (Animal)
+				{
+					return herdMigrationAllowed;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public PawnKindDef AnyPawnKind
 		{
 			get
 			{
-				if (this.cachedAnyPawnKind == null)
+				if (cachedAnyPawnKind == null)
 				{
 					List<PawnKindDef> allDefsListForReading = DefDatabase<PawnKindDef>.AllDefsListForReading;
 					for (int i = 0; i < allDefsListForReading.Count; i++)
 					{
 						if (allDefsListForReading[i].race.race == this)
 						{
-							this.cachedAnyPawnKind = allDefsListForReading[i];
+							cachedAnyPawnKind = allDefsListForReading[i];
 							break;
 						}
 					}
 				}
-				return this.cachedAnyPawnKind;
+				return cachedAnyPawnKind;
 			}
 		}
 
-		
 		public RulePackDef GetNameGenerator(Gender gender)
 		{
-			if (gender == Gender.Female && this.nameGeneratorFemale != null)
+			if (gender == Gender.Female && nameGeneratorFemale != null)
 			{
-				return this.nameGeneratorFemale;
+				return nameGeneratorFemale;
 			}
-			return this.nameGenerator;
+			return nameGenerator;
 		}
 
-		
 		public bool CanEverEat(Thing t)
 		{
-			return this.CanEverEat(t.def);
+			return CanEverEat(t.def);
 		}
 
-		
 		public bool CanEverEat(ThingDef t)
 		{
-			return this.EatsFood && t.ingestible != null && t.ingestible.preferability != FoodPreferability.Undefined && (this.willNeverEat == null || !this.willNeverEat.Contains(t)) && this.Eats(t.ingestible.foodType);
+			if (!EatsFood)
+			{
+				return false;
+			}
+			if (t.ingestible == null)
+			{
+				return false;
+			}
+			if (t.ingestible.preferability == FoodPreferability.Undefined)
+			{
+				return false;
+			}
+			if (willNeverEat != null && willNeverEat.Contains(t))
+			{
+				return false;
+			}
+			return Eats(t.ingestible.foodType);
 		}
 
-		
 		public bool Eats(FoodTypeFlags food)
 		{
-			return this.EatsFood && (this.foodType & food) > FoodTypeFlags.None;
+			if (!EatsFood)
+			{
+				return false;
+			}
+			return (foodType & food) != 0;
 		}
 
-		
 		public void ResolveReferencesSpecial()
 		{
-			if (this.useMeatFrom != null)
+			if (useMeatFrom != null)
 			{
-				this.meatDef = this.useMeatFrom.race.meatDef;
+				meatDef = useMeatFrom.race.meatDef;
 			}
-			if (this.useLeatherFrom != null)
+			if (useLeatherFrom != null)
 			{
-				this.leatherDef = this.useLeatherFrom.race.leatherDef;
+				leatherDef = useLeatherFrom.race.leatherDef;
 			}
 		}
 
-		
 		public IEnumerable<string> ConfigErrors()
 		{
-			if (this.soundMeleeHitPawn == null)
+			if (soundMeleeHitPawn == null)
 			{
 				yield return "soundMeleeHitPawn is null";
 			}
-			if (this.soundMeleeHitBuilding == null)
+			if (soundMeleeHitBuilding == null)
 			{
 				yield return "soundMeleeHitBuilding is null";
 			}
-			if (this.soundMeleeMiss == null)
+			if (soundMeleeMiss == null)
 			{
 				yield return "soundMeleeMiss is null";
 			}
-			if (this.predator && !this.Eats(FoodTypeFlags.Meat))
+			if (predator && !Eats(FoodTypeFlags.Meat))
 			{
 				yield return "predator but doesn't eat meat";
 			}
-			int num;
-			for (int i = 0; i < this.lifeStageAges.Count; i = num + 1)
+			for (int j = 0; j < lifeStageAges.Count; j++)
 			{
-				for (int j = 0; j < i; j = num + 1)
+				for (int i = 0; i < j; i++)
 				{
-					if (this.lifeStageAges[j].minAge > this.lifeStageAges[i].minAge)
+					if (lifeStageAges[i].minAge > lifeStageAges[j].minAge)
 					{
 						yield return "lifeStages minAges are not in ascending order";
 					}
-					num = j;
 				}
-				num = i;
 			}
-			if (this.litterSizeCurve != null)
+			if (litterSizeCurve != null)
 			{
-				foreach (string text in this.litterSizeCurve.ConfigErrors("litterSizeCurve"))
+				foreach (string item in litterSizeCurve.ConfigErrors("litterSizeCurve"))
 				{
-					
+					yield return item;
 				}
-				IEnumerator<string> enumerator = null;
 			}
-			if (this.nameOnTameChance > 0f && this.nameGenerator == null)
+			if (nameOnTameChance > 0f && nameGenerator == null)
 			{
 				yield return "can be named, but has no nameGenerator";
 			}
-			if (this.Animal && this.wildness < 0f)
+			if (Animal && wildness < 0f)
 			{
 				yield return "is animal but wildness is not defined";
 			}
-			if (this.useMeatFrom != null && this.useMeatFrom.category != ThingCategory.Pawn)
+			if (useMeatFrom != null && useMeatFrom.category != ThingCategory.Pawn)
 			{
-				yield return "tries to use meat from non-pawn " + this.useMeatFrom;
+				yield return "tries to use meat from non-pawn " + useMeatFrom;
 			}
-			if (this.useMeatFrom != null && this.useMeatFrom.race.useMeatFrom != null)
+			if (useMeatFrom != null && useMeatFrom.race.useMeatFrom != null)
 			{
-				yield return string.Concat(new object[]
-				{
-					"tries to use meat from ",
-					this.useMeatFrom,
-					" which uses meat from ",
-					this.useMeatFrom.race.useMeatFrom
-				});
+				yield return "tries to use meat from " + useMeatFrom + " which uses meat from " + useMeatFrom.race.useMeatFrom;
 			}
-			if (this.useLeatherFrom != null && this.useLeatherFrom.category != ThingCategory.Pawn)
+			if (useLeatherFrom != null && useLeatherFrom.category != ThingCategory.Pawn)
 			{
-				yield return "tries to use leather from non-pawn " + this.useLeatherFrom;
+				yield return "tries to use leather from non-pawn " + useLeatherFrom;
 			}
-			if (this.useLeatherFrom != null && this.useLeatherFrom.race.useLeatherFrom != null)
+			if (useLeatherFrom != null && useLeatherFrom.race.useLeatherFrom != null)
 			{
-				yield return string.Concat(new object[]
-				{
-					"tries to use leather from ",
-					this.useLeatherFrom,
-					" which uses leather from ",
-					this.useLeatherFrom.race.useLeatherFrom
-				});
+				yield return "tries to use leather from " + useLeatherFrom + " which uses leather from " + useLeatherFrom.race.useLeatherFrom;
 			}
-			if (this.Animal && this.trainability == null)
+			if (Animal && trainability == null)
 			{
 				yield return "animal has trainability = null";
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef parentDef, StatRequest req)
 		{
-			yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Race".Translate(), parentDef.LabelCap, parentDef.description, 2100, null, null, false);
+			yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Race".Translate(), parentDef.LabelCap, parentDef.description, 2100);
 			if (!parentDef.race.IsMechanoid)
 			{
-				string text = this.foodType.ToHumanString().CapitalizeFirst();
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Diet".Translate(), text, "Stat_Race_Diet_Desc".Translate(text), 1500, null, null, false);
+				string text = foodType.ToHumanString().CapitalizeFirst();
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Diet".Translate(), text, "Stat_Race_Diet_Desc".Translate(text), 1500);
 			}
 			if (req.HasThing && req.Thing is Pawn && (req.Thing as Pawn).needs != null && (req.Thing as Pawn).needs.food != null)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "HungerRate".Translate(), ((req.Thing as Pawn).needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed, false) * 60000f).ToString("0.##"), RaceProperties.NutritionEatenPerDayExplanation_NewTemp(req.Thing as Pawn, false, false, true), 1600, null, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "HungerRate".Translate(), ((req.Thing as Pawn).needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed) * 60000f).ToString("0.##"), NutritionEatenPerDayExplanation_NewTemp(req.Thing as Pawn), 1600);
 			}
 			if (parentDef.race.leatherDef != null)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "LeatherType".Translate(), parentDef.race.leatherDef.LabelCap, "Stat_Race_LeatherType_Desc".Translate(), 3550, null, new Dialog_InfoCard.Hyperlink[]
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "LeatherType".Translate(), parentDef.race.leatherDef.LabelCap, "Stat_Race_LeatherType_Desc".Translate(), 3550, null, new Dialog_InfoCard.Hyperlink[1]
 				{
-					new Dialog_InfoCard.Hyperlink(parentDef.race.leatherDef, -1)
-				}, false);
+					new Dialog_InfoCard.Hyperlink(parentDef.race.leatherDef)
+				});
 			}
-			if (parentDef.race.Animal || this.wildness > 0f)
+			if (parentDef.race.Animal || wildness > 0f)
 			{
-				StatDrawEntry statDrawEntry = new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Wildness".Translate(), this.wildness.ToStringPercent(), TrainableUtility.GetWildnessExplanation(parentDef), 2050, null, null, false);
-				yield return statDrawEntry;
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "HarmedRevengeChance".Translate(), PawnUtility.GetManhunterOnDamageChance(parentDef.race).ToStringPercent(), "HarmedRevengeChanceExplanation".Translate(), 510, null, null, false);
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "TameFailedRevengeChance".Translate(), parentDef.race.manhunterOnTameFailChance.ToStringPercent(), "Stat_Race_Animal_TameFailedRevengeChance_Desc".Translate(), 511, null, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Wildness".Translate(), wildness.ToStringPercent(), TrainableUtility.GetWildnessExplanation(parentDef), 2050);
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "HarmedRevengeChance".Translate(), PawnUtility.GetManhunterOnDamageChance(parentDef.race).ToStringPercent(), "HarmedRevengeChanceExplanation".Translate(), 510);
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "TameFailedRevengeChance".Translate(), parentDef.race.manhunterOnTameFailChance.ToStringPercent(), "Stat_Race_Animal_TameFailedRevengeChance_Desc".Translate(), 511);
 			}
-			if (this.intelligence < Intelligence.Humanlike && this.trainability != null)
+			if ((int)intelligence < 2 && trainability != null)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Trainability".Translate(), this.trainability.LabelCap, "Stat_Race_Trainability_Desc".Translate(), 2500, null, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "Trainability".Translate(), trainability.LabelCap, "Stat_Race_Trainability_Desc".Translate(), 2500);
 			}
-			yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "StatsReport_LifeExpectancy".Translate(), this.lifeExpectancy.ToStringByStyle(ToStringStyle.Integer, ToStringNumberSense.Absolute), "Stat_Race_LifeExpectancy_Desc".Translate(), 2000, null, null, false);
-			if (this.intelligence < Intelligence.Humanlike && !parentDef.race.IsMechanoid)
+			yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "StatsReport_LifeExpectancy".Translate(), lifeExpectancy.ToStringByStyle(ToStringStyle.Integer), "Stat_Race_LifeExpectancy_Desc".Translate(), 2000);
+			if ((int)intelligence < 2 && !parentDef.race.IsMechanoid)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "AnimalFilthRate".Translate(), (PawnUtility.AnimalFilthChancePerCell(parentDef, parentDef.race.baseBodySize) * 1000f).ToString("F2"), "AnimalFilthRateExplanation".Translate(1000.ToString()), 2203, null, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "AnimalFilthRate".Translate(), (PawnUtility.AnimalFilthChancePerCell(parentDef, parentDef.race.baseBodySize) * 1000f).ToString("F2"), "AnimalFilthRateExplanation".Translate(1000.ToString()), 2203);
 			}
 			if (parentDef.race.Animal)
 			{
-				StatDrawEntry statDrawEntry2 = new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "PackAnimal".Translate(), this.packAnimal ? "Yes".Translate() : "No".Translate(), "PackAnimalExplanation".Translate(), 2202, null, null, false);
-				yield return statDrawEntry2;
+				yield return new StatDrawEntry(StatCategoryDefOf.BasicsPawn, "PackAnimal".Translate(), packAnimal ? "Yes".Translate() : "No".Translate(), "PackAnimalExplanation".Translate(), 2202);
 				if (parentDef.race.nuzzleMtbHours > 0f)
 				{
-					StatDrawEntry statDrawEntry3 = new StatDrawEntry(StatCategoryDefOf.PawnSocial, "NuzzleInterval".Translate(), Mathf.RoundToInt(parentDef.race.nuzzleMtbHours * 2500f).ToStringTicksToPeriod(true, false, true, true), "NuzzleIntervalExplanation".Translate(), 500, null, null, false);
-					yield return statDrawEntry3;
+					yield return new StatDrawEntry(StatCategoryDefOf.PawnSocial, "NuzzleInterval".Translate(), Mathf.RoundToInt(parentDef.race.nuzzleMtbHours * 2500f).ToStringTicksToPeriod(), "NuzzleIntervalExplanation".Translate(), 500);
 				}
 			}
-			yield break;
 		}
 
-		
 		[Obsolete("Will be replaced with NutritionEatenPerDayExplanation_NewTemp soon.")]
 		public static string NutritionEatenPerDayExplanation(Pawn p)
 		{
-			return RaceProperties.NutritionEatenPerDayExplanation_NewTemp(p, true, true, false);
+			return NutritionEatenPerDayExplanation_NewTemp(p, showDiet: true, showLegend: true, showCalculations: false);
 		}
 
-		
 		public static string NutritionEatenPerDayExplanation_NewTemp(Pawn p, bool showDiet = false, bool showLegend = false, bool showCalculations = true)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine("NutritionEatenPerDayTip".Translate(ThingDefOf.MealSimple.GetStatValueAbstract(StatDefOf.Nutrition, null).ToString("0.##")));
+			stringBuilder.AppendLine("NutritionEatenPerDayTip".Translate(ThingDefOf.MealSimple.GetStatValueAbstract(StatDefOf.Nutrition).ToString("0.##")));
 			stringBuilder.AppendLine();
 			if (showDiet)
 			{
@@ -412,7 +474,7 @@ namespace Verse
 				DietCategory[] array = (DietCategory[])Enum.GetValues(typeof(DietCategory));
 				for (int i = 0; i < array.Length; i++)
 				{
-					if (array[i] != DietCategory.NeverEats && array[i] != DietCategory.Omnivorous)
+					if (array[i] != 0 && array[i] != DietCategory.Omnivorous)
 					{
 						stringBuilder.AppendLine(array[i].ToStringHumanShort() + " - " + array[i].ToStringHuman());
 					}
@@ -421,7 +483,7 @@ namespace Verse
 			}
 			if (showCalculations)
 			{
-				stringBuilder.AppendLine("StatsReport_BaseValue".Translate() + ": " + (p.ageTracker.CurLifeStage.hungerRateFactor * p.RaceProps.baseHungerRate * 2.66666666E-05f * 60000f).ToStringByStyle(ToStringStyle.FloatTwo, ToStringNumberSense.Absolute));
+				stringBuilder.AppendLine("StatsReport_BaseValue".Translate() + ": " + (p.ageTracker.CurLifeStage.hungerRateFactor * p.RaceProps.baseHungerRate * 2.66666666E-05f * 60000f).ToStringByStyle(ToStringStyle.FloatTwo));
 				if (p.health.hediffSet.HungerRateFactor != 1f)
 				{
 					stringBuilder.AppendLine();
@@ -445,207 +507,23 @@ namespace Verse
 				{
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("StatsReport_RelevantTraits".Translate() + ": " + p.story.traits.HungerRateFactor.ToStringByStyle(ToStringStyle.PercentOne, ToStringNumberSense.Factor));
-					foreach (Trait trait in p.story.traits.allTraits)
+					foreach (Trait allTrait in p.story.traits.allTraits)
 					{
-						if (trait.CurrentData.hungerRateFactor != 1f)
+						if (allTrait.CurrentData.hungerRateFactor != 1f)
 						{
-							stringBuilder.AppendLine("    " + trait.LabelCap + ": " + trait.CurrentData.hungerRateFactor.ToStringByStyle(ToStringStyle.PercentOne, ToStringNumberSense.Factor));
+							stringBuilder.AppendLine("    " + allTrait.LabelCap + ": " + allTrait.CurrentData.hungerRateFactor.ToStringByStyle(ToStringStyle.PercentOne, ToStringNumberSense.Factor));
 						}
 					}
 				}
-				if (p.GetStatValue(StatDefOf.HungerRateMultiplier, true) != 1f)
+				if (p.GetStatValue(StatDefOf.HungerRateMultiplier) != 1f)
 				{
 					stringBuilder.AppendLine();
-					stringBuilder.AppendLine(StatDefOf.HungerRateMultiplier.LabelCap + ": " + p.GetStatValue(StatDefOf.HungerRateMultiplier, true).ToStringByStyle(ToStringStyle.FloatMaxOne, ToStringNumberSense.Factor));
+					stringBuilder.AppendLine(StatDefOf.HungerRateMultiplier.LabelCap + ": " + p.GetStatValue(StatDefOf.HungerRateMultiplier).ToStringByStyle(ToStringStyle.FloatMaxOne, ToStringNumberSense.Factor));
 				}
 				stringBuilder.AppendLine();
-				stringBuilder.AppendLine("StatsReport_FinalValue".Translate() + ": " + (p.needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed, false) * 60000f).ToStringByStyle(ToStringStyle.FloatMaxTwo, ToStringNumberSense.Absolute));
+				stringBuilder.AppendLine("StatsReport_FinalValue".Translate() + ": " + (p.needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed) * 60000f).ToStringByStyle(ToStringStyle.FloatMaxTwo));
 			}
 			return stringBuilder.ToString().TrimEndNewlines();
 		}
-
-		
-		public Intelligence intelligence;
-
-		
-		private FleshTypeDef fleshType;
-
-		
-		private ThingDef bloodDef;
-
-		
-		public bool hasGenders = true;
-
-		
-		public bool needsRest = true;
-
-		
-		public ThinkTreeDef thinkTreeMain;
-
-		
-		public ThinkTreeDef thinkTreeConstant;
-
-		
-		public PawnNameCategory nameCategory;
-
-		
-		public FoodTypeFlags foodType;
-
-		
-		public BodyDef body;
-
-		
-		public Type deathActionWorkerClass;
-
-		
-		public List<AnimalBiomeRecord> wildBiomes;
-
-		
-		public SimpleCurve ageGenerationCurve;
-
-		
-		public bool makesFootprints;
-
-		
-		public int executionRange = 2;
-
-		
-		public float lifeExpectancy = 10f;
-
-		
-		public List<HediffGiverSetDef> hediffGiverSets;
-
-		
-		public bool herdAnimal;
-
-		
-		public bool packAnimal;
-
-		
-		public bool predator;
-
-		
-		public float maxPreyBodySize = 99999f;
-
-		
-		public float wildness;
-
-		
-		public float petness;
-
-		
-		public float nuzzleMtbHours = -1f;
-
-		
-		public float manhunterOnDamageChance;
-
-		
-		public float manhunterOnTameFailChance;
-
-		
-		public bool canBePredatorPrey = true;
-
-		
-		public bool herdMigrationAllowed = true;
-
-		
-		public List<ThingDef> willNeverEat;
-
-		
-		public float gestationPeriodDays = 10f;
-
-		
-		public SimpleCurve litterSizeCurve;
-
-		
-		public float mateMtbHours = 12f;
-
-		
-		[NoTranslate]
-		public List<string> untrainableTags;
-
-		
-		[NoTranslate]
-		public List<string> trainableTags;
-
-		
-		public TrainabilityDef trainability;
-
-		
-		private RulePackDef nameGenerator;
-
-		
-		private RulePackDef nameGeneratorFemale;
-
-		
-		public float nameOnTameChance;
-
-		
-		public float nameOnNuzzleChance;
-
-		
-		public float baseBodySize = 1f;
-
-		
-		public float baseHealthScale = 1f;
-
-		
-		public float baseHungerRate = 1f;
-
-		
-		public List<LifeStageAge> lifeStageAges = new List<LifeStageAge>();
-
-		
-		[MustTranslate]
-		public string meatLabel;
-
-		
-		public Color meatColor = Color.white;
-
-		
-		public float meatMarketValue = 2f;
-
-		
-		public ThingDef useMeatFrom;
-
-		
-		public ThingDef useLeatherFrom;
-
-		
-		public ThingDef leatherDef;
-
-		
-		public ShadowData specialShadowData;
-
-		
-		public IntRange soundCallIntervalRange = new IntRange(2000, 4000);
-
-		
-		public SoundDef soundMeleeHitPawn;
-
-		
-		public SoundDef soundMeleeHitBuilding;
-
-		
-		public SoundDef soundMeleeMiss;
-
-		
-		public SoundDef soundMeleeDodge;
-
-		
-		[Unsaved(false)]
-		private DeathActionWorker deathActionWorkerInt;
-
-		
-		[Unsaved(false)]
-		public ThingDef meatDef;
-
-		
-		[Unsaved(false)]
-		public ThingDef corpseDef;
-
-		
-		[Unsaved(false)]
-		private PawnKindDef cachedAnyPawnKind;
 	}
 }

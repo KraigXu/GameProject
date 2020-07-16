@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,70 +5,64 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnsArrivalModeWorkerUtility
 	{
-		
+		private const int MaxGroupsCount = 3;
+
 		public static void DropInDropPodsNearSpawnCenter(IncidentParms parms, List<Pawn> pawns)
 		{
 			Map map = (Map)parms.target;
 			bool flag = parms.faction != null && parms.faction.HostileTo(Faction.OfPlayer);
-			DropPodUtility.DropThingsNear(parms.spawnCenter, map, pawns.Cast<Thing>(), parms.podOpenDelay, false, true, flag || parms.raidArrivalModeForQuickMilitaryAid, true);
+			DropPodUtility.DropThingsNear(parms.spawnCenter, map, pawns.Cast<Thing>(), parms.podOpenDelay, canInstaDropDuringInit: false, leaveSlag: true, flag || parms.raidArrivalModeForQuickMilitaryAid);
 		}
 
-		
 		public static List<Pair<List<Pawn>, IntVec3>> SplitIntoRandomGroupsNearMapEdge(List<Pawn> pawns, Map map, bool arriveInPods)
 		{
 			List<Pair<List<Pawn>, IntVec3>> list = new List<Pair<List<Pawn>, IntVec3>>();
-			if (!pawns.Any<Pawn>())
+			if (!pawns.Any())
 			{
 				return list;
 			}
-			int maxGroupsCount = PawnsArrivalModeWorkerUtility.GetMaxGroupsCount(pawns.Count);
+			int maxGroupsCount = GetMaxGroupsCount(pawns.Count);
 			int num = (maxGroupsCount == 1) ? 1 : Rand.RangeInclusive(2, maxGroupsCount);
 			for (int i = 0; i < num; i++)
 			{
-				IntVec3 second = PawnsArrivalModeWorkerUtility.FindNewMapEdgeGroupCenter(map, list, arriveInPods);
-				list.Add(new Pair<List<Pawn>, IntVec3>(new List<Pawn>(), second)
-				{
-					First = 
-					{
-						pawns[i]
-					}
-				});
+				IntVec3 second = FindNewMapEdgeGroupCenter(map, list, arriveInPods);
+				Pair<List<Pawn>, IntVec3> item = new Pair<List<Pawn>, IntVec3>(new List<Pawn>(), second);
+				item.First.Add(pawns[i]);
+				list.Add(item);
 			}
 			for (int j = num; j < pawns.Count; j++)
 			{
-				list.RandomElement<Pair<List<Pawn>, IntVec3>>().First.Add(pawns[j]);
+				list.RandomElement().First.Add(pawns[j]);
 			}
 			return list;
 		}
 
-		
 		private static IntVec3 FindNewMapEdgeGroupCenter(Map map, List<Pair<List<Pawn>, IntVec3>> groups, bool arriveInPods)
 		{
 			IntVec3 result = IntVec3.Invalid;
 			float num = 0f;
 			for (int i = 0; i < 4; i++)
 			{
-				IntVec3 intVec;
+				IntVec3 result2;
 				if (arriveInPods)
 				{
-					intVec = DropCellFinder.FindRaidDropCenterDistant_NewTemp(map, false);
+					result2 = DropCellFinder.FindRaidDropCenterDistant_NewTemp(map);
 				}
-				else if (!RCellFinder.TryFindRandomPawnEntryCell(out intVec, map, CellFinder.EdgeRoadChance_Hostile, false, null))
+				else if (!RCellFinder.TryFindRandomPawnEntryCell(out result2, map, CellFinder.EdgeRoadChance_Hostile))
 				{
-					intVec = DropCellFinder.FindRaidDropCenterDistant_NewTemp(map, false);
+					result2 = DropCellFinder.FindRaidDropCenterDistant_NewTemp(map);
 				}
-				if (!groups.Any<Pair<List<Pawn>, IntVec3>>())
+				if (!groups.Any())
 				{
-					result = intVec;
+					result = result2;
 					break;
 				}
 				float num2 = float.MaxValue;
 				for (int j = 0; j < groups.Count; j++)
 				{
-					float num3 = (float)intVec.DistanceToSquared(groups[j].Second);
+					float num3 = result2.DistanceToSquared(groups[j].Second);
 					if (num3 < num2)
 					{
 						num2 = num3;
@@ -78,13 +71,12 @@ namespace RimWorld
 				if (!result.IsValid || num2 > num)
 				{
 					num = num2;
-					result = intVec;
+					result = result2;
 				}
 			}
 			return result;
 		}
 
-		
 		private static int GetMaxGroupsCount(int pawnsCount)
 		{
 			if (pawnsCount <= 1)
@@ -94,7 +86,6 @@ namespace RimWorld
 			return Mathf.Clamp(pawnsCount / 2, 2, 3);
 		}
 
-		
 		public static void SetPawnGroupsInfo(IncidentParms parms, List<Pair<List<Pawn>, IntVec3>> groups)
 		{
 			parms.pawnGroups = new Dictionary<Pawn, int>();
@@ -106,8 +97,5 @@ namespace RimWorld
 				}
 			}
 		}
-
-		
-		private const int MaxGroupsCount = 3;
 	}
 }

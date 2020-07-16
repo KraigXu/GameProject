@@ -1,70 +1,65 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ListableOption_WebLink : ListableOption
 	{
-		
-		public ListableOption_WebLink(string label, Texture2D image) : base(label, null, null)
+		public Texture2D image;
+
+		public string url;
+
+		private static readonly Vector2 Imagesize = new Vector2(24f, 18f);
+
+		public ListableOption_WebLink(string label, Texture2D image)
+			: base(label, null)
 		{
-			this.minHeight = 24f;
+			minHeight = 24f;
 			this.image = image;
 		}
 
-		
-		public ListableOption_WebLink(string label, string url, Texture2D image) : this(label, image)
+		public ListableOption_WebLink(string label, string url, Texture2D image)
+			: this(label, image)
 		{
 			this.url = url;
 		}
 
-		
-		public ListableOption_WebLink(string label, Action action, Texture2D image) : this(label, image)
+		public ListableOption_WebLink(string label, Action action, Texture2D image)
+			: this(label, image)
 		{
-			this.action = action;
+			base.action = action;
 		}
 
-		
 		public override float DrawOption(Vector2 pos, float width)
 		{
-			float num = width - ListableOption_WebLink.Imagesize.x - 3f;
-			float num2 = Text.CalcHeight(this.label, num);
-			float num3 = Mathf.Max(this.minHeight, num2);
+			float num = width - Imagesize.x - 3f;
+			float num2 = Text.CalcHeight(label, num);
+			float num3 = Mathf.Max(minHeight, num2);
 			Rect rect = new Rect(pos.x, pos.y, width, num3);
 			GUI.color = Color.white;
-			if (this.image != null)
+			if (image != null)
 			{
-				Rect position = new Rect(pos.x, pos.y + num3 / 2f - ListableOption_WebLink.Imagesize.y / 2f, ListableOption_WebLink.Imagesize.x, ListableOption_WebLink.Imagesize.y);
+				Rect position = new Rect(pos.x, pos.y + num3 / 2f - Imagesize.y / 2f, Imagesize.x, Imagesize.y);
 				if (Mouse.IsOver(rect))
 				{
 					GUI.color = Widgets.MouseoverOptionColor;
 				}
-				GUI.DrawTexture(position, this.image);
+				GUI.DrawTexture(position, image);
 			}
-			Widgets.Label(new Rect(rect.xMax - num, pos.y, num, num2), this.label);
+			Widgets.Label(new Rect(rect.xMax - num, pos.y, num, num2), label);
 			GUI.color = Color.white;
-			if (Widgets.ButtonInvisible(rect, true))
+			if (Widgets.ButtonInvisible(rect))
 			{
-				if (this.action != null)
+				if (action != null)
 				{
-					this.action();
+					action();
 				}
 				else
 				{
-					Application.OpenURL(this.url);
+					Application.OpenURL(url);
 				}
 			}
 			return num3;
 		}
-
-		
-		public Texture2D image;
-
-		
-		public string url;
-
-		
-		private static readonly Vector2 Imagesize = new Vector2(24f, 18f);
 	}
 }

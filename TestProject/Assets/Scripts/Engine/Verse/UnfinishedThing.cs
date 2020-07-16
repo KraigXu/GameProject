@@ -1,92 +1,88 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class UnfinishedThing : ThingWithComps
 	{
-		
-		
-		
+		private Pawn creatorInt;
+
+		private string creatorName = "ErrorCreatorName";
+
+		private RecipeDef recipeInt;
+
+		public List<Thing> ingredients = new List<Thing>();
+
+		private Bill_ProductionWithUft boundBillInt;
+
+		public float workLeft = -10000f;
+
+		private const float CancelIngredientRecoveryFraction = 0.75f;
+
 		public Pawn Creator
 		{
 			get
 			{
-				return this.creatorInt;
+				return creatorInt;
 			}
 			set
 			{
 				if (value == null)
 				{
-					Log.Error("Cannot set creator to null.", false);
+					Log.Error("Cannot set creator to null.");
 					return;
 				}
-				this.creatorInt = value;
-				this.creatorName = value.LabelShort;
+				creatorInt = value;
+				creatorName = value.LabelShort;
 			}
 		}
 
-		
-		
-		public RecipeDef Recipe
-		{
-			get
-			{
-				return this.recipeInt;
-			}
-		}
+		public RecipeDef Recipe => recipeInt;
 
-		
-		
-		
 		public Bill_ProductionWithUft BoundBill
 		{
 			get
 			{
-				if (this.boundBillInt != null && (this.boundBillInt.DeletedOrDereferenced || this.boundBillInt.BoundUft != this))
+				if (boundBillInt != null && (boundBillInt.DeletedOrDereferenced || boundBillInt.BoundUft != this))
 				{
-					this.boundBillInt = null;
+					boundBillInt = null;
 				}
-				return this.boundBillInt;
+				return boundBillInt;
 			}
 			set
 			{
-				if (value == this.boundBillInt)
+				if (value == boundBillInt)
 				{
 					return;
 				}
-				Bill_ProductionWithUft bill_ProductionWithUft = this.boundBillInt;
-				this.boundBillInt = value;
+				Bill_ProductionWithUft bill_ProductionWithUft = boundBillInt;
+				boundBillInt = value;
 				if (bill_ProductionWithUft != null && bill_ProductionWithUft.BoundUft == this)
 				{
-					bill_ProductionWithUft.SetBoundUft(null, false);
+					bill_ProductionWithUft.SetBoundUft(null, setOtherLink: false);
 				}
 				if (value != null)
 				{
-					this.recipeInt = value.recipe;
+					recipeInt = value.recipe;
 					if (value.BoundUft != this)
 					{
-						value.SetBoundUft(this, false);
+						value.SetBoundUft(this, setOtherLink: false);
 					}
 				}
 			}
 		}
 
-		
-		
 		public Thing BoundWorkTable
 		{
 			get
 			{
-				if (this.BoundBill == null)
+				if (BoundBill == null)
 				{
 					return null;
 				}
-				Thing thing = this.BoundBill.billStack.billGiver as Thing;
+				Thing thing = BoundBill.billStack.billGiver as Thing;
 				if (thing.Destroyed)
 				{
 					return null;
@@ -95,128 +91,109 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override string LabelNoCount
 		{
 			get
 			{
-				if (this.Recipe == null)
+				if (Recipe == null)
 				{
 					return base.LabelNoCount;
 				}
 				if (base.Stuff == null)
 				{
-					return "UnfinishedItem".Translate(this.Recipe.products[0].thingDef.label);
+					return "UnfinishedItem".Translate(Recipe.products[0].thingDef.label);
 				}
-				return "UnfinishedItemWithStuff".Translate(base.Stuff.LabelAsStuff, this.Recipe.products[0].thingDef.label);
+				return "UnfinishedItemWithStuff".Translate(base.Stuff.LabelAsStuff, Recipe.products[0].thingDef.label);
 			}
 		}
 
-		
-		
 		public override string DescriptionDetailed
 		{
 			get
 			{
-				if (this.Recipe == null)
+				if (Recipe == null)
 				{
 					return base.LabelNoCount;
 				}
-				return this.Recipe.ProducedThingDef.DescriptionDetailed;
+				return Recipe.ProducedThingDef.DescriptionDetailed;
 			}
 		}
 
-		
-		
 		public override string DescriptionFlavor
 		{
 			get
 			{
-				if (this.Recipe == null)
+				if (Recipe == null)
 				{
 					return base.LabelNoCount;
 				}
-				return this.Recipe.ProducedThingDef.description;
+				return Recipe.ProducedThingDef.description;
 			}
 		}
 
-		
-		
-		public bool Initialized
-		{
-			get
-			{
-				return this.workLeft > -5000f;
-			}
-		}
+		public bool Initialized => workLeft > -5000f;
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			if (Scribe.mode == LoadSaveMode.Saving && this.boundBillInt != null && this.boundBillInt.DeletedOrDereferenced)
+			if (Scribe.mode == LoadSaveMode.Saving && boundBillInt != null && boundBillInt.DeletedOrDereferenced)
 			{
-				this.boundBillInt = null;
+				boundBillInt = null;
 			}
-			Scribe_References.Look<Pawn>(ref this.creatorInt, "creator", false);
-			Scribe_Values.Look<string>(ref this.creatorName, "creatorName", null, false);
-			Scribe_References.Look<Bill_ProductionWithUft>(ref this.boundBillInt, "bill", false);
-			Scribe_Defs.Look<RecipeDef>(ref this.recipeInt, "recipe");
-			Scribe_Values.Look<float>(ref this.workLeft, "workLeft", 0f, false);
-			Scribe_Collections.Look<Thing>(ref this.ingredients, "ingredients", LookMode.Deep, Array.Empty<object>());
+			Scribe_References.Look(ref creatorInt, "creator");
+			Scribe_Values.Look(ref creatorName, "creatorName");
+			Scribe_References.Look(ref boundBillInt, "bill");
+			Scribe_Defs.Look(ref recipeInt, "recipe");
+			Scribe_Values.Look(ref workLeft, "workLeft", 0f);
+			Scribe_Collections.Look(ref ingredients, "ingredients", LookMode.Deep);
 		}
 
-		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			if (mode == DestroyMode.Cancel)
 			{
-				for (int i = 0; i < this.ingredients.Count; i++)
+				for (int i = 0; i < ingredients.Count; i++)
 				{
-					int num = GenMath.RoundRandom((float)this.ingredients[i].stackCount * 0.75f);
+					int num = GenMath.RoundRandom((float)ingredients[i].stackCount * 0.75f);
 					if (num > 0)
 					{
-						this.ingredients[i].stackCount = num;
-						GenPlace.TryPlaceThing(this.ingredients[i], base.Position, base.Map, ThingPlaceMode.Near, null, null, default(Rot4));
+						ingredients[i].stackCount = num;
+						GenPlace.TryPlaceThing(ingredients[i], base.Position, base.Map, ThingPlaceMode.Near);
 					}
 				}
-				this.ingredients.Clear();
+				ingredients.Clear();
 			}
 			base.Destroy(mode);
-			this.BoundBill = null;
+			BoundBill = null;
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			yield return new Command_Action
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				defaultLabel = "CommandCancelConstructionLabel".Translate(),
-				defaultDesc = "CommandCancelConstructionDesc".Translate(),
-				icon = ContentFinder<Texture2D>.Get("UI/Designators/Cancel", true),
-				hotKey = KeyBindingDefOf.Designator_Cancel,
-				action = delegate
-				{
-					this.Destroy(DestroyMode.Cancel);
-				}
+				yield return gizmo;
+			}
+			Command_Action command_Action = new Command_Action();
+			command_Action.defaultLabel = "CommandCancelConstructionLabel".Translate();
+			command_Action.defaultDesc = "CommandCancelConstructionDesc".Translate();
+			command_Action.icon = ContentFinder<Texture2D>.Get("UI/Designators/Cancel");
+			command_Action.hotKey = KeyBindingDefOf.Designator_Cancel;
+			command_Action.action = delegate
+			{
+				Destroy(DestroyMode.Cancel);
 			};
-			yield break;
-			yield break;
+			yield return command_Action;
 		}
 
-		
 		public Bill_ProductionWithUft BillOnTableForMe(Thing workTable)
 		{
-			if (this.Recipe.AllRecipeUsers.Contains(workTable.def))
+			if (Recipe.AllRecipeUsers.Contains(workTable.def))
 			{
 				IBillGiver billGiver = (IBillGiver)workTable;
 				for (int i = 0; i < billGiver.BillStack.Count; i++)
 				{
 					Bill_ProductionWithUft bill_ProductionWithUft = billGiver.BillStack[i] as Bill_ProductionWithUft;
-					if (bill_ProductionWithUft != null && bill_ProductionWithUft.ShouldDoNow() && bill_ProductionWithUft != null && bill_ProductionWithUft.recipe == this.Recipe)
+					if (bill_ProductionWithUft != null && bill_ProductionWithUft.ShouldDoNow() && bill_ProductionWithUft != null && bill_ProductionWithUft.recipe == Recipe)
 					{
 						return bill_ProductionWithUft;
 					}
@@ -225,17 +202,15 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override void DrawExtraSelectionOverlays()
 		{
 			base.DrawExtraSelectionOverlays();
-			if (this.BoundWorkTable != null)
+			if (BoundWorkTable != null)
 			{
-				GenDraw.DrawLineBetween(this.TrueCenter(), this.BoundWorkTable.TrueCenter());
+				GenDraw.DrawLineBetween(this.TrueCenter(), BoundWorkTable.TrueCenter());
 			}
 		}
 
-		
 		public override string GetInspectString()
 		{
 			string text = base.GetInspectString();
@@ -243,29 +218,8 @@ namespace Verse
 			{
 				text += "\n";
 			}
-			text += "Author".Translate() + ": " + this.creatorName;
-			return text + ("\n" + "WorkLeft".Translate() + ": " + this.workLeft.ToStringWorkAmount());
+			text += "Author".Translate() + ": " + creatorName;
+			return text + ("\n" + "WorkLeft".Translate() + ": " + workLeft.ToStringWorkAmount());
 		}
-
-		
-		private Pawn creatorInt;
-
-		
-		private string creatorName = "ErrorCreatorName";
-
-		
-		private RecipeDef recipeInt;
-
-		
-		public List<Thing> ingredients = new List<Thing>();
-
-		
-		private Bill_ProductionWithUft boundBillInt;
-
-		
-		public float workLeft = -10000f;
-
-		
-		private const float CancelIngredientRecoveryFraction = 0.75f;
 	}
 }

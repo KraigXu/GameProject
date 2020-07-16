@@ -1,99 +1,88 @@
-﻿using System;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompHatcher : ThingComp
 	{
-		
-		
-		public CompProperties_Hatcher Props
-		{
-			get
-			{
-				return (CompProperties_Hatcher)this.props;
-			}
-		}
+		private float gestateProgress;
 
-		
-		
-		private CompTemperatureRuinable FreezerComp
-		{
-			get
-			{
-				return this.parent.GetComp<CompTemperatureRuinable>();
-			}
-		}
+		public Pawn hatcheeParent;
 
-		
-		
+		public Pawn otherParent;
+
+		public Faction hatcheeFaction;
+
+		public CompProperties_Hatcher Props => (CompProperties_Hatcher)props;
+
+		private CompTemperatureRuinable FreezerComp => parent.GetComp<CompTemperatureRuinable>();
+
 		public bool TemperatureDamaged
 		{
 			get
 			{
-				return this.FreezerComp != null && this.FreezerComp.Ruined;
+				if (FreezerComp != null)
+				{
+					return FreezerComp.Ruined;
+				}
+				return false;
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.gestateProgress, "gestateProgress", 0f, false);
-			Scribe_References.Look<Pawn>(ref this.hatcheeParent, "hatcheeParent", false);
-			Scribe_References.Look<Pawn>(ref this.otherParent, "otherParent", false);
-			Scribe_References.Look<Faction>(ref this.hatcheeFaction, "hatcheeFaction", false);
+			Scribe_Values.Look(ref gestateProgress, "gestateProgress", 0f);
+			Scribe_References.Look(ref hatcheeParent, "hatcheeParent");
+			Scribe_References.Look(ref otherParent, "otherParent");
+			Scribe_References.Look(ref hatcheeFaction, "hatcheeFaction");
 		}
 
-		
 		public override void CompTick()
 		{
-			if (!this.TemperatureDamaged)
+			if (!TemperatureDamaged)
 			{
-				float num = 1f / (this.Props.hatcherDaystoHatch * 60000f);
-				this.gestateProgress += num;
-				if (this.gestateProgress > 1f)
+				float num = 1f / (Props.hatcherDaystoHatch * 60000f);
+				gestateProgress += num;
+				if (gestateProgress > 1f)
 				{
-					this.Hatch();
+					Hatch();
 				}
 			}
 		}
 
-		
 		public void Hatch()
 		{
 			try
 			{
-				PawnGenerationRequest request = new PawnGenerationRequest(this.Props.hatcherPawn, this.hatcheeFaction, PawnGenerationContext.NonPlayer, -1, false, true, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null);
-				for (int i = 0; i < this.parent.stackCount; i++)
+				PawnGenerationRequest request = new PawnGenerationRequest(Props.hatcherPawn, hatcheeFaction, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: true);
+				for (int i = 0; i < parent.stackCount; i++)
 				{
 					Pawn pawn = PawnGenerator.GeneratePawn(request);
-					if (PawnUtility.TrySpawnHatchedOrBornPawn(pawn, this.parent))
+					if (PawnUtility.TrySpawnHatchedOrBornPawn(pawn, parent))
 					{
 						if (pawn != null)
 						{
-							if (this.hatcheeParent != null)
+							if (hatcheeParent != null)
 							{
-								if (pawn.playerSettings != null && this.hatcheeParent.playerSettings != null && this.hatcheeParent.Faction == this.hatcheeFaction)
+								if (pawn.playerSettings != null && hatcheeParent.playerSettings != null && hatcheeParent.Faction == hatcheeFaction)
 								{
-									pawn.playerSettings.AreaRestriction = this.hatcheeParent.playerSettings.AreaRestriction;
+									pawn.playerSettings.AreaRestriction = hatcheeParent.playerSettings.AreaRestriction;
 								}
 								if (pawn.RaceProps.IsFlesh)
 								{
-									pawn.relations.AddDirectRelation(PawnRelationDefOf.Parent, this.hatcheeParent);
+									pawn.relations.AddDirectRelation(PawnRelationDefOf.Parent, hatcheeParent);
 								}
 							}
-							if (this.otherParent != null && (this.hatcheeParent == null || this.hatcheeParent.gender != this.otherParent.gender) && pawn.RaceProps.IsFlesh)
+							if (otherParent != null && (hatcheeParent == null || hatcheeParent.gender != otherParent.gender) && pawn.RaceProps.IsFlesh)
 							{
-								pawn.relations.AddDirectRelation(PawnRelationDefOf.Parent, this.otherParent);
+								pawn.relations.AddDirectRelation(PawnRelationDefOf.Parent, otherParent);
 							}
 						}
-						if (this.parent.Spawned)
+						if (parent.Spawned)
 						{
-							FilthMaker.TryMakeFilth(this.parent.Position, this.parent.Map, ThingDefOf.Filth_AmnioticFluid, 1, FilthSourceFlags.None);
+							FilthMaker.TryMakeFilth(parent.Position, parent.Map, ThingDefOf.Filth_AmnioticFluid);
 						}
 					}
 					else
@@ -104,70 +93,53 @@ namespace RimWorld
 			}
 			finally
 			{
-				this.parent.Destroy(DestroyMode.Vanish);
+				parent.Destroy();
 			}
 		}
 
-		
 		public override void PreAbsorbStack(Thing otherStack, int count)
 		{
-			float t = (float)count / (float)(this.parent.stackCount + count);
+			float t = (float)count / (float)(parent.stackCount + count);
 			float b = ((ThingWithComps)otherStack).GetComp<CompHatcher>().gestateProgress;
-			this.gestateProgress = Mathf.Lerp(this.gestateProgress, b, t);
+			gestateProgress = Mathf.Lerp(gestateProgress, b, t);
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
 			CompHatcher comp = ((ThingWithComps)piece).GetComp<CompHatcher>();
-			comp.gestateProgress = this.gestateProgress;
-			comp.hatcheeParent = this.hatcheeParent;
-			comp.otherParent = this.otherParent;
-			comp.hatcheeFaction = this.hatcheeFaction;
+			comp.gestateProgress = gestateProgress;
+			comp.hatcheeParent = hatcheeParent;
+			comp.otherParent = otherParent;
+			comp.hatcheeFaction = hatcheeFaction;
 		}
 
-		
 		public override void PrePreTraded(TradeAction action, Pawn playerNegotiator, ITrader trader)
 		{
 			base.PrePreTraded(action, playerNegotiator, trader);
-			if (action == TradeAction.PlayerBuys)
+			switch (action)
 			{
-				this.hatcheeFaction = Faction.OfPlayer;
-				return;
-			}
-			if (action == TradeAction.PlayerSells)
-			{
-				this.hatcheeFaction = trader.Faction;
+			case TradeAction.PlayerBuys:
+				hatcheeFaction = Faction.OfPlayer;
+				break;
+			case TradeAction.PlayerSells:
+				hatcheeFaction = trader.Faction;
+				break;
 			}
 		}
 
-		
 		public override void PostPostGeneratedForTrader(TraderKindDef trader, int forTile, Faction forFaction)
 		{
 			base.PostPostGeneratedForTrader(trader, forTile, forFaction);
-			this.hatcheeFaction = forFaction;
+			hatcheeFaction = forFaction;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.TemperatureDamaged)
+			if (!TemperatureDamaged)
 			{
-				return "EggProgress".Translate() + ": " + this.gestateProgress.ToStringPercent();
+				return "EggProgress".Translate() + ": " + gestateProgress.ToStringPercent();
 			}
 			return null;
 		}
-
-		
-		private float gestateProgress;
-
-		
-		public Pawn hatcheeParent;
-
-		
-		public Pawn otherParent;
-
-		
-		public Faction hatcheeFaction;
 	}
 }

@@ -1,92 +1,93 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_InitiateTradeRequest : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Settlement settlement;
+
+		public ThingDef requestedThingDef;
+
+		public int requestedCount;
+
+		public int requestDuration;
+
+		public bool keepAfterQuestEnds;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.settlement != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.settlement;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (settlement != null)
+				{
+					yield return settlement;
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-				IEnumerator<Faction> enumerator = null;
-				if (this.settlement.Faction != null)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return this.settlement.Faction;
+					yield return involvedFaction;
 				}
-				yield break;
-				yield break;
+				if (settlement.Faction != null)
+				{
+					yield return settlement.Faction;
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-
-
-				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
-				yield return new Dialog_InfoCard.Hyperlink(this.requestedThingDef, -1);
-				yield break;
-				yield break;
+				foreach (Dialog_InfoCard.Hyperlink hyperlink in base.Hyperlinks)
+				{
+					yield return hyperlink;
+				}
+				yield return new Dialog_InfoCard.Hyperlink(requestedThingDef);
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				TradeRequestComp component = this.settlement.GetComponent<TradeRequestComp>();
-				if (component != null)
+				return;
+			}
+			TradeRequestComp component = settlement.GetComponent<TradeRequestComp>();
+			if (component != null)
+			{
+				if (component.ActiveRequest)
 				{
-					if (component.ActiveRequest)
-					{
-						Log.Error("Settlement " + this.settlement.Label + " already has an active trade request.", false);
-						return;
-					}
-					component.requestThingDef = this.requestedThingDef;
-					component.requestCount = this.requestedCount;
-					component.expiration = Find.TickManager.TicksGame + this.requestDuration;
+					Log.Error("Settlement " + settlement.Label + " already has an active trade request.");
+					return;
 				}
+				component.requestThingDef = requestedThingDef;
+				component.requestCount = requestedCount;
+				component.expiration = Find.TickManager.TicksGame + requestDuration;
 			}
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			if (!this.keepAfterQuestEnds)
+			if (!keepAfterQuestEnds)
 			{
-				TradeRequestComp component = this.settlement.GetComponent<TradeRequestComp>();
+				TradeRequestComp component = settlement.GetComponent<TradeRequestComp>();
 				if (component != null && component.ActiveRequest)
 				{
 					component.Disable();
@@ -94,53 +95,33 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<Settlement>(ref this.settlement, "settlement", false);
-			Scribe_Defs.Look<ThingDef>(ref this.requestedThingDef, "requestedThingDef");
-			Scribe_Values.Look<int>(ref this.requestedCount, "requestedCount", 0, false);
-			Scribe_Values.Look<int>(ref this.requestDuration, "requestDuration", 0, false);
-			Scribe_Values.Look<bool>(ref this.keepAfterQuestEnds, "keepAfterQuestEnds", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref settlement, "settlement");
+			Scribe_Defs.Look(ref requestedThingDef, "requestedThingDef");
+			Scribe_Values.Look(ref requestedCount, "requestedCount", 0);
+			Scribe_Values.Look(ref requestDuration, "requestDuration", 0);
+			Scribe_Values.Look(ref keepAfterQuestEnds, "keepAfterQuestEnds", defaultValue: false);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.settlement = Find.WorldObjects.Settlements.Where(delegate(Settlement x)
+			inSignal = "DebugSignal" + Rand.Int;
+			settlement = Find.WorldObjects.Settlements.Where(delegate(Settlement x)
 			{
 				TradeRequestComp component = x.GetComponent<TradeRequestComp>();
 				return component != null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
-			}).RandomElementWithFallback(null);
-			if (this.settlement == null)
+			}).RandomElementWithFallback();
+			if (settlement == null)
 			{
-				this.settlement = Find.WorldObjects.Settlements.RandomElementWithFallback(null);
+				settlement = Find.WorldObjects.Settlements.RandomElementWithFallback();
 			}
-			this.requestedThingDef = ThingDefOf.Silver;
-			this.requestedCount = 100;
-			this.requestDuration = 60000;
+			requestedThingDef = ThingDefOf.Silver;
+			requestedCount = 100;
+			requestDuration = 60000;
 		}
-
-		
-		public string inSignal;
-
-		
-		public Settlement settlement;
-
-		
-		public ThingDef requestedThingDef;
-
-		
-		public int requestedCount;
-
-		
-		public int requestDuration;
-
-		
-		public bool keepAfterQuestEnds;
 	}
 }

@@ -1,19 +1,29 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Graphic
 	{
-		
-		
+		public GraphicData data;
+
+		public string path;
+
+		public Color color = Color.white;
+
+		public Color colorTwo = Color.white;
+
+		public Vector2 drawSize = Vector2.one;
+
+		private Graphic_Shadow cachedShadowGraphicInt;
+
+		private Graphic cachedShadowlessGraphicInt;
+
 		public Shader Shader
 		{
 			get
 			{
-				Material matSingle = this.MatSingle;
+				Material matSingle = MatSingle;
 				if (matSingle != null)
 				{
 					return matSingle.shader;
@@ -22,352 +32,223 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public Graphic_Shadow ShadowGraphic
 		{
 			get
 			{
-				if (this.cachedShadowGraphicInt == null && this.data != null && this.data.shadowData != null)
+				if (cachedShadowGraphicInt == null && data != null && data.shadowData != null)
 				{
-					this.cachedShadowGraphicInt = new Graphic_Shadow(this.data.shadowData);
+					cachedShadowGraphicInt = new Graphic_Shadow(data.shadowData);
 				}
-				return this.cachedShadowGraphicInt;
+				return cachedShadowGraphicInt;
 			}
 		}
 
-		
-		
-		public Color Color
-		{
-			get
-			{
-				return this.color;
-			}
-		}
+		public Color Color => color;
 
-		
-		
-		public Color ColorTwo
-		{
-			get
-			{
-				return this.colorTwo;
-			}
-		}
+		public Color ColorTwo => colorTwo;
 
-		
-		
-		public virtual Material MatSingle
-		{
-			get
-			{
-				return BaseContent.BadMat;
-			}
-		}
+		public virtual Material MatSingle => BaseContent.BadMat;
 
-		
-		
-		public virtual Material MatWest
-		{
-			get
-			{
-				return this.MatSingle;
-			}
-		}
+		public virtual Material MatWest => MatSingle;
 
-		
-		
-		public virtual Material MatSouth
-		{
-			get
-			{
-				return this.MatSingle;
-			}
-		}
+		public virtual Material MatSouth => MatSingle;
 
-		
-		
-		public virtual Material MatEast
-		{
-			get
-			{
-				return this.MatSingle;
-			}
-		}
+		public virtual Material MatEast => MatSingle;
 
-		
-		
-		public virtual Material MatNorth
-		{
-			get
-			{
-				return this.MatSingle;
-			}
-		}
+		public virtual Material MatNorth => MatSingle;
 
-		
-		
 		public virtual bool WestFlipped
 		{
 			get
 			{
-				return this.DataAllowsFlip && !this.ShouldDrawRotated;
-			}
-		}
-
-		
-		
-		public virtual bool EastFlipped
-		{
-			get
-			{
+				if (DataAllowsFlip)
+				{
+					return !ShouldDrawRotated;
+				}
 				return false;
 			}
 		}
 
-		
-		
-		public virtual bool ShouldDrawRotated
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public virtual bool EastFlipped => false;
 
-		
-		
-		public virtual float DrawRotatedExtraAngleOffset
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public virtual bool ShouldDrawRotated => false;
 
-		
-		
-		public virtual bool UseSameGraphicForGhost
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public virtual float DrawRotatedExtraAngleOffset => 0f;
 
-		
-		
+		public virtual bool UseSameGraphicForGhost => false;
+
 		protected bool DataAllowsFlip
 		{
 			get
 			{
-				return this.data == null || this.data.allowFlip;
+				if (data != null)
+				{
+					return data.allowFlip;
+				}
+				return true;
 			}
 		}
 
-		
 		public virtual void Init(GraphicRequest req)
 		{
-			Log.ErrorOnce("Cannot init Graphic of class " + base.GetType().ToString(), 658928, false);
+			Log.ErrorOnce("Cannot init Graphic of class " + GetType().ToString(), 658928);
 		}
 
-		
 		public virtual Material MatAt(Rot4 rot, Thing thing = null)
 		{
 			switch (rot.AsInt)
 			{
 			case 0:
-				return this.MatNorth;
+				return MatNorth;
 			case 1:
-				return this.MatEast;
+				return MatEast;
 			case 2:
-				return this.MatSouth;
+				return MatSouth;
 			case 3:
-				return this.MatWest;
+				return MatWest;
 			default:
 				return BaseContent.BadMat;
 			}
 		}
 
-		
 		public virtual Mesh MeshAt(Rot4 rot)
 		{
-			Vector2 vector = this.drawSize;
-			if (rot.IsHorizontal && !this.ShouldDrawRotated)
+			Vector2 vector = drawSize;
+			if (rot.IsHorizontal && !ShouldDrawRotated)
 			{
 				vector = vector.Rotated();
 			}
-			if ((rot == Rot4.West && this.WestFlipped) || (rot == Rot4.East && this.EastFlipped))
+			if ((rot == Rot4.West && WestFlipped) || (rot == Rot4.East && EastFlipped))
 			{
 				return MeshPool.GridPlaneFlip(vector);
 			}
 			return MeshPool.GridPlane(vector);
 		}
 
-		
 		public virtual Material MatSingleFor(Thing thing)
 		{
-			return this.MatSingle;
+			return MatSingle;
 		}
 
-		
 		public Vector3 DrawOffset(Rot4 rot)
 		{
-			if (this.data == null)
+			if (data == null)
 			{
 				return Vector3.zero;
 			}
-			return this.data.DrawOffsetForRot(rot);
+			return data.DrawOffsetForRot(rot);
 		}
 
-		
 		public void Draw(Vector3 loc, Rot4 rot, Thing thing, float extraRotation = 0f)
 		{
-			this.DrawWorker(loc, rot, thing.def, thing, extraRotation);
+			DrawWorker(loc, rot, thing.def, thing, extraRotation);
 		}
 
-		
 		public void DrawFromDef(Vector3 loc, Rot4 rot, ThingDef thingDef, float extraRotation = 0f)
 		{
-			this.DrawWorker(loc, rot, thingDef, null, extraRotation);
+			DrawWorker(loc, rot, thingDef, null, extraRotation);
 		}
 
-		
 		public virtual void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
 		{
-			Mesh mesh = this.MeshAt(rot);
-			Quaternion quaternion = this.QuatFromRot(rot);
+			Mesh mesh = MeshAt(rot);
+			Quaternion quat = QuatFromRot(rot);
 			if (extraRotation != 0f)
 			{
-				quaternion *= Quaternion.Euler(Vector3.up * extraRotation);
+				quat *= Quaternion.Euler(Vector3.up * extraRotation);
 			}
-			loc += this.DrawOffset(rot);
-			Material mat = this.MatAt(rot, thing);
-			this.DrawMeshInt(mesh, loc, quaternion, mat);
-			if (this.ShadowGraphic != null)
+			loc += DrawOffset(rot);
+			Material mat = MatAt(rot, thing);
+			DrawMeshInt(mesh, loc, quat, mat);
+			if (ShadowGraphic != null)
 			{
-				this.ShadowGraphic.DrawWorker(loc, rot, thingDef, thing, extraRotation);
+				ShadowGraphic.DrawWorker(loc, rot, thingDef, thing, extraRotation);
 			}
 		}
 
-		
 		protected virtual void DrawMeshInt(Mesh mesh, Vector3 loc, Quaternion quat, Material mat)
 		{
 			Graphics.DrawMesh(mesh, loc, quat, mat, 0);
 		}
 
-		
 		public virtual void Print(SectionLayer layer, Thing thing)
 		{
 			Vector2 size;
 			bool flag;
-			if (this.ShouldDrawRotated)
+			if (ShouldDrawRotated)
 			{
-				size = this.drawSize;
+				size = drawSize;
 				flag = false;
 			}
 			else
 			{
-				if (!thing.Rotation.IsHorizontal)
-				{
-					size = this.drawSize;
-				}
-				else
-				{
-					size = this.drawSize.Rotated();
-				}
-				flag = ((thing.Rotation == Rot4.West && this.WestFlipped) || (thing.Rotation == Rot4.East && this.EastFlipped));
+				size = (thing.Rotation.IsHorizontal ? drawSize.Rotated() : drawSize);
+				flag = ((thing.Rotation == Rot4.West && WestFlipped) || (thing.Rotation == Rot4.East && EastFlipped));
 			}
-			float num = this.AngleFromRot(thing.Rotation);
-			if (flag && this.data != null)
+			float num = AngleFromRot(thing.Rotation);
+			if (flag && data != null)
 			{
-				num += this.data.flipExtraRotation;
+				num += data.flipExtraRotation;
 			}
-			Vector3 center = thing.TrueCenter() + this.DrawOffset(thing.Rotation);
-			Printer_Plane.PrintPlane(layer, center, size, this.MatAt(thing.Rotation, thing), num, flag, null, null, 0.01f, 0f);
-			if (this.ShadowGraphic != null && thing != null)
+			Vector3 center = thing.TrueCenter() + DrawOffset(thing.Rotation);
+			Printer_Plane.PrintPlane(layer, center, size, MatAt(thing.Rotation, thing), num, flag);
+			if (ShadowGraphic != null && thing != null)
 			{
-				this.ShadowGraphic.Print(layer, thing);
+				ShadowGraphic.Print(layer, thing);
 			}
 		}
 
-		
 		public virtual Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
 		{
-			Log.ErrorOnce("CloneColored not implemented on this subclass of Graphic: " + base.GetType().ToString(), 66300, false);
+			Log.ErrorOnce("CloneColored not implemented on this subclass of Graphic: " + GetType().ToString(), 66300);
 			return BaseContent.BadGraphic;
 		}
 
-		
 		public virtual Graphic GetCopy(Vector2 newDrawSize)
 		{
-			return GraphicDatabase.Get(base.GetType(), this.path, this.Shader, newDrawSize, this.color, this.colorTwo);
+			return GraphicDatabase.Get(GetType(), path, Shader, newDrawSize, color, colorTwo);
 		}
 
-		
 		public virtual Graphic GetShadowlessGraphic()
 		{
-			if (this.data == null || this.data.shadowData == null)
+			if (data == null || data.shadowData == null)
 			{
 				return this;
 			}
-			if (this.cachedShadowlessGraphicInt == null)
+			if (cachedShadowlessGraphicInt == null)
 			{
 				GraphicData graphicData = new GraphicData();
-				graphicData.CopyFrom(this.data);
+				graphicData.CopyFrom(data);
 				graphicData.shadowData = null;
-				this.cachedShadowlessGraphicInt = graphicData.Graphic;
+				cachedShadowlessGraphicInt = graphicData.Graphic;
 			}
-			return this.cachedShadowlessGraphicInt;
+			return cachedShadowlessGraphicInt;
 		}
 
-		
 		protected float AngleFromRot(Rot4 rot)
 		{
-			if (this.ShouldDrawRotated)
+			if (ShouldDrawRotated)
 			{
-				float num = rot.AsAngle;
-				num += this.DrawRotatedExtraAngleOffset;
-				if ((rot == Rot4.West && this.WestFlipped) || (rot == Rot4.East && this.EastFlipped))
+				float asAngle = rot.AsAngle;
+				asAngle += DrawRotatedExtraAngleOffset;
+				if ((rot == Rot4.West && WestFlipped) || (rot == Rot4.East && EastFlipped))
 				{
-					num += 180f;
+					asAngle += 180f;
 				}
-				return num;
+				return asAngle;
 			}
 			return 0f;
 		}
 
-		
 		protected Quaternion QuatFromRot(Rot4 rot)
 		{
-			float num = this.AngleFromRot(rot);
+			float num = AngleFromRot(rot);
 			if (num == 0f)
 			{
 				return Quaternion.identity;
 			}
 			return Quaternion.AngleAxis(num, Vector3.up);
 		}
-
-		
-		public GraphicData data;
-
-		
-		public string path;
-
-		
-		public Color color = Color.white;
-
-		
-		public Color colorTwo = Color.white;
-
-		
-		public Vector2 drawSize = Vector2.one;
-
-		
-		private Graphic_Shadow cachedShadowGraphicInt;
-
-		
-		private Graphic cachedShadowlessGraphicInt;
 	}
 }

@@ -1,23 +1,18 @@
-﻿using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DeepDrillUtility
 	{
-		
+		public const int NumCellsToScan = 21;
+
 		public static ThingDef GetNextResource(IntVec3 p, Map map)
 		{
-			ThingDef result;
-			int num;
-			IntVec3 intVec;
-			DeepDrillUtility.GetNextResource(p, map, out result, out num, out intVec);
-			return result;
+			GetNextResource(p, map, out ThingDef resDef, out int _, out IntVec3 _);
+			return resDef;
 		}
 
-		
 		public static bool GetNextResource(IntVec3 p, Map map, out ThingDef resDef, out int countPresent, out IntVec3 cell)
 		{
 			for (int i = 0; i < 21; i++)
@@ -35,13 +30,12 @@ namespace RimWorld
 					}
 				}
 			}
-			resDef = DeepDrillUtility.GetBaseResource(map, p);
+			resDef = GetBaseResource(map, p);
 			countPresent = int.MaxValue;
 			cell = p;
 			return false;
 		}
 
-		
 		public static ThingDef GetBaseResource(Map map, IntVec3 cell)
 		{
 			if (!map.Biome.hasBedrock)
@@ -51,12 +45,9 @@ namespace RimWorld
 			Rand.PushState();
 			Rand.Seed = cell.GetHashCode();
 			ThingDef result = (from rock in Find.World.NaturalRockTypesIn(map.Tile)
-			select rock.building.mineableThing).RandomElement<ThingDef>();
+				select rock.building.mineableThing).RandomElement();
 			Rand.PopState();
 			return result;
 		}
-
-		
-		public const int NumCellsToScan = 21;
 	}
 }

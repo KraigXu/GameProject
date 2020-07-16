@@ -1,75 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class HediffDef : Def
 	{
-		
-		
-		public bool IsAddiction
-		{
-			get
-			{
-				return typeof(Hediff_Addiction).IsAssignableFrom(this.hediffClass);
-			}
-		}
+		public Type hediffClass = typeof(Hediff);
 
-		
-		
+		public List<HediffCompProperties> comps;
+
+		public float initialSeverity = 0.5f;
+
+		public float lethalSeverity = -1f;
+
+		public List<HediffStage> stages;
+
+		public bool tendable;
+
+		public bool isBad = true;
+
+		public ThingDef spawnThingOnRemoved;
+
+		public float chanceToCauseNoPain;
+
+		public bool makesSickThought;
+
+		public bool makesAlert = true;
+
+		public NeedDef causesNeed;
+
+		public NeedDef disablesNeed;
+
+		public float minSeverity;
+
+		public float maxSeverity = float.MaxValue;
+
+		public bool scenarioCanAdd;
+
+		public List<HediffGiver> hediffGivers;
+
+		public bool cureAllAtOnceIfCuredByItem;
+
+		public TaleDef taleOnVisible;
+
+		public bool everCurableByItem = true;
+
+		public string battleStateLabel;
+
+		public string labelNounPretty;
+
+		public List<string> tags;
+
+		public bool priceImpact;
+
+		public float priceOffset;
+
+		public bool chronic;
+
+		public SimpleCurve removeOnRedressChanceByDaysCurve = new SimpleCurve
+		{
+			new CurvePoint(0f, 0f),
+			new CurvePoint(1f, 0f)
+		};
+
+		public bool removeOnQuestLodgers;
+
+		public bool displayWound;
+
+		public Color defaultLabelColor = Color.white;
+
+		public InjuryProps injuryProps;
+
+		public AddedBodyPartProps addedPartProps;
+
+		[MustTranslate]
+		public string labelNoun;
+
+		private bool alwaysAllowMothballCached;
+
+		private bool alwaysAllowMothball;
+
+		private Hediff concreteExampleInt;
+
+		public bool IsAddiction => typeof(Hediff_Addiction).IsAssignableFrom(hediffClass);
+
 		public bool AlwaysAllowMothball
 		{
 			get
 			{
-				if (!this.alwaysAllowMothballCached)
+				if (!alwaysAllowMothballCached)
 				{
-					this.alwaysAllowMothball = true;
-					if (this.comps != null && this.comps.Count > 0)
+					alwaysAllowMothball = true;
+					if (comps != null && comps.Count > 0)
 					{
-						this.alwaysAllowMothball = false;
+						alwaysAllowMothball = false;
 					}
-					if (this.stages != null)
+					if (stages != null)
 					{
-						for (int i = 0; i < this.stages.Count; i++)
+						for (int i = 0; i < stages.Count; i++)
 						{
-							HediffStage hediffStage = this.stages[i];
+							HediffStage hediffStage = stages[i];
 							if (hediffStage.deathMtbDays > 0f || (hediffStage.hediffGivers != null && hediffStage.hediffGivers.Count > 0))
 							{
-								this.alwaysAllowMothball = false;
+								alwaysAllowMothball = false;
 							}
 						}
 					}
-					this.alwaysAllowMothballCached = true;
+					alwaysAllowMothballCached = true;
 				}
-				return this.alwaysAllowMothball;
+				return alwaysAllowMothball;
 			}
 		}
 
-		
-		
 		public Hediff ConcreteExample
 		{
 			get
 			{
-				if (this.concreteExampleInt == null)
+				if (concreteExampleInt == null)
 				{
-					this.concreteExampleInt = HediffMaker.Debug_MakeConcreteExampleHediff(this);
+					concreteExampleInt = HediffMaker.Debug_MakeConcreteExampleHediff(this);
 				}
-				return this.concreteExampleInt;
+				return concreteExampleInt;
 			}
 		}
 
-		
 		public bool HasComp(Type compClass)
 		{
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					if (this.comps[i].compClass == compClass)
+					if (comps[i].compClass == compClass)
 					{
 						return true;
 					}
@@ -78,294 +141,152 @@ namespace Verse
 			return false;
 		}
 
-		
 		public HediffCompProperties CompPropsFor(Type compClass)
 		{
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					if (this.comps[i].compClass == compClass)
+					if (comps[i].compClass == compClass)
 					{
-						return this.comps[i];
+						return comps[i];
 					}
 				}
 			}
 			return null;
 		}
 
-		
 		public T CompProps<T>() where T : HediffCompProperties
 		{
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					T t = this.comps[i] as T;
-					if (t != null)
+					T val = comps[i] as T;
+					if (val != null)
 					{
-						return t;
+						return val;
 					}
 				}
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		public bool PossibleToDevelopImmunityNaturally()
 		{
-			HediffCompProperties_Immunizable hediffCompProperties_Immunizable = this.CompProps<HediffCompProperties_Immunizable>();
-			return hediffCompProperties_Immunizable != null && (hediffCompProperties_Immunizable.immunityPerDayNotSick > 0f || hediffCompProperties_Immunizable.immunityPerDaySick > 0f);
+			HediffCompProperties_Immunizable hediffCompProperties_Immunizable = CompProps<HediffCompProperties_Immunizable>();
+			if (hediffCompProperties_Immunizable != null && (hediffCompProperties_Immunizable.immunityPerDayNotSick > 0f || hediffCompProperties_Immunizable.immunityPerDaySick > 0f))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public string PrettyTextForPart(BodyPartRecord bodyPart)
 		{
-			if (this.labelNounPretty.NullOrEmpty())
+			if (labelNounPretty.NullOrEmpty())
 			{
 				return null;
 			}
-			return string.Format(this.labelNounPretty, this.label, bodyPart.Label);
+			return string.Format(labelNounPretty, label, bodyPart.Label);
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			if (this.hediffClass == null)
+			if (hediffClass == null)
 			{
 				yield return "hediffClass is null";
 			}
-			if (!this.comps.NullOrEmpty<HediffCompProperties>() && !typeof(HediffWithComps).IsAssignableFrom(this.hediffClass))
+			if (!comps.NullOrEmpty() && !typeof(HediffWithComps).IsAssignableFrom(hediffClass))
 			{
 				yield return "has comps but hediffClass is not HediffWithComps or subclass thereof";
 			}
-			if (this.minSeverity > this.initialSeverity)
+			if (minSeverity > initialSeverity)
 			{
 				yield return "minSeverity is greater than initialSeverity";
 			}
-			if (this.maxSeverity < this.initialSeverity)
+			if (maxSeverity < initialSeverity)
 			{
 				yield return "maxSeverity is lower than initialSeverity";
 			}
-			if (!this.tendable && this.HasComp(typeof(HediffComp_TendDuration)))
+			if (!tendable && HasComp(typeof(HediffComp_TendDuration)))
 			{
 				yield return "has HediffComp_TendDuration but tendable = false";
 			}
-			if (string.IsNullOrEmpty(this.description))
+			if (string.IsNullOrEmpty(description))
 			{
-				yield return "Hediff with defName " + this.defName + " has no description!";
+				yield return "Hediff with defName " + defName + " has no description!";
 			}
-			if (this.comps != null)
+			if (comps != null)
 			{
-				int num;
-				for (int i = 0; i < this.comps.Count; i = num + 1)
+				for (int m = 0; m < comps.Count; m++)
 				{
-					foreach (string arg in this.comps[i].ConfigErrors(this))
+					foreach (string item2 in comps[m].ConfigErrors(this))
 					{
-						yield return this.comps[i] + ": " + arg;
+						yield return comps[m] + ": " + item2;
 					}
-					enumerator = null;
-					num = i;
 				}
 			}
-			if (this.stages != null)
+			if (stages != null)
 			{
-				int num;
-				if (!typeof(Hediff_Addiction).IsAssignableFrom(this.hediffClass))
+				if (!typeof(Hediff_Addiction).IsAssignableFrom(hediffClass))
 				{
-					for (int i = 0; i < this.stages.Count; i = num + 1)
+					for (int m = 0; m < stages.Count; m++)
 					{
-						if (i >= 1 && this.stages[i].minSeverity <= this.stages[i - 1].minSeverity)
+						if (m >= 1 && stages[m].minSeverity <= stages[m - 1].minSeverity)
 						{
 							yield return "stages are not in order of minSeverity";
 						}
-						num = i;
 					}
 				}
-				for (int i = 0; i < this.stages.Count; i = num + 1)
+				for (int m = 0; m < stages.Count; m++)
 				{
-					if (this.stages[i].makeImmuneTo != null)
+					if (stages[m].makeImmuneTo != null && !stages[m].makeImmuneTo.Any((HediffDef im) => im.HasComp(typeof(HediffComp_Immunizable))))
 					{
-						if (!this.stages[i].makeImmuneTo.Any((HediffDef im) => im.HasComp(typeof(HediffComp_Immunizable))))
-						{
-							yield return "makes immune to hediff which doesn't have comp immunizable";
-						}
+						yield return "makes immune to hediff which doesn't have comp immunizable";
 					}
-					if (this.stages[i].hediffGivers != null)
+					if (stages[m].hediffGivers != null)
 					{
-						for (int j = 0; j < this.stages[i].hediffGivers.Count; j = num + 1)
+						for (int j = 0; j < stages[m].hediffGivers.Count; j++)
 						{
-							foreach (string text2 in this.stages[i].hediffGivers[j].ConfigErrors())
+							foreach (string item3 in stages[m].hediffGivers[j].ConfigErrors())
 							{
-								yield return text2;
+								yield return item3;
 							}
-							enumerator = null;
-							num = j;
 						}
 					}
-					num = i;
 				}
 			}
-			if (this.hediffGivers != null)
+			if (hediffGivers != null)
 			{
-				int num;
-				for (int i = 0; i < this.hediffGivers.Count; i = num + 1)
+				for (int m = 0; m < hediffGivers.Count; m++)
 				{
-					foreach (string text3 in this.hediffGivers[i].ConfigErrors())
+					foreach (string item4 in hediffGivers[m].ConfigErrors())
 					{
-						yield return text3;
+						yield return item4;
 					}
-					enumerator = null;
-					num = i;
 				}
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public override IEnumerable<StatDrawEntry> SpecialDisplayStats(StatRequest req)
 		{
-			if (this.stages != null && this.stages.Count == 1)
+			if (stages != null && stages.Count == 1)
 			{
-				foreach (StatDrawEntry statDrawEntry in this.stages[0].SpecialDisplayStats())
+				foreach (StatDrawEntry item in stages[0].SpecialDisplayStats())
 				{
-					yield return statDrawEntry;
+					yield return item;
 				}
-				IEnumerator<StatDrawEntry> enumerator = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static HediffDef Named(string defName)
 		{
-			return DefDatabase<HediffDef>.GetNamed(defName, true);
+			return DefDatabase<HediffDef>.GetNamed(defName);
 		}
-
-		
-		public Type hediffClass = typeof(Hediff);
-
-		
-		public List<HediffCompProperties> comps;
-
-		
-		public float initialSeverity = 0.5f;
-
-		
-		public float lethalSeverity = -1f;
-
-		
-		public List<HediffStage> stages;
-
-		
-		public bool tendable;
-
-		
-		public bool isBad = true;
-
-		
-		public ThingDef spawnThingOnRemoved;
-
-		
-		public float chanceToCauseNoPain;
-
-		
-		public bool makesSickThought;
-
-		
-		public bool makesAlert = true;
-
-		
-		public NeedDef causesNeed;
-
-		
-		public NeedDef disablesNeed;
-
-		
-		public float minSeverity;
-
-		
-		public float maxSeverity = float.MaxValue;
-
-		
-		public bool scenarioCanAdd;
-
-		
-		public List<HediffGiver> hediffGivers;
-
-		
-		public bool cureAllAtOnceIfCuredByItem;
-
-		
-		public TaleDef taleOnVisible;
-
-		
-		public bool everCurableByItem = true;
-
-		
-		public string battleStateLabel;
-
-		
-		public string labelNounPretty;
-
-		
-		public List<string> tags;
-
-		
-		public bool priceImpact;
-
-		
-		public float priceOffset;
-
-		
-		public bool chronic;
-
-		
-		public SimpleCurve removeOnRedressChanceByDaysCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(0f, 0f),
-				true
-			},
-			{
-				new CurvePoint(1f, 0f),
-				true
-			}
-		};
-
-		
-		public bool removeOnQuestLodgers;
-
-		
-		public bool displayWound;
-
-		
-		public Color defaultLabelColor = Color.white;
-
-		
-		public InjuryProps injuryProps;
-
-		
-		public AddedBodyPartProps addedPartProps;
-
-		
-		[MustTranslate]
-		public string labelNoun;
-
-		
-		private bool alwaysAllowMothballCached;
-
-		
-		private bool alwaysAllowMothball;
-
-		
-		private Hediff concreteExampleInt;
 	}
 }

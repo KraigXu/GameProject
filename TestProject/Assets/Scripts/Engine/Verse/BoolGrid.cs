@@ -1,213 +1,183 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class BoolGrid : IExposable
 	{
-		
-		
-		public int TrueCount
-		{
-			get
-			{
-				return this.trueCountInt;
-			}
-		}
+		private bool[] arr;
 
-		
-		
+		private int trueCountInt;
+
+		private int mapSizeX;
+
+		private int mapSizeZ;
+
+		private int minPossibleTrueIndexCached = -1;
+
+		private bool minPossibleTrueIndexDirty;
+
+		public int TrueCount => trueCountInt;
+
 		public IEnumerable<IntVec3> ActiveCells
 		{
 			get
 			{
-				if (this.trueCountInt == 0)
+				if (trueCountInt == 0)
 				{
 					yield break;
 				}
 				int yieldedCount = 0;
-				bool canSetMinPossibleTrueIndex = this.minPossibleTrueIndexDirty;
-				int num = this.minPossibleTrueIndexDirty ? 0 : this.minPossibleTrueIndexCached;
-				int num2;
-				for (int i = num; i < this.arr.Length; i = num2 + 1)
+				bool canSetMinPossibleTrueIndex = minPossibleTrueIndexDirty;
+				int num = (!minPossibleTrueIndexDirty) ? minPossibleTrueIndexCached : 0;
+				for (int i = num; i < arr.Length; i++)
 				{
-					if (this.arr[i])
+					if (arr[i])
 					{
-						if (canSetMinPossibleTrueIndex && this.minPossibleTrueIndexDirty)
+						if (canSetMinPossibleTrueIndex && minPossibleTrueIndexDirty)
 						{
 							canSetMinPossibleTrueIndex = false;
-							this.minPossibleTrueIndexDirty = false;
-							this.minPossibleTrueIndexCached = i;
+							minPossibleTrueIndexDirty = false;
+							minPossibleTrueIndexCached = i;
 						}
-						yield return CellIndicesUtility.IndexToCell(i, this.mapSizeX);
-						num2 = yieldedCount;
-						yieldedCount = num2 + 1;
-						if (yieldedCount >= this.trueCountInt)
+						yield return CellIndicesUtility.IndexToCell(i, mapSizeX);
+						yieldedCount++;
+						if (yieldedCount >= trueCountInt)
 						{
-							yield break;
+							break;
 						}
 					}
-					num2 = i;
 				}
-				yield break;
 			}
 		}
 
-		
 		public bool this[int index]
 		{
 			get
 			{
-				return this.arr[index];
+				return arr[index];
 			}
 			set
 			{
-				this.Set(index, value);
+				Set(index, value);
 			}
 		}
 
-		
 		public bool this[IntVec3 c]
 		{
 			get
 			{
-				return this.arr[CellIndicesUtility.CellToIndex(c, this.mapSizeX)];
+				return arr[CellIndicesUtility.CellToIndex(c, mapSizeX)];
 			}
 			set
 			{
-				this.Set(c, value);
+				Set(c, value);
 			}
 		}
 
-		
 		public bool this[int x, int z]
 		{
 			get
 			{
-				return this.arr[CellIndicesUtility.CellToIndex(x, z, this.mapSizeX)];
+				return arr[CellIndicesUtility.CellToIndex(x, z, mapSizeX)];
 			}
 			set
 			{
-				this.Set(CellIndicesUtility.CellToIndex(x, z, this.mapSizeX), value);
+				Set(CellIndicesUtility.CellToIndex(x, z, mapSizeX), value);
 			}
 		}
 
-		
 		public BoolGrid()
 		{
 		}
 
-		
 		public BoolGrid(Map map)
 		{
-			this.ClearAndResizeTo(map);
+			ClearAndResizeTo(map);
 		}
 
-		
 		public bool MapSizeMatches(Map map)
 		{
-			return this.mapSizeX == map.Size.x && this.mapSizeZ == map.Size.z;
+			if (mapSizeX == map.Size.x)
+			{
+				return mapSizeZ == map.Size.z;
+			}
+			return false;
 		}
 
-		
 		public void ClearAndResizeTo(Map map)
 		{
-			if (this.MapSizeMatches(map) && this.arr != null)
+			if (MapSizeMatches(map) && arr != null)
 			{
-				this.Clear();
+				Clear();
 				return;
 			}
-			this.mapSizeX = map.Size.x;
-			this.mapSizeZ = map.Size.z;
-			this.arr = new bool[this.mapSizeX * this.mapSizeZ];
-			this.trueCountInt = 0;
-			this.minPossibleTrueIndexCached = -1;
-			this.minPossibleTrueIndexDirty = false;
+			mapSizeX = map.Size.x;
+			mapSizeZ = map.Size.z;
+			arr = new bool[mapSizeX * mapSizeZ];
+			trueCountInt = 0;
+			minPossibleTrueIndexCached = -1;
+			minPossibleTrueIndexDirty = false;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.trueCountInt, "trueCount", 0, false);
-			Scribe_Values.Look<int>(ref this.mapSizeX, "mapSizeX", 0, false);
-			Scribe_Values.Look<int>(ref this.mapSizeZ, "mapSizeZ", 0, false);
-			DataExposeUtility.BoolArray(ref this.arr, this.mapSizeX * this.mapSizeZ, "arr");
+			Scribe_Values.Look(ref trueCountInt, "trueCount", 0);
+			Scribe_Values.Look(ref mapSizeX, "mapSizeX", 0);
+			Scribe_Values.Look(ref mapSizeZ, "mapSizeZ", 0);
+			DataExposeUtility.BoolArray(ref arr, mapSizeX * mapSizeZ, "arr");
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				this.minPossibleTrueIndexDirty = true;
+				minPossibleTrueIndexDirty = true;
 			}
 		}
 
-		
 		public void Clear()
 		{
-			Array.Clear(this.arr, 0, this.arr.Length);
-			this.trueCountInt = 0;
-			this.minPossibleTrueIndexCached = -1;
-			this.minPossibleTrueIndexDirty = false;
+			Array.Clear(arr, 0, arr.Length);
+			trueCountInt = 0;
+			minPossibleTrueIndexCached = -1;
+			minPossibleTrueIndexDirty = false;
 		}
 
-		
 		public virtual void Set(IntVec3 c, bool value)
 		{
-			this.Set(CellIndicesUtility.CellToIndex(c, this.mapSizeX), value);
+			Set(CellIndicesUtility.CellToIndex(c, mapSizeX), value);
 		}
 
-		
 		public virtual void Set(int index, bool value)
 		{
-			if (this.arr[index] == value)
+			if (arr[index] == value)
 			{
 				return;
 			}
-			this.arr[index] = value;
+			arr[index] = value;
 			if (value)
 			{
-				this.trueCountInt++;
-				if (this.trueCountInt == 1 || index < this.minPossibleTrueIndexCached)
+				trueCountInt++;
+				if (trueCountInt == 1 || index < minPossibleTrueIndexCached)
 				{
-					this.minPossibleTrueIndexCached = index;
-					return;
+					minPossibleTrueIndexCached = index;
 				}
 			}
 			else
 			{
-				this.trueCountInt--;
-				if (index == this.minPossibleTrueIndexCached)
+				trueCountInt--;
+				if (index == minPossibleTrueIndexCached)
 				{
-					this.minPossibleTrueIndexDirty = true;
+					minPossibleTrueIndexDirty = true;
 				}
 			}
 		}
 
-		
 		public void Invert()
 		{
-			for (int i = 0; i < this.arr.Length; i++)
+			for (int i = 0; i < arr.Length; i++)
 			{
-				this.arr[i] = !this.arr[i];
+				arr[i] = !arr[i];
 			}
-			this.trueCountInt = this.arr.Length - this.trueCountInt;
-			this.minPossibleTrueIndexDirty = true;
+			trueCountInt = arr.Length - trueCountInt;
+			minPossibleTrueIndexDirty = true;
 		}
-
-		
-		private bool[] arr;
-
-		
-		private int trueCountInt;
-
-		
-		private int mapSizeX;
-
-		
-		private int mapSizeZ;
-
-		
-		private int minPossibleTrueIndexCached = -1;
-
-		
-		private bool minPossibleTrueIndexDirty;
 	}
 }

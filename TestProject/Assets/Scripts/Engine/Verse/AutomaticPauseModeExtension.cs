@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public static class AutomaticPauseModeExtension
 	{
-		
 		public static string ToStringHuman(this AutomaticPauseMode mode)
 		{
 			switch (mode)

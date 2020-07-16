@@ -1,160 +1,81 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class CompEquippable : ThingComp, IVerbOwner
 	{
-		
-		
-		private Pawn Holder
-		{
-			get
-			{
-				return this.PrimaryVerb.CasterPawn;
-			}
-		}
+		public VerbTracker verbTracker;
 
-		
-		
-		public List<Verb> AllVerbs
-		{
-			get
-			{
-				return this.verbTracker.AllVerbs;
-			}
-		}
+		private Pawn Holder => PrimaryVerb.CasterPawn;
 
-		
-		
-		public Verb PrimaryVerb
-		{
-			get
-			{
-				return this.verbTracker.PrimaryVerb;
-			}
-		}
+		public List<Verb> AllVerbs => verbTracker.AllVerbs;
 
-		
-		
-		public VerbTracker VerbTracker
-		{
-			get
-			{
-				return this.verbTracker;
-			}
-		}
+		public Verb PrimaryVerb => verbTracker.PrimaryVerb;
 
-		
-		
-		public List<VerbProperties> VerbProperties
-		{
-			get
-			{
-				return this.parent.def.Verbs;
-			}
-		}
+		public VerbTracker VerbTracker => verbTracker;
 
-		
-		
-		public List<Tool> Tools
-		{
-			get
-			{
-				return this.parent.def.tools;
-			}
-		}
+		public List<VerbProperties> VerbProperties => parent.def.Verbs;
 
-		
-		
-		Thing IVerbOwner.ConstantCaster
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public List<Tool> Tools => parent.def.tools;
 
-		
-		
-		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
-		{
-			get
-			{
-				return ImplementOwnerTypeDefOf.Weapon;
-			}
-		}
+		Thing IVerbOwner.ConstantCaster => null;
 
-		
+		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef => ImplementOwnerTypeDefOf.Weapon;
+
 		public CompEquippable()
 		{
-			this.verbTracker = new VerbTracker(this);
+			verbTracker = new VerbTracker(this);
 		}
 
-		
 		public IEnumerable<Command> GetVerbsCommands()
 		{
-			return this.verbTracker.GetVerbsCommands(KeyCode.None);
+			return verbTracker.GetVerbsCommands();
 		}
 
-		
 		public override void PostDestroy(DestroyMode mode, Map previousMap)
 		{
 			base.PostDestroy(mode, previousMap);
-			if (this.Holder != null && this.Holder.equipment != null && this.Holder.equipment.Primary == this.parent)
+			if (Holder != null && Holder.equipment != null && Holder.equipment.Primary == parent)
 			{
-				this.Holder.equipment.Notify_PrimaryDestroyed();
+				Holder.equipment.Notify_PrimaryDestroyed();
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Deep.Look<VerbTracker>(ref this.verbTracker, "verbTracker", new object[]
-			{
-				this
-			});
+			Scribe_Deep.Look(ref verbTracker, "verbTracker", this);
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			this.verbTracker.VerbsTick();
+			verbTracker.VerbsTick();
 		}
 
-		
 		public void Notify_EquipmentLost()
 		{
-			List<Verb> allVerbs = this.AllVerbs;
+			List<Verb> allVerbs = AllVerbs;
 			for (int i = 0; i < allVerbs.Count; i++)
 			{
 				allVerbs[i].Notify_EquipmentLost();
 			}
 		}
 
-		
 		string IVerbOwner.UniqueVerbOwnerID()
 		{
-			return "CompEquippable_" + this.parent.ThingID;
+			return "CompEquippable_" + parent.ThingID;
 		}
 
-		
 		bool IVerbOwner.VerbsStillUsableBy(Pawn p)
 		{
-			Apparel apparel = this.parent as Apparel;
+			Apparel apparel = parent as Apparel;
 			if (apparel != null)
 			{
 				return p.apparel.WornApparel.Contains(apparel);
 			}
-			return p.equipment.AllEquipmentListForReading.Contains(this.parent);
+			return p.equipment.AllEquipmentListForReading.Contains(parent);
 		}
-
-		
-		public VerbTracker verbTracker;
 	}
 }

@@ -1,12 +1,10 @@
-﻿using System;
 using RimWorld;
+using System;
 
 namespace Verse
 {
-	
 	public static class GraphicUtility
 	{
-		
 		public static Graphic ExtractInnerGraphicFor(this Graphic outerGraphic, Thing thing)
 		{
 			Graphic_Random graphic_Random = outerGraphic as Graphic_Random;
@@ -22,7 +20,6 @@ namespace Verse
 			return outerGraphic;
 		}
 
-		
 		public static Graphic_Linked WrapLinked(Graphic subGraphic, LinkDrawerType linkDrawerType)
 		{
 			switch (linkDrawerType)

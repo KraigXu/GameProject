@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TechLevelUtility
 	{
-		
 		public static string ToStringHuman(this TechLevel tl)
 		{
 			switch (tl)
@@ -32,7 +30,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static bool CanSpawnWithEquipmentFrom(this TechLevel pawnLevel, TechLevel gearLevel)
 		{
 			if (gearLevel == TechLevel.Undefined)
@@ -44,32 +41,38 @@ namespace RimWorld
 			case TechLevel.Undefined:
 				return false;
 			case TechLevel.Neolithic:
-				return gearLevel <= TechLevel.Neolithic;
+				return (int)gearLevel <= 2;
 			case TechLevel.Medieval:
-				return gearLevel <= TechLevel.Medieval;
+				return (int)gearLevel <= 3;
 			case TechLevel.Industrial:
 				return gearLevel == TechLevel.Industrial;
 			case TechLevel.Spacer:
-				return gearLevel == TechLevel.Spacer || gearLevel == TechLevel.Industrial;
+				if (gearLevel != TechLevel.Spacer)
+				{
+					return gearLevel == TechLevel.Industrial;
+				}
+				return true;
 			case TechLevel.Ultra:
-				return gearLevel == TechLevel.Ultra || gearLevel == TechLevel.Spacer;
+				if (gearLevel != TechLevel.Ultra)
+				{
+					return gearLevel == TechLevel.Spacer;
+				}
+				return true;
 			case TechLevel.Archotech:
 				return gearLevel == TechLevel.Archotech;
+			default:
+				Log.Error("Unknown tech levels " + pawnLevel + ", " + gearLevel);
+				return true;
 			}
-			Log.Error(string.Concat(new object[]
-			{
-				"Unknown tech levels ",
-				pawnLevel,
-				", ",
-				gearLevel
-			}), false);
-			return true;
 		}
 
-		
 		public static bool IsNeolithicOrWorse(this TechLevel techLevel)
 		{
-			return techLevel != TechLevel.Undefined && techLevel <= TechLevel.Neolithic;
+			if (techLevel == TechLevel.Undefined)
+			{
+				return false;
+			}
+			return (int)techLevel <= 2;
 		}
 	}
 }

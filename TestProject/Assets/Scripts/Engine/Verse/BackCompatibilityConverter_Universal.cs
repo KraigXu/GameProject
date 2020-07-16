@@ -1,19 +1,16 @@
-﻿using System;
-using System.Xml;
 using RimWorld;
+using System;
+using System.Xml;
 
 namespace Verse
 {
-	
 	public class BackCompatibilityConverter_Universal : BackCompatibilityConverter
 	{
-		
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
 			return true;
 		}
 
-		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			if (defType == typeof(ThingDef))
@@ -46,7 +43,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			if (providedClassName == "Hediff_PsychicAmplifier")
@@ -56,7 +52,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -65,9 +60,9 @@ namespace Verse
 				Pawn_RoyaltyTracker pawn_RoyaltyTracker;
 				if ((pawn_RoyaltyTracker = (obj as Pawn_RoyaltyTracker)) != null && num <= 2575)
 				{
-					foreach (RoyalTitle royalTitle in pawn_RoyaltyTracker.AllTitlesForReading)
+					foreach (RoyalTitle item in pawn_RoyaltyTracker.AllTitlesForReading)
 					{
-						royalTitle.conceited = RoyalTitleUtility.ShouldBecomeConceitedOnNewTitle(pawn_RoyaltyTracker.pawn);
+						item.conceited = RoyalTitleUtility.ShouldBecomeConceitedOnNewTitle(pawn_RoyaltyTracker.pawn);
 					}
 				}
 				Pawn_NeedsTracker pawn_NeedsTracker;
@@ -77,44 +72,34 @@ namespace Verse
 				}
 			}
 			Pawn pawn;
-			if ((pawn = (obj as Pawn)) != null)
+			if ((pawn = (obj as Pawn)) == null)
 			{
-				if (pawn.abilities == null)
+				return;
+			}
+			if (pawn.abilities == null)
+			{
+				pawn.abilities = new Pawn_AbilityTracker(pawn);
+			}
+			if (pawn.health != null)
+			{
+				if (pawn.health.hediffSet.hediffs.RemoveAll((Hediff x) => x == null) != 0)
 				{
-					pawn.abilities = new Pawn_AbilityTracker(pawn);
+					Log.Error(pawn.ToStringSafe() + " had some null hediffs.");
 				}
-				if (pawn.health != null)
+				Hediff hediff = pawn.health?.hediffSet?.GetFirstHediffOfDef(HediffDefOf.PsychicHangover);
+				if (hediff != null)
 				{
-					if (pawn.health.hediffSet.hediffs.RemoveAll((Hediff x) => x == null) != 0)
-					{
-						Log.Error(pawn.ToStringSafe<Pawn>() + " had some null hediffs.", false);
-					}
-					Pawn_HealthTracker health = pawn.health;
-					Hediff hediff;
-					if (health == null)
-					{
-						hediff = null;
-					}
-					else
-					{
-						HediffSet hediffSet = health.hediffSet;
-						hediff = ((hediffSet != null) ? hediffSet.GetFirstHediffOfDef(HediffDefOf.PsychicHangover, false) : null);
-					}
-					Hediff hediff2 = hediff;
-					if (hediff2 != null)
-					{
-						pawn.health.hediffSet.hediffs.Remove(hediff2);
-					}
-					Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.WakeUpTolerance, false);
-					if (firstHediffOfDef != null)
-					{
-						pawn.health.hediffSet.hediffs.Remove(firstHediffOfDef);
-					}
-					Hediff firstHediffOfDef2 = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.GoJuiceTolerance, false);
-					if (firstHediffOfDef2 != null)
-					{
-						pawn.health.hediffSet.hediffs.Remove(firstHediffOfDef2);
-					}
+					pawn.health.hediffSet.hediffs.Remove(hediff);
+				}
+				Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.WakeUpTolerance);
+				if (firstHediffOfDef != null)
+				{
+					pawn.health.hediffSet.hediffs.Remove(firstHediffOfDef);
+				}
+				Hediff firstHediffOfDef2 = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.GoJuiceTolerance);
+				if (firstHediffOfDef2 != null)
+				{
+					pawn.health.hediffSet.hediffs.Remove(firstHediffOfDef2);
 				}
 			}
 		}

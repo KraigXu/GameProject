@@ -1,26 +1,24 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Maintain : JobDriver
 	{
-		
+		private const int MaintainTicks = 180;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
-			Toil toil = Toils_General.Wait(180, TargetIndex.None);
-			toil.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
+			Toil toil = Toils_General.Wait(180);
+			toil.WithProgressBarToilDelay(TargetIndex.A);
 			toil.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			toil.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
 			yield return toil;
@@ -31,10 +29,6 @@ namespace RimWorld
 			};
 			maintain.defaultCompleteMode = ToilCompleteMode.Instant;
 			yield return maintain;
-			yield break;
 		}
-
-		
-		private const int MaintainTicks = 180;
 	}
 }

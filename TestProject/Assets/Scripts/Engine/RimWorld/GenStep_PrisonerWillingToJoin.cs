@@ -1,24 +1,15 @@
-﻿using System;
 using RimWorld.BaseGen;
 using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class GenStep_PrisonerWillingToJoin : GenStep_Scatterer
 	{
-		
-		
-		public override int SeedPart
-		{
-			get
-			{
-				return 69356099;
-			}
-		}
+		private const int Size = 8;
 
-		
+		public override int SeedPart => 69356099;
+
 		protected override bool CanScatterAt(IntVec3 c, Map map)
 		{
 			if (!base.CanScatterAt(c, map))
@@ -29,13 +20,13 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (!map.reachability.CanReachMapEdge(c, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false)))
+			if (!map.reachability.CanReachMapEdge(c, TraverseParms.For(TraverseMode.PassDoors)))
 			{
 				return false;
 			}
-			foreach (IntVec3 c2 in CellRect.CenteredOn(c, 8, 8))
+			foreach (IntVec3 item in CellRect.CenteredOn(c, 8, 8))
 			{
-				if (!c2.InBounds(map) || c2.GetEdifice(map) != null)
+				if (!item.InBounds(map) || item.GetEdifice(map) != null)
 				{
 					return false;
 				}
@@ -43,18 +34,9 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected override void ScatterAt(IntVec3 loc, Map map, GenStepParams parms, int count = 1)
 		{
-			Faction faction;
-			if (map.ParentFaction == null || map.ParentFaction == Faction.OfPlayer)
-			{
-				faction = Find.FactionManager.RandomEnemyFaction(false, false, true, TechLevel.Undefined);
-			}
-			else
-			{
-				faction = map.ParentFaction;
-			}
+			Faction faction = (map.ParentFaction != null && map.ParentFaction != Faction.OfPlayer) ? map.ParentFaction : Find.FactionManager.RandomEnemyFaction();
 			CellRect cellRect = CellRect.CenteredOn(loc, 8, 8).ClipInsideMap(map);
 			Pawn singlePawnToSpawn;
 			if (parms.sitePart != null && parms.sitePart.things != null && parms.sitePart.things.Any)
@@ -64,21 +46,14 @@ namespace RimWorld
 			else
 			{
 				PrisonerWillingToJoinComp component = map.Parent.GetComponent<PrisonerWillingToJoinComp>();
-				if (component != null && component.pawn.Any)
-				{
-					singlePawnToSpawn = component.pawn.Take(component.pawn[0]);
-				}
-				else
-				{
-					singlePawnToSpawn = PrisonerWillingToJoinQuestUtility.GeneratePrisoner(map.Tile, faction);
-				}
+				singlePawnToSpawn = ((component == null || !component.pawn.Any) ? PrisonerWillingToJoinQuestUtility.GeneratePrisoner(map.Tile, faction) : component.pawn.Take(component.pawn[0]));
 			}
 			ResolveParams resolveParams = default(ResolveParams);
 			resolveParams.rect = cellRect;
 			resolveParams.faction = faction;
-			BaseGenCore.globalSettings.map = map;
-			BaseGenCore.symbolStack.Push("prisonCell", resolveParams, null);
-			BaseGenCore.Generate();
+			RimWorld.BaseGen.BaseGen.globalSettings.map = map;
+			RimWorld.BaseGen.BaseGen.symbolStack.Push("prisonCell", resolveParams);
+			RimWorld.BaseGen.BaseGen.Generate();
 			ResolveParams resolveParams2 = default(ResolveParams);
 			resolveParams2.rect = cellRect;
 			resolveParams2.faction = faction;
@@ -88,13 +63,10 @@ namespace RimWorld
 				MapGenerator.rootsToUnfog.Add(x.Position);
 				((Pawn)x).mindState.WillJoinColonyIfRescued = true;
 			};
-			BaseGenCore.globalSettings.map = map;
-			BaseGenCore.symbolStack.Push("pawn", resolveParams2, null);
-			BaseGenCore.Generate();
-			MapGenerator.SetVar<CellRect>("RectOfInterest", cellRect);
+			RimWorld.BaseGen.BaseGen.globalSettings.map = map;
+			RimWorld.BaseGen.BaseGen.symbolStack.Push("pawn", resolveParams2);
+			RimWorld.BaseGen.BaseGen.Generate();
+			MapGenerator.SetVar("RectOfInterest", cellRect);
 		}
-
-		
-		private const int Size = 8;
 	}
 }

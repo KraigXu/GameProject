@@ -1,12 +1,9 @@
-﻿using System;
 using RimWorld.Planet;
 
 namespace RimWorld
 {
-	
 	public class BiomeWorker_ColdBog : BiomeWorker
 	{
-		
 		public override float GetScore(Tile tile, int tileID)
 		{
 			if (tile.WaterCovered)
@@ -21,7 +18,7 @@ namespace RimWorld
 			{
 				return 0f;
 			}
-			return -tile.temperature + 13f + tile.swampiness * 8f;
+			return 0f - tile.temperature + 13f + tile.swampiness * 8f;
 		}
 	}
 }

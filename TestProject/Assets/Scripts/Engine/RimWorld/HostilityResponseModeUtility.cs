@@ -1,32 +1,36 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class HostilityResponseModeUtility
 	{
-		
+		private static readonly Texture2D IgnoreIcon = ContentFinder<Texture2D>.Get("UI/Icons/HostilityResponse/Ignore");
+
+		private static readonly Texture2D AttackIcon = ContentFinder<Texture2D>.Get("UI/Icons/HostilityResponse/Attack");
+
+		private static readonly Texture2D FleeIcon = ContentFinder<Texture2D>.Get("UI/Icons/HostilityResponse/Flee");
+
+		private static readonly Color IconColor = new Color(0.84f, 0.84f, 0.84f);
+
 		public static Texture2D GetIcon(this HostilityResponseMode response)
 		{
 			switch (response)
 			{
 			case HostilityResponseMode.Ignore:
-				return HostilityResponseModeUtility.IgnoreIcon;
+				return IgnoreIcon;
 			case HostilityResponseMode.Attack:
-				return HostilityResponseModeUtility.AttackIcon;
+				return AttackIcon;
 			case HostilityResponseMode.Flee:
-				return HostilityResponseModeUtility.FleeIcon;
+				return FleeIcon;
 			default:
 				return BaseContent.BadTex;
 			}
 		}
 
-		
 		public static HostilityResponseMode GetNextResponse(Pawn pawn)
 		{
 			switch (pawn.playerSettings.hostilityResponse)
@@ -46,16 +50,14 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static string GetLabel(this HostilityResponseMode response)
 		{
 			return ("HostilityResponseMode_" + response).Translate();
 		}
 
-		
 		public static void DrawResponseButton(Rect rect, Pawn pawn, bool paintable)
 		{
-			Widgets.Dropdown<Pawn, HostilityResponseMode>(rect, pawn, HostilityResponseModeUtility.IconColor, new Func<Pawn, HostilityResponseMode>(HostilityResponseModeUtility.DrawResponseButton_GetResponse), new Func<Pawn, IEnumerable<Widgets.DropdownMenuElement<HostilityResponseMode>>>(HostilityResponseModeUtility.DrawResponseButton_GenerateMenu), null, pawn.playerSettings.hostilityResponse.GetIcon(), null, null, delegate
+			Widgets.Dropdown(rect, pawn, IconColor, DrawResponseButton_GetResponse, DrawResponseButton_GenerateMenu, null, pawn.playerSettings.hostilityResponse.GetIcon(), null, null, delegate
 			{
 				PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.HostilityResponse, KnowledgeAmount.SpecificInteraction);
 			}, paintable);
@@ -66,48 +68,27 @@ namespace RimWorld
 			}
 		}
 
-		
 		private static HostilityResponseMode DrawResponseButton_GetResponse(Pawn pawn)
 		{
 			return pawn.playerSettings.hostilityResponse;
 		}
 
-		
 		private static IEnumerable<Widgets.DropdownMenuElement<HostilityResponseMode>> DrawResponseButton_GenerateMenu(Pawn p)
 		{
-			IEnumerator enumerator = Enum.GetValues(typeof(HostilityResponseMode)).GetEnumerator();
+			foreach (HostilityResponseMode response in Enum.GetValues(typeof(HostilityResponseMode)))
 			{
-				while (enumerator.MoveNext())
+				if (response != HostilityResponseMode.Attack || !p.WorkTagIsDisabled(WorkTags.Violent))
 				{
-					HostilityResponseMode response = (HostilityResponseMode)enumerator.Current;
-					if (response != HostilityResponseMode.Attack || !p.WorkTagIsDisabled(WorkTags.Violent))
+					yield return new Widgets.DropdownMenuElement<HostilityResponseMode>
 					{
-						yield return new Widgets.DropdownMenuElement<HostilityResponseMode>
+						option = new FloatMenuOption(response.GetLabel(), delegate
 						{
-							option = new FloatMenuOption(response.GetLabel(), delegate
-							{
-								p.playerSettings.hostilityResponse = response;
-							}, response.GetIcon(), Color.white, MenuOptionPriority.Default, null, null, 0f, null, null),
-							payload = response
-						};
-					}
+							p.playerSettings.hostilityResponse = response;
+						}, response.GetIcon(), Color.white),
+						payload = response
+					};
 				}
 			}
-		
-			yield break;
-			yield break;
 		}
-
-		
-		private static readonly Texture2D IgnoreIcon = ContentFinder<Texture2D>.Get("UI/Icons/HostilityResponse/Ignore", true);
-
-		
-		private static readonly Texture2D AttackIcon = ContentFinder<Texture2D>.Get("UI/Icons/HostilityResponse/Attack", true);
-
-		
-		private static readonly Texture2D FleeIcon = ContentFinder<Texture2D>.Get("UI/Icons/HostilityResponse/Flee", true);
-
-		
-		private static readonly Color IconColor = new Color(0.84f, 0.84f, 0.84f);
 	}
 }

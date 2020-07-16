@@ -1,30 +1,27 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class GameConditionMaker
 	{
-		
 		public static GameCondition MakeConditionPermanent(GameConditionDef def)
 		{
-			GameCondition gameCondition = GameConditionMaker.MakeCondition(def, -1);
+			GameCondition gameCondition = MakeCondition(def);
 			gameCondition.Permanent = true;
 			gameCondition.startTick -= 180000;
 			return gameCondition;
 		}
 
-		
 		public static GameCondition MakeCondition(GameConditionDef def, int duration = -1)
 		{
-			GameCondition gameCondition = (GameCondition)Activator.CreateInstance(def.conditionClass);
-			gameCondition.startTick = Find.TickManager.TicksGame;
-			gameCondition.def = def;
-			gameCondition.Duration = duration;
-			gameCondition.uniqueID = Find.UniqueIDsManager.GetNextGameConditionID();
-			gameCondition.PostMake();
-			return gameCondition;
+			GameCondition obj = (GameCondition)Activator.CreateInstance(def.conditionClass);
+			obj.startTick = Find.TickManager.TicksGame;
+			obj.def = def;
+			obj.Duration = duration;
+			obj.uniqueID = Find.UniqueIDsManager.GetNextGameConditionID();
+			obj.PostMake();
+			return obj;
 		}
 	}
 }

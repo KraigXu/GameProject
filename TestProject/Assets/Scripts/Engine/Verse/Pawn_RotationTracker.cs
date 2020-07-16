@@ -1,124 +1,106 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Pawn_RotationTracker : IExposable
 	{
-		
+		private Pawn pawn;
+
 		public Pawn_RotationTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void Notify_Spawned()
 		{
-			this.UpdateRotation();
+			UpdateRotation();
 		}
 
-		
 		public void UpdateRotation()
 		{
-			if (this.pawn.Destroyed)
+			if (pawn.Destroyed || pawn.jobs.HandlingFacing)
 			{
 				return;
 			}
-			if (this.pawn.jobs.HandlingFacing)
+			if (pawn.pather.Moving)
 			{
-				return;
-			}
-			if (this.pawn.pather.Moving)
-			{
-				if (this.pawn.pather.curPath == null || this.pawn.pather.curPath.NodesLeftCount < 1)
+				if (pawn.pather.curPath != null && pawn.pather.curPath.NodesLeftCount >= 1)
 				{
-					return;
+					FaceAdjacentCell(pawn.pather.nextCell);
 				}
-				this.FaceAdjacentCell(this.pawn.pather.nextCell);
 				return;
 			}
-			else
+			Stance_Busy stance_Busy = pawn.stances.curStance as Stance_Busy;
+			if (stance_Busy != null && stance_Busy.focusTarg.IsValid)
 			{
-				Stance_Busy stance_Busy = this.pawn.stances.curStance as Stance_Busy;
-				if (stance_Busy == null || !stance_Busy.focusTarg.IsValid)
-				{
-					if (this.pawn.jobs.curJob != null)
-					{
-						LocalTargetInfo target = this.pawn.CurJob.GetTarget(this.pawn.jobs.curDriver.rotateToFace);
-						this.FaceTarget(target);
-					}
-					if (this.pawn.Drafted)
-					{
-						this.pawn.Rotation = Rot4.South;
-					}
-					return;
-				}
 				if (stance_Busy.focusTarg.HasThing)
 				{
-					this.Face(stance_Busy.focusTarg.Thing.DrawPos);
-					return;
+					Face(stance_Busy.focusTarg.Thing.DrawPos);
 				}
-				this.FaceCell(stance_Busy.focusTarg.Cell);
+				else
+				{
+					FaceCell(stance_Busy.focusTarg.Cell);
+				}
 				return;
+			}
+			if (pawn.jobs.curJob != null)
+			{
+				LocalTargetInfo target = pawn.CurJob.GetTarget(pawn.jobs.curDriver.rotateToFace);
+				FaceTarget(target);
+			}
+			if (pawn.Drafted)
+			{
+				pawn.Rotation = Rot4.South;
 			}
 		}
 
-		
 		public void RotationTrackerTick()
 		{
-			this.UpdateRotation();
+			UpdateRotation();
 		}
 
-		
 		private void FaceAdjacentCell(IntVec3 c)
 		{
-			if (c == this.pawn.Position)
+			if (!(c == pawn.Position))
 			{
-				return;
+				IntVec3 intVec = c - pawn.Position;
+				if (intVec.x > 0)
+				{
+					pawn.Rotation = Rot4.East;
+				}
+				else if (intVec.x < 0)
+				{
+					pawn.Rotation = Rot4.West;
+				}
+				else if (intVec.z > 0)
+				{
+					pawn.Rotation = Rot4.North;
+				}
+				else
+				{
+					pawn.Rotation = Rot4.South;
+				}
 			}
-			IntVec3 intVec = c - this.pawn.Position;
-			if (intVec.x > 0)
-			{
-				this.pawn.Rotation = Rot4.East;
-				return;
-			}
-			if (intVec.x < 0)
-			{
-				this.pawn.Rotation = Rot4.West;
-				return;
-			}
-			if (intVec.z > 0)
-			{
-				this.pawn.Rotation = Rot4.North;
-				return;
-			}
-			this.pawn.Rotation = Rot4.South;
 		}
 
-		
 		public void FaceCell(IntVec3 c)
 		{
-			if (c == this.pawn.Position)
+			if (!(c == pawn.Position))
 			{
-				return;
+				float angle = (c - pawn.Position).ToVector3().AngleFlat();
+				pawn.Rotation = RotFromAngleBiased(angle);
 			}
-			float angle = (c - this.pawn.Position).ToVector3().AngleFlat();
-			this.pawn.Rotation = Pawn_RotationTracker.RotFromAngleBiased(angle);
 		}
 
-		
 		public void Face(Vector3 p)
 		{
-			if (p == this.pawn.DrawPos)
+			if (!(p == pawn.DrawPos))
 			{
-				return;
+				float angle = (p - pawn.DrawPos).AngleFlat();
+				pawn.Rotation = RotFromAngleBiased(angle);
 			}
-			float angle = (p - this.pawn.DrawPos).AngleFlat();
-			this.pawn.Rotation = Pawn_RotationTracker.RotFromAngleBiased(angle);
 		}
 
-		
 		public void FaceTarget(LocalTargetInfo target)
 		{
 			if (!target.IsValid)
@@ -128,74 +110,70 @@ namespace Verse
 			if (target.HasThing)
 			{
 				Thing thing = target.Thing.Spawned ? target.Thing : ThingOwnerUtility.GetFirstSpawnedParentThing(target.Thing);
-				if (thing != null && thing.Spawned)
+				if (thing == null || !thing.Spawned)
 				{
-					bool flag = false;
-					IntVec3 c = default(IntVec3);
-					CellRect cellRect = thing.OccupiedRect();
-					for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
-					{
-						for (int j = cellRect.minX; j <= cellRect.maxX; j++)
-						{
-							if (this.pawn.Position == new IntVec3(j, 0, i))
-							{
-								this.Face(thing.DrawPos);
-								return;
-							}
-						}
-					}
-					for (int k = cellRect.minZ; k <= cellRect.maxZ; k++)
-					{
-						for (int l = cellRect.minX; l <= cellRect.maxX; l++)
-						{
-							IntVec3 intVec = new IntVec3(l, 0, k);
-							if (intVec.AdjacentToCardinal(this.pawn.Position))
-							{
-								this.FaceAdjacentCell(intVec);
-								return;
-							}
-							if (intVec.AdjacentTo8Way(this.pawn.Position))
-							{
-								flag = true;
-								c = intVec;
-							}
-						}
-					}
-					if (flag)
-					{
-						if (DebugViewSettings.drawPawnRotatorTarget)
-						{
-							this.pawn.Map.debugDrawer.FlashCell(this.pawn.Position, 0.6f, "jbthing", 50);
-							GenDraw.DrawLineBetween(this.pawn.Position.ToVector3Shifted(), c.ToVector3Shifted());
-						}
-						this.FaceAdjacentCell(c);
-						return;
-					}
-					this.Face(thing.DrawPos);
 					return;
 				}
-			}
-			else
-			{
-				if (this.pawn.Position.AdjacentTo8Way(target.Cell))
+				bool flag = false;
+				IntVec3 c = default(IntVec3);
+				CellRect cellRect = thing.OccupiedRect();
+				for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
+				{
+					for (int j = cellRect.minX; j <= cellRect.maxX; j++)
+					{
+						if (pawn.Position == new IntVec3(j, 0, i))
+						{
+							Face(thing.DrawPos);
+							return;
+						}
+					}
+				}
+				for (int k = cellRect.minZ; k <= cellRect.maxZ; k++)
+				{
+					for (int l = cellRect.minX; l <= cellRect.maxX; l++)
+					{
+						IntVec3 intVec = new IntVec3(l, 0, k);
+						if (intVec.AdjacentToCardinal(pawn.Position))
+						{
+							FaceAdjacentCell(intVec);
+							return;
+						}
+						if (intVec.AdjacentTo8Way(pawn.Position))
+						{
+							flag = true;
+							c = intVec;
+						}
+					}
+				}
+				if (flag)
 				{
 					if (DebugViewSettings.drawPawnRotatorTarget)
 					{
-						this.pawn.Map.debugDrawer.FlashCell(this.pawn.Position, 0.2f, "jbloc", 50);
-						GenDraw.DrawLineBetween(this.pawn.Position.ToVector3Shifted(), target.Cell.ToVector3Shifted());
+						pawn.Map.debugDrawer.FlashCell(pawn.Position, 0.6f, "jbthing");
+						GenDraw.DrawLineBetween(pawn.Position.ToVector3Shifted(), c.ToVector3Shifted());
 					}
-					this.FaceAdjacentCell(target.Cell);
-					return;
+					FaceAdjacentCell(c);
 				}
-				if (target.Cell.IsValid && target.Cell != this.pawn.Position)
+				else
 				{
-					this.Face(target.Cell.ToVector3());
-					return;
+					Face(thing.DrawPos);
 				}
+			}
+			else if (pawn.Position.AdjacentTo8Way(target.Cell))
+			{
+				if (DebugViewSettings.drawPawnRotatorTarget)
+				{
+					pawn.Map.debugDrawer.FlashCell(pawn.Position, 0.2f, "jbloc");
+					GenDraw.DrawLineBetween(pawn.Position.ToVector3Shifted(), target.Cell.ToVector3Shifted());
+				}
+				FaceAdjacentCell(target.Cell);
+			}
+			else if (target.Cell.IsValid && target.Cell != pawn.Position)
+			{
+				Face(target.Cell.ToVector3());
 			}
 		}
 
-		
 		public static Rot4 RotFromAngleBiased(float angle)
 		{
 			if (angle < 30f)
@@ -217,12 +195,8 @@ namespace Verse
 			return Rot4.North;
 		}
 
-		
 		public void ExposeData()
 		{
 		}
-
-		
-		private Pawn pawn;
 	}
 }

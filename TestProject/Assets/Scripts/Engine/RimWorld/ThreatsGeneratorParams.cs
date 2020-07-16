@@ -1,77 +1,63 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThreatsGeneratorParams : IExposable
 	{
-		
-		public void ExposeData()
-		{
-			Scribe_Values.Look<AllowedThreatsGeneratorThreats>(ref this.allowedThreats, "allowedThreats", AllowedThreatsGeneratorThreats.None, false);
-			Scribe_Values.Look<int>(ref this.randSeed, "randSeed", 0, false);
-			Scribe_Values.Look<float>(ref this.onDays, "onDays", 0f, false);
-			Scribe_Values.Look<float>(ref this.offDays, "offDays", 0f, false);
-			Scribe_Values.Look<float>(ref this.minSpacingDays, "minSpacingDays", 0f, false);
-			Scribe_Values.Look<FloatRange>(ref this.numIncidentsRange, "numIncidentsRange", default(FloatRange), false);
-			Scribe_Values.Look<float?>(ref this.threatPoints, "threatPoints", null, false);
-			Scribe_Values.Look<float?>(ref this.minThreatPoints, "minThreatPoints", null, false);
-			Scribe_Values.Look<float>(ref this.currentThreatPointsFactor, "currentThreatPointsFactor", 1f, false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-		}
-
-		
-		public override string ToString()
-		{
-			string text = "(";
-			text = text + "onDays=" + this.onDays.ToString("0.##");
-			text = text + " offDays=" + this.offDays.ToString("0.##");
-			text = text + " minSpacingDays=" + this.minSpacingDays.ToString("0.##");
-			text = text + " numIncidentsRange=" + this.numIncidentsRange;
-			if (this.threatPoints != null)
-			{
-				text = text + " threatPoints=" + this.threatPoints.Value;
-			}
-			if (this.minThreatPoints != null)
-			{
-				text = text + " minThreatPoints=" + this.minThreatPoints.Value;
-			}
-			if (this.faction != null)
-			{
-				text = text + " faction=" + this.faction;
-			}
-			return text + ")";
-		}
-
-		
 		public AllowedThreatsGeneratorThreats allowedThreats;
 
-		
 		public int randSeed;
 
-		
 		public float onDays;
 
-		
 		public float offDays;
 
-		
 		public float minSpacingDays;
 
-		
 		public FloatRange numIncidentsRange;
 
-		
 		public float? threatPoints;
 
-		
 		public float? minThreatPoints;
 
-		
 		public float currentThreatPointsFactor = 1f;
 
-		
 		public Faction faction;
+
+		public void ExposeData()
+		{
+			Scribe_Values.Look(ref allowedThreats, "allowedThreats", AllowedThreatsGeneratorThreats.None);
+			Scribe_Values.Look(ref randSeed, "randSeed", 0);
+			Scribe_Values.Look(ref onDays, "onDays", 0f);
+			Scribe_Values.Look(ref offDays, "offDays", 0f);
+			Scribe_Values.Look(ref minSpacingDays, "minSpacingDays", 0f);
+			Scribe_Values.Look(ref numIncidentsRange, "numIncidentsRange");
+			Scribe_Values.Look(ref threatPoints, "threatPoints");
+			Scribe_Values.Look(ref minThreatPoints, "minThreatPoints");
+			Scribe_Values.Look(ref currentThreatPointsFactor, "currentThreatPointsFactor", 1f);
+			Scribe_References.Look(ref faction, "faction");
+		}
+
+		public override string ToString()
+		{
+			string str = "(";
+			str = str + "onDays=" + onDays.ToString("0.##");
+			str = str + " offDays=" + offDays.ToString("0.##");
+			str = str + " minSpacingDays=" + minSpacingDays.ToString("0.##");
+			str = str + " numIncidentsRange=" + numIncidentsRange;
+			if (threatPoints.HasValue)
+			{
+				str = str + " threatPoints=" + threatPoints.Value;
+			}
+			if (minThreatPoints.HasValue)
+			{
+				str = str + " minThreatPoints=" + minThreatPoints.Value;
+			}
+			if (faction != null)
+			{
+				str = str + " faction=" + faction;
+			}
+			return str + ")";
+		}
 	}
 }

@@ -1,49 +1,36 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Instruction_ExpandArea : Lesson_Instruction
 	{
-		
-		
-		protected abstract Area MyArea { get; }
+		private int startingAreaCount = -1;
 
-		
-		
-		protected override float ProgressPercent
+		protected abstract Area MyArea
 		{
-			get
-			{
-				return (float)(this.MyArea.TrueCount - this.startingAreaCount) / (float)this.def.targetCount;
-			}
+			get;
 		}
 
-		
+		protected override float ProgressPercent => (float)(MyArea.TrueCount - startingAreaCount) / (float)def.targetCount;
+
 		public override void OnActivated()
 		{
 			base.OnActivated();
-			this.startingAreaCount = this.MyArea.TrueCount;
+			startingAreaCount = MyArea.TrueCount;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.startingAreaCount, "startingAreaCount", 0, false);
+			Scribe_Values.Look(ref startingAreaCount, "startingAreaCount", 0);
 		}
 
-		
 		public override void LessonUpdate()
 		{
-			if (this.ProgressPercent > 0.999f)
+			if (ProgressPercent > 0.999f)
 			{
 				Find.ActiveLesson.Deactivate();
 			}
 		}
-
-		
-		private int startingAreaCount = -1;
 	}
 }

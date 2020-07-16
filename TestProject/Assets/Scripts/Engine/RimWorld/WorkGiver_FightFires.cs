@@ -1,39 +1,25 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	internal class WorkGiver_FightFires : WorkGiver_Scanner
 	{
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForDef(ThingDefOf.Fire);
-			}
-		}
+		private const int NearbyPawnRadius = 15;
 
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.Touch;
-			}
-		}
+		private const int MaxReservationCheckDistance = 15;
 
-		
+		private const float HandledDistance = 5f;
+
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForDef(ThingDefOf.Fire);
+
+		public override PathEndMode PathEndMode => PathEndMode.Touch;
+
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Fire fire = t as Fire;
@@ -52,7 +38,7 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (!pawn.CanReach(pawn2, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+				if (!pawn.CanReach(pawn2, PathEndMode.Touch, Danger.Deadly))
 				{
 					return false;
 				}
@@ -65,37 +51,33 @@ namespace RimWorld
 				}
 				if (!pawn.Map.areaManager.Home[fire.Position])
 				{
-					JobFailReason.Is(WorkGiver_FixBrokenDownBuilding.NotInHomeAreaTrans, null);
+					JobFailReason.Is(WorkGiver_FixBrokenDownBuilding.NotInHomeAreaTrans);
 					return false;
 				}
 			}
-			return ((pawn.Position - fire.Position).LengthHorizontalSquared <= 225 || pawn.CanReserve(fire, 1, -1, null, forced)) && !WorkGiver_FightFires.FireIsBeingHandled(fire, pawn);
+			if ((pawn.Position - fire.Position).LengthHorizontalSquared > 225 && !pawn.CanReserve(fire, 1, -1, null, forced))
+			{
+				return false;
+			}
+			if (FireIsBeingHandled(fire, pawn))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			return JobMaker.MakeJob(JobDefOf.BeatFire, t);
 		}
 
-		
 		public static bool FireIsBeingHandled(Fire f, Pawn potentialHandler)
 		{
 			if (!f.Spawned)
 			{
 				return false;
 			}
-			Pawn pawn = f.Map.reservationManager.FirstRespectedReserver(f, potentialHandler);
-			return pawn != null && pawn.Position.InHorDistOf(f.Position, 5f);
+			return f.Map.reservationManager.FirstRespectedReserver(f, potentialHandler)?.Position.InHorDistOf(f.Position, 5f) ?? false;
 		}
-
-		
-		private const int NearbyPawnRadius = 15;
-
-		
-		private const int MaxReservationCheckDistance = 15;
-
-		
-		private const float HandledDistance = 5f;
 	}
 }

@@ -1,27 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class WorldTargeter
 	{
-		
-		
-		public bool IsTargeting
-		{
-			get
-			{
-				return this.action != null;
-			}
-		}
+		private Func<GlobalTargetInfo, bool> action;
 
-		
+		private bool canTargetTiles;
+
+		private Texture2D mouseAttachment;
+
+		public bool closeWorldTabWhenFinished;
+
+		private Action onUpdate;
+
+		private Func<GlobalTargetInfo, string> extraLabelGetter;
+
+		private const float BaseFeedbackTexSize = 0.8f;
+
+		public bool IsTargeting => action != null;
+
 		public void BeginTargeting(Func<GlobalTargetInfo, bool> action, bool canTargetTiles, Texture2D mouseAttachment = null, bool closeWorldTabWhenFinished = false, Action onUpdate = null, Func<GlobalTargetInfo, string> extraLabelGetter = null)
 		{
 			this.action = action;
@@ -32,86 +36,83 @@ namespace RimWorld
 			this.extraLabelGetter = extraLabelGetter;
 		}
 
-		
 		public void StopTargeting()
 		{
-			if (this.closeWorldTabWhenFinished)
+			if (closeWorldTabWhenFinished)
 			{
 				CameraJumper.TryHideWorld();
 			}
-			this.action = null;
-			this.canTargetTiles = false;
-			this.mouseAttachment = null;
-			this.closeWorldTabWhenFinished = false;
-			this.onUpdate = null;
-			this.extraLabelGetter = null;
+			action = null;
+			canTargetTiles = false;
+			mouseAttachment = null;
+			closeWorldTabWhenFinished = false;
+			onUpdate = null;
+			extraLabelGetter = null;
 		}
 
-		
 		public void ProcessInputEvents()
 		{
 			if (Event.current.type == EventType.MouseDown)
 			{
-				if (Event.current.button == 0 && this.IsTargeting)
+				if (Event.current.button == 0 && IsTargeting)
 				{
-					GlobalTargetInfo arg = this.CurrentTargetUnderMouse();
-					if (this.action(arg))
+					GlobalTargetInfo arg = CurrentTargetUnderMouse();
+					if (action(arg))
 					{
-						SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-						this.StopTargeting();
+						SoundDefOf.Tick_High.PlayOneShotOnCamera();
+						StopTargeting();
 					}
 					Event.current.Use();
 				}
-				if (Event.current.button == 1 && this.IsTargeting)
+				if (Event.current.button == 1 && IsTargeting)
 				{
-					SoundDefOf.CancelMode.PlayOneShotOnCamera(null);
-					this.StopTargeting();
+					SoundDefOf.CancelMode.PlayOneShotOnCamera();
+					StopTargeting();
 					Event.current.Use();
 				}
 			}
-			if (KeyBindingDefOf.Cancel.KeyDownEvent && this.IsTargeting)
+			if (KeyBindingDefOf.Cancel.KeyDownEvent && IsTargeting)
 			{
-				SoundDefOf.CancelMode.PlayOneShotOnCamera(null);
-				this.StopTargeting();
+				SoundDefOf.CancelMode.PlayOneShotOnCamera();
+				StopTargeting();
 				Event.current.Use();
 			}
 		}
 
-		
 		public void TargeterOnGUI()
 		{
-			if (this.IsTargeting && !Mouse.IsInputBlockedNow)
+			if (!IsTargeting || Mouse.IsInputBlockedNow)
 			{
-				Vector2 mousePosition = Event.current.mousePosition;
-				Texture2D image = this.mouseAttachment ?? TexCommand.Attack;
-				Rect position = new Rect(mousePosition.x + 8f, mousePosition.y + 8f, 32f, 32f);
-				GUI.DrawTexture(position, image);
-				if (this.extraLabelGetter != null)
+				return;
+			}
+			Vector2 mousePosition = Event.current.mousePosition;
+			Texture2D image = mouseAttachment ?? TexCommand.Attack;
+			Rect position = new Rect(mousePosition.x + 8f, mousePosition.y + 8f, 32f, 32f);
+			GUI.DrawTexture(position, image);
+			if (extraLabelGetter != null)
+			{
+				GUI.color = Color.white;
+				string text = extraLabelGetter(CurrentTargetUnderMouse());
+				if (!text.NullOrEmpty())
 				{
+					Color color = GUI.color;
 					GUI.color = Color.white;
-					string text = this.extraLabelGetter(this.CurrentTargetUnderMouse());
-					if (!text.NullOrEmpty())
-					{
-						Color color = GUI.color;
-						GUI.color = Color.white;
-						Rect rect = new Rect(position.xMax, position.y, 9999f, 100f);
-						Vector2 vector = Text.CalcSize(text);
-						GUI.DrawTexture(new Rect(rect.x - vector.x * 0.1f, rect.y, vector.x * 1.2f, vector.y), TexUI.GrayTextBG);
-						GUI.color = color;
-						Widgets.Label(rect, text);
-					}
-					GUI.color = Color.white;
+					Rect rect = new Rect(position.xMax, position.y, 9999f, 100f);
+					Vector2 vector = Text.CalcSize(text);
+					GUI.DrawTexture(new Rect(rect.x - vector.x * 0.1f, rect.y, vector.x * 1.2f, vector.y), TexUI.GrayTextBG);
+					GUI.color = color;
+					Widgets.Label(rect, text);
 				}
+				GUI.color = Color.white;
 			}
 		}
 
-		
 		public void TargeterUpdate()
 		{
-			if (this.IsTargeting)
+			if (IsTargeting)
 			{
 				Vector3 pos = Vector3.zero;
-				GlobalTargetInfo globalTargetInfo = this.CurrentTargetUnderMouse();
+				GlobalTargetInfo globalTargetInfo = CurrentTargetUnderMouse();
 				if (globalTargetInfo.HasWorldObject)
 				{
 					pos = globalTargetInfo.WorldObject.DrawPos;
@@ -122,19 +123,18 @@ namespace RimWorld
 				}
 				if (globalTargetInfo.IsValid && !Mouse.IsInputBlockedNow)
 				{
-					WorldRendererUtility.DrawQuadTangentialToPlanet(pos, 0.8f * Find.WorldGrid.averageTileSize, 0.018f, WorldMaterials.CurTargetingMat, false, false, null);
+					WorldRendererUtility.DrawQuadTangentialToPlanet(pos, 0.8f * Find.WorldGrid.averageTileSize, 0.018f, WorldMaterials.CurTargetingMat);
 				}
-				if (this.onUpdate != null)
+				if (onUpdate != null)
 				{
-					this.onUpdate();
+					onUpdate();
 				}
 			}
 		}
 
-		
 		public bool IsTargetedNow(WorldObject o, List<WorldObject> worldObjectsUnderMouse = null)
 		{
-			if (!this.IsTargeting)
+			if (!IsTargeting)
 			{
 				return false;
 			}
@@ -142,52 +142,34 @@ namespace RimWorld
 			{
 				worldObjectsUnderMouse = GenWorldUI.WorldObjectsUnderMouse(UI.MousePositionOnUI);
 			}
-			return worldObjectsUnderMouse.Any<WorldObject>() && o == worldObjectsUnderMouse[0];
+			if (worldObjectsUnderMouse.Any())
+			{
+				return o == worldObjectsUnderMouse[0];
+			}
+			return false;
 		}
 
-		
 		private GlobalTargetInfo CurrentTargetUnderMouse()
 		{
-			if (!this.IsTargeting)
+			if (!IsTargeting)
 			{
 				return GlobalTargetInfo.Invalid;
 			}
 			List<WorldObject> list = GenWorldUI.WorldObjectsUnderMouse(UI.MousePositionOnUI);
-			if (list.Any<WorldObject>())
+			if (list.Any())
 			{
 				return list[0];
 			}
-			if (!this.canTargetTiles)
+			if (canTargetTiles)
 			{
+				int num = GenWorld.MouseTile();
+				if (num >= 0)
+				{
+					return new GlobalTargetInfo(num);
+				}
 				return GlobalTargetInfo.Invalid;
-			}
-			int num = GenWorld.MouseTile(false);
-			if (num >= 0)
-			{
-				return new GlobalTargetInfo(num);
 			}
 			return GlobalTargetInfo.Invalid;
 		}
-
-		
-		private Func<GlobalTargetInfo, bool> action;
-
-		
-		private bool canTargetTiles;
-
-		
-		private Texture2D mouseAttachment;
-
-		
-		public bool closeWorldTabWhenFinished;
-
-		
-		private Action onUpdate;
-
-		
-		private Func<GlobalTargetInfo, string> extraLabelGetter;
-
-		
-		private const float BaseFeedbackTexSize = 0.8f;
 	}
 }

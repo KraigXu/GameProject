@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,10 +6,8 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TutorUtility
 	{
-		
 		public static bool BuildingOrBlueprintOrFrameCenterExists(IntVec3 c, Map map, ThingDef buildingDef)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -31,22 +29,21 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static CellRect FindUsableRect(int width, int height, Map map, float minFertility = 0f, bool noItems = false)
 		{
 			IntVec3 center = map.Center;
 			float num = 1f;
 			CellRect cellRect;
-			for (;;)
+			while (true)
 			{
-				cellRect = CellRect.CenteredOn(center + new IntVec3((int)Rand.Range(-num, num), 0, (int)Rand.Range(-num, num)), width / 2);
+				cellRect = CellRect.CenteredOn(center + new IntVec3((int)Rand.Range(0f - num, num), 0, (int)Rand.Range(0f - num, num)), width / 2);
 				cellRect.Width = width;
 				cellRect.Height = height;
 				cellRect = cellRect.ExpandedBy(1);
 				bool flag = true;
-				foreach (IntVec3 intVec in cellRect)
+				foreach (IntVec3 item in cellRect)
 				{
-					if (intVec.Fogged(map) || !intVec.Walkable(map) || !intVec.GetTerrain(map).affordances.Contains(TerrainAffordanceDefOf.Heavy) || intVec.GetTerrain(map).fertility < minFertility || intVec.GetZone(map) != null || TutorUtility.ContainsBlockingThing(intVec, map, noItems) || intVec.InNoBuildEdgeArea(map) || intVec.InNoZoneEdgeArea(map))
+					if (item.Fogged(map) || !item.Walkable(map) || !item.GetTerrain(map).affordances.Contains(TerrainAffordanceDefOf.Heavy) || item.GetTerrain(map).fertility < minFertility || item.GetZone(map) != null || ContainsBlockingThing(item, map, noItems) || item.InNoBuildEdgeArea(map) || item.InNoZoneEdgeArea(map))
 					{
 						flag = false;
 						break;
@@ -61,7 +58,6 @@ namespace RimWorld
 			return cellRect.ContractedBy(1);
 		}
 
-		
 		private static bool ContainsBlockingThing(IntVec3 cell, Map map, bool noItems)
 		{
 			List<Thing> thingList = cell.GetThingList(map);
@@ -83,7 +79,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static void DrawLabelOnThingOnGUI(Thing t, string label)
 		{
 			Vector2 vector = (t.DrawPos + new Vector3(0f, 0f, 0.5f)).MapToUIPosition();
@@ -96,7 +91,6 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		
 		public static void DrawLabelOnGUI(Vector3 mapPos, string label)
 		{
 			Vector2 vector = mapPos.MapToUIPosition();
@@ -109,74 +103,71 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		
 		public static void DrawCellRectOnGUI(CellRect cellRect, string label = null)
 		{
 			if (label != null)
 			{
-				TutorUtility.DrawLabelOnGUI(cellRect.CenterVector3, label);
+				DrawLabelOnGUI(cellRect.CenterVector3, label);
 			}
 		}
 
-		
 		public static void DrawCellRectUpdate(CellRect cellRect)
 		{
-			foreach (IntVec3 c in cellRect)
+			foreach (IntVec3 item in cellRect)
 			{
-				CellRenderer.RenderCell(c, 0.5f);
+				CellRenderer.RenderCell(item);
 			}
 		}
 
-		
 		public static void DoModalDialogIfNotKnown(ConceptDef conc, params string[] input)
 		{
 			if (!PlayerKnowledgeDatabase.IsComplete(conc))
 			{
-				TutorUtility.DoModalDialogIfNotKnownInner(conc, string.Format(conc.HelpTextAdjusted, input));
+				DoModalDialogIfNotKnownInner(conc, string.Format(conc.HelpTextAdjusted, input));
 			}
 		}
 
-		
 		public static void DoModalDialogWithArgsIfNotKnown(ConceptDef conc, params NamedArgument[] args)
 		{
 			if (!PlayerKnowledgeDatabase.IsComplete(conc))
 			{
-				TutorUtility.DoModalDialogIfNotKnownInner(conc, conc.HelpTextAdjusted.Formatted(args));
+				DoModalDialogIfNotKnownInner(conc, conc.HelpTextAdjusted.Formatted(args));
 			}
 		}
 
-		
 		public static void DoModalDialogWithArgsIfNotKnown(ConceptDef conc, string buttonAText, Action buttonAAction, string buttonBText = null, Action buttonBAction = null, params NamedArgument[] args)
 		{
 			if (!PlayerKnowledgeDatabase.IsComplete(conc))
 			{
-				Find.WindowStack.Add(new Dialog_MessageBox(conc.HelpTextAdjusted.Formatted(args), buttonAText, buttonAAction, buttonBText, buttonBAction, null, false, null, null));
+				Find.WindowStack.Add(new Dialog_MessageBox(conc.HelpTextAdjusted.Formatted(args), buttonAText, buttonAAction, buttonBText, buttonBAction));
 				PlayerKnowledgeDatabase.KnowledgeDemonstrated(conc, KnowledgeAmount.Total);
 			}
 		}
 
-		
 		private static void DoModalDialogIfNotKnownInner(ConceptDef conc, string msg)
 		{
-			Find.WindowStack.Add(new Dialog_MessageBox(msg, null, null, null, null, null, false, null, null));
+			Find.WindowStack.Add(new Dialog_MessageBox(msg));
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(conc, KnowledgeAmount.Total);
 		}
 
-		
 		public static bool EventCellsMatchExactly(EventPack ep, List<IntVec3> targetCells)
 		{
 			if (ep.Cell.IsValid)
 			{
-				return targetCells.Count == 1 && ep.Cell == targetCells[0];
+				if (targetCells.Count == 1)
+				{
+					return ep.Cell == targetCells[0];
+				}
+				return false;
 			}
 			if (ep.Cells == null)
 			{
 				return false;
 			}
 			int num = 0;
-			foreach (IntVec3 item in ep.Cells)
+			foreach (IntVec3 cell in ep.Cells)
 			{
-				if (!targetCells.Contains(item))
+				if (!targetCells.Contains(cell))
 				{
 					return false;
 				}
@@ -185,14 +176,17 @@ namespace RimWorld
 			return num == targetCells.Count;
 		}
 
-		
 		public static bool EventCellsAreWithin(EventPack ep, List<IntVec3> targetCells)
 		{
 			if (ep.Cell.IsValid)
 			{
 				return targetCells.Contains(ep.Cell);
 			}
-			return ep.Cells != null && !ep.Cells.Any((IntVec3 c) => !targetCells.Contains(c));
+			if (ep.Cells != null)
+			{
+				return !ep.Cells.Any((IntVec3 c) => !targetCells.Contains(c));
+			}
+			return false;
 		}
 	}
 }

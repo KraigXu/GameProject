@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,172 +6,150 @@ using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class GraphicDatabaseHeadRecords
 	{
-		
-		public static void Reset()
+		private class HeadGraphicRecord
 		{
-			GraphicDatabaseHeadRecords.heads.Clear();
-			GraphicDatabaseHeadRecords.skull = null;
-			GraphicDatabaseHeadRecords.stump = null;
-		}
+			public Gender gender;
 
-		
-		private static void BuildDatabaseIfNecessary()
-		{
-			if (GraphicDatabaseHeadRecords.heads.Count > 0 && GraphicDatabaseHeadRecords.skull != null && GraphicDatabaseHeadRecords.stump != null)
+			public CrownType crownType;
+
+			public string graphicPath;
+
+			private List<KeyValuePair<Color, Graphic_Multi>> graphics = new List<KeyValuePair<Color, Graphic_Multi>>();
+
+			public HeadGraphicRecord(string graphicPath)
 			{
-				return;
-			}
-			GraphicDatabaseHeadRecords.heads.Clear();
-			foreach (string text in GraphicDatabaseHeadRecords.HeadsFolderPaths)
-			{
-				foreach (string str in GraphicDatabaseUtility.GraphicNamesInFolder(text))
+				this.graphicPath = graphicPath;
+				string[] array = Path.GetFileNameWithoutExtension(graphicPath).Split('_');
+				try
 				{
-					GraphicDatabaseHeadRecords.heads.Add(new GraphicDatabaseHeadRecords.HeadGraphicRecord(text + "/" + str));
+					crownType = ParseHelper.FromString<CrownType>(array[array.Length - 2]);
+					gender = ParseHelper.FromString<Gender>(array[array.Length - 3]);
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Parse error with head graphic at " + graphicPath + ": " + ex.Message);
+					crownType = CrownType.Undefined;
+					gender = Gender.None;
 				}
 			}
-			GraphicDatabaseHeadRecords.skull = new GraphicDatabaseHeadRecords.HeadGraphicRecord(GraphicDatabaseHeadRecords.SkullPath);
-			GraphicDatabaseHeadRecords.stump = new GraphicDatabaseHeadRecords.HeadGraphicRecord(GraphicDatabaseHeadRecords.StumpPath);
-		}
 
-		
-		public static Graphic_Multi GetHeadNamed(string graphicPath, Color skinColor)
-		{
-			GraphicDatabaseHeadRecords.BuildDatabaseIfNecessary();
-			for (int i = 0; i < GraphicDatabaseHeadRecords.heads.Count; i++)
+			public Graphic_Multi GetGraphic(Color color, bool dessicated = false)
 			{
-				GraphicDatabaseHeadRecords.HeadGraphicRecord headGraphicRecord = GraphicDatabaseHeadRecords.heads[i];
-				if (headGraphicRecord.graphicPath == graphicPath)
+				Shader shader = (!dessicated) ? ShaderDatabase.CutoutSkin : ShaderDatabase.Cutout;
+				for (int i = 0; i < graphics.Count; i++)
 				{
-					return headGraphicRecord.GetGraphic(skinColor, false);
+					if (color.IndistinguishableFrom(graphics[i].Key) && graphics[i].Value.Shader == shader)
+					{
+						return graphics[i].Value;
+					}
 				}
+				Graphic_Multi graphic_Multi = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(graphicPath, shader, Vector2.one, color);
+				graphics.Add(new KeyValuePair<Color, Graphic_Multi>(color, graphic_Multi));
+				return graphic_Multi;
 			}
-			Log.Message("Tried to get pawn head at path " + graphicPath + " that was not found. Defaulting...", false);
-			return GraphicDatabaseHeadRecords.heads.First<GraphicDatabaseHeadRecords.HeadGraphicRecord>().GetGraphic(skinColor, false);
 		}
 
-		
-		public static Graphic_Multi GetSkull()
-		{
-			GraphicDatabaseHeadRecords.BuildDatabaseIfNecessary();
-			return GraphicDatabaseHeadRecords.skull.GetGraphic(Color.white, true);
-		}
+		private static List<HeadGraphicRecord> heads = new List<HeadGraphicRecord>();
 
-		
-		public static Graphic_Multi GetStump(Color skinColor)
-		{
-			GraphicDatabaseHeadRecords.BuildDatabaseIfNecessary();
-			return GraphicDatabaseHeadRecords.stump.GetGraphic(skinColor, false);
-		}
+		private static HeadGraphicRecord skull;
 
-		
-		public static Graphic_Multi GetHeadRandom(Gender gender, Color skinColor, CrownType crownType)
-		{
-			GraphicDatabaseHeadRecords.BuildDatabaseIfNecessary();
-			Predicate<GraphicDatabaseHeadRecords.HeadGraphicRecord> predicate = (GraphicDatabaseHeadRecords.HeadGraphicRecord head) => head.crownType == crownType && head.gender == gender;
-			int num = 0;
-			GraphicDatabaseHeadRecords.HeadGraphicRecord headGraphicRecord;
-			for (;;)
-			{
-				headGraphicRecord = GraphicDatabaseHeadRecords.heads.RandomElement<GraphicDatabaseHeadRecords.HeadGraphicRecord>();
-				if (predicate(headGraphicRecord))
-				{
-					break;
-				}
-				num++;
-				if (num > 40)
-				{
-					goto Block_2;
-				}
-			}
-			return headGraphicRecord.GetGraphic(skinColor, false);
-			Block_2:
-			foreach (GraphicDatabaseHeadRecords.HeadGraphicRecord headGraphicRecord2 in GraphicDatabaseHeadRecords.heads.InRandomOrder(null))
-			{
-				if (predicate(headGraphicRecord2))
-				{
-					return headGraphicRecord2.GetGraphic(skinColor, false);
-				}
-			}
-			Log.Error("Failed to find head for gender=" + gender + ". Defaulting...", false);
-			return GraphicDatabaseHeadRecords.heads.First<GraphicDatabaseHeadRecords.HeadGraphicRecord>().GetGraphic(skinColor, false);
-		}
+		private static HeadGraphicRecord stump;
 
-		
-		private static List<GraphicDatabaseHeadRecords.HeadGraphicRecord> heads = new List<GraphicDatabaseHeadRecords.HeadGraphicRecord>();
-
-		
-		private static GraphicDatabaseHeadRecords.HeadGraphicRecord skull;
-
-		
-		private static GraphicDatabaseHeadRecords.HeadGraphicRecord stump;
-
-		
-		private static readonly string[] HeadsFolderPaths = new string[]
+		private static readonly string[] HeadsFolderPaths = new string[2]
 		{
 			"Things/Pawn/Humanlike/Heads/Male",
 			"Things/Pawn/Humanlike/Heads/Female"
 		};
 
-		
 		private static readonly string SkullPath = "Things/Pawn/Humanlike/Heads/None_Average_Skull";
 
-		
 		private static readonly string StumpPath = "Things/Pawn/Humanlike/Heads/None_Average_Stump";
 
-		
-		private class HeadGraphicRecord
+		public static void Reset()
 		{
-			
-			public HeadGraphicRecord(string graphicPath)
-			{
-				this.graphicPath = graphicPath;
-				string[] array = Path.GetFileNameWithoutExtension(graphicPath).Split(new char[]
-				{
-					'_'
-				});
-				try
-				{
-					this.crownType = ParseHelper.FromString<CrownType>(array[array.Length - 2]);
-					this.gender = ParseHelper.FromString<Gender>(array[array.Length - 3]);
-				}
-				catch (Exception ex)
-				{
-					Log.Error("Parse error with head graphic at " + graphicPath + ": " + ex.Message, false);
-					this.crownType = CrownType.Undefined;
-					this.gender = Gender.None;
-				}
-			}
+			heads.Clear();
+			skull = null;
+			stump = null;
+		}
 
-			
-			public Graphic_Multi GetGraphic(Color color, bool dessicated = false)
+		private static void BuildDatabaseIfNecessary()
+		{
+			if (heads.Count <= 0 || skull == null || stump == null)
 			{
-				Shader shader = (!dessicated) ? ShaderDatabase.CutoutSkin : ShaderDatabase.Cutout;
-				for (int i = 0; i < this.graphics.Count; i++)
+				heads.Clear();
+				string[] headsFolderPaths = HeadsFolderPaths;
+				foreach (string text in headsFolderPaths)
 				{
-					if (color.IndistinguishableFrom(this.graphics[i].Key) && this.graphics[i].Value.Shader == shader)
+					foreach (string item in GraphicDatabaseUtility.GraphicNamesInFolder(text))
 					{
-						return this.graphics[i].Value;
+						heads.Add(new HeadGraphicRecord(text + "/" + item));
 					}
 				}
-				Graphic_Multi graphic_Multi = (Graphic_Multi)GraphicDatabase.Get<Graphic_Multi>(this.graphicPath, shader, Vector2.one, color);
-				this.graphics.Add(new KeyValuePair<Color, Graphic_Multi>(color, graphic_Multi));
-				return graphic_Multi;
+				skull = new HeadGraphicRecord(SkullPath);
+				stump = new HeadGraphicRecord(StumpPath);
 			}
+		}
 
-			
-			public Gender gender;
+		public static Graphic_Multi GetHeadNamed(string graphicPath, Color skinColor)
+		{
+			BuildDatabaseIfNecessary();
+			for (int i = 0; i < heads.Count; i++)
+			{
+				HeadGraphicRecord headGraphicRecord = heads[i];
+				if (headGraphicRecord.graphicPath == graphicPath)
+				{
+					return headGraphicRecord.GetGraphic(skinColor);
+				}
+			}
+			Log.Message("Tried to get pawn head at path " + graphicPath + " that was not found. Defaulting...");
+			return heads.First().GetGraphic(skinColor);
+		}
 
-			
-			public CrownType crownType;
+		public static Graphic_Multi GetSkull()
+		{
+			BuildDatabaseIfNecessary();
+			return skull.GetGraphic(Color.white, dessicated: true);
+		}
 
-			
-			public string graphicPath;
+		public static Graphic_Multi GetStump(Color skinColor)
+		{
+			BuildDatabaseIfNecessary();
+			return stump.GetGraphic(skinColor);
+		}
 
-			
-			private List<KeyValuePair<Color, Graphic_Multi>> graphics = new List<KeyValuePair<Color, Graphic_Multi>>();
+		public static Graphic_Multi GetHeadRandom(Gender gender, Color skinColor, CrownType crownType)
+		{
+			BuildDatabaseIfNecessary();
+			Predicate<HeadGraphicRecord> predicate = delegate(HeadGraphicRecord head)
+			{
+				if (head.crownType != crownType)
+				{
+					return false;
+				}
+				return (head.gender == gender) ? true : false;
+			};
+			int num = 0;
+			do
+			{
+				HeadGraphicRecord headGraphicRecord = heads.RandomElement();
+				if (predicate(headGraphicRecord))
+				{
+					return headGraphicRecord.GetGraphic(skinColor);
+				}
+				num++;
+			}
+			while (num <= 40);
+			foreach (HeadGraphicRecord item in heads.InRandomOrder())
+			{
+				if (predicate(item))
+				{
+					return item.GetGraphic(skinColor);
+				}
+			}
+			Log.Error("Failed to find head for gender=" + gender + ". Defaulting...");
+			return heads.First().GetGraphic(skinColor);
 		}
 	}
 }

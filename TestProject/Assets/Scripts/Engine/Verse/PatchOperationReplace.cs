@@ -1,32 +1,28 @@
-﻿using System;
 using System.Linq;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperationReplace : PatchOperationPathed
 	{
-		
+		private XmlContainer value;
+
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
-			XmlNode node = this.value.node;
+			XmlNode node = value.node;
 			bool result = false;
-			foreach (XmlNode xmlNode in xml.SelectNodes(this.xpath).Cast<XmlNode>().ToArray<XmlNode>())
+			XmlNode[] array = xml.SelectNodes(xpath).Cast<XmlNode>().ToArray();
+			foreach (XmlNode xmlNode in array)
 			{
 				result = true;
 				XmlNode parentNode = xmlNode.ParentNode;
-				foreach (object obj in node.ChildNodes)
+				foreach (XmlNode childNode in node.ChildNodes)
 				{
-					XmlNode node2 = (XmlNode)obj;
-					parentNode.InsertBefore(parentNode.OwnerDocument.ImportNode(node2, true), xmlNode);
+					parentNode.InsertBefore(parentNode.OwnerDocument.ImportNode(childNode, deep: true), xmlNode);
 				}
 				parentNode.RemoveChild(xmlNode);
 			}
 			return result;
 		}
-
-		
-		private XmlContainer value;
 	}
 }

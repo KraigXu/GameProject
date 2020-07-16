@@ -1,12 +1,7 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class ITab_Shells : ITab_Storage
 	{
-		
-		
 		protected override IStoreSettingsParent SelStoreSettingsParent
 		{
 			get
@@ -19,27 +14,18 @@ namespace RimWorld
 				Building_TurretGun building_TurretGun = base.SelObject as Building_TurretGun;
 				if (building_TurretGun != null)
 				{
-					return base.GetThingOrThingCompStoreSettingsParent(building_TurretGun.gun);
+					return GetThingOrThingCompStoreSettingsParent(building_TurretGun.gun);
 				}
 				return null;
 			}
 		}
 
-		
-		
-		protected override bool IsPrioritySettingVisible
-		{
-			get
-			{
-				return false;
-			}
-		}
+		protected override bool IsPrioritySettingVisible => false;
 
-		
 		public ITab_Shells()
 		{
-			this.labelKey = "TabShells";
-			this.tutorTag = "Shells";
+			labelKey = "TabShells";
+			tutorTag = "Shells";
 		}
 	}
 }

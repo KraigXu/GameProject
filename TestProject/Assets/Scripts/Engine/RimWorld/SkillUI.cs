@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,47 +6,70 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class SkillUI
 	{
-		
-		public static void Reset()
+		public enum SkillDrawMode : byte
 		{
-			SkillUI.skillDefsInListOrderCached = (from sd in DefDatabase<SkillDef>.AllDefs
-			orderby sd.listOrder descending
-			select sd).ToList<SkillDef>();
+			Gameplay,
+			Menu
 		}
 
-		
-		public static void DrawSkillsOf(Pawn p, Vector2 offset, SkillUI.SkillDrawMode mode)
+		private static float levelLabelWidth = -1f;
+
+		private static List<SkillDef> skillDefsInListOrderCached;
+
+		private const float SkillWidth = 230f;
+
+		public const float SkillHeight = 24f;
+
+		public const float SkillYSpacing = 3f;
+
+		private const float LeftEdgeMargin = 6f;
+
+		private const float IncButX = 205f;
+
+		private const float IncButSpacing = 10f;
+
+		private static readonly Color DisabledSkillColor = new Color(1f, 1f, 1f, 0.5f);
+
+		private static Texture2D PassionMinorIcon = ContentFinder<Texture2D>.Get("UI/Icons/PassionMinor");
+
+		private static Texture2D PassionMajorIcon = ContentFinder<Texture2D>.Get("UI/Icons/PassionMajor");
+
+		private static Texture2D SkillBarFillTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.1f));
+
+		public static void Reset()
+		{
+			skillDefsInListOrderCached = DefDatabase<SkillDef>.AllDefs.OrderByDescending((SkillDef sd) => sd.listOrder).ToList();
+		}
+
+		public static void DrawSkillsOf(Pawn p, Vector2 offset, SkillDrawMode mode)
 		{
 			Text.Font = GameFont.Small;
 			List<SkillDef> allDefsListForReading = DefDatabase<SkillDef>.AllDefsListForReading;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				float x = Text.CalcSize(allDefsListForReading[i].skillLabel.CapitalizeFirst()).x;
-				if (x > SkillUI.levelLabelWidth)
+				if (x > levelLabelWidth)
 				{
-					SkillUI.levelLabelWidth = x;
+					levelLabelWidth = x;
 				}
 			}
-			for (int j = 0; j < SkillUI.skillDefsInListOrderCached.Count; j++)
+			for (int j = 0; j < skillDefsInListOrderCached.Count; j++)
 			{
-				SkillDef skillDef = SkillUI.skillDefsInListOrderCached[j];
+				SkillDef skillDef = skillDefsInListOrderCached[j];
 				float y = (float)j * 27f + offset.y;
-				SkillUI.DrawSkill(p.skills.GetSkill(skillDef), new Vector2(offset.x, y), mode, "");
+				DrawSkill(p.skills.GetSkill(skillDef), new Vector2(offset.x, y), mode);
 			}
 		}
 
-		
-		public static void DrawSkill(SkillRecord skill, Vector2 topLeft, SkillUI.SkillDrawMode mode, string tooltipPrefix = "")
+		public static void DrawSkill(SkillRecord skill, Vector2 topLeft, SkillDrawMode mode, string tooltipPrefix = "")
 		{
-			SkillUI.DrawSkill(skill, new Rect(topLeft.x, topLeft.y, 230f, 24f), mode, "");
+			DrawSkill(skill, new Rect(topLeft.x, topLeft.y, 230f, 24f), mode);
 		}
 
-		
-		public static void DrawSkill(SkillRecord skill, Rect holdingRect, SkillUI.SkillDrawMode mode, string tooltipPrefix = "")
+		public static void DrawSkill(SkillRecord skill, Rect holdingRect, SkillDrawMode mode, string tooltipPrefix = "")
 		{
 			if (Mouse.IsOver(holdingRect))
 			{
@@ -55,26 +77,26 @@ namespace RimWorld
 			}
 			GUI.BeginGroup(holdingRect);
 			Text.Anchor = TextAnchor.MiddleLeft;
-			Rect rect = new Rect(6f, 0f, SkillUI.levelLabelWidth + 6f, holdingRect.height);
+			Rect rect = new Rect(6f, 0f, levelLabelWidth + 6f, holdingRect.height);
 			Widgets.Label(rect, skill.def.skillLabel.CapitalizeFirst());
 			Rect position = new Rect(rect.xMax, 0f, 24f, 24f);
 			if (!skill.TotallyDisabled)
 			{
-				if (skill.passion > Passion.None)
+				if ((int)skill.passion > 0)
 				{
-					Texture2D image = (skill.passion == Passion.Major) ? SkillUI.PassionMajorIcon : SkillUI.PassionMinorIcon;
+					Texture2D image = (skill.passion == Passion.Major) ? PassionMajorIcon : PassionMinorIcon;
 					GUI.DrawTexture(position, image);
 				}
 				Rect rect2 = new Rect(position.xMax, 0f, holdingRect.width - position.xMax, holdingRect.height);
 				float fillPercent = Mathf.Max(0.01f, (float)skill.Level / 20f);
-				Widgets.FillableBar(rect2, fillPercent, SkillUI.SkillBarFillTex, null, false);
+				Widgets.FillableBar(rect2, fillPercent, SkillBarFillTex, null, doBorder: false);
 			}
 			Rect rect3 = new Rect(position.xMax + 4f, 0f, 999f, holdingRect.height);
 			rect3.yMin += 3f;
 			string label;
 			if (skill.TotallyDisabled)
 			{
-				GUI.color = SkillUI.DisabledSkillColor;
+				GUI.color = DisabledSkillColor;
 				label = "-";
 			}
 			else
@@ -88,7 +110,7 @@ namespace RimWorld
 			GUI.EndGroup();
 			if (Mouse.IsOver(holdingRect))
 			{
-				string text = SkillUI.GetSkillDescription(skill);
+				string text = GetSkillDescription(skill);
 				if (tooltipPrefix != "")
 				{
 					text = tooltipPrefix + "\n\n" + text;
@@ -97,7 +119,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		private static string GetSkillDescription(SkillRecord sk)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -107,24 +128,11 @@ namespace RimWorld
 			}
 			else
 			{
-				stringBuilder.AppendLine(string.Concat(new object[]
-				{
-					"Level".Translate() + " ",
-					sk.Level,
-					": ",
-					sk.LevelDescriptor
-				}));
+				stringBuilder.AppendLine((string)("Level".Translate() + " ") + sk.Level + ": " + sk.LevelDescriptor);
 				if (Current.ProgramState == ProgramState.Playing)
 				{
 					string text = (sk.Level == 20) ? "Experience".Translate() : "ProgressToNextLevel".Translate();
-					stringBuilder.AppendLine(string.Concat(new object[]
-					{
-						text,
-						": ",
-						sk.xpSinceLastLevel.ToString("F0"),
-						" / ",
-						sk.XpRequiredForLevelUp
-					}));
+					stringBuilder.AppendLine(text + ": " + sk.xpSinceLastLevel.ToString("F0") + " / " + sk.XpRequiredForLevelUp);
 				}
 				stringBuilder.Append("Passion".Translate() + ": ");
 				switch (sk.passion)
@@ -149,51 +157,6 @@ namespace RimWorld
 			stringBuilder.AppendLine();
 			stringBuilder.Append(sk.def.description);
 			return stringBuilder.ToString();
-		}
-
-		
-		private static float levelLabelWidth = -1f;
-
-		
-		private static List<SkillDef> skillDefsInListOrderCached;
-
-		
-		private const float SkillWidth = 230f;
-
-		
-		public const float SkillHeight = 24f;
-
-		
-		public const float SkillYSpacing = 3f;
-
-		
-		private const float LeftEdgeMargin = 6f;
-
-		
-		private const float IncButX = 205f;
-
-		
-		private const float IncButSpacing = 10f;
-
-		
-		private static readonly Color DisabledSkillColor = new Color(1f, 1f, 1f, 0.5f);
-
-		
-		private static Texture2D PassionMinorIcon = ContentFinder<Texture2D>.Get("UI/Icons/PassionMinor", true);
-
-		
-		private static Texture2D PassionMajorIcon = ContentFinder<Texture2D>.Get("UI/Icons/PassionMajor", true);
-
-		
-		private static Texture2D SkillBarFillTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.1f));
-
-		
-		public enum SkillDrawMode : byte
-		{
-			
-			Gameplay,
-			
-			Menu
 		}
 	}
 }

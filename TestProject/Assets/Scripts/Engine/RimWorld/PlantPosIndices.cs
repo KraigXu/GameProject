@@ -1,17 +1,19 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PlantPosIndices
 	{
-		
+		private static int[][][] rootList;
+
+		private const int ListCount = 8;
+
 		static PlantPosIndices()
 		{
+			rootList = new int[25][][];
 			for (int i = 0; i < 25; i++)
 			{
-				PlantPosIndices.rootList[i] = new int[8][];
+				rootList[i] = new int[8][];
 				for (int j = 0; j < 8; j++)
 				{
 					int[] array = new int[i + 1];
@@ -19,24 +21,17 @@ namespace RimWorld
 					{
 						array[k] = k;
 					}
-					array.Shuffle<int>();
-					PlantPosIndices.rootList[i][j] = array;
+					array.Shuffle();
+					rootList[i][j] = array;
 				}
 			}
 		}
 
-		
 		public static int[] GetPositionIndices(Plant p)
 		{
 			int maxMeshCount = p.def.plant.maxMeshCount;
-			int num = (p.thingIDNumber ^ 42348528) % 8;
-			return PlantPosIndices.rootList[maxMeshCount - 1][num];
+			int num = (p.thingIDNumber ^ 0x2862FF0) % 8;
+			return rootList[maxMeshCount - 1][num];
 		}
-
-		
-		private static int[][][] rootList = new int[25][][];
-
-		
-		private const int ListCount = 8;
 	}
 }

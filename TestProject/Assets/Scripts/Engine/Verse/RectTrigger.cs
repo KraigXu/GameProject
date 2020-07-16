@@ -1,85 +1,87 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
-using Verse;
 
-public class RectTrigger : Thing
+namespace Verse
 {
-	private CellRect rect;
-
-	public bool destroyIfUnfogged;
-
-	public bool activateOnExplosion;
-
-	public string signalTag;
-
-	public CellRect Rect
+	public class RectTrigger : Thing
 	{
-		get
+		private CellRect rect;
+
+		public bool destroyIfUnfogged;
+
+		public bool activateOnExplosion;
+
+		public string signalTag;
+
+		public CellRect Rect
 		{
-			return rect;
-		}
-		set
-		{
-			rect = value;
-			if (base.Spawned)
+			get
 			{
-				rect.ClipInsideMap(base.Map);
+				return rect;
 			}
-		}
-	}
-
-	public override void SpawnSetup(Map map, bool respawningAfterLoad)
-	{
-		base.SpawnSetup(map, respawningAfterLoad);
-		rect.ClipInsideMap(base.Map);
-	}
-
-	public override void Tick()
-	{
-		if (destroyIfUnfogged && !rect.CenterCell.Fogged(base.Map))
-		{
-			Destroy();
-		}
-		else
-		{
-			if (!this.IsHashIntervalTick(60))
+			set
 			{
-				return;
-			}
-			Map map = base.Map;
-			for (int i = rect.minZ; i <= rect.maxZ; i++)
-			{
-				for (int j = rect.minX; j <= rect.maxX; j++)
+				rect = value;
+				if (base.Spawned)
 				{
-					List<Thing> thingList = new IntVec3(j, 0, i).GetThingList(map);
-					for (int k = 0; k < thingList.Count; k++)
+					rect.ClipInsideMap(base.Map);
+				}
+			}
+		}
+
+		public override void SpawnSetup(Map map, bool respawningAfterLoad)
+		{
+			base.SpawnSetup(map, respawningAfterLoad);
+			rect.ClipInsideMap(base.Map);
+		}
+
+		public override void Tick()
+		{
+			if (destroyIfUnfogged && !rect.CenterCell.Fogged(base.Map))
+			{
+				Destroy();
+			}
+			else
+			{
+				if (!this.IsHashIntervalTick(60))
+				{
+					return;
+				}
+				Map map = base.Map;
+				for (int i = rect.minZ; i <= rect.maxZ; i++)
+				{
+					for (int j = rect.minX; j <= rect.maxX; j++)
 					{
-						if (thingList[k].def.category == ThingCategory.Pawn && thingList[k].def.race.intelligence == Intelligence.Humanlike && thingList[k].Faction == Faction.OfPlayer)
+						List<Thing> thingList = new IntVec3(j, 0, i).GetThingList(map);
+						for (int k = 0; k < thingList.Count; k++)
 						{
-							ActivatedBy((Pawn)thingList[k]);
-							return;
+							if (thingList[k].def.category == ThingCategory.Pawn && thingList[k].def.race.intelligence == Intelligence.Humanlike && thingList[k].Faction == Faction.OfPlayer)
+							{
+								ActivatedBy((Pawn)thingList[k]);
+								return;
+							}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	public void ActivatedBy(Pawn p)
-	{
-		Find.SignalManager.SendSignal(new RimWorld.Signal(signalTag, p.Named("SUBJECT")));
-		if (!base.Destroyed)
+		public void ActivatedBy(Pawn p)
 		{
-			Destroy();
+			Find.SignalManager.SendSignal(new Signal(signalTag, p.Named("SUBJECT")));
+			if (!base.Destroyed)
+			{
+				Destroy();
+			}
 		}
-	}
 
-	public override void ExposeData()
-	{
-		base.ExposeData();
-		Scribe_Values.Look(ref rect, "rect");
-		Scribe_Values.Look(ref destroyIfUnfogged, "destroyIfUnfogged", defaultValue: false);
-		Scribe_Values.Look(ref activateOnExplosion, "activateOnExplosion", defaultValue: false);
-		Scribe_Values.Look(ref signalTag, "signalTag");
+		public override void ExposeData()
+		{
+			base.ExposeData();
+			Scribe_Values.Look(ref rect, "rect");
+			Scribe_Values.Look(ref destroyIfUnfogged, "destroyIfUnfogged", defaultValue: false);
+			Scribe_Values.Look(ref activateOnExplosion, "activateOnExplosion", defaultValue: false);
+			Scribe_Values.Look(ref signalTag, "signalTag");
+		}
 	}
 }

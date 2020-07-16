@@ -1,62 +1,48 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorageSettings : IExposable
 	{
-		
-		
-		private IHaulDestination HaulDestinationOwner
-		{
-			get
-			{
-				return this.owner as IHaulDestination;
-			}
-		}
+		public IStoreSettingsParent owner;
 
-		
-		
-		private ISlotGroupParent SlotGroupParentOwner
-		{
-			get
-			{
-				return this.owner as ISlotGroupParent;
-			}
-		}
+		public ThingFilter filter;
 
-		
-		
-		
+		[LoadAlias("priority")]
+		private StoragePriority priorityInt = StoragePriority.Normal;
+
+		private IHaulDestination HaulDestinationOwner => owner as IHaulDestination;
+
+		private ISlotGroupParent SlotGroupParentOwner => owner as ISlotGroupParent;
+
 		public StoragePriority Priority
 		{
 			get
 			{
-				return this.priorityInt;
+				return priorityInt;
 			}
 			set
 			{
-				this.priorityInt = value;
-				if (Current.ProgramState == ProgramState.Playing && this.HaulDestinationOwner != null && this.HaulDestinationOwner.Map != null)
+				priorityInt = value;
+				if (Current.ProgramState == ProgramState.Playing && HaulDestinationOwner != null && HaulDestinationOwner.Map != null)
 				{
-					this.HaulDestinationOwner.Map.haulDestinationManager.Notify_HaulDestinationChangedPriority();
+					HaulDestinationOwner.Map.haulDestinationManager.Notify_HaulDestinationChangedPriority();
 				}
-				if (Current.ProgramState == ProgramState.Playing && this.SlotGroupParentOwner != null && this.SlotGroupParentOwner.Map != null)
+				if (Current.ProgramState == ProgramState.Playing && SlotGroupParentOwner != null && SlotGroupParentOwner.Map != null)
 				{
-					this.SlotGroupParentOwner.Map.listerHaulables.RecalcAllInCells(this.SlotGroupParentOwner.AllSlotCells());
+					SlotGroupParentOwner.Map.listerHaulables.RecalcAllInCells(SlotGroupParentOwner.AllSlotCells());
 				}
 			}
 		}
 
-		
 		public StorageSettings()
 		{
-			this.filter = new ThingFilter(new Action(this.TryNotifyChanged));
+			filter = new ThingFilter(TryNotifyChanged);
 		}
 
-		
-		public StorageSettings(IStoreSettingsParent owner) : this()
+		public StorageSettings(IStoreSettingsParent owner)
+			: this()
 		{
 			this.owner = owner;
 			if (owner != null)
@@ -64,46 +50,39 @@ namespace RimWorld
 				StorageSettings parentStoreSettings = owner.GetParentStoreSettings();
 				if (parentStoreSettings != null)
 				{
-					this.priorityInt = parentStoreSettings.priorityInt;
+					priorityInt = parentStoreSettings.priorityInt;
 				}
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<StoragePriority>(ref this.priorityInt, "priority", StoragePriority.Unstored, false);
-			Scribe_Deep.Look<ThingFilter>(ref this.filter, "filter", new object[]
-			{
-				new Action(this.TryNotifyChanged)
-			});
+			Scribe_Values.Look(ref priorityInt, "priority", StoragePriority.Unstored);
+			Scribe_Deep.Look(ref filter, "filter", new Action(TryNotifyChanged));
 		}
 
-		
 		public void SetFromPreset(StorageSettingsPreset preset)
 		{
-			this.filter.SetFromPreset(preset);
-			this.TryNotifyChanged();
+			filter.SetFromPreset(preset);
+			TryNotifyChanged();
 		}
 
-		
 		public void CopyFrom(StorageSettings other)
 		{
-			this.Priority = other.Priority;
-			this.filter.CopyAllowancesFrom(other.filter);
-			this.TryNotifyChanged();
+			Priority = other.Priority;
+			filter.CopyAllowancesFrom(other.filter);
+			TryNotifyChanged();
 		}
 
-		
 		public bool AllowedToAccept(Thing t)
 		{
-			if (!this.filter.Allows(t))
+			if (!filter.Allows(t))
 			{
 				return false;
 			}
-			if (this.owner != null)
+			if (owner != null)
 			{
-				StorageSettings parentStoreSettings = this.owner.GetParentStoreSettings();
+				StorageSettings parentStoreSettings = owner.GetParentStoreSettings();
 				if (parentStoreSettings != null && !parentStoreSettings.AllowedToAccept(t))
 				{
 					return false;
@@ -112,16 +91,15 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public bool AllowedToAccept(ThingDef t)
 		{
-			if (!this.filter.Allows(t))
+			if (!filter.Allows(t))
 			{
 				return false;
 			}
-			if (this.owner != null)
+			if (owner != null)
 			{
-				StorageSettings parentStoreSettings = this.owner.GetParentStoreSettings();
+				StorageSettings parentStoreSettings = owner.GetParentStoreSettings();
 				if (parentStoreSettings != null && !parentStoreSettings.AllowedToAccept(t))
 				{
 					return false;
@@ -130,23 +108,12 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		private void TryNotifyChanged()
 		{
-			if (this.owner != null && this.SlotGroupParentOwner != null && this.SlotGroupParentOwner.GetSlotGroup() != null && this.SlotGroupParentOwner.Map != null)
+			if (owner != null && SlotGroupParentOwner != null && SlotGroupParentOwner.GetSlotGroup() != null && SlotGroupParentOwner.Map != null)
 			{
-				this.SlotGroupParentOwner.Map.listerHaulables.Notify_SlotGroupChanged(this.SlotGroupParentOwner.GetSlotGroup());
+				SlotGroupParentOwner.Map.listerHaulables.Notify_SlotGroupChanged(SlotGroupParentOwner.GetSlotGroup());
 			}
 		}
-
-		
-		public IStoreSettingsParent owner;
-
-		
-		public ThingFilter filter;
-
-		
-		[LoadAlias("priority")]
-		private StoragePriority priorityInt = StoragePriority.Normal;
 	}
 }

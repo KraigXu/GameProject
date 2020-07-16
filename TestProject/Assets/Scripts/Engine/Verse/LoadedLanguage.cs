@@ -1,253 +1,184 @@
-﻿using System;
+using RimWorld.IO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using RimWorld.IO;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class LoadedLanguage
 	{
-		public override string ToString()
-		{
-			return this.info.friendlyNameEnglish;
-		}
-
-
-		public string folderName;
-
-
-		public LanguageInfo info;
-
-
-		private LanguageWorker workerInt;
-
-
-		private LanguageWordInfo wordInfo = new LanguageWordInfo();
-
-
-		private bool dataIsLoaded;
-
-
-		public List<string> loadErrors = new List<string>();
-
-
-		public List<string> backstoriesLoadErrors = new List<string>();
-
-
-		public bool anyKeyedReplacementsXmlParseError;
-
-
-		public string lastKeyedReplacementsXmlParseErrorInFile;
-
-
-		public bool anyDefInjectionsXmlParseError;
-
-
-		public string lastDefInjectionsXmlParseErrorInFile;
-
-
-		public bool anyError;
-
-
-		private string legacyFolderName;
-
-
-		private Dictionary<ModContentPack, HashSet<string>> tmpAlreadyLoadedFiles = new Dictionary<ModContentPack, HashSet<string>>();
-
-
-		public Texture2D icon = BaseContent.BadTex;
-
-
-		public Dictionary<string, LoadedLanguage.KeyedReplacement> keyedReplacements = new Dictionary<string, LoadedLanguage.KeyedReplacement>();
-
-
-		public List<DefInjectionPackage> defInjections = new List<DefInjectionPackage>();
-
-
-		public Dictionary<string, List<string>> stringFiles = new Dictionary<string, List<string>>();
-
-
-		public const string OldKeyedTranslationsFolderName = "CodeLinked";
-
-
-		public const string KeyedTranslationsFolderName = "Keyed";
-
-
-		public const string OldDefInjectionsFolderName = "DefLinked";
-
-
-		public const string DefInjectionsFolderName = "DefInjected";
-
-
-		public const string LanguagesFolderName = "Languages";
-
-
-		public const string PlaceholderText = "TODO";
-
-
-		private bool infoIsRealMetadata;
-
-
 		public class KeyedReplacement
 		{
-
 			public string key;
-
 
 			public string value;
 
-
 			public string fileSource;
-
 
 			public int fileSourceLine;
 
-
 			public string fileSourceFullPath;
-
 
 			public bool isPlaceholder;
 		}
 
+		public string folderName;
 
-		public string DisplayName
-		{
-			get
-			{
-				return GenText.SplitCamelCase(this.folderName);
-			}
-		}
+		public LanguageInfo info;
 
-		
-		
+		private LanguageWorker workerInt;
+
+		private LanguageWordInfo wordInfo = new LanguageWordInfo();
+
+		private bool dataIsLoaded;
+
+		public List<string> loadErrors = new List<string>();
+
+		public List<string> backstoriesLoadErrors = new List<string>();
+
+		public bool anyKeyedReplacementsXmlParseError;
+
+		public string lastKeyedReplacementsXmlParseErrorInFile;
+
+		public bool anyDefInjectionsXmlParseError;
+
+		public string lastDefInjectionsXmlParseErrorInFile;
+
+		public bool anyError;
+
+		private string legacyFolderName;
+
+		private Dictionary<ModContentPack, HashSet<string>> tmpAlreadyLoadedFiles = new Dictionary<ModContentPack, HashSet<string>>();
+
+		public Texture2D icon = BaseContent.BadTex;
+
+		public Dictionary<string, KeyedReplacement> keyedReplacements = new Dictionary<string, KeyedReplacement>();
+
+		public List<DefInjectionPackage> defInjections = new List<DefInjectionPackage>();
+
+		public Dictionary<string, List<string>> stringFiles = new Dictionary<string, List<string>>();
+
+		public const string OldKeyedTranslationsFolderName = "CodeLinked";
+
+		public const string KeyedTranslationsFolderName = "Keyed";
+
+		public const string OldDefInjectionsFolderName = "DefLinked";
+
+		public const string DefInjectionsFolderName = "DefInjected";
+
+		public const string LanguagesFolderName = "Languages";
+
+		public const string PlaceholderText = "TODO";
+
+		private bool infoIsRealMetadata;
+
+		public string DisplayName => GenText.SplitCamelCase(folderName);
+
 		public string FriendlyNameNative
 		{
 			get
 			{
-				if (this.info == null || this.info.friendlyNameNative.NullOrEmpty())
+				if (info == null || info.friendlyNameNative.NullOrEmpty())
 				{
-					return this.folderName;
+					return folderName;
 				}
-				return this.info.friendlyNameNative;
+				return info.friendlyNameNative;
 			}
 		}
 
-		
-		
 		public string FriendlyNameEnglish
 		{
 			get
 			{
-				if (this.info == null || this.info.friendlyNameEnglish.NullOrEmpty())
+				if (info == null || info.friendlyNameEnglish.NullOrEmpty())
 				{
-					return this.folderName;
+					return folderName;
 				}
-				return this.info.friendlyNameEnglish;
+				return info.friendlyNameEnglish;
 			}
 		}
 
-		
-		
 		public IEnumerable<Tuple<VirtualDirectory, ModContentPack, string>> AllDirectories
 		{
 			get
 			{
 				foreach (ModContentPack mod in LoadedModManager.RunningMods)
 				{
-					foreach (string text in mod.foldersToLoadDescendingOrder)
+					foreach (string item in mod.foldersToLoadDescendingOrder)
 					{
-						string path = Path.Combine(text, "Languages");
-						VirtualDirectory directory = AbstractFilesystem.GetDirectory(Path.Combine(path, this.folderName));
+						string path = Path.Combine(item, "Languages");
+						VirtualDirectory directory = AbstractFilesystem.GetDirectory(Path.Combine(path, folderName));
 						if (directory.Exists)
 						{
-							yield return new Tuple<VirtualDirectory, ModContentPack, string>(directory, mod, text);
+							yield return new Tuple<VirtualDirectory, ModContentPack, string>(directory, mod, item);
 						}
 						else
 						{
-							directory = AbstractFilesystem.GetDirectory(Path.Combine(path, this.legacyFolderName));
+							directory = AbstractFilesystem.GetDirectory(Path.Combine(path, legacyFolderName));
 							if (directory.Exists)
 							{
-								yield return new Tuple<VirtualDirectory, ModContentPack, string>(directory, mod, text);
+								yield return new Tuple<VirtualDirectory, ModContentPack, string>(directory, mod, item);
 							}
 						}
 					}
-					List<string>.Enumerator enumerator2 = default(List<string>.Enumerator);
-					
 				}
-				IEnumerator<ModContentPack> enumerator = null;
-				yield break;
-				yield break;
 			}
 		}
 
-		
-		
 		public LanguageWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (LanguageWorker)Activator.CreateInstance(this.info.languageWorkerClass);
+					workerInt = (LanguageWorker)Activator.CreateInstance(info.languageWorkerClass);
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
-		
-		public string LegacyFolderName
-		{
-			get
-			{
-				return this.legacyFolderName;
-			}
-		}
+		public string LegacyFolderName => legacyFolderName;
 
-		
 		public LoadedLanguage(string folderName)
 		{
 			this.folderName = folderName;
-			this.legacyFolderName = (folderName.Contains("(") ? folderName.Substring(0, folderName.IndexOf("(") - 1) : folderName).Trim();
+			legacyFolderName = (folderName.Contains("(") ? folderName.Substring(0, folderName.IndexOf("(") - 1) : folderName).Trim();
 		}
 
-		
 		public void LoadMetadata()
 		{
-			if (this.info != null && this.infoIsRealMetadata)
+			if (info == null || !infoIsRealMetadata)
 			{
-				return;
-			}
-			this.infoIsRealMetadata = true;
-			foreach (ModContentPack modContentPack in LoadedModManager.RunningMods)
-			{
-				foreach (string path in modContentPack.foldersToLoadDescendingOrder)
+				infoIsRealMetadata = true;
+				foreach (ModContentPack runningMod in LoadedModManager.RunningMods)
 				{
-					string text = Path.Combine(path, "Languages");
-					if (new DirectoryInfo(text).Exists)
+					foreach (string item in runningMod.foldersToLoadDescendingOrder)
 					{
-						foreach (VirtualDirectory virtualDirectory in AbstractFilesystem.GetDirectories(text, "*", SearchOption.TopDirectoryOnly, false))
+						string text = Path.Combine(item, "Languages");
+						if (new DirectoryInfo(text).Exists)
 						{
-							if (virtualDirectory.Name == this.folderName || virtualDirectory.Name == this.legacyFolderName)
+							foreach (VirtualDirectory directory in AbstractFilesystem.GetDirectories(text, "*", SearchOption.TopDirectoryOnly))
 							{
-								this.info = DirectXmlLoader.ItemFromXmlFile<LanguageInfo>(virtualDirectory, "LanguageInfo.xml", false);
-								if (this.info.friendlyNameNative.NullOrEmpty() && virtualDirectory.FileExists("FriendlyName.txt"))
+								if (directory.Name == folderName || directory.Name == legacyFolderName)
 								{
-									this.info.friendlyNameNative = virtualDirectory.ReadAllText("FriendlyName.txt");
+									info = DirectXmlLoader.ItemFromXmlFile<LanguageInfo>(directory, "LanguageInfo.xml", resolveCrossRefs: false);
+									if (info.friendlyNameNative.NullOrEmpty() && directory.FileExists("FriendlyName.txt"))
+									{
+										info.friendlyNameNative = directory.ReadAllText("FriendlyName.txt");
+									}
+									if (info.friendlyNameNative.NullOrEmpty())
+									{
+										info.friendlyNameNative = folderName;
+									}
+									if (info.friendlyNameEnglish.NullOrEmpty())
+									{
+										info.friendlyNameEnglish = folderName;
+									}
+									return;
 								}
-								if (this.info.friendlyNameNative.NullOrEmpty())
-								{
-									this.info.friendlyNameNative = this.folderName;
-								}
-								if (this.info.friendlyNameEnglish.NullOrEmpty())
-								{
-									this.info.friendlyNameEnglish = this.folderName;
-								}
-								return;
 							}
 						}
 					}
@@ -255,11 +186,10 @@ namespace Verse
 			}
 		}
 
-		
 		public void InitMetadata(VirtualDirectory directory)
 		{
-			this.infoIsRealMetadata = false;
-			this.info = new LanguageInfo();
+			infoIsRealMetadata = false;
+			info = new LanguageInfo();
 			string text = Regex.Replace(directory.Name, "(\\B[A-Z]+?(?=[A-Z][^A-Z])|\\B[A-Z]+?(?=[^A-Z]))", " $1");
 			string friendlyNameEnglish = text;
 			string friendlyNameNative = text;
@@ -270,152 +200,141 @@ namespace Verse
 				friendlyNameEnglish = text.Substring(0, num - 1);
 				friendlyNameNative = text.Substring(num + 1, num2 - num - 1);
 			}
-			this.info.friendlyNameEnglish = friendlyNameEnglish;
-			this.info.friendlyNameNative = friendlyNameNative;
+			info.friendlyNameEnglish = friendlyNameEnglish;
+			info.friendlyNameNative = friendlyNameNative;
 		}
 
-		
 		public void LoadData()
 		{
-			if (this.dataIsLoaded)
+			if (!dataIsLoaded)
 			{
-				return;
-			}
-			this.dataIsLoaded = true;
-			DeepProfiler.Start("Loading language data: " + this.folderName);
-			try
-			{
-				this.tmpAlreadyLoadedFiles.Clear();
-				foreach (Tuple<VirtualDirectory, ModContentPack, string> tuple in this.AllDirectories)
+				dataIsLoaded = true;
+				DeepProfiler.Start("Loading language data: " + folderName);
+				try
 				{
-					Tuple<VirtualDirectory, ModContentPack, string> localDirectory = tuple;
-					if (!this.tmpAlreadyLoadedFiles.ContainsKey(localDirectory.Item2))
+					tmpAlreadyLoadedFiles.Clear();
+					foreach (Tuple<VirtualDirectory, ModContentPack, string> allDirectory in AllDirectories)
 					{
-						this.tmpAlreadyLoadedFiles[localDirectory.Item2] = new HashSet<string>();
-					}
-					LongEventHandler.ExecuteWhenFinished(delegate
-					{
-						if (this.icon == BaseContent.BadTex)
+						Tuple<VirtualDirectory, ModContentPack, string> localDirectory = allDirectory;
+						if (!tmpAlreadyLoadedFiles.ContainsKey(localDirectory.Item2))
 						{
-							VirtualFile file = localDirectory.Item1.GetFile("LangIcon.png");
-							if (file.Exists)
+							tmpAlreadyLoadedFiles[localDirectory.Item2] = new HashSet<string>();
+						}
+						LongEventHandler.ExecuteWhenFinished(delegate
+						{
+							if (icon == BaseContent.BadTex)
 							{
-								this.icon = ModContentLoader<Texture2D>.LoadItem(file).contentItem;
+								VirtualFile file = localDirectory.Item1.GetFile("LangIcon.png");
+								if (file.Exists)
+								{
+									icon = ModContentLoader<Texture2D>.LoadItem(file).contentItem;
+								}
+							}
+						});
+						VirtualDirectory directory = localDirectory.Item1.GetDirectory("CodeLinked");
+						if (directory.Exists)
+						{
+							loadErrors.Add("Translations aren't called CodeLinked any more. Please rename to Keyed: " + directory);
+						}
+						else
+						{
+							directory = localDirectory.Item1.GetDirectory("Keyed");
+						}
+						if (directory.Exists)
+						{
+							foreach (VirtualFile file2 in directory.GetFiles("*.xml", SearchOption.AllDirectories))
+							{
+								if (TryRegisterFileIfNew(localDirectory, file2.FullPath))
+								{
+									LoadFromFile_Keyed(file2);
+								}
 							}
 						}
-					});
-					VirtualDirectory directory = localDirectory.Item1.GetDirectory("CodeLinked");
-					if (directory.Exists)
-					{
-						this.loadErrors.Add("Translations aren't called CodeLinked any more. Please rename to Keyed: " + directory);
-					}
-					else
-					{
-						directory = localDirectory.Item1.GetDirectory("Keyed");
-					}
-					if (directory.Exists)
-					{
-						foreach (VirtualFile virtualFile in directory.GetFiles("*.xml", SearchOption.AllDirectories))
+						VirtualDirectory directory2 = localDirectory.Item1.GetDirectory("DefLinked");
+						if (directory2.Exists)
 						{
-							if (this.TryRegisterFileIfNew(localDirectory, virtualFile.FullPath))
-							{
-								this.LoadFromFile_Keyed(virtualFile);
-							}
+							loadErrors.Add("Translations aren't called DefLinked any more. Please rename to DefInjected: " + directory2);
 						}
-					}
-					VirtualDirectory directory2 = localDirectory.Item1.GetDirectory("DefLinked");
-					if (directory2.Exists)
-					{
-						this.loadErrors.Add("Translations aren't called DefLinked any more. Please rename to DefInjected: " + directory2);
-					}
-					else
-					{
-						directory2 = localDirectory.Item1.GetDirectory("DefInjected");
-					}
-					if (directory2.Exists)
-					{
-						foreach (VirtualDirectory virtualDirectory in directory2.GetDirectories("*", SearchOption.TopDirectoryOnly))
+						else
 						{
-							string name = virtualDirectory.Name;
-							Type typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(name, null);
-							if (typeInAnyAssembly == null && name.Length > 3)
+							directory2 = localDirectory.Item1.GetDirectory("DefInjected");
+						}
+						if (directory2.Exists)
+						{
+							foreach (VirtualDirectory directory4 in directory2.GetDirectories("*", SearchOption.TopDirectoryOnly))
 							{
-								typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(name.Substring(0, name.Length - 1), null);
-							}
-							if (typeInAnyAssembly == null)
-							{
-								this.loadErrors.Add(string.Concat(new object[]
+								string name = directory4.Name;
+								Type typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(name);
+								if (typeInAnyAssembly == null && name.Length > 3)
 								{
-									"Error loading language from ",
-									tuple,
-									": dir ",
-									virtualDirectory.Name,
-									" doesn't correspond to any def type. Skipping..."
-								}));
-							}
-							else
-							{
-								foreach (VirtualFile virtualFile2 in virtualDirectory.GetFiles("*.xml", SearchOption.AllDirectories))
+									typeInAnyAssembly = GenTypes.GetTypeInAnyAssembly(name.Substring(0, name.Length - 1));
+								}
+								if (typeInAnyAssembly == null)
 								{
-									if (this.TryRegisterFileIfNew(localDirectory, virtualFile2.FullPath))
+									loadErrors.Add("Error loading language from " + allDirectory + ": dir " + directory4.Name + " doesn't correspond to any def type. Skipping...");
+								}
+								else
+								{
+									foreach (VirtualFile file3 in directory4.GetFiles("*.xml", SearchOption.AllDirectories))
 									{
-										this.LoadFromFile_DefInject(virtualFile2, typeInAnyAssembly);
+										if (TryRegisterFileIfNew(localDirectory, file3.FullPath))
+										{
+											LoadFromFile_DefInject(file3, typeInAnyAssembly);
+										}
 									}
 								}
 							}
 						}
-					}
-					this.EnsureAllDefTypesHaveDefInjectionPackage();
-					VirtualDirectory directory3 = localDirectory.Item1.GetDirectory("Strings");
-					if (directory3.Exists)
-					{
-						foreach (VirtualDirectory virtualDirectory2 in directory3.GetDirectories("*", SearchOption.TopDirectoryOnly))
+						EnsureAllDefTypesHaveDefInjectionPackage();
+						VirtualDirectory directory3 = localDirectory.Item1.GetDirectory("Strings");
+						if (directory3.Exists)
 						{
-							foreach (VirtualFile virtualFile3 in virtualDirectory2.GetFiles("*.txt", SearchOption.AllDirectories))
+							foreach (VirtualDirectory directory5 in directory3.GetDirectories("*", SearchOption.TopDirectoryOnly))
 							{
-								if (this.TryRegisterFileIfNew(localDirectory, virtualFile3.FullPath))
+								foreach (VirtualFile file4 in directory5.GetFiles("*.txt", SearchOption.AllDirectories))
 								{
-									this.LoadFromFile_Strings(virtualFile3, directory3);
+									if (TryRegisterFileIfNew(localDirectory, file4.FullPath))
+									{
+										LoadFromFile_Strings(file4, directory3);
+									}
 								}
 							}
 						}
+						wordInfo.LoadFrom(localDirectory, this);
 					}
-					this.wordInfo.LoadFrom(localDirectory, this);
 				}
-			}
-			catch (Exception arg)
-			{
-				Log.Error("Exception loading language data. Rethrowing. Exception: " + arg, false);
-				throw;
-			}
-			finally
-			{
-				DeepProfiler.End();
+				catch (Exception arg)
+				{
+					Log.Error("Exception loading language data. Rethrowing. Exception: " + arg);
+					throw;
+				}
+				finally
+				{
+					DeepProfiler.End();
+				}
 			}
 		}
 
-		
 		public bool TryRegisterFileIfNew(Tuple<VirtualDirectory, ModContentPack, string> dir, string filePath)
 		{
 			if (!filePath.StartsWith(dir.Item3))
 			{
-				Log.Error("Failed to get a relative path for a file: " + filePath + ", located in " + dir.Item3, false);
+				Log.Error("Failed to get a relative path for a file: " + filePath + ", located in " + dir.Item3);
 				return false;
 			}
 			string item = filePath.Substring(dir.Item3.Length);
-			if (!this.tmpAlreadyLoadedFiles.ContainsKey(dir.Item2))
+			if (!tmpAlreadyLoadedFiles.ContainsKey(dir.Item2))
 			{
-				this.tmpAlreadyLoadedFiles[dir.Item2] = new HashSet<string>();
+				tmpAlreadyLoadedFiles[dir.Item2] = new HashSet<string>();
 			}
-			else if (this.tmpAlreadyLoadedFiles[dir.Item2].Contains(item))
+			else if (tmpAlreadyLoadedFiles[dir.Item2].Contains(item))
 			{
 				return false;
 			}
-			this.tmpAlreadyLoadedFiles[dir.Item2].Add(item);
+			tmpAlreadyLoadedFiles[dir.Item2].Add(item);
 			return true;
 		}
 
-		
 		private void LoadFromFile_Strings(VirtualFile file, VirtualDirectory stringsTopDir)
 		{
 			string text;
@@ -425,13 +344,7 @@ namespace Verse
 			}
 			catch (Exception ex)
 			{
-				this.loadErrors.Add(string.Concat(new object[]
-				{
-					"Exception loading from strings file ",
-					file,
-					": ",
-					ex
-				}));
+				loadErrors.Add("Exception loading from strings file " + file + ": " + ex);
 				return;
 			}
 			string text2 = file.FullPath;
@@ -446,151 +359,139 @@ namespace Verse
 			{
 				list.Add(item);
 			}
-			List<string> list2;
-			if (this.stringFiles.TryGetValue(text2, out list2))
+			if (stringFiles.TryGetValue(text2, out List<string> value))
 			{
-				List<string>.Enumerator enumerator2 = list.GetEnumerator();
+				foreach (string item2 in list)
 				{
-					while (enumerator2.MoveNext())
-					{
-						string item2 = enumerator2.Current;
-						list2.Add(item2);
-					}
-					return;
+					value.Add(item2);
 				}
 			}
-			this.stringFiles.Add(text2, list);
+			else
+			{
+				stringFiles.Add(text2, list);
+			}
 		}
 
-		
 		private void LoadFromFile_Keyed(VirtualFile file)
 		{
 			Dictionary<string, string> dictionary = new Dictionary<string, string>();
 			Dictionary<string, int> dictionary2 = new Dictionary<string, int>();
 			try
 			{
-				foreach (DirectXmlLoaderSimple.XmlKeyValuePair xmlKeyValuePair in DirectXmlLoaderSimple.ValuesFromXmlFile(file))
+				foreach (DirectXmlLoaderSimple.XmlKeyValuePair item in DirectXmlLoaderSimple.ValuesFromXmlFile(file))
 				{
-					if (this.keyedReplacements.ContainsKey(xmlKeyValuePair.key) || dictionary.ContainsKey(xmlKeyValuePair.key))
+					if (keyedReplacements.ContainsKey(item.key) || dictionary.ContainsKey(item.key))
 					{
-						this.loadErrors.Add("Duplicate keyed translation key: " + xmlKeyValuePair.key + " in language " + this.folderName);
+						loadErrors.Add("Duplicate keyed translation key: " + item.key + " in language " + folderName);
 					}
 					else
 					{
-						dictionary.Add(xmlKeyValuePair.key, xmlKeyValuePair.value);
-						dictionary2.Add(xmlKeyValuePair.key, xmlKeyValuePair.lineNumber);
+						dictionary.Add(item.key, item.value);
+						dictionary2.Add(item.key, item.lineNumber);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				this.loadErrors.Add(string.Concat(new object[]
-				{
-					"Exception loading from translation file ",
-					file,
-					": ",
-					ex
-				}));
+				loadErrors.Add("Exception loading from translation file " + file + ": " + ex);
 				dictionary.Clear();
 				dictionary2.Clear();
-				this.anyKeyedReplacementsXmlParseError = true;
-				this.lastKeyedReplacementsXmlParseErrorInFile = file.Name;
+				anyKeyedReplacementsXmlParseError = true;
+				lastKeyedReplacementsXmlParseErrorInFile = file.Name;
 			}
-			foreach (KeyValuePair<string, string> keyValuePair in dictionary)
+			foreach (KeyValuePair<string, string> item2 in dictionary)
 			{
-				string text = keyValuePair.Value;
-				LoadedLanguage.KeyedReplacement keyedReplacement = new LoadedLanguage.KeyedReplacement();
+				string text = item2.Value;
+				KeyedReplacement keyedReplacement = new KeyedReplacement();
 				if (text == "TODO")
 				{
 					keyedReplacement.isPlaceholder = true;
 					text = "";
 				}
-				keyedReplacement.key = keyValuePair.Key;
+				keyedReplacement.key = item2.Key;
 				keyedReplacement.value = text;
 				keyedReplacement.fileSource = file.Name;
-				keyedReplacement.fileSourceLine = dictionary2[keyValuePair.Key];
+				keyedReplacement.fileSourceLine = dictionary2[item2.Key];
 				keyedReplacement.fileSourceFullPath = file.FullPath;
-				this.keyedReplacements.Add(keyValuePair.Key, keyedReplacement);
+				keyedReplacements.Add(item2.Key, keyedReplacement);
 			}
 		}
 
-		
 		public void LoadFromFile_DefInject(VirtualFile file, Type defType)
 		{
-			DefInjectionPackage defInjectionPackage = (from di in this.defInjections
-			where di.defType == defType
-			select di).FirstOrDefault<DefInjectionPackage>();
+			DefInjectionPackage defInjectionPackage = defInjections.Where((DefInjectionPackage di) => di.defType == defType).FirstOrDefault();
 			if (defInjectionPackage == null)
 			{
 				defInjectionPackage = new DefInjectionPackage(defType);
-				this.defInjections.Add(defInjectionPackage);
+				defInjections.Add(defInjectionPackage);
 			}
-			bool flag;
-			defInjectionPackage.AddDataFromFile(file, out flag);
-			if (flag)
+			defInjectionPackage.AddDataFromFile(file, out bool xmlParseError);
+			if (xmlParseError)
 			{
-				this.anyDefInjectionsXmlParseError = true;
-				this.lastDefInjectionsXmlParseErrorInFile = file.Name;
+				anyDefInjectionsXmlParseError = true;
+				lastDefInjectionsXmlParseErrorInFile = file.Name;
 			}
 		}
 
-		
 		private void EnsureAllDefTypesHaveDefInjectionPackage()
 		{
-			IEnumerator<Type> enumerator = GenDefDatabase.AllDefTypesWithDatabases().GetEnumerator();
+			foreach (Type defType in GenDefDatabase.AllDefTypesWithDatabases())
 			{
-				while (enumerator.MoveNext())
+				if (!defInjections.Any((DefInjectionPackage x) => x.defType == defType))
 				{
-					Type defType = enumerator.Current;
-					if (!this.defInjections.Any((DefInjectionPackage x) => x.defType == defType))
-					{
-						this.defInjections.Add(new DefInjectionPackage(defType));
-					}
+					defInjections.Add(new DefInjectionPackage(defType));
 				}
 			}
 		}
 
-		
 		public bool HaveTextForKey(string key, bool allowPlaceholders = false)
 		{
-			if (!this.dataIsLoaded)
+			if (!dataIsLoaded)
 			{
-				this.LoadData();
+				LoadData();
 			}
-			LoadedLanguage.KeyedReplacement keyedReplacement;
-			return key != null && this.keyedReplacements.TryGetValue(key, out keyedReplacement) && (allowPlaceholders || !keyedReplacement.isPlaceholder);
+			if (key == null)
+			{
+				return false;
+			}
+			if (!keyedReplacements.TryGetValue(key, out KeyedReplacement value))
+			{
+				return false;
+			}
+			if (!allowPlaceholders)
+			{
+				return !value.isPlaceholder;
+			}
+			return true;
 		}
 
-		
 		public bool TryGetTextFromKey(string key, out TaggedString translated)
 		{
-			if (!this.dataIsLoaded)
+			if (!dataIsLoaded)
 			{
-				this.LoadData();
+				LoadData();
 			}
 			if (key == null)
 			{
 				translated = key;
 				return false;
 			}
-			LoadedLanguage.KeyedReplacement keyedReplacement;
-			if (!this.keyedReplacements.TryGetValue(key, out keyedReplacement) || keyedReplacement.isPlaceholder)
+			if (!keyedReplacements.TryGetValue(key, out KeyedReplacement value) || value.isPlaceholder)
 			{
 				translated = key;
 				return false;
 			}
-			translated = keyedReplacement.value;
+			translated = value.value;
 			return true;
 		}
 
-		
 		public bool TryGetStringsFromFile(string fileName, out List<string> stringsList)
 		{
-			if (!this.dataIsLoaded)
+			if (!dataIsLoaded)
 			{
-				this.LoadData();
+				LoadData();
 			}
-			if (!this.stringFiles.TryGetValue(fileName, out stringsList))
+			if (!stringFiles.TryGetValue(fileName, out stringsList))
 			{
 				stringsList = null;
 				return false;
@@ -598,80 +499,70 @@ namespace Verse
 			return true;
 		}
 
-		
 		public string GetKeySourceFileAndLine(string key)
 		{
-			LoadedLanguage.KeyedReplacement keyedReplacement;
-			if (!this.keyedReplacements.TryGetValue(key, out keyedReplacement))
+			if (!keyedReplacements.TryGetValue(key, out KeyedReplacement value))
 			{
 				return "unknown";
 			}
-			return keyedReplacement.fileSource + ":" + keyedReplacement.fileSourceLine;
+			return value.fileSource + ":" + value.fileSourceLine;
 		}
 
-		
 		public Gender ResolveGender(string str, string fallback = null)
 		{
-			return this.wordInfo.ResolveGender(str, fallback);
+			return wordInfo.ResolveGender(str, fallback);
 		}
 
-		
 		public void InjectIntoData_BeforeImpliedDefs()
 		{
-			if (!this.dataIsLoaded)
+			if (!dataIsLoaded)
 			{
-				this.LoadData();
+				LoadData();
 			}
-			foreach (DefInjectionPackage defInjectionPackage in this.defInjections)
+			foreach (DefInjectionPackage defInjection in defInjections)
 			{
 				try
 				{
-					defInjectionPackage.InjectIntoDefs(false);
+					defInjection.InjectIntoDefs(errorOnDefNotFound: false);
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Critical error while injecting translations into defs: " + arg, false);
+					Log.Error("Critical error while injecting translations into defs: " + arg);
 				}
 			}
 		}
 
-		
 		public void InjectIntoData_AfterImpliedDefs()
 		{
-			if (!this.dataIsLoaded)
+			if (!dataIsLoaded)
 			{
-				this.LoadData();
+				LoadData();
 			}
-			int num = this.loadErrors.Count;
-			foreach (DefInjectionPackage defInjectionPackage in this.defInjections)
+			int num = loadErrors.Count;
+			foreach (DefInjectionPackage defInjection in defInjections)
 			{
 				try
 				{
-					defInjectionPackage.InjectIntoDefs(true);
-					num += defInjectionPackage.loadErrors.Count;
+					defInjection.InjectIntoDefs(errorOnDefNotFound: true);
+					num += defInjection.loadErrors.Count;
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Critical error while injecting translations into defs: " + arg, false);
+					Log.Error("Critical error while injecting translations into defs: " + arg);
 				}
 			}
-			BackstoryTranslationUtility.LoadAndInjectBackstoryData(this.AllDirectories, this.backstoriesLoadErrors);
-			num += this.backstoriesLoadErrors.Count;
+			BackstoryTranslationUtility.LoadAndInjectBackstoryData(AllDirectories, backstoriesLoadErrors);
+			num += backstoriesLoadErrors.Count;
 			if (num != 0)
 			{
-				this.anyError = true;
-				Log.Warning(string.Concat(new object[]
-				{
-					"Translation data for language ",
-					LanguageDatabase.activeLanguage.FriendlyNameEnglish,
-					" has ",
-					num,
-					" errors. Generate translation report for more info."
-				}), false);
+				anyError = true;
+				Log.Warning("Translation data for language " + LanguageDatabase.activeLanguage.FriendlyNameEnglish + " has " + num + " errors. Generate translation report for more info.");
 			}
 		}
 
-		
-
+		public override string ToString()
+		{
+			return info.friendlyNameEnglish;
+		}
 	}
 }

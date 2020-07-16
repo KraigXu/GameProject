@@ -1,80 +1,47 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompProperties_Drug : CompProperties
 	{
-		
-		
-		public bool Addictive
-		{
-			get
-			{
-				return this.addictiveness > 0f;
-			}
-		}
+		public ChemicalDef chemical;
 
-		
-		
-		public bool CanCauseOverdose
-		{
-			get
-			{
-				return this.overdoseSeverityOffset.TrueMax > 0f;
-			}
-		}
+		public float addictiveness;
 
-		
+		public float minToleranceToAddict;
+
+		public float existingAddictionSeverityOffset = 0.1f;
+
+		public float needLevelOffset = 1f;
+
+		public FloatRange overdoseSeverityOffset = FloatRange.Zero;
+
+		public float largeOverdoseChance;
+
+		public bool isCombatEnhancingDrug;
+
+		public float listOrder;
+
+		public bool Addictive => addictiveness > 0f;
+
+		public bool CanCauseOverdose => overdoseSeverityOffset.TrueMax > 0f;
+
 		public CompProperties_Drug()
 		{
-			this.compClass = typeof(CompDrug);
+			compClass = typeof(CompDrug);
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
 		{
-			foreach (string text in this.ConfigErrors(parentDef))
+			foreach (string item in base.ConfigErrors(parentDef))
 			{
-				
+				yield return item;
 			}
-			
-			IEnumerator<string> enumerator = null;
-			if (this.Addictive && this.chemical == null)
+			if (Addictive && chemical == null)
 			{
 				yield return "addictive but chemical is null";
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public ChemicalDef chemical;
-
-		
-		public float addictiveness;
-
-		
-		public float minToleranceToAddict;
-
-		
-		public float existingAddictionSeverityOffset = 0.1f;
-
-		
-		public float needLevelOffset = 1f;
-
-		
-		public FloatRange overdoseSeverityOffset = FloatRange.Zero;
-
-		
-		public float largeOverdoseChance;
-
-		
-		public bool isCombatEnhancingDrug;
-
-		
-		public float listOrder;
 	}
 }

@@ -1,229 +1,169 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class Area : IExposable, ILoadReferenceable, ICellBoolGiver
 	{
-		
-		
-		public Map Map
+		public AreaManager areaManager;
+
+		public int ID = -1;
+
+		private BoolGrid innerGrid;
+
+		private CellBoolDrawer drawer;
+
+		private Texture2D colorTextureInt;
+
+		public Map Map => areaManager.map;
+
+		public int TrueCount => innerGrid.TrueCount;
+
+		public abstract string Label
 		{
-			get
-			{
-				return this.areaManager.map;
-			}
+			get;
 		}
 
-		
-		
-		public int TrueCount
+		public abstract Color Color
 		{
-			get
-			{
-				return this.innerGrid.TrueCount;
-			}
+			get;
 		}
 
-		
-		
-		public abstract string Label { get; }
+		public abstract int ListPriority
+		{
+			get;
+		}
 
-		
-		
-		public abstract Color Color { get; }
-
-		
-		
-		public abstract int ListPriority { get; }
-
-		
-		
 		public Texture2D ColorTexture
 		{
 			get
 			{
-				if (this.colorTextureInt == null)
+				if (colorTextureInt == null)
 				{
-					this.colorTextureInt = SolidColorMaterials.NewSolidColorTexture(this.Color);
+					colorTextureInt = SolidColorMaterials.NewSolidColorTexture(Color);
 				}
-				return this.colorTextureInt;
+				return colorTextureInt;
 			}
 		}
 
-		
 		public bool this[int index]
 		{
 			get
 			{
-				return this.innerGrid[index];
+				return innerGrid[index];
 			}
 			set
 			{
-				this.Set(this.Map.cellIndices.IndexToCell(index), value);
+				Set(Map.cellIndices.IndexToCell(index), value);
 			}
 		}
 
-		
 		public bool this[IntVec3 c]
 		{
 			get
 			{
-				return this.innerGrid[this.Map.cellIndices.CellToIndex(c)];
+				return innerGrid[Map.cellIndices.CellToIndex(c)];
 			}
 			set
 			{
-				this.Set(c, value);
+				Set(c, value);
 			}
 		}
 
-		
-		
 		private CellBoolDrawer Drawer
 		{
 			get
 			{
-				if (this.drawer == null)
+				if (drawer == null)
 				{
-					this.drawer = new CellBoolDrawer(this, this.Map.Size.x, this.Map.Size.z, 3650, 0.33f);
+					drawer = new CellBoolDrawer(this, Map.Size.x, Map.Size.z, 3650);
 				}
-				return this.drawer;
+				return drawer;
 			}
 		}
 
-		
-		
-		public IEnumerable<IntVec3> ActiveCells
-		{
-			get
-			{
-				return this.innerGrid.ActiveCells;
-			}
-		}
+		public IEnumerable<IntVec3> ActiveCells => innerGrid.ActiveCells;
 
-		
-		
-		public virtual bool Mutable
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public virtual bool Mutable => false;
 
-		
 		public Area()
 		{
 		}
 
-		
 		public Area(AreaManager areaManager)
 		{
 			this.areaManager = areaManager;
-			this.innerGrid = new BoolGrid(areaManager.map);
-			this.ID = Find.UniqueIDsManager.GetNextAreaID();
+			innerGrid = new BoolGrid(areaManager.map);
+			ID = Find.UniqueIDsManager.GetNextAreaID();
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ID, "ID", -1, false);
-			Scribe_Deep.Look<BoolGrid>(ref this.innerGrid, "innerGrid", Array.Empty<object>());
+			Scribe_Values.Look(ref ID, "ID", -1);
+			Scribe_Deep.Look(ref innerGrid, "innerGrid");
 		}
 
-		
 		public bool GetCellBool(int index)
 		{
-			return this.innerGrid[index];
+			return innerGrid[index];
 		}
 
-		
 		public Color GetCellExtraColor(int index)
 		{
 			return Color.white;
 		}
 
-		
 		public virtual bool AssignableAsAllowed()
 		{
 			return false;
 		}
 
-		
 		public virtual void SetLabel(string label)
 		{
 			throw new NotImplementedException();
 		}
 
-		
 		protected virtual void Set(IntVec3 c, bool val)
 		{
-			int index = this.Map.cellIndices.CellToIndex(c);
-			if (this.innerGrid[index] == val)
+			int index = Map.cellIndices.CellToIndex(c);
+			if (innerGrid[index] != val)
 			{
-				return;
+				innerGrid[index] = val;
+				MarkDirty(c);
 			}
-			this.innerGrid[index] = val;
-			this.MarkDirty(c);
 		}
 
-		
 		private void MarkDirty(IntVec3 c)
 		{
-			this.Drawer.SetDirty();
-			Region region = c.GetRegion(this.Map, RegionType.Set_All);
-			if (region != null)
-			{
-				region.Notify_AreaChanged(this);
-			}
+			Drawer.SetDirty();
+			c.GetRegion(Map, RegionType.Set_All)?.Notify_AreaChanged(this);
 		}
 
-		
 		public void Delete()
 		{
-			this.areaManager.Remove(this);
+			areaManager.Remove(this);
 		}
 
-		
 		public void MarkForDraw()
 		{
-			if (this.Map == Find.CurrentMap)
+			if (Map == Find.CurrentMap)
 			{
-				this.Drawer.MarkForDraw();
+				Drawer.MarkForDraw();
 			}
 		}
 
-		
 		public void AreaUpdate()
 		{
-			this.Drawer.CellBoolDrawerUpdate();
+			Drawer.CellBoolDrawerUpdate();
 		}
 
-		
 		public void Invert()
 		{
-			this.innerGrid.Invert();
-			this.Drawer.SetDirty();
+			innerGrid.Invert();
+			Drawer.SetDirty();
 		}
 
-		
 		public abstract string GetUniqueLoadID();
-
-		
-		public AreaManager areaManager;
-
-		
-		public int ID = -1;
-
-		
-		private BoolGrid innerGrid;
-
-		
-		private CellBoolDrawer drawer;
-
-		
-		private Texture2D colorTextureInt;
 	}
 }

@@ -1,85 +1,73 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public sealed class PassingShipManager : IExposable
 	{
-		
+		public Map map;
+
+		public List<PassingShip> passingShips = new List<PassingShip>();
+
+		private static List<PassingShip> tmpPassingShips = new List<PassingShip>();
+
 		public PassingShipManager(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<PassingShip>(ref this.passingShips, "passingShips", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref passingShips, "passingShips", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				for (int i = 0; i < this.passingShips.Count; i++)
+				for (int i = 0; i < passingShips.Count; i++)
 				{
-					this.passingShips[i].passingShipManager = this;
+					passingShips[i].passingShipManager = this;
 				}
 			}
 		}
 
-		
 		public void AddShip(PassingShip vis)
 		{
-			this.passingShips.Add(vis);
+			passingShips.Add(vis);
 			vis.passingShipManager = this;
 		}
 
-		
 		public void RemoveShip(PassingShip vis)
 		{
-			this.passingShips.Remove(vis);
+			passingShips.Remove(vis);
 			vis.passingShipManager = null;
 		}
 
-		
 		public void PassingShipManagerTick()
 		{
-			for (int i = this.passingShips.Count - 1; i >= 0; i--)
+			for (int num = passingShips.Count - 1; num >= 0; num--)
 			{
-				this.passingShips[i].PassingShipTick();
+				passingShips[num].PassingShipTick();
 			}
 		}
 
-		
 		public void RemoveAllShipsOfFaction(Faction faction)
 		{
-			for (int i = this.passingShips.Count - 1; i >= 0; i--)
+			for (int num = passingShips.Count - 1; num >= 0; num--)
 			{
-				if (this.passingShips[i].Faction == faction)
+				if (passingShips[num].Faction == faction)
 				{
-					this.passingShips[i].Depart();
+					passingShips[num].Depart();
 				}
 			}
 		}
 
-		
 		internal void DebugSendAllShipsAway()
 		{
-			PassingShipManager.tmpPassingShips.Clear();
-			PassingShipManager.tmpPassingShips.AddRange(this.passingShips);
-			for (int i = 0; i < PassingShipManager.tmpPassingShips.Count; i++)
+			tmpPassingShips.Clear();
+			tmpPassingShips.AddRange(passingShips);
+			for (int i = 0; i < tmpPassingShips.Count; i++)
 			{
-				PassingShipManager.tmpPassingShips[i].Depart();
+				tmpPassingShips[i].Depart();
 			}
-			Messages.Message("All passing ships sent away.", MessageTypeDefOf.TaskCompletion, false);
+			Messages.Message("All passing ships sent away.", MessageTypeDefOf.TaskCompletion, historical: false);
 		}
-
-		
-		public Map map;
-
-		
-		public List<PassingShip> passingShips = new List<PassingShip>();
-
-		
-		private static List<PassingShip> tmpPassingShips = new List<PassingShip>();
 	}
 }

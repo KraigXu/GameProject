@@ -1,12 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace RimWorld
 {
-	
 	public static class StatUtility
 	{
-		
 		public static void SetStatValueInList(ref List<StatModifier> statList, StatDef stat, float value)
 		{
 			if (statList == null)
@@ -27,19 +24,16 @@ namespace RimWorld
 			statList.Add(statModifier);
 		}
 
-		
 		public static float GetStatFactorFromList(this List<StatModifier> modList, StatDef stat)
 		{
 			return modList.GetStatValueFromList(stat, 1f);
 		}
 
-		
 		public static float GetStatOffsetFromList(this List<StatModifier> modList, StatDef stat)
 		{
 			return modList.GetStatValueFromList(stat, 0f);
 		}
 
-		
 		public static float GetStatValueFromList(this List<StatModifier> modList, StatDef stat, float defaultValue)
 		{
 			if (modList != null)
@@ -55,7 +49,6 @@ namespace RimWorld
 			return defaultValue;
 		}
 
-		
 		public static bool StatListContains(this List<StatModifier> modList, StatDef stat)
 		{
 			if (modList != null)

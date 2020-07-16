@@ -1,30 +1,25 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class BattleLog : IExposable
 	{
-		
-		
-		public List<Battle> Battles
-		{
-			get
-			{
-				return this.battles;
-			}
-		}
+		private List<Battle> battles = new List<Battle>();
 
-		
+		private const int BattleHistoryLength = 20;
+
+		private HashSet<LogEntry> activeEntries;
+
+		public List<Battle> Battles => battles;
+
 		public void Add(LogEntry entry)
 		{
 			Battle battle = null;
-			foreach (Thing thing in entry.GetConcerns())
+			foreach (Pawn concern in entry.GetConcerns())
 			{
-				Battle battleActive = ((Pawn)thing).records.BattleActive;
+				Battle battleActive = concern.records.BattleActive;
 				if (battle == null)
 				{
 					battle = battleActive;
@@ -37,55 +32,51 @@ namespace Verse
 			if (battle == null)
 			{
 				battle = Battle.Create();
-				this.battles.Insert(0, battle);
+				battles.Insert(0, battle);
 			}
-			foreach (Thing thing2 in entry.GetConcerns())
+			foreach (Pawn concern2 in entry.GetConcerns())
 			{
-				Pawn pawn = (Pawn)thing2;
-				Battle battleActive2 = pawn.records.BattleActive;
+				Battle battleActive2 = concern2.records.BattleActive;
 				if (battleActive2 != null && battleActive2 != battle)
 				{
 					battle.Absorb(battleActive2);
-					this.battles.Remove(battleActive2);
+					battles.Remove(battleActive2);
 				}
-				pawn.records.EnterBattle(battle);
+				concern2.records.EnterBattle(battle);
 			}
 			battle.Add(entry);
-			this.activeEntries = null;
-			this.ReduceToCapacity();
+			activeEntries = null;
+			ReduceToCapacity();
 		}
 
-		
 		private void ReduceToCapacity()
 		{
-			int num = this.battles.Count((Battle btl) => btl.AbsorbedBy == null);
-			while (num > 20 && this.battles[this.battles.Count - 1].LastEntryTimestamp + Mathf.Max(420000, 5000) < Find.TickManager.TicksGame)
+			int num = battles.Count((Battle btl) => btl.AbsorbedBy == null);
+			while (num > 20 && battles[battles.Count - 1].LastEntryTimestamp + Mathf.Max(420000, 5000) < Find.TickManager.TicksGame)
 			{
-				if (this.battles[this.battles.Count - 1].AbsorbedBy == null)
+				if (battles[battles.Count - 1].AbsorbedBy == null)
 				{
 					num--;
 				}
-				this.battles.RemoveAt(this.battles.Count - 1);
-				this.activeEntries = null;
+				battles.RemoveAt(battles.Count - 1);
+				activeEntries = null;
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Battle>(ref this.battles, "battles", LookMode.Deep, Array.Empty<object>());
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.battles == null)
+			Scribe_Collections.Look(ref battles, "battles", LookMode.Deep);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && battles == null)
 			{
-				this.battles = new List<Battle>();
+				battles = new List<Battle>();
 			}
 		}
 
-		
 		public bool AnyEntryConcerns(Pawn p)
 		{
-			for (int i = 0; i < this.battles.Count; i++)
+			for (int i = 0; i < battles.Count; i++)
 			{
-				if (this.battles[i].Concerns(p))
+				if (battles[i].Concerns(p))
 				{
 					return true;
 				}
@@ -93,50 +84,36 @@ namespace Verse
 			return false;
 		}
 
-		
 		public bool IsEntryActive(LogEntry log)
 		{
-			if (this.activeEntries == null)
+			if (activeEntries == null)
 			{
-				this.activeEntries = new HashSet<LogEntry>();
-				for (int i = 0; i < this.battles.Count; i++)
+				activeEntries = new HashSet<LogEntry>();
+				for (int i = 0; i < battles.Count; i++)
 				{
-					List<LogEntry> entries = this.battles[i].Entries;
+					List<LogEntry> entries = battles[i].Entries;
 					for (int j = 0; j < entries.Count; j++)
 					{
-						this.activeEntries.Add(entries[j]);
+						activeEntries.Add(entries[j]);
 					}
 				}
 			}
-			return this.activeEntries.Contains(log);
+			return activeEntries.Contains(log);
 		}
 
-		
 		public void RemoveEntry(LogEntry log)
 		{
-			int num = 0;
-			while (num < this.battles.Count && !this.battles[num].Entries.Remove(log))
+			for (int i = 0; i < battles.Count && !battles[i].Entries.Remove(log); i++)
 			{
-				num++;
 			}
 		}
 
-		
 		public void Notify_PawnDiscarded(Pawn p, bool silentlyRemoveReferences)
 		{
-			for (int i = this.battles.Count - 1; i >= 0; i--)
+			for (int num = battles.Count - 1; num >= 0; num--)
 			{
-				this.battles[i].Notify_PawnDiscarded(p, silentlyRemoveReferences);
+				battles[num].Notify_PawnDiscarded(p, silentlyRemoveReferences);
 			}
 		}
-
-		
-		private List<Battle> battles = new List<Battle>();
-
-		
-		private const int BattleHistoryLength = 20;
-
-		
-		private HashSet<LogEntry> activeEntries;
 	}
 }

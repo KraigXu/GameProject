@@ -1,27 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SpecialThingFilterWorker_PlantFood : SpecialThingFilterWorker
 	{
-		
 		public override bool Matches(Thing t)
 		{
-			return this.AlwaysMatches(t.def);
+			return AlwaysMatches(t.def);
 		}
 
-		
 		public override bool AlwaysMatches(ThingDef def)
 		{
-			return def.ingestible != null && (def.ingestible.foodType & FoodTypeFlags.Plant) > FoodTypeFlags.None;
+			if (def.ingestible != null)
+			{
+				return (def.ingestible.foodType & FoodTypeFlags.Plant) != 0;
+			}
+			return false;
 		}
 
-		
 		public override bool CanEverMatch(ThingDef def)
 		{
-			return this.AlwaysMatches(def);
+			return AlwaysMatches(def);
 		}
 	}
 }

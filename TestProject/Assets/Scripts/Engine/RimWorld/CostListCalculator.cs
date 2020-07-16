@@ -1,46 +1,104 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class CostListCalculator
 	{
-		
+		private struct CostListPair : IEquatable<CostListPair>
+		{
+			public BuildableDef buildable;
+
+			public ThingDef stuff;
+
+			public CostListPair(BuildableDef buildable, ThingDef stuff)
+			{
+				this.buildable = buildable;
+				this.stuff = stuff;
+			}
+
+			public override int GetHashCode()
+			{
+				return Gen.HashCombine(Gen.HashCombine(0, buildable), stuff);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (!(obj is CostListPair))
+				{
+					return false;
+				}
+				return Equals((CostListPair)obj);
+			}
+
+			public bool Equals(CostListPair other)
+			{
+				return this == other;
+			}
+
+			public static bool operator ==(CostListPair lhs, CostListPair rhs)
+			{
+				if (lhs.buildable == rhs.buildable)
+				{
+					return lhs.stuff == rhs.stuff;
+				}
+				return false;
+			}
+
+			public static bool operator !=(CostListPair lhs, CostListPair rhs)
+			{
+				return !(lhs == rhs);
+			}
+		}
+
+		private class FastCostListPairComparer : IEqualityComparer<CostListPair>
+		{
+			public static readonly FastCostListPairComparer Instance = new FastCostListPairComparer();
+
+			public bool Equals(CostListPair x, CostListPair y)
+			{
+				return x == y;
+			}
+
+			public int GetHashCode(CostListPair obj)
+			{
+				return obj.GetHashCode();
+			}
+		}
+
+		private static Dictionary<CostListPair, List<ThingDefCountClass>> cachedCosts = new Dictionary<CostListPair, List<ThingDefCountClass>>(FastCostListPairComparer.Instance);
+
 		public static void Reset()
 		{
-			CostListCalculator.cachedCosts.Clear();
+			cachedCosts.Clear();
 		}
 
-		
 		public static List<ThingDefCountClass> CostListAdjusted(this Thing thing)
 		{
-			return thing.def.CostListAdjusted(thing.Stuff, true);
+			return thing.def.CostListAdjusted(thing.Stuff);
 		}
 
-		
 		public static List<ThingDefCountClass> CostListAdjusted(this BuildableDef entDef, ThingDef stuff, bool errorOnNullStuff = true)
 		{
-			CostListCalculator.CostListPair key = new CostListCalculator.CostListPair(entDef, stuff);
-			List<ThingDefCountClass> list;
-			if (!CostListCalculator.cachedCosts.TryGetValue(key, out list))
+			CostListPair key = new CostListPair(entDef, stuff);
+			if (!cachedCosts.TryGetValue(key, out List<ThingDefCountClass> value))
 			{
-				list = new List<ThingDefCountClass>();
+				value = new List<ThingDefCountClass>();
 				int num = 0;
 				if (entDef.MadeFromStuff)
 				{
 					if (errorOnNullStuff && stuff == null)
 					{
-						Log.Error("Cannot get AdjustedCostList for " + entDef + " with null Stuff.", false);
+						Log.Error("Cannot get AdjustedCostList for " + entDef + " with null Stuff.");
 						if (GenStuff.DefaultStuffFor(entDef) == null)
 						{
 							return null;
 						}
-						return entDef.CostListAdjusted(GenStuff.DefaultStuffFor(entDef), true);
+						return entDef.CostListAdjusted(GenStuff.DefaultStuffFor(entDef));
 					}
-					else if (stuff != null)
+					if (stuff != null)
 					{
 						num = Mathf.RoundToInt((float)entDef.costStuffCount / stuff.VolumePerUnit);
 						if (num < 1)
@@ -55,14 +113,7 @@ namespace RimWorld
 				}
 				else if (stuff != null)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Got AdjustedCostList for ",
-						entDef,
-						" with stuff ",
-						stuff,
-						" but is not MadeFromStuff."
-					}), false);
+					Log.Error("Got AdjustedCostList for " + entDef + " with stuff " + stuff + " but is not MadeFromStuff.");
 				}
 				bool flag = false;
 				if (entDef.costList != null)
@@ -72,91 +123,22 @@ namespace RimWorld
 						ThingDefCountClass thingDefCountClass = entDef.costList[i];
 						if (thingDefCountClass.thingDef == stuff)
 						{
-							list.Add(new ThingDefCountClass(thingDefCountClass.thingDef, thingDefCountClass.count + num));
+							value.Add(new ThingDefCountClass(thingDefCountClass.thingDef, thingDefCountClass.count + num));
 							flag = true;
 						}
 						else
 						{
-							list.Add(thingDefCountClass);
+							value.Add(thingDefCountClass);
 						}
 					}
 				}
 				if (!flag && num > 0)
 				{
-					list.Add(new ThingDefCountClass(stuff, num));
+					value.Add(new ThingDefCountClass(stuff, num));
 				}
-				CostListCalculator.cachedCosts.Add(key, list);
+				cachedCosts.Add(key, value);
 			}
-			return list;
-		}
-
-		
-		private static Dictionary<CostListCalculator.CostListPair, List<ThingDefCountClass>> cachedCosts = new Dictionary<CostListCalculator.CostListPair, List<ThingDefCountClass>>(CostListCalculator.FastCostListPairComparer.Instance);
-
-		
-		private struct CostListPair : IEquatable<CostListCalculator.CostListPair>
-		{
-			
-			public CostListPair(BuildableDef buildable, ThingDef stuff)
-			{
-				this.buildable = buildable;
-				this.stuff = stuff;
-			}
-
-			
-			public override int GetHashCode()
-			{
-				return Gen.HashCombine<ThingDef>(Gen.HashCombine<BuildableDef>(0, this.buildable), this.stuff);
-			}
-
-			
-			public override bool Equals(object obj)
-			{
-				return obj is CostListCalculator.CostListPair && this.Equals((CostListCalculator.CostListPair)obj);
-			}
-
-			
-			public bool Equals(CostListCalculator.CostListPair other)
-			{
-				return this == other;
-			}
-
-			
-			public static bool operator ==(CostListCalculator.CostListPair lhs, CostListCalculator.CostListPair rhs)
-			{
-				return lhs.buildable == rhs.buildable && lhs.stuff == rhs.stuff;
-			}
-
-			
-			public static bool operator !=(CostListCalculator.CostListPair lhs, CostListCalculator.CostListPair rhs)
-			{
-				return !(lhs == rhs);
-			}
-
-			
-			public BuildableDef buildable;
-
-			
-			public ThingDef stuff;
-		}
-
-		
-		private class FastCostListPairComparer : IEqualityComparer<CostListCalculator.CostListPair>
-		{
-			
-			public bool Equals(CostListCalculator.CostListPair x, CostListCalculator.CostListPair y)
-			{
-				return x == y;
-			}
-
-			
-			public int GetHashCode(CostListCalculator.CostListPair obj)
-			{
-				return obj.GetHashCode();
-			}
-
-			
-			public static readonly CostListCalculator.FastCostListPairComparer Instance = new CostListCalculator.FastCostListPairComparer();
+			return value;
 		}
 	}
 }

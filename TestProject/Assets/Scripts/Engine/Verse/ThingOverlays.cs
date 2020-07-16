@@ -1,13 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ThingOverlays
 	{
-		
 		public void ThingOverlaysOnGUI()
 		{
 			if (Event.current.type != EventType.Repaint)
@@ -27,13 +25,7 @@ namespace Verse
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Exception drawing ThingOverlay for ",
-							thing,
-							": ",
-							ex
-						}), false);
+						Log.Error("Exception drawing ThingOverlay for " + thing + ": " + ex);
 					}
 				}
 			}

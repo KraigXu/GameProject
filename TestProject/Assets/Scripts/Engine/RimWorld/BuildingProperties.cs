@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,50 +6,218 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class BuildingProperties
 	{
-		
-		
-		public bool SupportsPlants
-		{
-			get
-			{
-				return this.sowTag != null;
-			}
-		}
+		public bool isEdifice = true;
 
-		
-		
-		public bool IsTurret
-		{
-			get
-			{
-				return this.turretGunDef != null;
-			}
-		}
+		[NoTranslate]
+		public List<string> buildingTags = new List<string>();
 
-		
-		
+		public bool isInert;
+
+		private bool deconstructible = true;
+
+		public bool alwaysDeconstructible;
+
+		public bool claimable = true;
+
+		public bool isSittable;
+
+		public SoundDef soundAmbient;
+
+		public ConceptDef spawnedConceptLearnOpportunity;
+
+		public ConceptDef boughtConceptLearnOpportunity;
+
+		public bool expandHomeArea = true;
+
+		public Type blueprintClass = typeof(Blueprint_Build);
+
+		public GraphicData blueprintGraphicData;
+
+		public float uninstallWork = 200f;
+
+		public bool forceShowRoomStats;
+
+		public bool wantsHopperAdjacent;
+
+		public bool allowWireConnection = true;
+
+		public bool shipPart;
+
+		public bool canPlaceOverImpassablePlant = true;
+
+		public float heatPerTickWhileWorking;
+
+		public bool canBuildNonEdificesUnder = true;
+
+		public bool canPlaceOverWall;
+
+		public bool allowAutoroof = true;
+
+		public bool preventDeteriorationOnTop;
+
+		public bool preventDeteriorationInside;
+
+		public bool isMealSource;
+
+		public bool isNaturalRock;
+
+		public bool isResourceRock;
+
+		public bool repairable = true;
+
+		public float roofCollapseDamageMultiplier = 1f;
+
+		public bool hasFuelingPort;
+
+		public ThingDef smoothedThing;
+
+		[Unsaved(false)]
+		public ThingDef unsmoothedThing;
+
+		public TerrainDef naturalTerrain;
+
+		public TerrainDef leaveTerrain;
+
+		public float combatPower;
+
+		public int minMechClusterPoints;
+
+		public bool isPlayerEjectable;
+
+		public GraphicData fullGraveGraphicData;
+
+		public float bed_healPerDay;
+
+		public bool bed_defaultMedical;
+
+		public bool bed_showSleeperBody;
+
+		public bool bed_humanlike = true;
+
+		public float bed_maxBodySize = 9999f;
+
+		public bool bed_caravansCanUse;
+
+		public float nutritionCostPerDispense;
+
+		public SoundDef soundDispense;
+
+		public ThingDef turretGunDef;
+
+		public float turretBurstWarmupTime;
+
+		public float turretBurstCooldownTime = -1f;
+
+		public float turretInitialCooldownTime;
+
+		[Unsaved(false)]
+		public Material turretTopMat;
+
+		public float turretTopDrawSize = 2f;
+
+		public Vector2 turretTopOffset;
+
+		public bool ai_combatDangerous;
+
+		public bool ai_chillDestination = true;
+
+		public bool ai_neverTrashThis;
+
+		public SoundDef soundDoorOpenPowered;
+
+		public SoundDef soundDoorClosePowered;
+
+		public SoundDef soundDoorOpenManual;
+
+		public SoundDef soundDoorCloseManual;
+
+		[NoTranslate]
+		public string sowTag;
+
+		public ThingDef defaultPlantToGrow;
+
+		public ThingDef mineableThing;
+
+		public int mineableYield = 1;
+
+		public float mineableNonMinedEfficiency = 0.7f;
+
+		public float mineableDropChance = 1f;
+
+		public bool mineableYieldWasteable = true;
+
+		public float mineableScatterCommonality;
+
+		public IntRange mineableScatterLumpSizeRange = new IntRange(20, 40);
+
+		public StorageSettings fixedStorageSettings;
+
+		public StorageSettings defaultStorageSettings;
+
+		public bool ignoreStoredThingsBeauty;
+
+		public bool isTrap;
+
+		public bool trapDestroyOnSpring;
+
+		public float trapPeacefulWildAnimalsSpringChanceFactor = 1f;
+
+		public DamageArmorCategoryDef trapDamageCategory;
+
+		public GraphicData trapUnarmedGraphicData;
+
+		[Unsaved(false)]
+		public Graphic trapUnarmedGraphic;
+
+		public float unpoweredWorkTableWorkSpeedFactor;
+
+		public IntRange watchBuildingStandDistanceRange = IntRange.one;
+
+		public int watchBuildingStandRectWidth = 3;
+
+		public bool watchBuildingInSameRoom;
+
+		public JoyKindDef joyKind;
+
+		public int haulToContainerDuration;
+
+		public float instrumentRange;
+
+		public int minDistanceToSameTypeOfBuilding;
+
+		public bool artificialForMeditationPurposes = true;
+
+		public bool SupportsPlants => sowTag != null;
+
+		public bool IsTurret => turretGunDef != null;
+
 		public bool IsDeconstructible
 		{
 			get
 			{
-				return this.alwaysDeconstructible || (!this.isNaturalRock && this.deconstructible);
+				if (!alwaysDeconstructible)
+				{
+					if (!isNaturalRock)
+					{
+						return deconstructible;
+					}
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public bool IsMortar
 		{
 			get
 			{
-				if (!this.IsTurret)
+				if (!IsTurret)
 				{
 					return false;
 				}
-				List<VerbProperties> verbs = this.turretGunDef.Verbs;
+				List<VerbProperties> verbs = turretGunDef.Verbs;
 				for (int i = 0; i < verbs.Count; i++)
 				{
 					if (verbs[i].isPrimary && verbs[i].defaultProjectile != null && verbs[i].defaultProjectile.projectile.flyOverhead)
@@ -57,94 +225,88 @@ namespace RimWorld
 						return true;
 					}
 				}
-				if (this.turretGunDef.HasComp(typeof(CompChangeableProjectile)))
+				if (turretGunDef.HasComp(typeof(CompChangeableProjectile)))
 				{
-					if (this.turretGunDef.building.fixedStorageSettings.filter.Allows(ThingDefOf.Shell_HighExplosive))
+					if (turretGunDef.building.fixedStorageSettings.filter.Allows(ThingDefOf.Shell_HighExplosive))
 					{
 						return true;
 					}
-					foreach (ThingDef thingDef in this.turretGunDef.building.fixedStorageSettings.filter.AllowedThingDefs)
+					foreach (ThingDef allowedThingDef in turretGunDef.building.fixedStorageSettings.filter.AllowedThingDefs)
 					{
-						if (thingDef.projectileWhenLoaded != null && thingDef.projectileWhenLoaded.projectile.flyOverhead)
+						if (allowedThingDef.projectileWhenLoaded != null && allowedThingDef.projectileWhenLoaded.projectile.flyOverhead)
 						{
 							return true;
 						}
 					}
-					return false;
 				}
 				return false;
 			}
 		}
 
-		
 		public IEnumerable<string> ConfigErrors(ThingDef parent)
 		{
-			if (this.isTrap && !this.isEdifice)
+			if (isTrap && !isEdifice)
 			{
 				yield return "isTrap but is not edifice. Code will break.";
 			}
-			if (this.alwaysDeconstructible && !this.deconstructible)
+			if (alwaysDeconstructible && !deconstructible)
 			{
 				yield return "alwaysDeconstructible=true but deconstructible=false";
 			}
-			if (parent.holdsRoof && !this.isEdifice)
+			if (parent.holdsRoof && !isEdifice)
 			{
 				yield return "holds roof but is not an edifice.";
 			}
-			if (this.buildingTags.Contains("MechClusterCombatThreat") && this.combatPower <= 0f)
+			if (buildingTags.Contains("MechClusterCombatThreat") && combatPower <= 0f)
 			{
 				yield return "has MechClusterCombatThreat tag but 0 combatPower and thus no points cost; this will make an infinite loop during mech cluster building selection";
 			}
-			yield break;
 		}
 
-		
 		public void PostLoadSpecial(ThingDef parent)
 		{
 		}
 
-		
 		public void ResolveReferencesSpecial()
 		{
-			if (this.soundDoorOpenPowered == null)
+			if (soundDoorOpenPowered == null)
 			{
-				this.soundDoorOpenPowered = SoundDefOf.Door_OpenPowered;
+				soundDoorOpenPowered = SoundDefOf.Door_OpenPowered;
 			}
-			if (this.soundDoorClosePowered == null)
+			if (soundDoorClosePowered == null)
 			{
-				this.soundDoorClosePowered = SoundDefOf.Door_ClosePowered;
+				soundDoorClosePowered = SoundDefOf.Door_ClosePowered;
 			}
-			if (this.soundDoorOpenManual == null)
+			if (soundDoorOpenManual == null)
 			{
-				this.soundDoorOpenManual = SoundDefOf.Door_OpenManual;
+				soundDoorOpenManual = SoundDefOf.Door_OpenManual;
 			}
-			if (this.soundDoorCloseManual == null)
+			if (soundDoorCloseManual == null)
 			{
-				this.soundDoorCloseManual = SoundDefOf.Door_CloseManual;
+				soundDoorCloseManual = SoundDefOf.Door_CloseManual;
 			}
-			if (this.turretGunDef != null)
+			if (turretGunDef != null)
 			{
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{
-					this.turretTopMat = MaterialPool.MatFrom(this.turretGunDef.graphicData.texPath);
+					turretTopMat = MaterialPool.MatFrom(turretGunDef.graphicData.texPath);
 				});
 			}
-			if (this.fixedStorageSettings != null)
+			if (fixedStorageSettings != null)
 			{
-				this.fixedStorageSettings.filter.ResolveReferences();
+				fixedStorageSettings.filter.ResolveReferences();
 			}
-			if (this.defaultStorageSettings == null && this.fixedStorageSettings != null)
+			if (defaultStorageSettings == null && fixedStorageSettings != null)
 			{
-				this.defaultStorageSettings = new StorageSettings();
-				this.defaultStorageSettings.CopyFrom(this.fixedStorageSettings);
+				defaultStorageSettings = new StorageSettings();
+				defaultStorageSettings.CopyFrom(fixedStorageSettings);
 			}
-			if (this.defaultStorageSettings != null)
+			if (defaultStorageSettings != null)
 			{
-				this.defaultStorageSettings.filter.ResolveReferences();
+				defaultStorageSettings.filter.ResolveReferences();
 			}
 		}
 
-		
 		public static void FinalizeInit()
 		{
 			List<ThingDef> allDefsListForReading = DefDatabase<ThingDef>.AllDefsListForReading;
@@ -156,7 +318,7 @@ namespace RimWorld
 					ThingDef thingDef2 = thingDef.building.smoothedThing;
 					if (thingDef2.building == null)
 					{
-						Log.Error(string.Format("{0} is smoothable to non-building {1}", thingDef, thingDef2), false);
+						Log.Error($"{thingDef} is smoothable to non-building {thingDef2}");
 					}
 					else if (thingDef2.building.unsmoothedThing == null || thingDef2.building.unsmoothedThing == thingDef)
 					{
@@ -164,307 +326,36 @@ namespace RimWorld
 					}
 					else
 					{
-						Log.Error(string.Format("{0} and {1} both smooth to {2}", thingDef, thingDef2.building.unsmoothedThing, thingDef2), false);
+						Log.Error($"{thingDef} and {thingDef2.building.unsmoothedThing} both smooth to {thingDef2}");
 					}
 				}
 			}
 		}
 
-		
 		public IEnumerable<StatDrawEntry> SpecialDisplayStats(ThingDef parentDef, StatRequest req)
 		{
-			if (this.joyKind != null)
+			if (joyKind != null)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine("Stat_RecreationType_Desc".Translate());
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine("Stat_JoyKind_AllTypes".Translate() + ":");
-				foreach (JoyKindDef joyKindDef in DefDatabase<JoyKindDef>.AllDefs)
+				foreach (JoyKindDef allDef in DefDatabase<JoyKindDef>.AllDefs)
 				{
-					stringBuilder.AppendLine("  - " + joyKindDef.LabelCap);
+					stringBuilder.AppendLine("  - " + allDef.LabelCap);
 				}
-				yield return new StatDrawEntry(StatCategoryDefOf.Building, "StatsReport_JoyKind".Translate(), this.joyKind.LabelCap, stringBuilder.ToString(), 4750, this.joyKind.LabelCap, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.Building, "StatsReport_JoyKind".Translate(), joyKind.LabelCap, stringBuilder.ToString(), 4750, joyKind.LabelCap);
 			}
 			if (parentDef.Minifiable)
 			{
-				yield return new StatDrawEntry(StatCategoryDefOf.Building, "StatsReport_WorkToUninstall".Translate(), this.uninstallWork.ToStringWorkAmount(), "Stat_Thing_WorkToUninstall_Desc".Translate(), 1102, null, null, false);
+				yield return new StatDrawEntry(StatCategoryDefOf.Building, "StatsReport_WorkToUninstall".Translate(), uninstallWork.ToStringWorkAmount(), "Stat_Thing_WorkToUninstall_Desc".Translate(), 1102);
 			}
 			if (typeof(Building_TrapDamager).IsAssignableFrom(parentDef.thingClass))
 			{
-				float f = StatDefOf.TrapMeleeDamage.Worker.GetValue(req, true) * 0.015f;
-				yield return new StatDrawEntry(StatCategoryDefOf.Building, "TrapArmorPenetration".Translate(), f.ToStringPercent(), "ArmorPenetrationExplanation".Translate(), 3000, null, null, false);
+				float f = StatDefOf.TrapMeleeDamage.Worker.GetValue(req) * 0.015f;
+				yield return new StatDrawEntry(StatCategoryDefOf.Building, "TrapArmorPenetration".Translate(), f.ToStringPercent(), "ArmorPenetrationExplanation".Translate(), 3000);
 			}
-			yield break;
 		}
-
-		
-		public bool isEdifice = true;
-
-		
-		[NoTranslate]
-		public List<string> buildingTags = new List<string>();
-
-		
-		public bool isInert;
-
-		
-		private bool deconstructible = true;
-
-		
-		public bool alwaysDeconstructible;
-
-		
-		public bool claimable = true;
-
-		
-		public bool isSittable;
-
-		
-		public SoundDef soundAmbient;
-
-		
-		public ConceptDef spawnedConceptLearnOpportunity;
-
-		
-		public ConceptDef boughtConceptLearnOpportunity;
-
-		
-		public bool expandHomeArea = true;
-
-		
-		public Type blueprintClass = typeof(Blueprint_Build);
-
-		
-		public GraphicData blueprintGraphicData;
-
-		
-		public float uninstallWork = 200f;
-
-		
-		public bool forceShowRoomStats;
-
-		
-		public bool wantsHopperAdjacent;
-
-		
-		public bool allowWireConnection = true;
-
-		
-		public bool shipPart;
-
-		
-		public bool canPlaceOverImpassablePlant = true;
-
-		
-		public float heatPerTickWhileWorking;
-
-		
-		public bool canBuildNonEdificesUnder = true;
-
-		
-		public bool canPlaceOverWall;
-
-		
-		public bool allowAutoroof = true;
-
-		
-		public bool preventDeteriorationOnTop;
-
-		
-		public bool preventDeteriorationInside;
-
-		
-		public bool isMealSource;
-
-		
-		public bool isNaturalRock;
-
-		
-		public bool isResourceRock;
-
-		
-		public bool repairable = true;
-
-		
-		public float roofCollapseDamageMultiplier = 1f;
-
-		
-		public bool hasFuelingPort;
-
-		
-		public ThingDef smoothedThing;
-
-		
-		[Unsaved(false)]
-		public ThingDef unsmoothedThing;
-
-		
-		public TerrainDef naturalTerrain;
-
-		
-		public TerrainDef leaveTerrain;
-
-		
-		public float combatPower;
-
-		
-		public int minMechClusterPoints;
-
-		
-		public bool isPlayerEjectable;
-
-		
-		public GraphicData fullGraveGraphicData;
-
-		
-		public float bed_healPerDay;
-
-		
-		public bool bed_defaultMedical;
-
-		
-		public bool bed_showSleeperBody;
-
-		
-		public bool bed_humanlike = true;
-
-		
-		public float bed_maxBodySize = 9999f;
-
-		
-		public bool bed_caravansCanUse;
-
-		
-		public float nutritionCostPerDispense;
-
-		
-		public SoundDef soundDispense;
-
-		
-		public ThingDef turretGunDef;
-
-		
-		public float turretBurstWarmupTime;
-
-		
-		public float turretBurstCooldownTime = -1f;
-
-		
-		public float turretInitialCooldownTime;
-
-		
-		[Unsaved(false)]
-		public Material turretTopMat;
-
-		
-		public float turretTopDrawSize = 2f;
-
-		
-		public Vector2 turretTopOffset;
-
-		
-		public bool ai_combatDangerous;
-
-		
-		public bool ai_chillDestination = true;
-
-		
-		public bool ai_neverTrashThis;
-
-		
-		public SoundDef soundDoorOpenPowered;
-
-		
-		public SoundDef soundDoorClosePowered;
-
-		
-		public SoundDef soundDoorOpenManual;
-
-		
-		public SoundDef soundDoorCloseManual;
-
-		
-		[NoTranslate]
-		public string sowTag;
-
-		
-		public ThingDef defaultPlantToGrow;
-
-		
-		public ThingDef mineableThing;
-
-		
-		public int mineableYield = 1;
-
-		
-		public float mineableNonMinedEfficiency = 0.7f;
-
-		
-		public float mineableDropChance = 1f;
-
-		
-		public bool mineableYieldWasteable = true;
-
-		
-		public float mineableScatterCommonality;
-
-		
-		public IntRange mineableScatterLumpSizeRange = new IntRange(20, 40);
-
-		
-		public StorageSettings fixedStorageSettings;
-
-		
-		public StorageSettings defaultStorageSettings;
-
-		
-		public bool ignoreStoredThingsBeauty;
-
-		
-		public bool isTrap;
-
-		
-		public bool trapDestroyOnSpring;
-
-		
-		public float trapPeacefulWildAnimalsSpringChanceFactor = 1f;
-
-		
-		public DamageArmorCategoryDef trapDamageCategory;
-
-		
-		public GraphicData trapUnarmedGraphicData;
-
-		
-		[Unsaved(false)]
-		public Graphic trapUnarmedGraphic;
-
-		
-		public float unpoweredWorkTableWorkSpeedFactor;
-
-		
-		public IntRange watchBuildingStandDistanceRange = IntRange.one;
-
-		
-		public int watchBuildingStandRectWidth = 3;
-
-		
-		public bool watchBuildingInSameRoom;
-
-		
-		public JoyKindDef joyKind;
-
-		
-		public int haulToContainerDuration;
-
-		
-		public float instrumentRange;
-
-		
-		public int minDistanceToSameTypeOfBuilding;
-
-		
-		public bool artificialForMeditationPurposes = true;
 	}
 }

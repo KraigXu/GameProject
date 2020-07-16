@@ -1,49 +1,41 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_VisitSickPawn : JobDriver
 	{
-		
-		
-		private Pawn Patient
-		{
-			get
-			{
-				return (Pawn)this.job.GetTarget(TargetIndex.A).Thing;
-			}
-		}
+		private const TargetIndex PatientInd = TargetIndex.A;
 
-		
-		
-		private Thing Chair
-		{
-			get
-			{
-				return this.job.GetTarget(TargetIndex.B).Thing;
-			}
-		}
+		private const TargetIndex ChairInd = TargetIndex.B;
 
-		
+		private Pawn Patient => (Pawn)job.GetTarget(TargetIndex.A).Thing;
+
+		private Thing Chair => job.GetTarget(TargetIndex.B).Thing;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.Patient, this.job, 1, -1, null, errorOnFailed) && (this.Chair == null || this.pawn.Reserve(this.Chair, this.job, 1, -1, null, errorOnFailed));
+			if (!pawn.Reserve(Patient, job, 1, -1, null, errorOnFailed))
+			{
+				return false;
+			}
+			if (Chair != null && !pawn.Reserve(Chair, job, 1, -1, null, errorOnFailed))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
-			this.FailOn(() => !this.Patient.InBed() || !this.Patient.Awake());
-			if (this.Chair != null)
+			this.FailOn(() => !Patient.InBed() || !Patient.Awake());
+			if (Chair != null)
 			{
 				this.FailOnDespawnedNullOrForbidden(TargetIndex.B);
 			}
-			if (this.Chair != null)
+			if (Chair != null)
 			{
 				yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.OnCell);
 			}
@@ -51,37 +43,29 @@ namespace RimWorld
 			{
 				yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell);
 			}
-			yield return Toils_Interpersonal.WaitToBeAbleToInteract(this.pawn);
-			yield return new Toil
+			yield return Toils_Interpersonal.WaitToBeAbleToInteract(pawn);
+			Toil toil = new Toil();
+			toil.tickAction = delegate
 			{
-				tickAction = delegate
+				Patient.needs.joy.GainJoy(job.def.joyGainRate * 0.000144f, job.def.joyKind);
+				if (pawn.IsHashIntervalTick(320))
 				{
-					this.Patient.needs.joy.GainJoy(this.job.def.joyGainRate * 0.000144f, this.job.def.joyKind);
-					if (this.pawn.IsHashIntervalTick(320))
-					{
-						InteractionDef intDef = (Rand.Value < 0.8f) ? InteractionDefOf.Chitchat : InteractionDefOf.DeepTalk;
-						this.pawn.interactions.TryInteractWith(this.Patient, intDef);
-					}
-					this.pawn.rotationTracker.FaceCell(this.Patient.Position);
-					this.pawn.GainComfortFromCellIfPossible(false);
-					JoyUtility.JoyTickCheckEnd(this.pawn, JoyTickFullJoyAction.None, 1f, null);
-					if (this.pawn.needs.joy.CurLevelPercentage > 0.9999f && this.Patient.needs.joy.CurLevelPercentage > 0.9999f)
-					{
-						this.pawn.jobs.EndCurrentJob(JobCondition.Succeeded, true, true);
-					}
-				},
-				handlingFacing = true,
-				socialMode = RandomSocialMode.Off,
-				defaultCompleteMode = ToilCompleteMode.Delay,
-				defaultDuration = this.job.def.joyDuration
+					InteractionDef intDef = (Rand.Value < 0.8f) ? InteractionDefOf.Chitchat : InteractionDefOf.DeepTalk;
+					pawn.interactions.TryInteractWith(Patient, intDef);
+				}
+				pawn.rotationTracker.FaceCell(Patient.Position);
+				pawn.GainComfortFromCellIfPossible();
+				JoyUtility.JoyTickCheckEnd(pawn, JoyTickFullJoyAction.None);
+				if (pawn.needs.joy.CurLevelPercentage > 0.9999f && Patient.needs.joy.CurLevelPercentage > 0.9999f)
+				{
+					pawn.jobs.EndCurrentJob(JobCondition.Succeeded);
+				}
 			};
-			yield break;
+			toil.handlingFacing = true;
+			toil.socialMode = RandomSocialMode.Off;
+			toil.defaultCompleteMode = ToilCompleteMode.Delay;
+			toil.defaultDuration = job.def.joyDuration;
+			yield return toil;
 		}
-
-		
-		private const TargetIndex PatientInd = TargetIndex.A;
-
-		
-		private const TargetIndex ChairInd = TargetIndex.B;
 	}
 }

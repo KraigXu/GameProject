@@ -1,40 +1,35 @@
-﻿using System;
 using System.Xml;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TraitEntry
 	{
-		
+		public TraitDef def;
+
+		public int degree;
+
 		public TraitEntry()
 		{
 		}
 
-		
 		public TraitEntry(TraitDef def, int degree)
 		{
 			this.def = def;
 			this.degree = degree;
 		}
 
-		
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
-			this.def = DefDatabase<TraitDef>.GetNamed(xmlRoot.Name, true);
+			def = DefDatabase<TraitDef>.GetNamed(xmlRoot.Name);
 			if (xmlRoot.HasChildNodes)
 			{
-				this.degree = ParseHelper.FromString<int>(xmlRoot.FirstChild.Value);
-				return;
+				degree = ParseHelper.FromString<int>(xmlRoot.FirstChild.Value);
 			}
-			this.degree = 0;
+			else
+			{
+				degree = 0;
+			}
 		}
-
-		
-		public TraitDef def;
-
-		
-		public int degree;
 	}
 }

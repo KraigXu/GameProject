@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public static class DietCategoryUtility
 	{
-		
 		public static string ToStringHuman(this DietCategory diet)
 		{
 			switch (diet)
@@ -27,7 +23,6 @@ namespace Verse
 			}
 		}
 
-		
 		public static string ToStringHumanShort(this DietCategory diet)
 		{
 			switch (diet)

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TargetHighlighter
 	{
-		
+		private static List<Vector3> arrowPositions = new List<Vector3>();
+
+		private static List<Pair<Vector3, float>> circleOverlays = new List<Pair<Vector3, float>>();
+
 		public static void Highlight(GlobalTargetInfo target, bool arrow = true, bool colonistBar = true, bool circleOverlay = false)
 		{
 			if (!target.IsValid)
@@ -22,9 +23,9 @@ namespace RimWorld
 				if (adjustedTarget.IsMapTarget && adjustedTarget.Map != null && adjustedTarget.Map == Find.CurrentMap)
 				{
 					Vector3 centerVector = ((TargetInfo)adjustedTarget).CenterVector3;
-					if (!TargetHighlighter.arrowPositions.Contains(centerVector))
+					if (!arrowPositions.Contains(centerVector))
 					{
-						TargetHighlighter.arrowPositions.Add(centerVector);
+						arrowPositions.Add(centerVector);
 					}
 				}
 			}
@@ -50,53 +51,47 @@ namespace RimWorld
 					}
 				}
 			}
-			if (circleOverlay && target.Thing != null && target.Thing.Spawned && target.Thing.Map == Find.CurrentMap)
+			if (!circleOverlay || target.Thing == null || !target.Thing.Spawned || target.Thing.Map != Find.CurrentMap)
 			{
-				Pawn pawn = target.Thing as Pawn;
-				float num;
-				if (pawn != null)
+				return;
+			}
+			Pawn pawn = target.Thing as Pawn;
+			float num;
+			if (pawn != null)
+			{
+				if (pawn.RaceProps.Humanlike)
 				{
-					if (pawn.RaceProps.Humanlike)
-					{
-						num = 1.6f;
-					}
-					else
-					{
-						num = pawn.ageTracker.CurLifeStage.bodySizeFactor * pawn.ageTracker.CurKindLifeStage.bodyGraphicData.drawSize.y;
-						num = Mathf.Max(num, 1f);
-					}
+					num = 1.6f;
 				}
 				else
 				{
-					num = (float)Mathf.Max(target.Thing.def.size.x, target.Thing.def.size.z);
+					num = pawn.ageTracker.CurLifeStage.bodySizeFactor * pawn.ageTracker.CurKindLifeStage.bodyGraphicData.drawSize.y;
+					num = Mathf.Max(num, 1f);
 				}
-				Pair<Vector3, float> item = new Pair<Vector3, float>(target.Thing.DrawPos, num * 0.5f);
-				if (!TargetHighlighter.circleOverlays.Contains(item))
-				{
-					TargetHighlighter.circleOverlays.Add(item);
-				}
+			}
+			else
+			{
+				num = Mathf.Max(target.Thing.def.size.x, target.Thing.def.size.z);
+			}
+			Pair<Vector3, float> item = new Pair<Vector3, float>(target.Thing.DrawPos, num * 0.5f);
+			if (!circleOverlays.Contains(item))
+			{
+				circleOverlays.Add(item);
 			}
 		}
 
-		
 		public static void TargetHighlighterUpdate()
 		{
-			for (int i = 0; i < TargetHighlighter.arrowPositions.Count; i++)
+			for (int i = 0; i < arrowPositions.Count; i++)
 			{
-				GenDraw.DrawArrowPointingAt(TargetHighlighter.arrowPositions[i], false);
+				GenDraw.DrawArrowPointingAt(arrowPositions[i]);
 			}
-			TargetHighlighter.arrowPositions.Clear();
-			for (int j = 0; j < TargetHighlighter.circleOverlays.Count; j++)
+			arrowPositions.Clear();
+			for (int j = 0; j < circleOverlays.Count; j++)
 			{
-				GenDraw.DrawCircleOutline(TargetHighlighter.circleOverlays[j].First, TargetHighlighter.circleOverlays[j].Second);
+				GenDraw.DrawCircleOutline(circleOverlays[j].First, circleOverlays[j].Second);
 			}
-			TargetHighlighter.circleOverlays.Clear();
+			circleOverlays.Clear();
 		}
-
-		
-		private static List<Vector3> arrowPositions = new List<Vector3>();
-
-		
-		private static List<Pair<Vector3, float>> circleOverlays = new List<Pair<Vector3, float>>();
 	}
 }

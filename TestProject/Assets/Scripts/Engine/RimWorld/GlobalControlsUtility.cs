@@ -1,22 +1,21 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class GlobalControlsUtility
 	{
-		
+		private const int VisibilityControlsPerRow = 5;
+
 		public static void DoPlaySettings(WidgetRow rowVisibility, bool worldView, ref float curBaseY)
 		{
 			float y = curBaseY - TimeControls.TimeButSize.y;
-			rowVisibility.Init((float)UI.screenWidth, y, UIDirection.LeftThenUp, 141f, 4f);
+			rowVisibility.Init(UI.screenWidth, y, UIDirection.LeftThenUp, 141f);
 			Find.PlaySettings.DoPlaySettingsGlobalControls(rowVisibility, worldView);
 			curBaseY = rowVisibility.FinalY;
 		}
 
-		
 		public static void DoTimespeedControls(float leftX, float width, ref float curBaseY)
 		{
 			leftX += Mathf.Max(0f, width - 150f);
@@ -27,7 +26,6 @@ namespace RimWorld
 			curBaseY -= timerRect.height;
 		}
 
-		
 		public static void DoDate(float leftX, float width, ref float curBaseY)
 		{
 			Rect dateRect = new Rect(leftX, curBaseY - DateReadout.Height, width, DateReadout.Height);
@@ -35,7 +33,6 @@ namespace RimWorld
 			curBaseY -= dateRect.height;
 		}
 
-		
 		public static void DoRealtimeClock(float leftX, float width, ref float curBaseY)
 		{
 			Rect rect = new Rect(leftX - 20f, curBaseY - 26f, width + 20f - 7f, 26f);
@@ -44,8 +41,5 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 			curBaseY -= 26f;
 		}
-
-		
-		private const int VisibilityControlsPerRow = 5;
 	}
 }

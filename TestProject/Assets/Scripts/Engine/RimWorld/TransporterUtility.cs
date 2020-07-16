@@ -1,17 +1,14 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class TransporterUtility
 	{
-		
 		public static void GetTransportersInGroup(int transportersGroup, Map map, List<CompTransporter> outTransporters)
 		{
 			outTransporters.Clear();
@@ -30,7 +27,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static Lord FindLord(int transportersGroup, Map map)
 		{
 			List<Lord> lords = map.lordManager.lords;
@@ -45,120 +41,100 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static bool WasLoadingCanceled(Thing transporter)
 		{
 			CompTransporter compTransporter = transporter.TryGetComp<CompTransporter>();
-			return compTransporter != null && !compTransporter.LoadingInProgressOrReadyToLaunch;
+			if (compTransporter != null && !compTransporter.LoadingInProgressOrReadyToLaunch)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static int InitiateLoading(IEnumerable<CompTransporter> transporters)
 		{
 			int nextTransporterGroupID = Find.UniqueIDsManager.GetNextTransporterGroupID();
-			foreach (CompTransporter compTransporter in transporters)
+			foreach (CompTransporter transporter in transporters)
 			{
-				compTransporter.groupID = nextTransporterGroupID;
+				transporter.groupID = nextTransporterGroupID;
 			}
 			return nextTransporterGroupID;
 		}
 
-		
 		public static IEnumerable<Pawn> AllSendablePawns(List<CompTransporter> transporters, Map map)
 		{
 			CompShuttle shuttle = transporters[0].parent.TryGetComp<CompShuttle>();
-			bool allowEvenIfDowned = true;
-			bool allowEvenIfInMentalState = false;
-			bool allowEvenIfPrisonerNotSecure = false;
-			bool allowCapturableDownedPawns = false;
-			int num = (transporters[0].Props.canChangeAssignedThingsAfterStarting && transporters[0].LoadingInProgressOrReadyToLaunch) ? transporters[0].groupID : -1;
-			List<Pawn> pawns = CaravanFormingUtility.AllSendablePawns(map, allowEvenIfDowned, allowEvenIfInMentalState, allowEvenIfPrisonerNotSecure, allowCapturableDownedPawns, shuttle != null, num);
-			for (int i = 0; i < pawns.Count; i = num + 1)
+			int allowLoadAndEnterTransportersLordForGroupID = (transporters[0].Props.canChangeAssignedThingsAfterStarting && transporters[0].LoadingInProgressOrReadyToLaunch) ? transporters[0].groupID : (-1);
+			List<Pawn> pawns = CaravanFormingUtility.AllSendablePawns(map, allowEvenIfDowned: true, allowEvenIfInMentalState: false, allowEvenIfPrisonerNotSecure: false, allowCapturableDownedPawns: false, shuttle != null, allowLoadAndEnterTransportersLordForGroupID);
+			for (int i = 0; i < pawns.Count; i++)
 			{
 				if (shuttle == null || shuttle.IsRequired(pawns[i]) || shuttle.IsAllowed(pawns[i]))
 				{
 					yield return pawns[i];
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public static IEnumerable<Thing> AllSendableItems(List<CompTransporter> transporters, Map map)
 		{
-			List<Thing> items = CaravanFormingUtility.AllReachableColonyItems(map, false, transporters[0].Props.canChangeAssignedThingsAfterStarting && transporters[0].LoadingInProgressOrReadyToLaunch, false);
+			List<Thing> items = CaravanFormingUtility.AllReachableColonyItems(map, allowEvenIfOutsideHomeArea: false, transporters[0].Props.canChangeAssignedThingsAfterStarting && transporters[0].LoadingInProgressOrReadyToLaunch);
 			CompShuttle shuttle = transporters[0].parent.TryGetComp<CompShuttle>();
-			int num;
-			for (int i = 0; i < items.Count; i = num + 1)
+			for (int i = 0; i < items.Count; i++)
 			{
 				if (shuttle == null || shuttle.IsRequired(items[i]) || shuttle.IsAllowed(items[i]))
 				{
 					yield return items[i];
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public static IEnumerable<Thing> ThingsBeingHauledTo(List<CompTransporter> transporters, Map map)
 		{
 			List<Pawn> pawns = map.mapPawns.AllPawnsSpawned;
-			int num;
-			for (int i = 0; i < pawns.Count; i = num + 1)
+			for (int i = 0; i < pawns.Count; i++)
 			{
 				if (pawns[i].CurJobDef == JobDefOf.HaulToTransporter && transporters.Contains(((JobDriver_HaulToTransporter)pawns[i].jobs.curDriver).Transporter) && pawns[i].carryTracker.CarriedThing != null)
 				{
 					yield return pawns[i].carryTracker.CarriedThing;
 				}
-				num = i;
 			}
-			yield break;
 		}
 
-		
 		public static void MakeLordsAsAppropriate(List<Pawn> pawns, List<CompTransporter> transporters, Map map)
 		{
 			int groupID = transporters[0].groupID;
 			Lord lord = null;
-			IEnumerable<Pawn> enumerable = from x in pawns
-			where x.IsColonist && !x.Downed && x.Spawned
-			select x;
-			if (enumerable.Any<Pawn>())
+			IEnumerable<Pawn> enumerable = pawns.Where((Pawn x) => x.IsColonist && !x.Downed && x.Spawned);
+			if (enumerable.Any())
 			{
 				lord = map.lordManager.lords.Find((Lord x) => x.LordJob is LordJob_LoadAndEnterTransporters && ((LordJob_LoadAndEnterTransporters)x.LordJob).transportersGroup == groupID);
 				if (lord == null)
 				{
-					lord = LordMaker.MakeNewLord(Faction.OfPlayer, new LordJob_LoadAndEnterTransporters(groupID), map, null);
+					lord = LordMaker.MakeNewLord(Faction.OfPlayer, new LordJob_LoadAndEnterTransporters(groupID), map);
 				}
-				foreach (Pawn pawn in enumerable)
+				foreach (Pawn item in enumerable)
 				{
-					if (!lord.ownedPawns.Contains(pawn))
+					if (!lord.ownedPawns.Contains(item))
 					{
-						Lord lord2 = pawn.GetLord();
-						if (lord2 != null)
-						{
-							lord2.Notify_PawnLost(pawn, PawnLostCondition.ForcedToJoinOtherLord, null);
-						}
-						lord.AddPawn(pawn);
-						pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+						item.GetLord()?.Notify_PawnLost(item, PawnLostCondition.ForcedToJoinOtherLord);
+						lord.AddPawn(item);
+						item.jobs.EndCurrentJob(JobCondition.InterruptForced);
 					}
 				}
-				for (int i = lord.ownedPawns.Count - 1; i >= 0; i--)
+				for (int num = lord.ownedPawns.Count - 1; num >= 0; num--)
 				{
-					if (!enumerable.Contains(lord.ownedPawns[i]))
+					if (!enumerable.Contains(lord.ownedPawns[num]))
 					{
-						lord.Notify_PawnLost(lord.ownedPawns[i], PawnLostCondition.NoLongerEnteringTransportPods, null);
+						lord.Notify_PawnLost(lord.ownedPawns[num], PawnLostCondition.NoLongerEnteringTransportPods);
 					}
 				}
 			}
-			for (int j = map.lordManager.lords.Count - 1; j >= 0; j--)
+			for (int num2 = map.lordManager.lords.Count - 1; num2 >= 0; num2--)
 			{
-				LordJob_LoadAndEnterTransporters lordJob_LoadAndEnterTransporters = map.lordManager.lords[j].LordJob as LordJob_LoadAndEnterTransporters;
-				if (lordJob_LoadAndEnterTransporters != null && lordJob_LoadAndEnterTransporters.transportersGroup == groupID && map.lordManager.lords[j] != lord)
+				LordJob_LoadAndEnterTransporters lordJob_LoadAndEnterTransporters = map.lordManager.lords[num2].LordJob as LordJob_LoadAndEnterTransporters;
+				if (lordJob_LoadAndEnterTransporters != null && lordJob_LoadAndEnterTransporters.transportersGroup == groupID && map.lordManager.lords[num2] != lord)
 				{
-					map.lordManager.RemoveLord(map.lordManager.lords[j]);
+					map.lordManager.RemoveLord(map.lordManager.lords[num2]);
 				}
 			}
 		}

@@ -1,80 +1,66 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Filth : Thing
 	{
-		
-		
+		public int thickness = 1;
+
+		public List<string> sources;
+
+		private int growTick;
+
+		private int disappearAfterTicks;
+
+		private const int MaxThickness = 5;
+
+		private const int MinAgeToPickUp = 400;
+
+		private const int MaxNumSources = 3;
+
 		public bool CanFilthAttachNow
 		{
 			get
 			{
-				return this.def.filth.canFilthAttach && this.thickness > 1 && Find.TickManager.TicksGame - this.growTick > 400;
+				if (def.filth.canFilthAttach && thickness > 1)
+				{
+					return Find.TickManager.TicksGame - growTick > 400;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public bool CanBeThickened
-		{
-			get
-			{
-				return this.thickness < 5;
-			}
-		}
+		public bool CanBeThickened => thickness < 5;
 
-		
-		
-		public int TicksSinceThickened
-		{
-			get
-			{
-				return Find.TickManager.TicksGame - this.growTick;
-			}
-		}
+		public int TicksSinceThickened => Find.TickManager.TicksGame - growTick;
 
-		
-		
-		public int DisappearAfterTicks
-		{
-			get
-			{
-				return this.disappearAfterTicks;
-			}
-		}
+		public int DisappearAfterTicks => disappearAfterTicks;
 
-		
-		
 		public override string Label
 		{
 			get
 			{
-				if (this.sources.NullOrEmpty<string>())
+				if (sources.NullOrEmpty())
 				{
-					return "FilthLabel".Translate(base.Label, this.thickness.ToString());
+					return "FilthLabel".Translate(base.Label, thickness.ToString());
 				}
-				return "FilthLabelWithSource".Translate(base.Label, this.sources.ToCommaList(true), this.thickness.ToString());
+				return "FilthLabelWithSource".Translate(base.Label, sources.ToCommaList(useAnd: true), thickness.ToString());
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.thickness, "thickness", 1, false);
-			Scribe_Values.Look<int>(ref this.growTick, "growTick", 0, false);
-			Scribe_Values.Look<int>(ref this.disappearAfterTicks, "disappearAfterTicks", 0, false);
-			if (Scribe.mode != LoadSaveMode.Saving || this.sources != null)
+			Scribe_Values.Look(ref thickness, "thickness", 1);
+			Scribe_Values.Look(ref growTick, "growTick", 0);
+			Scribe_Values.Look(ref disappearAfterTicks, "disappearAfterTicks", 0);
+			if (Scribe.mode != LoadSaveMode.Saving || sources != null)
 			{
-				Scribe_Collections.Look<string>(ref this.sources, "sources", LookMode.Value, Array.Empty<object>());
+				Scribe_Collections.Look(ref sources, "sources", LookMode.Value);
 			}
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
@@ -84,16 +70,15 @@ namespace RimWorld
 			}
 			if (!respawningAfterLoad)
 			{
-				this.growTick = Find.TickManager.TicksGame;
-				this.disappearAfterTicks = (int)(this.def.filth.disappearsInDays.RandomInRange * 60000f);
+				growTick = Find.TickManager.TicksGame;
+				disappearAfterTicks = (int)(def.filth.disappearsInDays.RandomInRange * 60000f);
 			}
-			if (!FilthMaker.TerrainAcceptsFilth(base.Map.terrainGrid.TerrainAt(base.Position), this.def, FilthSourceFlags.None))
+			if (!FilthMaker.TerrainAcceptsFilth(base.Map.terrainGrid.TerrainAt(base.Position), def))
 			{
-				this.Destroy(DestroyMode.Vanish);
+				Destroy();
 			}
 		}
 
-		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
@@ -104,67 +89,63 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void AddSource(string newSource)
-		{
-			if (this.sources == null)
-			{
-				this.sources = new List<string>();
-			}
-			for (int i = 0; i < this.sources.Count; i++)
-			{
-				if (this.sources[i] == newSource)
-				{
-					return;
-				}
-			}
-			while (this.sources.Count > 3)
-			{
-				this.sources.RemoveAt(0);
-			}
-			this.sources.Add(newSource);
-		}
-
-		
-		public void AddSources(IEnumerable<string> sources)
 		{
 			if (sources == null)
 			{
-				return;
+				sources = new List<string>();
 			}
-			foreach (string newSource in sources)
+			for (int i = 0; i < sources.Count; i++)
 			{
-				this.AddSource(newSource);
-			}
-		}
-
-		
-		public virtual void ThickenFilth()
-		{
-			this.growTick = Find.TickManager.TicksGame;
-			if (this.thickness < this.def.filth.maxThickness)
-			{
-				this.thickness++;
-				this.UpdateMesh();
-			}
-		}
-
-		
-		public void ThinFilth()
-		{
-			this.thickness--;
-			if (base.Spawned)
-			{
-				if (this.thickness == 0)
+				if (sources[i] == newSource)
 				{
-					this.Destroy(DestroyMode.Vanish);
 					return;
 				}
-				this.UpdateMesh();
+			}
+			while (sources.Count > 3)
+			{
+				sources.RemoveAt(0);
+			}
+			sources.Add(newSource);
+		}
+
+		public void AddSources(IEnumerable<string> sources)
+		{
+			if (sources != null)
+			{
+				foreach (string source in sources)
+				{
+					AddSource(source);
+				}
 			}
 		}
 
-		
+		public virtual void ThickenFilth()
+		{
+			growTick = Find.TickManager.TicksGame;
+			if (thickness < def.filth.maxThickness)
+			{
+				thickness++;
+				UpdateMesh();
+			}
+		}
+
+		public void ThinFilth()
+		{
+			thickness--;
+			if (base.Spawned)
+			{
+				if (thickness == 0)
+				{
+					Destroy();
+				}
+				else
+				{
+					UpdateMesh();
+				}
+			}
+		}
+
 		private void UpdateMesh()
 		{
 			if (base.Spawned)
@@ -173,31 +154,9 @@ namespace RimWorld
 			}
 		}
 
-		
 		public bool CanDropAt(IntVec3 c, Map map, FilthSourceFlags additionalFlags = FilthSourceFlags.None)
 		{
-			return FilthMaker.CanMakeFilth(c, map, this.def, additionalFlags);
+			return FilthMaker.CanMakeFilth(c, map, def, additionalFlags);
 		}
-
-		
-		public int thickness = 1;
-
-		
-		public List<string> sources;
-
-		
-		private int growTick;
-
-		
-		private int disappearAfterTicks;
-
-		
-		private const int MaxThickness = 5;
-
-		
-		private const int MinAgeToPickUp = 400;
-
-		
-		private const int MaxNumSources = 3;
 	}
 }

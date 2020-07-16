@@ -1,169 +1,152 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class TooltipHandler
 	{
-		
+		private static Dictionary<int, ActiveTip> activeTips = new Dictionary<int, ActiveTip>();
+
+		private static int frame = 0;
+
+		private static List<int> dyingTips = new List<int>(32);
+
+		private const float SpaceBetweenTooltips = 2f;
+
+		private static List<ActiveTip> drawingTips = new List<ActiveTip>();
+
+		private static Comparison<ActiveTip> compareTooltipsByPriorityCached = CompareTooltipsByPriority;
+
 		public static void ClearTooltipsFrom(Rect rect)
 		{
-			if (Event.current.type != EventType.Repaint)
+			if (Event.current.type == EventType.Repaint && Mouse.IsOver(rect))
 			{
-				return;
-			}
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.dyingTips.Clear();
-				foreach (KeyValuePair<int, ActiveTip> keyValuePair in TooltipHandler.activeTips)
+				dyingTips.Clear();
+				foreach (KeyValuePair<int, ActiveTip> activeTip in activeTips)
 				{
-					if (keyValuePair.Value.lastTriggerFrame == TooltipHandler.frame)
+					if (activeTip.Value.lastTriggerFrame == frame)
 					{
-						TooltipHandler.dyingTips.Add(keyValuePair.Key);
+						dyingTips.Add(activeTip.Key);
 					}
 				}
-				for (int i = 0; i < TooltipHandler.dyingTips.Count; i++)
+				for (int i = 0; i < dyingTips.Count; i++)
 				{
-					TooltipHandler.activeTips.Remove(TooltipHandler.dyingTips[i]);
+					activeTips.Remove(dyingTips[i]);
 				}
 			}
 		}
 
-		
 		public static void TipRegion(Rect rect, Func<string> textGetter, int uniqueId)
 		{
-			TooltipHandler.TipRegion(rect, new TipSignal(textGetter, uniqueId));
+			TipRegion(rect, new TipSignal(textGetter, uniqueId));
 		}
 
-		
 		public static void TipRegionByKey(Rect rect, string key)
 		{
-			if (!Mouse.IsOver(rect) && !DebugViewSettings.drawTooltipEdges)
+			if (Mouse.IsOver(rect) || DebugViewSettings.drawTooltipEdges)
 			{
-				return;
+				TipRegion(rect, key.Translate());
 			}
-			TooltipHandler.TipRegion(rect, key.Translate());
 		}
 
-		
 		public static void TipRegionByKey(Rect rect, string key, NamedArgument arg1)
 		{
-			if (!Mouse.IsOver(rect) && !DebugViewSettings.drawTooltipEdges)
+			if (Mouse.IsOver(rect) || DebugViewSettings.drawTooltipEdges)
 			{
-				return;
+				TipRegion(rect, key.Translate(arg1));
 			}
-			TooltipHandler.TipRegion(rect, key.Translate(arg1));
 		}
 
-		
 		public static void TipRegionByKey(Rect rect, string key, NamedArgument arg1, NamedArgument arg2)
 		{
-			if (!Mouse.IsOver(rect) && !DebugViewSettings.drawTooltipEdges)
+			if (Mouse.IsOver(rect) || DebugViewSettings.drawTooltipEdges)
 			{
-				return;
+				TipRegion(rect, key.Translate(arg1, arg2));
 			}
-			TooltipHandler.TipRegion(rect, key.Translate(arg1, arg2));
 		}
 
-		
 		public static void TipRegionByKey(Rect rect, string key, NamedArgument arg1, NamedArgument arg2, NamedArgument arg3)
 		{
-			if (!Mouse.IsOver(rect) && !DebugViewSettings.drawTooltipEdges)
+			if (Mouse.IsOver(rect) || DebugViewSettings.drawTooltipEdges)
 			{
-				return;
+				TipRegion(rect, key.Translate(arg1, arg2, arg3));
 			}
-			TooltipHandler.TipRegion(rect, key.Translate(arg1, arg2, arg3));
 		}
 
-		
 		public static void TipRegion(Rect rect, TipSignal tip)
 		{
-			if (Event.current.type != EventType.Repaint)
+			if (Event.current.type == EventType.Repaint && (tip.textGetter != null || !tip.text.NullOrEmpty()) && (Mouse.IsOver(rect) || DebugViewSettings.drawTooltipEdges))
 			{
-				return;
+				if (DebugViewSettings.drawTooltipEdges)
+				{
+					Widgets.DrawBox(rect);
+				}
+				if (!activeTips.ContainsKey(tip.uniqueId))
+				{
+					ActiveTip value = new ActiveTip(tip);
+					activeTips.Add(tip.uniqueId, value);
+					activeTips[tip.uniqueId].firstTriggerTime = Time.realtimeSinceStartup;
+				}
+				activeTips[tip.uniqueId].lastTriggerFrame = frame;
+				activeTips[tip.uniqueId].signal.text = tip.text;
+				activeTips[tip.uniqueId].signal.textGetter = tip.textGetter;
 			}
-			if (tip.textGetter == null && tip.text.NullOrEmpty())
-			{
-				return;
-			}
-			if (!Mouse.IsOver(rect) && !DebugViewSettings.drawTooltipEdges)
-			{
-				return;
-			}
-			if (DebugViewSettings.drawTooltipEdges)
-			{
-				Widgets.DrawBox(rect, 1);
-			}
-			if (!TooltipHandler.activeTips.ContainsKey(tip.uniqueId))
-			{
-				ActiveTip value = new ActiveTip(tip);
-				TooltipHandler.activeTips.Add(tip.uniqueId, value);
-				TooltipHandler.activeTips[tip.uniqueId].firstTriggerTime = (double)Time.realtimeSinceStartup;
-			}
-			TooltipHandler.activeTips[tip.uniqueId].lastTriggerFrame = TooltipHandler.frame;
-			TooltipHandler.activeTips[tip.uniqueId].signal.text = tip.text;
-			TooltipHandler.activeTips[tip.uniqueId].signal.textGetter = tip.textGetter;
 		}
 
-		
 		public static void DoTooltipGUI()
 		{
-			TooltipHandler.DrawActiveTips();
+			DrawActiveTips();
 			if (Event.current.type == EventType.Repaint)
 			{
-				TooltipHandler.CleanActiveTooltips();
-				TooltipHandler.frame++;
+				CleanActiveTooltips();
+				frame++;
 			}
 		}
 
-		
 		private static void DrawActiveTips()
 		{
-			if (TooltipHandler.activeTips.Count == 0)
+			if (activeTips.Count == 0)
 			{
 				return;
 			}
-			TooltipHandler.drawingTips.Clear();
-			foreach (ActiveTip activeTip in TooltipHandler.activeTips.Values)
+			drawingTips.Clear();
+			foreach (ActiveTip value in activeTips.Values)
 			{
-				if ((double)Time.realtimeSinceStartup > activeTip.firstTriggerTime + (double)activeTip.signal.delay)
+				if ((double)Time.realtimeSinceStartup > value.firstTriggerTime + (double)value.signal.delay)
 				{
-					TooltipHandler.drawingTips.Add(activeTip);
+					drawingTips.Add(value);
 				}
 			}
-			if (TooltipHandler.drawingTips.Any<ActiveTip>())
+			if (drawingTips.Any())
 			{
-				TooltipHandler.drawingTips.Sort(TooltipHandler.compareTooltipsByPriorityCached);
-				Vector2 pos = TooltipHandler.CalculateInitialTipPosition(TooltipHandler.drawingTips);
-				for (int i = 0; i < TooltipHandler.drawingTips.Count; i++)
+				drawingTips.Sort(compareTooltipsByPriorityCached);
+				Vector2 pos = CalculateInitialTipPosition(drawingTips);
+				for (int i = 0; i < drawingTips.Count; i++)
 				{
-					pos.y += TooltipHandler.drawingTips[i].DrawTooltip(pos);
+					pos.y += drawingTips[i].DrawTooltip(pos);
 					pos.y += 2f;
 				}
-				TooltipHandler.drawingTips.Clear();
+				drawingTips.Clear();
 			}
 		}
 
-		
 		private static void CleanActiveTooltips()
 		{
-			TooltipHandler.dyingTips.Clear();
-			foreach (KeyValuePair<int, ActiveTip> keyValuePair in TooltipHandler.activeTips)
+			dyingTips.Clear();
+			foreach (KeyValuePair<int, ActiveTip> activeTip in activeTips)
 			{
-				if (keyValuePair.Value.lastTriggerFrame != TooltipHandler.frame)
+				if (activeTip.Value.lastTriggerFrame != frame)
 				{
-					TooltipHandler.dyingTips.Add(keyValuePair.Key);
+					dyingTips.Add(activeTip.Key);
 				}
 			}
-			for (int i = 0; i < TooltipHandler.dyingTips.Count; i++)
+			for (int i = 0; i < dyingTips.Count; i++)
 			{
-				TooltipHandler.activeTips.Remove(TooltipHandler.dyingTips[i]);
+				activeTips.Remove(dyingTips[i]);
 			}
 		}
 
-		
 		private static Vector2 CalculateInitialTipPosition(List<ActiveTip> drawingTips)
 		{
 			float num = 0f;
@@ -181,7 +164,6 @@ namespace Verse
 			return GenUI.GetMouseAttachedWindowPos(num2, num);
 		}
 
-		
 		private static int CompareTooltipsByPriority(ActiveTip A, ActiveTip B)
 		{
 			if (A.signal.priority == B.signal.priority)
@@ -198,23 +180,5 @@ namespace Verse
 			}
 			return 0;
 		}
-
-		
-		private static Dictionary<int, ActiveTip> activeTips = new Dictionary<int, ActiveTip>();
-
-		
-		private static int frame = 0;
-
-		
-		private static List<int> dyingTips = new List<int>(32);
-
-		
-		private const float SpaceBetweenTooltips = 2f;
-
-		
-		private static List<ActiveTip> drawingTips = new List<ActiveTip>();
-
-		
-		private static Comparison<ActiveTip> compareTooltipsByPriorityCached = new Comparison<ActiveTip>(TooltipHandler.CompareTooltipsByPriority);
 	}
 }

@@ -1,17 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PageUtility
 	{
-		
 		public static Page StitchedPages(IEnumerable<Page> pages)
 		{
-			List<Page> list = pages.ToList<Page>();
+			List<Page> list = pages.ToList();
 			if (list.Count == 0)
 			{
 				return null;
@@ -30,7 +27,6 @@ namespace RimWorld
 			return list[0];
 		}
 
-		
 		public static void InitGameStart()
 		{
 			LongEventHandler.QueueLongEvent(delegate
@@ -38,7 +34,7 @@ namespace RimWorld
 				Find.GameInitData.PrepForMapGen();
 				Find.GameInitData.startedFromEntry = true;
 				Find.Scenario.PreMapGenerate();
-			}, "Play", "GeneratingMap", true, null, true);
+			}, "Play", "GeneratingMap", doAsynchronously: true, null);
 		}
 	}
 }

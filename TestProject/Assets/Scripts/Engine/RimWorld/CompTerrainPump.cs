@@ -1,145 +1,107 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class CompTerrainPump : ThingComp
 	{
-		
-		
-		private CompProperties_TerrainPump Props
-		{
-			get
-			{
-				return (CompProperties_TerrainPump)this.props;
-			}
-		}
+		private CompPowerTrader powerComp;
 
-		
-		
-		private float ProgressDays
-		{
-			get
-			{
-				return (float)this.progressTicks / 60000f;
-			}
-		}
+		private int progressTicks;
 
-		
-		
-		private float CurrentRadius
-		{
-			get
-			{
-				return Mathf.Min(this.Props.radius, this.ProgressDays / this.Props.daysToRadius * this.Props.radius);
-			}
-		}
+		private CompProperties_TerrainPump Props => (CompProperties_TerrainPump)props;
 
-		
-		
+		private float ProgressDays => (float)progressTicks / 60000f;
+
+		private float CurrentRadius => Mathf.Min(Props.radius, ProgressDays / Props.daysToRadius * Props.radius);
+
 		private bool Working
 		{
 			get
 			{
-				return this.powerComp == null || this.powerComp.PowerOn;
+				if (powerComp != null)
+				{
+					return powerComp.PowerOn;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		private int TicksUntilRadiusInteger
 		{
 			get
 			{
-				float num = Mathf.Ceil(this.CurrentRadius) - this.CurrentRadius;
+				float num = Mathf.Ceil(CurrentRadius) - CurrentRadius;
 				if (num < 1E-05f)
 				{
 					num = 1f;
 				}
-				float num2 = this.Props.radius / this.Props.daysToRadius;
+				float num2 = Props.radius / Props.daysToRadius;
 				return (int)(num / num2 * 60000f);
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			this.powerComp = this.parent.TryGetComp<CompPowerTrader>();
+			powerComp = parent.TryGetComp<CompPowerTrader>();
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
-			this.progressTicks = 0;
+			progressTicks = 0;
 		}
 
-		
 		public override void CompTickRare()
 		{
-			if (this.Working)
+			if (Working)
 			{
-				this.progressTicks += 250;
-				int num = GenRadial.NumCellsInRadius(this.CurrentRadius);
+				progressTicks += 250;
+				int num = GenRadial.NumCellsInRadius(CurrentRadius);
 				for (int i = 0; i < num; i++)
 				{
-					this.AffectCell(this.parent.Position + GenRadial.RadialPattern[i]);
+					AffectCell(parent.Position + GenRadial.RadialPattern[i]);
 				}
 			}
 		}
 
-		
 		protected abstract void AffectCell(IntVec3 c);
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.progressTicks, "progressTicks", 0, false);
+			Scribe_Values.Look(ref progressTicks, "progressTicks", 0);
 		}
 
-		
 		public override void PostDrawExtraSelectionOverlays()
 		{
-			if (this.CurrentRadius < this.Props.radius - 0.0001f)
+			if (CurrentRadius < Props.radius - 0.0001f)
 			{
-				GenDraw.DrawRadiusRing(this.parent.Position, this.CurrentRadius);
+				GenDraw.DrawRadiusRing(parent.Position, CurrentRadius);
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			string text = "TimePassed".Translate().CapitalizeFirst() + ": " + this.progressTicks.ToStringTicksToPeriod(true, false, true, true) + "\n" + "CurrentRadius".Translate().CapitalizeFirst() + ": " + this.CurrentRadius.ToString("F1");
-			if (this.ProgressDays < this.Props.daysToRadius && this.Working)
+			string text = "TimePassed".Translate().CapitalizeFirst() + ": " + progressTicks.ToStringTicksToPeriod() + "\n" + "CurrentRadius".Translate().CapitalizeFirst() + ": " + CurrentRadius.ToString("F1");
+			if (ProgressDays < Props.daysToRadius && Working)
 			{
-				text += "\n" + "RadiusExpandsIn".Translate().CapitalizeFirst() + ": " + this.TicksUntilRadiusInteger.ToStringTicksToPeriod(true, false, true, true);
+				text += "\n" + "RadiusExpandsIn".Translate().CapitalizeFirst() + ": " + TicksUntilRadiusInteger.ToStringTicksToPeriod();
 			}
 			return text;
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (Prefs.DevMode)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEBUG: Progress 1 day";
+				command_Action.action = delegate
 				{
-					defaultLabel = "DEBUG: Progress 1 day",
-					action = delegate
-					{
-						this.progressTicks += 60000;
-					}
+					progressTicks += 60000;
 				};
+				yield return command_Action;
 			}
-			yield break;
 		}
-
-		
-		private CompPowerTrader powerComp;
-
-		
-		private int progressTicks;
 	}
 }

@@ -1,81 +1,64 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class HediffComp_Disappears : HediffComp
 	{
-		
-		
-		public HediffCompProperties_Disappears Props
-		{
-			get
-			{
-				return (HediffCompProperties_Disappears)this.props;
-			}
-		}
+		public int ticksToDisappear;
 
-		
-		
+		public HediffCompProperties_Disappears Props => (HediffCompProperties_Disappears)props;
+
 		public override bool CompShouldRemove
 		{
 			get
 			{
-				return base.CompShouldRemove || this.ticksToDisappear <= 0;
+				if (!base.CompShouldRemove)
+				{
+					return ticksToDisappear <= 0;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public override string CompLabelInBracketsExtra
 		{
 			get
 			{
-				if (!this.Props.showRemainingTime)
+				if (!Props.showRemainingTime)
 				{
 					return base.CompLabelInBracketsExtra;
 				}
-				return this.ticksToDisappear.TicksToSeconds().ToString("0.0");
+				return ticksToDisappear.TicksToSeconds().ToString("0.0");
 			}
 		}
 
-		
 		public override void CompPostMake()
 		{
 			base.CompPostMake();
-			this.ticksToDisappear = this.Props.disappearsAfterTicks.RandomInRange;
+			ticksToDisappear = Props.disappearsAfterTicks.RandomInRange;
 		}
 
-		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
-			this.ticksToDisappear--;
+			ticksToDisappear--;
 		}
 
-		
 		public override void CompPostMerged(Hediff other)
 		{
 			base.CompPostMerged(other);
 			HediffComp_Disappears hediffComp_Disappears = other.TryGetComp<HediffComp_Disappears>();
-			if (hediffComp_Disappears != null && hediffComp_Disappears.ticksToDisappear > this.ticksToDisappear)
+			if (hediffComp_Disappears != null && hediffComp_Disappears.ticksToDisappear > ticksToDisappear)
 			{
-				this.ticksToDisappear = hediffComp_Disappears.ticksToDisappear;
+				ticksToDisappear = hediffComp_Disappears.ticksToDisappear;
 			}
 		}
 
-		
 		public override void CompExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ticksToDisappear, "ticksToDisappear", 0, false);
+			Scribe_Values.Look(ref ticksToDisappear, "ticksToDisappear", 0);
 		}
 
-		
 		public override string CompDebugString()
 		{
-			return "ticksToDisappear: " + this.ticksToDisappear;
+			return "ticksToDisappear: " + ticksToDisappear;
 		}
-
-		
-		public int ticksToDisappear;
 	}
 }

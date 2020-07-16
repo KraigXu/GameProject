@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRoleWorker_Barracks : RoomRoleWorker
 	{
-		
 		public override float GetScore(Room room)
 		{
 			int num = 0;

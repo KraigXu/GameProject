@@ -1,57 +1,59 @@
-﻿using RimWorld;
 using Verse;
 using Verse.AI;
 
-public class LordToil_Speech : LordToil_Gathering
+namespace RimWorld
 {
-	public Pawn organizer;
-
-	public LordToilData_Speech Data => (LordToilData_Speech)data;
-
-	public LordToil_Speech(IntVec3 spot, GatheringDef gatheringDef, Pawn organizer)
-		: base(spot, gatheringDef)
+	public class LordToil_Speech : LordToil_Gathering
 	{
-		this.organizer = organizer;
-		data = new LordToilData_Speech();
-	}
+		public Pawn organizer;
 
-	public override void Init()
-	{
-		base.Init();
-		Data.spectateRect = CellRect.CenteredOn(spot, 0);
-		Rot4 rotation = spot.GetFirstThing<Building_Throne>(organizer.MapHeld).Rotation;
-		SpectateRectSide asSpectateSide = rotation.Opposite.AsSpectateSide;
-		Data.spectateRectAllowedSides = (SpectateRectSide.All & ~asSpectateSide);
-		Data.spectateRectPreferredSide = rotation.AsSpectateSide;
-	}
+		public LordToilData_Speech Data => (LordToilData_Speech)data;
 
-	public override ThinkTreeDutyHook VoluntaryJoinDutyHookFor(Pawn p)
-	{
-		if (p == organizer)
+		public LordToil_Speech(IntVec3 spot, GatheringDef gatheringDef, Pawn organizer)
+			: base(spot, gatheringDef)
 		{
-			return DutyDefOf.GiveSpeech.hook;
+			this.organizer = organizer;
+			data = new LordToilData_Speech();
 		}
-		return DutyDefOf.Spectate.hook;
-	}
 
-	public override void UpdateAllDuties()
-	{
-		for (int i = 0; i < lord.ownedPawns.Count; i++)
+		public override void Init()
 		{
-			Pawn pawn = lord.ownedPawns[i];
-			if (pawn == organizer)
+			base.Init();
+			Data.spectateRect = CellRect.CenteredOn(spot, 0);
+			Rot4 rotation = spot.GetFirstThing<Building_Throne>(organizer.MapHeld).Rotation;
+			SpectateRectSide asSpectateSide = rotation.Opposite.AsSpectateSide;
+			Data.spectateRectAllowedSides = (SpectateRectSide.All & ~asSpectateSide);
+			Data.spectateRectPreferredSide = rotation.AsSpectateSide;
+		}
+
+		public override ThinkTreeDutyHook VoluntaryJoinDutyHookFor(Pawn p)
+		{
+			if (p == organizer)
 			{
-				Building_Throne firstThing = spot.GetFirstThing<Building_Throne>(base.Map);
-				pawn.mindState.duty = new PawnDuty(DutyDefOf.GiveSpeech, spot, firstThing);
-				pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+				return DutyDefOf.GiveSpeech.hook;
 			}
-			else
+			return DutyDefOf.Spectate.hook;
+		}
+
+		public override void UpdateAllDuties()
+		{
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				PawnDuty pawnDuty = new PawnDuty(DutyDefOf.Spectate);
-				pawnDuty.spectateRect = Data.spectateRect;
-				pawnDuty.spectateRectAllowedSides = Data.spectateRectAllowedSides;
-				pawnDuty.spectateRectPreferredSide = Data.spectateRectPreferredSide;
-				pawn.mindState.duty = pawnDuty;
+				Pawn pawn = lord.ownedPawns[i];
+				if (pawn == organizer)
+				{
+					Building_Throne firstThing = spot.GetFirstThing<Building_Throne>(base.Map);
+					pawn.mindState.duty = new PawnDuty(DutyDefOf.GiveSpeech, spot, firstThing);
+					pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+				}
+				else
+				{
+					PawnDuty pawnDuty = new PawnDuty(DutyDefOf.Spectate);
+					pawnDuty.spectateRect = Data.spectateRect;
+					pawnDuty.spectateRectAllowedSides = Data.spectateRectAllowedSides;
+					pawnDuty.spectateRectPreferredSide = Data.spectateRectPreferredSide;
+					pawn.mindState.duty = pawnDuty;
+				}
 			}
 		}
 	}

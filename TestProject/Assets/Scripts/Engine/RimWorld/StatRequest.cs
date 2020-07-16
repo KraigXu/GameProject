@@ -1,143 +1,63 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public struct StatRequest : IEquatable<StatRequest>
 	{
-		
-		
-		public Thing Thing
-		{
-			get
-			{
-				return this.thingInt;
-			}
-		}
+		private Thing thingInt;
 
-		
-		
-		public Def Def
-		{
-			get
-			{
-				return this.defInt;
-			}
-		}
+		private Def defInt;
 
-		
-		
-		public BuildableDef BuildableDef
-		{
-			get
-			{
-				return (BuildableDef)this.defInt;
-			}
-		}
+		private ThingDef stuffDefInt;
 
-		
-		
-		public AbilityDef AbilityDef
-		{
-			get
-			{
-				return (AbilityDef)this.defInt;
-			}
-		}
+		private QualityCategory qualityCategoryInt;
 
-		
-		
-		public Faction Faction
-		{
-			get
-			{
-				return this.faction;
-			}
-		}
+		private Faction faction;
 
-		
-		
-		public Pawn Pawn
-		{
-			get
-			{
-				return this.pawn;
-			}
-		}
+		private Pawn pawn;
 
-		
-		
-		public bool ForAbility
-		{
-			get
-			{
-				return this.defInt is AbilityDef;
-			}
-		}
+		public Thing Thing => thingInt;
 
-		
-		
+		public Def Def => defInt;
+
+		public BuildableDef BuildableDef => (BuildableDef)defInt;
+
+		public AbilityDef AbilityDef => (AbilityDef)defInt;
+
+		public Faction Faction => faction;
+
+		public Pawn Pawn => pawn;
+
+		public bool ForAbility => defInt is AbilityDef;
+
 		public List<StatModifier> StatBases
 		{
 			get
 			{
-				if (!(this.defInt is BuildableDef))
+				if (!(defInt is BuildableDef))
 				{
-					return this.AbilityDef.statBases;
+					return AbilityDef.statBases;
 				}
-				return this.BuildableDef.statBases;
+				return BuildableDef.statBases;
 			}
 		}
 
-		
-		
-		public ThingDef StuffDef
-		{
-			get
-			{
-				return this.stuffDefInt;
-			}
-		}
+		public ThingDef StuffDef => stuffDefInt;
 
-		
-		
-		public QualityCategory QualityCategory
-		{
-			get
-			{
-				return this.qualityCategoryInt;
-			}
-		}
+		public QualityCategory QualityCategory => qualityCategoryInt;
 
-		
-		
-		public bool HasThing
-		{
-			get
-			{
-				return this.Thing != null;
-			}
-		}
+		public bool HasThing => Thing != null;
 
-		
-		
-		public bool Empty
-		{
-			get
-			{
-				return this.Def == null;
-			}
-		}
+		public bool Empty => Def == null;
 
-		
 		public static StatRequest For(Thing thing)
 		{
 			if (thing == null)
 			{
-				Log.Error("StatRequest for null thing.", false);
-				return StatRequest.ForEmpty();
+				Log.Error("StatRequest for null thing.");
+				return ForEmpty();
 			}
 			StatRequest result = default(StatRequest);
 			result.thingInt = thing;
@@ -147,13 +67,12 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		public static StatRequest For(Thing thing, Pawn pawn)
 		{
 			if (thing == null)
 			{
-				Log.Error("StatRequest for null thing.", false);
-				return StatRequest.ForEmpty();
+				Log.Error("StatRequest for null thing.");
+				return ForEmpty();
 			}
 			StatRequest result = default(StatRequest);
 			result.thingInt = thing;
@@ -164,104 +83,86 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		public static StatRequest For(BuildableDef def, ThingDef stuffDef, QualityCategory quality = QualityCategory.Normal)
 		{
 			if (def == null)
 			{
-				Log.Error("StatRequest for null def.", false);
-				return StatRequest.ForEmpty();
+				Log.Error("StatRequest for null def.");
+				return ForEmpty();
 			}
-			return new StatRequest
-			{
-				thingInt = null,
-				defInt = def,
-				stuffDefInt = stuffDef,
-				qualityCategoryInt = quality
-			};
+			StatRequest result = default(StatRequest);
+			result.thingInt = null;
+			result.defInt = def;
+			result.stuffDefInt = stuffDef;
+			result.qualityCategoryInt = quality;
+			return result;
 		}
 
-		
 		public static StatRequest For(AbilityDef def)
 		{
 			if (def == null)
 			{
-				Log.Error("StatRequest for null def.", false);
-				return StatRequest.ForEmpty();
+				Log.Error("StatRequest for null def.");
+				return ForEmpty();
 			}
-			return new StatRequest
-			{
-				thingInt = null,
-				stuffDefInt = null,
-				defInt = def,
-				qualityCategoryInt = QualityCategory.Normal
-			};
+			StatRequest result = default(StatRequest);
+			result.thingInt = null;
+			result.stuffDefInt = null;
+			result.defInt = def;
+			result.qualityCategoryInt = QualityCategory.Normal;
+			return result;
 		}
 
-		
 		public static StatRequest For(RoyalTitleDef def, Faction faction)
 		{
 			if (def == null)
 			{
-				Log.Error("StatRequest for null def.", false);
-				return StatRequest.ForEmpty();
+				Log.Error("StatRequest for null def.");
+				return ForEmpty();
 			}
-			return new StatRequest
-			{
-				thingInt = null,
-				stuffDefInt = null,
-				defInt = null,
-				faction = faction,
-				qualityCategoryInt = QualityCategory.Normal
-			};
+			StatRequest result = default(StatRequest);
+			result.thingInt = null;
+			result.stuffDefInt = null;
+			result.defInt = null;
+			result.faction = faction;
+			result.qualityCategoryInt = QualityCategory.Normal;
+			return result;
 		}
 
-		
 		public static StatRequest ForEmpty()
 		{
-			return new StatRequest
-			{
-				thingInt = null,
-				defInt = null,
-				stuffDefInt = null,
-				qualityCategoryInt = QualityCategory.Normal
-			};
+			StatRequest result = default(StatRequest);
+			result.thingInt = null;
+			result.defInt = null;
+			result.stuffDefInt = null;
+			result.qualityCategoryInt = QualityCategory.Normal;
+			return result;
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.Thing != null)
+			if (Thing != null)
 			{
-				return "(" + this.Thing + ")";
+				return "(" + Thing + ")";
 			}
-			return string.Concat(new object[]
-			{
-				"(",
-				this.Thing,
-				", ",
-				(this.StuffDef != null) ? this.StuffDef.defName : "null",
-				")"
-			});
+			return "(" + Thing + ", " + ((StuffDef != null) ? StuffDef.defName : "null") + ")";
 		}
 
-		
 		public override int GetHashCode()
 		{
-			int num = 0;
-			num = Gen.HashCombineInt(num, (int)this.defInt.shortHash);
-			if (this.thingInt != null)
+			int seed = 0;
+			seed = Gen.HashCombineInt(seed, defInt.shortHash);
+			if (thingInt != null)
 			{
-				num = Gen.HashCombineInt(num, this.thingInt.thingIDNumber);
+				seed = Gen.HashCombineInt(seed, thingInt.thingIDNumber);
 			}
-			if (this.stuffDefInt != null)
+			if (stuffDefInt != null)
 			{
-				num = Gen.HashCombineInt(num, (int)this.stuffDefInt.shortHash);
+				seed = Gen.HashCombineInt(seed, stuffDefInt.shortHash);
 			}
-			return num;
+			return seed;
 		}
 
-		
 		public override bool Equals(object obj)
 		{
 			if (!(obj is StatRequest))
@@ -269,43 +170,30 @@ namespace RimWorld
 				return false;
 			}
 			StatRequest statRequest = (StatRequest)obj;
-			return statRequest.defInt == this.defInt && statRequest.thingInt == this.thingInt && statRequest.stuffDefInt == this.stuffDefInt;
+			if (statRequest.defInt == defInt && statRequest.thingInt == thingInt)
+			{
+				return statRequest.stuffDefInt == stuffDefInt;
+			}
+			return false;
 		}
 
-		
 		public bool Equals(StatRequest other)
 		{
-			return other.defInt == this.defInt && other.thingInt == this.thingInt && other.stuffDefInt == this.stuffDefInt;
+			if (other.defInt == defInt && other.thingInt == thingInt)
+			{
+				return other.stuffDefInt == stuffDefInt;
+			}
+			return false;
 		}
 
-		
 		public static bool operator ==(StatRequest lhs, StatRequest rhs)
 		{
 			return lhs.Equals(rhs);
 		}
 
-		
 		public static bool operator !=(StatRequest lhs, StatRequest rhs)
 		{
 			return !(lhs == rhs);
 		}
-
-		
-		private Thing thingInt;
-
-		
-		private Def defInt;
-
-		
-		private ThingDef stuffDefInt;
-
-		
-		private QualityCategory qualityCategoryInt;
-
-		
-		private Faction faction;
-
-		
-		private Pawn pawn;
 	}
 }

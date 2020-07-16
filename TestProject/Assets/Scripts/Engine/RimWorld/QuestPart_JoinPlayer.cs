@@ -1,125 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_JoinPlayer : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public string outSignalResult;
+
+		public List<Pawn> pawns = new List<Pawn>();
+
+		public bool joinPlayer;
+
+		public bool makePrisoners;
+
+		public MapParent mapParent;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.mapParent != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.mapParent;
+					yield return questLookTarget;
 				}
-				foreach (Pawn t in PawnsArriveQuestPartUtility.GetQuestLookTargets(this.pawns))
+				if (mapParent != null)
 				{
-					yield return t;
+					yield return mapParent;
 				}
-				IEnumerator<Pawn> enumerator2 = null;
-				yield break;
-				yield break;
+				foreach (Pawn questLookTarget2 in PawnsArriveQuestPartUtility.GetQuestLookTargets(pawns))
+				{
+					yield return questLookTarget2;
+				}
 			}
 		}
 
-		
-		
-		public override bool IncreasesPopulation
-		{
-			get
-			{
-				return PawnsArriveQuestPartUtility.IncreasesPopulation(this.pawns, this.joinPlayer, this.makePrisoners);
-			}
-		}
+		public override bool IncreasesPopulation => PawnsArriveQuestPartUtility.IncreasesPopulation(pawns, joinPlayer, makePrisoners);
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				this.pawns.RemoveAll((Pawn x) => x.Destroyed);
-				if (this.joinPlayer)
+				return;
+			}
+			pawns.RemoveAll((Pawn x) => x.Destroyed);
+			if (joinPlayer)
+			{
+				for (int i = 0; i < pawns.Count; i++)
 				{
-					for (int i = 0; i < this.pawns.Count; i++)
+					if (pawns[i].Faction != Faction.OfPlayer)
 					{
-						if (this.pawns[i].Faction != Faction.OfPlayer)
-						{
-							this.pawns[i].SetFaction(Faction.OfPlayer, null);
-						}
+						pawns[i].SetFaction(Faction.OfPlayer);
 					}
+				}
+			}
+			else
+			{
+				if (!makePrisoners)
+				{
 					return;
 				}
-				if (this.makePrisoners)
+				for (int j = 0; j < pawns.Count; j++)
 				{
-					for (int j = 0; j < this.pawns.Count; j++)
+					if (pawns[j].RaceProps.Humanlike)
 					{
-						if (this.pawns[j].RaceProps.Humanlike)
+						if (!pawns[j].IsPrisonerOfColony)
 						{
-							if (!this.pawns[j].IsPrisonerOfColony)
-							{
-								this.pawns[j].guest.SetGuestStatus(Faction.OfPlayer, true);
-							}
-							HealthUtility.TryAnesthetize(this.pawns[j]);
+							pawns[j].guest.SetGuestStatus(Faction.OfPlayer, prisoner: true);
 						}
+						HealthUtility.TryAnesthetize(pawns[j]);
 					}
 				}
 			}
 		}
 
-		
 		public override bool QuestPartReserves(Pawn p)
 		{
-			return this.pawns.Contains(p);
+			return pawns.Contains(p);
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.pawns.Replace(replace, with);
+			pawns.Replace(replace, with);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<string>(ref this.outSignalResult, "outSignalResult", null, false);
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.joinPlayer, "joinPlayer", false, false);
-			Scribe_Values.Look<bool>(ref this.makePrisoners, "makePrisoners", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref outSignalResult, "outSignalResult");
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Values.Look(ref joinPlayer, "joinPlayer", defaultValue: false);
+			Scribe_Values.Look(ref makePrisoners, "makePrisoners", defaultValue: false);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public string outSignalResult;
-
-		
-		public List<Pawn> pawns = new List<Pawn>();
-
-		
-		public bool joinPlayer;
-
-		
-		public bool makePrisoners;
-
-		
-		public MapParent mapParent;
 	}
 }

@@ -1,32 +1,20 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	[Flags]
 	public enum MapMeshFlag
 	{
-		
-		None = 0,
-		
-		Things = 1,
-		
-		FogOfWar = 2,
-		
-		Buildings = 4,
-		
-		GroundGlow = 8,
-		
-		Terrain = 16,
-		
-		Roofs = 32,
-		
-		Snow = 64,
-		
-		Zone = 128,
-		
-		PowerGrid = 256,
-		
-		BuildingsDamage = 512
+		None = 0x0,
+		Things = 0x1,
+		FogOfWar = 0x2,
+		Buildings = 0x4,
+		GroundGlow = 0x8,
+		Terrain = 0x10,
+		Roofs = 0x20,
+		Snow = 0x40,
+		Zone = 0x80,
+		PowerGrid = 0x100,
+		BuildingsDamage = 0x200
 	}
 }

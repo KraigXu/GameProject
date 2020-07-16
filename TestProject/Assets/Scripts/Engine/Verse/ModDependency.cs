@@ -1,39 +1,23 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ModDependency : ModRequirement
 	{
-		
-		
-		public override string RequirementTypeLabel
-		{
-			get
-			{
-				return "ModDependsOn".Translate("");
-			}
-		}
+		public string downloadUrl;
 
-		
-		
-		public override bool IsSatisfied
-		{
-			get
-			{
-				return ModLister.GetActiveModWithIdentifier(this.packageId) != null;
-			}
-		}
+		public string steamWorkshopUrl;
 
-		
-		
+		public override string RequirementTypeLabel => "ModDependsOn".Translate("");
+
+		public override bool IsSatisfied => ModLister.GetActiveModWithIdentifier(packageId) != null;
+
 		public override Texture2D StatusIcon
 		{
 			get
 			{
-				ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.packageId, true);
+				ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(packageId, ignorePostfix: true);
 				if (modWithIdentifier == null)
 				{
 					return ModRequirement.NotInstalled;
@@ -46,13 +30,11 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override string Tooltip
 		{
 			get
 			{
-				ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.packageId, true);
+				ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(packageId, ignorePostfix: true);
 				if (modWithIdentifier == null)
 				{
 					return base.Tooltip + "\n" + "ContentNotInstalled".Translate() + "\n\n" + "ModClickToGoToWebsite".Translate();
@@ -65,26 +47,16 @@ namespace Verse
 			}
 		}
 
-		
-		
-		public string Url
-		{
-			get
-			{
-				return this.steamWorkshopUrl ?? this.downloadUrl;
-			}
-		}
+		public string Url => steamWorkshopUrl ?? downloadUrl;
 
-		
 		public override void OnClicked(Page_ModsConfig window)
 		{
-			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.packageId, true);
+			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(packageId, ignorePostfix: true);
 			if (modWithIdentifier == null)
 			{
-				if (!this.Url.NullOrEmpty())
+				if (!Url.NullOrEmpty())
 				{
-					SteamUtility.OpenUrl(this.Url);
-					return;
+					SteamUtility.OpenUrl(Url);
 				}
 			}
 			else if (!modWithIdentifier.Active)
@@ -92,11 +64,5 @@ namespace Verse
 				window.SelectMod(modWithIdentifier);
 			}
 		}
-
-		
-		public string downloadUrl;
-
-		
-		public string steamWorkshopUrl;
 	}
 }

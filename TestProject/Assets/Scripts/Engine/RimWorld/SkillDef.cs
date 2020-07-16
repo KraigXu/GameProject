@@ -1,35 +1,44 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SkillDef : Def
 	{
-		
+		[MustTranslate]
+		public string skillLabel;
+
+		public bool usuallyDefinedInBackstories = true;
+
+		public bool pawnCreatorSummaryVisible;
+
+		public WorkTags disablingWorkTags;
+
+		public float listOrder;
+
+		public bool neverDisabledBasedOnWorkTypes;
+
 		public override void PostLoad()
 		{
-			if (this.label == null)
+			if (label == null)
 			{
-				this.label = this.skillLabel;
+				label = skillLabel;
 			}
 		}
 
-		
 		public bool IsDisabled(WorkTags combinedDisabledWorkTags, IEnumerable<WorkTypeDef> disabledWorkTypes)
 		{
-			if ((combinedDisabledWorkTags & this.disablingWorkTags) != WorkTags.None)
+			if ((combinedDisabledWorkTags & disablingWorkTags) != 0)
 			{
 				return true;
 			}
-			if (this.neverDisabledBasedOnWorkTypes)
+			if (neverDisabledBasedOnWorkTypes)
 			{
 				return false;
 			}
 			List<WorkTypeDef> allDefsListForReading = DefDatabase<WorkTypeDef>.AllDefsListForReading;
-			bool result = false;
+			bool flag = false;
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				WorkTypeDef workTypeDef = allDefsListForReading[i];
@@ -41,30 +50,15 @@ namespace RimWorld
 						{
 							return false;
 						}
-						result = true;
+						flag = true;
 					}
 				}
 			}
-			return result;
+			if (!flag)
+			{
+				return false;
+			}
+			return true;
 		}
-
-		
-		[MustTranslate]
-		public string skillLabel;
-
-		
-		public bool usuallyDefinedInBackstories = true;
-
-		
-		public bool pawnCreatorSummaryVisible;
-
-		
-		public WorkTags disablingWorkTags;
-
-		
-		public float listOrder;
-
-		
-		public bool neverDisabledBasedOnWorkTypes;
 	}
 }

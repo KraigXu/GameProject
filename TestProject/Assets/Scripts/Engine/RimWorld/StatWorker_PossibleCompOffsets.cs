@@ -1,21 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatWorker_PossibleCompOffsets : StatWorker
 	{
-		
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			float num = base.GetValueUnfinalized(req, applyPostProcess);
 			if (req.HasThing)
 			{
 				CompStatOffsetBase compStatOffsetBase = req.Thing.TryGetComp<CompStatOffsetBase>();
-				if (compStatOffsetBase != null && compStatOffsetBase.Props.statDef == this.stat)
+				if (compStatOffsetBase != null && compStatOffsetBase.Props.statDef == stat)
 				{
 					num += compStatOffsetBase.GetStatOffset(req.Pawn);
 				}
@@ -23,7 +20,6 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			string explanationUnfinalized = base.GetExplanationUnfinalized(req, numberSense);
@@ -35,12 +31,12 @@ namespace RimWorld
 				CompStatOffsetBase compStatOffsetBase = thing.TryGetComp<CompStatOffsetBase>();
 				List<string> list = new List<string>();
 				List<string> list2 = new List<string>();
-				if (compStatOffsetBase != null && compStatOffsetBase.Props.statDef == this.stat)
+				if (compStatOffsetBase != null && compStatOffsetBase.Props.statDef == stat)
 				{
 					for (int i = 0; i < compStatOffsetBase.Props.offsets.Count; i++)
 					{
 						FocusStrengthOffset focusStrengthOffset = compStatOffsetBase.Props.offsets[i];
-						if (focusStrengthOffset.CanApply(thing, null))
+						if (focusStrengthOffset.CanApply(thing))
 						{
 							list.Add(focusStrengthOffset.GetExplanation(thing));
 						}
@@ -51,7 +47,7 @@ namespace RimWorld
 					}
 					if (list.Count > 0)
 					{
-						stringBuilder.AppendLine(list.ToLineList(null));
+						stringBuilder.AppendLine(list.ToLineList());
 					}
 					if (list2.Count > 0)
 					{
@@ -67,17 +63,16 @@ namespace RimWorld
 			else if ((thingDef = (req.Def as ThingDef)) != null)
 			{
 				CompProperties_MeditationFocus compProperties = thingDef.GetCompProperties<CompProperties_MeditationFocus>();
-				if (compProperties != null && compProperties.statDef == this.stat)
+				if (compProperties != null && compProperties.statDef == stat)
 				{
 					stringBuilder.AppendLine();
 					stringBuilder.AppendLine("StatReport_PossibleOffsets".Translate() + ":");
-					stringBuilder.AppendLine(compProperties.GetExplanationAbstract(thingDef).ToLineList("  - ", false));
+					stringBuilder.AppendLine(compProperties.GetExplanationAbstract(thingDef).ToLineList("  - "));
 				}
 			}
 			return explanationUnfinalized + stringBuilder;
 		}
 
-		
 		public override string GetStatDrawEntryLabel(StatDef stat, float value, ToStringNumberSense numberSense, StatRequest optionalReq, bool finalized = true)
 		{
 			float num = 0f;
@@ -85,20 +80,20 @@ namespace RimWorld
 			ThingDef thingDef;
 			if (optionalReq.Thing != null)
 			{
-				num2 = optionalReq.Thing.def.GetStatValueAbstract(stat, null);
+				num2 = optionalReq.Thing.def.GetStatValueAbstract(stat);
 				CompStatOffsetBase compStatOffsetBase = optionalReq.Thing.TryGetComp<CompStatOffsetBase>();
 				if (compStatOffsetBase != null && compStatOffsetBase.Props.statDef == stat)
 				{
-					num = compStatOffsetBase.Props.GetMaxOffset(false);
+					num = compStatOffsetBase.Props.GetMaxOffset();
 				}
 			}
 			else if ((thingDef = (optionalReq.Def as ThingDef)) != null)
 			{
-				num2 = thingDef.GetStatValueAbstract(stat, null);
+				num2 = thingDef.GetStatValueAbstract(stat);
 				CompProperties_MeditationFocus compProperties = thingDef.GetCompProperties<CompProperties_MeditationFocus>();
 				if (compProperties != null && compProperties.statDef == stat)
 				{
-					num = compProperties.GetMaxOffset(true);
+					num = compProperties.GetMaxOffset(forAbstract: true);
 				}
 			}
 			if (num != 0f)

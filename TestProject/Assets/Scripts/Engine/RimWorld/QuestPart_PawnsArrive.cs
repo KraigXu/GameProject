@@ -1,181 +1,155 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_PawnsArrive : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public MapParent mapParent;
+
+		public List<Pawn> pawns = new List<Pawn>();
+
+		public PawnsArrivalModeDef arrivalMode;
+
+		public IntVec3 spawnNear = IntVec3.Invalid;
+
+		public bool joinPlayer;
+
+		public string customLetterText;
+
+		public string customLetterLabel;
+
+		public LetterDef customLetterDef;
+
+		public bool sendStandardLetter = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-	
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.mapParent != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.mapParent;
+					yield return questLookTarget;
 				}
-				foreach (Pawn t in PawnsArriveQuestPartUtility.GetQuestLookTargets(this.pawns))
+				if (mapParent != null)
 				{
-					yield return t;
+					yield return mapParent;
 				}
-				IEnumerator<Pawn> enumerator2 = null;
-				yield break;
-				yield break;
+				foreach (Pawn questLookTarget2 in PawnsArriveQuestPartUtility.GetQuestLookTargets(pawns))
+				{
+					yield return questLookTarget2;
+				}
 			}
 		}
 
-		
-		
-		public override bool IncreasesPopulation
-		{
-			get
-			{
-				return PawnsArriveQuestPartUtility.IncreasesPopulation(this.pawns, this.joinPlayer, false);
-			}
-		}
+		public override bool IncreasesPopulation => PawnsArriveQuestPartUtility.IncreasesPopulation(pawns, joinPlayer, makePrisoners: false);
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				this.pawns.RemoveAll((Pawn x) => x.Destroyed);
-				if (this.mapParent != null && this.mapParent.HasMap && this.pawns.Any<Pawn>())
+				return;
+			}
+			pawns.RemoveAll((Pawn x) => x.Destroyed);
+			if (mapParent == null || !mapParent.HasMap || !pawns.Any())
+			{
+				return;
+			}
+			for (int i = 0; i < pawns.Count; i++)
+			{
+				if (joinPlayer && pawns[i].Faction != Faction.OfPlayer)
 				{
-					for (int i = 0; i < this.pawns.Count; i++)
-					{
-						if (this.joinPlayer && this.pawns[i].Faction != Faction.OfPlayer)
-						{
-							this.pawns[i].SetFaction(Faction.OfPlayer, null);
-						}
-					}
-					IncidentParms incidentParms = new IncidentParms();
-					incidentParms.target = this.mapParent.Map;
-					incidentParms.spawnCenter = this.spawnNear;
-					PawnsArrivalModeDef pawnsArrivalModeDef = this.arrivalMode ?? PawnsArrivalModeDefOf.EdgeWalkIn;
-					pawnsArrivalModeDef.Worker.TryResolveRaidSpawnCenter(incidentParms);
-					pawnsArrivalModeDef.Worker.Arrive(this.pawns, incidentParms);
-					if (this.sendStandardLetter)
-					{
-						TaggedString taggedString;
-						TaggedString taggedString2;
-						if (this.joinPlayer && this.pawns.Count == 1 && this.pawns[0].RaceProps.Humanlike)
-						{
-							taggedString = "LetterRefugeeJoins".Translate(this.pawns[0].Named("PAWN"));
-							taggedString2 = "LetterLabelRefugeeJoins".Translate(this.pawns[0].Named("PAWN"));
-							PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref taggedString, ref taggedString2, this.pawns[0]);
-						}
-						else
-						{
-							if (this.joinPlayer)
-							{
-								taggedString = "LetterPawnsArriveAndJoin".Translate(GenLabel.ThingsLabel(this.pawns.Cast<Thing>(), "  - "));
-								taggedString2 = "LetterLabelPawnsArriveAndJoin".Translate();
-							}
-							else
-							{
-								taggedString = "LetterPawnsArrive".Translate(GenLabel.ThingsLabel(this.pawns.Cast<Thing>(), "  - "));
-								taggedString2 = "LetterLabelPawnsArrive".Translate();
-							}
-							PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(this.pawns, ref taggedString2, ref taggedString, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), true, true);
-						}
-						taggedString2 = (this.customLetterLabel.NullOrEmpty() ? taggedString2 : this.customLetterLabel.Formatted(taggedString2.Named("BASELABEL")));
-						taggedString = (this.customLetterText.NullOrEmpty() ? taggedString : this.customLetterText.Formatted(taggedString.Named("BASETEXT")));
-						Find.LetterStack.ReceiveLetter(taggedString2, taggedString, this.customLetterDef ?? LetterDefOf.PositiveEvent, this.pawns[0], null, this.quest, null, null);
-					}
+					pawns[i].SetFaction(Faction.OfPlayer);
 				}
 			}
+			IncidentParms incidentParms = new IncidentParms();
+			incidentParms.target = mapParent.Map;
+			incidentParms.spawnCenter = spawnNear;
+			PawnsArrivalModeDef obj = arrivalMode ?? PawnsArrivalModeDefOf.EdgeWalkIn;
+			obj.Worker.TryResolveRaidSpawnCenter(incidentParms);
+			obj.Worker.Arrive(pawns, incidentParms);
+			if (!sendStandardLetter)
+			{
+				return;
+			}
+			TaggedString title;
+			TaggedString text;
+			if (joinPlayer && pawns.Count == 1 && pawns[0].RaceProps.Humanlike)
+			{
+				text = "LetterRefugeeJoins".Translate(pawns[0].Named("PAWN"));
+				title = "LetterLabelRefugeeJoins".Translate(pawns[0].Named("PAWN"));
+				PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref text, ref title, pawns[0]);
+			}
+			else
+			{
+				if (joinPlayer)
+				{
+					text = "LetterPawnsArriveAndJoin".Translate(GenLabel.ThingsLabel(pawns.Cast<Thing>()));
+					title = "LetterLabelPawnsArriveAndJoin".Translate();
+				}
+				else
+				{
+					text = "LetterPawnsArrive".Translate(GenLabel.ThingsLabel(pawns.Cast<Thing>()));
+					title = "LetterLabelPawnsArrive".Translate();
+				}
+				PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(pawns, ref title, ref text, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), informEvenIfSeenBefore: true);
+			}
+			title = (customLetterLabel.NullOrEmpty() ? title : customLetterLabel.Formatted(title.Named("BASELABEL")));
+			text = (customLetterText.NullOrEmpty() ? text : customLetterText.Formatted(text.Named("BASETEXT")));
+			Find.LetterStack.ReceiveLetter(title, text, customLetterDef ?? LetterDefOf.PositiveEvent, pawns[0], null, quest);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Defs.Look<PawnsArrivalModeDef>(ref this.arrivalMode, "arrivalMode");
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Values.Look<IntVec3>(ref this.spawnNear, "spawnNear", default(IntVec3), false);
-			Scribe_Values.Look<bool>(ref this.joinPlayer, "joinPlayer", false, false);
-			Scribe_Values.Look<string>(ref this.customLetterLabel, "customLetterLabel", null, false);
-			Scribe_Values.Look<string>(ref this.customLetterText, "customLetterText", null, false);
-			Scribe_Defs.Look<LetterDef>(ref this.customLetterDef, "customLetterDef");
-			Scribe_Values.Look<bool>(ref this.sendStandardLetter, "sendStandardLetter", true, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Defs.Look(ref arrivalMode, "arrivalMode");
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Values.Look(ref spawnNear, "spawnNear");
+			Scribe_Values.Look(ref joinPlayer, "joinPlayer", defaultValue: false);
+			Scribe_Values.Look(ref customLetterLabel, "customLetterLabel");
+			Scribe_Values.Look(ref customLetterText, "customLetterText");
+			Scribe_Defs.Look(ref customLetterDef, "customLetterDef");
+			Scribe_Values.Look(ref sendStandardLetter, "sendStandardLetter", defaultValue: true);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.SpaceRefugee, null, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null));
+				Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.SpaceRefugee));
 				pawn.relations.everSeenByPlayer = true;
 				if (!pawn.IsWorldPawn())
 				{
-					Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Decide);
+					Find.WorldPawns.PassToWorld(pawn);
 				}
-				this.pawns.Add(pawn);
-				this.arrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn;
-				this.mapParent = Find.RandomPlayerHomeMap.Parent;
-				this.joinPlayer = true;
+				pawns.Add(pawn);
+				arrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn;
+				mapParent = Find.RandomPlayerHomeMap.Parent;
+				joinPlayer = true;
 			}
 		}
 
-		
 		public override bool QuestPartReserves(Pawn p)
 		{
-			return this.pawns.Contains(p);
+			return pawns.Contains(p);
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.pawns.Replace(replace, with);
+			pawns.Replace(replace, with);
 		}
-
-		
-		public string inSignal;
-
-		
-		public MapParent mapParent;
-
-		
-		public List<Pawn> pawns = new List<Pawn>();
-
-		
-		public PawnsArrivalModeDef arrivalMode;
-
-		
-		public IntVec3 spawnNear = IntVec3.Invalid;
-
-		
-		public bool joinPlayer;
-
-		
-		public string customLetterText;
-
-		
-		public string customLetterLabel;
-
-		
-		public LetterDef customLetterDef;
-
-		
-		public bool sendStandardLetter = true;
 	}
 }

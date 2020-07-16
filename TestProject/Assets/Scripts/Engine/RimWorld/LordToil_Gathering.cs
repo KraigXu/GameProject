@@ -1,39 +1,32 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public abstract class LordToil_Gathering : LordToil
 	{
-		
+		protected IntVec3 spot;
+
+		protected GatheringDef gatheringDef;
+
 		public LordToil_Gathering(IntVec3 spot, GatheringDef gatheringDef)
 		{
 			this.spot = spot;
 			this.gatheringDef = gatheringDef;
 		}
 
-		
 		public override ThinkTreeDutyHook VoluntaryJoinDutyHookFor(Pawn p)
 		{
-			return this.gatheringDef.duty.hook;
+			return gatheringDef.duty.hook;
 		}
 
-		
 		public override void UpdateAllDuties()
 		{
-			for (int i = 0; i < this.lord.ownedPawns.Count; i++)
+			for (int i = 0; i < lord.ownedPawns.Count; i++)
 			{
-				this.lord.ownedPawns[i].mindState.duty = new PawnDuty(this.gatheringDef.duty, this.spot, -1f);
+				lord.ownedPawns[i].mindState.duty = new PawnDuty(gatheringDef.duty, spot);
 			}
 		}
-
-		
-		protected IntVec3 spot;
-
-		
-		protected GatheringDef gatheringDef;
 	}
 }

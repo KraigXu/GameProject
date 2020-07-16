@@ -1,33 +1,35 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class InspectGizmoGrid
 	{
-		
+		private static List<object> objList = new List<object>();
+
+		private static List<Gizmo> gizmoList = new List<Gizmo>();
+
 		public static void DrawInspectGizmoGridFor(IEnumerable<object> selectedObjects, out Gizmo mouseoverGizmo)
 		{
 			mouseoverGizmo = null;
 			try
 			{
-				InspectGizmoGrid.objList.Clear();
-				InspectGizmoGrid.objList.AddRange(selectedObjects);
-				InspectGizmoGrid.gizmoList.Clear();
-				for (int i = 0; i < InspectGizmoGrid.objList.Count; i++)
+				objList.Clear();
+				objList.AddRange(selectedObjects);
+				gizmoList.Clear();
+				for (int i = 0; i < objList.Count; i++)
 				{
-					ISelectable selectable = InspectGizmoGrid.objList[i] as ISelectable;
+					ISelectable selectable = objList[i] as ISelectable;
 					if (selectable != null)
 					{
-						InspectGizmoGrid.gizmoList.AddRange(selectable.GetGizmos());
+						gizmoList.AddRange(selectable.GetGizmos());
 					}
 				}
-				for (int j = 0; j < InspectGizmoGrid.objList.Count; j++)
+				for (int j = 0; j < objList.Count; j++)
 				{
-					Thing t = InspectGizmoGrid.objList[j] as Thing;
+					Thing t = objList[j] as Thing;
 					if (t != null)
 					{
 						List<Designator> allDesignators = Find.ReverseDesignatorDatabase.AllDesignators;
@@ -38,43 +40,34 @@ namespace RimWorld
 							{
 								Command_Action command_Action = new Command_Action();
 								command_Action.defaultLabel = des.LabelCapReverseDesignating(t);
-								float iconAngle;
-								Vector2 iconOffset;
-								command_Action.icon = des.IconReverseDesignating(t, out iconAngle, out iconOffset);
-								command_Action.iconAngle = iconAngle;
-								command_Action.iconOffset = iconOffset;
+								command_Action.icon = des.IconReverseDesignating(t, out float angle, out Vector2 offset);
+								command_Action.iconAngle = angle;
+								command_Action.iconOffset = offset;
 								command_Action.defaultDesc = des.DescReverseDesignating(t);
-								command_Action.order = ((des is Designator_Uninstall) ? -11f : -20f);
+								command_Action.order = ((des is Designator_Uninstall) ? (-11f) : (-20f));
 								command_Action.action = delegate
 								{
-									if (!TutorSystem.AllowAction(des.TutorTagDesignate))
+									if (TutorSystem.AllowAction(des.TutorTagDesignate))
 									{
-										return;
+										des.DesignateThing(t);
+										des.Finalize(somethingSucceeded: true);
 									}
-									des.DesignateThing(t);
-									des.Finalize(true);
 								};
 								command_Action.hotKey = des.hotKey;
 								command_Action.groupKey = des.groupKey;
-								InspectGizmoGrid.gizmoList.Add(command_Action);
+								gizmoList.Add(command_Action);
 							}
 						}
 					}
 				}
-				InspectGizmoGrid.objList.Clear();
-				GizmoGridDrawer.DrawGizmoGrid(InspectGizmoGrid.gizmoList, InspectPaneUtility.PaneWidthFor(Find.WindowStack.WindowOfType<IInspectPane>()) + GizmoGridDrawer.GizmoSpacing.y, out mouseoverGizmo);
-				InspectGizmoGrid.gizmoList.Clear();
+				objList.Clear();
+				GizmoGridDrawer.DrawGizmoGrid(gizmoList, InspectPaneUtility.PaneWidthFor(Find.WindowStack.WindowOfType<IInspectPane>()) + GizmoGridDrawer.GizmoSpacing.y, out mouseoverGizmo);
+				gizmoList.Clear();
 			}
 			catch (Exception ex)
 			{
-				Log.ErrorOnce(ex.ToString(), 3427734, false);
+				Log.ErrorOnce(ex.ToString(), 3427734);
 			}
 		}
-
-		
-		private static List<object> objList = new List<object>();
-
-		
-		private static List<Gizmo> gizmoList = new List<Gizmo>();
 	}
 }

@@ -1,30 +1,24 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_PlantGrowthNutritionFactor : StatPart
 	{
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
-			float num;
-			if (this.TryGetFactor(req, out num))
+			if (TryGetFactor(req, out float factor))
 			{
-				val *= num;
+				val *= factor;
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
-			float f;
-			if (this.TryGetFactor(req, out f))
+			if (TryGetFactor(req, out float factor))
 			{
 				Plant plant = (Plant)req.Thing;
-				TaggedString taggedString = "StatsReport_PlantGrowth".Translate(plant.Growth.ToStringPercent()) + ": x" + f.ToStringPercent();
+				TaggedString taggedString = "StatsReport_PlantGrowth".Translate(plant.Growth.ToStringPercent()) + ": x" + factor.ToStringPercent();
 				if (!plant.def.plant.Sowable)
 				{
 					taggedString += " (" + "StatsReport_PlantGrowth_Wild".Translate() + ")";
@@ -34,7 +28,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		private bool TryGetFactor(StatRequest req, out float factor)
 		{
 			if (!req.HasThing)

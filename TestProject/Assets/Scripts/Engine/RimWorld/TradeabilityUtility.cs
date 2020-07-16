@@ -1,20 +1,23 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public static class TradeabilityUtility
 	{
-		
 		public static bool PlayerCanSell(this Tradeability tradeability)
 		{
-			return tradeability == Tradeability.All || tradeability == Tradeability.Sellable;
+			if (tradeability != Tradeability.All)
+			{
+				return tradeability == Tradeability.Sellable;
+			}
+			return true;
 		}
 
-		
 		public static bool TraderCanSell(this Tradeability tradeability)
 		{
-			return tradeability == Tradeability.All || tradeability == Tradeability.Buyable;
+			if (tradeability != Tradeability.All)
+			{
+				return tradeability == Tradeability.Buyable;
+			}
+			return true;
 		}
 	}
 }

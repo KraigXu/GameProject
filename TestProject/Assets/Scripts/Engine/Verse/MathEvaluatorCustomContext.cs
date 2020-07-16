@@ -1,45 +1,27 @@
-﻿using System;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
 namespace Verse
 {
-	
 	public class MathEvaluatorCustomContext : XsltContext
 	{
-		
-		
-		public override bool Whitespace
-		{
-			get
-			{
-				return true;
-			}
-		}
+		private XsltArgumentList argList;
 
-		
-		
-		public XsltArgumentList ArgList
-		{
-			get
-			{
-				return this.argList;
-			}
-		}
+		public override bool Whitespace => true;
 
-		
+		public XsltArgumentList ArgList => argList;
+
 		public MathEvaluatorCustomContext()
 		{
 		}
 
-		
-		public MathEvaluatorCustomContext(NameTable nt, XsltArgumentList args) : base(nt)
+		public MathEvaluatorCustomContext(NameTable nt, XsltArgumentList args)
+			: base(nt)
 		{
-			this.argList = args;
+			argList = args;
 		}
 
-		
 		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
 		{
 			MathEvaluatorCustomFunctions.FunctionType[] functionTypes = MathEvaluatorCustomFunctions.FunctionTypes;
@@ -53,29 +35,23 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override IXsltContextVariable ResolveVariable(string prefix, string name)
 		{
-			if (this.ArgList.GetParam(name, prefix) != null)
+			if (ArgList.GetParam(name, prefix) != null)
 			{
 				return new MathEvaluatorCustomVariable(prefix, name);
 			}
 			return null;
 		}
 
-		
 		public override bool PreserveWhitespace(XPathNavigator node)
 		{
 			return false;
 		}
 
-		
 		public override int CompareDocument(string baseUri, string nextbaseUri)
 		{
 			return 0;
 		}
-
-		
-		private XsltArgumentList argList;
 	}
 }

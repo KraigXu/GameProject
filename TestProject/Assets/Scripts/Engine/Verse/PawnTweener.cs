@@ -1,127 +1,99 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class PawnTweener
 	{
-		
-		
-		public Vector3 TweenedPos
-		{
-			get
-			{
-				return this.tweenedPos;
-			}
-		}
+		private Pawn pawn;
 
-		
-		
-		public Vector3 LastTickTweenedVelocity
-		{
-			get
-			{
-				return this.TweenedPos - this.lastTickSpringPos;
-			}
-		}
+		private Vector3 tweenedPos = new Vector3(0f, 0f, 0f);
 
-		
+		private int lastDrawFrame = -1;
+
+		private Vector3 lastTickSpringPos;
+
+		private const float SpringTightness = 0.09f;
+
+		public Vector3 TweenedPos => tweenedPos;
+
+		public Vector3 LastTickTweenedVelocity => TweenedPos - lastTickSpringPos;
+
 		public PawnTweener(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void PreDrawPosCalculation()
 		{
-			if (this.lastDrawFrame == RealTime.frameCount)
+			if (lastDrawFrame == RealTime.frameCount)
 			{
 				return;
 			}
-			if (this.lastDrawFrame < RealTime.frameCount - 1)
+			if (lastDrawFrame < RealTime.frameCount - 1)
 			{
-				this.ResetTweenedPosToRoot();
+				ResetTweenedPosToRoot();
 			}
 			else
 			{
-				this.lastTickSpringPos = this.tweenedPos;
+				lastTickSpringPos = tweenedPos;
 				float tickRateMultiplier = Find.TickManager.TickRateMultiplier;
 				if (tickRateMultiplier < 5f)
 				{
-					Vector3 a = this.TweenedPosRoot() - this.tweenedPos;
+					Vector3 a = TweenedPosRoot() - tweenedPos;
 					float num = 0.09f * (RealTime.deltaTime * 60f * tickRateMultiplier);
 					if (RealTime.deltaTime > 0.05f)
 					{
 						num = Mathf.Min(num, 1f);
 					}
-					this.tweenedPos += a * num;
+					tweenedPos += a * num;
 				}
 				else
 				{
-					this.tweenedPos = this.TweenedPosRoot();
+					tweenedPos = TweenedPosRoot();
 				}
 			}
-			this.lastDrawFrame = RealTime.frameCount;
+			lastDrawFrame = RealTime.frameCount;
 		}
 
-		
 		public void ResetTweenedPosToRoot()
 		{
-			this.tweenedPos = this.TweenedPosRoot();
-			this.lastTickSpringPos = this.tweenedPos;
+			tweenedPos = TweenedPosRoot();
+			lastTickSpringPos = tweenedPos;
 		}
 
-		
 		private Vector3 TweenedPosRoot()
 		{
-			if (!this.pawn.Spawned)
+			if (!pawn.Spawned)
 			{
-				return this.pawn.Position.ToVector3Shifted();
+				return pawn.Position.ToVector3Shifted();
 			}
-			float num = this.MovedPercent();
-			return this.pawn.pather.nextCell.ToVector3Shifted() * num + this.pawn.Position.ToVector3Shifted() * (1f - num) + PawnCollisionTweenerUtility.PawnCollisionPosOffsetFor(this.pawn);
+			float num = MovedPercent();
+			return pawn.pather.nextCell.ToVector3Shifted() * num + pawn.Position.ToVector3Shifted() * (1f - num) + PawnCollisionTweenerUtility.PawnCollisionPosOffsetFor(pawn);
 		}
 
-		
 		private float MovedPercent()
 		{
-			if (!this.pawn.pather.Moving)
+			if (!pawn.pather.Moving)
 			{
 				return 0f;
 			}
-			if (this.pawn.stances.FullBodyBusy)
+			if (pawn.stances.FullBodyBusy)
 			{
 				return 0f;
 			}
-			if (this.pawn.pather.BuildingBlockingNextPathCell() != null)
+			if (pawn.pather.BuildingBlockingNextPathCell() != null)
 			{
 				return 0f;
 			}
-			if (this.pawn.pather.NextCellDoorToWaitForOrManuallyOpen() != null)
+			if (pawn.pather.NextCellDoorToWaitForOrManuallyOpen() != null)
 			{
 				return 0f;
 			}
-			if (this.pawn.pather.WillCollideWithPawnOnNextPathCell())
+			if (pawn.pather.WillCollideWithPawnOnNextPathCell())
 			{
 				return 0f;
 			}
-			return 1f - this.pawn.pather.nextCellCostLeft / this.pawn.pather.nextCellCostTotal;
+			return 1f - pawn.pather.nextCellCostLeft / pawn.pather.nextCellCostTotal;
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private Vector3 tweenedPos = new Vector3(0f, 0f, 0f);
-
-		
-		private int lastDrawFrame = -1;
-
-		
-		private Vector3 lastTickSpringPos;
-
-		
-		private const float SpringTightness = 0.09f;
 	}
 }

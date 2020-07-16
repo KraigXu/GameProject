@@ -1,14 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ITab_Art : ITab
 	{
-		
-		
+		private static string cachedImageDescription;
+
+		private static CompArt cachedImageSource;
+
+		private static TaleReference cachedTaleRef;
+
+		private static readonly Vector2 WinSize = new Vector2(400f, 300f);
+
 		private CompArt SelectedCompArt
 		{
 			get
@@ -19,60 +23,44 @@ namespace RimWorld
 				{
 					thing = minifiedThing.InnerThing;
 				}
-				if (thing == null)
-				{
-					return null;
-				}
-				return thing.TryGetComp<CompArt>();
+				return thing?.TryGetComp<CompArt>();
 			}
 		}
 
-		
-		
 		public override bool IsVisible
 		{
 			get
 			{
-				return this.SelectedCompArt != null && this.SelectedCompArt.Active;
+				if (SelectedCompArt != null)
+				{
+					return SelectedCompArt.Active;
+				}
+				return false;
 			}
 		}
 
-		
 		public ITab_Art()
 		{
-			this.size = ITab_Art.WinSize;
-			this.labelKey = "TabArt";
-			this.tutorTag = "Art";
+			size = WinSize;
+			labelKey = "TabArt";
+			tutorTag = "Art";
 		}
 
-		
 		protected override void FillTab()
 		{
-			Rect rect = new Rect(0f, 0f, ITab_Art.WinSize.x, ITab_Art.WinSize.y).ContractedBy(10f);
+			Rect rect = new Rect(0f, 0f, WinSize.x, WinSize.y).ContractedBy(10f);
 			Text.Font = GameFont.Medium;
-			Widgets.Label(rect, this.SelectedCompArt.Title);
-			if (ITab_Art.cachedImageSource != this.SelectedCompArt || ITab_Art.cachedTaleRef != this.SelectedCompArt.TaleRef)
+			Widgets.Label(rect, SelectedCompArt.Title);
+			if (cachedImageSource != SelectedCompArt || cachedTaleRef != SelectedCompArt.TaleRef)
 			{
-				ITab_Art.cachedImageDescription = this.SelectedCompArt.GenerateImageDescription();
-				ITab_Art.cachedImageSource = this.SelectedCompArt;
-				ITab_Art.cachedTaleRef = this.SelectedCompArt.TaleRef;
+				cachedImageDescription = SelectedCompArt.GenerateImageDescription();
+				cachedImageSource = SelectedCompArt;
+				cachedTaleRef = SelectedCompArt.TaleRef;
 			}
 			Rect rect2 = rect;
 			rect2.yMin += 35f;
 			Text.Font = GameFont.Small;
-			Widgets.Label(rect2, ITab_Art.cachedImageDescription);
+			Widgets.Label(rect2, cachedImageDescription);
 		}
-
-		
-		private static string cachedImageDescription;
-
-		
-		private static CompArt cachedImageSource;
-
-		
-		private static TaleReference cachedTaleRef;
-
-		
-		private static readonly Vector2 WinSize = new Vector2(400f, 300f);
 	}
 }

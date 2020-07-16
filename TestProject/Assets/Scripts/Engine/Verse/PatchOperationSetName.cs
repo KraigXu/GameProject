@@ -1,28 +1,25 @@
-﻿using System;
 using System.Linq;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperationSetName : PatchOperationPathed
 	{
-		
+		protected string name;
+
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
 			bool result = false;
-			foreach (XmlNode xmlNode in xml.SelectNodes(this.xpath).Cast<XmlNode>().ToArray<XmlNode>())
+			XmlNode[] array = xml.SelectNodes(xpath).Cast<XmlNode>().ToArray();
+			foreach (XmlNode xmlNode in array)
 			{
 				result = true;
-				XmlNode xmlNode2 = xmlNode.OwnerDocument.CreateElement(this.name);
+				XmlNode xmlNode2 = xmlNode.OwnerDocument.CreateElement(name);
 				xmlNode2.InnerXml = xmlNode.InnerXml;
 				xmlNode.ParentNode.InsertBefore(xmlNode2, xmlNode);
 				xmlNode.ParentNode.RemoveChild(xmlNode);
 			}
 			return result;
 		}
-
-		
-		protected string name;
 	}
 }

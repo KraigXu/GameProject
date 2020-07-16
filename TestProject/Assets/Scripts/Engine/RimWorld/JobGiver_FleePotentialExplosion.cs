@@ -1,16 +1,15 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_FleePotentialExplosion : ThinkNode_JobGiver
 	{
-		
+		public const float FleeDist = 9f;
+
 		protected override Job TryGiveJob(Pawn pawn)
 		{
-			if (pawn.RaceProps.intelligence < Intelligence.Humanlike)
+			if ((int)pawn.RaceProps.intelligence < 2)
 			{
 				return null;
 			}
@@ -32,17 +31,13 @@ namespace RimWorld
 			{
 				return null;
 			}
-			IntVec3 c;
-			if (!RCellFinder.TryFindDirectFleeDestination(knownExploder.Position, 9f, pawn, out c))
+			if (!RCellFinder.TryFindDirectFleeDestination(knownExploder.Position, 9f, pawn, out IntVec3 result))
 			{
 				return null;
 			}
-			Job job = JobMaker.MakeJob(JobDefOf.Goto, c);
+			Job job = JobMaker.MakeJob(JobDefOf.Goto, result);
 			job.locomotionUrgency = LocomotionUrgency.Sprint;
 			return job;
 		}
-
-		
-		public const float FleeDist = 9f;
 	}
 }

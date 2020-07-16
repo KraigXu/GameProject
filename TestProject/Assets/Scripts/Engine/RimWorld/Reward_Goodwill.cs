@@ -1,94 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.QuestGen;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class Reward_Goodwill : Reward
 	{
-		
-		
+		public int amount;
+
+		public Faction faction;
+
 		public override IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get
 			{
-				yield return QuestPartUtility.GetStandardRewardStackElement("Goodwill".Translate() + " " + this.amount.ToStringWithSign(), delegate(Rect r)
+				yield return QuestPartUtility.GetStandardRewardStackElement("Goodwill".Translate() + " " + amount.ToStringWithSign(), delegate(Rect r)
 				{
-					GUI.color = this.faction.Color;
-					GUI.DrawTexture(r, this.faction.def.FactionIcon);
+					GUI.color = faction.Color;
+					GUI.DrawTexture(r, faction.def.FactionIcon);
 					GUI.color = Color.white;
-				}, () => "GoodwillTip".Translate(this.faction, this.amount, -75, 75, this.faction.PlayerGoodwill, this.faction.PlayerRelationKind.GetLabel()), delegate
+				}, () => "GoodwillTip".Translate(faction, amount, -75, 75, faction.PlayerGoodwill, faction.PlayerRelationKind.GetLabel()), delegate
 				{
-					Find.WindowStack.Add(new Dialog_InfoCard(this.faction));
+					Find.WindowStack.Add(new Dialog_InfoCard(faction));
 				});
-				yield break;
 			}
 		}
 
-		
 		public override void InitFromValue(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed)
 		{
-			this.amount = GenMath.RoundRandom(RewardsGenerator.RewardValueToGoodwillCurve.Evaluate(rewardValue));
-			this.amount = Mathf.Min(this.amount, 100 - parms.giverFaction.PlayerGoodwill);
-			this.amount = Mathf.Max(this.amount, 1);
-			valueActuallyUsed = RewardsGenerator.RewardValueToGoodwillCurve.EvaluateInverted((float)this.amount);
+			amount = GenMath.RoundRandom(RewardsGenerator.RewardValueToGoodwillCurve.Evaluate(rewardValue));
+			amount = Mathf.Min(amount, 100 - parms.giverFaction.PlayerGoodwill);
+			amount = Mathf.Max(amount, 1);
+			valueActuallyUsed = RewardsGenerator.RewardValueToGoodwillCurve.EvaluateInverted(amount);
 			if (parms.giverFaction.HostileTo(Faction.OfPlayer))
 			{
-				this.amount += Mathf.Clamp(-parms.giverFaction.PlayerGoodwill / 2, 0, this.amount);
-				this.amount = Mathf.Min(this.amount, 100 - parms.giverFaction.PlayerGoodwill);
-				this.amount = Mathf.Max(this.amount, 1);
+				amount += Mathf.Clamp(-parms.giverFaction.PlayerGoodwill / 2, 0, amount);
+				amount = Mathf.Min(amount, 100 - parms.giverFaction.PlayerGoodwill);
+				amount = Mathf.Max(amount, 1);
 			}
-			this.faction = parms.giverFaction;
+			faction = parms.giverFaction;
 		}
 
-		
 		public override IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules)
 		{
-			yield return new QuestPart_FactionGoodwillChange
-            {
-				change = this.amount,
-				faction = this.faction,
-				inSignal = QuestGen.QuestGen.slate.Get<string>("inSignal", null, false)
-			};
-			yield break;
+			QuestPart_FactionGoodwillChange questPart_FactionGoodwillChange = new QuestPart_FactionGoodwillChange();
+			questPart_FactionGoodwillChange.change = amount;
+			questPart_FactionGoodwillChange.faction = faction;
+			questPart_FactionGoodwillChange.inSignal = RimWorld.QuestGen.QuestGen.slate.Get<string>("inSignal");
+			yield return questPart_FactionGoodwillChange;
 		}
 
-		
 		public override string GetDescription(RewardsGeneratorParams parms)
 		{
-			return "Reward_Goodwill".Translate(this.faction, this.amount).Resolve();
+			return "Reward_Goodwill".Translate(faction, amount).Resolve();
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				base.GetType().Name,
-				" (faction=",
-				this.faction.ToStringSafe<Faction>(),
-				", amount=",
-				this.amount,
-				")"
-			});
+			return GetType().Name + " (faction=" + faction.ToStringSafe() + ", amount=" + amount + ")";
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.amount, "amount", 0, false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+			Scribe_Values.Look(ref amount, "amount", 0);
+			Scribe_References.Look(ref faction, "faction");
 		}
-
-		
-		public int amount;
-
-		
-		public Faction faction;
 	}
 }

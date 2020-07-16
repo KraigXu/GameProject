@@ -1,12 +1,9 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class Printer_Mesh
 	{
-		
 		public static void PrintMesh(SectionLayer layer, Vector3 center, Mesh mesh, Material mat)
 		{
 			LayerSubMesh subMesh = layer.GetSubMesh(mat);
@@ -35,7 +32,8 @@ namespace Verse
 					subMesh.uvs.Add(Vector2.zero);
 				}
 			}
-			foreach (int num in mesh.triangles)
+			int[] triangles = mesh.triangles;
+			foreach (int num in triangles)
 			{
 				subMesh.tris.Add(count + num);
 			}

@@ -1,30 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_BeatFire : JobDriver
 	{
-		
-		
-		protected Fire TargetFire
-		{
-			get
-			{
-				return (Fire)this.job.targetA.Thing;
-			}
-		}
+		protected Fire TargetFire => (Fire)job.targetA.Thing;
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -32,21 +20,21 @@ namespace RimWorld
 			Toil approach = new Toil();
 			approach.initAction = delegate
 			{
-				if (this.Map.reservationManager.CanReserve(this.pawn, this.TargetFire, 1, -1, null, false))
+				if (base.Map.reservationManager.CanReserve(pawn, TargetFire))
 				{
-					this.pawn.Reserve(this.TargetFire, this.job, 1, -1, null, true);
+					pawn.Reserve(TargetFire, job);
 				}
-				this.pawn.pather.StartPath(this.TargetFire, PathEndMode.Touch);
+				pawn.pather.StartPath(TargetFire, PathEndMode.Touch);
 			};
 			approach.tickAction = delegate
 			{
-				if (this.pawn.pather.Moving && this.pawn.pather.nextCell != this.TargetFire.Position)
+				if (pawn.pather.Moving && pawn.pather.nextCell != TargetFire.Position)
 				{
-					this.StartBeatingFireIfAnyAt(this.pawn.pather.nextCell, beat);
+					StartBeatingFireIfAnyAt(pawn.pather.nextCell, beat);
 				}
-				if (this.pawn.Position != this.TargetFire.Position)
+				if (pawn.Position != TargetFire.Position)
 				{
-					this.StartBeatingFireIfAnyAt(this.pawn.Position, beat);
+					StartBeatingFireIfAnyAt(pawn.Position, beat);
 				}
 			};
 			approach.FailOnDespawnedOrNull(TargetIndex.A);
@@ -55,30 +43,25 @@ namespace RimWorld
 			yield return approach;
 			beat.tickAction = delegate
 			{
-				if (!this.pawn.CanReachImmediate(this.TargetFire, PathEndMode.Touch))
+				if (!pawn.CanReachImmediate(TargetFire, PathEndMode.Touch))
 				{
-					this.JumpToToil(approach);
-					return;
+					JumpToToil(approach);
 				}
-				if (this.pawn.Position != this.TargetFire.Position && this.StartBeatingFireIfAnyAt(this.pawn.Position, beat))
+				else if (!(pawn.Position != TargetFire.Position) || !StartBeatingFireIfAnyAt(pawn.Position, beat))
 				{
-					return;
-				}
-				this.pawn.natives.TryBeatFire(this.TargetFire);
-				if (this.TargetFire.Destroyed)
-				{
-					this.pawn.records.Increment(RecordDefOf.FiresExtinguished);
-					this.pawn.jobs.EndCurrentJob(JobCondition.Succeeded, true, true);
-					return;
+					pawn.natives.TryBeatFire(TargetFire);
+					if (TargetFire.Destroyed)
+					{
+						pawn.records.Increment(RecordDefOf.FiresExtinguished);
+						pawn.jobs.EndCurrentJob(JobCondition.Succeeded);
+					}
 				}
 			};
 			beat.FailOnDespawnedOrNull(TargetIndex.A);
 			beat.defaultCompleteMode = ToilCompleteMode.Never;
 			yield return beat;
-			yield break;
 		}
 
-		
 		private bool StartBeatingFireIfAnyAt(IntVec3 cell, Toil nextToil)
 		{
 			List<Thing> thingList = cell.GetThingList(base.Map);
@@ -87,9 +70,9 @@ namespace RimWorld
 				Fire fire = thingList[i] as Fire;
 				if (fire != null && fire.parent == null)
 				{
-					this.job.targetA = fire;
-					this.pawn.pather.StopDead();
-					base.JumpToToil(nextToil);
+					job.targetA = fire;
+					pawn.pather.StopDead();
+					JumpToToil(nextToil);
 					return true;
 				}
 			}

@@ -1,296 +1,189 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Pawn_AgeTracker : IExposable
 	{
-		
-		
-		
+		private Pawn pawn;
+
+		private long ageBiologicalTicksInt = -1L;
+
+		private long birthAbsTicksInt = -1L;
+
+		private int cachedLifeStageIndex = -1;
+
+		private long nextLifeStageChangeTick = -1L;
+
+		private const float BornAtLongitude = 0f;
+
 		public long BirthAbsTicks
 		{
 			get
 			{
-				return this.birthAbsTicksInt;
+				return birthAbsTicksInt;
 			}
 			set
 			{
-				this.birthAbsTicksInt = value;
+				birthAbsTicksInt = value;
 			}
 		}
 
-		
-		
-		public int AgeBiologicalYears
-		{
-			get
-			{
-				return (int)(this.ageBiologicalTicksInt / 3600000L);
-			}
-		}
+		public int AgeBiologicalYears => (int)(ageBiologicalTicksInt / 3600000);
 
-		
-		
-		public float AgeBiologicalYearsFloat
-		{
-			get
-			{
-				return (float)this.ageBiologicalTicksInt / 3600000f;
-			}
-		}
+		public float AgeBiologicalYearsFloat => (float)ageBiologicalTicksInt / 3600000f;
 
-		
-		
-		
 		public long AgeBiologicalTicks
 		{
 			get
 			{
-				return this.ageBiologicalTicksInt;
+				return ageBiologicalTicksInt;
 			}
 			set
 			{
-				this.ageBiologicalTicksInt = value;
-				this.cachedLifeStageIndex = -1;
+				ageBiologicalTicksInt = value;
+				cachedLifeStageIndex = -1;
 			}
 		}
 
-		
-		
-		
 		public long AgeChronologicalTicks
 		{
 			get
 			{
-				return (long)GenTicks.TicksAbs - this.birthAbsTicksInt;
+				return GenTicks.TicksAbs - birthAbsTicksInt;
 			}
 			set
 			{
-				this.BirthAbsTicks = (long)GenTicks.TicksAbs - value;
+				BirthAbsTicks = GenTicks.TicksAbs - value;
 			}
 		}
 
-		
-		
-		public int AgeChronologicalYears
-		{
-			get
-			{
-				return (int)(this.AgeChronologicalTicks / 3600000L);
-			}
-		}
+		public int AgeChronologicalYears => (int)(AgeChronologicalTicks / 3600000);
 
-		
-		
-		public float AgeChronologicalYearsFloat
-		{
-			get
-			{
-				return (float)this.AgeChronologicalTicks / 3600000f;
-			}
-		}
+		public float AgeChronologicalYearsFloat => (float)AgeChronologicalTicks / 3600000f;
 
-		
-		
-		public int BirthYear
-		{
-			get
-			{
-				return GenDate.Year(this.birthAbsTicksInt, 0f);
-			}
-		}
+		public int BirthYear => GenDate.Year(birthAbsTicksInt, 0f);
 
-		
-		
-		public int BirthDayOfSeasonZeroBased
-		{
-			get
-			{
-				return GenDate.DayOfSeason(this.birthAbsTicksInt, 0f);
-			}
-		}
+		public int BirthDayOfSeasonZeroBased => GenDate.DayOfSeason(birthAbsTicksInt, 0f);
 
-		
-		
-		public int BirthDayOfYear
-		{
-			get
-			{
-				return GenDate.DayOfYear(this.birthAbsTicksInt, 0f);
-			}
-		}
+		public int BirthDayOfYear => GenDate.DayOfYear(birthAbsTicksInt, 0f);
 
-		
-		
-		public Quadrum BirthQuadrum
-		{
-			get
-			{
-				return GenDate.Quadrum(this.birthAbsTicksInt, 0f);
-			}
-		}
+		public Quadrum BirthQuadrum => GenDate.Quadrum(birthAbsTicksInt, 0f);
 
-		
-		
 		public string AgeNumberString
 		{
 			get
 			{
-				string text = this.AgeBiologicalYearsFloat.ToStringApproxAge();
-				if (this.AgeChronologicalYears != this.AgeBiologicalYears)
+				string text = AgeBiologicalYearsFloat.ToStringApproxAge();
+				if (AgeChronologicalYears != AgeBiologicalYears)
 				{
-					text = string.Concat(new object[]
-					{
-						text,
-						" (",
-						this.AgeChronologicalYears,
-						")"
-					});
+					text = text + " (" + AgeChronologicalYears + ")";
 				}
 				return text;
 			}
 		}
 
-		
-		
 		public string AgeTooltipString
 		{
 			get
 			{
-				int value;
-				int value2;
-				int value3;
-				float num;
-				this.ageBiologicalTicksInt.TicksToPeriod(out value, out value2, out value3, out num);
-				int value4;
-				int value5;
-				int value6;
-				((long)GenTicks.TicksAbs - this.birthAbsTicksInt).TicksToPeriod(out value4, out value5, out value6, out num);
-				string value7 = "FullDate".Translate(Find.ActiveLanguageWorker.OrdinalNumber(this.BirthDayOfSeasonZeroBased + 1, Gender.None), this.BirthQuadrum.Label(), this.BirthYear);
-				string text = "Born".Translate(value7) + "\n" + "AgeChronological".Translate(value4, value5, value6) + "\n" + "AgeBiological".Translate(value, value2, value3);
+				ageBiologicalTicksInt.TicksToPeriod(out int years, out int quadrums, out int days, out float hoursFloat);
+				(GenTicks.TicksAbs - birthAbsTicksInt).TicksToPeriod(out int years2, out int quadrums2, out int days2, out hoursFloat);
+				string value = "FullDate".Translate(Find.ActiveLanguageWorker.OrdinalNumber(BirthDayOfSeasonZeroBased + 1), BirthQuadrum.Label(), BirthYear);
+				string text = "Born".Translate(value) + "\n" + "AgeChronological".Translate(years2, quadrums2, days2) + "\n" + "AgeBiological".Translate(years, quadrums, days);
 				if (Prefs.DevMode)
 				{
 					text += "\n\nDev mode info:";
-					text = text + "\nageBiologicalTicksInt: " + this.ageBiologicalTicksInt;
-					text = text + "\nbirthAbsTicksInt: " + this.birthAbsTicksInt;
-					text = text + "\nnextLifeStageChangeTick: " + this.nextLifeStageChangeTick;
+					text = text + "\nageBiologicalTicksInt: " + ageBiologicalTicksInt;
+					text = text + "\nbirthAbsTicksInt: " + birthAbsTicksInt;
+					text = text + "\nnextLifeStageChangeTick: " + nextLifeStageChangeTick;
 				}
 				return text;
 			}
 		}
 
-		
-		
 		public int CurLifeStageIndex
 		{
 			get
 			{
-				if (this.cachedLifeStageIndex < 0)
+				if (cachedLifeStageIndex < 0)
 				{
-					this.RecalculateLifeStageIndex();
+					RecalculateLifeStageIndex();
 				}
-				return this.cachedLifeStageIndex;
+				return cachedLifeStageIndex;
 			}
 		}
 
-		
-		
-		public LifeStageDef CurLifeStage
-		{
-			get
-			{
-				return this.CurLifeStageRace.def;
-			}
-		}
+		public LifeStageDef CurLifeStage => CurLifeStageRace.def;
 
-		
-		
-		public LifeStageAge CurLifeStageRace
-		{
-			get
-			{
-				return this.pawn.RaceProps.lifeStageAges[this.CurLifeStageIndex];
-			}
-		}
+		public LifeStageAge CurLifeStageRace => pawn.RaceProps.lifeStageAges[CurLifeStageIndex];
 
-		
-		
 		public PawnKindLifeStage CurKindLifeStage
 		{
 			get
 			{
-				if (this.pawn.RaceProps.Humanlike)
+				if (pawn.RaceProps.Humanlike)
 				{
-					Log.ErrorOnce("Tried to get CurKindLifeStage from humanlike pawn " + this.pawn, 8888811, false);
+					Log.ErrorOnce("Tried to get CurKindLifeStage from humanlike pawn " + pawn, 8888811);
 					return null;
 				}
-				return this.pawn.kindDef.lifeStages[this.CurLifeStageIndex];
+				return pawn.kindDef.lifeStages[CurLifeStageIndex];
 			}
 		}
 
-		
 		public Pawn_AgeTracker(Pawn newPawn)
 		{
-			this.pawn = newPawn;
+			pawn = newPawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<long>(ref this.ageBiologicalTicksInt, "ageBiologicalTicks", 0L, false);
-			Scribe_Values.Look<long>(ref this.birthAbsTicksInt, "birthAbsTicks", 0L, false);
+			Scribe_Values.Look(ref ageBiologicalTicksInt, "ageBiologicalTicks", 0L);
+			Scribe_Values.Look(ref birthAbsTicksInt, "birthAbsTicks", 0L);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.cachedLifeStageIndex = -1;
+				cachedLifeStageIndex = -1;
 			}
 		}
 
-		
 		public void AgeTick()
 		{
-			this.ageBiologicalTicksInt += 1L;
-			if ((long)Find.TickManager.TicksGame >= this.nextLifeStageChangeTick)
+			ageBiologicalTicksInt++;
+			if (Find.TickManager.TicksGame >= nextLifeStageChangeTick)
 			{
-				this.RecalculateLifeStageIndex();
+				RecalculateLifeStageIndex();
 			}
-			if (this.ageBiologicalTicksInt % 3600000L == 0L)
+			if (ageBiologicalTicksInt % 3600000 == 0L)
 			{
-				this.BirthdayBiological();
+				BirthdayBiological();
 			}
 		}
 
-		
 		public void AgeTickMothballed(int interval)
 		{
-			long num = this.ageBiologicalTicksInt;
-			this.ageBiologicalTicksInt += (long)interval;
-			while ((long)Find.TickManager.TicksGame >= this.nextLifeStageChangeTick)
+			long num = ageBiologicalTicksInt;
+			ageBiologicalTicksInt += interval;
+			while (Find.TickManager.TicksGame >= nextLifeStageChangeTick)
 			{
-				this.RecalculateLifeStageIndex();
+				RecalculateLifeStageIndex();
 			}
-			int num2 = (int)(num / 3600000L);
-			while ((long)num2 < this.ageBiologicalTicksInt / 3600000L)
+			for (int i = (int)(num / 3600000); i < ageBiologicalTicksInt / 3600000; i += 3600000)
 			{
-				this.BirthdayBiological();
-				num2 += 3600000;
+				BirthdayBiological();
 			}
 		}
 
-		
 		private void RecalculateLifeStageIndex()
 		{
 			int num = -1;
-			List<LifeStageAge> lifeStageAges = this.pawn.RaceProps.lifeStageAges;
-			for (int i = lifeStageAges.Count - 1; i >= 0; i--)
+			List<LifeStageAge> lifeStageAges = pawn.RaceProps.lifeStageAges;
+			for (int num2 = lifeStageAges.Count - 1; num2 >= 0; num2--)
 			{
-				if (lifeStageAges[i].minAge <= this.AgeBiologicalYearsFloat + 1E-06f)
+				if (lifeStageAges[num2].minAge <= AgeBiologicalYearsFloat + 1E-06f)
 				{
-					num = i;
+					num = num2;
 					break;
 				}
 			}
@@ -298,101 +191,82 @@ namespace Verse
 			{
 				num = 0;
 			}
-			bool flag = this.cachedLifeStageIndex != num;
-			this.cachedLifeStageIndex = num;
-			if (flag && !this.pawn.RaceProps.Humanlike)
+			bool num3 = cachedLifeStageIndex != num;
+			cachedLifeStageIndex = num;
+			if (num3 && !pawn.RaceProps.Humanlike)
 			{
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{
-					this.pawn.Drawer.renderer.graphics.SetAllGraphicsDirty();
+					pawn.Drawer.renderer.graphics.SetAllGraphicsDirty();
 				});
-				this.CheckChangePawnKindName();
+				CheckChangePawnKindName();
 			}
-			if (this.cachedLifeStageIndex < lifeStageAges.Count - 1)
+			if (cachedLifeStageIndex < lifeStageAges.Count - 1)
 			{
-				float num2 = lifeStageAges[this.cachedLifeStageIndex + 1].minAge - this.AgeBiologicalYearsFloat;
-				int num3 = (Current.ProgramState == ProgramState.Playing) ? Find.TickManager.TicksGame : 0;
-				this.nextLifeStageChangeTick = (long)num3 + (long)Mathf.Ceil(num2 * 3600000f);
-				return;
+				float num4 = lifeStageAges[cachedLifeStageIndex + 1].minAge - AgeBiologicalYearsFloat;
+				int num5 = (Current.ProgramState == ProgramState.Playing) ? Find.TickManager.TicksGame : 0;
+				nextLifeStageChangeTick = num5 + (long)Mathf.Ceil(num4 * 3600000f);
 			}
-			this.nextLifeStageChangeTick = long.MaxValue;
+			else
+			{
+				nextLifeStageChangeTick = long.MaxValue;
+			}
 		}
 
-		
 		private void BirthdayBiological()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (HediffGiver_Birthday hediffGiver_Birthday in AgeInjuryUtility.RandomHediffsToGainOnBirthday(this.pawn, this.AgeBiologicalYears))
+			foreach (HediffGiver_Birthday item in AgeInjuryUtility.RandomHediffsToGainOnBirthday(pawn, AgeBiologicalYears))
 			{
-				if (hediffGiver_Birthday.TryApply(this.pawn, null))
+				if (item.TryApply(pawn))
 				{
 					if (stringBuilder.Length != 0)
 					{
 						stringBuilder.AppendLine();
 					}
-					stringBuilder.Append("    - " + hediffGiver_Birthday.hediff.LabelCap);
+					stringBuilder.Append("    - " + item.hediff.LabelCap);
 				}
 			}
-			if (this.pawn.RaceProps.Humanlike && PawnUtility.ShouldSendNotificationAbout(this.pawn) && stringBuilder.Length > 0)
+			if (pawn.RaceProps.Humanlike && PawnUtility.ShouldSendNotificationAbout(pawn) && stringBuilder.Length > 0)
 			{
-				string str = "BirthdayBiologicalAgeInjuries".Translate(this.pawn, this.AgeBiologicalYears, stringBuilder).AdjustedFor(this.pawn, "PAWN", true);
-				Find.LetterStack.ReceiveLetter("LetterLabelBirthday".Translate(), str, LetterDefOf.NegativeEvent, this.pawn, null, null, null, null);
+				string str = "BirthdayBiologicalAgeInjuries".Translate(pawn, AgeBiologicalYears, stringBuilder).AdjustedFor(pawn);
+				Find.LetterStack.ReceiveLetter("LetterLabelBirthday".Translate(), str, LetterDefOf.NegativeEvent, (TargetInfo)pawn);
 			}
 		}
 
-		
 		public void DebugForceBirthdayBiological()
 		{
-			this.BirthdayBiological();
+			BirthdayBiological();
 		}
 
-		
 		private void CheckChangePawnKindName()
 		{
-			NameSingle nameSingle = this.pawn.Name as NameSingle;
+			NameSingle nameSingle = pawn.Name as NameSingle;
 			if (nameSingle == null || !nameSingle.Numerical)
 			{
 				return;
 			}
-			string kindLabel = this.pawn.KindLabel;
-			if (nameSingle.NameWithoutNumber == kindLabel)
+			string kindLabel = pawn.KindLabel;
+			if (!(nameSingle.NameWithoutNumber == kindLabel))
 			{
-				return;
+				int number = nameSingle.Number;
+				string text = pawn.KindLabel + " " + number;
+				if (!NameUseChecker.NameSingleIsUsed(text))
+				{
+					pawn.Name = new NameSingle(text, numerical: true);
+				}
+				else
+				{
+					pawn.Name = PawnBioAndNameGenerator.GeneratePawnName(pawn, NameStyle.Numeric);
+				}
 			}
-			int number = nameSingle.Number;
-			string text = this.pawn.KindLabel + " " + number;
-			if (!NameUseChecker.NameSingleIsUsed(text))
-			{
-				this.pawn.Name = new NameSingle(text, true);
-				return;
-			}
-			this.pawn.Name = PawnBioAndNameGenerator.GeneratePawnName(this.pawn, NameStyle.Numeric, null);
 		}
 
-		
 		public void DebugMake1YearOlder()
 		{
-			this.ageBiologicalTicksInt += 3600000L;
-			this.birthAbsTicksInt -= 3600000L;
-			this.RecalculateLifeStageIndex();
+			ageBiologicalTicksInt += 3600000L;
+			birthAbsTicksInt -= 3600000L;
+			RecalculateLifeStageIndex();
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private long ageBiologicalTicksInt = -1L;
-
-		
-		private long birthAbsTicksInt = -1L;
-
-		
-		private int cachedLifeStageIndex = -1;
-
-		
-		private long nextLifeStageChangeTick = -1L;
-
-		
-		private const float BornAtLongitude = 0f;
 	}
 }

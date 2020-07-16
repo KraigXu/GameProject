@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,85 +5,53 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Zone_Growing : Zone, IPlantToGrowSettable
 	{
-		
-		
-		public override bool IsMultiselectable
-		{
-			get
-			{
-				return true;
-			}
-		}
+		private ThingDef plantDefToGrow = ThingDefOf.Plant_Potato;
 
-		
-		
-		protected override Color NextZoneColor
-		{
-			get
-			{
-				return ZoneColorUtility.NextGrowingZoneColor();
-			}
-		}
+		public bool allowSow = true;
 
-		
-		
-		IEnumerable<IntVec3> IPlantToGrowSettable.Cells
-		{
-			get
-			{
-				return base.Cells;
-			}
-		}
+		public override bool IsMultiselectable => true;
 
-		
+		protected override Color NextZoneColor => ZoneColorUtility.NextGrowingZoneColor();
+
+		IEnumerable<IntVec3> IPlantToGrowSettable.Cells => base.Cells;
+
 		public Zone_Growing()
 		{
 		}
 
-		
-		public Zone_Growing(ZoneManager zoneManager) : base("GrowingZone".Translate(), zoneManager)
+		public Zone_Growing(ZoneManager zoneManager)
+			: base("GrowingZone".Translate(), zoneManager)
 		{
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<ThingDef>(ref this.plantDefToGrow, "plantDefToGrow");
-			Scribe_Values.Look<bool>(ref this.allowSow, "allowSow", true, false);
+			Scribe_Defs.Look(ref plantDefToGrow, "plantDefToGrow");
+			Scribe_Values.Look(ref allowSow, "allowSow", defaultValue: true);
 		}
 
-		
 		public override string GetInspectString()
 		{
 			string text = "";
-			if (!base.Cells.NullOrEmpty<IntVec3>())
+			if (!base.Cells.NullOrEmpty())
 			{
-				IntVec3 c = base.Cells.First<IntVec3>();
+				IntVec3 c = base.Cells.First();
 				if (c.UsesOutdoorTemperature(base.Map))
 				{
-					text += "OutdoorGrowingPeriod".Translate() + ": " + Zone_Growing.GrowingQuadrumsDescription(base.Map.Tile) + "\n";
+					text += "OutdoorGrowingPeriod".Translate() + ": " + GrowingQuadrumsDescription(base.Map.Tile) + "\n";
 				}
-				if (PlantUtility.GrowthSeasonNow(c, base.Map, true))
-				{
-					text += "GrowSeasonHereNow".Translate();
-				}
-				else
-				{
-					text += "CannotGrowBadSeasonTemperature".Translate();
-				}
+				text = ((!PlantUtility.GrowthSeasonNow(c, base.Map, forSowing: true)) ? ((string)(text + "CannotGrowBadSeasonTemperature".Translate())) : ((string)(text + "GrowSeasonHereNow".Translate())));
 			}
 			return text;
 		}
 
-		
 		public static string GrowingQuadrumsDescription(int tile)
 		{
 			List<Twelfth> list = GenTemperature.TwelfthsInAverageTemperatureRange(tile, 10f, 42f);
-			if (list.NullOrEmpty<Twelfth>())
+			if (list.NullOrEmpty())
 			{
 				return "NoGrowingPeriod".Translate();
 			}
@@ -95,57 +62,44 @@ namespace RimWorld
 			return "PeriodDays".Translate(list.Count * 5 + "/" + 60) + " (" + QuadrumUtility.QuadrumsRangeLabel(list) + ")";
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			yield return PlantToGrowSettableUtility.SetPlantToGrowCommand(this);
-			yield return new Command_Toggle
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				defaultLabel = "CommandAllowSow".Translate(),
-				defaultDesc = "CommandAllowSowDesc".Translate(),
-				hotKey = KeyBindingDefOf.Command_ItemForbid,
-				icon = TexCommand.ForbidOff,
-				isActive = (() => this.allowSow),
-				toggleAction = delegate
-				{
-					this.allowSow = !this.allowSow;
-				}
+				yield return gizmo;
+			}
+			yield return PlantToGrowSettableUtility.SetPlantToGrowCommand(this);
+			Command_Toggle command_Toggle = new Command_Toggle();
+			command_Toggle.defaultLabel = "CommandAllowSow".Translate();
+			command_Toggle.defaultDesc = "CommandAllowSowDesc".Translate();
+			command_Toggle.hotKey = KeyBindingDefOf.Command_ItemForbid;
+			command_Toggle.icon = TexCommand.ForbidOff;
+			command_Toggle.isActive = (() => allowSow);
+			command_Toggle.toggleAction = delegate
+			{
+				allowSow = !allowSow;
 			};
-			yield break;
-			yield break;
+			yield return command_Toggle;
 		}
 
-		
 		public override IEnumerable<Gizmo> GetZoneAddGizmos()
 		{
 			yield return DesignatorUtility.FindAllowedDesignator<Designator_ZoneAdd_Growing_Expand>();
-			yield break;
 		}
 
-		
 		public ThingDef GetPlantDefToGrow()
 		{
-			return this.plantDefToGrow;
+			return plantDefToGrow;
 		}
 
-		
 		public void SetPlantDefToGrow(ThingDef plantDef)
 		{
-			this.plantDefToGrow = plantDef;
+			plantDefToGrow = plantDef;
 		}
 
-		
 		public bool CanAcceptSowNow()
 		{
 			return true;
 		}
-
-		
-		private ThingDef plantDefToGrow = ThingDefOf.Plant_Potato;
-
-		
-		public bool allowSow = true;
 	}
 }

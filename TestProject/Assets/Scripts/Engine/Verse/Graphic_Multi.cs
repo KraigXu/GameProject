@@ -1,149 +1,88 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Graphic_Multi : Graphic
 	{
-		
-		
-		public string GraphicPath
-		{
-			get
-			{
-				return this.path;
-			}
-		}
+		private Material[] mats = new Material[4];
 
-		
-		
-		public override Material MatSingle
-		{
-			get
-			{
-				return this.MatSouth;
-			}
-		}
+		private bool westFlipped;
 
-		
-		
-		public override Material MatWest
-		{
-			get
-			{
-				return this.mats[3];
-			}
-		}
+		private bool eastFlipped;
 
-		
-		
-		public override Material MatSouth
-		{
-			get
-			{
-				return this.mats[2];
-			}
-		}
+		private float drawRotatedExtraAngleOffset;
 
-		
-		
-		public override Material MatEast
-		{
-			get
-			{
-				return this.mats[1];
-			}
-		}
+		public string GraphicPath => path;
 
-		
-		
-		public override Material MatNorth
-		{
-			get
-			{
-				return this.mats[0];
-			}
-		}
+		public override Material MatSingle => MatSouth;
 
-		
-		
-		public override bool WestFlipped
-		{
-			get
-			{
-				return this.westFlipped;
-			}
-		}
+		public override Material MatWest => mats[3];
 
-		
-		
-		public override bool EastFlipped
-		{
-			get
-			{
-				return this.eastFlipped;
-			}
-		}
+		public override Material MatSouth => mats[2];
 
-		
-		
+		public override Material MatEast => mats[1];
+
+		public override Material MatNorth => mats[0];
+
+		public override bool WestFlipped => westFlipped;
+
+		public override bool EastFlipped => eastFlipped;
+
 		public override bool ShouldDrawRotated
 		{
 			get
 			{
-				return (this.data == null || this.data.drawRotated) && (this.MatEast == this.MatNorth || this.MatWest == this.MatNorth);
+				if (data != null && !data.drawRotated)
+				{
+					return false;
+				}
+				if (!(MatEast == MatNorth))
+				{
+					return MatWest == MatNorth;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public override float DrawRotatedExtraAngleOffset
-		{
-			get
-			{
-				return this.drawRotatedExtraAngleOffset;
-			}
-		}
+		public override float DrawRotatedExtraAngleOffset => drawRotatedExtraAngleOffset;
 
-		
 		public override void Init(GraphicRequest req)
 		{
-			this.data = req.graphicData;
-			this.path = req.path;
-			this.color = req.color;
-			this.colorTwo = req.colorTwo;
-			this.drawSize = req.drawSize;
-			Texture2D[] array = new Texture2D[this.mats.Length];
-			array[0] = ContentFinder<Texture2D>.Get(req.path + "_north", false);
-			array[1] = ContentFinder<Texture2D>.Get(req.path + "_east", false);
-			array[2] = ContentFinder<Texture2D>.Get(req.path + "_south", false);
-			array[3] = ContentFinder<Texture2D>.Get(req.path + "_west", false);
+			data = req.graphicData;
+			path = req.path;
+			color = req.color;
+			colorTwo = req.colorTwo;
+			drawSize = req.drawSize;
+			Texture2D[] array = new Texture2D[mats.Length];
+			array[0] = ContentFinder<Texture2D>.Get(req.path + "_north", reportFailure: false);
+			array[1] = ContentFinder<Texture2D>.Get(req.path + "_east", reportFailure: false);
+			array[2] = ContentFinder<Texture2D>.Get(req.path + "_south", reportFailure: false);
+			array[3] = ContentFinder<Texture2D>.Get(req.path + "_west", reportFailure: false);
 			if (array[0] == null)
 			{
 				if (array[2] != null)
 				{
 					array[0] = array[2];
-					this.drawRotatedExtraAngleOffset = 180f;
+					drawRotatedExtraAngleOffset = 180f;
 				}
 				else if (array[1] != null)
 				{
 					array[0] = array[1];
-					this.drawRotatedExtraAngleOffset = -90f;
+					drawRotatedExtraAngleOffset = -90f;
 				}
 				else if (array[3] != null)
 				{
 					array[0] = array[3];
-					this.drawRotatedExtraAngleOffset = 90f;
+					drawRotatedExtraAngleOffset = 90f;
 				}
 				else
 				{
-					array[0] = ContentFinder<Texture2D>.Get(req.path, false);
+					array[0] = ContentFinder<Texture2D>.Get(req.path, reportFailure: false);
 				}
 			}
 			if (array[0] == null)
 			{
-				Log.Error("Failed to find any textures at " + req.path + " while constructing " + this.ToStringSafe<Graphic_Multi>(), false);
+				Log.Error("Failed to find any textures at " + req.path + " while constructing " + this.ToStringSafe());
 				return;
 			}
 			if (array[2] == null)
@@ -155,7 +94,7 @@ namespace Verse
 				if (array[3] != null)
 				{
 					array[1] = array[3];
-					this.eastFlipped = base.DataAllowsFlip;
+					eastFlipped = base.DataAllowsFlip;
 				}
 				else
 				{
@@ -167,20 +106,20 @@ namespace Verse
 				if (array[1] != null)
 				{
 					array[3] = array[1];
-					this.westFlipped = base.DataAllowsFlip;
+					westFlipped = base.DataAllowsFlip;
 				}
 				else
 				{
 					array[3] = array[0];
 				}
 			}
-			Texture2D[] array2 = new Texture2D[this.mats.Length];
+			Texture2D[] array2 = new Texture2D[mats.Length];
 			if (req.shader.SupportsMaskTex())
 			{
-				array2[0] = ContentFinder<Texture2D>.Get(req.path + "_northm", false);
-				array2[1] = ContentFinder<Texture2D>.Get(req.path + "_eastm", false);
-				array2[2] = ContentFinder<Texture2D>.Get(req.path + "_southm", false);
-				array2[3] = ContentFinder<Texture2D>.Get(req.path + "_westm", false);
+				array2[0] = ContentFinder<Texture2D>.Get(req.path + "_northm", reportFailure: false);
+				array2[1] = ContentFinder<Texture2D>.Get(req.path + "_eastm", reportFailure: false);
+				array2[2] = ContentFinder<Texture2D>.Get(req.path + "_southm", reportFailure: false);
+				array2[3] = ContentFinder<Texture2D>.Get(req.path + "_westm", reportFailure: false);
 				if (array2[0] == null)
 				{
 					if (array2[2] != null)
@@ -223,56 +162,32 @@ namespace Verse
 					}
 				}
 			}
-			for (int i = 0; i < this.mats.Length; i++)
+			for (int i = 0; i < mats.Length; i++)
 			{
 				MaterialRequest req2 = default(MaterialRequest);
 				req2.mainTex = array[i];
 				req2.shader = req.shader;
-				req2.color = this.color;
-				req2.colorTwo = this.colorTwo;
+				req2.color = color;
+				req2.colorTwo = colorTwo;
 				req2.maskTex = array2[i];
 				req2.shaderParameters = req.shaderParameters;
-				this.mats[i] = MaterialPool.MatFrom(req2);
+				mats[i] = MaterialPool.MatFrom(req2);
 			}
 		}
 
-		
 		public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)
 		{
-			return GraphicDatabase.Get<Graphic_Multi>(this.path, newShader, this.drawSize, newColor, newColorTwo, this.data);
+			return GraphicDatabase.Get<Graphic_Multi>(path, newShader, drawSize, newColor, newColorTwo, data);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"Multi(initPath=",
-				this.path,
-				", color=",
-				this.color,
-				", colorTwo=",
-				this.colorTwo,
-				")"
-			});
+			return "Multi(initPath=" + path + ", color=" + color + ", colorTwo=" + colorTwo + ")";
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombineStruct<Color>(Gen.HashCombineStruct<Color>(Gen.HashCombine<string>(0, this.path), this.color), this.colorTwo);
+			return Gen.HashCombineStruct(Gen.HashCombineStruct(Gen.HashCombine(0, path), color), colorTwo);
 		}
-
-		
-		private Material[] mats = new Material[4];
-
-		
-		private bool westFlipped;
-
-		
-		private bool eastFlipped;
-
-		
-		private float drawRotatedExtraAngleOffset;
 	}
 }

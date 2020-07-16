@@ -1,29 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class MaterialAtlasPool
 	{
-		
-		public static Material SubMaterialFromAtlas(Material mat, LinkDirections LinkSet)
-		{
-			if (!MaterialAtlasPool.atlasDict.ContainsKey(mat))
-			{
-				MaterialAtlasPool.atlasDict.Add(mat, new MaterialAtlasPool.MaterialAtlas(mat));
-			}
-			return MaterialAtlasPool.atlasDict[mat].SubMat(LinkSet);
-		}
-
-		
-		private static Dictionary<Material, MaterialAtlasPool.MaterialAtlas> atlasDict = new Dictionary<Material, MaterialAtlasPool.MaterialAtlas>();
-
-		
 		private class MaterialAtlas
 		{
-			
+			protected Material[] subMats = new Material[16];
+
+			private const float TexPadding = 0.03125f;
+
 			public MaterialAtlas(Material newRootMat)
 			{
 				Vector2 mainTextureScale = new Vector2(0.1875f, 0.1875f);
@@ -36,26 +23,30 @@ namespace Verse
 					material.name = newRootMat.name + "_ASM" + i;
 					material.mainTextureScale = mainTextureScale;
 					material.mainTextureOffset = mainTextureOffset;
-					this.subMats[i] = material;
+					subMats[i] = material;
 				}
 			}
 
-			
 			public Material SubMat(LinkDirections linkSet)
 			{
-				if ((int)linkSet >= this.subMats.Length)
+				if ((int)linkSet >= subMats.Length)
 				{
-					Log.Warning("Cannot get submat of index " + (int)linkSet + ": out of range.", false);
+					Log.Warning("Cannot get submat of index " + (int)linkSet + ": out of range.");
 					return BaseContent.BadMat;
 				}
-				return this.subMats[(int)linkSet];
+				return subMats[(uint)linkSet];
 			}
+		}
 
-			
-			protected Material[] subMats = new Material[16];
+		private static Dictionary<Material, MaterialAtlas> atlasDict = new Dictionary<Material, MaterialAtlas>();
 
-			
-			private const float TexPadding = 0.03125f;
+		public static Material SubMaterialFromAtlas(Material mat, LinkDirections LinkSet)
+		{
+			if (!atlasDict.ContainsKey(mat))
+			{
+				atlasDict.Add(mat, new MaterialAtlas(mat));
+			}
+			return atlasDict[mat].SubMat(LinkSet);
 		}
 	}
 }

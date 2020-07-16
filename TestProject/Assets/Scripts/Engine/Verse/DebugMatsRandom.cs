@@ -1,22 +1,25 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public static class DebugMatsRandom
 	{
-		
+		private static readonly Material[] mats;
+
+		public const int MaterialCount = 100;
+
+		private const float Opacity = 0.25f;
+
 		static DebugMatsRandom()
 		{
+			mats = new Material[100];
 			for (int i = 0; i < 100; i++)
 			{
-				DebugMatsRandom.mats[i] = SolidColorMaterials.SimpleSolidColorMaterial(new Color(Rand.Value, Rand.Value, Rand.Value, 0.25f), false);
+				mats[i] = SolidColorMaterials.SimpleSolidColorMaterial(new Color(Rand.Value, Rand.Value, Rand.Value, 0.25f));
 			}
 		}
 
-		
 		public static Material Mat(int ind)
 		{
 			ind %= 100;
@@ -24,16 +27,7 @@ namespace Verse
 			{
 				ind *= -1;
 			}
-			return DebugMatsRandom.mats[ind];
+			return mats[ind];
 		}
-
-		
-		private static readonly Material[] mats = new Material[100];
-
-		
-		public const int MaterialCount = 100;
-
-		
-		private const float Opacity = 0.25f;
 	}
 }

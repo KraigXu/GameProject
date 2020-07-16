@@ -90,7 +90,7 @@ public class SceneSwitcher : MonoBehaviour
     void Start()
     {
         //淡入
-        _mask.DOFade(1, 1);
+       // _mask.DOFade(1, 1);
         _slider.enabled = false;
         _tipsTitle.enabled = false;
         _tipsContent.enabled = false;
@@ -183,7 +183,7 @@ public class SceneSwitcher : MonoBehaviour
                     _tipsContent.enabled = false;
                     _btnUp.enabled = false;
                     _btnDown.enabled = false;
-                    _mask.DOFade(0, 1);
+                  ///  _mask.DOFade(0, 1);
                 }
                     
                

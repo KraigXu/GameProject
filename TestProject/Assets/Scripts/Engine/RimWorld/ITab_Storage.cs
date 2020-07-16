@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,31 +6,30 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ITab_Storage : ITab
 	{
-		
-		
+		private Vector2 scrollPosition;
+
+		private static readonly Vector2 WinSize = new Vector2(300f, 480f);
+
 		protected virtual IStoreSettingsParent SelStoreSettingsParent
 		{
 			get
 			{
 				Thing thing = base.SelObject as Thing;
-				if (thing == null)
+				if (thing != null)
 				{
-					return base.SelObject as IStoreSettingsParent;
+					IStoreSettingsParent thingOrThingCompStoreSettingsParent = GetThingOrThingCompStoreSettingsParent(thing);
+					if (thingOrThingCompStoreSettingsParent != null)
+					{
+						return thingOrThingCompStoreSettingsParent;
+					}
+					return null;
 				}
-				IStoreSettingsParent thingOrThingCompStoreSettingsParent = this.GetThingOrThingCompStoreSettingsParent(thing);
-				if (thingOrThingCompStoreSettingsParent != null)
-				{
-					return thingOrThingCompStoreSettingsParent;
-				}
-				return null;
+				return base.SelObject as IStoreSettingsParent;
 			}
 		}
 
-		
-		
 		public override bool IsVisible
 		{
 			get
@@ -40,63 +39,43 @@ namespace RimWorld
 				{
 					return false;
 				}
-				IStoreSettingsParent selStoreSettingsParent = this.SelStoreSettingsParent;
-				return selStoreSettingsParent != null && selStoreSettingsParent.StorageTabVisible;
+				return SelStoreSettingsParent?.StorageTabVisible ?? false;
 			}
 		}
 
-		
-		
-		protected virtual bool IsPrioritySettingVisible
-		{
-			get
-			{
-				return true;
-			}
-		}
+		protected virtual bool IsPrioritySettingVisible => true;
 
-		
-		
-		private float TopAreaHeight
-		{
-			get
-			{
-				return (float)(this.IsPrioritySettingVisible ? 35 : 20);
-			}
-		}
+		private float TopAreaHeight => IsPrioritySettingVisible ? 35 : 20;
 
-		
 		public ITab_Storage()
 		{
-			this.size = ITab_Storage.WinSize;
-			this.labelKey = "TabStorage";
-			this.tutorTag = "Storage";
+			size = WinSize;
+			labelKey = "TabStorage";
+			tutorTag = "Storage";
 		}
 
-		
 		protected override void FillTab()
 		{
-			IStoreSettingsParent storeSettingsParent = this.SelStoreSettingsParent;
+			IStoreSettingsParent storeSettingsParent = SelStoreSettingsParent;
 			StorageSettings settings = storeSettingsParent.GetStoreSettings();
-			Rect position = new Rect(0f, 0f, ITab_Storage.WinSize.x, ITab_Storage.WinSize.y).ContractedBy(10f);
+			Rect position = new Rect(0f, 0f, WinSize.x, WinSize.y).ContractedBy(10f);
 			GUI.BeginGroup(position);
-			if (this.IsPrioritySettingVisible)
+			if (IsPrioritySettingVisible)
 			{
 				Text.Font = GameFont.Small;
-				Rect rect = new Rect(0f, 0f, 160f, this.TopAreaHeight - 6f);
-				if (Widgets.ButtonText(rect, "Priority".Translate() + ": " + settings.Priority.Label().CapitalizeFirst(), true, true, true))
+				Rect rect = new Rect(0f, 0f, 160f, TopAreaHeight - 6f);
+				if (Widgets.ButtonText(rect, "Priority".Translate() + ": " + settings.Priority.Label().CapitalizeFirst()))
 				{
 					List<FloatMenuOption> list = new List<FloatMenuOption>();
-					foreach (object obj in Enum.GetValues(typeof(StoragePriority)))
+					foreach (StoragePriority value in Enum.GetValues(typeof(StoragePriority)))
 					{
-						StoragePriority storagePriority = (StoragePriority)obj;
-						if (storagePriority != StoragePriority.Unstored)
+						if (value != 0)
 						{
-							StoragePriority localPr = storagePriority;
+							StoragePriority localPr = value;
 							list.Add(new FloatMenuOption(localPr.Label().CapitalizeFirst(), delegate
 							{
 								settings.Priority = localPr;
-							}, MenuOptionPriority.Default, null, null, 0f, null, null));
+							}));
 						}
 					}
 					Find.WindowStack.Add(new FloatMenu(list));
@@ -108,23 +87,22 @@ namespace RimWorld
 			{
 				parentFilter = storeSettingsParent.GetParentStoreSettings().filter;
 			}
-			Rect rect2 = new Rect(0f, this.TopAreaHeight, position.width, position.height - this.TopAreaHeight);
+			Rect rect2 = new Rect(0f, TopAreaHeight, position.width, position.height - TopAreaHeight);
 			Bill[] first = (from b in BillUtility.GlobalBills()
-			where b is Bill_Production && b.GetStoreZone() == storeSettingsParent && b.recipe.WorkerCounter.CanPossiblyStoreInStockpile((Bill_Production)b, b.GetStoreZone())
-			select b).ToArray<Bill>();
-			ThingFilterUI.DoThingFilterConfigWindow(rect2, ref this.scrollPosition, settings.filter, parentFilter, 8, null, null, false, null, null);
+				where b is Bill_Production && b.GetStoreZone() == storeSettingsParent && b.recipe.WorkerCounter.CanPossiblyStoreInStockpile((Bill_Production)b, b.GetStoreZone())
+				select b).ToArray();
+			ThingFilterUI.DoThingFilterConfigWindow(rect2, ref scrollPosition, settings.filter, parentFilter, 8);
 			Bill[] second = (from b in BillUtility.GlobalBills()
-			where b is Bill_Production && b.GetStoreZone() == storeSettingsParent && b.recipe.WorkerCounter.CanPossiblyStoreInStockpile((Bill_Production)b, b.GetStoreZone())
-			select b).ToArray<Bill>();
-			foreach (Bill bill in first.Except(second))
+				where b is Bill_Production && b.GetStoreZone() == storeSettingsParent && b.recipe.WorkerCounter.CanPossiblyStoreInStockpile((Bill_Production)b, b.GetStoreZone())
+				select b).ToArray();
+			foreach (Bill item in first.Except(second))
 			{
-				Messages.Message("MessageBillValidationStoreZoneInsufficient".Translate(bill.LabelCap, bill.billStack.billGiver.LabelShort.CapitalizeFirst(), bill.GetStoreZone().label), bill.billStack.billGiver as Thing, MessageTypeDefOf.RejectInput, false);
+				Messages.Message("MessageBillValidationStoreZoneInsufficient".Translate(item.LabelCap, item.billStack.billGiver.LabelShort.CapitalizeFirst(), item.GetStoreZone().label), item.billStack.billGiver as Thing, MessageTypeDefOf.RejectInput, historical: false);
 			}
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.StorageTab, KnowledgeAmount.FrameDisplayed);
 			GUI.EndGroup();
 		}
 
-		
 		protected IStoreSettingsParent GetThingOrThingCompStoreSettingsParent(Thing t)
 		{
 			IStoreSettingsParent storeSettingsParent = t as IStoreSettingsParent;
@@ -147,11 +125,5 @@ namespace RimWorld
 			}
 			return null;
 		}
-
-		
-		private Vector2 scrollPosition;
-
-		
-		private static readonly Vector2 WinSize = new Vector2(300f, 480f);
 	}
 }

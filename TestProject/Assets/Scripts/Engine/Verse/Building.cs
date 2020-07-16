@@ -1,74 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using Verse.AI.Group;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class Building : ThingWithComps
 	{
-		
-		
-		public CompPower PowerComp
-		{
-			get
-			{
-				return base.GetComp<CompPower>();
-			}
-		}
+		private Sustainer sustainerAmbient;
 
-		
-		
-		public virtual bool TransmitsPowerNow
-		{
-			get
-			{
-				CompPower powerComp = this.PowerComp;
-				return powerComp != null && powerComp.Props.transmitsPower;
-			}
-		}
+		public bool canChangeTerrainOnDestroyed = true;
 
-		
-		
+		public CompPower PowerComp => GetComp<CompPower>();
+
+		public virtual bool TransmitsPowerNow => PowerComp?.Props.transmitsPower ?? false;
+
 		public override int HitPoints
 		{
 			set
 			{
-				int hitPoints = this.HitPoints;
+				int hitPoints = HitPoints;
 				base.HitPoints = value;
 				BuildingsDamageSectionLayerUtility.Notify_BuildingHitPointsChanged(this, hitPoints);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.canChangeTerrainOnDestroyed, "canChangeTerrainOnDestroyed", true, false);
+			Scribe_Values.Look(ref canChangeTerrainOnDestroyed, "canChangeTerrainOnDestroyed", defaultValue: true);
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
-			if (this.def.IsEdifice())
+			if (def.IsEdifice())
 			{
 				map.edificeGrid.Register(this);
-				if (this.def.Fillage == FillCategory.Full)
+				if (def.Fillage == FillCategory.Full)
 				{
 					map.terrainGrid.Drawer.SetDirty();
 				}
-				if (this.def.AffectsFertility)
+				if (def.AffectsFertility)
 				{
 					map.fertilityGrid.Drawer.SetDirty();
 				}
 			}
 			base.SpawnSetup(map, respawningAfterLoad);
 			base.Map.listerBuildings.Add(this);
-			if (this.def.coversFloor)
+			if (def.coversFloor)
 			{
-				base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.Terrain, true, false);
+				base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.Terrain, regenAdjacentCells: true, regenAdjacentSections: false);
 			}
 			CellRect cellRect = this.OccupiedRect();
 			for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
@@ -78,23 +59,23 @@ namespace Verse
 					IntVec3 intVec = new IntVec3(j, 0, i);
 					base.Map.mapDrawer.MapMeshDirty(intVec, MapMeshFlag.Buildings);
 					base.Map.glowGrid.MarkGlowGridDirty(intVec);
-					if (!SnowGrid.CanCoexistWithSnow(this.def))
+					if (!SnowGrid.CanCoexistWithSnow(def))
 					{
 						base.Map.snowGrid.SetDepth(intVec, 0f);
 					}
 				}
 			}
-			if (base.Faction == Faction.OfPlayer && this.def.building != null && this.def.building.spawnedConceptLearnOpportunity != null)
+			if (base.Faction == Faction.OfPlayer && def.building != null && def.building.spawnedConceptLearnOpportunity != null)
 			{
-				LessonAutoActivator.TeachOpportunity(this.def.building.spawnedConceptLearnOpportunity, OpportunityType.GoodToKnow);
+				LessonAutoActivator.TeachOpportunity(def.building.spawnedConceptLearnOpportunity, OpportunityType.GoodToKnow);
 			}
 			AutoHomeAreaMaker.Notify_BuildingSpawned(this);
-			if (this.def.building != null && !this.def.building.soundAmbient.NullOrUndefined())
+			if (def.building != null && !def.building.soundAmbient.NullOrUndefined())
 			{
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{
-					SoundInfo info = SoundInfo.InMap(this, MaintenanceType.None);
-					this.sustainerAmbient = this.def.building.soundAmbient.TrySpawnSustainer(info);
+					SoundInfo info = SoundInfo.InMap(this);
+					sustainerAmbient = def.building.soundAmbient.TrySpawnSustainer(info);
 				});
 			}
 			base.Map.listerBuildingsRepairable.Notify_BuildingSpawned(this);
@@ -107,41 +88,40 @@ namespace Verse
 			map.avoidGrid.Notify_BuildingSpawned(this);
 		}
 
-		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
 			base.DeSpawn(mode);
-			if (this.def.IsEdifice())
+			if (def.IsEdifice())
 			{
 				map.edificeGrid.DeRegister(this);
-				if (this.def.Fillage == FillCategory.Full)
+				if (def.Fillage == FillCategory.Full)
 				{
 					map.terrainGrid.Drawer.SetDirty();
 				}
-				if (this.def.AffectsFertility)
+				if (def.AffectsFertility)
 				{
 					map.fertilityGrid.Drawer.SetDirty();
 				}
 			}
 			if (mode != DestroyMode.WillReplace)
 			{
-				if (this.def.MakeFog)
+				if (def.MakeFog)
 				{
 					map.fogGrid.Notify_FogBlockerRemoved(base.Position);
 				}
-				if (this.def.holdsRoof)
+				if (def.holdsRoof)
 				{
 					RoofCollapseCellsFinder.Notify_RoofHolderDespawned(this, map);
 				}
-				if (this.def.IsSmoothable)
+				if (def.IsSmoothable)
 				{
 					SmoothSurfaceDesignatorUtility.Notify_BuildingDespawned(this, map);
 				}
 			}
-			if (this.sustainerAmbient != null)
+			if (sustainerAmbient != null)
 			{
-				this.sustainerAmbient.End();
+				sustainerAmbient.End();
 			}
 			CellRect cellRect = this.OccupiedRect();
 			for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
@@ -150,11 +130,11 @@ namespace Verse
 				{
 					IntVec3 loc = new IntVec3(j, 0, i);
 					MapMeshFlag mapMeshFlag = MapMeshFlag.Buildings;
-					if (this.def.coversFloor)
+					if (def.coversFloor)
 					{
 						mapMeshFlag |= MapMeshFlag.Terrain;
 					}
-					if (this.def.Fillage == FillCategory.Full)
+					if (def.Fillage == FillCategory.Full)
 					{
 						mapMeshFlag |= MapMeshFlag.Roofs;
 						mapMeshFlag |= MapMeshFlag.Snow;
@@ -166,11 +146,11 @@ namespace Verse
 			map.listerBuildings.Remove(this);
 			map.listerBuildingsRepairable.Notify_BuildingDeSpawned(this);
 			map.listerArtificialBuildingsForMeditation.Notify_BuildingDeSpawned(this);
-			if (this.def.building.leaveTerrain != null && Current.ProgramState == ProgramState.Playing && this.canChangeTerrainOnDestroyed)
+			if (def.building.leaveTerrain != null && Current.ProgramState == ProgramState.Playing && canChangeTerrainOnDestroyed)
 			{
-				foreach (IntVec3 c in this.OccupiedRect())
+				foreach (IntVec3 item in this.OccupiedRect())
 				{
-					map.terrainGrid.SetTerrain(c, this.def.building.leaveTerrain);
+					map.terrainGrid.SetTerrain(item, def.building.leaveTerrain);
 				}
 			}
 			map.designationManager.Notify_BuildingDespawned(this);
@@ -178,52 +158,43 @@ namespace Verse
 			{
 				map.exitMapGrid.Notify_LOSBlockerDespawned();
 			}
-			if (this.def.building.hasFuelingPort)
+			if (def.building.hasFuelingPort)
 			{
-				CompLaunchable compLaunchable = FuelingPortUtility.LaunchableAt(FuelingPortUtility.GetFuelingPortCell(base.Position, base.Rotation), map);
-				if (compLaunchable != null)
-				{
-					compLaunchable.Notify_FuelingPortSourceDeSpawned();
-				}
+				FuelingPortUtility.LaunchableAt(FuelingPortUtility.GetFuelingPortCell(base.Position, base.Rotation), map)?.Notify_FuelingPortSourceDeSpawned();
 			}
 			map.avoidGrid.Notify_BuildingDespawned(this);
 		}
 
-		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			bool spawned = base.Spawned;
 			Map map = base.Map;
 			SmoothableWallUtility.Notify_BuildingDestroying(this, mode);
-			Lord lord = this.GetLord();
-			if (lord != null)
-			{
-				lord.Notify_BuildingLost(this, null);
-			}
+			this.GetLord()?.Notify_BuildingLost(this);
 			base.Destroy(mode);
 			InstallBlueprintUtility.CancelBlueprintsFor(this);
 			if (mode == DestroyMode.Deconstruct && spawned)
 			{
-				SoundDefOf.Building_Deconstructed.PlayOneShot(new TargetInfo(base.Position, map, false));
+				SoundDefOf.Building_Deconstructed.PlayOneShot(new TargetInfo(base.Position, map));
 			}
 			if (spawned)
 			{
-				ThingUtility.CheckAutoRebuildOnDestroyed(this, mode, map, this.def);
+				ThingUtility.CheckAutoRebuildOnDestroyed(this, mode, map, def);
 			}
 		}
 
-		
 		public override void Draw()
 		{
-			if (this.def.drawerType == DrawerType.RealtimeOnly)
+			if (def.drawerType == DrawerType.RealtimeOnly)
 			{
 				base.Draw();
-				return;
 			}
-			base.Comps_PostDraw();
+			else
+			{
+				Comps_PostDraw();
+			}
 		}
 
-		
 		public override void SetFaction(Faction newFaction, Pawn recruiter = null)
 		{
 			if (base.Spawned)
@@ -236,7 +207,7 @@ namespace Verse
 			{
 				base.Map.listerBuildingsRepairable.Notify_BuildingSpawned(this);
 				base.Map.listerBuildings.Add(this);
-				base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.PowerGrid, true, false);
+				base.Map.mapDrawer.MapMeshDirty(base.Position, MapMeshFlag.PowerGrid, regenAdjacentCells: true, regenAdjacentSections: false);
 				if (newFaction == Faction.OfPlayer)
 				{
 					AutoHomeAreaMaker.Notify_BuildingClaimed(this);
@@ -244,7 +215,6 @@ namespace Verse
 			}
 		}
 
-		
 		public override void PreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
 		{
 			if (base.Faction != null && base.Spawned && base.Faction != Faction.OfPlayer)
@@ -265,7 +235,6 @@ namespace Verse
 			}
 		}
 
-		
 		public override void PostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			base.PostApplyDamage(dinfo, totalDamageDealt);
@@ -275,7 +244,6 @@ namespace Verse
 			}
 		}
 
-		
 		public override void DrawExtraSelectionOverlays()
 		{
 			base.DrawExtraSelectionOverlays();
@@ -286,12 +254,13 @@ namespace Verse
 			}
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (((this.def.BuildableByPlayer && this.def.passability != Traversability.Impassable && !this.def.IsDoor) || this.def.building.forceShowRoomStats) && Gizmo_RoomStats.GetRoomToShowStatsFor(this) != null && Find.Selector.SingleSelectedObject == this)
+			foreach (Gizmo gizmo in base.GetGizmos())
+			{
+				yield return gizmo;
+			}
+			if (((def.BuildableByPlayer && def.passability != Traversability.Impassable && !def.IsDoor) || def.building.forceShowRoomStats) && Gizmo_RoomStats.GetRoomToShowStatsFor(this) != null && Find.Selector.SingleSelectedObject == this)
 			{
 				yield return new Gizmo_RoomStats(this);
 			}
@@ -300,31 +269,27 @@ namespace Verse
 			{
 				yield return selectMonumentMarkerGizmo;
 			}
-			if (this.def.Minifiable && base.Faction == Faction.OfPlayer)
+			if (def.Minifiable && base.Faction == Faction.OfPlayer)
 			{
-				yield return InstallationDesignatorDatabase.DesignatorFor(this.def);
+				yield return InstallationDesignatorDatabase.DesignatorFor(def);
 			}
-			Command command = BuildCopyCommandUtility.BuildCopyCommand(this.def, base.Stuff);
+			Command command = BuildCopyCommandUtility.BuildCopyCommand(def, base.Stuff);
 			if (command != null)
 			{
 				yield return command;
 			}
 			if (base.Faction == Faction.OfPlayer)
 			{
-				foreach (Command command2 in BuildFacilityCommandUtility.BuildFacilityCommands(this.def))
+				foreach (Command item in BuildFacilityCommandUtility.BuildFacilityCommands(def))
 				{
-					yield return command2;
+					yield return item;
 				}
-				IEnumerator<Command> enumerator2 = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public virtual bool ClaimableBy(Faction by)
 		{
-			if (!this.def.Claimable)
+			if (!def.Claimable)
 			{
 				return false;
 			}
@@ -366,28 +331,31 @@ namespace Verse
 			return true;
 		}
 
-		
 		public virtual bool DeconstructibleBy(Faction faction)
 		{
-			return DebugSettings.godMode || (this.def.building.IsDeconstructible && (base.Faction == faction || this.ClaimableBy(faction) || this.def.building.alwaysDeconstructible));
+			if (DebugSettings.godMode)
+			{
+				return true;
+			}
+			if (!def.building.IsDeconstructible)
+			{
+				return false;
+			}
+			if (base.Faction != faction && !ClaimableBy(faction))
+			{
+				return def.building.alwaysDeconstructible;
+			}
+			return true;
 		}
 
-		
 		public virtual ushort PathWalkCostFor(Pawn p)
 		{
 			return 0;
 		}
 
-		
 		public virtual bool IsDangerousFor(Pawn p)
 		{
 			return false;
 		}
-
-		
-		private Sustainer sustainerAmbient;
-
-		
-		public bool canChangeTerrainOnDestroyed = true;
 	}
 }

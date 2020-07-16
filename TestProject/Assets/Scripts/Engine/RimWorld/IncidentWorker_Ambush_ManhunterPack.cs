@@ -1,56 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_Ambush_ManhunterPack : IncidentWorker_Ambush
 	{
-		
+		private const float ManhunterAmbushPointsFactor = 0.75f;
+
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
-			PawnKindDef pawnKindDef;
-			return base.CanFireNowSub(parms) && ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(this.AdjustedPoints(parms.points), -1, out pawnKindDef);
+			if (!base.CanFireNowSub(parms))
+			{
+				return false;
+			}
+			PawnKindDef animalKind;
+			return ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(AdjustedPoints(parms.points), -1, out animalKind);
 		}
 
-		
 		protected override List<Pawn> GeneratePawns(IncidentParms parms)
 		{
-			PawnKindDef animalKind;
-			if (!ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(this.AdjustedPoints(parms.points), parms.target.Tile, out animalKind) && !ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(this.AdjustedPoints(parms.points), -1, out animalKind))
+			if (!ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(AdjustedPoints(parms.points), parms.target.Tile, out PawnKindDef animalKind) && !ManhunterPackIncidentUtility.TryFindManhunterAnimalKind(AdjustedPoints(parms.points), -1, out animalKind))
 			{
-				Log.Error("Could not find any valid animal kind for " + this.def + " incident.", false);
+				Log.Error("Could not find any valid animal kind for " + def + " incident.");
 				return new List<Pawn>();
 			}
-			return ManhunterPackIncidentUtility.GenerateAnimals_NewTmp(animalKind, parms.target.Tile, this.AdjustedPoints(parms.points), 0);
+			return ManhunterPackIncidentUtility.GenerateAnimals_NewTmp(animalKind, parms.target.Tile, AdjustedPoints(parms.points));
 		}
 
-		
 		protected override void PostProcessGeneratedPawnsAfterSpawning(List<Pawn> generatedPawns)
 		{
 			for (int i = 0; i < generatedPawns.Count; i++)
 			{
-				generatedPawns[i].health.AddHediff(HediffDefOf.Scaria, null, null, null);
-				generatedPawns[i].mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.ManhunterPermanent, null, false, false, null, false);
+				generatedPawns[i].health.AddHediff(HediffDefOf.Scaria);
+				generatedPawns[i].mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.ManhunterPermanent);
 			}
 		}
 
-		
 		private float AdjustedPoints(float basePoints)
 		{
 			return basePoints * 0.75f;
 		}
 
-		
 		protected override string GetLetterText(Pawn anyPawn, IncidentParms parms)
 		{
 			Caravan caravan = parms.target as Caravan;
-			return string.Format(this.def.letterText, (caravan != null) ? caravan.Name : "yourCaravan".TranslateSimple(), anyPawn.GetKindLabelPlural(-1)).CapitalizeFirst();
+			return string.Format(def.letterText, (caravan != null) ? caravan.Name : "yourCaravan".TranslateSimple(), anyPawn.GetKindLabelPlural()).CapitalizeFirst();
 		}
-
-		
-		private const float ManhunterAmbushPointsFactor = 0.75f;
 	}
 }

@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public static class HediffGrowthModeUtility
 	{
-		
 		public static string GetLabel(this HediffGrowthMode m)
 		{
 			switch (m)

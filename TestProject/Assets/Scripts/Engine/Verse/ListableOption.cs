@@ -1,12 +1,18 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ListableOption
 	{
-		
+		public string label;
+
+		public Action action;
+
+		private string uiHighlightTag;
+
+		public float minHeight = 45f;
+
 		public ListableOption(string label, Action action, string uiHighlightTag = null)
 		{
 			this.label = label;
@@ -14,33 +20,20 @@ namespace Verse
 			this.uiHighlightTag = uiHighlightTag;
 		}
 
-		
 		public virtual float DrawOption(Vector2 pos, float width)
 		{
-			float b = Text.CalcHeight(this.label, width);
-			float num = Mathf.Max(this.minHeight, b);
+			float b = Text.CalcHeight(label, width);
+			float num = Mathf.Max(minHeight, b);
 			Rect rect = new Rect(pos.x, pos.y, width, num);
-			if (Widgets.ButtonText(rect, this.label, true, true, true))
+			if (Widgets.ButtonText(rect, label))
 			{
-				this.action();
+				action();
 			}
-			if (this.uiHighlightTag != null)
+			if (uiHighlightTag != null)
 			{
-				UIHighlighter.HighlightOpportunity(rect, this.uiHighlightTag);
+				UIHighlighter.HighlightOpportunity(rect, uiHighlightTag);
 			}
 			return num;
 		}
-
-		
-		public string label;
-
-		
-		public Action action;
-
-		
-		private string uiHighlightTag;
-
-		
-		public float minHeight = 45f;
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Verse;
+using System;
 
 namespace Verse
 {
@@ -45,5 +44,4 @@ namespace Verse
 			return LabelCap;
 		}
 	}
-
 }

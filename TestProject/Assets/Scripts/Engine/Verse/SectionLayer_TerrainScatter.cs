@@ -1,37 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class SectionLayer_TerrainScatter : SectionLayer
 	{
-		
-		
-		public override bool Visible
+		private class Scatterable
 		{
-			get
+			private Map map;
+
+			public ScatterableDef def;
+
+			public Vector3 loc;
+
+			public float size;
+
+			public float rotation;
+
+			public bool IsOnValidTerrain
 			{
-				return DebugViewSettings.drawTerrain;
+				get
+				{
+					IntVec3 c = loc.ToIntVec3();
+					TerrainDef terrainDef = map.terrainGrid.TerrainAt(c);
+					if (def.scatterType == terrainDef.scatterType)
+					{
+						return !c.Filled(map);
+					}
+					return false;
+				}
+			}
+
+			public Scatterable(ScatterableDef def, Vector3 loc, Map map)
+			{
+				this.def = def;
+				this.loc = loc;
+				this.map = map;
+				size = Rand.Range(def.minSize, def.maxSize);
+				rotation = Rand.Range(0f, 360f);
+			}
+
+			public void PrintOnto(SectionLayer layer)
+			{
+				Printer_Plane.PrintPlane(layer, loc, Vector2.one * size, def.mat, rotation);
 			}
 		}
 
-		
-		public SectionLayer_TerrainScatter(Section section) : base(section)
+		private List<Scatterable> scats = new List<Scatterable>();
+
+		public override bool Visible => DebugViewSettings.drawTerrain;
+
+		public SectionLayer_TerrainScatter(Section section)
+			: base(section)
 		{
-			this.relevantChangeTypes = MapMeshFlag.Terrain;
+			relevantChangeTypes = MapMeshFlag.Terrain;
 		}
 
-		
 		public override void Regenerate()
 		{
-			base.ClearSubMeshes(MeshParts.All);
-			this.scats.RemoveAll((SectionLayer_TerrainScatter.Scatterable scat) => !scat.IsOnValidTerrain);
+			ClearSubMeshes(MeshParts.All);
+			scats.RemoveAll((Scatterable scat) => !scat.IsOnValidTerrain);
 			int num = 0;
 			TerrainDef[] topGrid = base.Map.terrainGrid.topGrid;
-			CellRect cellRect = this.section.CellRect;
+			CellRect cellRect = section.CellRect;
 			CellIndices cellIndices = base.Map.cellIndices;
 			for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
 			{
@@ -45,77 +77,23 @@ namespace Verse
 			}
 			num /= 40;
 			int num2 = 0;
-			while (this.scats.Count < num && num2 < 200)
+			while (scats.Count < num && num2 < 200)
 			{
 				num2++;
-				IntVec3 randomCell = this.section.CellRect.RandomCell;
+				IntVec3 randomCell = section.CellRect.RandomCell;
 				string terrScatType = base.Map.terrainGrid.TerrainAt(randomCell).scatterType;
-				ScatterableDef def2;
-				if (terrScatType != null && !randomCell.Filled(base.Map) && (from def in DefDatabase<ScatterableDef>.AllDefs
-				where def.scatterType == terrScatType
-				select def).TryRandomElement(out def2))
+				if (terrScatType != null && !randomCell.Filled(base.Map) && DefDatabase<ScatterableDef>.AllDefs.Where((ScatterableDef def) => def.scatterType == terrScatType).TryRandomElement(out ScatterableDef result))
 				{
-					Vector3 loc = new Vector3((float)randomCell.x + Rand.Value, (float)randomCell.y, (float)randomCell.z + Rand.Value);
-					SectionLayer_TerrainScatter.Scatterable scatterable = new SectionLayer_TerrainScatter.Scatterable(def2, loc, base.Map);
-					this.scats.Add(scatterable);
+					Scatterable scatterable = new Scatterable(loc: new Vector3((float)randomCell.x + Rand.Value, randomCell.y, (float)randomCell.z + Rand.Value), def: result, map: base.Map);
+					scats.Add(scatterable);
 					scatterable.PrintOnto(this);
 				}
 			}
-			for (int k = 0; k < this.scats.Count; k++)
+			for (int k = 0; k < scats.Count; k++)
 			{
-				this.scats[k].PrintOnto(this);
+				scats[k].PrintOnto(this);
 			}
-			base.FinalizeMesh(MeshParts.All);
-		}
-
-		
-		private List<SectionLayer_TerrainScatter.Scatterable> scats = new List<SectionLayer_TerrainScatter.Scatterable>();
-
-		
-		private class Scatterable
-		{
-			
-			public Scatterable(ScatterableDef def, Vector3 loc, Map map)
-			{
-				this.def = def;
-				this.loc = loc;
-				this.map = map;
-				this.size = Rand.Range(def.minSize, def.maxSize);
-				this.rotation = Rand.Range(0f, 360f);
-			}
-
-			
-			public void PrintOnto(SectionLayer layer)
-			{
-				Printer_Plane.PrintPlane(layer, this.loc, Vector2.one * this.size, this.def.mat, this.rotation, false, null, null, 0.01f, 0f);
-			}
-
-			
-			
-			public bool IsOnValidTerrain
-			{
-				get
-				{
-					IntVec3 c = this.loc.ToIntVec3();
-					TerrainDef terrainDef = this.map.terrainGrid.TerrainAt(c);
-					return this.def.scatterType == terrainDef.scatterType && !c.Filled(this.map);
-				}
-			}
-
-			
-			private Map map;
-
-			
-			public ScatterableDef def;
-
-			
-			public Vector3 loc;
-
-			
-			public float size;
-
-			
-			public float rotation;
+			FinalizeMesh(MeshParts.All);
 		}
 	}
 }

@@ -1,42 +1,34 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Flee : JobDriver
 	{
-		
+		protected const TargetIndex DestInd = TargetIndex.A;
+
+		protected const TargetIndex DangerInd = TargetIndex.B;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			this.pawn.Map.pawnDestinationReservationManager.Reserve(this.pawn, this.job, this.job.GetTarget(TargetIndex.A).Cell);
+			pawn.Map.pawnDestinationReservationManager.Reserve(pawn, job, job.GetTarget(TargetIndex.A).Cell);
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			yield return new Toil
+			Toil toil = new Toil();
+			toil.atomicWithPrevious = true;
+			toil.defaultCompleteMode = ToilCompleteMode.Instant;
+			toil.initAction = delegate
 			{
-				atomicWithPrevious = true,
-				defaultCompleteMode = ToilCompleteMode.Instant,
-				initAction = delegate
+				if (pawn.IsColonist)
 				{
-					if (this.pawn.IsColonist)
-					{
-						MoteMaker.MakeColonistActionOverlay(this.pawn, ThingDefOf.Mote_ColonistFleeing);
-					}
+					MoteMaker.MakeColonistActionOverlay(pawn, ThingDefOf.Mote_ColonistFleeing);
 				}
 			};
+			yield return toil;
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.OnCell);
-			yield break;
 		}
-
-		
-		protected const TargetIndex DestInd = TargetIndex.A;
-
-		
-		protected const TargetIndex DangerInd = TargetIndex.B;
 	}
 }

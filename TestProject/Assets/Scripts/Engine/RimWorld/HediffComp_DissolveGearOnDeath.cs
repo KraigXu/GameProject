@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,64 +6,51 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class HediffComp_DissolveGearOnDeath : HediffComp
 	{
-		
-		
-		public HediffCompProperties_DissolveGearOnDeath Props
-		{
-			get
-			{
-				return (HediffCompProperties_DissolveGearOnDeath)this.props;
-			}
-		}
+		public HediffCompProperties_DissolveGearOnDeath Props => (HediffCompProperties_DissolveGearOnDeath)props;
 
-		
 		public override void Notify_PawnDied()
 		{
 			base.Notify_PawnDied();
-			if (this.Props.injuryCreatedOnDeath != null)
+			if (Props.injuryCreatedOnDeath != null)
 			{
-				List<BodyPartRecord> list = new List<BodyPartRecord>(from part in base.Pawn.RaceProps.body.AllParts
-				where part.coverageAbs > 0f && !base.Pawn.health.hediffSet.PartIsMissing(part)
-				select part);
-				int num = Mathf.Min(this.Props.injuryCount.RandomInRange, list.Count);
+				List<BodyPartRecord> list = new List<BodyPartRecord>(base.Pawn.RaceProps.body.AllParts.Where((BodyPartRecord part) => part.coverageAbs > 0f && !base.Pawn.health.hediffSet.PartIsMissing(part)));
+				int num = Mathf.Min(Props.injuryCount.RandomInRange, list.Count);
 				for (int i = 0; i < num; i++)
 				{
 					int index = Rand.Range(0, list.Count);
 					BodyPartRecord part2 = list[index];
 					list.RemoveAt(index);
-					base.Pawn.health.AddHediff(this.Props.injuryCreatedOnDeath, part2, null, null);
+					base.Pawn.health.AddHediff(Props.injuryCreatedOnDeath, part2);
 				}
 			}
 		}
 
-		
 		public override void Notify_PawnKilled()
 		{
-			base.Pawn.equipment.DestroyAllEquipment(DestroyMode.Vanish);
-			base.Pawn.apparel.DestroyAll(DestroyMode.Vanish);
+			base.Pawn.equipment.DestroyAllEquipment();
+			base.Pawn.apparel.DestroyAll();
 			if (!base.Pawn.Spawned)
 			{
 				return;
 			}
-			if (this.Props.mote != null)
+			if (Props.mote != null)
 			{
 				Vector3 drawPos = base.Pawn.DrawPos;
-				for (int i = 0; i < this.Props.moteCount; i++)
+				for (int i = 0; i < Props.moteCount; i++)
 				{
-					Vector2 vector = Rand.InsideUnitCircle * this.Props.moteOffsetRange.RandomInRange * (float)Rand.Sign;
-					MoteMaker.MakeStaticMote(new Vector3(drawPos.x + vector.x, drawPos.y, drawPos.z + vector.y), base.Pawn.Map, this.Props.mote, 1f);
+					Vector2 vector = Rand.InsideUnitCircle * Props.moteOffsetRange.RandomInRange * Rand.Sign;
+					MoteMaker.MakeStaticMote(new Vector3(drawPos.x + vector.x, drawPos.y, drawPos.z + vector.y), base.Pawn.Map, Props.mote);
 				}
 			}
-			if (this.Props.filth != null)
+			if (Props.filth != null)
 			{
-				FilthMaker.TryMakeFilth(base.Pawn.Position, base.Pawn.Map, this.Props.filth, this.Props.filthCount, FilthSourceFlags.None);
+				FilthMaker.TryMakeFilth(base.Pawn.Position, base.Pawn.Map, Props.filth, Props.filthCount);
 			}
-			if (this.Props.sound != null)
+			if (Props.sound != null)
 			{
-				this.Props.sound.PlayOneShot(SoundInfo.InMap(base.Pawn, MaintenanceType.None));
+				Props.sound.PlayOneShot(SoundInfo.InMap(base.Pawn));
 			}
 		}
 	}

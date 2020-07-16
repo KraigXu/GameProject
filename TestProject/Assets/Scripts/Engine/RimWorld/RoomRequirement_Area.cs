@@ -1,39 +1,32 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRequirement_Area : RoomRequirement
 	{
-		
+		public int area;
+
 		public override string Label(Room r = null)
 		{
-			return ((!this.labelKey.NullOrEmpty()) ? this.labelKey : "RoomRequirementArea").Translate(((r != null) ? (r.CellCount + "/") : "") + this.area);
+			return ((!labelKey.NullOrEmpty()) ? labelKey : "RoomRequirementArea").Translate(((r != null) ? (r.CellCount + "/") : "") + area);
 		}
 
-		
 		public override bool Met(Room r, Pawn p = null)
 		{
-			return r.CellCount >= this.area;
+			return r.CellCount >= area;
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
-
-			IEnumerator<string> enumerator = null;
-			if (this.area <= 0)
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (area <= 0)
 			{
 				yield return "area must be larger than 0";
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public int area;
 	}
 }

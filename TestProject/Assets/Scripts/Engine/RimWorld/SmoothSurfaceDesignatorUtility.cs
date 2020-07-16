@@ -1,25 +1,25 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SmoothSurfaceDesignatorUtility
 	{
-		
 		public static bool CanSmoothFloorUnder(Building b)
 		{
-			return b.def.Fillage != FillCategory.Full || b.def.passability != Traversability.Impassable;
+			if (b.def.Fillage == FillCategory.Full)
+			{
+				return b.def.passability != Traversability.Impassable;
+			}
+			return true;
 		}
 
-		
 		public static void Notify_BuildingSpawned(Building b)
 		{
-			if (!SmoothSurfaceDesignatorUtility.CanSmoothFloorUnder(b))
+			if (!CanSmoothFloorUnder(b))
 			{
-				foreach (IntVec3 c in b.OccupiedRect())
+				foreach (IntVec3 item in b.OccupiedRect())
 				{
-					Designation designation = b.Map.designationManager.DesignationAt(c, DesignationDefOf.SmoothFloor);
+					Designation designation = b.Map.designationManager.DesignationAt(item, DesignationDefOf.SmoothFloor);
 					if (designation != null)
 					{
 						b.Map.designationManager.RemoveDesignation(designation);
@@ -28,12 +28,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void Notify_BuildingDespawned(Building b, Map map)
 		{
-			foreach (IntVec3 c in b.OccupiedRect())
+			foreach (IntVec3 item in b.OccupiedRect())
 			{
-				Designation designation = map.designationManager.DesignationAt(c, DesignationDefOf.SmoothWall);
+				Designation designation = map.designationManager.DesignationAt(item, DesignationDefOf.SmoothWall);
 				if (designation != null)
 				{
 					map.designationManager.RemoveDesignation(designation);

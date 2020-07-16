@@ -1,35 +1,37 @@
-﻿using RimWorld;
 using System;
 using System.Linq;
 using Verse;
 
-public static class TaleFactory
+namespace RimWorld
 {
-	public static Tale MakeRawTale(TaleDef def, params object[] args)
+	public static class TaleFactory
 	{
-		try
+		public static Tale MakeRawTale(TaleDef def, params object[] args)
 		{
-			Tale obj = (Tale)Activator.CreateInstance(def.taleClass, args);
-			obj.def = def;
-			obj.id = Find.UniqueIDsManager.GetNextTaleID();
-			obj.date = Find.TickManager.TicksAbs;
-			return obj;
+			try
+			{
+				Tale obj = (Tale)Activator.CreateInstance(def.taleClass, args);
+				obj.def = def;
+				obj.id = Find.UniqueIDsManager.GetNextTaleID();
+				obj.date = Find.TickManager.TicksAbs;
+				return obj;
+			}
+			catch (Exception arg2)
+			{
+				Log.Error($"Failed to create tale object {def} with parameters {args.Select((object arg) => arg.ToStringSafe()).ToCommaList()}: {arg2}");
+				return null;
+			}
 		}
-		catch (Exception arg2)
-		{
-			Log.Error($"Failed to create tale object {def} with parameters {args.Select((object arg) => arg.ToStringSafe()).ToCommaList()}: {arg2}");
-			return null;
-		}
-	}
 
-	public static Tale MakeRandomTestTale(TaleDef def = null)
-	{
-		if (def == null)
+		public static Tale MakeRandomTestTale(TaleDef def = null)
 		{
-			def = DefDatabase<TaleDef>.AllDefs.Where((TaleDef d) => d.usableForArt).RandomElement();
+			if (def == null)
+			{
+				def = DefDatabase<TaleDef>.AllDefs.Where((TaleDef d) => d.usableForArt).RandomElement();
+			}
+			Tale tale = MakeRawTale(def);
+			tale.GenerateTestData();
+			return tale;
 		}
-		Tale tale = MakeRawTale(def);
-		tale.GenerateTestData();
-		return tale;
 	}
 }

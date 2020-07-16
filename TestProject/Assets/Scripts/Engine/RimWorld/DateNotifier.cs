@@ -1,43 +1,41 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class DateNotifier : IExposable
 	{
-		
+		private Season lastSeason;
+
 		public void ExposeData()
 		{
-			Scribe_Values.Look<Season>(ref this.lastSeason, "lastSeason", Season.Undefined, false);
+			Scribe_Values.Look(ref lastSeason, "lastSeason", Season.Undefined);
 		}
 
-		
 		public void DateNotifierTick()
 		{
-			Map map = this.FindPlayerHomeWithMinTimezone();
+			Map map = FindPlayerHomeWithMinTimezone();
 			float latitude = (map != null) ? Find.WorldGrid.LongLatOf(map.Tile).y : 0f;
 			float longitude = (map != null) ? Find.WorldGrid.LongLatOf(map.Tile).x : 0f;
-			Season season = GenDate.Season((long)Find.TickManager.TicksAbs, latitude, longitude);
-			if (season != this.lastSeason && (this.lastSeason == Season.Undefined || season != this.lastSeason.GetPreviousSeason()))
+			Season season = GenDate.Season(Find.TickManager.TicksAbs, latitude, longitude);
+			if (season == lastSeason || (lastSeason != 0 && season == lastSeason.GetPreviousSeason()))
 			{
-				if (this.lastSeason != Season.Undefined && this.AnyPlayerHomeSeasonsAreMeaningful())
-				{
-					if (GenDate.YearsPassed == 0 && season == Season.Summer && this.AnyPlayerHomeAvgTempIsLowInWinter())
-					{
-						Find.LetterStack.ReceiveLetter("LetterLabelFirstSummerWarning".Translate(), "FirstSummerWarning".Translate(), LetterDefOf.NeutralEvent, null);
-					}
-					else if (GenDate.DaysPassed > 5)
-					{
-						Messages.Message("MessageSeasonBegun".Translate(season.Label()).CapitalizeFirst(), MessageTypeDefOf.NeutralEvent, true);
-					}
-				}
-				this.lastSeason = season;
+				return;
 			}
+			if (lastSeason != 0 && AnyPlayerHomeSeasonsAreMeaningful())
+			{
+				if (GenDate.YearsPassed == 0 && season == Season.Summer && AnyPlayerHomeAvgTempIsLowInWinter())
+				{
+					Find.LetterStack.ReceiveLetter("LetterLabelFirstSummerWarning".Translate(), "FirstSummerWarning".Translate(), LetterDefOf.NeutralEvent);
+				}
+				else if (GenDate.DaysPassed > 5)
+				{
+					Messages.Message("MessageSeasonBegun".Translate(season.Label()).CapitalizeFirst(), MessageTypeDefOf.NeutralEvent);
+				}
+			}
+			lastSeason = season;
 		}
 
-		
 		private Map FindPlayerHomeWithMinTimezone()
 		{
 			List<Map> maps = Find.Maps;
@@ -58,7 +56,6 @@ namespace RimWorld
 			return map;
 		}
 
-		
 		private bool AnyPlayerHomeSeasonsAreMeaningful()
 		{
 			List<Map> maps = Find.Maps;
@@ -72,7 +69,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private bool AnyPlayerHomeAvgTempIsLowInWinter()
 		{
 			List<Map> maps = Find.Maps;
@@ -85,8 +81,5 @@ namespace RimWorld
 			}
 			return false;
 		}
-
-		
-		private Season lastSeason;
 	}
 }

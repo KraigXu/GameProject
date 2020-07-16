@@ -1,151 +1,137 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public sealed class ListerThings
 	{
-		
-		
-		public List<Thing> AllThings
-		{
-			get
-			{
-				return this.listsByGroup[2];
-			}
-		}
+		private Dictionary<ThingDef, List<Thing>> listsByDef = new Dictionary<ThingDef, List<Thing>>(ThingDefComparer.Instance);
 
-		
+		private List<Thing>[] listsByGroup;
+
+		public ListerThingsUse use;
+
+		private static readonly List<Thing> EmptyList = new List<Thing>();
+
+		public List<Thing> AllThings => listsByGroup[2];
+
 		public ListerThings(ListerThingsUse use)
 		{
 			this.use = use;
-			this.listsByGroup = new List<Thing>[ThingListGroupHelper.AllGroups.Length];
-			this.listsByGroup[2] = new List<Thing>();
+			listsByGroup = new List<Thing>[ThingListGroupHelper.AllGroups.Length];
+			listsByGroup[2] = new List<Thing>();
 		}
 
-		
 		public List<Thing> ThingsInGroup(ThingRequestGroup group)
 		{
-			return this.ThingsMatching(ThingRequest.ForGroup(group));
+			return ThingsMatching(ThingRequest.ForGroup(group));
 		}
 
-		
 		public List<Thing> ThingsOfDef(ThingDef def)
 		{
-			return this.ThingsMatching(ThingRequest.ForDef(def));
+			return ThingsMatching(ThingRequest.ForDef(def));
 		}
 
-		
 		public List<Thing> ThingsMatching(ThingRequest req)
 		{
 			if (req.singleDef != null)
 			{
-				List<Thing> result;
-				if (!this.listsByDef.TryGetValue(req.singleDef, out result))
+				if (!listsByDef.TryGetValue(req.singleDef, out List<Thing> value))
 				{
-					return ListerThings.EmptyList;
+					return EmptyList;
 				}
-				return result;
+				return value;
 			}
-			else
+			if (req.group != 0)
 			{
-				if (req.group == ThingRequestGroup.Undefined)
+				if (use == ListerThingsUse.Region && !req.group.StoreInRegion())
 				{
-					throw new InvalidOperationException("Invalid ThingRequest " + req);
+					Log.ErrorOnce("Tried to get things in group " + req.group + " in a region, but this group is never stored in regions. Most likely a global query should have been used.", 1968735132);
+					return EmptyList;
 				}
-				if (this.use == ListerThingsUse.Region && !req.group.StoreInRegion())
-				{
-					Log.ErrorOnce("Tried to get things in group " + req.group + " in a region, but this group is never stored in regions. Most likely a global query should have been used.", 1968735132, false);
-					return ListerThings.EmptyList;
-				}
-				return this.listsByGroup[(int)req.group] ?? ListerThings.EmptyList;
+				return listsByGroup[(uint)req.group] ?? EmptyList;
 			}
+			throw new InvalidOperationException("Invalid ThingRequest " + req);
 		}
 
-		
 		public bool Contains(Thing t)
 		{
-			return this.AllThings.Contains(t);
+			return AllThings.Contains(t);
 		}
 
-		
 		public void Add(Thing t)
 		{
-			if (!ListerThings.EverListable(t.def, this.use))
+			if (!EverListable(t.def, use))
 			{
 				return;
 			}
-			List<Thing> list;
-			if (!this.listsByDef.TryGetValue(t.def, out list))
+			if (!listsByDef.TryGetValue(t.def, out List<Thing> value))
 			{
-				list = new List<Thing>();
-				this.listsByDef.Add(t.def, list);
+				value = new List<Thing>();
+				listsByDef.Add(t.def, value);
 			}
-			list.Add(t);
-			foreach (ThingRequestGroup thingRequestGroup in ThingListGroupHelper.AllGroups)
+			value.Add(t);
+			ThingRequestGroup[] allGroups = ThingListGroupHelper.AllGroups;
+			foreach (ThingRequestGroup thingRequestGroup in allGroups)
 			{
-				if ((this.use != ListerThingsUse.Region || thingRequestGroup.StoreInRegion()) && thingRequestGroup.Includes(t.def))
+				if ((use != ListerThingsUse.Region || thingRequestGroup.StoreInRegion()) && thingRequestGroup.Includes(t.def))
 				{
-					List<Thing> list2 = this.listsByGroup[(int)thingRequestGroup];
-					if (list2 == null)
+					List<Thing> list = listsByGroup[(uint)thingRequestGroup];
+					if (list == null)
 					{
-						list2 = new List<Thing>();
-						this.listsByGroup[(int)thingRequestGroup] = list2;
+						list = new List<Thing>();
+						listsByGroup[(uint)thingRequestGroup] = list;
 					}
-					list2.Add(t);
+					list.Add(t);
 				}
 			}
 		}
 
-		
 		public void Remove(Thing t)
 		{
-			if (!ListerThings.EverListable(t.def, this.use))
+			if (!EverListable(t.def, use))
 			{
 				return;
 			}
-			this.listsByDef[t.def].Remove(t);
+			listsByDef[t.def].Remove(t);
 			ThingRequestGroup[] allGroups = ThingListGroupHelper.AllGroups;
 			for (int i = 0; i < allGroups.Length; i++)
 			{
 				ThingRequestGroup group = allGroups[i];
-				if ((this.use != ListerThingsUse.Region || group.StoreInRegion()) && group.Includes(t.def))
+				if ((use != ListerThingsUse.Region || group.StoreInRegion()) && group.Includes(t.def))
 				{
-					this.listsByGroup[i].Remove(t);
+					listsByGroup[i].Remove(t);
 				}
 			}
 		}
 
-		
 		public static bool EverListable(ThingDef def, ListerThingsUse use)
 		{
-			return (def.category != ThingCategory.Mote || (def.drawGUIOverlay && use != ListerThingsUse.Region)) && (def.category != ThingCategory.Projectile || use != ListerThingsUse.Region) && def.category != ThingCategory.Gas;
+			if (def.category == ThingCategory.Mote && (!def.drawGUIOverlay || use == ListerThingsUse.Region))
+			{
+				return false;
+			}
+			if (def.category == ThingCategory.Projectile && use == ListerThingsUse.Region)
+			{
+				return false;
+			}
+			if (def.category == ThingCategory.Gas)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public void Clear()
 		{
-			this.listsByDef.Clear();
-			for (int i = 0; i < this.listsByGroup.Length; i++)
+			listsByDef.Clear();
+			for (int i = 0; i < listsByGroup.Length; i++)
 			{
-				if (this.listsByGroup[i] != null)
+				if (listsByGroup[i] != null)
 				{
-					this.listsByGroup[i].Clear();
+					listsByGroup[i].Clear();
 				}
 			}
 		}
-
-		
-		private Dictionary<ThingDef, List<Thing>> listsByDef = new Dictionary<ThingDef, List<Thing>>(ThingDefComparer.Instance);
-
-		
-		private List<Thing>[] listsByGroup;
-
-		
-		public ListerThingsUse use;
-
-		
-		private static readonly List<Thing> EmptyList = new List<Thing>();
 	}
 }

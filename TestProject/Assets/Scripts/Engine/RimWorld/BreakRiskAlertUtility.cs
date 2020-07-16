@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,70 +5,67 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class BreakRiskAlertUtility
 	{
-		
-		
+		private static List<Pawn> pawnsAtRiskExtremeResult = new List<Pawn>();
+
+		private static List<Pawn> pawnsAtRiskMajorResult = new List<Pawn>();
+
+		private static List<Pawn> pawnsAtRiskMinorResult = new List<Pawn>();
+
 		public static List<Pawn> PawnsAtRiskExtreme
 		{
 			get
 			{
-				BreakRiskAlertUtility.pawnsAtRiskExtremeResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
+				pawnsAtRiskExtremeResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
 				{
-					if (!pawn.Downed && pawn.mindState.mentalBreaker.BreakExtremeIsImminent)
+					if (!item.Downed && item.mindState.mentalBreaker.BreakExtremeIsImminent)
 					{
-						BreakRiskAlertUtility.pawnsAtRiskExtremeResult.Add(pawn);
+						pawnsAtRiskExtremeResult.Add(item);
 					}
 				}
-				return BreakRiskAlertUtility.pawnsAtRiskExtremeResult;
+				return pawnsAtRiskExtremeResult;
 			}
 		}
 
-		
-		
 		public static List<Pawn> PawnsAtRiskMajor
 		{
 			get
 			{
-				BreakRiskAlertUtility.pawnsAtRiskMajorResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
+				pawnsAtRiskMajorResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
 				{
-					if (!pawn.Downed && pawn.mindState.mentalBreaker.BreakMajorIsImminent)
+					if (!item.Downed && item.mindState.mentalBreaker.BreakMajorIsImminent)
 					{
-						BreakRiskAlertUtility.pawnsAtRiskMajorResult.Add(pawn);
+						pawnsAtRiskMajorResult.Add(item);
 					}
 				}
-				return BreakRiskAlertUtility.pawnsAtRiskMajorResult;
+				return pawnsAtRiskMajorResult;
 			}
 		}
 
-		
-		
 		public static List<Pawn> PawnsAtRiskMinor
 		{
 			get
 			{
-				BreakRiskAlertUtility.pawnsAtRiskMinorResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
+				pawnsAtRiskMinorResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
 				{
-					if (!pawn.Downed && pawn.mindState.mentalBreaker.BreakMinorIsImminent)
+					if (!item.Downed && item.mindState.mentalBreaker.BreakMinorIsImminent)
 					{
-						BreakRiskAlertUtility.pawnsAtRiskMinorResult.Add(pawn);
+						pawnsAtRiskMinorResult.Add(item);
 					}
 				}
-				return BreakRiskAlertUtility.pawnsAtRiskMinorResult;
+				return pawnsAtRiskMinorResult;
 			}
 		}
 
-		
-		
 		public static string AlertLabel
 		{
 			get
 			{
-				int num = BreakRiskAlertUtility.PawnsAtRiskExtreme.Count<Pawn>();
+				int num = PawnsAtRiskExtreme.Count();
 				string text;
 				if (num > 0)
 				{
@@ -77,14 +73,14 @@ namespace RimWorld
 				}
 				else
 				{
-					num = BreakRiskAlertUtility.PawnsAtRiskMajor.Count<Pawn>();
+					num = PawnsAtRiskMajor.Count();
 					if (num > 0)
 					{
 						text = "BreakRiskMajor".Translate();
 					}
 					else
 					{
-						num = BreakRiskAlertUtility.PawnsAtRiskMinor.Count<Pawn>();
+						num = PawnsAtRiskMinor.Count();
 						text = "BreakRiskMinor".Translate();
 					}
 				}
@@ -96,45 +92,43 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public static string AlertExplanation
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				if (BreakRiskAlertUtility.PawnsAtRiskExtreme.Any<Pawn>())
+				if (PawnsAtRiskExtreme.Any())
 				{
 					StringBuilder stringBuilder2 = new StringBuilder();
-					foreach (Pawn pawn in BreakRiskAlertUtility.PawnsAtRiskExtreme)
+					foreach (Pawn item in PawnsAtRiskExtreme)
 					{
-						stringBuilder2.AppendLine("  - " + pawn.NameShortColored.Resolve());
+						stringBuilder2.AppendLine("  - " + item.NameShortColored.Resolve());
 					}
 					stringBuilder.Append("BreakRiskExtremeDesc".Translate(stringBuilder2).Resolve());
 				}
-				if (BreakRiskAlertUtility.PawnsAtRiskMajor.Any<Pawn>())
+				if (PawnsAtRiskMajor.Any())
 				{
 					if (stringBuilder.Length != 0)
 					{
 						stringBuilder.AppendLine();
 					}
 					StringBuilder stringBuilder3 = new StringBuilder();
-					foreach (Pawn pawn2 in BreakRiskAlertUtility.PawnsAtRiskMajor)
+					foreach (Pawn item2 in PawnsAtRiskMajor)
 					{
-						stringBuilder3.AppendLine("  - " + pawn2.NameShortColored.Resolve());
+						stringBuilder3.AppendLine("  - " + item2.NameShortColored.Resolve());
 					}
 					stringBuilder.Append("BreakRiskMajorDesc".Translate(stringBuilder3).Resolve());
 				}
-				if (BreakRiskAlertUtility.PawnsAtRiskMinor.Any<Pawn>())
+				if (PawnsAtRiskMinor.Any())
 				{
 					if (stringBuilder.Length != 0)
 					{
 						stringBuilder.AppendLine();
 					}
 					StringBuilder stringBuilder4 = new StringBuilder();
-					foreach (Pawn pawn3 in BreakRiskAlertUtility.PawnsAtRiskMinor)
+					foreach (Pawn item3 in PawnsAtRiskMinor)
 					{
-						stringBuilder4.AppendLine("  - " + pawn3.NameShortColored.Resolve());
+						stringBuilder4.AppendLine("  - " + item3.NameShortColored.Resolve());
 					}
 					stringBuilder.Append("BreakRiskMinorDesc".Translate(stringBuilder4).Resolve());
 				}
@@ -144,21 +138,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void Clear()
 		{
-			BreakRiskAlertUtility.pawnsAtRiskExtremeResult.Clear();
-			BreakRiskAlertUtility.pawnsAtRiskMajorResult.Clear();
-			BreakRiskAlertUtility.pawnsAtRiskMinorResult.Clear();
+			pawnsAtRiskExtremeResult.Clear();
+			pawnsAtRiskMajorResult.Clear();
+			pawnsAtRiskMinorResult.Clear();
 		}
-
-		
-		private static List<Pawn> pawnsAtRiskExtremeResult = new List<Pawn>();
-
-		
-		private static List<Pawn> pawnsAtRiskMajorResult = new List<Pawn>();
-
-		
-		private static List<Pawn> pawnsAtRiskMinorResult = new List<Pawn>();
 	}
 }

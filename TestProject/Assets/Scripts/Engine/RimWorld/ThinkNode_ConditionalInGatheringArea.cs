@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class ThinkNode_ConditionalInGatheringArea : ThinkNode_Conditional
 	{
-		
 		protected override bool Satisfied(Pawn pawn)
 		{
 			if (pawn.mindState.duty == null)

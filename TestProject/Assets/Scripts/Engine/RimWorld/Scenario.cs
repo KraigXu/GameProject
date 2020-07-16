@@ -1,195 +1,196 @@
-﻿using System;
+using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Steamworks;
 using Verse;
 using Verse.Steam;
 
 namespace RimWorld
 {
-	
 	public class Scenario : IExposable, WorkshopUploadable
 	{
-		
-		
+		[MustTranslate]
+		public string name;
+
+		[MustTranslate]
+		public string summary;
+
+		[MustTranslate]
+		public string description;
+
+		internal ScenPart_PlayerFaction playerFaction;
+
+		internal List<ScenPart> parts = new List<ScenPart>();
+
+		private PublishedFileId_t publishedFileIdInt = PublishedFileId_t.Invalid;
+
+		private ScenarioCategory categoryInt;
+
+		[NoTranslate]
+		public string fileName;
+
+		private WorkshopItemHook workshopHookInt;
+
+		[NoTranslate]
+		private string tempUploadDir;
+
+		public bool enabled = true;
+
+		public bool showInUI = true;
+
+		public const int NameMaxLength = 55;
+
+		public const int SummaryMaxLength = 300;
+
+		public const int DescriptionMaxLength = 1000;
+
 		public IEnumerable<System.Version> SupportedVersions
 		{
 			get
 			{
 				yield return new System.Version(VersionControl.CurrentMajor, VersionControl.CurrentMinor);
-				yield break;
 			}
 		}
 
-		
-		
-		public FileInfo File
-		{
-			get
-			{
-				return new FileInfo(GenFilePaths.AbsPathForScenario(this.fileName));
-			}
-		}
+		public FileInfo File => new FileInfo(GenFilePaths.AbsPathForScenario(fileName));
 
-		
-		
 		public IEnumerable<ScenPart> AllParts
 		{
 			get
 			{
-				yield return this.playerFaction;
-				int num;
-				for (int i = 0; i < this.parts.Count; i = num + 1)
+				yield return playerFaction;
+				for (int i = 0; i < parts.Count; i++)
 				{
-					yield return this.parts[i];
-					num = i;
+					yield return parts[i];
 				}
-				yield break;
 			}
 		}
 
-		
-		
-		
 		public ScenarioCategory Category
 		{
 			get
 			{
-				if (this.categoryInt == ScenarioCategory.Undefined)
+				if (categoryInt == ScenarioCategory.Undefined)
 				{
-					Log.Error("Category is Undefined on Scenario " + this, false);
+					Log.Error("Category is Undefined on Scenario " + this);
 				}
-				return this.categoryInt;
+				return categoryInt;
 			}
 			set
 			{
-				this.categoryInt = value;
+				categoryInt = value;
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<string>(ref this.name, "name", null, false);
-			Scribe_Values.Look<string>(ref this.summary, "summary", null, false);
-			Scribe_Values.Look<string>(ref this.description, "description", null, false);
-			Scribe_Values.Look<PublishedFileId_t>(ref this.publishedFileIdInt, "publishedFileId", PublishedFileId_t.Invalid, false);
-			Scribe_Deep.Look<ScenPart_PlayerFaction>(ref this.playerFaction, "playerFaction", Array.Empty<object>());
-			Scribe_Collections.Look<ScenPart>(ref this.parts, "parts", LookMode.Deep, Array.Empty<object>());
+			Scribe_Values.Look(ref name, "name");
+			Scribe_Values.Look(ref summary, "summary");
+			Scribe_Values.Look(ref description, "description");
+			Scribe_Values.Look(ref publishedFileIdInt, "publishedFileId", PublishedFileId_t.Invalid);
+			Scribe_Deep.Look(ref playerFaction, "playerFaction");
+			Scribe_Collections.Look(ref parts, "parts", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.parts.RemoveAll((ScenPart x) => x == null) != 0)
+				if (parts.RemoveAll((ScenPart x) => x == null) != 0)
 				{
-					Log.Warning("Some ScenParts were null after loading.", false);
+					Log.Warning("Some ScenParts were null after loading.");
 				}
-				if (this.parts.RemoveAll((ScenPart x) => x.HasNullDefs()) != 0)
+				if (parts.RemoveAll((ScenPart x) => x.HasNullDefs()) != 0)
 				{
-					Log.Warning("Some ScenParts had null defs.", false);
+					Log.Warning("Some ScenParts had null defs.");
 				}
 			}
 		}
 
-		
 		public IEnumerable<string> ConfigErrors()
 		{
-			if (this.name.NullOrEmpty())
+			if (name.NullOrEmpty())
 			{
 				yield return "no title";
 			}
-			if (this.parts.NullOrEmpty<ScenPart>())
+			if (parts.NullOrEmpty())
 			{
 				yield return "no parts";
 			}
-			if (this.playerFaction == null)
+			if (playerFaction == null)
 			{
 				yield return "no playerFaction";
 			}
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				foreach (string text in scenPart.ConfigErrors())
+				foreach (string item in allPart.ConfigErrors())
 				{
-					
+					yield return item;
 				}
-				IEnumerator<string> enumerator2 = null;
 			}
-			IEnumerator<ScenPart> enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public string GetFullInformationText()
 		{
-			string result;
 			try
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.AppendLine(this.description);
+				stringBuilder.AppendLine(description);
 				stringBuilder.AppendLine();
-				foreach (ScenPart scenPart in this.AllParts)
+				foreach (ScenPart allPart in AllParts)
 				{
-					scenPart.summarized = false;
+					allPart.summarized = false;
 				}
-				foreach (ScenPart scenPart2 in from p in this.AllParts
-				orderby p.def.summaryPriority descending, p.def.defName
-				where p.visible
-				select p)
+				foreach (ScenPart item in from p in AllParts
+					orderby p.def.summaryPriority descending, p.def.defName
+					where p.visible
+					select p)
 				{
-					string text = scenPart2.Summary(this);
+					string text = item.Summary(this);
 					if (!text.NullOrEmpty())
 					{
 						stringBuilder.AppendLine(text);
 					}
 				}
-				result = stringBuilder.ToString().TrimEndNewlines();
+				return stringBuilder.ToString().TrimEndNewlines();
 			}
 			catch (Exception ex)
 			{
-				Log.ErrorOnce("Exception in Scenario.GetFullInformationText():\n" + ex.ToString(), 10395878, false);
-				result = "Cannot read data.";
+				Log.ErrorOnce("Exception in Scenario.GetFullInformationText():\n" + ex.ToString(), 10395878);
+				return "Cannot read data.";
 			}
-			return result;
 		}
 
-		
 		public string GetSummary()
 		{
-			return this.summary;
+			return summary;
 		}
 
-		
 		public Scenario CopyForEditing()
 		{
 			Scenario scenario = new Scenario();
-			scenario.name = this.name;
-			scenario.summary = this.summary;
-			scenario.description = this.description;
-			scenario.playerFaction = (ScenPart_PlayerFaction)this.playerFaction.CopyForEditing();
-			scenario.parts.AddRange(from p in this.parts
-			select p.CopyForEditing());
+			scenario.name = name;
+			scenario.summary = summary;
+			scenario.description = description;
+			scenario.playerFaction = (ScenPart_PlayerFaction)playerFaction.CopyForEditing();
+			scenario.parts.AddRange(parts.Select((ScenPart p) => p.CopyForEditing()));
 			scenario.categoryInt = ScenarioCategory.CustomLocal;
 			return scenario;
 		}
 
-		
 		public void PreConfigure()
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.PreConfigure();
+				allPart.PreConfigure();
 			}
 		}
 
-		
 		public Page GetFirstConfigPage()
 		{
 			List<Page> list = new List<Page>();
 			list.Add(new Page_SelectStoryteller());
 			list.Add(new Page_CreateWorldParams());
 			list.Add(new Page_SelectStartingSite());
-			foreach (Page item in this.parts.SelectMany((ScenPart p) => p.GetConfigPages()))
+			foreach (Page item in parts.SelectMany((ScenPart p) => p.GetConfigPages()))
 			{
 				list.Add(item);
 			}
@@ -209,101 +210,88 @@ namespace RimWorld
 			return page;
 		}
 
-		
 		public bool AllowPlayerStartingPawn(Pawn pawn, bool tryingToRedress, PawnGenerationRequest req)
 		{
-			IEnumerator<ScenPart> enumerator = this.AllParts.GetEnumerator();
+			foreach (ScenPart allPart in AllParts)
 			{
-				while (enumerator.MoveNext())
+				if (!allPart.AllowPlayerStartingPawn(pawn, tryingToRedress, req))
 				{
-					if (!enumerator.Current.AllowPlayerStartingPawn(pawn, tryingToRedress, req))
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 			return true;
 		}
 
-		
 		public void Notify_NewPawnGenerating(Pawn pawn, PawnGenerationContext context)
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.Notify_NewPawnGenerating(pawn, context);
+				allPart.Notify_NewPawnGenerating(pawn, context);
 			}
 		}
 
-		
 		public void Notify_PawnGenerated(Pawn pawn, PawnGenerationContext context, bool redressed)
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.Notify_PawnGenerated(pawn, context, redressed);
+				allPart.Notify_PawnGenerated(pawn, context, redressed);
 			}
 		}
 
-		
 		public void Notify_PawnDied(Corpse corpse)
 		{
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				this.parts[i].Notify_PawnDied(corpse);
+				parts[i].Notify_PawnDied(corpse);
 			}
 		}
 
-		
 		public void PostWorldGenerate()
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.PostWorldGenerate();
+				allPart.PostWorldGenerate();
 			}
 		}
 
-		
 		public void PreMapGenerate()
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.PreMapGenerate();
+				allPart.PreMapGenerate();
 			}
 		}
 
-		
 		public void GenerateIntoMap(Map map)
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.GenerateIntoMap(map);
+				allPart.GenerateIntoMap(map);
 			}
 		}
 
-		
 		public void PostMapGenerate(Map map)
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.PostMapGenerate(map);
+				allPart.PostMapGenerate(map);
 			}
 		}
 
-		
 		public void PostGameStart()
 		{
-			foreach (ScenPart scenPart in this.AllParts)
+			foreach (ScenPart allPart in AllParts)
 			{
-				scenPart.PostGameStart();
+				allPart.PostGameStart();
 			}
 		}
 
-		
 		public float GetStatFactor(StatDef stat)
 		{
 			float num = 1f;
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				ScenPart_StatFactor scenPart_StatFactor = this.parts[i] as ScenPart_StatFactor;
+				ScenPart_StatFactor scenPart_StatFactor = parts[i] as ScenPart_StatFactor;
 				if (scenPart_StatFactor != null)
 				{
 					num *= scenPart_StatFactor.GetStatFactor(stat);
@@ -312,126 +300,133 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public void TickScenario()
 		{
-			for (int i = 0; i < this.parts.Count; i++)
+			for (int i = 0; i < parts.Count; i++)
 			{
-				this.parts[i].Tick();
+				parts[i].Tick();
 			}
 		}
 
-		
 		public void RemovePart(ScenPart part)
 		{
-			if (!this.parts.Contains(part))
+			if (!parts.Contains(part))
 			{
-				Log.Error("Cannot remove: " + part, false);
+				Log.Error("Cannot remove: " + part);
 			}
-			this.parts.Remove(part);
+			parts.Remove(part);
 		}
 
-		
 		public bool CanReorder(ScenPart part, ReorderDirection dir)
 		{
 			if (!part.def.PlayerAddRemovable)
 			{
 				return false;
 			}
-			int num = this.parts.IndexOf(part);
-			if (dir == ReorderDirection.Up)
+			int num = parts.IndexOf(part);
+			switch (dir)
 			{
-				return num != 0 && (num <= 0 || this.parts[num - 1].def.PlayerAddRemovable);
+			case ReorderDirection.Up:
+				if (num == 0)
+				{
+					return false;
+				}
+				if (num > 0 && !parts[num - 1].def.PlayerAddRemovable)
+				{
+					return false;
+				}
+				return true;
+			case ReorderDirection.Down:
+				return num != parts.Count - 1;
+			default:
+				throw new NotImplementedException();
 			}
-			if (dir == ReorderDirection.Down)
-			{
-				return num != this.parts.Count - 1;
-			}
-			throw new NotImplementedException();
 		}
 
-		
 		public void Reorder(ScenPart part, ReorderDirection dir)
 		{
-			int num = this.parts.IndexOf(part);
-			this.parts.RemoveAt(num);
+			int num = parts.IndexOf(part);
+			parts.RemoveAt(num);
 			if (dir == ReorderDirection.Up)
 			{
-				this.parts.Insert(num - 1, part);
+				parts.Insert(num - 1, part);
 			}
 			if (dir == ReorderDirection.Down)
 			{
-				this.parts.Insert(num + 1, part);
+				parts.Insert(num + 1, part);
 			}
 		}
 
-		
 		public bool CanToUploadToWorkshop()
 		{
-			return this.Category != ScenarioCategory.FromDef && this.TryUploadReport().Accepted && !this.GetWorkshopItemHook().MayHaveAuthorNotCurrentUser;
+			if (Category == ScenarioCategory.FromDef)
+			{
+				return false;
+			}
+			if (!TryUploadReport().Accepted)
+			{
+				return false;
+			}
+			if (GetWorkshopItemHook().MayHaveAuthorNotCurrentUser)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public void PrepareForWorkshopUpload()
 		{
-			string path = this.name + Rand.RangeInclusive(100, 999).ToString();
-			this.tempUploadDir = Path.Combine(GenFilePaths.TempFolderPath, path);
-			DirectoryInfo directoryInfo = new DirectoryInfo(this.tempUploadDir);
+			string path = name + Rand.RangeInclusive(100, 999).ToString();
+			tempUploadDir = Path.Combine(GenFilePaths.TempFolderPath, path);
+			DirectoryInfo directoryInfo = new DirectoryInfo(tempUploadDir);
 			if (directoryInfo.Exists)
 			{
 				directoryInfo.Delete();
 			}
 			directoryInfo.Create();
-			string text = Path.Combine(this.tempUploadDir, this.name);
-			text += ".rsc";
-			GameDataSaveLoader.SaveScenario(this, text);
+			string str = Path.Combine(tempUploadDir, name);
+			str += ".rsc";
+			GameDataSaveLoader.SaveScenario(this, str);
 		}
 
-		
 		public AcceptanceReport TryUploadReport()
 		{
-			if (this.name == null || this.name.Length < 3 || this.summary == null || this.summary.Length < 3 || this.description == null || this.description.Length < 3)
+			if (name == null || name.Length < 3 || summary == null || summary.Length < 3 || description == null || description.Length < 3)
 			{
 				return "TextFieldsMustBeFilled".TranslateSimple();
 			}
 			return AcceptanceReport.WasAccepted;
 		}
 
-		
 		public PublishedFileId_t GetPublishedFileId()
 		{
-			return this.publishedFileIdInt;
+			return publishedFileIdInt;
 		}
 
-		
 		public void SetPublishedFileId(PublishedFileId_t newPfid)
 		{
-			this.publishedFileIdInt = newPfid;
-			if (this.Category == ScenarioCategory.CustomLocal && !this.fileName.NullOrEmpty())
+			publishedFileIdInt = newPfid;
+			if (Category == ScenarioCategory.CustomLocal && !fileName.NullOrEmpty())
 			{
-				GameDataSaveLoader.SaveScenario(this, GenFilePaths.AbsPathForScenario(this.fileName));
+				GameDataSaveLoader.SaveScenario(this, GenFilePaths.AbsPathForScenario(fileName));
 			}
 		}
 
-		
 		public string GetWorkshopName()
 		{
-			return this.name;
+			return name;
 		}
 
-		
 		public string GetWorkshopDescription()
 		{
-			return this.GetFullInformationText();
+			return GetFullInformationText();
 		}
 
-		
 		public string GetWorkshopPreviewImagePath()
 		{
 			return GenFilePaths.ScenarioPreviewImagePath;
 		}
 
-		
 		public IList<string> GetWorkshopTags()
 		{
 			return new List<string>
@@ -440,99 +435,45 @@ namespace RimWorld
 			};
 		}
 
-		
 		public DirectoryInfo GetWorkshopUploadDirectory()
 		{
-			return new DirectoryInfo(this.tempUploadDir);
+			return new DirectoryInfo(tempUploadDir);
 		}
 
-		
 		public WorkshopItemHook GetWorkshopItemHook()
 		{
-			if (this.workshopHookInt == null)
+			if (workshopHookInt == null)
 			{
-				this.workshopHookInt = new WorkshopItemHook(this);
+				workshopHookInt = new WorkshopItemHook(this);
 			}
-			return this.workshopHookInt;
+			return workshopHookInt;
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.name.NullOrEmpty())
+			if (name.NullOrEmpty())
 			{
 				return "LabellessScenario";
 			}
-			return this.name;
+			return name;
 		}
 
-		
 		public override int GetHashCode()
 		{
 			int num = 6126121;
-			if (this.name != null)
+			if (name != null)
 			{
-				num ^= this.name.GetHashCode();
+				num ^= name.GetHashCode();
 			}
-			if (this.summary != null)
+			if (summary != null)
 			{
-				num ^= this.summary.GetHashCode();
+				num ^= summary.GetHashCode();
 			}
-			if (this.description != null)
+			if (description != null)
 			{
-				num ^= this.description.GetHashCode();
+				num ^= description.GetHashCode();
 			}
-			return num ^ this.publishedFileIdInt.GetHashCode();
+			return num ^ publishedFileIdInt.GetHashCode();
 		}
-
-		
-		[MustTranslate]
-		public string name;
-
-		
-		[MustTranslate]
-		public string summary;
-
-		
-		[MustTranslate]
-		public string description;
-
-		
-		internal ScenPart_PlayerFaction playerFaction;
-
-		
-		internal List<ScenPart> parts = new List<ScenPart>();
-
-		
-		private PublishedFileId_t publishedFileIdInt = PublishedFileId_t.Invalid;
-
-		
-		private ScenarioCategory categoryInt;
-
-		
-		[NoTranslate]
-		public string fileName;
-
-		
-		private WorkshopItemHook workshopHookInt;
-
-		
-		[NoTranslate]
-		private string tempUploadDir;
-
-		
-		public bool enabled = true;
-
-		
-		public bool showInUI = true;
-
-		
-		public const int NameMaxLength = 55;
-
-		
-		public const int SummaryMaxLength = 300;
-
-		
-		public const int DescriptionMaxLength = 1000;
 	}
 }

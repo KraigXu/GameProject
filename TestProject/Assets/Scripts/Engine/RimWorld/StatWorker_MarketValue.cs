@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,33 +5,30 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatWorker_MarketValue : StatWorker
 	{
-		
+		public const float ValuePerWork = 0.0036f;
+
+		private const float DefaultGuessStuffCost = 2f;
+
 		public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
 		{
 			if (req.HasThing && req.Thing is Pawn)
 			{
-				return base.GetValueUnfinalized(StatRequest.For(req.BuildableDef, req.StuffDef, QualityCategory.Normal), applyPostProcess) * PriceUtility.PawnQualityPriceFactor((Pawn)req.Thing, null) + PriceUtility.PawnQualityPriceOffset((Pawn)req.Thing, null);
+				return base.GetValueUnfinalized(StatRequest.For(req.BuildableDef, req.StuffDef), applyPostProcess) * PriceUtility.PawnQualityPriceFactor((Pawn)req.Thing) + PriceUtility.PawnQualityPriceOffset((Pawn)req.Thing);
 			}
-			float result;
 			if (req.StatBases.StatListContains(StatDefOf.MarketValue))
 			{
-				result = base.GetValueUnfinalized(req, true);
+				return base.GetValueUnfinalized(req);
 			}
-			else
-			{
-				result = StatWorker_MarketValue.CalculatedBaseMarketValue(req.BuildableDef, req.StuffDef);
-			}
-			return result;
+			return CalculatedBaseMarketValue(req.BuildableDef, req.StuffDef);
 		}
 
-		
 		public static float CalculatedBaseMarketValue(BuildableDef def, ThingDef stuffDef)
 		{
 			float num = 0f;
-			RecipeDef recipeDef = StatWorker_MarketValue.CalculableRecipe(def);
+			RecipeDef recipeDef = null;
+			recipeDef = CalculableRecipe(def);
 			float num2;
 			int num3;
 			if (recipeDef != null)
@@ -63,14 +59,7 @@ namespace RimWorld
 				}
 				if (def.costStuffCount > 0)
 				{
-					if (stuffDef != null)
-					{
-						num += (float)def.costStuffCount / stuffDef.VolumePerUnit * stuffDef.GetStatValueAbstract(StatDefOf.MarketValue, null);
-					}
-					else
-					{
-						num += (float)def.costStuffCount * 2f;
-					}
+					num = ((stuffDef == null) ? (num + (float)def.costStuffCount * 2f) : (num + (float)def.costStuffCount / stuffDef.VolumePerUnit * stuffDef.GetStatValueAbstract(StatDefOf.MarketValue)));
 				}
 			}
 			if (num2 > 2f)
@@ -80,32 +69,31 @@ namespace RimWorld
 			return num / (float)num3;
 		}
 
-		
 		public static RecipeDef CalculableRecipe(BuildableDef def)
 		{
-			if (def.costList.NullOrEmpty<ThingDefCountClass>() && def.costStuffCount <= 0)
+			if (def.costList.NullOrEmpty() && def.costStuffCount <= 0)
 			{
 				List<RecipeDef> allDefsListForReading = DefDatabase<RecipeDef>.AllDefsListForReading;
 				for (int i = 0; i < allDefsListForReading.Count; i++)
 				{
 					RecipeDef recipeDef = allDefsListForReading[i];
-					if (recipeDef.products != null && recipeDef.products.Count == 1 && recipeDef.products[0].thingDef == def)
+					if (recipeDef.products == null || recipeDef.products.Count != 1 || recipeDef.products[0].thingDef != def)
 					{
-						for (int j = 0; j < recipeDef.ingredients.Count; j++)
-						{
-							if (!recipeDef.ingredients[j].IsFixedIngredient)
-							{
-								return null;
-							}
-						}
-						return recipeDef;
+						continue;
 					}
+					for (int j = 0; j < recipeDef.ingredients.Count; j++)
+					{
+						if (!recipeDef.ingredients[j].IsFixedIngredient)
+						{
+							return null;
+						}
+					}
+					return recipeDef;
 				}
 			}
 			return null;
 		}
 
-		
 		public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
 		{
 			if (req.HasThing && req.Thing is Pawn)
@@ -120,16 +108,7 @@ namespace RimWorld
 			{
 				return base.GetExplanationUnfinalized(req, numberSense);
 			}
-			return "StatsReport_MarketValueFromStuffsAndWork".TranslateSimple().TrimEnd(new char[]
-			{
-				'.'
-			}) + ": " + StatWorker_MarketValue.CalculatedBaseMarketValue(req.BuildableDef, req.StuffDef).ToStringByStyle(this.stat.ToStringStyleUnfinalized, numberSense);
+			return "StatsReport_MarketValueFromStuffsAndWork".TranslateSimple().TrimEnd('.') + ": " + CalculatedBaseMarketValue(req.BuildableDef, req.StuffDef).ToStringByStyle(stat.ToStringStyleUnfinalized, numberSense);
 		}
-
-		
-		public const float ValuePerWork = 0.0036f;
-
-		
-		private const float DefaultGuessStuffCost = 2f;
 	}
 }

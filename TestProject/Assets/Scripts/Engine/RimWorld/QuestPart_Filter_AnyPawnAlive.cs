@@ -1,44 +1,36 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Filter_AnyPawnAlive : QuestPart_Filter
 	{
-		
+		public List<Pawn> pawns;
+
 		protected override bool Pass(SignalArgs args)
 		{
-			if (this.pawns.NullOrEmpty<Pawn>())
+			if (pawns.NullOrEmpty())
 			{
 				return false;
 			}
-			List<Pawn>.Enumerator enumerator = this.pawns.GetEnumerator();
+			foreach (Pawn pawn in pawns)
 			{
-				while (enumerator.MoveNext())
+				if (!pawn.Destroyed)
 				{
-					if (!enumerator.Current.Destroyed)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 			return false;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
-
-		
-		public List<Pawn> pawns;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,75 +6,83 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class GameCondition_Flashstorm : GameCondition
 	{
-		
-		
-		public int AreaRadius
-		{
-			get
-			{
-				return this.areaRadius;
-			}
-		}
+		private static readonly IntRange AreaRadiusRange = new IntRange(45, 60);
 
-		
+		private static readonly IntRange TicksBetweenStrikes = new IntRange(320, 800);
+
+		private const int RainDisableTicksAfterConditionEnds = 30000;
+
+		public IntVec2 centerLocation = IntVec2.Invalid;
+
+		public IntRange areaRadiusOverride = IntRange.zero;
+
+		public IntRange initialStrikeDelay = IntRange.zero;
+
+		public bool ambientSound;
+
+		private int areaRadius;
+
+		private int nextLightningTicks;
+
+		private Sustainer soundSustainer;
+
+		public int AreaRadius => areaRadius;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<IntVec2>(ref this.centerLocation, "centerLocation", default(IntVec2), false);
-			Scribe_Values.Look<int>(ref this.areaRadius, "areaRadius", 0, false);
-			Scribe_Values.Look<IntRange>(ref this.areaRadiusOverride, "areaRadiusOverride", default(IntRange), false);
-			Scribe_Values.Look<int>(ref this.nextLightningTicks, "nextLightningTicks", 0, false);
-			Scribe_Values.Look<IntRange>(ref this.initialStrikeDelay, "initialStrikeDelay", default(IntRange), false);
-			Scribe_Values.Look<bool>(ref this.ambientSound, "ambientSound", false, false);
+			Scribe_Values.Look(ref centerLocation, "centerLocation");
+			Scribe_Values.Look(ref areaRadius, "areaRadius", 0);
+			Scribe_Values.Look(ref areaRadiusOverride, "areaRadiusOverride");
+			Scribe_Values.Look(ref nextLightningTicks, "nextLightningTicks", 0);
+			Scribe_Values.Look(ref initialStrikeDelay, "initialStrikeDelay");
+			Scribe_Values.Look(ref ambientSound, "ambientSound", defaultValue: false);
 		}
 
-		
 		public override void Init()
 		{
 			base.Init();
-			this.areaRadius = ((this.areaRadiusOverride == IntRange.zero) ? GameCondition_Flashstorm.AreaRadiusRange.RandomInRange : this.areaRadiusOverride.RandomInRange);
-			this.nextLightningTicks = Find.TickManager.TicksGame + this.initialStrikeDelay.RandomInRange;
-			if (this.centerLocation.IsInvalid)
+			areaRadius = ((areaRadiusOverride == IntRange.zero) ? AreaRadiusRange.RandomInRange : areaRadiusOverride.RandomInRange);
+			nextLightningTicks = Find.TickManager.TicksGame + initialStrikeDelay.RandomInRange;
+			if (centerLocation.IsInvalid)
 			{
-				this.FindGoodCenterLocation();
+				FindGoodCenterLocation();
 			}
 		}
 
-		
 		public override void GameConditionTick()
 		{
-			if (Find.TickManager.TicksGame > this.nextLightningTicks)
+			if (Find.TickManager.TicksGame > nextLightningTicks)
 			{
-				Vector2 vector = Rand.UnitVector2 * Rand.Range(0f, (float)this.areaRadius);
-				IntVec3 intVec = new IntVec3((int)Math.Round((double)vector.x) + this.centerLocation.x, 0, (int)Math.Round((double)vector.y) + this.centerLocation.z);
-				if (this.IsGoodLocationForStrike(intVec))
+				Vector2 vector = Rand.UnitVector2 * Rand.Range(0f, areaRadius);
+				IntVec3 intVec = new IntVec3((int)Math.Round(vector.x) + centerLocation.x, 0, (int)Math.Round(vector.y) + centerLocation.z);
+				if (IsGoodLocationForStrike(intVec))
 				{
 					base.SingleMap.weatherManager.eventHandler.AddEvent(new WeatherEvent_LightningStrike(base.SingleMap, intVec));
-					this.nextLightningTicks = Find.TickManager.TicksGame + GameCondition_Flashstorm.TicksBetweenStrikes.RandomInRange;
+					nextLightningTicks = Find.TickManager.TicksGame + TicksBetweenStrikes.RandomInRange;
 				}
 			}
-			if (this.ambientSound)
+			if (ambientSound)
 			{
-				if (this.soundSustainer == null || this.soundSustainer.Ended)
+				if (soundSustainer == null || soundSustainer.Ended)
 				{
-					this.soundSustainer = SoundDefOf.FlashstormAmbience.TrySpawnSustainer(SoundInfo.InMap(new TargetInfo(this.centerLocation.ToIntVec3, base.SingleMap, false), MaintenanceType.PerTick));
-					return;
+					soundSustainer = SoundDefOf.FlashstormAmbience.TrySpawnSustainer(SoundInfo.InMap(new TargetInfo(centerLocation.ToIntVec3, base.SingleMap), MaintenanceType.PerTick));
 				}
-				this.soundSustainer.Maintain();
+				else
+				{
+					soundSustainer.Maintain();
+				}
 			}
 		}
 
-		
 		public override void End()
 		{
 			base.SingleMap.weatherDecider.DisableRainFor(30000);
 			base.End();
 		}
 
-		
 		private void FindGoodCenterLocation()
 		{
 			if (base.SingleMap.Size.x <= 16 || base.SingleMap.Size.z <= 16)
@@ -83,28 +91,30 @@ namespace RimWorld
 			}
 			for (int i = 0; i < 10; i++)
 			{
-				this.centerLocation = new IntVec2(Rand.Range(8, base.SingleMap.Size.x - 8), Rand.Range(8, base.SingleMap.Size.z - 8));
-				if (this.IsGoodCenterLocation(this.centerLocation))
+				centerLocation = new IntVec2(Rand.Range(8, base.SingleMap.Size.x - 8), Rand.Range(8, base.SingleMap.Size.z - 8));
+				if (IsGoodCenterLocation(centerLocation))
 				{
 					break;
 				}
 			}
 		}
 
-		
 		private bool IsGoodLocationForStrike(IntVec3 loc)
 		{
-			return loc.InBounds(base.SingleMap) && !loc.Roofed(base.SingleMap) && loc.Standable(base.SingleMap);
+			if (loc.InBounds(base.SingleMap) && !loc.Roofed(base.SingleMap))
+			{
+				return loc.Standable(base.SingleMap);
+			}
+			return false;
 		}
 
-		
 		private bool IsGoodCenterLocation(IntVec2 loc)
 		{
 			int num = 0;
-			int num2 = (int)(3.14159274f * (float)this.areaRadius * (float)this.areaRadius / 2f);
-			foreach (IntVec3 loc2 in this.GetPotentiallyAffectedCells(loc))
+			int num2 = (int)((float)Math.PI * (float)areaRadius * (float)areaRadius / 2f);
+			foreach (IntVec3 potentiallyAffectedCell in GetPotentiallyAffectedCells(loc))
 			{
-				if (this.IsGoodLocationForStrike(loc2))
+				if (IsGoodLocationForStrike(potentiallyAffectedCell))
 				{
 					num++;
 				}
@@ -116,53 +126,23 @@ namespace RimWorld
 			return num >= num2;
 		}
 
-		
 		private IEnumerable<IntVec3> GetPotentiallyAffectedCells(IntVec2 center)
 		{
-			int num;
-			for (int x = center.x - this.areaRadius; x <= center.x + this.areaRadius; x = num)
+			int x = center.x - areaRadius;
+			while (x <= center.x + areaRadius)
 			{
-				for (int z = center.z - this.areaRadius; z <= center.z + this.areaRadius; z = num)
+				int num;
+				for (int z = center.z - areaRadius; z <= center.z + areaRadius; z = num)
 				{
-					if ((center.x - x) * (center.x - x) + (center.z - z) * (center.z - z) <= this.areaRadius * this.areaRadius)
+					if ((center.x - x) * (center.x - x) + (center.z - z) * (center.z - z) <= areaRadius * areaRadius)
 					{
 						yield return new IntVec3(x, 0, z);
 					}
 					num = z + 1;
 				}
 				num = x + 1;
+				x = num;
 			}
-			yield break;
 		}
-
-		
-		private static readonly IntRange AreaRadiusRange = new IntRange(45, 60);
-
-		
-		private static readonly IntRange TicksBetweenStrikes = new IntRange(320, 800);
-
-		
-		private const int RainDisableTicksAfterConditionEnds = 30000;
-
-		
-		public IntVec2 centerLocation = IntVec2.Invalid;
-
-		
-		public IntRange areaRadiusOverride = IntRange.zero;
-
-		
-		public IntRange initialStrikeDelay = IntRange.zero;
-
-		
-		public bool ambientSound;
-
-		
-		private int areaRadius;
-
-		
-		private int nextLightningTicks;
-
-		
-		private Sustainer soundSustainer;
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,106 +7,82 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public static class ShipCountdown
 	{
-		
-		
-		public static bool CountingDown
-		{
-			get
-			{
-				return ShipCountdown.timeLeft >= 0f;
-			}
-		}
+		private static float timeLeft = -1000f;
 
-		
+		private static Building shipRoot;
+
+		private static string customLaunchString;
+
+		private const float InitialTime = 7.2f;
+
+		public static bool CountingDown => timeLeft >= 0f;
+
 		public static void InitiateCountdown(Building launchingShipRoot)
 		{
-			SoundDefOf.ShipTakeoff.PlayOneShotOnCamera(null);
-			ShipCountdown.shipRoot = launchingShipRoot;
-			ShipCountdown.timeLeft = 7.2f;
-			ShipCountdown.customLaunchString = null;
+			SoundDefOf.ShipTakeoff.PlayOneShotOnCamera();
+			shipRoot = launchingShipRoot;
+			timeLeft = 7.2f;
+			customLaunchString = null;
 			ScreenFader.StartFade(Color.white, 7.2f);
 		}
 
-		
 		public static void InitiateCountdown(string launchString)
 		{
-			ShipCountdown.shipRoot = null;
-			ShipCountdown.timeLeft = 7.2f;
-			ShipCountdown.customLaunchString = launchString;
+			shipRoot = null;
+			timeLeft = 7.2f;
+			customLaunchString = launchString;
 			ScreenFader.StartFade(Color.white, 7.2f);
 		}
 
-		
 		public static void ShipCountdownUpdate()
 		{
-			if (ShipCountdown.timeLeft > 0f)
+			if (timeLeft > 0f)
 			{
-				ShipCountdown.timeLeft -= Time.deltaTime;
-				if (ShipCountdown.timeLeft <= 0f)
+				timeLeft -= Time.deltaTime;
+				if (timeLeft <= 0f)
 				{
-					ShipCountdown.CountdownEnded();
+					CountdownEnded();
 				}
 			}
 		}
 
-		
 		public static void CancelCountdown()
 		{
-			ShipCountdown.timeLeft = -1000f;
+			timeLeft = -1000f;
 		}
 
-		
 		private static void CountdownEnded()
 		{
-			if (ShipCountdown.shipRoot != null)
+			if (shipRoot != null)
 			{
-				List<Building> list = ShipUtility.ShipBuildingsAttachedTo(ShipCountdown.shipRoot).ToList<Building>();
+				List<Building> list = ShipUtility.ShipBuildingsAttachedTo(shipRoot).ToList();
 				StringBuilder stringBuilder = new StringBuilder();
-				foreach (Building building in list)
+				foreach (Building item in list)
 				{
-					Building_CryptosleepCasket building_CryptosleepCasket = building as Building_CryptosleepCasket;
+					Building_CryptosleepCasket building_CryptosleepCasket = item as Building_CryptosleepCasket;
 					if (building_CryptosleepCasket != null && building_CryptosleepCasket.HasAnyContents)
 					{
 						stringBuilder.AppendLine("   " + building_CryptosleepCasket.ContainedThing.LabelCap);
 						Find.StoryWatcher.statsRecord.colonistsLaunched++;
-						TaleRecorder.RecordTale(TaleDefOf.LaunchedShip, new object[]
-						{
-							building_CryptosleepCasket.ContainedThing
-						});
+						TaleRecorder.RecordTale(TaleDefOf.LaunchedShip, building_CryptosleepCasket.ContainedThing);
 					}
 				}
 				GameVictoryUtility.ShowCredits(GameVictoryUtility.MakeEndCredits("GameOverShipLaunchedIntro".Translate(), "GameOverShipLaunchedEnding".Translate(), stringBuilder.ToString()));
-				List<Building>.Enumerator enumerator = list.GetEnumerator();
+				foreach (Building item2 in list)
 				{
-					while (enumerator.MoveNext())
-					{
-						Building building2 = enumerator.Current;
-						building2.Destroy(DestroyMode.Vanish);
-					}
-					return;
+					item2.Destroy();
 				}
 			}
-			if (!ShipCountdown.customLaunchString.NullOrEmpty())
+			else if (!customLaunchString.NullOrEmpty())
 			{
-				GameVictoryUtility.ShowCredits(ShipCountdown.customLaunchString);
-				return;
+				GameVictoryUtility.ShowCredits(customLaunchString);
 			}
-			GameVictoryUtility.ShowCredits(GameVictoryUtility.MakeEndCredits("GameOverShipLaunchedIntro".Translate(), "GameOverShipLaunchedEnding".Translate(), null));
+			else
+			{
+				GameVictoryUtility.ShowCredits(GameVictoryUtility.MakeEndCredits("GameOverShipLaunchedIntro".Translate(), "GameOverShipLaunchedEnding".Translate(), null));
+			}
 		}
-
-		
-		private static float timeLeft = -1000f;
-
-		
-		private static Building shipRoot;
-
-		
-		private static string customLaunchString;
-
-		
-		private const float InitialTime = 7.2f;
 	}
 }

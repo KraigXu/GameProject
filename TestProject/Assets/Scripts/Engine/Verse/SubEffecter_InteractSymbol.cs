@@ -1,35 +1,30 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class SubEffecter_InteractSymbol : SubEffecter
 	{
-		
-		public SubEffecter_InteractSymbol(SubEffecterDef def, Effecter parent) : base(def, parent)
+		private Mote interactMote;
+
+		public SubEffecter_InteractSymbol(SubEffecterDef def, Effecter parent)
+			: base(def, parent)
 		{
 		}
 
-		
 		public override void SubEffectTick(TargetInfo A, TargetInfo B)
 		{
-			if (this.interactMote == null)
+			if (interactMote == null)
 			{
-				this.interactMote = MoteMaker.MakeInteractionOverlay(this.def.moteDef, A, B);
+				interactMote = MoteMaker.MakeInteractionOverlay(def.moteDef, A, B);
 			}
 		}
 
-		
 		public override void SubCleanup()
 		{
-			if (this.interactMote != null && !this.interactMote.Destroyed)
+			if (interactMote != null && !interactMote.Destroyed)
 			{
-				this.interactMote.Destroy(DestroyMode.Vanish);
+				interactMote.Destroy();
 			}
 		}
-
-		
-		private Mote interactMote;
 	}
 }

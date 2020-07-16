@@ -1,53 +1,31 @@
-﻿using System;
 using System.Xml;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatModifier
 	{
-		
-		
-		public string ValueToStringAsOffset
-		{
-			get
-			{
-				return this.stat.Worker.ValueToString(this.value, false, ToStringNumberSense.Offset);
-			}
-		}
+		public StatDef stat;
 
-		
-		
-		public string ToStringAsFactor
-		{
-			get
-			{
-				return this.stat.Worker.ValueToString(this.value, false, ToStringNumberSense.Factor);
-			}
-		}
+		public float value;
 
-		
+		public string ValueToStringAsOffset => stat.Worker.ValueToString(value, finalized: false, ToStringNumberSense.Offset);
+
+		public string ToStringAsFactor => stat.Worker.ValueToString(value, finalized: false, ToStringNumberSense.Factor);
+
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
-			DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "stat", xmlRoot.Name, null, null);
-			this.value = ParseHelper.FromString<float>(xmlRoot.FirstChild.Value);
+			DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "stat", xmlRoot.Name);
+			value = ParseHelper.FromString<float>(xmlRoot.FirstChild.Value);
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.stat == null)
+			if (stat == null)
 			{
 				return "(null stat)";
 			}
-			return this.stat.defName + "-" + this.value.ToString();
+			return stat.defName + "-" + value.ToString();
 		}
-
-		
-		public StatDef stat;
-
-		
-		public float value;
 	}
 }

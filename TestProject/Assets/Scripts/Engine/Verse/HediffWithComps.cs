@@ -1,27 +1,26 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public class HediffWithComps : Hediff
 	{
-		
-		
+		public List<HediffComp> comps = new List<HediffComp>();
+
 		public override string LabelInBrackets
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.Append(base.LabelInBrackets);
-				if (this.comps != null)
+				if (comps != null)
 				{
-					for (int i = 0; i < this.comps.Count; i++)
+					for (int i = 0; i < comps.Count; i++)
 					{
-						string compLabelInBracketsExtra = this.comps[i].CompLabelInBracketsExtra;
+						string compLabelInBracketsExtra = comps[i].CompLabelInBracketsExtra;
 						if (!compLabelInBracketsExtra.NullOrEmpty())
 						{
 							if (stringBuilder.Length != 0)
@@ -36,17 +35,15 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override bool ShouldRemove
 		{
 			get
 			{
-				if (this.comps != null)
+				if (comps != null)
 				{
-					for (int i = 0; i < this.comps.Count; i++)
+					for (int i = 0; i < comps.Count; i++)
 					{
-						if (this.comps[i].CompShouldRemove)
+						if (comps[i].CompShouldRemove)
 						{
 							return true;
 						}
@@ -56,17 +53,15 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override bool Visible
 		{
 			get
 			{
-				if (this.comps != null)
+				if (comps != null)
 				{
-					for (int i = 0; i < this.comps.Count; i++)
+					for (int i = 0; i < comps.Count; i++)
 					{
-						if (this.comps[i].CompDisallowVisible())
+						if (comps[i].CompDisallowVisible())
 						{
 							return false;
 						}
@@ -76,19 +71,17 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override string TipStringExtra
 		{
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.Append(base.TipStringExtra);
-				if (this.comps != null)
+				if (comps != null)
 				{
-					for (int i = 0; i < this.comps.Count; i++)
+					for (int i = 0; i < comps.Count; i++)
 					{
-						string compTipStringExtra = this.comps[i].CompTipStringExtra;
+						string compTipStringExtra = comps[i].CompTipStringExtra;
 						if (!compTipStringExtra.NullOrEmpty())
 						{
 							stringBuilder.AppendLine(compTipStringExtra);
@@ -99,15 +92,13 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override TextureAndColor StateIcon
 		{
 			get
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					TextureAndColor compStateIcon = this.comps[i].CompStateIcon;
+					TextureAndColor compStateIcon = comps[i].CompStateIcon;
 					if (compStateIcon.HasValue)
 					{
 						return compStateIcon;
@@ -117,236 +108,206 @@ namespace Verse
 			}
 		}
 
-		
 		public override void PostAdd(DamageInfo? dinfo)
 		{
 			base.PostAdd(dinfo);
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					this.comps[i].CompPostPostAdd(dinfo);
+					comps[i].CompPostPostAdd(dinfo);
 				}
 			}
 		}
 
-		
 		public override void PostRemoved()
 		{
 			base.PostRemoved();
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					this.comps[i].CompPostPostRemoved();
+					comps[i].CompPostPostRemoved();
 				}
 			}
 		}
 
-		
 		public override void PostTick()
 		{
 			base.PostTick();
-			if (this.comps != null)
+			if (comps != null)
 			{
-				float num = 0f;
-				for (int i = 0; i < this.comps.Count; i++)
+				float severityAdjustment = 0f;
+				for (int i = 0; i < comps.Count; i++)
 				{
-					this.comps[i].CompPostTick(ref num);
+					comps[i].CompPostTick(ref severityAdjustment);
 				}
-				if (num != 0f)
+				if (severityAdjustment != 0f)
 				{
-					this.Severity += num;
+					Severity += severityAdjustment;
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				this.InitializeComps();
+				InitializeComps();
 			}
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					this.comps[i].CompExposeData();
+					comps[i].CompExposeData();
 				}
 			}
 		}
 
-		
 		public override void Tended(float quality, int batchPosition = 0)
 		{
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].CompTended(quality, batchPosition);
+				comps[i].CompTended(quality, batchPosition);
 			}
 		}
 
-		
 		public override bool TryMergeWith(Hediff other)
 		{
 			if (base.TryMergeWith(other))
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					this.comps[i].CompPostMerged(other);
+					comps[i].CompPostMerged(other);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public override void Notify_PawnDied()
 		{
 			base.Notify_PawnDied();
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].Notify_PawnDied();
+				comps[i].Notify_PawnDied();
 			}
 		}
 
-		
 		public override void Notify_PawnKilled()
 		{
 			base.Notify_PawnKilled();
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].Notify_PawnKilled();
+				comps[i].Notify_PawnKilled();
 			}
 		}
 
-		
 		public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
 			base.Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
+				comps[i].Notify_PawnPostApplyDamage(dinfo, totalDamageDealt);
 			}
 		}
 
-		
 		public override void ModifyChemicalEffect(ChemicalDef chem, ref float effect)
 		{
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].CompModifyChemicalEffect(chem, ref effect);
+				comps[i].CompModifyChemicalEffect(chem, ref effect);
 			}
 		}
 
-		
 		public override void Notify_PawnUsedVerb(Verb verb, LocalTargetInfo target)
 		{
 			base.Notify_PawnUsedVerb(verb, target);
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].Notify_PawnUsedVerb(verb, target);
+				comps[i].Notify_PawnUsedVerb(verb, target);
 			}
 		}
 
-		
 		public override void Notify_EntropyGained(float baseAmount, float finalAmount, Thing src = null)
 		{
 			base.Notify_EntropyGained(baseAmount, finalAmount, src);
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].Notify_EntropyGained(baseAmount, finalAmount, src);
+				comps[i].Notify_EntropyGained(baseAmount, finalAmount, src);
 			}
 		}
 
-		
 		public override void Notify_ImplantUsed(string violationSourceName, float detectionChance, int violationSourceLevel = -1)
 		{
 			base.Notify_ImplantUsed(violationSourceName, detectionChance, violationSourceLevel);
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].Notify_ImplantUsed(violationSourceName, detectionChance, violationSourceLevel);
+				comps[i].Notify_ImplantUsed(violationSourceName, detectionChance, violationSourceLevel);
 			}
 		}
 
-		
 		public override void PostMake()
 		{
 			base.PostMake();
-			this.InitializeComps();
-			for (int i = this.comps.Count - 1; i >= 0; i--)
+			InitializeComps();
+			for (int num = comps.Count - 1; num >= 0; num--)
 			{
 				try
 				{
-					this.comps[i].CompPostMake();
+					comps[num].CompPostMake();
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Error in HediffComp.CompPostMake(): " + arg, false);
-					this.comps.RemoveAt(i);
+					Log.Error("Error in HediffComp.CompPostMake(): " + arg);
+					comps.RemoveAt(num);
 				}
 			}
 		}
 
-		
 		private void InitializeComps()
 		{
-			if (this.def.comps != null)
+			if (def.comps != null)
 			{
-				this.comps = new List<HediffComp>();
-				for (int i = 0; i < this.def.comps.Count; i++)
+				comps = new List<HediffComp>();
+				for (int i = 0; i < def.comps.Count; i++)
 				{
 					HediffComp hediffComp = null;
 					try
 					{
-						hediffComp = (HediffComp)Activator.CreateInstance(this.def.comps[i].compClass);
-						hediffComp.props = this.def.comps[i];
+						hediffComp = (HediffComp)Activator.CreateInstance(def.comps[i].compClass);
+						hediffComp.props = def.comps[i];
 						hediffComp.parent = this;
-						this.comps.Add(hediffComp);
+						comps.Add(hediffComp);
 					}
 					catch (Exception arg)
 					{
-						Log.Error("Could not instantiate or initialize a HediffComp: " + arg, false);
-						this.comps.Remove(hediffComp);
+						Log.Error("Could not instantiate or initialize a HediffComp: " + arg);
+						comps.Remove(hediffComp);
 					}
 				}
 			}
 		}
 
-		
 		public override string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine(base.DebugString());
-			if (this.comps != null)
+			if (comps != null)
 			{
-				for (int i = 0; i < this.comps.Count; i++)
+				for (int i = 0; i < comps.Count; i++)
 				{
-					string str;
-					if (this.comps[i].ToString().Contains('_'))
-					{
-						str = this.comps[i].ToString().Split(new char[]
-						{
-							'_'
-						})[1];
-					}
-					else
-					{
-						str = this.comps[i].ToString();
-					}
+					string str = (!comps[i].ToString().Contains('_')) ? comps[i].ToString() : comps[i].ToString().Split('_')[1];
 					stringBuilder.AppendLine("--" + str);
-					string text = this.comps[i].CompDebugString();
+					string text = comps[i].CompDebugString();
 					if (!text.NullOrEmpty())
 					{
-						stringBuilder.AppendLine(text.TrimEnd(Array.Empty<char>()).Indented("    "));
+						stringBuilder.AppendLine(text.TrimEnd().Indented());
 					}
 				}
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		public List<HediffComp> comps = new List<HediffComp>();
 	}
 }

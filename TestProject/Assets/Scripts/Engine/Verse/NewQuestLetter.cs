@@ -1,42 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class NewQuestLetter : ChoiceLetter
 	{
-		
-		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get
 			{
-				if (this.quest != null)
+				if (quest != null)
 				{
-					yield return base.Option_ViewInQuestsTab("ViewQuest", false);
+					yield return Option_ViewInQuestsTab("ViewQuest");
 				}
-				if (this.lookTargets.IsValid())
+				if (lookTargets.IsValid())
 				{
 					yield return base.Option_JumpToLocation;
 				}
 				yield return base.Option_Close;
-				yield break;
 			}
 		}
 
-		
 		public override void OpenLetter()
 		{
-			if (this.quest != null && !base.ArchivedOnly)
+			if (quest != null && !base.ArchivedOnly)
 			{
-				Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Quests, true);
-				((MainTabWindow_Quests)MainButtonDefOf.Quests.TabWindow).Select(this.quest);
+				Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Quests);
+				((MainTabWindow_Quests)MainButtonDefOf.Quests.TabWindow).Select(quest);
 				Find.LetterStack.RemoveLetter(this);
-				return;
 			}
-			base.OpenLetter();
+			else
+			{
+				base.OpenLetter();
+			}
 		}
 	}
 }

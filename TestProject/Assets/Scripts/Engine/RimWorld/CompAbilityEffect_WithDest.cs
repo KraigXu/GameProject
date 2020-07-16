@@ -1,155 +1,69 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class CompAbilityEffect_WithDest : CompAbilityEffect, ITargetingSource
 	{
-		
-		
-		public new CompProperties_EffectWithDest Props
-		{
-			get
-			{
-				return (CompProperties_EffectWithDest)this.props;
-			}
-		}
+		protected LocalTargetInfo selectedTarget;
 
-		
-		
-		public TargetingParameters targetParams
-		{
-			get
-			{
-				return new TargetingParameters
-				{
-					canTargetLocations = true
-				};
-			}
-		}
+		private List<IntVec3> cells = new List<IntVec3>();
 
-		
-		
-		public bool MultiSelect
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public new CompProperties_EffectWithDest Props => (CompProperties_EffectWithDest)props;
 
-		
-		
-		public Thing Caster
+		public TargetingParameters targetParams => new TargetingParameters
 		{
-			get
-			{
-				return this.parent.pawn;
-			}
-		}
+			canTargetLocations = true
+		};
 
-		
-		
-		public Pawn CasterPawn
-		{
-			get
-			{
-				return this.parent.pawn;
-			}
-		}
+		public bool MultiSelect => false;
 
-		
-		
-		public Verb GetVerb
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public Thing Caster => parent.pawn;
 
-		
-		
-		public bool CasterIsPawn
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public Pawn CasterPawn => parent.pawn;
 
-		
-		
-		public bool IsMeleeAttack
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public Verb GetVerb => null;
 
-		
-		
-		public bool Targetable
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public bool CasterIsPawn => true;
 
-		
-		
-		public Texture2D UIIcon
-		{
-			get
-			{
-				return BaseContent.BadTex;
-			}
-		}
+		public bool IsMeleeAttack => false;
 
-		
-		
-		public ITargetingSource DestinationSelector
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public bool Targetable => true;
 
-		
+		public Texture2D UIIcon => BaseContent.BadTex;
+
+		public ITargetingSource DestinationSelector => null;
+
 		public LocalTargetInfo GetDestination(LocalTargetInfo target)
 		{
-			Map map = this.parent.pawn.Map;
-			switch (this.Props.destination)
+			Map map = parent.pawn.Map;
+			switch (Props.destination)
 			{
 			case AbilityEffectDestination.Caster:
-				return new LocalTargetInfo(this.parent.pawn.InteractionCell);
+				return new LocalTargetInfo(parent.pawn.InteractionCell);
 			case AbilityEffectDestination.RandomInRange:
 			{
-				this.cells.Clear();
-				int num = GenRadial.NumCellsInRadius(this.Props.randomRange.max);
+				cells.Clear();
+				int num = GenRadial.NumCellsInRadius(Props.randomRange.max);
 				for (int i = 0; i < num; i++)
 				{
 					IntVec3 intVec = GenRadial.RadialPattern[i];
-					if (intVec.DistanceTo(IntVec3.Zero) >= this.Props.randomRange.min)
+					if (!(intVec.DistanceTo(IntVec3.Zero) < Props.randomRange.min))
 					{
 						IntVec3 intVec2 = target.Cell + intVec;
-						if (intVec2.Standable(map) && (!this.Props.requiresLineOfSight || GenSight.LineOfSight(target.Cell, intVec2, map, false, null, 0, 0)))
+						if (intVec2.Standable(map) && (!Props.requiresLineOfSight || GenSight.LineOfSight(target.Cell, intVec2, map)))
 						{
-							this.cells.Add(intVec2);
+							cells.Add(intVec2);
 						}
 					}
 				}
-				if (this.cells.Any<IntVec3>())
+				if (cells.Any())
 				{
-					return new LocalTargetInfo(this.cells.RandomElement<IntVec3>());
+					return new LocalTargetInfo(cells.RandomElement());
 				}
-				Messages.Message("NoValidDestinationFound".Translate(this.parent.def.LabelCap), MessageTypeDefOf.RejectInput, true);
+				Messages.Message("NoValidDestinationFound".Translate(parent.def.LabelCap), MessageTypeDefOf.RejectInput);
 				return LocalTargetInfo.Invalid;
 			}
 			case AbilityEffectDestination.Selected:
@@ -159,20 +73,23 @@ namespace RimWorld
 			}
 		}
 
-		
 		protected bool CanPlaceSelectedTargetAt(LocalTargetInfo target)
 		{
-			if (this.selectedTarget.Pawn != null)
+			if (selectedTarget.Pawn != null)
 			{
-				return !target.Cell.Impassable(this.parent.pawn.Map) && target.Cell.Walkable(this.parent.pawn.Map);
+				if (!target.Cell.Impassable(parent.pawn.Map))
+				{
+					return target.Cell.Walkable(parent.pawn.Map);
+				}
+				return false;
 			}
-			Building edifice = target.Cell.GetEdifice(this.parent.pawn.Map);
+			Building edifice = target.Cell.GetEdifice(parent.pawn.Map);
 			Building_Door building_Door;
 			if (edifice != null && edifice.def.surfaceType != SurfaceType.Item && edifice.def.surfaceType != SurfaceType.Eat && ((building_Door = (edifice as Building_Door)) == null || !building_Door.Open))
 			{
 				return false;
 			}
-			List<Thing> thingList = target.Cell.GetThingList(this.parent.pawn.Map);
+			List<Thing> thingList = target.Cell.GetThingList(parent.pawn.Map);
 			for (int i = 0; i < thingList.Count; i++)
 			{
 				if (thingList[i].def.category == ThingCategory.Item)
@@ -183,28 +100,41 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public virtual bool CanHitTarget(LocalTargetInfo target)
 		{
-			return target.IsValid && target.Cell.DistanceTo(target.Cell) <= this.Props.range && this.CanPlaceSelectedTargetAt(target) && (!this.Props.requiresLineOfSight || GenSight.LineOfSight(this.selectedTarget.Cell, target.Cell, this.parent.pawn.Map, false, null, 0, 0));
+			if (!target.IsValid)
+			{
+				return false;
+			}
+			if (target.Cell.DistanceTo(target.Cell) > Props.range)
+			{
+				return false;
+			}
+			if (!CanPlaceSelectedTargetAt(target))
+			{
+				return false;
+			}
+			if (Props.requiresLineOfSight && !GenSight.LineOfSight(selectedTarget.Cell, target.Cell, parent.pawn.Map))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public bool ValidateTarget(LocalTargetInfo target)
 		{
-			return this.CanHitTarget(target);
+			return CanHitTarget(target);
 		}
 
-		
 		public void DrawHighlight(LocalTargetInfo target)
 		{
-			if (this.Props.requiresLineOfSight)
+			if (Props.requiresLineOfSight)
 			{
-				GenDraw.DrawRadiusRing(this.selectedTarget.Cell, this.Props.range, Color.white, (IntVec3 c) => GenSight.LineOfSight(this.selectedTarget.Cell, c, this.parent.pawn.Map, false, null, 0, 0) && this.CanPlaceSelectedTargetAt(c));
+				GenDraw.DrawRadiusRing(selectedTarget.Cell, Props.range, Color.white, (IntVec3 c) => GenSight.LineOfSight(selectedTarget.Cell, c, parent.pawn.Map) && CanPlaceSelectedTargetAt(c));
 			}
 			else
 			{
-				GenDraw.DrawRadiusRing(this.selectedTarget.Cell, this.Props.range);
+				GenDraw.DrawRadiusRing(selectedTarget.Cell, Props.range);
 			}
 			if (target.IsValid)
 			{
@@ -212,43 +142,25 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void OnGUI(LocalTargetInfo target)
 		{
-			Texture2D icon;
-			if (target.IsValid)
-			{
-				icon = this.parent.def.uiIcon;
-			}
-			else
-			{
-				icon = TexCommand.CannotShoot;
-			}
+			Texture2D icon = (!target.IsValid) ? TexCommand.CannotShoot : parent.def.uiIcon;
 			GenUI.DrawMouseAttachment(icon);
 		}
 
-		
 		public void OrderForceTarget(LocalTargetInfo target)
 		{
-			this.parent.QueueCastingJob(this.selectedTarget, target);
+			parent.QueueCastingJob(selectedTarget, target);
 		}
 
-		
 		public void SetTarget(LocalTargetInfo target)
 		{
-			this.selectedTarget = target;
+			selectedTarget = target;
 		}
 
-		
 		public virtual void SelectDestination()
 		{
-			Find.Targeter.BeginTargeting(this, null);
+			Find.Targeter.BeginTargeting(this);
 		}
-
-		
-		protected LocalTargetInfo selectedTarget;
-
-		
-		private List<IntVec3> cells = new List<IntVec3>();
 	}
 }

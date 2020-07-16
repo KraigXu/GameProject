@@ -1,56 +1,48 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_StarvationColonists : Alert
 	{
-		
-		public Alert_StarvationColonists()
-		{
-			this.defaultLabel = "Starvation".Translate();
-			this.defaultPriority = AlertPriority.High;
-		}
+		private List<Pawn> starvingColonistsResult = new List<Pawn>();
 
-		
-		
 		private List<Pawn> StarvingColonists
 		{
 			get
 			{
-				this.starvingColonistsResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
+				starvingColonistsResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
 				{
-					if (pawn.needs.food != null && pawn.needs.food.Starving)
+					if (item.needs.food != null && item.needs.food.Starving)
 					{
-						this.starvingColonistsResult.Add(pawn);
+						starvingColonistsResult.Add(item);
 					}
 				}
-				return this.starvingColonistsResult;
+				return starvingColonistsResult;
 			}
 		}
 
-		
+		public Alert_StarvationColonists()
+		{
+			defaultLabel = "Starvation".Translate();
+			defaultPriority = AlertPriority.High;
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.StarvingColonists)
+			foreach (Pawn starvingColonist in StarvingColonists)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + starvingColonist.NameShortColored.Resolve());
 			}
 			return "StarvationDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.StarvingColonists);
+			return AlertReport.CulpritsAre(StarvingColonists);
 		}
-
-		
-		private List<Pawn> starvingColonistsResult = new List<Pawn>();
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,135 +5,98 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	internal class ScenPart_CreateIncident : ScenPart_IncidentBase
 	{
-		
-		
-		protected override string IncidentTag
-		{
-			get
-			{
-				return "CreateIncident";
-			}
-		}
+		private const float IntervalMidpoint = 30f;
 
-		
-		
-		private float IntervalTicks
-		{
-			get
-			{
-				return 60000f * this.intervalDays;
-			}
-		}
+		private const float IntervalDeviation = 15f;
 
-		
+		private float intervalDays;
+
+		private bool repeat;
+
+		private string intervalDaysBuffer;
+
+		private float occurTick;
+
+		private bool isFinished;
+
+		protected override string IncidentTag => "CreateIncident";
+
+		private float IntervalTicks => 60000f * intervalDays;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.intervalDays, "intervalDays", 0f, false);
-			Scribe_Values.Look<bool>(ref this.repeat, "repeat", false, false);
-			Scribe_Values.Look<float>(ref this.occurTick, "occurTick", 0f, false);
-			Scribe_Values.Look<bool>(ref this.isFinished, "isFinished", false, false);
+			Scribe_Values.Look(ref intervalDays, "intervalDays", 0f);
+			Scribe_Values.Look(ref repeat, "repeat", defaultValue: false);
+			Scribe_Values.Look(ref occurTick, "occurTick", 0f);
+			Scribe_Values.Look(ref isFinished, "isFinished", defaultValue: false);
 		}
 
-		
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
 			Rect scenPartRect = listing.GetScenPartRect(this, ScenPart.RowHeight * 3f);
 			Rect rect = new Rect(scenPartRect.x, scenPartRect.y, scenPartRect.width, scenPartRect.height / 3f);
 			Rect rect2 = new Rect(scenPartRect.x, scenPartRect.y + scenPartRect.height / 3f, scenPartRect.width, scenPartRect.height / 3f);
 			Rect rect3 = new Rect(scenPartRect.x, scenPartRect.y + scenPartRect.height * 2f / 3f, scenPartRect.width, scenPartRect.height / 3f);
-			base.DoIncidentEditInterface(rect);
-			Widgets.TextFieldNumericLabeled<float>(rect2, "intervalDays".Translate(), ref this.intervalDays, ref this.intervalDaysBuffer, 0f, 1E+09f);
-			Widgets.CheckboxLabeled(rect3, "repeat".Translate(), ref this.repeat, false, null, null, false);
+			DoIncidentEditInterface(rect);
+			Widgets.TextFieldNumericLabeled(rect2, "intervalDays".Translate(), ref intervalDays, ref intervalDaysBuffer);
+			Widgets.CheckboxLabeled(rect3, "repeat".Translate(), ref repeat);
 		}
 
-		
 		public override void Randomize()
 		{
 			base.Randomize();
-			this.intervalDays = 15f * Rand.Gaussian(0f, 1f) + 30f;
-			if (this.intervalDays < 0f)
+			intervalDays = 15f * Rand.Gaussian() + 30f;
+			if (intervalDays < 0f)
 			{
-				this.intervalDays = 0f;
+				intervalDays = 0f;
 			}
-			this.repeat = (Rand.Range(0, 100) < 50);
+			repeat = (Rand.Range(0, 100) < 50);
 		}
 
-		
 		protected override IEnumerable<IncidentDef> RandomizableIncidents()
 		{
 			yield return IncidentDefOf.Eclipse;
 			yield return IncidentDefOf.ToxicFallout;
 			yield return IncidentDefOf.SolarFlare;
-			yield break;
 		}
 
-		
 		public override void PostGameStart()
 		{
 			base.PostGameStart();
-			this.occurTick = (float)Find.TickManager.TicksGame + this.IntervalTicks;
+			occurTick = (float)Find.TickManager.TicksGame + IntervalTicks;
 		}
 
-		
 		public override void Tick()
 		{
 			base.Tick();
-			if (Find.AnyPlayerHomeMap == null)
+			if (Find.AnyPlayerHomeMap == null || isFinished)
 			{
 				return;
 			}
-			if (this.isFinished)
+			if (incident == null)
 			{
-				return;
+				Log.Error("Trying to tick ScenPart_CreateIncident but the incident is null");
+				isFinished = true;
 			}
-			if (this.incident == null)
+			else if ((float)Find.TickManager.TicksGame >= occurTick)
 			{
-				Log.Error("Trying to tick ScenPart_CreateIncident but the incident is null", false);
-				this.isFinished = true;
-				return;
-			}
-			if ((float)Find.TickManager.TicksGame >= this.occurTick)
-			{
-				IncidentParms parms = StorytellerUtility.DefaultParmsNow(this.incident.category, (from x in Find.Maps
-				where x.IsPlayerHome
-				select x).RandomElement<Map>());
-				if (!this.incident.Worker.TryExecute(parms))
+				IncidentParms parms = StorytellerUtility.DefaultParmsNow(incident.category, Find.Maps.Where((Map x) => x.IsPlayerHome).RandomElement());
+				if (!incident.Worker.TryExecute(parms))
 				{
-					this.isFinished = true;
-					return;
+					isFinished = true;
 				}
-				if (this.repeat && this.intervalDays > 0f)
+				else if (repeat && intervalDays > 0f)
 				{
-					this.occurTick += this.IntervalTicks;
-					return;
+					occurTick += IntervalTicks;
 				}
-				this.isFinished = true;
+				else
+				{
+					isFinished = true;
+				}
 			}
 		}
-
-		
-		private const float IntervalMidpoint = 30f;
-
-		
-		private const float IntervalDeviation = 15f;
-
-		
-		private float intervalDays;
-
-		
-		private bool repeat;
-
-		
-		private string intervalDaysBuffer;
-
-		
-		private float occurTick;
-
-		
-		private bool isFinished;
 	}
 }

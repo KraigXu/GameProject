@@ -1,25 +1,15 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public abstract class Reward : IExposable
 	{
-		
-		
-		public virtual bool MakesUseOfChosenPawnSignal
-		{
-			get
-			{
-				return false;
-			}
-		}
+		protected bool usedOrCleanedUp;
 
-		
-		
+		public virtual bool MakesUseOfChosenPawnSignal => false;
+
 		public virtual IEnumerable<GenUI.AnonymousStackElement> StackElements
 		{
 			get
@@ -28,44 +18,27 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		public virtual float TotalMarketValue
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public virtual float TotalMarketValue => 0f;
 
-		
 		public abstract void InitFromValue(float rewardValue, RewardsGeneratorParams parms, out float valueActuallyUsed);
 
-		
 		public abstract IEnumerable<QuestPart> GenerateQuestParts(int index, RewardsGeneratorParams parms, string customLetterLabel, string customLetterText, RulePack customLetterLabelRules, RulePack customLetterTextRules);
 
-		
 		public abstract string GetDescription(RewardsGeneratorParams parms);
 
-		
 		public virtual void Notify_Used()
 		{
-			this.usedOrCleanedUp = true;
+			usedOrCleanedUp = true;
 		}
 
-		
 		public virtual void Notify_PreCleanup()
 		{
-			this.usedOrCleanedUp = true;
+			usedOrCleanedUp = true;
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<bool>(ref this.usedOrCleanedUp, "usedOrCleanedUp", false, false);
+			Scribe_Values.Look(ref usedOrCleanedUp, "usedOrCleanedUp", defaultValue: false);
 		}
-
-		
-		protected bool usedOrCleanedUp;
 	}
 }

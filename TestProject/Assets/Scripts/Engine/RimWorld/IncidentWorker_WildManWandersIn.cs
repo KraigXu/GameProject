@@ -1,62 +1,61 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_WildManWandersIn : IncidentWorker
 	{
-		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
 			{
 				return false;
 			}
-			Faction faction;
-			if (!this.TryFindFormerFaction(out faction))
+			if (!TryFindFormerFaction(out Faction _))
 			{
 				return false;
 			}
 			Map map = (Map)parms.target;
-			IntVec3 intVec;
-			return !map.GameConditionManager.ConditionIsActive(GameConditionDefOf.ToxicFallout) && map.mapTemperature.SeasonAcceptableFor(ThingDefOf.Human) && this.TryFindEntryCell(map, out intVec);
+			if (map.GameConditionManager.ConditionIsActive(GameConditionDefOf.ToxicFallout))
+			{
+				return false;
+			}
+			if (!map.mapTemperature.SeasonAcceptableFor(ThingDefOf.Human))
+			{
+				return false;
+			}
+			IntVec3 cell;
+			return TryFindEntryCell(map, out cell);
 		}
 
-		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			IntVec3 loc;
-			if (!this.TryFindEntryCell(map, out loc))
+			if (!TryFindEntryCell(map, out IntVec3 cell))
 			{
 				return false;
 			}
-			Faction faction;
-			if (!this.TryFindFormerFaction(out faction))
+			if (!TryFindFormerFaction(out Faction formerFaction))
 			{
 				return false;
 			}
-			Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.WildMan, faction);
-			pawn.SetFaction(null, null);
-			GenSpawn.Spawn(pawn, loc, map, WipeMode.Vanish);
-			TaggedString baseLetterLabel = this.def.letterLabel.Formatted(pawn.LabelShort, pawn.Named("PAWN")).CapitalizeFirst();
-			TaggedString baseLetterText = this.def.letterText.Formatted(pawn.NameShortColored, pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true).CapitalizeFirst();
-			PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref baseLetterText, ref baseLetterLabel, pawn);
-			base.SendStandardLetter(baseLetterLabel, baseLetterText, this.def.letterDef, parms, pawn, Array.Empty<NamedArgument>());
+			Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.WildMan, formerFaction);
+			pawn.SetFaction(null);
+			GenSpawn.Spawn(pawn, cell, map);
+			TaggedString title = def.letterLabel.Formatted(pawn.LabelShort, pawn.Named("PAWN")).CapitalizeFirst();
+			TaggedString text = def.letterText.Formatted(pawn.NameShortColored, pawn.Named("PAWN")).AdjustedFor(pawn).CapitalizeFirst();
+			PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref text, ref title, pawn);
+			SendStandardLetter(title, text, def.letterDef, parms, pawn);
 			return true;
 		}
 
-		
 		private bool TryFindEntryCell(Map map, out IntVec3 cell)
 		{
 			return CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => map.reachability.CanReachColony(c), map, CellFinder.EdgeRoadChance_Ignore, out cell);
 		}
 
-		
 		private bool TryFindFormerFaction(out Faction formerFaction)
 		{
-			return Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out formerFaction, false, true, TechLevel.Undefined);
+			return Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out formerFaction, tryMedievalOrBetter: false, allowDefeated: true);
 		}
 	}
 }

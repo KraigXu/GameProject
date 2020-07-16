@@ -1,20 +1,15 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TerrainDefGenerator_Stone
 	{
-		
 		public static IEnumerable<TerrainDef> ImpliedTerrainDefs()
 		{
 			int i = 0;
-			foreach (ThingDef thingDef in from def in DefDatabase<ThingDef>.AllDefs
-			where def.building != null && def.building.isNaturalRock && !def.building.isResourceRock
-			select def)
+			foreach (ThingDef item in DefDatabase<ThingDef>.AllDefs.Where((ThingDef def) => def.building != null && def.building.isNaturalRock && !def.building.isResourceRock))
 			{
 				TerrainDef terrainDef = new TerrainDef();
 				TerrainDef hewn = new TerrainDef();
@@ -31,13 +26,13 @@ namespace RimWorld
 				terrainDef.affordances.Add(TerrainAffordanceDefOf.SmoothableStone);
 				terrainDef.fertility = 0f;
 				terrainDef.filthAcceptanceMask = (FilthSourceFlags.Terrain | FilthSourceFlags.Unnatural);
-				terrainDef.modContentPack = thingDef.modContentPack;
+				terrainDef.modContentPack = item.modContentPack;
 				terrainDef.renderPrecedence = 190 + i;
-				terrainDef.defName = thingDef.defName + "_Rough";
-				terrainDef.label = "RoughStoneTerrainLabel".Translate(thingDef.label);
-				terrainDef.description = "RoughStoneTerrainDesc".Translate(thingDef.label);
-				terrainDef.color = thingDef.graphicData.color;
-				thingDef.building.naturalTerrain = terrainDef;
+				terrainDef.defName = item.defName + "_Rough";
+				terrainDef.label = "RoughStoneTerrainLabel".Translate(item.label);
+				terrainDef.description = "RoughStoneTerrainDesc".Translate(item.label);
+				terrainDef.color = item.graphicData.color;
+				item.building.naturalTerrain = terrainDef;
 				hewn.texturePath = "Terrain/Surfaces/RoughHewnRock";
 				hewn.edgeType = TerrainDef.TerrainEdgeType.FadeRough;
 				hewn.pathCost = 1;
@@ -50,13 +45,13 @@ namespace RimWorld
 				hewn.affordances.Add(TerrainAffordanceDefOf.SmoothableStone);
 				hewn.fertility = 0f;
 				hewn.filthAcceptanceMask = FilthSourceFlags.Any;
-				hewn.modContentPack = thingDef.modContentPack;
+				hewn.modContentPack = item.modContentPack;
 				hewn.renderPrecedence = 50 + i;
-				hewn.defName = thingDef.defName + "_RoughHewn";
-				hewn.label = "RoughHewnStoneTerrainLabel".Translate(thingDef.label);
-				hewn.description = "RoughHewnStoneTerrainDesc".Translate(thingDef.label);
-				hewn.color = thingDef.graphicData.color;
-				thingDef.building.leaveTerrain = hewn;
+				hewn.defName = item.defName + "_RoughHewn";
+				hewn.label = "RoughHewnStoneTerrainLabel".Translate(item.label);
+				hewn.description = "RoughHewnStoneTerrainDesc".Translate(item.label);
+				hewn.color = item.graphicData.color;
+				item.building.leaveTerrain = hewn;
 				smooth.texturePath = "Terrain/Surfaces/SmoothStone";
 				smooth.edgeType = TerrainDef.TerrainEdgeType.FadeRough;
 				smooth.pathCost = 0;
@@ -69,29 +64,23 @@ namespace RimWorld
 				smooth.affordances.Add(TerrainAffordanceDefOf.Heavy);
 				smooth.fertility = 0f;
 				smooth.filthAcceptanceMask = FilthSourceFlags.Any;
-				smooth.modContentPack = thingDef.modContentPack;
+				smooth.modContentPack = item.modContentPack;
 				smooth.tags = new List<string>
 				{
 					"Floor"
 				};
 				smooth.renderPrecedence = 140 + i;
-				smooth.defName = thingDef.defName + "_Smooth";
-				smooth.label = "SmoothStoneTerrainLabel".Translate(thingDef.label);
-				smooth.description = "SmoothStoneTerrainDesc".Translate(thingDef.label);
-				smooth.color = thingDef.graphicData.color;
+				smooth.defName = item.defName + "_Smooth";
+				smooth.label = "SmoothStoneTerrainLabel".Translate(item.label);
+				smooth.description = "SmoothStoneTerrainDesc".Translate(item.label);
+				smooth.color = item.graphicData.color;
 				terrainDef.smoothedTerrain = smooth;
 				hewn.smoothedTerrain = smooth;
 				yield return terrainDef;
 				yield return hewn;
 				yield return smooth;
-				int num = i;
-				i = num + 1;
-				hewn = null;
-				smooth = null;
+				i++;
 			}
-			IEnumerator<ThingDef> enumerator = null;
-			yield break;
-			yield break;
 		}
 	}
 }

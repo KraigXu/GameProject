@@ -1,14 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Alert_Critical : Alert
 	{
-		
-		
+		private int lastActiveFrame = -1;
+
+		private const float PulseFreq = 0.5f;
+
+		private const float PulseAmpCritical = 0.6f;
+
+		private const float PulseAmpTutorial = 0.2f;
+
 		protected override Color BGColor
 		{
 			get
@@ -18,32 +22,18 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void AlertActiveUpdate()
 		{
-			if (this.lastActiveFrame < Time.frameCount - 1)
+			if (lastActiveFrame < Time.frameCount - 1)
 			{
-				Messages.Message("MessageCriticalAlert".Translate(base.Label.CapitalizeFirst()), new LookTargets(this.GetReport().AllCulprits), MessageTypeDefOf.ThreatBig, true);
+				Messages.Message("MessageCriticalAlert".Translate(base.Label.CapitalizeFirst()), new LookTargets(GetReport().AllCulprits), MessageTypeDefOf.ThreatBig);
 			}
-			this.lastActiveFrame = Time.frameCount;
+			lastActiveFrame = Time.frameCount;
 		}
 
-		
 		public Alert_Critical()
 		{
-			this.defaultPriority = AlertPriority.Critical;
+			defaultPriority = AlertPriority.Critical;
 		}
-
-		
-		private int lastActiveFrame = -1;
-
-		
-		private const float PulseFreq = 0.5f;
-
-		
-		private const float PulseAmpCritical = 0.6f;
-
-		
-		private const float PulseAmpTutorial = 0.2f;
 	}
 }

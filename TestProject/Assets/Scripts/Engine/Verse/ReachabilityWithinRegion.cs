@@ -1,12 +1,9 @@
-﻿using System;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class ReachabilityWithinRegion
 	{
-		
 		public static bool ThingFromRegionListerReachable(Thing thing, Region region, PathEndMode peMode, Pawn traveler)
 		{
 			Map map = region.Map;
@@ -18,33 +15,37 @@ namespace Verse
 			{
 			case PathEndMode.None:
 				return false;
+			case PathEndMode.Touch:
+				return true;
 			case PathEndMode.OnCell:
-				if (thing.def.size.x != 1 || thing.def.size.z != 1)
+				if (thing.def.size.x == 1 && thing.def.size.z == 1)
 				{
-					CellRect.Enumerator enumerator = thing.OccupiedRect().GetEnumerator();
+					if (thing.Position.GetRegion(map) == region)
 					{
-						while (enumerator.MoveNext())
+						return true;
+					}
+				}
+				else
+				{
+					foreach (IntVec3 item in thing.OccupiedRect())
+					{
+						if (item.GetRegion(map) == region)
 						{
-							if (enumerator.Current.GetRegion(map, RegionType.Set_Passable) == region)
-							{
-								return true;
-							}
+							return true;
 						}
 					}
-					return false;
 				}
-				if (thing.Position.GetRegion(map, RegionType.Set_Passable) == region)
+				return false;
+			case PathEndMode.InteractionCell:
+				if (thing.InteractionCell.GetRegion(map) == region)
 				{
 					return true;
 				}
 				return false;
-			case PathEndMode.Touch:
-				return true;
-			case PathEndMode.InteractionCell:
-				return thing.InteractionCell.GetRegion(map, RegionType.Set_Passable) == region;
+			default:
+				Log.Error("Unsupported PathEndMode: " + peMode);
+				return false;
 			}
-			Log.Error("Unsupported PathEndMode: " + peMode, false);
-			return false;
 		}
 	}
 }

@@ -1,29 +1,29 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StunHandler : IExposable
 	{
-		
-		
-		public bool Stunned
-		{
-			get
-			{
-				return this.stunTicksLeft > 0;
-			}
-		}
+		public Thing parent;
 
-		
-		
+		private int stunTicksLeft;
+
+		private Mote moteStun;
+
+		private int EMPAdaptedTicksLeft;
+
+		private Effecter empEffecter;
+
+		public const float StunDurationTicksPerDamage = 30f;
+
+		public bool Stunned => stunTicksLeft > 0;
+
 		private int EMPAdaptationTicksDuration
 		{
 			get
 			{
-				Pawn pawn = this.parent as Pawn;
+				Pawn pawn = parent as Pawn;
 				if (pawn != null && pawn.RaceProps.IsMechanoid)
 				{
 					return 2200;
@@ -32,130 +32,101 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		private bool AffectedByEMP
 		{
 			get
 			{
 				Pawn pawn;
-				return (pawn = (this.parent as Pawn)) == null || !pawn.RaceProps.IsFlesh;
+				if ((pawn = (parent as Pawn)) != null)
+				{
+					return !pawn.RaceProps.IsFlesh;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public int StunTicksLeft
-		{
-			get
-			{
-				return this.stunTicksLeft;
-			}
-		}
+		public int StunTicksLeft => stunTicksLeft;
 
-		
 		public StunHandler(Thing parent)
 		{
 			this.parent = parent;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.stunTicksLeft, "stunTicksLeft", 0, false);
-			Scribe_Values.Look<int>(ref this.EMPAdaptedTicksLeft, "EMPAdaptedTicksLeft", 0, false);
+			Scribe_Values.Look(ref stunTicksLeft, "stunTicksLeft", 0);
+			Scribe_Values.Look(ref EMPAdaptedTicksLeft, "EMPAdaptedTicksLeft", 0);
 		}
 
-		
 		public void StunHandlerTick()
 		{
-			if (this.EMPAdaptedTicksLeft > 0)
+			if (EMPAdaptedTicksLeft > 0)
 			{
-				this.EMPAdaptedTicksLeft--;
+				EMPAdaptedTicksLeft--;
 			}
-			if (this.stunTicksLeft > 0)
+			if (stunTicksLeft > 0)
 			{
-				this.stunTicksLeft--;
-				if (this.moteStun == null || this.moteStun.Destroyed)
+				stunTicksLeft--;
+				if (moteStun == null || moteStun.Destroyed)
 				{
-					this.moteStun = MoteMaker.MakeStunOverlay(this.parent);
+					moteStun = MoteMaker.MakeStunOverlay(parent);
 				}
-				Pawn pawn = this.parent as Pawn;
+				Pawn pawn = parent as Pawn;
 				if (pawn != null && pawn.Downed)
 				{
-					this.stunTicksLeft = 0;
+					stunTicksLeft = 0;
 				}
-				if (this.moteStun != null)
+				if (moteStun != null)
 				{
-					this.moteStun.Maintain();
+					moteStun.Maintain();
 				}
-				if (this.AffectedByEMP)
+				if (AffectedByEMP)
 				{
-					if (this.empEffecter == null)
+					if (empEffecter == null)
 					{
-						this.empEffecter = EffecterDefOf.DisabledByEMP.Spawn();
+						empEffecter = EffecterDefOf.DisabledByEMP.Spawn();
 					}
-					this.empEffecter.EffectTick(this.parent, this.parent);
-					return;
+					empEffecter.EffectTick(parent, parent);
 				}
 			}
-			else if (this.empEffecter != null)
+			else if (empEffecter != null)
 			{
-				this.empEffecter.Cleanup();
+				empEffecter.Cleanup();
 			}
 		}
 
-		
 		public void Notify_DamageApplied(DamageInfo dinfo, bool affectedByEMP)
 		{
-			Pawn pawn = this.parent as Pawn;
+			Pawn pawn = parent as Pawn;
 			if (pawn != null && (pawn.Downed || pawn.Dead))
 			{
 				return;
 			}
 			if (dinfo.Def == DamageDefOf.Stun)
 			{
-				this.StunFor(Mathf.RoundToInt(dinfo.Amount * 30f), dinfo.Instigator, true);
-				return;
+				StunFor(Mathf.RoundToInt(dinfo.Amount * 30f), dinfo.Instigator);
 			}
-			if (dinfo.Def == DamageDefOf.EMP && this.AffectedByEMP)
+			else if (dinfo.Def == DamageDefOf.EMP && AffectedByEMP)
 			{
-				if (this.EMPAdaptedTicksLeft <= 0)
+				if (EMPAdaptedTicksLeft <= 0)
 				{
-					this.StunFor(Mathf.RoundToInt(dinfo.Amount * 30f), dinfo.Instigator, true);
-					this.EMPAdaptedTicksLeft = this.EMPAdaptationTicksDuration;
-					return;
+					StunFor(Mathf.RoundToInt(dinfo.Amount * 30f), dinfo.Instigator);
+					EMPAdaptedTicksLeft = EMPAdaptationTicksDuration;
 				}
-				MoteMaker.ThrowText(new Vector3((float)this.parent.Position.x + 1f, (float)this.parent.Position.y, (float)this.parent.Position.z + 1f), this.parent.Map, "Adapted".Translate(), Color.white, -1f);
+				else
+				{
+					MoteMaker.ThrowText(new Vector3((float)parent.Position.x + 1f, parent.Position.y, (float)parent.Position.z + 1f), parent.Map, "Adapted".Translate(), Color.white);
+				}
 			}
 		}
 
-		
 		public void StunFor(int ticks, Thing instigator, bool addBattleLog = true)
 		{
-			this.stunTicksLeft = Mathf.Max(this.stunTicksLeft, ticks);
+			stunTicksLeft = Mathf.Max(stunTicksLeft, ticks);
 			if (addBattleLog)
 			{
-				Find.BattleLog.Add(new BattleLogEntry_Event(this.parent, RulePackDefOf.Event_Stun, instigator));
+				Find.BattleLog.Add(new BattleLogEntry_Event(parent, RulePackDefOf.Event_Stun, instigator));
 			}
 		}
-
-		
-		public Thing parent;
-
-		
-		private int stunTicksLeft;
-
-		
-		private Mote moteStun;
-
-		
-		private int EMPAdaptedTicksLeft;
-
-		
-		private Effecter empEffecter;
-
-		
-		public const float StunDurationTicksPerDamage = 30f;
 	}
 }

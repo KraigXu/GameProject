@@ -1,12 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class ResearchProjectTagDef : Def
 	{
-		
 		public int CompletedProjects()
 		{
 			int num = 0;

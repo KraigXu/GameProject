@@ -1,19 +1,16 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SiteGenStepUtility
 	{
-		
 		public static bool TryFindRootToSpawnAroundRectOfInterest(out CellRect rectToDefend, out IntVec3 singleCellToSpawnNear, Map map)
 		{
 			singleCellToSpawnNear = IntVec3.Invalid;
-			if (!MapGenerator.TryGetVar<CellRect>("RectOfInterest", out rectToDefend))
+			if (!MapGenerator.TryGetVar("RectOfInterest", out rectToDefend))
 			{
 				rectToDefend = CellRect.Empty;
-				if (!RCellFinder.TryFindRandomCellNearTheCenterOfTheMapWith((IntVec3 x) => x.Standable(map) && !x.Fogged(map) && x.GetRoom(map, RegionType.Set_Passable).CellCount >= 225, map, out singleCellToSpawnNear))
+				if (!RCellFinder.TryFindRandomCellNearTheCenterOfTheMapWith((IntVec3 x) => x.Standable(map) && !x.Fogged(map) && x.GetRoom(map).CellCount >= 225, map, out singleCellToSpawnNear))
 				{
 					return false;
 				}
@@ -21,7 +18,6 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool TryFindSpawnCellAroundOrNear(CellRect around, IntVec3 near, Map map, out IntVec3 spawnCell)
 		{
 			if (near.IsValid)

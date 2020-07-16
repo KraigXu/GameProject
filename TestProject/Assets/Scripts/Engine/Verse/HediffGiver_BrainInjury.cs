@@ -1,12 +1,15 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class HediffGiver_BrainInjury : HediffGiver
 	{
-		
+		public float chancePerDamagePct;
+
+		public string letterLabel;
+
+		public string letter;
+
 		public override bool OnHediffAdded(Pawn pawn, Hediff hediff)
 		{
 			if (!(hediff is Hediff_Injury))
@@ -18,24 +21,15 @@ namespace Verse
 				return false;
 			}
 			float num = hediff.Severity / hediff.Part.def.GetMaxHealth(pawn);
-			if (Rand.Value < num * this.chancePerDamagePct && base.TryApply(pawn, null))
+			if (Rand.Value < num * chancePerDamagePct && TryApply(pawn))
 			{
-				if ((pawn.Faction == Faction.OfPlayer || pawn.IsPrisonerOfColony) && !this.letter.NullOrEmpty())
+				if ((pawn.Faction == Faction.OfPlayer || pawn.IsPrisonerOfColony) && !letter.NullOrEmpty())
 				{
-					Find.LetterStack.ReceiveLetter(this.letterLabel, this.letter.Formatted(pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true), LetterDefOf.NegativeEvent, pawn, null, null, null, null);
+					Find.LetterStack.ReceiveLetter(letterLabel, letter.Formatted(pawn.Named("PAWN")).AdjustedFor(pawn), LetterDefOf.NegativeEvent, pawn);
 				}
 				return true;
 			}
 			return false;
 		}
-
-		
-		public float chancePerDamagePct;
-
-		
-		public string letterLabel;
-
-		
-		public string letter;
 	}
 }

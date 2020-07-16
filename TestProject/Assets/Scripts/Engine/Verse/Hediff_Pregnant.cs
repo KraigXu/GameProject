@@ -1,38 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Hediff_Pregnant : HediffWithComps
 	{
-		
-		
-		
+		public Pawn father;
+
+		private const int MiscarryCheckInterval = 1000;
+
+		private const float MTBMiscarryStarvingDays = 0.5f;
+
+		private const float MTBMiscarryWoundedDays = 0.5f;
+
 		public float GestationProgress
 		{
 			get
 			{
-				return this.Severity;
+				return Severity;
 			}
 			private set
 			{
-				this.Severity = value;
+				Severity = value;
 			}
 		}
 
-		
-		
 		private bool IsSeverelyWounded
 		{
 			get
 			{
 				float num = 0f;
-				List<Hediff> hediffs = this.pawn.health.hediffSet.hediffs;
+				List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
 				for (int i = 0; i < hediffs.Count; i++)
 				{
 					if (hediffs[i] is Hediff_Injury && !hediffs[i].IsPermanent())
@@ -40,72 +41,69 @@ namespace Verse
 						num += hediffs[i].Severity;
 					}
 				}
-				List<Hediff_MissingPart> missingPartsCommonAncestors = this.pawn.health.hediffSet.GetMissingPartsCommonAncestors();
+				List<Hediff_MissingPart> missingPartsCommonAncestors = pawn.health.hediffSet.GetMissingPartsCommonAncestors();
 				for (int j = 0; j < missingPartsCommonAncestors.Count; j++)
 				{
 					if (missingPartsCommonAncestors[j].IsFreshNonSolidExtremity)
 					{
-						num += missingPartsCommonAncestors[j].Part.def.GetMaxHealth(this.pawn);
+						num += missingPartsCommonAncestors[j].Part.def.GetMaxHealth(pawn);
 					}
 				}
-				return num > 38f * this.pawn.RaceProps.baseHealthScale;
+				return num > 38f * pawn.RaceProps.baseHealthScale;
 			}
 		}
 
-		
 		public override void Tick()
 		{
-			this.ageTicks++;
-			if (this.pawn.IsHashIntervalTick(1000))
+			ageTicks++;
+			if (pawn.IsHashIntervalTick(1000))
 			{
-				if (this.pawn.needs.food != null && this.pawn.needs.food.CurCategory == HungerCategory.Starving && this.pawn.health.hediffSet.HasHediff(HediffDefOf.Malnutrition, false) && this.pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition, false).Severity > 0.25f && Rand.MTBEventOccurs(0.5f, 60000f, 1000f))
+				if (pawn.needs.food != null && pawn.needs.food.CurCategory == HungerCategory.Starving && pawn.health.hediffSet.HasHediff(HediffDefOf.Malnutrition) && pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Malnutrition).Severity > 0.25f && Rand.MTBEventOccurs(0.5f, 60000f, 1000f))
 				{
-					if (this.Visible && PawnUtility.ShouldSendNotificationAbout(this.pawn))
+					if (Visible && PawnUtility.ShouldSendNotificationAbout(pawn))
 					{
-						string value = this.pawn.Name.Numerical ? this.pawn.LabelShort : (this.pawn.LabelShort + " (" + this.pawn.kindDef.label + ")");
-						Messages.Message("MessageMiscarriedStarvation".Translate(value, this.pawn), this.pawn, MessageTypeDefOf.NegativeHealthEvent, true);
+						string value = pawn.Name.Numerical ? pawn.LabelShort : (pawn.LabelShort + " (" + pawn.kindDef.label + ")");
+						Messages.Message("MessageMiscarriedStarvation".Translate(value, pawn), pawn, MessageTypeDefOf.NegativeHealthEvent);
 					}
-					this.Miscarry();
+					Miscarry();
 					return;
 				}
-				if (this.IsSeverelyWounded && Rand.MTBEventOccurs(0.5f, 60000f, 1000f))
+				if (IsSeverelyWounded && Rand.MTBEventOccurs(0.5f, 60000f, 1000f))
 				{
-					if (this.Visible && PawnUtility.ShouldSendNotificationAbout(this.pawn))
+					if (Visible && PawnUtility.ShouldSendNotificationAbout(pawn))
 					{
-						string value2 = this.pawn.Name.Numerical ? this.pawn.LabelShort : (this.pawn.LabelShort + " (" + this.pawn.kindDef.label + ")");
-						Messages.Message("MessageMiscarriedPoorHealth".Translate(value2, this.pawn), this.pawn, MessageTypeDefOf.NegativeHealthEvent, true);
+						string value2 = pawn.Name.Numerical ? pawn.LabelShort : (pawn.LabelShort + " (" + pawn.kindDef.label + ")");
+						Messages.Message("MessageMiscarriedPoorHealth".Translate(value2, pawn), pawn, MessageTypeDefOf.NegativeHealthEvent);
 					}
-					this.Miscarry();
+					Miscarry();
 					return;
 				}
 			}
-			this.GestationProgress += 1f / (this.pawn.RaceProps.gestationPeriodDays * 60000f);
-			if (this.GestationProgress >= 1f)
+			GestationProgress += 1f / (pawn.RaceProps.gestationPeriodDays * 60000f);
+			if (GestationProgress >= 1f)
 			{
-				if (this.Visible && PawnUtility.ShouldSendNotificationAbout(this.pawn))
+				if (Visible && PawnUtility.ShouldSendNotificationAbout(pawn))
 				{
-					Messages.Message("MessageGaveBirth".Translate(this.pawn), this.pawn, MessageTypeDefOf.PositiveEvent, true);
+					Messages.Message("MessageGaveBirth".Translate(pawn), pawn, MessageTypeDefOf.PositiveEvent);
 				}
-				Hediff_Pregnant.DoBirthSpawn(this.pawn, this.father);
-				this.pawn.health.RemoveHediff(this);
+				DoBirthSpawn(pawn, father);
+				pawn.health.RemoveHediff(this);
 			}
 		}
 
-		
 		private void Miscarry()
 		{
-			this.pawn.health.RemoveHediff(this);
+			pawn.health.RemoveHediff(this);
 		}
 
-		
 		public static void DoBirthSpawn(Pawn mother, Pawn father)
 		{
-			int num = (mother.RaceProps.litterSizeCurve != null) ? Mathf.RoundToInt(Rand.ByCurve(mother.RaceProps.litterSizeCurve)) : 1;
+			int num = (mother.RaceProps.litterSizeCurve == null) ? 1 : Mathf.RoundToInt(Rand.ByCurve(mother.RaceProps.litterSizeCurve));
 			if (num < 1)
 			{
 				num = 1;
 			}
-			PawnGenerationRequest request = new PawnGenerationRequest(mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, -1, false, true, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, null, null, null, null, null, null, null);
+			PawnGenerationRequest request = new PawnGenerationRequest(mother.kindDef, mother.Faction, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: true);
 			Pawn pawn = null;
 			for (int i = 0; i < num; i++)
 			{
@@ -129,15 +127,11 @@ namespace Verse
 				{
 					Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Discard);
 				}
-				TaleRecorder.RecordTale(TaleDefOf.GaveBirth, new object[]
-				{
-					mother,
-					pawn
-				});
+				TaleRecorder.RecordTale(TaleDefOf.GaveBirth, mother, pawn);
 			}
 			if (mother.Spawned)
 			{
-				FilthMaker.TryMakeFilth(mother.Position, mother.Map, ThingDefOf.Filth_AmnioticFluid, mother.LabelIndefinite(), 5, FilthSourceFlags.None);
+				FilthMaker.TryMakeFilth(mother.Position, mother.Map, ThingDefOf.Filth_AmnioticFluid, mother.LabelIndefinite(), 5);
 				if (mother.caller != null)
 				{
 					mother.caller.DoCall();
@@ -149,33 +143,19 @@ namespace Verse
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Pawn>(ref this.father, "father", false);
+			Scribe_References.Look(ref father, "father");
 		}
 
-		
 		public override string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append(base.DebugString());
-			stringBuilder.AppendLine("Gestation progress: " + this.GestationProgress.ToStringPercent());
-			stringBuilder.AppendLine("Time left: " + ((int)((1f - this.GestationProgress) * this.pawn.RaceProps.gestationPeriodDays * 60000f)).ToStringTicksToPeriod(true, false, true, true));
+			stringBuilder.AppendLine("Gestation progress: " + GestationProgress.ToStringPercent());
+			stringBuilder.AppendLine("Time left: " + ((int)((1f - GestationProgress) * pawn.RaceProps.gestationPeriodDays * 60000f)).ToStringTicksToPeriod());
 			return stringBuilder.ToString();
 		}
-
-		
-		public Pawn father;
-
-		
-		private const int MiscarryCheckInterval = 1000;
-
-		
-		private const float MTBMiscarryStarvingDays = 0.5f;
-
-		
-		private const float MTBMiscarryWoundedDays = 0.5f;
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,58 +5,60 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ListerHaulables
 	{
-		
+		private Map map;
+
+		private List<Thing> haulables = new List<Thing>();
+
+		private const int CellsPerTick = 4;
+
+		private static int groupCycleIndex;
+
+		private List<int> cellCycleIndices = new List<int>();
+
+		private string debugOutput = "uninitialized";
+
 		public ListerHaulables(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public List<Thing> ThingsPotentiallyNeedingHauling()
 		{
-			return this.haulables;
+			return haulables;
 		}
 
-		
 		public void Notify_Spawned(Thing t)
 		{
-			this.CheckAdd(t);
+			CheckAdd(t);
 		}
 
-		
 		public void Notify_DeSpawned(Thing t)
 		{
-			this.TryRemove(t);
+			TryRemove(t);
 		}
 
-		
 		public void HaulDesignationAdded(Thing t)
 		{
-			this.CheckAdd(t);
+			CheckAdd(t);
 		}
 
-		
 		public void HaulDesignationRemoved(Thing t)
 		{
-			this.TryRemove(t);
+			TryRemove(t);
 		}
 
-		
 		public void Notify_Unforbidden(Thing t)
 		{
-			this.CheckAdd(t);
+			CheckAdd(t);
 		}
 
-		
 		public void Notify_Forbidden(Thing t)
 		{
-			this.TryRemove(t);
+			TryRemove(t);
 		}
 
-		
 		public void Notify_SlotGroupChanged(SlotGroup sg)
 		{
 			List<IntVec3> cellsList = sg.CellsList;
@@ -65,92 +66,84 @@ namespace RimWorld
 			{
 				for (int i = 0; i < cellsList.Count; i++)
 				{
-					this.RecalcAllInCell(cellsList[i]);
+					RecalcAllInCell(cellsList[i]);
 				}
 			}
 		}
 
-		
 		public void ListerHaulablesTick()
 		{
-			ListerHaulables.groupCycleIndex++;
-			if (ListerHaulables.groupCycleIndex >= 2147473647)
+			groupCycleIndex++;
+			if (groupCycleIndex >= 2147473647)
 			{
-				ListerHaulables.groupCycleIndex = 0;
+				groupCycleIndex = 0;
 			}
-			List<SlotGroup> allGroupsListForReading = this.map.haulDestinationManager.AllGroupsListForReading;
+			List<SlotGroup> allGroupsListForReading = map.haulDestinationManager.AllGroupsListForReading;
 			if (allGroupsListForReading.Count == 0)
 			{
 				return;
 			}
-			int num = ListerHaulables.groupCycleIndex % allGroupsListForReading.Count;
-			SlotGroup slotGroup = allGroupsListForReading[ListerHaulables.groupCycleIndex % allGroupsListForReading.Count];
-			if (slotGroup.CellsList.Count != 0)
+			int num = groupCycleIndex % allGroupsListForReading.Count;
+			SlotGroup slotGroup = allGroupsListForReading[groupCycleIndex % allGroupsListForReading.Count];
+			if (slotGroup.CellsList.Count == 0)
 			{
-				while (this.cellCycleIndices.Count <= num)
+				return;
+			}
+			while (cellCycleIndices.Count <= num)
+			{
+				cellCycleIndices.Add(0);
+			}
+			if (cellCycleIndices[num] >= 2147473647)
+			{
+				cellCycleIndices[num] = 0;
+			}
+			for (int i = 0; i < 4; i++)
+			{
+				cellCycleIndices[num]++;
+				List<Thing> thingList = slotGroup.CellsList[cellCycleIndices[num] % slotGroup.CellsList.Count].GetThingList(map);
+				for (int j = 0; j < thingList.Count; j++)
 				{
-					this.cellCycleIndices.Add(0);
-				}
-				if (this.cellCycleIndices[num] >= 2147473647)
-				{
-					this.cellCycleIndices[num] = 0;
-				}
-				for (int i = 0; i < 4; i++)
-				{
-					List<int> list = this.cellCycleIndices;
-					int index = num;
-					int num2 = list[index];
-					list[index] = num2 + 1;
-					List<Thing> thingList = slotGroup.CellsList[this.cellCycleIndices[num] % slotGroup.CellsList.Count].GetThingList(this.map);
-					for (int j = 0; j < thingList.Count; j++)
+					if (thingList[j].def.EverHaulable)
 					{
-						if (thingList[j].def.EverHaulable)
-						{
-							this.Check(thingList[j]);
-							break;
-						}
+						Check(thingList[j]);
+						break;
 					}
 				}
 			}
 		}
 
-		
 		public void RecalcAllInCell(IntVec3 c)
 		{
-			List<Thing> thingList = c.GetThingList(this.map);
+			List<Thing> thingList = c.GetThingList(map);
 			for (int i = 0; i < thingList.Count; i++)
 			{
-				this.Check(thingList[i]);
+				Check(thingList[i]);
 			}
 		}
 
-		
 		public void RecalcAllInCells(IEnumerable<IntVec3> cells)
 		{
-			foreach (IntVec3 c in cells)
+			foreach (IntVec3 cell in cells)
 			{
-				this.RecalcAllInCell(c);
+				RecalcAllInCell(cell);
 			}
 		}
 
-		
 		private void Check(Thing t)
 		{
-			if (this.ShouldBeHaulable(t))
+			if (ShouldBeHaulable(t))
 			{
-				if (!this.haulables.Contains(t))
+				if (!haulables.Contains(t))
 				{
-					this.haulables.Add(t);
-					return;
+					haulables.Add(t);
 				}
 			}
-			else if (this.haulables.Contains(t))
+			else if (haulables.Contains(t))
 			{
-				this.haulables.Remove(t);
+				haulables.Remove(t);
 			}
 		}
 
-		
 		private bool ShouldBeHaulable(Thing t)
 		{
 			if (t.IsForbidden(Faction.OfPlayer))
@@ -163,70 +156,53 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (this.map.designationManager.DesignationOn(t, DesignationDefOf.Haul) == null && !t.IsInAnyStorage())
+				if (map.designationManager.DesignationOn(t, DesignationDefOf.Haul) == null && !t.IsInAnyStorage())
 				{
 					return false;
 				}
 			}
-			return !t.IsInValidBestStorage();
+			if (t.IsInValidBestStorage())
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		private void CheckAdd(Thing t)
 		{
-			if (this.ShouldBeHaulable(t) && !this.haulables.Contains(t))
+			if (ShouldBeHaulable(t) && !haulables.Contains(t))
 			{
-				this.haulables.Add(t);
+				haulables.Add(t);
 			}
 		}
 
-		
 		private void TryRemove(Thing t)
 		{
-			if (t.def.category == ThingCategory.Item && this.haulables.Contains(t))
+			if (t.def.category == ThingCategory.Item && haulables.Contains(t))
 			{
-				this.haulables.Remove(t);
+				haulables.Remove(t);
 			}
 		}
 
-		
 		internal string DebugString()
 		{
 			if (Time.frameCount % 10 == 0)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.AppendLine("======= All haulables (Count " + this.haulables.Count + ")");
+				stringBuilder.AppendLine("======= All haulables (Count " + haulables.Count + ")");
 				int num = 0;
-				foreach (Thing thing in this.haulables)
+				foreach (Thing haulable in haulables)
 				{
-					stringBuilder.AppendLine(thing.ThingID);
+					stringBuilder.AppendLine(haulable.ThingID);
 					num++;
 					if (num > 200)
 					{
 						break;
 					}
 				}
-				this.debugOutput = stringBuilder.ToString();
+				debugOutput = stringBuilder.ToString();
 			}
-			return this.debugOutput;
+			return debugOutput;
 		}
-
-		
-		private Map map;
-
-		
-		private List<Thing> haulables = new List<Thing>();
-
-		
-		private const int CellsPerTick = 4;
-
-		
-		private static int groupCycleIndex;
-
-		
-		private List<int> cellCycleIndices = new List<int>();
-
-		
-		private string debugOutput = "uninitialized";
 	}
 }

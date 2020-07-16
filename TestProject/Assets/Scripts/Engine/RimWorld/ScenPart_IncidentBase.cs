@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,98 +5,91 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class ScenPart_IncidentBase : ScenPart
 	{
-		
-		
-		public IncidentDef Incident
+		protected IncidentDef incident;
+
+		public IncidentDef Incident => incident;
+
+		protected abstract string IncidentTag
 		{
-			get
-			{
-				return this.incident;
-			}
+			get;
 		}
 
-		
-		
-		protected abstract string IncidentTag { get; }
-
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<IncidentDef>(ref this.incident, "incident");
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.incident == null)
+			Scribe_Defs.Look(ref incident, "incident");
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && incident == null)
 			{
-				this.incident = this.RandomizableIncidents().FirstOrDefault<IncidentDef>();
-				Log.Error("ScenPart has null incident after loading. Changing to " + this.incident.ToStringSafe<IncidentDef>(), false);
+				incident = RandomizableIncidents().FirstOrDefault();
+				Log.Error("ScenPart has null incident after loading. Changing to " + incident.ToStringSafe());
 			}
 		}
 
-		
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
 			Rect scenPartRect = listing.GetScenPartRect(this, ScenPart.RowHeight);
-			this.DoIncidentEditInterface(scenPartRect);
+			DoIncidentEditInterface(scenPartRect);
 		}
 
-		
 		public override string Summary(Scenario scen)
 		{
-			string key = "ScenPart_" + this.IncidentTag;
-			return ScenSummaryList.SummaryWithList(scen, this.IncidentTag, key.Translate());
+			string key = "ScenPart_" + IncidentTag;
+			return ScenSummaryList.SummaryWithList(scen, IncidentTag, key.Translate());
 		}
 
-		
 		public override IEnumerable<string> GetSummaryListEntries(string tag)
 		{
-			if (tag == this.IncidentTag)
+			if (tag == IncidentTag)
 			{
-				yield return this.incident.LabelCap;
+				yield return incident.LabelCap;
 			}
-			yield break;
 		}
 
-		
 		public override void Randomize()
 		{
-			this.incident = this.RandomizableIncidents().RandomElement<IncidentDef>();
+			incident = RandomizableIncidents().RandomElement();
 		}
 
-		
 		public override bool TryMerge(ScenPart other)
 		{
 			ScenPart_IncidentBase scenPart_IncidentBase = other as ScenPart_IncidentBase;
-			return scenPart_IncidentBase != null && scenPart_IncidentBase.Incident == this.incident;
+			if (scenPart_IncidentBase != null && scenPart_IncidentBase.Incident == incident)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override bool CanCoexistWith(ScenPart other)
 		{
 			ScenPart_IncidentBase scenPart_IncidentBase = other as ScenPart_IncidentBase;
-			return scenPart_IncidentBase == null || scenPart_IncidentBase.Incident != this.incident;
+			if (scenPart_IncidentBase != null && scenPart_IncidentBase.Incident == incident)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected virtual IEnumerable<IncidentDef> RandomizableIncidents()
 		{
 			return Enumerable.Empty<IncidentDef>();
 		}
 
-		
 		protected void DoIncidentEditInterface(Rect rect)
 		{
-			if (Widgets.ButtonText(rect, this.incident.LabelCap, true, true, true))
+			if (Widgets.ButtonText(rect, incident.LabelCap))
 			{
-				FloatMenuUtility.MakeMenu<IncidentDef>(DefDatabase<IncidentDef>.AllDefs, (IncidentDef id) => id.LabelCap, (IncidentDef id) => delegate
+				FloatMenuUtility.MakeMenu(DefDatabase<IncidentDef>.AllDefs, (IncidentDef id) => id.LabelCap, delegate(IncidentDef id)
 				{
-					this.incident = id;
+					ScenPart_IncidentBase scenPart_IncidentBase = this;
+					return delegate
+					{
+						scenPart_IncidentBase.incident = id;
+					};
 				});
 			}
 		}
-
-		
-		protected IncidentDef incident;
 	}
 }

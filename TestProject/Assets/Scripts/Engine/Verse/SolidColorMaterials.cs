@@ -1,75 +1,59 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class SolidColorMaterials
 	{
-		
-		
-		public static int SimpleColorMatCount
-		{
-			get
-			{
-				return SolidColorMaterials.simpleColorMats.Count + SolidColorMaterials.simpleColorAndVertexColorMats.Count;
-			}
-		}
+		private static Dictionary<Color, Material> simpleColorMats = new Dictionary<Color, Material>();
 
-		
+		private static Dictionary<Color, Material> simpleColorAndVertexColorMats = new Dictionary<Color, Material>();
+
+		public static int SimpleColorMatCount => simpleColorMats.Count + simpleColorAndVertexColorMats.Count;
+
 		public static Material SimpleSolidColorMaterial(Color col, bool careAboutVertexColors = false)
 		{
-			col = col;
-			Material material;
+			col = (Color32)col;
+			Material value;
 			if (careAboutVertexColors)
 			{
-				if (!SolidColorMaterials.simpleColorAndVertexColorMats.TryGetValue(col, out material))
+				if (!simpleColorAndVertexColorMats.TryGetValue(col, out value))
 				{
-					material = SolidColorMaterials.NewSolidColorMaterial(col, ShaderDatabase.VertexColor);
-					SolidColorMaterials.simpleColorAndVertexColorMats.Add(col, material);
+					value = NewSolidColorMaterial(col, ShaderDatabase.VertexColor);
+					simpleColorAndVertexColorMats.Add(col, value);
 				}
 			}
-			else if (!SolidColorMaterials.simpleColorMats.TryGetValue(col, out material))
+			else if (!simpleColorMats.TryGetValue(col, out value))
 			{
-				material = SolidColorMaterials.NewSolidColorMaterial(col, ShaderDatabase.SolidColor);
-				SolidColorMaterials.simpleColorMats.Add(col, material);
+				value = NewSolidColorMaterial(col, ShaderDatabase.SolidColor);
+				simpleColorMats.Add(col, value);
 			}
-			return material;
+			return value;
 		}
 
-		
 		public static Material NewSolidColorMaterial(Color col, Shader shader)
 		{
 			if (!UnityData.IsInMainThread)
 			{
-				Log.Error("Tried to create a material from a different thread.", false);
+				Log.Error("Tried to create a material from a different thread.");
 				return null;
 			}
 			Material material = MaterialAllocator.Create(shader);
 			material.color = col;
-			material.name = string.Concat(new object[]
-			{
-				"SolidColorMat-",
-				shader.name,
-				"-",
-				col
-			});
+			material.name = "SolidColorMat-" + shader.name + "-" + col;
 			return material;
 		}
 
-		
 		public static Texture2D NewSolidColorTexture(float r, float g, float b, float a)
 		{
-			return SolidColorMaterials.NewSolidColorTexture(new Color(r, g, b, a));
+			return NewSolidColorTexture(new Color(r, g, b, a));
 		}
 
-		
 		public static Texture2D NewSolidColorTexture(Color color)
 		{
 			if (!UnityData.IsInMainThread)
 			{
-				Log.Error("Tried to create a texture from a different thread.", false);
+				Log.Error("Tried to create a texture from a different thread.");
 				return null;
 			}
 			Texture2D texture2D = new Texture2D(1, 1);
@@ -78,11 +62,5 @@ namespace Verse
 			texture2D.Apply();
 			return texture2D;
 		}
-
-		
-		private static Dictionary<Color, Material> simpleColorMats = new Dictionary<Color, Material>();
-
-		
-		private static Dictionary<Color, Material> simpleColorAndVertexColorMats = new Dictionary<Color, Material>();
 	}
 }

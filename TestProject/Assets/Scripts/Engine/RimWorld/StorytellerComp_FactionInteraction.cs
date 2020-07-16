@@ -1,56 +1,41 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_FactionInteraction : StorytellerComp
 	{
-		
-		
-		private StorytellerCompProperties_FactionInteraction Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_FactionInteraction)this.props;
-			}
-		}
+		private StorytellerCompProperties_FactionInteraction Props => (StorytellerCompProperties_FactionInteraction)props;
 
-		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
-			if (this.Props.minDanger != StoryDanger.None)
+			if (Props.minDanger != 0)
 			{
 				Map map = target as Map;
-				if (map == null || map.dangerWatcher.DangerRating < this.Props.minDanger)
+				if (map == null || (int)map.dangerWatcher.DangerRating < (int)Props.minDanger)
 				{
 					yield break;
 				}
 			}
-			float num = StorytellerUtility.AllyIncidentFraction(this.Props.fullAlliesOnly);
+			float num = StorytellerUtility.AllyIncidentFraction(Props.fullAlliesOnly);
 			if (num <= 0f)
 			{
 				yield break;
 			}
-			int incCount = IncidentCycleUtility.IncidentCountThisInterval(target, Find.Storyteller.storytellerComps.IndexOf(this), this.Props.minDaysPassed, 60f, 0f, this.Props.minSpacingDays, this.Props.baseIncidentsPerYear, this.Props.baseIncidentsPerYear, num);
-			int num2;
-			for (int i = 0; i < incCount; i = num2 + 1)
+			int incCount = IncidentCycleUtility.IncidentCountThisInterval(target, Find.Storyteller.storytellerComps.IndexOf(this), Props.minDaysPassed, 60f, 0f, Props.minSpacingDays, Props.baseIncidentsPerYear, Props.baseIncidentsPerYear, num);
+			for (int i = 0; i < incCount; i++)
 			{
-				IncidentParms parms = this.GenerateParms(this.Props.incident.category, target);
-				if (this.Props.incident.Worker.CanFireNow(parms, false))
+				IncidentParms parms = GenerateParms(Props.incident.category, target);
+				if (Props.incident.Worker.CanFireNow(parms))
 				{
-					yield return new FiringIncident(this.Props.incident, this, parms);
+					yield return new FiringIncident(Props.incident, this, parms);
 				}
-				num2 = i;
 			}
-			yield break;
 		}
 
-		
 		public override string ToString()
 		{
-			return base.ToString() + " (" + this.Props.incident.defName + ")";
+			return base.ToString() + " (" + Props.incident.defName + ")";
 		}
 	}
 }

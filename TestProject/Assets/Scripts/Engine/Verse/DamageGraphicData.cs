@@ -1,148 +1,121 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class DamageGraphicData
 	{
-		
+		public bool enabled = true;
+
+		public Rect rectN;
+
+		public Rect rectE;
+
+		public Rect rectS;
+
+		public Rect rectW;
+
+		public Rect rect;
+
+		[NoTranslate]
+		public List<string> scratches;
+
+		[NoTranslate]
+		public string cornerTL;
+
+		[NoTranslate]
+		public string cornerTR;
+
+		[NoTranslate]
+		public string cornerBL;
+
+		[NoTranslate]
+		public string cornerBR;
+
+		[NoTranslate]
+		public string edgeLeft;
+
+		[NoTranslate]
+		public string edgeRight;
+
+		[NoTranslate]
+		public string edgeTop;
+
+		[NoTranslate]
+		public string edgeBot;
+
+		[Unsaved(false)]
+		public List<Material> scratchMats;
+
+		[Unsaved(false)]
+		public Material cornerTLMat;
+
+		[Unsaved(false)]
+		public Material cornerTRMat;
+
+		[Unsaved(false)]
+		public Material cornerBLMat;
+
+		[Unsaved(false)]
+		public Material cornerBRMat;
+
+		[Unsaved(false)]
+		public Material edgeLeftMat;
+
+		[Unsaved(false)]
+		public Material edgeRightMat;
+
+		[Unsaved(false)]
+		public Material edgeTopMat;
+
+		[Unsaved(false)]
+		public Material edgeBotMat;
+
 		public void ResolveReferencesSpecial()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
 			{
-				if (this.scratches != null)
+				if (scratches != null)
 				{
-					this.scratchMats = new List<Material>();
-					for (int i = 0; i < this.scratches.Count; i++)
+					scratchMats = new List<Material>();
+					for (int i = 0; i < scratches.Count; i++)
 					{
-						this.scratchMats[i] = MaterialPool.MatFrom(this.scratches[i], ShaderDatabase.Transparent);
+						scratchMats[i] = MaterialPool.MatFrom(scratches[i], ShaderDatabase.Transparent);
 					}
 				}
-				if (this.cornerTL != null)
+				if (cornerTL != null)
 				{
-					this.cornerTLMat = MaterialPool.MatFrom(this.cornerTL, ShaderDatabase.Transparent);
+					cornerTLMat = MaterialPool.MatFrom(cornerTL, ShaderDatabase.Transparent);
 				}
-				if (this.cornerTR != null)
+				if (cornerTR != null)
 				{
-					this.cornerTRMat = MaterialPool.MatFrom(this.cornerTR, ShaderDatabase.Transparent);
+					cornerTRMat = MaterialPool.MatFrom(cornerTR, ShaderDatabase.Transparent);
 				}
-				if (this.cornerBL != null)
+				if (cornerBL != null)
 				{
-					this.cornerBLMat = MaterialPool.MatFrom(this.cornerBL, ShaderDatabase.Transparent);
+					cornerBLMat = MaterialPool.MatFrom(cornerBL, ShaderDatabase.Transparent);
 				}
-				if (this.cornerBR != null)
+				if (cornerBR != null)
 				{
-					this.cornerBRMat = MaterialPool.MatFrom(this.cornerBR, ShaderDatabase.Transparent);
+					cornerBRMat = MaterialPool.MatFrom(cornerBR, ShaderDatabase.Transparent);
 				}
-				if (this.edgeTop != null)
+				if (edgeTop != null)
 				{
-					this.edgeTopMat = MaterialPool.MatFrom(this.edgeTop, ShaderDatabase.Transparent);
+					edgeTopMat = MaterialPool.MatFrom(edgeTop, ShaderDatabase.Transparent);
 				}
-				if (this.edgeBot != null)
+				if (edgeBot != null)
 				{
-					this.edgeBotMat = MaterialPool.MatFrom(this.edgeBot, ShaderDatabase.Transparent);
+					edgeBotMat = MaterialPool.MatFrom(edgeBot, ShaderDatabase.Transparent);
 				}
-				if (this.edgeLeft != null)
+				if (edgeLeft != null)
 				{
-					this.edgeLeftMat = MaterialPool.MatFrom(this.edgeLeft, ShaderDatabase.Transparent);
+					edgeLeftMat = MaterialPool.MatFrom(edgeLeft, ShaderDatabase.Transparent);
 				}
-				if (this.edgeRight != null)
+				if (edgeRight != null)
 				{
-					this.edgeRightMat = MaterialPool.MatFrom(this.edgeRight, ShaderDatabase.Transparent);
+					edgeRightMat = MaterialPool.MatFrom(edgeRight, ShaderDatabase.Transparent);
 				}
 			});
 		}
-
-		
-		public bool enabled = true;
-
-		
-		public Rect rectN;
-
-		
-		public Rect rectE;
-
-		
-		public Rect rectS;
-
-		
-		public Rect rectW;
-
-		
-		public Rect rect;
-
-		
-		[NoTranslate]
-		public List<string> scratches;
-
-		
-		[NoTranslate]
-		public string cornerTL;
-
-		
-		[NoTranslate]
-		public string cornerTR;
-
-		
-		[NoTranslate]
-		public string cornerBL;
-
-		
-		[NoTranslate]
-		public string cornerBR;
-
-		
-		[NoTranslate]
-		public string edgeLeft;
-
-		
-		[NoTranslate]
-		public string edgeRight;
-
-		
-		[NoTranslate]
-		public string edgeTop;
-
-		
-		[NoTranslate]
-		public string edgeBot;
-
-		
-		[Unsaved(false)]
-		public List<Material> scratchMats;
-
-		
-		[Unsaved(false)]
-		public Material cornerTLMat;
-
-		
-		[Unsaved(false)]
-		public Material cornerTRMat;
-
-		
-		[Unsaved(false)]
-		public Material cornerBLMat;
-
-		
-		[Unsaved(false)]
-		public Material cornerBRMat;
-
-		
-		[Unsaved(false)]
-		public Material edgeLeftMat;
-
-		
-		[Unsaved(false)]
-		public Material edgeRightMat;
-
-		
-		[Unsaved(false)]
-		public Material edgeTopMat;
-
-		
-		[Unsaved(false)]
-		public Material edgeBotMat;
 	}
 }

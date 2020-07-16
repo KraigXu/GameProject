@@ -1,73 +1,63 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_QuestExpiresSoon : Alert
 	{
-		
-		
+		private const int TicksToAlert = 60000;
+
 		private Quest QuestExpiring
 		{
 			get
 			{
-				foreach (Quest quest in Find.QuestManager.questsInDisplayOrder)
+				foreach (Quest item in Find.QuestManager.questsInDisplayOrder)
 				{
-					if (!quest.dismissed && !quest.Historical && !quest.initiallyAccepted && quest.State == QuestState.NotYetAccepted && quest.ticksUntilAcceptanceExpiry > 0 && quest.ticksUntilAcceptanceExpiry < 60000)
+					if (!item.dismissed && !item.Historical && !item.initiallyAccepted && item.State == QuestState.NotYetAccepted && item.ticksUntilAcceptanceExpiry > 0 && item.ticksUntilAcceptanceExpiry < 60000)
 					{
-						return quest;
+						return item;
 					}
 				}
 				return null;
 			}
 		}
 
-		
 		public Alert_QuestExpiresSoon()
 		{
-			this.defaultPriority = AlertPriority.High;
+			defaultPriority = AlertPriority.High;
 		}
 
-		
 		protected override void OnClick()
 		{
-			if (this.QuestExpiring != null)
+			if (QuestExpiring != null)
 			{
-				Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Quests, true);
-				((MainTabWindow_Quests)MainButtonDefOf.Quests.TabWindow).Select(this.QuestExpiring);
+				Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Quests);
+				((MainTabWindow_Quests)MainButtonDefOf.Quests.TabWindow).Select(QuestExpiring);
 			}
 		}
 
-		
 		public override string GetLabel()
 		{
-			Quest questExpiring = this.QuestExpiring;
+			Quest questExpiring = QuestExpiring;
 			if (questExpiring == null)
 			{
 				return string.Empty;
 			}
-			return "QuestExpiresSoon".Translate(questExpiring.ticksUntilAcceptanceExpiry.ToStringTicksToPeriod(true, false, true, true));
+			return "QuestExpiresSoon".Translate(questExpiring.ticksUntilAcceptanceExpiry.ToStringTicksToPeriod());
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
-			Quest questExpiring = this.QuestExpiring;
+			Quest questExpiring = QuestExpiring;
 			if (questExpiring == null)
 			{
 				return string.Empty;
 			}
-			return "QuestExpiresSoonDesc".Translate(questExpiring.name, questExpiring.ticksUntilAcceptanceExpiry.ToStringTicksToPeriod(true, false, true, true).Colorize(ColoredText.DateTimeColor));
+			return "QuestExpiresSoonDesc".Translate(questExpiring.name, questExpiring.ticksUntilAcceptanceExpiry.ToStringTicksToPeriod().Colorize(ColoredText.DateTimeColor));
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return this.QuestExpiring != null;
+			return QuestExpiring != null;
 		}
-
-		
-		private const int TicksToAlert = 60000;
 	}
 }

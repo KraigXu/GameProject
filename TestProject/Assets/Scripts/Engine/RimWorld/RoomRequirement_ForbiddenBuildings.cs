@@ -1,23 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRequirement_ForbiddenBuildings : RoomRequirement
 	{
-		
+		public List<string> buildingTags = new List<string>();
+
 		public override bool Met(Room r, Pawn p = null)
 		{
-			foreach (Thing thing in r.ContainedAndAdjacentThings)
+			foreach (Thing containedAndAdjacentThing in r.ContainedAndAdjacentThings)
 			{
-				if (thing.def.building != null)
+				if (containedAndAdjacentThing.def.building != null)
 				{
-					for (int i = 0; i < this.buildingTags.Count; i++)
+					for (int i = 0; i < buildingTags.Count; i++)
 					{
-						string item = this.buildingTags[i];
-						if (thing.def.building.buildingTags.Contains(item))
+						string item = buildingTags[i];
+						if (containedAndAdjacentThing.def.building.buildingTags.Contains(item))
 						{
 							return false;
 						}
@@ -26,8 +25,5 @@ namespace RimWorld
 			}
 			return true;
 		}
-
-		
-		public List<string> buildingTags = new List<string>();
 	}
 }

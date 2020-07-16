@@ -1,44 +1,39 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Filter_ArgNotEqual : QuestPart_Filter
 	{
-		
+		public string name;
+
+		public object obj;
+
+		private Type objType;
+
+		private LookMode objLookMode;
+
 		protected override bool Pass(SignalArgs args)
 		{
-			NamedArgument namedArgument;
-			return !args.TryGetArg(this.name, out namedArgument) || !object.Equals(this.obj, namedArgument.arg);
+			if (args.TryGetArg(name, out NamedArgument arg))
+			{
+				return !object.Equals(obj, arg.arg);
+			}
+			return true;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.name, "name", null, false);
-			Scribe_Universal.Look<object>(ref this.obj, "obj", ref this.objLookMode, ref this.objType, false);
+			Scribe_Values.Look(ref name, "name");
+			Scribe_Universal.Look(ref obj, "obj", ref objLookMode, ref objType);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.name = "test";
-			this.obj = "value";
+			name = "test";
+			obj = "value";
 		}
-
-		
-		public string name;
-
-		
-		public object obj;
-
-		
-		private Type objType;
-
-		
-		private LookMode objLookMode;
 	}
 }

@@ -1,115 +1,104 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Thought_Memory : Thought
 	{
-		
-		
+		public float moodPowerFactor = 1f;
+
+		public Pawn otherPawn;
+
+		public int age;
+
+		private int forcedStage;
+
+		private string cachedLabelCap;
+
+		private Pawn cachedLabelCapForOtherPawn;
+
+		private int cachedLabelCapForStageIndex = -1;
+
 		public override bool VisibleInNeedsTab
 		{
 			get
 			{
-				return base.VisibleInNeedsTab && !this.ShouldDiscard;
+				if (base.VisibleInNeedsTab)
+				{
+					return !ShouldDiscard;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public override int CurStageIndex
-		{
-			get
-			{
-				return this.forcedStage;
-			}
-		}
+		public override int CurStageIndex => forcedStage;
 
-		
-		
-		public virtual bool ShouldDiscard
-		{
-			get
-			{
-				return this.age > this.def.DurationTicks;
-			}
-		}
+		public virtual bool ShouldDiscard => age > def.DurationTicks;
 
-		
-		
 		public override string LabelCap
 		{
 			get
 			{
-				if (this.cachedLabelCap == null || this.cachedLabelCapForOtherPawn != this.otherPawn || this.cachedLabelCapForStageIndex != this.CurStageIndex)
+				if (cachedLabelCap == null || cachedLabelCapForOtherPawn != otherPawn || cachedLabelCapForStageIndex != CurStageIndex)
 				{
-					if (this.otherPawn != null)
+					if (otherPawn != null)
 					{
-						this.cachedLabelCap = base.CurStage.label.Formatted(this.otherPawn.LabelShort, this.otherPawn).CapitalizeFirst();
-						if (this.def.Worker != null)
+						cachedLabelCap = base.CurStage.label.Formatted(otherPawn.LabelShort, otherPawn).CapitalizeFirst();
+						if (def.Worker != null)
 						{
-							this.cachedLabelCap = this.def.Worker.PostProcessLabel(this.pawn, this.cachedLabelCap);
+							cachedLabelCap = def.Worker.PostProcessLabel(pawn, cachedLabelCap);
 						}
 					}
 					else
 					{
-						this.cachedLabelCap = base.LabelCap;
+						cachedLabelCap = base.LabelCap;
 					}
-					this.cachedLabelCapForOtherPawn = this.otherPawn;
-					this.cachedLabelCapForStageIndex = this.CurStageIndex;
+					cachedLabelCapForOtherPawn = otherPawn;
+					cachedLabelCapForStageIndex = CurStageIndex;
 				}
-				return this.cachedLabelCap;
+				return cachedLabelCap;
 			}
 		}
 
-		
-		
 		public override string LabelCapSocial
 		{
 			get
 			{
 				if (base.CurStage.labelSocial != null)
 				{
-					return base.CurStage.LabelSocialCap.Formatted(this.pawn.Named("PAWN"), this.otherPawn.Named("OTHERPAWN"));
+					return base.CurStage.LabelSocialCap.Formatted(pawn.Named("PAWN"), otherPawn.Named("OTHERPAWN"));
 				}
 				return base.LabelCapSocial;
 			}
 		}
 
-		
 		public void SetForcedStage(int stageIndex)
 		{
-			this.forcedStage = stageIndex;
+			forcedStage = stageIndex;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Pawn>(ref this.otherPawn, "otherPawn", true);
-			Scribe_Values.Look<float>(ref this.moodPowerFactor, "moodPowerFactor", 1f, false);
-			Scribe_Values.Look<int>(ref this.age, "age", 0, false);
-			Scribe_Values.Look<int>(ref this.forcedStage, "stageIndex", 0, false);
+			Scribe_References.Look(ref otherPawn, "otherPawn", saveDestroyedThings: true);
+			Scribe_Values.Look(ref moodPowerFactor, "moodPowerFactor", 1f);
+			Scribe_Values.Look(ref age, "age", 0);
+			Scribe_Values.Look(ref forcedStage, "stageIndex", 0);
 		}
 
-		
 		public virtual void ThoughtInterval()
 		{
-			this.age += 150;
+			age += 150;
 		}
 
-		
 		public void Renew()
 		{
-			this.age = 0;
+			age = 0;
 		}
 
-		
 		public virtual bool TryMergeWithExistingMemory(out bool showBubble)
 		{
-			ThoughtHandler thoughts = this.pawn.needs.mood.thoughts;
-			if (thoughts.memories.NumMemoriesInGroup(this) >= this.def.stackLimit)
+			ThoughtHandler thoughts = pawn.needs.mood.thoughts;
+			if (thoughts.memories.NumMemoriesInGroup(this) >= def.stackLimit)
 			{
 				Thought_Memory thought_Memory = thoughts.memories.OldestMemoryInGroup(this);
 				if (thought_Memory != null)
@@ -123,57 +112,36 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public override bool GroupsWith(Thought other)
 		{
 			Thought_Memory thought_Memory = other as Thought_Memory;
-			return thought_Memory != null && base.GroupsWith(other) && (this.otherPawn == thought_Memory.otherPawn || this.LabelCap == thought_Memory.LabelCap);
+			if (thought_Memory == null)
+			{
+				return false;
+			}
+			if (base.GroupsWith(other))
+			{
+				if (otherPawn != thought_Memory.otherPawn)
+				{
+					return LabelCap == thought_Memory.LabelCap;
+				}
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override float MoodOffset()
 		{
-			if (ThoughtUtility.ThoughtNullified(this.pawn, this.def))
+			if (ThoughtUtility.ThoughtNullified(pawn, def))
 			{
 				return 0f;
 			}
-			return base.MoodOffset() * this.moodPowerFactor;
+			return base.MoodOffset() * moodPowerFactor;
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"(",
-				this.def.defName,
-				", moodPowerFactor=",
-				this.moodPowerFactor,
-				", age=",
-				this.age,
-				")"
-			});
+			return "(" + def.defName + ", moodPowerFactor=" + moodPowerFactor + ", age=" + age + ")";
 		}
-
-		
-		public float moodPowerFactor = 1f;
-
-		
-		public Pawn otherPawn;
-
-		
-		public int age;
-
-		
-		private int forcedStage;
-
-		
-		private string cachedLabelCap;
-
-		
-		private Pawn cachedLabelCapForOtherPawn;
-
-		
-		private int cachedLabelCapForStageIndex = -1;
 	}
 }

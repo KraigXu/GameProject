@@ -1,168 +1,150 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class Dijkstra<T>
 	{
-		
-		public static void Run(T startingNode, Func<T, IEnumerable<T>> neighborsGetter, Func<T, T, float> distanceGetter, List<KeyValuePair<T, float>> outDistances, Dictionary<T, T> outParents = null)
+		private class DistanceComparer : IComparer<KeyValuePair<T, float>>
 		{
-			Dijkstra<T>.singleNodeList.Clear();
-			Dijkstra<T>.singleNodeList.Add(startingNode);
-			Dijkstra<T>.Run(Dijkstra<T>.singleNodeList, neighborsGetter, distanceGetter, outDistances, outParents);
+			public int Compare(KeyValuePair<T, float> a, KeyValuePair<T, float> b)
+			{
+				return a.Value.CompareTo(b.Value);
+			}
 		}
 
-		
+		private static Dictionary<T, float> distances = new Dictionary<T, float>();
+
+		private static FastPriorityQueue<KeyValuePair<T, float>> queue = new FastPriorityQueue<KeyValuePair<T, float>>(new DistanceComparer());
+
+		private static List<T> singleNodeList = new List<T>();
+
+		private static List<KeyValuePair<T, float>> tmpResult = new List<KeyValuePair<T, float>>();
+
+		public static void Run(T startingNode, Func<T, IEnumerable<T>> neighborsGetter, Func<T, T, float> distanceGetter, List<KeyValuePair<T, float>> outDistances, Dictionary<T, T> outParents = null)
+		{
+			singleNodeList.Clear();
+			singleNodeList.Add(startingNode);
+			Run(singleNodeList, neighborsGetter, distanceGetter, outDistances, outParents);
+		}
+
 		public static void Run(IEnumerable<T> startingNodes, Func<T, IEnumerable<T>> neighborsGetter, Func<T, T, float> distanceGetter, List<KeyValuePair<T, float>> outDistances, Dictionary<T, T> outParents = null)
 		{
 			outDistances.Clear();
-			Dijkstra<T>.distances.Clear();
-			Dijkstra<T>.queue.Clear();
-			if (outParents != null)
-			{
-				outParents.Clear();
-			}
+			distances.Clear();
+			queue.Clear();
+			outParents?.Clear();
 			IList<T> list = startingNodes as IList<T>;
 			if (list != null)
 			{
 				for (int i = 0; i < list.Count; i++)
 				{
 					T key = list[i];
-					if (!Dijkstra<T>.distances.ContainsKey(key))
+					if (!distances.ContainsKey(key))
 					{
-						Dijkstra<T>.distances.Add(key, 0f);
-						Dijkstra<T>.queue.Push(new KeyValuePair<T, float>(key, 0f));
+						distances.Add(key, 0f);
+						queue.Push(new KeyValuePair<T, float>(key, 0f));
 					}
 				}
-				goto IL_183;
 			}
-			IEnumerator<T> enumerator = startingNodes.GetEnumerator();
+			else
 			{
-				while (enumerator.MoveNext())
+				foreach (T startingNode in startingNodes)
 				{
-					T key2 = enumerator.Current;
-					if (!Dijkstra<T>.distances.ContainsKey(key2))
+					if (!distances.ContainsKey(startingNode))
 					{
-						Dijkstra<T>.distances.Add(key2, 0f);
-						Dijkstra<T>.queue.Push(new KeyValuePair<T, float>(key2, 0f));
+						distances.Add(startingNode, 0f);
+						queue.Push(new KeyValuePair<T, float>(startingNode, 0f));
 					}
 				}
-				goto IL_183;
 			}
-			IL_DC:
-			KeyValuePair<T, float> node = Dijkstra<T>.queue.Pop();
-			float num = Dijkstra<T>.distances[node.Key];
-			if (node.Value == num)
+			while (queue.Count != 0)
 			{
+				KeyValuePair<T, float> node = queue.Pop();
+				float num = distances[node.Key];
+				if (node.Value != num)
+				{
+					continue;
+				}
 				IEnumerable<T> enumerable = neighborsGetter(node.Key);
-				if (enumerable != null)
+				if (enumerable == null)
 				{
-					IList<T> list2 = enumerable as IList<T>;
-					if (list2 != null)
+					continue;
+				}
+				IList<T> list2 = enumerable as IList<T>;
+				if (list2 != null)
+				{
+					for (int j = 0; j < list2.Count; j++)
 					{
-						for (int j = 0; j < list2.Count; j++)
-						{
-							Dijkstra<T>.HandleNeighbor(list2[j], num, node, distanceGetter, outParents);
-						}
+						HandleNeighbor(list2[j], num, node, distanceGetter, outParents);
 					}
-					else
+				}
+				else
+				{
+					foreach (T item in enumerable)
 					{
-						foreach (T n in enumerable)
-						{
-							Dijkstra<T>.HandleNeighbor(n, num, node, distanceGetter, outParents);
-						}
+						HandleNeighbor(item, num, node, distanceGetter, outParents);
 					}
 				}
 			}
-			IL_183:
-			if (Dijkstra<T>.queue.Count == 0)
+			foreach (KeyValuePair<T, float> distance in distances)
 			{
-				foreach (KeyValuePair<T, float> item in Dijkstra<T>.distances)
-				{
-					outDistances.Add(item);
-				}
-				Dijkstra<T>.distances.Clear();
-				return;
+				outDistances.Add(distance);
 			}
-			goto IL_DC;
+			distances.Clear();
 		}
 
-		
 		public static void Run(T startingNode, Func<T, IEnumerable<T>> neighborsGetter, Func<T, T, float> distanceGetter, Dictionary<T, float> outDistances, Dictionary<T, T> outParents = null)
 		{
-			Dijkstra<T>.singleNodeList.Clear();
-			Dijkstra<T>.singleNodeList.Add(startingNode);
-			Dijkstra<T>.Run(Dijkstra<T>.singleNodeList, neighborsGetter, distanceGetter, outDistances, outParents);
+			singleNodeList.Clear();
+			singleNodeList.Add(startingNode);
+			Run(singleNodeList, neighborsGetter, distanceGetter, outDistances, outParents);
 		}
 
-		
 		public static void Run(IEnumerable<T> startingNodes, Func<T, IEnumerable<T>> neighborsGetter, Func<T, T, float> distanceGetter, Dictionary<T, float> outDistances, Dictionary<T, T> outParents = null)
 		{
-			Dijkstra<T>.Run(startingNodes, neighborsGetter, distanceGetter, Dijkstra<T>.tmpResult, outParents);
+			Run(startingNodes, neighborsGetter, distanceGetter, tmpResult, outParents);
 			outDistances.Clear();
-			for (int i = 0; i < Dijkstra<T>.tmpResult.Count; i++)
+			for (int i = 0; i < tmpResult.Count; i++)
 			{
-				outDistances.Add(Dijkstra<T>.tmpResult[i].Key, Dijkstra<T>.tmpResult[i].Value);
+				outDistances.Add(tmpResult[i].Key, tmpResult[i].Value);
 			}
-			Dijkstra<T>.tmpResult.Clear();
+			tmpResult.Clear();
 		}
 
-		
 		private static void HandleNeighbor(T n, float nodeDist, KeyValuePair<T, float> node, Func<T, T, float> distanceGetter, Dictionary<T, T> outParents)
 		{
 			float num = nodeDist + Mathf.Max(distanceGetter(node.Key, n), 0f);
 			bool flag = false;
-			float num2;
-			if (Dijkstra<T>.distances.TryGetValue(n, out num2))
+			if (distances.TryGetValue(n, out float value))
 			{
-				if (num < num2)
+				if (num < value)
 				{
-					Dijkstra<T>.distances[n] = num;
+					distances[n] = num;
 					flag = true;
 				}
 			}
 			else
 			{
-				Dijkstra<T>.distances.Add(n, num);
+				distances.Add(n, num);
 				flag = true;
 			}
-			if (flag)
+			if (!flag)
 			{
-				Dijkstra<T>.queue.Push(new KeyValuePair<T, float>(n, num));
-				if (outParents != null)
+				return;
+			}
+			queue.Push(new KeyValuePair<T, float>(n, num));
+			if (outParents != null)
+			{
+				if (outParents.ContainsKey(n))
 				{
-					if (outParents.ContainsKey(n))
-					{
-						outParents[n] = node.Key;
-						return;
-					}
+					outParents[n] = node.Key;
+				}
+				else
+				{
 					outParents.Add(n, node.Key);
 				}
-			}
-		}
-
-		
-		private static Dictionary<T, float> distances = new Dictionary<T, float>();
-
-		
-		private static FastPriorityQueue<KeyValuePair<T, float>> queue = new FastPriorityQueue<KeyValuePair<T, float>>(new Dijkstra<T>.DistanceComparer());
-
-		
-		private static List<T> singleNodeList = new List<T>();
-
-		
-		private static List<KeyValuePair<T, float>> tmpResult = new List<KeyValuePair<T, float>>();
-
-		
-		private class DistanceComparer : IComparer<KeyValuePair<T, float>>
-		{
-			
-			public int Compare(KeyValuePair<T, float> a, KeyValuePair<T, float> b)
-			{
-				return a.Value.CompareTo(b.Value);
 			}
 		}
 	}

@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class MarriageCeremonyUtility
 	{
-		
 		public static bool AcceptableGameConditionsToStartCeremony(Map map)
 		{
 			if (!GatheringsUtility.AcceptableGameConditionsToContinueGathering(map))
@@ -23,43 +20,80 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (map.dangerWatcher.DangerRating != StoryDanger.None)
+			if (map.dangerWatcher.DangerRating != 0)
 			{
 				return false;
 			}
 			int num = 0;
-			List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonistsSpawned.GetEnumerator();
+			foreach (Pawn item in map.mapPawns.FreeColonistsSpawned)
 			{
-				while (enumerator.MoveNext())
+				if (item.Drafted)
 				{
-					if (enumerator.Current.Drafted)
-					{
-						num++;
-					}
+					num++;
 				}
 			}
-			return (float)num / (float)map.mapPawns.FreeColonistsSpawnedCount < 0.5f;
+			if ((float)num / (float)map.mapPawns.FreeColonistsSpawnedCount >= 0.5f)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool FianceReadyToStartCeremony(Pawn pawn, Pawn otherPawn)
 		{
-			return MarriageCeremonyUtility.FianceCanContinueCeremony(pawn, otherPawn) && pawn.health.hediffSet.BleedRateTotal <= 0f && !HealthAIUtility.ShouldSeekMedicalRestUrgent(pawn) && !PawnUtility.WillSoonHaveBasicNeed(pawn) && !MarriageCeremonyUtility.IsCurrentlyMarryingSomeone(pawn) && pawn.GetLord() == null && (!pawn.Drafted && !pawn.InMentalState && pawn.Awake() && !pawn.IsBurning()) && !pawn.InBed();
+			if (!FianceCanContinueCeremony(pawn, otherPawn))
+			{
+				return false;
+			}
+			if (pawn.health.hediffSet.BleedRateTotal > 0f)
+			{
+				return false;
+			}
+			if (HealthAIUtility.ShouldSeekMedicalRestUrgent(pawn))
+			{
+				return false;
+			}
+			if (PawnUtility.WillSoonHaveBasicNeed(pawn))
+			{
+				return false;
+			}
+			if (IsCurrentlyMarryingSomeone(pawn))
+			{
+				return false;
+			}
+			if (pawn.GetLord() != null)
+			{
+				return false;
+			}
+			if (!pawn.Drafted && !pawn.InMentalState && pawn.Awake() && !pawn.IsBurning())
+			{
+				return !pawn.InBed();
+			}
+			return false;
 		}
 
-		
 		public static bool FianceCanContinueCeremony(Pawn pawn, Pawn otherPawn)
 		{
-			return GatheringsUtility.PawnCanStartOrContinueGathering(pawn) && !pawn.HostileTo(otherPawn) && (pawn.Spawned && !pawn.Downed) && !pawn.InMentalState;
+			if (!GatheringsUtility.PawnCanStartOrContinueGathering(pawn))
+			{
+				return false;
+			}
+			if (pawn.HostileTo(otherPawn))
+			{
+				return false;
+			}
+			if (pawn.Spawned && !pawn.Downed)
+			{
+				return !pawn.InMentalState;
+			}
+			return false;
 		}
 
-		
 		public static bool ShouldGuestKeepAttendingCeremony(Pawn p)
 		{
 			return GatheringsUtility.ShouldGuestKeepAttendingGathering(p);
 		}
 
-		
 		public static void Married(Pawn firstPawn, Pawn secondPawn)
 		{
 			LovePartnerRelationUtility.ChangeSpouseRelationsToExSpouse(firstPawn);
@@ -67,8 +101,8 @@ namespace RimWorld
 			firstPawn.relations.RemoveDirectRelation(PawnRelationDefOf.Fiance, secondPawn);
 			firstPawn.relations.TryRemoveDirectRelation(PawnRelationDefOf.ExSpouse, secondPawn);
 			firstPawn.relations.AddDirectRelation(PawnRelationDefOf.Spouse, secondPawn);
-			MarriageCeremonyUtility.AddNewlyMarriedThoughts(firstPawn, secondPawn);
-			MarriageCeremonyUtility.AddNewlyMarriedThoughts(secondPawn, firstPawn);
+			AddNewlyMarriedThoughts(firstPawn, secondPawn);
+			AddNewlyMarriedThoughts(secondPawn, firstPawn);
 			if (firstPawn.needs.mood != null)
 			{
 				firstPawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.DivorcedMe, secondPawn);
@@ -79,29 +113,22 @@ namespace RimWorld
 			}
 			if (firstPawn.relations.nextMarriageNameChange != secondPawn.relations.nextMarriageNameChange)
 			{
-				Log.Warning("Marriage name change is different on marrying pawns. This is weird, but not harmful.", false);
+				Log.Warning("Marriage name change is different on marrying pawns. This is weird, but not harmful.");
 			}
 			SpouseRelationUtility.ChangeNameAfterMarriage(firstPawn, secondPawn, firstPawn.relations.nextMarriageNameChange);
 			LovePartnerRelationUtility.TryToShareBed(firstPawn, secondPawn);
-			TaleRecorder.RecordTale(TaleDefOf.Marriage, new object[]
-			{
-				firstPawn,
-				secondPawn
-			});
+			TaleRecorder.RecordTale(TaleDefOf.Marriage, firstPawn, secondPawn);
 		}
 
-		
 		private static void AddNewlyMarriedThoughts(Pawn pawn, Pawn otherPawn)
 		{
-			if (pawn.needs.mood == null)
+			if (pawn.needs.mood != null)
 			{
-				return;
+				pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.GotMarried, otherPawn);
+				pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.HoneymoonPhase, otherPawn);
 			}
-			pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.GotMarried, otherPawn);
-			pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.HoneymoonPhase, otherPawn);
 		}
 
-		
 		private static bool IsCurrentlyMarryingSomeone(Pawn p)
 		{
 			if (!p.Spawned)

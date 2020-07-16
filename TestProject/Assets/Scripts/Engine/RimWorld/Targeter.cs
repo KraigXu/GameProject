@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,163 +8,176 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Targeter
 	{
-		
-		
+		public ITargetingSource targetingSource;
+
+		public ITargetingSource targetingSourceParent;
+
+		public List<Pawn> targetingSourceAdditionalPawns;
+
+		private Action<LocalTargetInfo> action;
+
+		private Pawn caster;
+
+		private TargetingParameters targetParams;
+
+		private Action actionWhenFinished;
+
+		private Texture2D mouseAttachment;
+
+		private bool needsStopTargetingCall;
+
 		public bool IsTargeting
 		{
 			get
 			{
-				return this.targetingSource != null || this.action != null;
+				if (targetingSource == null)
+				{
+					return action != null;
+				}
+				return true;
 			}
 		}
 
-		
 		public void BeginTargeting(ITargetingSource source, ITargetingSource parent = null)
 		{
 			if (source.Targetable)
 			{
-				this.targetingSource = source;
-				this.targetingSourceAdditionalPawns = new List<Pawn>();
+				targetingSource = source;
+				targetingSourceAdditionalPawns = new List<Pawn>();
 			}
 			else
 			{
 				Job job = JobMaker.MakeJob(JobDefOf.UseVerbOnThing);
-				job.verbToUse = this.targetingSource.GetVerb;
-				source.CasterPawn.jobs.StartJob(job, JobCondition.None, null, false, true, null, null, false, false);
+				job.verbToUse = targetingSource.GetVerb;
+				source.CasterPawn.jobs.StartJob(job);
 			}
-			this.action = null;
-			this.caster = null;
-			this.targetParams = null;
-			this.actionWhenFinished = null;
-			this.mouseAttachment = null;
-			this.targetingSourceParent = parent;
-			this.needsStopTargetingCall = false;
+			action = null;
+			caster = null;
+			targetParams = null;
+			actionWhenFinished = null;
+			mouseAttachment = null;
+			targetingSourceParent = parent;
+			needsStopTargetingCall = false;
 		}
 
-		
 		public void BeginTargeting(TargetingParameters targetParams, Action<LocalTargetInfo> action, Pawn caster = null, Action actionWhenFinished = null, Texture2D mouseAttachment = null)
 		{
-			this.targetingSource = null;
-			this.targetingSourceParent = null;
-			this.targetingSourceAdditionalPawns = null;
+			targetingSource = null;
+			targetingSourceParent = null;
+			targetingSourceAdditionalPawns = null;
 			this.action = action;
 			this.targetParams = targetParams;
 			this.caster = caster;
 			this.actionWhenFinished = actionWhenFinished;
 			this.mouseAttachment = mouseAttachment;
-			this.needsStopTargetingCall = false;
+			needsStopTargetingCall = false;
 		}
 
-		
 		public void BeginTargeting(TargetingParameters targetParams, ITargetingSource ability, Action<LocalTargetInfo> action, Action actionWhenFinished = null, Texture2D mouseAttachment = null)
 		{
-			this.targetingSource = null;
-			this.targetingSourceParent = null;
-			this.targetingSourceAdditionalPawns = null;
+			targetingSource = null;
+			targetingSourceParent = null;
+			targetingSourceAdditionalPawns = null;
 			this.action = action;
 			this.actionWhenFinished = actionWhenFinished;
-			this.caster = null;
+			caster = null;
 			this.targetParams = targetParams;
 			this.mouseAttachment = mouseAttachment;
-			this.targetingSource = ability;
-			this.needsStopTargetingCall = false;
+			targetingSource = ability;
+			needsStopTargetingCall = false;
 		}
 
-		
 		public void StopTargeting()
 		{
-			if (this.actionWhenFinished != null)
+			if (actionWhenFinished != null)
 			{
-				Action action = this.actionWhenFinished;
-				this.actionWhenFinished = null;
-				action();
+				Action obj = actionWhenFinished;
+				actionWhenFinished = null;
+				obj();
 			}
-			this.targetingSource = null;
-			this.action = null;
-			this.targetParams = null;
+			targetingSource = null;
+			action = null;
+			targetParams = null;
 		}
 
-		
 		public void ProcessInputEvents()
 		{
-			this.ConfirmStillValid();
-			if (this.IsTargeting)
+			ConfirmStillValid();
+			if (!IsTargeting)
 			{
-				if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+				return;
+			}
+			if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
+			{
+				LocalTargetInfo localTargetInfo = CurrentTargetUnderMouse(mustBeHittableNowIfNotMelee: false);
+				needsStopTargetingCall = true;
+				if (targetingSource != null)
 				{
-					LocalTargetInfo localTargetInfo = this.CurrentTargetUnderMouse(false);
-					this.needsStopTargetingCall = true;
-					if (this.targetingSource != null)
+					if (!targetingSource.ValidateTarget(localTargetInfo))
 					{
-						if (!this.targetingSource.ValidateTarget(localTargetInfo))
-						{
-							Event.current.Use();
-							return;
-						}
-						this.OrderVerbForceTarget();
+						Event.current.Use();
+						return;
 					}
-					if (this.action != null && localTargetInfo.IsValid)
-					{
-						this.action(localTargetInfo);
-					}
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-					if (this.targetingSource != null)
-					{
-						if (this.targetingSource.DestinationSelector != null)
-						{
-							this.BeginTargeting(this.targetingSource.DestinationSelector, this.targetingSource);
-						}
-						else if (this.targetingSource.MultiSelect && Event.current.shift)
-						{
-							this.BeginTargeting(this.targetingSource, null);
-						}
-						else if (this.targetingSourceParent != null && this.targetingSourceParent.MultiSelect && Event.current.shift)
-						{
-							this.BeginTargeting(this.targetingSourceParent, null);
-						}
-					}
-					if (this.needsStopTargetingCall)
-					{
-						this.StopTargeting();
-					}
-					Event.current.Use();
+					OrderVerbForceTarget();
 				}
-				if ((Event.current.type == EventType.MouseDown && Event.current.button == 1) || KeyBindingDefOf.Cancel.KeyDownEvent)
+				if (action != null && localTargetInfo.IsValid)
 				{
-					SoundDefOf.CancelMode.PlayOneShotOnCamera(null);
-					this.StopTargeting();
-					Event.current.Use();
+					action(localTargetInfo);
 				}
+				SoundDefOf.Tick_High.PlayOneShotOnCamera();
+				if (targetingSource != null)
+				{
+					if (targetingSource.DestinationSelector != null)
+					{
+						BeginTargeting(targetingSource.DestinationSelector, targetingSource);
+					}
+					else if (targetingSource.MultiSelect && Event.current.shift)
+					{
+						BeginTargeting(targetingSource);
+					}
+					else if (targetingSourceParent != null && targetingSourceParent.MultiSelect && Event.current.shift)
+					{
+						BeginTargeting(targetingSourceParent);
+					}
+				}
+				if (needsStopTargetingCall)
+				{
+					StopTargeting();
+				}
+				Event.current.Use();
+			}
+			if ((Event.current.type == EventType.MouseDown && Event.current.button == 1) || KeyBindingDefOf.Cancel.KeyDownEvent)
+			{
+				SoundDefOf.CancelMode.PlayOneShotOnCamera();
+				StopTargeting();
+				Event.current.Use();
 			}
 		}
 
-		
 		public void TargeterOnGUI()
 		{
-			if (this.targetingSource != null)
+			if (targetingSource != null)
 			{
-				LocalTargetInfo target = this.CurrentTargetUnderMouse(true);
-				this.targetingSource.OnGUI(target);
+				LocalTargetInfo target = CurrentTargetUnderMouse(mustBeHittableNowIfNotMelee: true);
+				targetingSource.OnGUI(target);
 			}
-			if (this.action != null)
+			if (action != null)
 			{
-				GenUI.DrawMouseAttachment(this.mouseAttachment ?? TexCommand.Attack);
+				GenUI.DrawMouseAttachment(mouseAttachment ?? TexCommand.Attack);
 			}
 		}
 
-		
 		public void TargeterUpdate()
 		{
-			if (this.targetingSource != null)
+			if (targetingSource != null)
 			{
-				this.targetingSource.DrawHighlight(this.CurrentTargetUnderMouse(true));
+				targetingSource.DrawHighlight(CurrentTargetUnderMouse(mustBeHittableNowIfNotMelee: true));
 			}
-			if (this.action != null)
+			if (action != null)
 			{
-				LocalTargetInfo targ = this.CurrentTargetUnderMouse(false);
+				LocalTargetInfo targ = CurrentTargetUnderMouse(mustBeHittableNowIfNotMelee: false);
 				if (targ.IsValid)
 				{
 					GenDraw.DrawTargetHighlight(targ);
@@ -172,22 +185,21 @@ namespace RimWorld
 			}
 		}
 
-		
 		public bool IsPawnTargeting(Pawn p)
 		{
-			if (this.caster == p)
+			if (caster == p)
 			{
 				return true;
 			}
-			if (this.targetingSource != null && this.targetingSource.CasterIsPawn)
+			if (targetingSource != null && targetingSource.CasterIsPawn)
 			{
-				if (this.targetingSource.CasterPawn == p)
+				if (targetingSource.CasterPawn == p)
 				{
 					return true;
 				}
-				for (int i = 0; i < this.targetingSourceAdditionalPawns.Count; i++)
+				for (int i = 0; i < targetingSourceAdditionalPawns.Count; i++)
 				{
-					if (this.targetingSourceAdditionalPawns[i] == p)
+					if (targetingSourceAdditionalPawns[i] == p)
 					{
 						return true;
 					}
@@ -196,44 +208,50 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private void ConfirmStillValid()
 		{
-			if (this.caster != null && (this.caster.Map != Find.CurrentMap || this.caster.Destroyed || !Find.Selector.IsSelected(this.caster)))
+			if (caster != null && (caster.Map != Find.CurrentMap || caster.Destroyed || !Find.Selector.IsSelected(caster)))
 			{
-				this.StopTargeting();
+				StopTargeting();
 			}
-			if (this.targetingSource != null)
+			if (targetingSource == null)
 			{
-				Selector selector = Find.Selector;
-				if (this.targetingSource.Caster.Map != Find.CurrentMap || this.targetingSource.Caster.Destroyed || !selector.IsSelected(this.targetingSource.Caster))
+				return;
+			}
+			Selector selector = Find.Selector;
+			if (targetingSource.Caster.Map != Find.CurrentMap || targetingSource.Caster.Destroyed || !selector.IsSelected(targetingSource.Caster))
+			{
+				StopTargeting();
+				return;
+			}
+			int num = 0;
+			while (true)
+			{
+				if (num < targetingSourceAdditionalPawns.Count)
 				{
-					this.StopTargeting();
-					return;
-				}
-				for (int i = 0; i < this.targetingSourceAdditionalPawns.Count; i++)
-				{
-					if (this.targetingSourceAdditionalPawns[i].Destroyed || !selector.IsSelected(this.targetingSourceAdditionalPawns[i]))
+					if (targetingSourceAdditionalPawns[num].Destroyed || !selector.IsSelected(targetingSourceAdditionalPawns[num]))
 					{
-						this.StopTargeting();
-						return;
+						break;
 					}
+					num++;
+					continue;
 				}
+				return;
 			}
+			StopTargeting();
 		}
 
-		
 		private void OrderVerbForceTarget()
 		{
-			if (this.targetingSource.CasterIsPawn)
+			if (targetingSource.CasterIsPawn)
 			{
-				this.OrderPawnForceTarget(this.targetingSource);
-				for (int i = 0; i < this.targetingSourceAdditionalPawns.Count; i++)
+				OrderPawnForceTarget(targetingSource);
+				for (int i = 0; i < targetingSourceAdditionalPawns.Count; i++)
 				{
-					Verb targetingVerb = this.GetTargetingVerb(this.targetingSourceAdditionalPawns[i]);
+					Verb targetingVerb = GetTargetingVerb(targetingSourceAdditionalPawns[i]);
 					if (targetingVerb != null)
 					{
-						this.OrderPawnForceTarget(targetingVerb);
+						OrderPawnForceTarget(targetingVerb);
 					}
 				}
 				return;
@@ -245,42 +263,39 @@ namespace RimWorld
 				Building_Turret building_Turret = selectedObjects[j] as Building_Turret;
 				if (building_Turret != null && building_Turret.Map == Find.CurrentMap)
 				{
-					LocalTargetInfo targ = this.CurrentTargetUnderMouse(true);
+					LocalTargetInfo targ = CurrentTargetUnderMouse(mustBeHittableNowIfNotMelee: true);
 					building_Turret.OrderAttack(targ);
 				}
 			}
 		}
 
-		
 		public void OrderPawnForceTarget(ITargetingSource targetingSource)
 		{
-			LocalTargetInfo target = this.CurrentTargetUnderMouse(true);
-			if (!target.IsValid)
+			LocalTargetInfo target = CurrentTargetUnderMouse(mustBeHittableNowIfNotMelee: true);
+			if (target.IsValid)
 			{
-				return;
+				targetingSource.OrderForceTarget(target);
 			}
-			targetingSource.OrderForceTarget(target);
 		}
 
-		
 		private LocalTargetInfo CurrentTargetUnderMouse(bool mustBeHittableNowIfNotMelee)
 		{
-			if (!this.IsTargeting)
+			if (!IsTargeting)
 			{
 				return LocalTargetInfo.Invalid;
 			}
-			TargetingParameters targetingParameters = (this.targetingSource != null) ? this.targetingSource.targetParams : this.targetParams;
-			LocalTargetInfo localTargetInfo = GenUI.TargetsAtMouse_NewTemp(targetingParameters, false, this.targetingSource).FirstOrFallback(LocalTargetInfo.Invalid);
-			if (localTargetInfo.IsValid && this.targetingSource != null)
+			TargetingParameters targetingParameters = (targetingSource != null) ? targetingSource.targetParams : targetParams;
+			LocalTargetInfo localTargetInfo = GenUI.TargetsAtMouse_NewTemp(targetingParameters, thingsOnly: false, targetingSource).FirstOrFallback(LocalTargetInfo.Invalid);
+			if (localTargetInfo.IsValid && targetingSource != null)
 			{
-				if (mustBeHittableNowIfNotMelee && !(localTargetInfo.Thing is Pawn) && !this.targetingSource.IsMeleeAttack)
+				if (mustBeHittableNowIfNotMelee && !(localTargetInfo.Thing is Pawn) && !targetingSource.IsMeleeAttack)
 				{
-					if (this.targetingSourceAdditionalPawns != null && this.targetingSourceAdditionalPawns.Any<Pawn>())
+					if (targetingSourceAdditionalPawns != null && targetingSourceAdditionalPawns.Any())
 					{
 						bool flag = false;
-						for (int i = 0; i < this.targetingSourceAdditionalPawns.Count; i++)
+						for (int i = 0; i < targetingSourceAdditionalPawns.Count; i++)
 						{
-							Verb targetingVerb = this.GetTargetingVerb(this.targetingSourceAdditionalPawns[i]);
+							Verb targetingVerb = GetTargetingVerb(targetingSourceAdditionalPawns[i]);
 							if (targetingVerb != null && targetingVerb.CanHitTarget(localTargetInfo))
 							{
 								flag = true;
@@ -292,12 +307,12 @@ namespace RimWorld
 							localTargetInfo = LocalTargetInfo.Invalid;
 						}
 					}
-					else if (!this.targetingSource.CanHitTarget(localTargetInfo))
+					else if (!targetingSource.CanHitTarget(localTargetInfo))
 					{
 						localTargetInfo = LocalTargetInfo.Invalid;
 					}
 				}
-				if (localTargetInfo == this.targetingSource.Caster && !targetingParameters.canTargetSelf)
+				if (localTargetInfo == targetingSource.Caster && !targetingParameters.canTargetSelf)
 				{
 					localTargetInfo = LocalTargetInfo.Invalid;
 				}
@@ -305,37 +320,9 @@ namespace RimWorld
 			return localTargetInfo;
 		}
 
-		
 		private Verb GetTargetingVerb(Pawn pawn)
 		{
-			return pawn.equipment.AllEquipmentVerbs.FirstOrDefault((Verb x) => x.verbProps == this.targetingSource.GetVerb.verbProps);
+			return pawn.equipment.AllEquipmentVerbs.FirstOrDefault((Verb x) => x.verbProps == targetingSource.GetVerb.verbProps);
 		}
-
-		
-		public ITargetingSource targetingSource;
-
-		
-		public ITargetingSource targetingSourceParent;
-
-		
-		public List<Pawn> targetingSourceAdditionalPawns;
-
-		
-		private Action<LocalTargetInfo> action;
-
-		
-		private Pawn caster;
-
-		
-		private TargetingParameters targetParams;
-
-		
-		private Action actionWhenFinished;
-
-		
-		private Texture2D mouseAttachment;
-
-		
-		private bool needsStopTargetingCall;
 	}
 }

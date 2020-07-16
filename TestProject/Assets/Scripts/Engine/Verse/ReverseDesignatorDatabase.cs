@@ -1,73 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class ReverseDesignatorDatabase
 	{
-		
-		
+		private List<Designator> desList;
+
 		public List<Designator> AllDesignators
 		{
 			get
 			{
-				if (this.desList == null)
+				if (desList == null)
 				{
-					this.InitDesignators();
+					InitDesignators();
 				}
-				return this.desList;
+				return desList;
 			}
 		}
 
-		
 		public void Reinit()
 		{
-			this.desList = null;
+			desList = null;
 		}
 
-		
 		public T Get<T>() where T : Designator
 		{
-			if (this.desList == null)
+			if (desList == null)
 			{
-				this.InitDesignators();
+				InitDesignators();
 			}
-			for (int i = 0; i < this.desList.Count; i++)
+			for (int i = 0; i < desList.Count; i++)
 			{
-				T t = this.desList[i] as T;
-				if (t != null)
+				T val = desList[i] as T;
+				if (val != null)
 				{
-					return t;
+					return val;
 				}
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		private void InitDesignators()
 		{
-			this.desList = new List<Designator>();
-			this.desList.Add(new Designator_Cancel());
-			this.desList.Add(new Designator_Claim());
-			this.desList.Add(new Designator_Deconstruct());
-			this.desList.Add(new Designator_Uninstall());
-			this.desList.Add(new Designator_Haul());
-			this.desList.Add(new Designator_Hunt());
-			this.desList.Add(new Designator_Slaughter());
-			this.desList.Add(new Designator_Tame());
-			this.desList.Add(new Designator_PlantsCut());
-			this.desList.Add(new Designator_PlantsHarvest());
-			this.desList.Add(new Designator_PlantsHarvestWood());
-			this.desList.Add(new Designator_Mine());
-			this.desList.Add(new Designator_Strip());
-			this.desList.Add(new Designator_Open());
-			this.desList.Add(new Designator_SmoothSurface());
-			this.desList.RemoveAll((Designator des) => !Current.Game.Rules.DesignatorAllowed(des));
+			desList = new List<Designator>();
+			desList.Add(new Designator_Cancel());
+			desList.Add(new Designator_Claim());
+			desList.Add(new Designator_Deconstruct());
+			desList.Add(new Designator_Uninstall());
+			desList.Add(new Designator_Haul());
+			desList.Add(new Designator_Hunt());
+			desList.Add(new Designator_Slaughter());
+			desList.Add(new Designator_Tame());
+			desList.Add(new Designator_PlantsCut());
+			desList.Add(new Designator_PlantsHarvest());
+			desList.Add(new Designator_PlantsHarvestWood());
+			desList.Add(new Designator_Mine());
+			desList.Add(new Designator_Strip());
+			desList.Add(new Designator_Open());
+			desList.Add(new Designator_SmoothSurface());
+			desList.RemoveAll((Designator des) => !Current.Game.Rules.DesignatorAllowed(des));
 		}
-
-		
-		private List<Designator> desList;
 	}
 }

@@ -1,26 +1,22 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class SubEffecter_SprayerChance : SubEffecter_Sprayer
 	{
-		
-		public SubEffecter_SprayerChance(SubEffecterDef def, Effecter parent) : base(def, parent)
+		public SubEffecter_SprayerChance(SubEffecterDef def, Effecter parent)
+			: base(def, parent)
 		{
 		}
 
-		
 		public override void SubEffectTick(TargetInfo A, TargetInfo B)
 		{
-			float num = this.def.chancePerTick;
-			if (this.def.spawnLocType == MoteSpawnLocType.RandomCellOnTarget && B.HasThing)
+			float num = def.chancePerTick;
+			if (def.spawnLocType == MoteSpawnLocType.RandomCellOnTarget && B.HasThing)
 			{
 				num *= (float)(B.Thing.def.size.x * B.Thing.def.size.z);
 			}
 			if (Rand.Value < num)
 			{
-				base.MakeMote(A, B);
+				MakeMote(A, B);
 			}
 		}
 	}

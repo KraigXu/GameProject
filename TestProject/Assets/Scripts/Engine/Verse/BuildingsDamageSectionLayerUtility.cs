@@ -1,34 +1,45 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public static class BuildingsDamageSectionLayerUtility
 	{
-		
+		private static readonly Material[] DefaultScratchMats = new Material[3]
+		{
+			MaterialPool.MatFrom("Damage/Scratch1", ShaderDatabase.Transparent),
+			MaterialPool.MatFrom("Damage/Scratch2", ShaderDatabase.Transparent),
+			MaterialPool.MatFrom("Damage/Scratch3", ShaderDatabase.Transparent)
+		};
+
+		private static List<DamageOverlay> availableOverlays = new List<DamageOverlay>();
+
+		private static List<DamageOverlay> overlaysWorkingList = new List<DamageOverlay>();
+
+		private static List<DamageOverlay> overlays = new List<DamageOverlay>();
+
 		public static void Notify_BuildingHitPointsChanged(Building b, int oldHitPoints)
 		{
-			if (!b.Spawned || !b.def.useHitPoints || b.HitPoints == oldHitPoints || !b.def.drawDamagedOverlay || BuildingsDamageSectionLayerUtility.GetDamageOverlaysCount(b, b.HitPoints) == BuildingsDamageSectionLayerUtility.GetDamageOverlaysCount(b, oldHitPoints))
+			if (b.Spawned && b.def.useHitPoints && b.HitPoints != oldHitPoints && b.def.drawDamagedOverlay && GetDamageOverlaysCount(b, b.HitPoints) != GetDamageOverlaysCount(b, oldHitPoints))
 			{
-				return;
+				b.Map.mapDrawer.MapMeshDirty(b.Position, MapMeshFlag.BuildingsDamage);
 			}
-			b.Map.mapDrawer.MapMeshDirty(b.Position, MapMeshFlag.BuildingsDamage);
 		}
 
-		
 		public static bool UsesLinkableCornersAndEdges(Building b)
 		{
-			return b.def.size.x == 1 && b.def.size.z == 1 && b.def.Fillage == FillCategory.Full;
+			if (b.def.size.x == 1 && b.def.size.z == 1)
+			{
+				return b.def.Fillage == FillCategory.Full;
+			}
+			return false;
 		}
 
-		
 		public static IList<Material> GetScratchMats(Building b)
 		{
-			IList<Material> result = BuildingsDamageSectionLayerUtility.DefaultScratchMats;
+			IList<Material> result = DefaultScratchMats;
 			if (b.def.graphicData != null && b.def.graphicData.damageData != null && b.def.graphicData.damageData.scratchMats != null)
 			{
 				result = b.def.graphicData.damageData.scratchMats;
@@ -36,14 +47,13 @@ namespace Verse
 			return result;
 		}
 
-		
 		public static List<DamageOverlay> GetAvailableOverlays(Building b)
 		{
-			BuildingsDamageSectionLayerUtility.availableOverlays.Clear();
-			if (BuildingsDamageSectionLayerUtility.GetScratchMats(b).Any<Material>())
+			availableOverlays.Clear();
+			if (GetScratchMats(b).Any())
 			{
 				int num = 3;
-				Rect damageRect = BuildingsDamageSectionLayerUtility.GetDamageRect(b);
+				Rect damageRect = GetDamageRect(b);
 				float num2 = damageRect.width * damageRect.height;
 				if (num2 > 4f)
 				{
@@ -51,77 +61,72 @@ namespace Verse
 				}
 				for (int i = 0; i < num; i++)
 				{
-					BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.Scratch);
+					availableOverlays.Add(DamageOverlay.Scratch);
 				}
 			}
-			if (BuildingsDamageSectionLayerUtility.UsesLinkableCornersAndEdges(b))
+			if (UsesLinkableCornersAndEdges(b))
 			{
 				if (b.def.graphicData != null && b.def.graphicData.damageData != null)
 				{
 					IntVec3 position = b.Position;
 					DamageGraphicData damageData = b.def.graphicData.damageData;
-					if (damageData.edgeTopMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x, position.z + 1) && BuildingsDamageSectionLayerUtility.SameAndDamagedAt(b, position.x + 1, position.z) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x + 1, position.z + 1))
+					if (damageData.edgeTopMat != null && DifferentAt(b, position.x, position.z + 1) && SameAndDamagedAt(b, position.x + 1, position.z) && DifferentAt(b, position.x + 1, position.z + 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.TopEdge);
+						availableOverlays.Add(DamageOverlay.TopEdge);
 					}
-					if (damageData.edgeRightMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x + 1, position.z) && BuildingsDamageSectionLayerUtility.SameAndDamagedAt(b, position.x, position.z + 1) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x + 1, position.z + 1))
+					if (damageData.edgeRightMat != null && DifferentAt(b, position.x + 1, position.z) && SameAndDamagedAt(b, position.x, position.z + 1) && DifferentAt(b, position.x + 1, position.z + 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.RightEdge);
+						availableOverlays.Add(DamageOverlay.RightEdge);
 					}
-					if (damageData.edgeBotMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x, position.z - 1) && BuildingsDamageSectionLayerUtility.SameAndDamagedAt(b, position.x + 1, position.z) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x + 1, position.z - 1))
+					if (damageData.edgeBotMat != null && DifferentAt(b, position.x, position.z - 1) && SameAndDamagedAt(b, position.x + 1, position.z) && DifferentAt(b, position.x + 1, position.z - 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.BotEdge);
+						availableOverlays.Add(DamageOverlay.BotEdge);
 					}
-					if (damageData.edgeLeftMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x - 1, position.z) && BuildingsDamageSectionLayerUtility.SameAndDamagedAt(b, position.x, position.z + 1) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x - 1, position.z + 1))
+					if (damageData.edgeLeftMat != null && DifferentAt(b, position.x - 1, position.z) && SameAndDamagedAt(b, position.x, position.z + 1) && DifferentAt(b, position.x - 1, position.z + 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.LeftEdge);
+						availableOverlays.Add(DamageOverlay.LeftEdge);
 					}
-					if (damageData.cornerTLMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x - 1, position.z) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x, position.z + 1))
+					if (damageData.cornerTLMat != null && DifferentAt(b, position.x - 1, position.z) && DifferentAt(b, position.x, position.z + 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.TopLeftCorner);
+						availableOverlays.Add(DamageOverlay.TopLeftCorner);
 					}
-					if (damageData.cornerTRMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x + 1, position.z) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x, position.z + 1))
+					if (damageData.cornerTRMat != null && DifferentAt(b, position.x + 1, position.z) && DifferentAt(b, position.x, position.z + 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.TopRightCorner);
+						availableOverlays.Add(DamageOverlay.TopRightCorner);
 					}
-					if (damageData.cornerBRMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x + 1, position.z) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x, position.z - 1))
+					if (damageData.cornerBRMat != null && DifferentAt(b, position.x + 1, position.z) && DifferentAt(b, position.x, position.z - 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.BotRightCorner);
+						availableOverlays.Add(DamageOverlay.BotRightCorner);
 					}
-					if (damageData.cornerBLMat != null && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x - 1, position.z) && BuildingsDamageSectionLayerUtility.DifferentAt(b, position.x, position.z - 1))
+					if (damageData.cornerBLMat != null && DifferentAt(b, position.x - 1, position.z) && DifferentAt(b, position.x, position.z - 1))
 					{
-						BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.BotLeftCorner);
+						availableOverlays.Add(DamageOverlay.BotLeftCorner);
 					}
 				}
 			}
 			else
 			{
-				Material x;
-				Material x2;
-				Material x3;
-				Material x4;
-				BuildingsDamageSectionLayerUtility.GetCornerMats(out x, out x2, out x3, out x4, b);
-				if (x != null)
+				GetCornerMats(out Material topLeft, out Material topRight, out Material botRight, out Material botLeft, b);
+				if (topLeft != null)
 				{
-					BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.TopLeftCorner);
+					availableOverlays.Add(DamageOverlay.TopLeftCorner);
 				}
-				if (x2 != null)
+				if (topRight != null)
 				{
-					BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.TopRightCorner);
+					availableOverlays.Add(DamageOverlay.TopRightCorner);
 				}
-				if (x4 != null)
+				if (botLeft != null)
 				{
-					BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.BotLeftCorner);
+					availableOverlays.Add(DamageOverlay.BotLeftCorner);
 				}
-				if (x3 != null)
+				if (botRight != null)
 				{
-					BuildingsDamageSectionLayerUtility.availableOverlays.Add(DamageOverlay.BotRightCorner);
+					availableOverlays.Add(DamageOverlay.BotRightCorner);
 				}
 			}
-			return BuildingsDamageSectionLayerUtility.availableOverlays;
+			return availableOverlays;
 		}
 
-		
 		public static void GetCornerMats(out Material topLeft, out Material topRight, out Material botRight, out Material botLeft, Building b)
 		{
 			if (b.def.graphicData == null || b.def.graphicData.damageData == null)
@@ -139,56 +144,56 @@ namespace Verse
 				topRight = damageData.cornerTRMat;
 				botRight = damageData.cornerBRMat;
 				botLeft = damageData.cornerBLMat;
-				return;
 			}
-			if (b.Rotation == Rot4.East)
+			else if (b.Rotation == Rot4.East)
 			{
 				topLeft = damageData.cornerBLMat;
 				topRight = damageData.cornerTLMat;
 				botRight = damageData.cornerTRMat;
 				botLeft = damageData.cornerBRMat;
-				return;
 			}
-			if (b.Rotation == Rot4.South)
+			else if (b.Rotation == Rot4.South)
 			{
 				topLeft = damageData.cornerBRMat;
 				topRight = damageData.cornerBLMat;
 				botRight = damageData.cornerTLMat;
 				botLeft = damageData.cornerTRMat;
-				return;
 			}
-			topLeft = damageData.cornerTRMat;
-			topRight = damageData.cornerBRMat;
-			botRight = damageData.cornerBLMat;
-			botLeft = damageData.cornerTLMat;
+			else
+			{
+				topLeft = damageData.cornerTRMat;
+				topRight = damageData.cornerBRMat;
+				botRight = damageData.cornerBLMat;
+				botLeft = damageData.cornerTLMat;
+			}
 		}
 
-		
 		public static List<DamageOverlay> GetOverlays(Building b)
 		{
-			BuildingsDamageSectionLayerUtility.overlays.Clear();
-			BuildingsDamageSectionLayerUtility.overlaysWorkingList.Clear();
-			BuildingsDamageSectionLayerUtility.overlaysWorkingList.AddRange(BuildingsDamageSectionLayerUtility.GetAvailableOverlays(b));
-			if (!BuildingsDamageSectionLayerUtility.overlaysWorkingList.Any<DamageOverlay>())
+			overlays.Clear();
+			overlaysWorkingList.Clear();
+			overlaysWorkingList.AddRange(GetAvailableOverlays(b));
+			if (!overlaysWorkingList.Any())
 			{
-				return BuildingsDamageSectionLayerUtility.overlays;
+				return overlays;
 			}
 			Rand.PushState();
 			Rand.Seed = Gen.HashCombineInt(b.thingIDNumber, 1958376471);
-			int damageOverlaysCount = BuildingsDamageSectionLayerUtility.GetDamageOverlaysCount(b, b.HitPoints);
-			int num = 0;
-			while (num < damageOverlaysCount && BuildingsDamageSectionLayerUtility.overlaysWorkingList.Any<DamageOverlay>())
+			int damageOverlaysCount = GetDamageOverlaysCount(b, b.HitPoints);
+			for (int i = 0; i < damageOverlaysCount; i++)
 			{
-				DamageOverlay item = BuildingsDamageSectionLayerUtility.overlaysWorkingList.RandomElement<DamageOverlay>();
-				BuildingsDamageSectionLayerUtility.overlaysWorkingList.Remove(item);
-				BuildingsDamageSectionLayerUtility.overlays.Add(item);
-				num++;
+				if (!overlaysWorkingList.Any())
+				{
+					break;
+				}
+				DamageOverlay item = overlaysWorkingList.RandomElement();
+				overlaysWorkingList.Remove(item);
+				overlays.Add(item);
 			}
 			Rand.PopState();
-			return BuildingsDamageSectionLayerUtility.overlays;
+			return overlays;
 		}
 
-		
 		public static Rect GetDamageRect(Building b)
 		{
 			DamageGraphicData damageGraphicData = null;
@@ -197,7 +202,7 @@ namespace Verse
 				damageGraphicData = b.def.graphicData.damageData;
 			}
 			CellRect cellRect = b.OccupiedRect();
-			Rect result = new Rect((float)cellRect.minX, (float)cellRect.minZ, (float)cellRect.Width, (float)cellRect.Height);
+			Rect result = new Rect(cellRect.minX, cellRect.minZ, cellRect.Width, cellRect.Height);
 			if (damageGraphicData != null)
 			{
 				if (b.Rotation == Rot4.North && damageGraphicData.rectN != default(Rect))
@@ -256,15 +261,13 @@ namespace Verse
 			return result;
 		}
 
-		
 		private static int GetDamageOverlaysCount(Building b, int hp)
 		{
 			float num = (float)hp / (float)b.MaxHitPoints;
-			int count = BuildingsDamageSectionLayerUtility.GetAvailableOverlays(b).Count;
+			int count = GetAvailableOverlays(b).Count;
 			return count - Mathf.FloorToInt((float)count * num);
 		}
 
-		
 		private static bool DifferentAt(Building b, int x, int z)
 		{
 			IntVec3 c = new IntVec3(x, 0, z);
@@ -283,7 +286,6 @@ namespace Verse
 			return true;
 		}
 
-		
 		private static bool SameAndDamagedAt(Building b, int x, int z)
 		{
 			IntVec3 c = new IntVec3(x, 0, z);
@@ -302,41 +304,21 @@ namespace Verse
 			return false;
 		}
 
-		
 		public static void DebugDraw()
 		{
-			if (!Prefs.DevMode || !DebugViewSettings.drawDamageRects || Find.CurrentMap == null)
+			if (Prefs.DevMode && DebugViewSettings.drawDamageRects && Find.CurrentMap != null)
 			{
-				return;
+				Building building = Find.Selector.FirstSelectedObject as Building;
+				if (building != null)
+				{
+					Material material = DebugSolidColorMats.MaterialOf(Color.red);
+					Rect damageRect = GetDamageRect(building);
+					float y = 14.99f;
+					Vector3 pos = new Vector3(damageRect.x + damageRect.width / 2f, y, damageRect.y + damageRect.height / 2f);
+					Vector3 s = new Vector3(damageRect.width, 1f, damageRect.height);
+					Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(pos, Quaternion.identity, s), material, 0);
+				}
 			}
-			Building building = Find.Selector.FirstSelectedObject as Building;
-			if (building == null)
-			{
-				return;
-			}
-			Material material = DebugSolidColorMats.MaterialOf(Color.red);
-			Rect damageRect = BuildingsDamageSectionLayerUtility.GetDamageRect(building);
-			float y = 14.99f;
-			Vector3 pos = new Vector3(damageRect.x + damageRect.width / 2f, y, damageRect.y + damageRect.height / 2f);
-			Vector3 s = new Vector3(damageRect.width, 1f, damageRect.height);
-			Graphics.DrawMesh(MeshPool.plane10, Matrix4x4.TRS(pos, Quaternion.identity, s), material, 0);
 		}
-
-		
-		private static readonly Material[] DefaultScratchMats = new Material[]
-		{
-			MaterialPool.MatFrom("Damage/Scratch1", ShaderDatabase.Transparent),
-			MaterialPool.MatFrom("Damage/Scratch2", ShaderDatabase.Transparent),
-			MaterialPool.MatFrom("Damage/Scratch3", ShaderDatabase.Transparent)
-		};
-
-		
-		private static List<DamageOverlay> availableOverlays = new List<DamageOverlay>();
-
-		
-		private static List<DamageOverlay> overlaysWorkingList = new List<DamageOverlay>();
-
-		
-		private static List<DamageOverlay> overlays = new List<DamageOverlay>();
 	}
 }

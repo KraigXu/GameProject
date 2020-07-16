@@ -1,87 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class CompMannable : ThingComp
 	{
-		
-		
+		private int lastManTick = -1;
+
+		private Pawn lastManPawn;
+
 		public bool MannedNow
 		{
 			get
 			{
-				return Find.TickManager.TicksGame - this.lastManTick <= 1 && this.lastManPawn != null && this.lastManPawn.Spawned;
+				if (Find.TickManager.TicksGame - lastManTick <= 1 && lastManPawn != null)
+				{
+					return lastManPawn.Spawned;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public Pawn ManningPawn
 		{
 			get
 			{
-				if (!this.MannedNow)
+				if (!MannedNow)
 				{
 					return null;
 				}
-				return this.lastManPawn;
+				return lastManPawn;
 			}
 		}
 
-		
-		
-		public CompProperties_Mannable Props
-		{
-			get
-			{
-				return (CompProperties_Mannable)this.props;
-			}
-		}
+		public CompProperties_Mannable Props => (CompProperties_Mannable)props;
 
-		
 		public void ManForATick(Pawn pawn)
 		{
-			this.lastManTick = Find.TickManager.TicksGame;
-			this.lastManPawn = pawn;
-			pawn.mindState.lastMannedThing = this.parent;
+			lastManTick = Find.TickManager.TicksGame;
+			lastManPawn = pawn;
+			pawn.mindState.lastMannedThing = parent;
 		}
 
-		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
 		{
-			if (!pawn.RaceProps.ToolUser)
+			if (!pawn.RaceProps.ToolUser || !pawn.CanReserveAndReach(parent, PathEndMode.InteractionCell, Danger.Deadly))
 			{
 				yield break;
 			}
-			if (!pawn.CanReserveAndReach(this.parent, PathEndMode.InteractionCell, Danger.Deadly, 1, -1, null, false))
+			if (Props.manWorkType != 0 && pawn.WorkTagIsDisabled(Props.manWorkType))
 			{
-				yield break;
-			}
-			if (this.Props.manWorkType != WorkTags.None && pawn.WorkTagIsDisabled(this.Props.manWorkType))
-			{
-				if (this.Props.manWorkType == WorkTags.Violent)
+				if (Props.manWorkType == WorkTags.Violent)
 				{
-					yield return new FloatMenuOption("CannotManThing".Translate(this.parent.LabelShort, this.parent) + " (" + "IsIncapableOfViolenceLower".Translate(pawn.LabelShort, pawn) + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+					yield return new FloatMenuOption("CannotManThing".Translate(parent.LabelShort, parent) + " (" + "IsIncapableOfViolenceLower".Translate(pawn.LabelShort, pawn) + ")", null);
 				}
-				yield break;
 			}
-			FloatMenuOption floatMenuOption = new FloatMenuOption("OrderManThing".Translate(this.parent.LabelShort, this.parent), delegate
+			else
 			{
-				Job job = JobMaker.MakeJob(JobDefOf.ManTurret, this.parent);
-				pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-			}, MenuOptionPriority.Default, null, null, 0f, null, null);
-			
-			yield break;
+				yield return new FloatMenuOption("OrderManThing".Translate(parent.LabelShort, parent), delegate
+				{
+					Job job = JobMaker.MakeJob(JobDefOf.ManTurret, parent);
+					pawn.jobs.TryTakeOrderedJob(job);
+				});
+			}
 		}
-
-		
-		private int lastManTick = -1;
-
-		
-		private Pawn lastManPawn;
 	}
 }

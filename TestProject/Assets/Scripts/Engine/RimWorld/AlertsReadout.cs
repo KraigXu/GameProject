@@ -1,38 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class AlertsReadout
 	{
-		
+		private List<Alert> activeAlerts = new List<Alert>(16);
+
+		private int curAlertIndex;
+
+		private float lastFinalY;
+
+		private int mouseoverAlertIndex = -1;
+
+		private readonly List<Alert> AllAlerts = new List<Alert>();
+
+		private const int StartTickDelay = 600;
+
+		public const float AlertListWidth = 164f;
+
+		private const int AlertCycleLength = 24;
+
+		private const int UpdateAlertsFromQuestsIntervalFrames = 20;
+
+		private readonly List<AlertPriority> PriosInDrawOrder;
+
 		public AlertsReadout()
 		{
-			this.AllAlerts.Clear();
-			foreach (Type type in typeof(Alert).AllLeafSubclasses())
+			AllAlerts.Clear();
+			foreach (Type item2 in typeof(Alert).AllLeafSubclasses())
 			{
-				if (!(type == typeof(Alert_Custom)) && !(type == typeof(Alert_CustomCritical)))
+				if (!(item2 == typeof(Alert_Custom)) && !(item2 == typeof(Alert_CustomCritical)))
 				{
-					this.AllAlerts.Add((Alert)Activator.CreateInstance(type));
+					AllAlerts.Add((Alert)Activator.CreateInstance(item2));
 				}
 			}
-			if (this.PriosInDrawOrder == null)
+			if (PriosInDrawOrder == null)
 			{
-				this.PriosInDrawOrder = new List<AlertPriority>();
-				foreach (object obj in Enum.GetValues(typeof(AlertPriority)))
+				PriosInDrawOrder = new List<AlertPriority>();
+				foreach (AlertPriority value in Enum.GetValues(typeof(AlertPriority)))
 				{
-					AlertPriority item = (AlertPriority)obj;
-					this.PriosInDrawOrder.Add(item);
+					PriosInDrawOrder.Add(value);
 				}
-				this.PriosInDrawOrder.Reverse();
+				PriosInDrawOrder.Reverse();
 			}
 		}
 
-		
 		public void AlertsReadoutUpdate()
 		{
 			if (Mathf.Max(Find.TickManager.TicksGame, Find.TutorialState.endTick) < 600)
@@ -41,17 +57,17 @@ namespace RimWorld
 			}
 			if (Find.Storyteller.def.disableAlerts)
 			{
-				this.activeAlerts.Clear();
+				activeAlerts.Clear();
 				return;
 			}
-			this.curAlertIndex++;
-			if (this.curAlertIndex >= 24)
+			curAlertIndex++;
+			if (curAlertIndex >= 24)
 			{
-				this.curAlertIndex = 0;
+				curAlertIndex = 0;
 			}
-			for (int i = this.curAlertIndex; i < this.AllAlerts.Count; i += 24)
+			for (int i = curAlertIndex; i < AllAlerts.Count; i += 24)
 			{
-				this.CheckAddOrRemoveAlert(this.AllAlerts[i], false);
+				CheckAddOrRemoveAlert(AllAlerts[i]);
 			}
 			if (Time.frameCount % 20 == 0)
 			{
@@ -62,51 +78,51 @@ namespace RimWorld
 					for (int k = 0; k < partsListForReading.Count; k++)
 					{
 						QuestPartActivable questPartActivable = partsListForReading[k] as QuestPartActivable;
-						if (questPartActivable != null)
+						if (questPartActivable == null)
 						{
-							Alert cachedAlert = questPartActivable.CachedAlert;
-							if (cachedAlert != null)
+							continue;
+						}
+						Alert cachedAlert = questPartActivable.CachedAlert;
+						if (cachedAlert != null)
+						{
+							bool flag = questsListForReading[j].State != QuestState.Ongoing || questPartActivable.State != QuestPartState.Enabled;
+							bool alertDirty = questPartActivable.AlertDirty;
+							CheckAddOrRemoveAlert(cachedAlert, flag | alertDirty);
+							if (alertDirty)
 							{
-								bool flag = questsListForReading[j].State != QuestState.Ongoing || questPartActivable.State != QuestPartState.Enabled;
-								bool alertDirty = questPartActivable.AlertDirty;
-								this.CheckAddOrRemoveAlert(cachedAlert, flag || alertDirty);
-								if (alertDirty)
-								{
-									questPartActivable.ClearCachedAlert();
-								}
+								questPartActivable.ClearCachedAlert();
 							}
 						}
 					}
 				}
 			}
-			for (int l = this.activeAlerts.Count - 1; l >= 0; l--)
+			for (int num = activeAlerts.Count - 1; num >= 0; num--)
 			{
-				Alert alert = this.activeAlerts[l];
+				Alert alert = activeAlerts[num];
 				try
 				{
-					this.activeAlerts[l].AlertActiveUpdate();
+					activeAlerts[num].AlertActiveUpdate();
 				}
 				catch (Exception ex)
 				{
-					Log.ErrorOnce("Exception updating alert " + alert.ToString() + ": " + ex.ToString(), 743575, false);
-					this.activeAlerts.RemoveAt(l);
+					Log.ErrorOnce("Exception updating alert " + alert.ToString() + ": " + ex.ToString(), 743575);
+					activeAlerts.RemoveAt(num);
 				}
 			}
-			if (this.mouseoverAlertIndex >= 0 && this.mouseoverAlertIndex < this.activeAlerts.Count)
+			if (mouseoverAlertIndex >= 0 && mouseoverAlertIndex < activeAlerts.Count)
 			{
-				IEnumerable<GlobalTargetInfo> allCulprits = this.activeAlerts[this.mouseoverAlertIndex].GetReport().AllCulprits;
+				IEnumerable<GlobalTargetInfo> allCulprits = activeAlerts[mouseoverAlertIndex].GetReport().AllCulprits;
 				if (allCulprits != null)
 				{
-					foreach (GlobalTargetInfo target in allCulprits)
+					foreach (GlobalTargetInfo item in allCulprits)
 					{
-						TargetHighlighter.Highlight(target, true, true, false);
+						TargetHighlighter.Highlight(item);
 					}
 				}
 			}
-			this.mouseoverAlertIndex = -1;
+			mouseoverAlertIndex = -1;
 		}
 
-		
 		private void CheckAddOrRemoveAlert(Alert alert, bool forceRemove = false)
 		{
 			try
@@ -114,32 +130,27 @@ namespace RimWorld
 				alert.Recalculate();
 				if (!forceRemove && alert.Active)
 				{
-					if (!this.activeAlerts.Contains(alert))
+					if (!activeAlerts.Contains(alert))
 					{
-						this.activeAlerts.Add(alert);
+						activeAlerts.Add(alert);
 						alert.Notify_Started();
 					}
 				}
 				else
 				{
-					this.activeAlerts.Remove(alert);
+					activeAlerts.Remove(alert);
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.ErrorOnce("Exception processing alert " + alert.ToString() + ": " + ex.ToString(), 743575, false);
-				this.activeAlerts.Remove(alert);
+				Log.ErrorOnce("Exception processing alert " + alert.ToString() + ": " + ex.ToString(), 743575);
+				activeAlerts.Remove(alert);
 			}
 		}
 
-		
 		public void AlertsReadoutOnGUI()
 		{
-			if (Event.current.type == EventType.Layout || Event.current.type == EventType.MouseDrag)
-			{
-				return;
-			}
-			if (this.activeAlerts.Count == 0)
+			if (Event.current.type == EventType.Layout || Event.current.type == EventType.MouseDrag || activeAlerts.Count == 0)
 			{
 				return;
 			}
@@ -147,12 +158,12 @@ namespace RimWorld
 			AlertPriority alertPriority = AlertPriority.Critical;
 			bool flag = false;
 			float num = 0f;
-			for (int i = 0; i < this.activeAlerts.Count; i++)
+			for (int i = 0; i < activeAlerts.Count; i++)
 			{
-				num += this.activeAlerts[i].Height;
+				num += activeAlerts[i].Height;
 			}
 			float num2 = Find.LetterStack.LastTopY - num;
-			Rect rect = new Rect((float)UI.screenWidth - 154f, num2, 154f, this.lastFinalY - num2);
+			Rect rect = new Rect((float)UI.screenWidth - 154f, num2, 154f, lastFinalY - num2);
 			float num3 = GenUI.BackgroundDarkAlphaForText();
 			if (num3 > 0.001f)
 			{
@@ -165,12 +176,12 @@ namespace RimWorld
 			{
 				num4 = 0f;
 			}
-			for (int j = 0; j < this.PriosInDrawOrder.Count; j++)
+			for (int j = 0; j < PriosInDrawOrder.Count; j++)
 			{
-				AlertPriority alertPriority2 = this.PriosInDrawOrder[j];
-				for (int k = 0; k < this.activeAlerts.Count; k++)
+				AlertPriority alertPriority2 = PriosInDrawOrder[j];
+				for (int k = 0; k < activeAlerts.Count; k++)
 				{
-					Alert alert2 = this.activeAlerts[k];
+					Alert alert2 = activeAlerts[k];
 					if (alert2.Priority == alertPriority2)
 					{
 						if (!flag)
@@ -182,50 +193,20 @@ namespace RimWorld
 						if (Mouse.IsOver(rect2))
 						{
 							alert = alert2;
-							this.mouseoverAlertIndex = k;
+							mouseoverAlertIndex = k;
 						}
 						num4 += rect2.height;
 					}
 				}
 			}
-			this.lastFinalY = num4;
+			lastFinalY = num4;
 			UIHighlighter.HighlightOpportunity(rect, "Alerts");
 			if (alert != null)
 			{
 				alert.DrawInfoPane();
 				PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.Alerts, KnowledgeAmount.FrameDisplayed);
-				this.CheckAddOrRemoveAlert(alert, false);
+				CheckAddOrRemoveAlert(alert);
 			}
 		}
-
-		
-		private List<Alert> activeAlerts = new List<Alert>(16);
-
-		
-		private int curAlertIndex;
-
-		
-		private float lastFinalY;
-
-		
-		private int mouseoverAlertIndex = -1;
-
-		
-		private readonly List<Alert> AllAlerts = new List<Alert>();
-
-		
-		private const int StartTickDelay = 600;
-
-		
-		public const float AlertListWidth = 164f;
-
-		
-		private const int AlertCycleLength = 24;
-
-		
-		private const int UpdateAlertsFromQuestsIntervalFrames = 20;
-
-		
-		private readonly List<AlertPriority> PriosInDrawOrder;
 	}
 }

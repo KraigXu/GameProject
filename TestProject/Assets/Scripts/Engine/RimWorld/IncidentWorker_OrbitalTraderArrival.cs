@@ -1,20 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_OrbitalTraderArrival : IncidentWorker
 	{
-		
+		private const int MaxShips = 5;
+
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
-			return base.CanFireNowSub(parms) && ((Map)parms.target).passingShipManager.passingShips.Count < 5;
+			if (!base.CanFireNowSub(parms))
+			{
+				return false;
+			}
+			if (((Map)parms.target).passingShipManager.passingShips.Count >= 5)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -22,15 +28,12 @@ namespace RimWorld
 			{
 				return false;
 			}
-			TraderKindDef traderKindDef;
-			if ((from x in DefDatabase<TraderKindDef>.AllDefs
-			where this.CanSpawn(map, x)
-			select x).TryRandomElementByWeight((TraderKindDef traderDef) => traderDef.CalculatedCommonality, out traderKindDef))
+			if (DefDatabase<TraderKindDef>.AllDefs.Where((TraderKindDef x) => CanSpawn(map, x)).TryRandomElementByWeight((TraderKindDef traderDef) => traderDef.CalculatedCommonality, out TraderKindDef result))
 			{
-				TradeShip tradeShip = new TradeShip(traderKindDef, this.GetFaction(traderKindDef));
+				TradeShip tradeShip = new TradeShip(result, GetFaction(result));
 				if (map.listerBuildings.allBuildingsColonist.Any((Building b) => b.def.IsCommsConsole && (b.GetComp<CompPowerTrader>() == null || b.GetComp<CompPowerTrader>().PowerOn)))
 				{
-					base.SendStandardLetter(tradeShip.def.LabelCap, "TraderArrival".Translate(tradeShip.name, tradeShip.def.label, (tradeShip.Faction == null) ? "TraderArrivalNoFaction".Translate() : "TraderArrivalFromFaction".Translate(tradeShip.Faction.Named("FACTION"))), LetterDefOf.PositiveEvent, parms, LookTargets.Invalid, Array.Empty<NamedArgument>());
+					SendStandardLetter(tradeShip.def.LabelCap, "TraderArrival".Translate(tradeShip.name, tradeShip.def.label, (tradeShip.Faction == null) ? "TraderArrivalNoFaction".Translate() : "TraderArrivalFromFaction".Translate(tradeShip.Faction.Named("FACTION"))), LetterDefOf.PositiveEvent, parms, LookTargets.Invalid);
 				}
 				map.passingShipManager.AddShip(tradeShip);
 				tradeShip.GenerateThings();
@@ -39,24 +42,19 @@ namespace RimWorld
 			throw new InvalidOperationException();
 		}
 
-		
 		private Faction GetFaction(TraderKindDef trader)
 		{
 			if (trader.faction == null)
 			{
 				return null;
 			}
-			Faction result;
-			if (!(from f in Find.FactionManager.AllFactions
-			where f.def == trader.faction
-			select f).TryRandomElement(out result))
+			if (!Find.FactionManager.AllFactions.Where((Faction f) => f.def == trader.faction).TryRandomElement(out Faction result))
 			{
 				return null;
 			}
 			return result;
 		}
 
-		
 		private bool CanSpawn(Map map, TraderKindDef trader)
 		{
 			if (!trader.orbital)
@@ -67,25 +65,19 @@ namespace RimWorld
 			{
 				return true;
 			}
-			Faction faction = this.GetFaction(trader);
+			Faction faction = GetFaction(trader);
 			if (faction == null)
 			{
 				return false;
 			}
-			List<Pawn>.Enumerator enumerator = map.mapPawns.FreeColonists.GetEnumerator();
+			foreach (Pawn freeColonist in map.mapPawns.FreeColonists)
 			{
-				while (enumerator.MoveNext())
+				if (freeColonist.CanTradeWith(faction, trader))
 				{
-					if (enumerator.Current.CanTradeWith(faction, trader))
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 			return false;
 		}
-
-		
-		private const int MaxShips = 5;
 	}
 }

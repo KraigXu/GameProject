@@ -1,26 +1,32 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class UnityGUIBugsFixer
 	{
-		
-		
+		private static List<Resolution> resolutions = new List<Resolution>();
+
+		private static Vector2 currentEventDelta;
+
+		private static int lastMousePositionFrame;
+
+		private const float ScrollFactor = 6f;
+
+		private static Vector2? lastMousePosition;
+
 		public static List<Resolution> ScreenResolutionsWithoutDuplicates
 		{
 			get
 			{
-				UnityGUIBugsFixer.resolutions.Clear();
+				resolutions.Clear();
 				Resolution[] array = Screen.resolutions;
 				for (int i = 0; i < array.Length; i++)
 				{
 					bool flag = false;
-					for (int j = 0; j < UnityGUIBugsFixer.resolutions.Count; j++)
+					for (int j = 0; j < resolutions.Count; j++)
 					{
-						if (UnityGUIBugsFixer.resolutions[j].width == array[i].width && UnityGUIBugsFixer.resolutions[j].height == array[i].height)
+						if (resolutions[j].width == array[i].width && resolutions[j].height == array[i].height)
 						{
 							flag = true;
 							break;
@@ -28,32 +34,22 @@ namespace Verse
 					}
 					if (!flag)
 					{
-						UnityGUIBugsFixer.resolutions.Add(array[i]);
+						resolutions.Add(array[i]);
 					}
 				}
-				return UnityGUIBugsFixer.resolutions;
+				return resolutions;
 			}
 		}
 
-		
-		
-		public static Vector2 CurrentEventDelta
-		{
-			get
-			{
-				return UnityGUIBugsFixer.currentEventDelta;
-			}
-		}
+		public static Vector2 CurrentEventDelta => currentEventDelta;
 
-		
 		public static void OnGUI()
 		{
-			UnityGUIBugsFixer.FixScrolling();
-			UnityGUIBugsFixer.FixShift();
-			UnityGUIBugsFixer.FixDelta();
+			FixScrolling();
+			FixShift();
+			FixDelta();
 		}
 
-		
 		private static void FixScrolling()
 		{
 			if (Event.current.type == EventType.ScrollWheel && (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer))
@@ -63,7 +59,6 @@ namespace Verse
 			}
 		}
 
-		
 		private static void FixShift()
 		{
 			if ((Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer) && !Event.current.shift)
@@ -72,62 +67,45 @@ namespace Verse
 			}
 		}
 
-		
 		public static bool ResolutionsEqual(IntVec2 a, IntVec2 b)
 		{
 			return a == b;
 		}
 
-		
 		private static void FixDelta()
 		{
 			Vector2 vector = UI.GUIToScreenPoint(Event.current.mousePosition);
 			if (Event.current.rawType == EventType.MouseDrag)
 			{
-				if (vector != UnityGUIBugsFixer.lastMousePosition || Time.frameCount != UnityGUIBugsFixer.lastMousePositionFrame)
+				Vector2 value = vector;
+				Vector2? rhs = lastMousePosition;
+				if (value != rhs || Time.frameCount != lastMousePositionFrame)
 				{
-					if (UnityGUIBugsFixer.lastMousePosition != null)
+					if (lastMousePosition.HasValue)
 					{
-						UnityGUIBugsFixer.currentEventDelta = vector - UnityGUIBugsFixer.lastMousePosition.Value;
+						currentEventDelta = vector - lastMousePosition.Value;
 					}
 					else
 					{
-						UnityGUIBugsFixer.currentEventDelta = default(Vector2);
+						currentEventDelta = default(Vector2);
 					}
-					UnityGUIBugsFixer.lastMousePosition = new Vector2?(vector);
-					UnityGUIBugsFixer.lastMousePositionFrame = Time.frameCount;
-					return;
+					lastMousePosition = vector;
+					lastMousePositionFrame = Time.frameCount;
 				}
 			}
 			else
 			{
-				UnityGUIBugsFixer.currentEventDelta = Event.current.delta;
+				currentEventDelta = Event.current.delta;
 				if (Event.current.rawType == EventType.MouseDown)
 				{
-					UnityGUIBugsFixer.lastMousePosition = new Vector2?(vector);
-					UnityGUIBugsFixer.lastMousePositionFrame = Time.frameCount;
-					return;
+					lastMousePosition = vector;
+					lastMousePositionFrame = Time.frameCount;
 				}
-				if (Event.current.rawType == EventType.MouseUp)
+				else if (Event.current.rawType == EventType.MouseUp)
 				{
-					UnityGUIBugsFixer.lastMousePosition = null;
+					lastMousePosition = null;
 				}
 			}
 		}
-
-		
-		private static List<Resolution> resolutions = new List<Resolution>();
-
-		
-		private static Vector2 currentEventDelta;
-
-		
-		private static int lastMousePositionFrame;
-
-		
-		private const float ScrollFactor = 6f;
-
-		
-		private static Vector2? lastMousePosition;
 	}
 }

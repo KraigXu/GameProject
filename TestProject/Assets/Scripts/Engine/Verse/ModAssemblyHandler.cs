@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,35 +7,38 @@ using System.Text;
 
 namespace Verse
 {
-	
 	public class ModAssemblyHandler
 	{
-		
+		private ModContentPack mod;
+
+		public List<Assembly> loadedAssemblies = new List<Assembly>();
+
+		private static bool globalResolverIsSet;
+
 		public ModAssemblyHandler(ModContentPack mod)
 		{
 			this.mod = mod;
 		}
 
-		
 		public void ReloadAll()
 		{
-			if (!ModAssemblyHandler.globalResolverIsSet)
+			if (!globalResolverIsSet)
 			{
 				ResolveEventHandler @object = (object obj, ResolveEventArgs args) => Assembly.GetExecutingAssembly();
 				AppDomain.CurrentDomain.AssemblyResolve += @object.Invoke;
-				ModAssemblyHandler.globalResolverIsSet = true;
+				globalResolverIsSet = true;
 			}
-			foreach (FileInfo fileInfo in from f in ModContentPack.GetAllFilesForModPreserveOrder(this.mod, "Assemblies/", (string e) => e.ToLower() == ".dll", null)
-			select f.Item2)
+			foreach (FileInfo item in from f in ModContentPack.GetAllFilesForModPreserveOrder(mod, "Assemblies/", (string e) => e.ToLower() == ".dll")
+				select f.Item2)
 			{
 				Assembly assembly = null;
 				try
 				{
-					byte[] rawAssembly = File.ReadAllBytes(fileInfo.FullName);
-					FileInfo fileInfo2 = new FileInfo(Path.Combine(fileInfo.DirectoryName, Path.GetFileNameWithoutExtension(fileInfo.FullName)) + ".pdb");
-					if (fileInfo2.Exists)
+					byte[] rawAssembly = File.ReadAllBytes(item.FullName);
+					FileInfo fileInfo = new FileInfo(Path.Combine(item.DirectoryName, Path.GetFileNameWithoutExtension(item.FullName)) + ".pdb");
+					if (fileInfo.Exists)
 					{
-						byte[] rawSymbolStore = File.ReadAllBytes(fileInfo2.FullName);
+						byte[] rawSymbolStore = File.ReadAllBytes(fileInfo.FullName);
 						assembly = AppDomain.CurrentDomain.Load(rawAssembly, rawSymbolStore);
 					}
 					else
@@ -45,17 +48,16 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error("Exception loading " + fileInfo.Name + ": " + ex.ToString(), false);
-					break;
+					Log.Error("Exception loading " + item.Name + ": " + ex.ToString());
+					return;
 				}
-				if (!(assembly == null) && this.AssemblyIsUsable(assembly))
+				if (!(assembly == null) && AssemblyIsUsable(assembly))
 				{
-					this.loadedAssemblies.Add(assembly);
+					loadedAssemblies.Add(assembly);
 				}
 			}
 		}
 
-		
 		private bool AssemblyIsUsable(Assembly asm)
 		{
 			try
@@ -65,46 +67,26 @@ namespace Verse
 			catch (ReflectionTypeLoadException ex)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.AppendLine(string.Concat(new object[]
-				{
-					"ReflectionTypeLoadException getting types in assembly ",
-					asm.GetName().Name,
-					": ",
-					ex
-				}));
+				stringBuilder.AppendLine("ReflectionTypeLoadException getting types in assembly " + asm.GetName().Name + ": " + ex);
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine("Loader exceptions:");
 				if (ex.LoaderExceptions != null)
 				{
-					foreach (Exception ex2 in ex.LoaderExceptions)
+					Exception[] loaderExceptions = ex.LoaderExceptions;
+					foreach (Exception ex2 in loaderExceptions)
 					{
 						stringBuilder.AppendLine("   => " + ex2.ToString());
 					}
 				}
-				Log.Error(stringBuilder.ToString(), false);
+				Log.Error(stringBuilder.ToString());
 				return false;
 			}
 			catch (Exception ex3)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception getting types in assembly ",
-					asm.GetName().Name,
-					": ",
-					ex3
-				}), false);
+				Log.Error("Exception getting types in assembly " + asm.GetName().Name + ": " + ex3);
 				return false;
 			}
 			return true;
 		}
-
-		
-		private ModContentPack mod;
-
-		
-		public List<Assembly> loadedAssemblies = new List<Assembly>();
-
-		
-		private static bool globalResolverIsSet;
 	}
 }

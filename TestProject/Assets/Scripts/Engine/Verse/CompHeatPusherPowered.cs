@@ -1,37 +1,33 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class CompHeatPusherPowered : CompHeatPusher
 	{
-		
-		
+		protected CompPowerTrader powerComp;
+
+		protected CompRefuelable refuelableComp;
+
+		protected CompBreakdownable breakdownableComp;
+
 		protected override bool ShouldPushHeatNow
 		{
 			get
 			{
-				return base.ShouldPushHeatNow && FlickUtility.WantsToBeOn(this.parent) && (this.powerComp == null || this.powerComp.PowerOn) && (this.refuelableComp == null || this.refuelableComp.HasFuel) && (this.breakdownableComp == null || !this.breakdownableComp.BrokenDown);
+				if (!base.ShouldPushHeatNow || !FlickUtility.WantsToBeOn(parent) || (powerComp != null && !powerComp.PowerOn) || (refuelableComp != null && !refuelableComp.HasFuel) || (breakdownableComp != null && breakdownableComp.BrokenDown))
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			this.powerComp = this.parent.GetComp<CompPowerTrader>();
-			this.refuelableComp = this.parent.GetComp<CompRefuelable>();
-			this.breakdownableComp = this.parent.GetComp<CompBreakdownable>();
+			powerComp = parent.GetComp<CompPowerTrader>();
+			refuelableComp = parent.GetComp<CompRefuelable>();
+			breakdownableComp = parent.GetComp<CompBreakdownable>();
 		}
-
-		
-		protected CompPowerTrader powerComp;
-
-		
-		protected CompRefuelable refuelableComp;
-
-		
-		protected CompBreakdownable breakdownableComp;
 	}
 }

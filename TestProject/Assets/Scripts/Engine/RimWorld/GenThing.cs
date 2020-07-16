@@ -1,25 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class GenThing
 	{
-		
+		private static List<Thing> tmpThings = new List<Thing>();
+
+		private static List<string> tmpThingLabels = new List<string>();
+
+		private static List<Pair<string, int>> tmpThingCounts = new List<Pair<string, int>>();
+
 		public static Vector3 TrueCenter(this Thing t)
 		{
-			Pawn pawn = t as Pawn;
-			if (pawn != null)
-			{
-				return pawn.Drawer.DrawPos;
-			}
-			return GenThing.TrueCenter(t.Position, t.Rotation, t.def.size, t.def.Altitude);
+			return (t as Pawn)?.Drawer.DrawPos ?? TrueCenter(t.Position, t.Rotation, t.def.size, t.def.Altitude);
 		}
 
-		
 		public static Vector3 TrueCenter(IntVec3 loc, Rot4 rotation, IntVec2 thingSize, float altitude)
 		{
 			Vector3 result = loc.ToVector3ShiftedWithAltitude(altitude);
@@ -78,14 +75,13 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		public static bool TryDropAndSetForbidden(Thing th, IntVec3 pos, Map map, ThingPlaceMode mode, out Thing resultingThing, bool forbidden)
 		{
-			if (GenDrop.TryDropSpawn_NewTmp(th, pos, map, ThingPlaceMode.Near, out resultingThing, null, null, true))
+			if (GenDrop.TryDropSpawn_NewTmp(th, pos, map, ThingPlaceMode.Near, out resultingThing))
 			{
 				if (resultingThing != null)
 				{
-					resultingThing.SetForbidden(forbidden, false);
+					resultingThing.SetForbidden(forbidden, warnOnFail: false);
 				}
 				return true;
 			}
@@ -93,28 +89,27 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static string ThingsToCommaList(IList<Thing> things, bool useAnd = false, bool aggregate = true, int maxCount = -1)
 		{
-			GenThing.tmpThings.Clear();
-			GenThing.tmpThingLabels.Clear();
-			GenThing.tmpThingCounts.Clear();
-			GenThing.tmpThings.AddRange(things);
-			if (GenThing.tmpThings.Count >= 2)
+			tmpThings.Clear();
+			tmpThingLabels.Clear();
+			tmpThingCounts.Clear();
+			tmpThings.AddRange(things);
+			if (tmpThings.Count >= 2)
 			{
-				GenThing.tmpThings.SortByDescending((Thing x) => x is Pawn, (Thing x) => x.def.BaseMarketValue * (float)x.stackCount);
+				tmpThings.SortByDescending((Thing x) => x is Pawn, (Thing x) => x.def.BaseMarketValue * (float)x.stackCount);
 			}
-			for (int i = 0; i < GenThing.tmpThings.Count; i++)
+			for (int i = 0; i < tmpThings.Count; i++)
 			{
-				string text = (GenThing.tmpThings[i] is Pawn) ? GenThing.tmpThings[i].LabelShort : GenThing.tmpThings[i].LabelNoCount;
+				string text = (tmpThings[i] is Pawn) ? tmpThings[i].LabelShort : tmpThings[i].LabelNoCount;
 				bool flag = false;
 				if (aggregate)
 				{
-					for (int j = 0; j < GenThing.tmpThingCounts.Count; j++)
+					for (int j = 0; j < tmpThingCounts.Count; j++)
 					{
-						if (GenThing.tmpThingCounts[j].First == text)
+						if (tmpThingCounts[j].First == text)
 						{
-							GenThing.tmpThingCounts[j] = new Pair<string, int>(GenThing.tmpThingCounts[j].First, GenThing.tmpThingCounts[j].Second + GenThing.tmpThings[i].stackCount);
+							tmpThingCounts[j] = new Pair<string, int>(tmpThingCounts[j].First, tmpThingCounts[j].Second + tmpThings[i].stackCount);
 							flag = true;
 							break;
 						}
@@ -122,12 +117,12 @@ namespace RimWorld
 				}
 				if (!flag)
 				{
-					GenThing.tmpThingCounts.Add(new Pair<string, int>(text, GenThing.tmpThings[i].stackCount));
+					tmpThingCounts.Add(new Pair<string, int>(text, tmpThings[i].stackCount));
 				}
 			}
-			GenThing.tmpThings.Clear();
+			tmpThings.Clear();
 			bool flag2 = false;
-			int num = GenThing.tmpThingCounts.Count;
+			int num = tmpThingCounts.Count;
 			if (maxCount >= 0 && num > maxCount)
 			{
 				num = maxCount;
@@ -135,14 +130,14 @@ namespace RimWorld
 			}
 			for (int k = 0; k < num; k++)
 			{
-				string text2 = GenThing.tmpThingCounts[k].First;
-				if (GenThing.tmpThingCounts[k].Second != 1)
+				string text2 = tmpThingCounts[k].First;
+				if (tmpThingCounts[k].Second != 1)
 				{
-					text2 = text2 + " x" + GenThing.tmpThingCounts[k].Second;
+					text2 = text2 + " x" + tmpThingCounts[k].Second;
 				}
-				GenThing.tmpThingLabels.Add(text2);
+				tmpThingLabels.Add(text2);
 			}
-			string text3 = GenThing.tmpThingLabels.ToCommaList(useAnd && !flag2);
+			string text3 = tmpThingLabels.ToCommaList(useAnd && !flag2);
 			if (flag2)
 			{
 				text3 += "...";
@@ -150,7 +145,6 @@ namespace RimWorld
 			return text3;
 		}
 
-		
 		public static float GetMarketValue(IList<Thing> things)
 		{
 			float num = 0f;
@@ -161,14 +155,13 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public static bool CloserThingBetween(ThingDef thingDef, IntVec3 a, IntVec3 b, Map map, Thing thingToIgnore = null)
 		{
-			foreach (IntVec3 intVec in CellRect.FromLimits(a, b))
+			foreach (IntVec3 item in CellRect.FromLimits(a, b))
 			{
-				if (!(intVec == a) && !(intVec == b) && intVec.InBounds(map))
+				if (!(item == a) && !(item == b) && item.InBounds(map))
 				{
-					foreach (Thing thing in intVec.GetThingList(map))
+					foreach (Thing thing in item.GetThingList(map))
 					{
 						if ((thingToIgnore == null || thingToIgnore != thing) && (thing.def == thingDef || thing.def.entityDefToBuild == thingDef))
 						{
@@ -179,14 +172,5 @@ namespace RimWorld
 			}
 			return false;
 		}
-
-		
-		private static List<Thing> tmpThings = new List<Thing>();
-
-		
-		private static List<string> tmpThingLabels = new List<string>();
-
-		
-		private static List<Pair<string, int>> tmpThingCounts = new List<Pair<string, int>>();
 	}
 }

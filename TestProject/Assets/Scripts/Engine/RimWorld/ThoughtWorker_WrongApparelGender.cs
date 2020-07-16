@@ -1,25 +1,20 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_WrongApparelGender : ThoughtWorker
 	{
-		
 		public override string PostProcessLabel(Pawn p, string label)
 		{
-			return label.Formatted(p.gender.Opposite().GetLabel(false).ToLower(), p.Named("PAWN"));
+			return label.Formatted(p.gender.Opposite().GetLabel().ToLower(), p.Named("PAWN"));
 		}
 
-		
 		public override string PostProcessDescription(Pawn p, string description)
 		{
-			return description.Formatted(p.gender.Opposite().GetLabel(false).ToLower(), p.gender.GetLabel(false), p.Named("PAWN"));
+			return description.Formatted(p.gender.Opposite().GetLabel().ToLower(), p.gender.GetLabel(), p.Named("PAWN"));
 		}
 
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			List<Apparel> wornApparel = p.apparel.WornApparel;

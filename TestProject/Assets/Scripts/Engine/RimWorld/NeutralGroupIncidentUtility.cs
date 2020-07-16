@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class NeutralGroupIncidentUtility
 	{
-		
 		public static bool AnyBlockingHostileLord(Map map, Faction forFaction)
 		{
 			Faction faction = map.ParentFaction ?? Faction.OfPlayer;

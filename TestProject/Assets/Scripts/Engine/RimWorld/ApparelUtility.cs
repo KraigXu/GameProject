@@ -1,14 +1,48 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ApparelUtility
 	{
-		
+		public struct LayerGroupPair : IEquatable<LayerGroupPair>
+		{
+			private readonly ApparelLayerDef layer;
+
+			private readonly BodyPartGroupDef group;
+
+			public LayerGroupPair(ApparelLayerDef layer, BodyPartGroupDef group)
+			{
+				this.layer = layer;
+				this.group = group;
+			}
+
+			public override bool Equals(object rhs)
+			{
+				if (!(rhs is LayerGroupPair))
+				{
+					return false;
+				}
+				return Equals((LayerGroupPair)rhs);
+			}
+
+			public bool Equals(LayerGroupPair other)
+			{
+				if (other.layer == layer)
+				{
+					return other.group == group;
+				}
+				return false;
+			}
+
+			public override int GetHashCode()
+			{
+				return (17 * 23 + layer.GetHashCode()) * 23 + group.GetHashCode();
+			}
+		}
+
 		public static bool CanWearTogether(ThingDef A, ThingDef B, BodyDef body)
 		{
 			bool flag = false;
@@ -55,8 +89,7 @@ namespace RimWorld
 			return true;
 		}
 
-		
-		public static void GenerateLayerGroupPairs(BodyDef body, ThingDef td, Action<ApparelUtility.LayerGroupPair> callback)
+		public static void GenerateLayerGroupPairs(BodyDef body, ThingDef td, Action<LayerGroupPair> callback)
 		{
 			for (int i = 0; i < td.apparel.layers.Count; i++)
 			{
@@ -64,12 +97,11 @@ namespace RimWorld
 				BodyPartGroupDef[] interferingBodyPartGroups = td.apparel.GetInterferingBodyPartGroups(body);
 				for (int j = 0; j < interferingBodyPartGroups.Length; j++)
 				{
-					callback(new ApparelUtility.LayerGroupPair(layer, interferingBodyPartGroups[j]));
+					callback(new LayerGroupPair(layer, interferingBodyPartGroups[j]));
 				}
 			}
 		}
 
-		
 		public static bool HasPartsToWear(Pawn p, ThingDef apparel)
 		{
 			List<Hediff> hediffs = p.health.hediffSet.hediffs;
@@ -97,41 +129,6 @@ namespace RimWorld
 				}
 			}
 			return false;
-		}
-
-		
-		public struct LayerGroupPair : IEquatable<ApparelUtility.LayerGroupPair>
-		{
-			
-			public LayerGroupPair(ApparelLayerDef layer, BodyPartGroupDef group)
-			{
-				this.layer = layer;
-				this.group = group;
-			}
-
-			
-			public override bool Equals(object rhs)
-			{
-				return rhs is ApparelUtility.LayerGroupPair && this.Equals((ApparelUtility.LayerGroupPair)rhs);
-			}
-
-			
-			public bool Equals(ApparelUtility.LayerGroupPair other)
-			{
-				return other.layer == this.layer && other.group == this.group;
-			}
-
-			
-			public override int GetHashCode()
-			{
-				return (17 * 23 + this.layer.GetHashCode()) * 23 + this.group.GetHashCode();
-			}
-
-			
-			private readonly ApparelLayerDef layer;
-
-			
-			private readonly BodyPartGroupDef group;
 		}
 	}
 }

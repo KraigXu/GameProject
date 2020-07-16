@@ -1,45 +1,43 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public static class TimeAssignmentSelector
 	{
-		
+		public static TimeAssignmentDef selectedAssignment = TimeAssignmentDefOf.Work;
+
 		public static void DrawTimeAssignmentSelectorGrid(Rect rect)
 		{
 			rect.yMax -= 2f;
 			Rect rect2 = rect;
 			rect2.xMax = rect2.center.x;
 			rect2.yMax = rect2.center.y;
-			TimeAssignmentSelector.DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Anything);
+			DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Anything);
 			rect2.x += rect2.width;
-			TimeAssignmentSelector.DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Work);
+			DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Work);
 			rect2.y += rect2.height;
 			rect2.x -= rect2.width;
-			TimeAssignmentSelector.DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Joy);
+			DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Joy);
 			rect2.x += rect2.width;
-			TimeAssignmentSelector.DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Sleep);
+			DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Sleep);
 			if (ModsConfig.RoyaltyActive)
 			{
 				rect2.x += rect2.width;
 				rect2.y -= rect2.height;
-				TimeAssignmentSelector.DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Meditate);
+				DrawTimeAssignmentSelectorFor(rect2, TimeAssignmentDefOf.Meditate);
 			}
 		}
 
-		
 		private static void DrawTimeAssignmentSelectorFor(Rect rect, TimeAssignmentDef ta)
 		{
 			rect = rect.ContractedBy(2f);
 			GUI.DrawTexture(rect, ta.ColorTexture);
-			if (Widgets.ButtonInvisible(rect, true))
+			if (Widgets.ButtonInvisible(rect))
 			{
-				TimeAssignmentSelector.selectedAssignment = ta;
-				SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+				selectedAssignment = ta;
+				SoundDefOf.Tick_High.PlayOneShotOnCamera();
 			}
 			GUI.color = Color.white;
 			if (Mouse.IsOver(rect))
@@ -51,15 +49,14 @@ namespace RimWorld
 			GUI.color = Color.white;
 			Widgets.Label(rect, ta.LabelCap);
 			Text.Anchor = TextAnchor.UpperLeft;
-			if (TimeAssignmentSelector.selectedAssignment == ta)
+			if (selectedAssignment == ta)
 			{
 				Widgets.DrawBox(rect, 2);
-				return;
 			}
-			UIHighlighter.HighlightOpportunity(rect, ta.cachedHighlightNotSelectedTag);
+			else
+			{
+				UIHighlighter.HighlightOpportunity(rect, ta.cachedHighlightNotSelectedTag);
+			}
 		}
-
-		
-		public static TimeAssignmentDef selectedAssignment = TimeAssignmentDefOf.Work;
 	}
 }

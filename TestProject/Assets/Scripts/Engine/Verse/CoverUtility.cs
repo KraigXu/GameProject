@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class CoverUtility
 	{
-		
+		public const float CoverPercent_Corner = 0.75f;
+
 		public static List<CoverInfo> CalculateCoverGiverSet(LocalTargetInfo target, IntVec3 shooterLoc, Map map)
 		{
 			IntVec3 cell = target.Cell;
@@ -15,16 +14,14 @@ namespace Verse
 			for (int i = 0; i < 8; i++)
 			{
 				IntVec3 intVec = cell + GenAdj.AdjacentCells[i];
-				CoverInfo item;
-				if (intVec.InBounds(map) && CoverUtility.TryFindAdjustedCoverInCell(shooterLoc, target, intVec, map, out item) && item.BlockChance > 0f)
+				if (intVec.InBounds(map) && TryFindAdjustedCoverInCell(shooterLoc, target, intVec, map, out CoverInfo result) && result.BlockChance > 0f)
 				{
-					list.Add(item);
+					list.Add(result);
 				}
 			}
 			return list;
 		}
 
-		
 		public static float CalculateOverallBlockChance(LocalTargetInfo target, IntVec3 shooterLoc, Map map)
 		{
 			IntVec3 cell = target.Cell;
@@ -32,16 +29,14 @@ namespace Verse
 			for (int i = 0; i < 8; i++)
 			{
 				IntVec3 intVec = cell + GenAdj.AdjacentCells[i];
-				CoverInfo coverInfo;
-				if (intVec.InBounds(map) && CoverUtility.TryFindAdjustedCoverInCell(shooterLoc, target, intVec, map, out coverInfo))
+				if (intVec.InBounds(map) && TryFindAdjustedCoverInCell(shooterLoc, target, intVec, map, out CoverInfo result))
 				{
-					num += (1f - num) * coverInfo.BlockChance;
+					num += (1f - num) * result.BlockChance;
 				}
 			}
 			return num;
 		}
 
-		
 		private static bool TryFindAdjustedCoverInCell(IntVec3 shooterLoc, LocalTargetInfo target, IntVec3 adjCell, Map map, out CoverInfo result)
 		{
 			IntVec3 cell = target.Cell;
@@ -76,7 +71,7 @@ namespace Verse
 			}
 			else
 			{
-				if (num >= 65f)
+				if (!(num < 65f))
 				{
 					result = CoverInfo.Invalid;
 					return false;
@@ -96,7 +91,6 @@ namespace Verse
 			return true;
 		}
 
-		
 		public static float BaseBlockChance(this ThingDef def)
 		{
 			if (def.Fillage == FillCategory.Full)
@@ -106,7 +100,6 @@ namespace Verse
 			return def.fillPercent;
 		}
 
-		
 		public static float BaseBlockChance(this Thing thing)
 		{
 			Building_Door building_Door = thing as Building_Door;
@@ -117,7 +110,6 @@ namespace Verse
 			return thing.def.BaseBlockChance();
 		}
 
-		
 		public static float TotalSurroundingCoverScore(IntVec3 c, Map map)
 		{
 			float num = 0f;
@@ -135,8 +127,5 @@ namespace Verse
 			}
 			return num;
 		}
-
-		
-		public const float CoverPercent_Corner = 0.75f;
 	}
 }

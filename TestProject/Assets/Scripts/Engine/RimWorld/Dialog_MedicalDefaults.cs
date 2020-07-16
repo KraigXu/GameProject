@@ -1,33 +1,27 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Dialog_MedicalDefaults : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(346f, 350f);
-			}
-		}
+		private const float MedicalCareStartX = 170f;
 
-		
+		private const float VerticalGap = 6f;
+
+		private const float VerticalBigGap = 24f;
+
+		public override Vector2 InitialSize => new Vector2(346f, 350f);
+
 		public Dialog_MedicalDefaults()
 		{
-			this.forcePause = true;
-			this.doCloseX = true;
-			this.doCloseButton = true;
-			this.closeOnClickedOutside = true;
-			this.absorbInputAroundWindow = true;
+			forcePause = true;
+			doCloseX = true;
+			doCloseButton = true;
+			closeOnClickedOutside = true;
+			absorbInputAroundWindow = true;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Rect rect = new Rect(0f, 0f, 170f, 28f);
@@ -55,14 +49,5 @@ namespace RimWorld
 			Widgets.Label(rect, "MedGroupHostileFaction".Translate());
 			MedicalCareUtility.MedicalCareSetter(rect2, ref Find.PlaySettings.defaultCareForHostileFaction);
 		}
-
-		
-		private const float MedicalCareStartX = 170f;
-
-		
-		private const float VerticalGap = 6f;
-
-		
-		private const float VerticalBigGap = 24f;
 	}
 }

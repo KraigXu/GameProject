@@ -1,17 +1,14 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace Verse
 {
-	
 	public class SavedGameLoaderNow
 	{
-		
 		public static void LoadGameFromSaveFileNow(string fileName)
 		{
-			string str = (from mod in LoadedModManager.RunningMods
-			select mod.PackageIdPlayerFacing).ToLineList("  - ", false);
-			Log.Message("Loading game from file " + fileName + " with mods:\n" + str, false);
+			string str = LoadedModManager.RunningMods.Select((ModContentPack mod) => mod.PackageIdPlayerFacing).ToLineList("  - ");
+			Log.Message("Loading game from file " + fileName + " with mods:\n" + str);
 			DeepProfiler.Start("Loading game from file " + fileName);
 			Current.Game = new Game();
 			DeepProfiler.Start("InitLoading (read file)");
@@ -19,10 +16,10 @@ namespace Verse
 			DeepProfiler.End();
 			try
 			{
-				ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Map, true);
+				ScribeMetaHeaderUtility.LoadGameDataHeader(ScribeMetaHeaderUtility.ScribeHeaderMode.Map, logVersionConflictWarning: true);
 				if (!Scribe.EnterNode("game"))
 				{
-					Log.Error("Could not find game XML node.", false);
+					Log.Error("Could not find game XML node.");
 					Scribe.ForceStop();
 					return;
 				}

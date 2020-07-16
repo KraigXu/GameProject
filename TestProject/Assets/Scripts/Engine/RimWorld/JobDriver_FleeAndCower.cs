@@ -1,48 +1,41 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_FleeAndCower : JobDriver_Flee
 	{
-		
+		private const int CowerTicks = 1200;
+
+		private const int CheckFleeAgainIntervalTicks = 35;
+
 		public override string GetReport()
 		{
-			if (this.pawn.CurJob != this.job || this.pawn.Position != this.job.GetTarget(TargetIndex.A).Cell)
+			if (pawn.CurJob != job || pawn.Position != job.GetTarget(TargetIndex.A).Cell)
 			{
 				return base.GetReport();
 			}
 			return "ReportCowering".Translate();
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-
-			IEnumerator<Toil> enumerator = null;
-			yield return new Toil
+			foreach (Toil item in base.MakeNewToils())
 			{
-				defaultCompleteMode = ToilCompleteMode.Delay,
-				defaultDuration = 1200,
-				tickAction = delegate
+				yield return item;
+			}
+			Toil toil = new Toil();
+			toil.defaultCompleteMode = ToilCompleteMode.Delay;
+			toil.defaultDuration = 1200;
+			toil.tickAction = delegate
+			{
+				if (pawn.IsHashIntervalTick(35) && SelfDefenseUtility.ShouldStartFleeing(pawn))
 				{
-					if (this.pawn.IsHashIntervalTick(35) && SelfDefenseUtility.ShouldStartFleeing(this.pawn))
-					{
-						base.EndJobWith(JobCondition.InterruptForced);
-					}
+					EndJobWith(JobCondition.InterruptForced);
 				}
 			};
-			yield break;
-			yield break;
+			yield return toil;
 		}
-
-		
-		private const int CowerTicks = 1200;
-
-		
-		private const int CheckFleeAgainIntervalTicks = 35;
 	}
 }

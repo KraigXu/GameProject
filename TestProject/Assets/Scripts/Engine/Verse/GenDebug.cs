@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class GenDebug
 	{
-		
 		public static void DebugPlaceSphere(Vector3 Loc, float Scale)
 		{
 			GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -16,30 +13,28 @@ namespace Verse
 			gameObject.transform.localScale = new Vector3(Scale, Scale, Scale);
 		}
 
-		
 		public static void LogList<T>(IEnumerable<T> list)
 		{
-			foreach (T t in list)
+			foreach (T item in list)
 			{
-				Log.Message("    " + t.ToString(), false);
+				Log.Message("    " + item.ToString());
 			}
 		}
 
-		
 		public static void ClearArea(CellRect r, Map map)
 		{
 			r.ClipInsideMap(map);
-			foreach (IntVec3 c in r)
+			foreach (IntVec3 item in r)
 			{
-				map.roofGrid.SetRoof(c, null);
+				map.roofGrid.SetRoof(item, null);
 			}
-			foreach (IntVec3 c2 in r)
+			foreach (IntVec3 item2 in r)
 			{
-				foreach (Thing thing in c2.GetThingList(map).ToList<Thing>())
+				foreach (Thing item3 in item2.GetThingList(map).ToList())
 				{
-					if (thing.def.destroyable)
+					if (item3.def.destroyable)
 					{
-						thing.Destroy(DestroyMode.Vanish);
+						item3.Destroy();
 					}
 				}
 			}

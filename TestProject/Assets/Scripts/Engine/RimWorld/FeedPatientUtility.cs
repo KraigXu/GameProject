@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FeedPatientUtility
 	{
-		
 		public static bool ShouldBeFed(Pawn p)
 		{
 			if (p.GetPosture() == PawnPosture.Standing)
@@ -58,10 +55,13 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool IsHungry(Pawn p)
 		{
-			return p.needs != null && p.needs.food != null && p.needs.food.CurLevelPercentage <= p.needs.food.PercentageThreshHungry + 0.02f;
+			if (p.needs != null && p.needs.food != null)
+			{
+				return p.needs.food.CurLevelPercentage <= p.needs.food.PercentageThreshHungry + 0.02f;
+			}
+			return false;
 		}
 	}
 }

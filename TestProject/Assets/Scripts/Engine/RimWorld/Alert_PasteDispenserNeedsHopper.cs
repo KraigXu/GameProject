@@ -1,29 +1,27 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_PasteDispenserNeedsHopper : Alert
 	{
-		
-		
+		private List<Thing> badDispensersResult = new List<Thing>();
+
 		private List<Thing> BadDispensers
 		{
 			get
 			{
-				this.badDispensersResult.Clear();
+				badDispensersResult.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
-					foreach (Thing thing in maps[i].listerThings.ThingsInGroup(ThingRequestGroup.FoodDispenser))
+					foreach (Thing item in maps[i].listerThings.ThingsInGroup(ThingRequestGroup.FoodDispenser))
 					{
 						bool flag = false;
 						ThingDef hopper = ThingDefOf.Hopper;
-						foreach (IntVec3 c in ((Building_NutrientPasteDispenser)thing).AdjCellsCardinalInBounds)
+						foreach (IntVec3 adjCellsCardinalInBound in ((Building_NutrientPasteDispenser)item).AdjCellsCardinalInBounds)
 						{
-							Thing edifice = c.GetEdifice(thing.Map);
+							Thing edifice = adjCellsCardinalInBound.GetEdifice(item.Map);
 							if (edifice != null && edifice.def == hopper)
 							{
 								flag = true;
@@ -32,29 +30,24 @@ namespace RimWorld
 						}
 						if (!flag)
 						{
-							this.badDispensersResult.Add(thing);
+							badDispensersResult.Add(item);
 						}
 					}
 				}
-				return this.badDispensersResult;
+				return badDispensersResult;
 			}
 		}
 
-		
 		public Alert_PasteDispenserNeedsHopper()
 		{
-			this.defaultLabel = "NeedFoodHopper".Translate();
-			this.defaultExplanation = "NeedFoodHopperDesc".Translate();
-			this.defaultPriority = AlertPriority.High;
+			defaultLabel = "NeedFoodHopper".Translate();
+			defaultExplanation = "NeedFoodHopperDesc".Translate();
+			defaultPriority = AlertPriority.High;
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.BadDispensers);
+			return AlertReport.CulpritsAre(BadDispensers);
 		}
-
-		
-		private List<Thing> badDispensersResult = new List<Thing>();
 	}
 }

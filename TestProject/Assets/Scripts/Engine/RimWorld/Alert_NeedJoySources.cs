@@ -1,22 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedJoySources : Alert
 	{
-		
 		public Alert_NeedJoySources()
 		{
-			this.defaultLabel = "NeedJoySource".Translate();
+			defaultLabel = "NeedJoySource".Translate();
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
-			Map map = this.BadMap();
+			Map map = BadMap();
 			int value = JoyUtility.JoyKindsOnMapCount(map);
 			string label = map.info.parent.Label;
 			ExpectationDef expectationDef = ExpectationsUtility.CurrentExpectationFor(map);
@@ -26,19 +22,17 @@ namespace RimWorld
 			return "NeedJoySourceDesc".Translate(value, label, expectationDef.label, joyKindsNeeded, value2, value3);
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return this.BadMap() != null;
+			return BadMap() != null;
 		}
 
-		
 		private Map BadMap()
 		{
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				if (this.NeedJoySource(maps[i]))
+				if (NeedJoySource(maps[i]))
 				{
 					return maps[i];
 				}
@@ -46,7 +40,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		private bool NeedJoySource(Map map)
 		{
 			if (!map.IsPlayerHome)

@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnOrCorpseStatUtility
 	{
-		
 		public static bool TryGetPawnOrCorpseStat(StatRequest req, Func<Pawn, float> pawnStatGetter, Func<ThingDef, float> pawnDefStatGetter, out float stat)
 		{
 			if (req.HasThing)

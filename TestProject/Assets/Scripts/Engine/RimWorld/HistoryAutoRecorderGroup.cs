@@ -1,23 +1,28 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class HistoryAutoRecorderGroup : IExposable
 	{
-		
+		public HistoryAutoRecorderGroupDef def;
+
+		public List<HistoryAutoRecorder> recorders = new List<HistoryAutoRecorder>();
+
+		private List<SimpleCurveDrawInfo> curves = new List<SimpleCurveDrawInfo>();
+
+		private int cachedGraphTickCount = -1;
+
 		public float GetMaxDay()
 		{
 			float num = 0f;
-			foreach (HistoryAutoRecorder historyAutoRecorder in this.recorders)
+			foreach (HistoryAutoRecorder recorder in recorders)
 			{
-				int count = historyAutoRecorder.records.Count;
+				int count = recorder.records.Count;
 				if (count != 0)
 				{
-					float num2 = (float)((count - 1) * historyAutoRecorder.def.recordTicksFrequency) / 60000f;
+					float num2 = (float)((count - 1) * recorder.def.recordTicksFrequency) / 60000f;
 					if (num2 > num)
 					{
 						num = num2;
@@ -27,26 +32,24 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public void Tick()
 		{
-			for (int i = 0; i < this.recorders.Count; i++)
+			for (int i = 0; i < recorders.Count; i++)
 			{
-				this.recorders[i].Tick();
+				recorders[i].Tick();
 			}
 		}
 
-		
 		public void DrawGraph(Rect graphRect, Rect legendRect, FloatRange section, List<CurveMark> marks)
 		{
 			int ticksGame = Find.TickManager.TicksGame;
-			if (ticksGame != this.cachedGraphTickCount)
+			if (ticksGame != cachedGraphTickCount)
 			{
-				this.cachedGraphTickCount = ticksGame;
-				this.curves.Clear();
-				for (int i = 0; i < this.recorders.Count; i++)
+				cachedGraphTickCount = ticksGame;
+				curves.Clear();
+				for (int i = 0; i < recorders.Count; i++)
 				{
-					HistoryAutoRecorder historyAutoRecorder = this.recorders[i];
+					HistoryAutoRecorder historyAutoRecorder = recorders[i];
 					SimpleCurveDrawInfo simpleCurveDrawInfo = new SimpleCurveDrawInfo();
 					simpleCurveDrawInfo.color = historyAutoRecorder.def.graphColor;
 					simpleCurveDrawInfo.label = historyAutoRecorder.def.LabelCap;
@@ -54,14 +57,14 @@ namespace RimWorld
 					simpleCurveDrawInfo.curve = new SimpleCurve();
 					for (int j = 0; j < historyAutoRecorder.records.Count; j++)
 					{
-						simpleCurveDrawInfo.curve.Add(new CurvePoint((float)j * (float)historyAutoRecorder.def.recordTicksFrequency / 60000f, historyAutoRecorder.records[j]), false);
+						simpleCurveDrawInfo.curve.Add(new CurvePoint((float)j * (float)historyAutoRecorder.def.recordTicksFrequency / 60000f, historyAutoRecorder.records[j]), sort: false);
 					}
 					simpleCurveDrawInfo.curve.SortPoints();
 					if (historyAutoRecorder.records.Count == 1)
 					{
-						simpleCurveDrawInfo.curve.Add(new CurvePoint(1.66666669E-05f, historyAutoRecorder.records[0]), true);
+						simpleCurveDrawInfo.curve.Add(new CurvePoint(1.66666669E-05f, historyAutoRecorder.records[0]));
 					}
-					this.curves.Add(simpleCurveDrawInfo);
+					curves.Add(simpleCurveDrawInfo);
 				}
 			}
 			if (Mathf.Approximately(section.min, section.max))
@@ -70,58 +73,40 @@ namespace RimWorld
 			}
 			SimpleCurveDrawerStyle curveDrawerStyle = Find.History.curveDrawerStyle;
 			curveDrawerStyle.FixedSection = section;
-			curveDrawerStyle.UseFixedScale = this.def.useFixedScale;
-			curveDrawerStyle.FixedScale = this.def.fixedScale;
-			curveDrawerStyle.YIntegersOnly = this.def.integersOnly;
-			curveDrawerStyle.OnlyPositiveValues = this.def.onlyPositiveValues;
-			SimpleCurveDrawer.DrawCurves(graphRect, this.curves, curveDrawerStyle, marks, legendRect);
+			curveDrawerStyle.UseFixedScale = def.useFixedScale;
+			curveDrawerStyle.FixedScale = def.fixedScale;
+			curveDrawerStyle.YIntegersOnly = def.integersOnly;
+			curveDrawerStyle.OnlyPositiveValues = def.onlyPositiveValues;
+			SimpleCurveDrawer.DrawCurves(graphRect, curves, curveDrawerStyle, marks, legendRect);
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<HistoryAutoRecorderGroupDef>(ref this.def, "def");
-			Scribe_Collections.Look<HistoryAutoRecorder>(ref this.recorders, "recorders", LookMode.Deep, Array.Empty<object>());
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Collections.Look(ref recorders, "recorders", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.AddOrRemoveHistoryRecorders();
+				AddOrRemoveHistoryRecorders();
 			}
 		}
 
-		
 		public void AddOrRemoveHistoryRecorders()
 		{
-			if (this.recorders.RemoveAll((HistoryAutoRecorder x) => x == null) != 0)
+			if (recorders.RemoveAll((HistoryAutoRecorder x) => x == null) != 0)
 			{
-				Log.Warning("Some history auto recorders were null.", false);
+				Log.Warning("Some history auto recorders were null.");
 			}
-			List<HistoryAutoRecorderDef>.Enumerator enumerator = this.def.historyAutoRecorderDefs.GetEnumerator();
+			foreach (HistoryAutoRecorderDef recorderDef in def.historyAutoRecorderDefs)
 			{
-				while (enumerator.MoveNext())
+				if (!recorders.Any((HistoryAutoRecorder x) => x.def == recorderDef))
 				{
-					HistoryAutoRecorderDef recorderDef = enumerator.Current;
-					if (!this.recorders.Any((HistoryAutoRecorder x) => x.def == recorderDef))
-					{
-						HistoryAutoRecorder historyAutoRecorder = new HistoryAutoRecorder();
-						historyAutoRecorder.def = recorderDef;
-						this.recorders.Add(historyAutoRecorder);
-					}
+					HistoryAutoRecorder historyAutoRecorder = new HistoryAutoRecorder();
+					historyAutoRecorder.def = recorderDef;
+					recorders.Add(historyAutoRecorder);
 				}
 			}
-			this.recorders.RemoveAll((HistoryAutoRecorder x) => x.def == null);
+			recorders.RemoveAll((HistoryAutoRecorder x) => x.def == null);
 		}
-
-		
-		public HistoryAutoRecorderGroupDef def;
-
-		
-		public List<HistoryAutoRecorder> recorders = new List<HistoryAutoRecorder>();
-
-		
-		private List<SimpleCurveDrawInfo> curves = new List<SimpleCurveDrawInfo>();
-
-		
-		private int cachedGraphTickCount = -1;
 	}
 }

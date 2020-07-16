@@ -1,23 +1,20 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SkyfallerUtility
 	{
-		
 		public static bool CanPossiblyFallOnColonist(ThingDef skyfaller, IntVec3 c, Map map)
 		{
 			CellRect cellRect = GenAdj.OccupiedRect(c, Rot4.North, skyfaller.size);
 			int dist = Mathf.Max(Mathf.CeilToInt(skyfaller.skyfaller.explosionRadius) + 7, 14);
-			foreach (IntVec3 c2 in cellRect.ExpandedBy(dist))
+			foreach (IntVec3 item in cellRect.ExpandedBy(dist))
 			{
-				if (c2.InBounds(map))
+				if (item.InBounds(map))
 				{
-					List<Thing> thingList = c2.GetThingList(map);
+					List<Thing> thingList = item.GetThingList(map);
 					for (int i = 0; i < thingList.Count; i++)
 					{
 						Pawn pawn = thingList[i] as Pawn;
@@ -31,21 +28,18 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static void MakeDropoffShuttle(Map map, List<Thing> contents, Faction faction = null)
 		{
-			IntVec3 center;
-			Thing thing;
-			if (!DropCellFinder.TryFindShipLandingArea(map, out center, out thing))
+			if (!DropCellFinder.TryFindShipLandingArea(map, out IntVec3 result, out Thing firstBlockingThing))
 			{
-				if (thing != null)
+				if (firstBlockingThing != null)
 				{
-					Messages.Message("ShuttleBlocked".Translate("BlockedBy".Translate(thing).CapitalizeFirst()), thing, MessageTypeDefOf.NeutralEvent, true);
+					Messages.Message("ShuttleBlocked".Translate("BlockedBy".Translate(firstBlockingThing).CapitalizeFirst()), firstBlockingThing, MessageTypeDefOf.NeutralEvent);
 				}
-				center = DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.Shuttle.Size, null, 2);
+				result = DropCellFinder.TryFindSafeLandingSpotCloseToColony(map, ThingDefOf.Shuttle.Size);
 			}
-			Thing thing2 = ThingMaker.MakeThing(ThingDefOf.Shuttle, null);
-			thing2.TryGetComp<CompShuttle>().dropEverythingOnArrival = true;
+			Thing thing = ThingMaker.MakeThing(ThingDefOf.Shuttle);
+			thing.TryGetComp<CompShuttle>().dropEverythingOnArrival = true;
 			for (int i = 0; i < contents.Count; i++)
 			{
 				Pawn p;
@@ -54,9 +48,9 @@ namespace RimWorld
 					Find.WorldPawns.RemovePawn(p);
 				}
 			}
-			thing2.SetFaction(faction, null);
-			thing2.TryGetComp<CompTransporter>().innerContainer.TryAddRangeOrTransfer(contents, true, false);
-			GenPlace.TryPlaceThing(SkyfallerMaker.MakeSkyfaller(ThingDefOf.ShuttleIncoming, Gen.YieldSingle<Thing>(thing2)), center, map, ThingPlaceMode.Near, null, null, default(Rot4));
+			thing.SetFaction(faction);
+			thing.TryGetComp<CompTransporter>().innerContainer.TryAddRangeOrTransfer(contents);
+			GenPlace.TryPlaceThing(SkyfallerMaker.MakeSkyfaller(ThingDefOf.ShuttleIncoming, Gen.YieldSingle(thing)), result, map, ThingPlaceMode.Near);
 		}
 	}
 }

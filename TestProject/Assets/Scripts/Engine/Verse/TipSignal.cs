@@ -1,31 +1,39 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public struct TipSignal
 	{
-		
+		public const float DefaultDelay = 0.45f;
+
+		public string text;
+
+		public Func<string> textGetter;
+
+		public int uniqueId;
+
+		public TooltipPriority priority;
+
+		public float delay;
+
 		public TipSignal(string text, int uniqueId)
 		{
 			this.text = text;
-			this.textGetter = null;
+			textGetter = null;
 			this.uniqueId = uniqueId;
-			this.priority = TooltipPriority.Default;
-			this.delay = 0.45f;
+			priority = TooltipPriority.Default;
+			delay = 0.45f;
 		}
 
-		
 		public TipSignal(string text, int uniqueId, TooltipPriority priority)
 		{
 			this.text = text;
-			this.textGetter = null;
+			textGetter = null;
 			this.uniqueId = uniqueId;
 			this.priority = priority;
-			this.delay = 0.45f;
+			delay = 0.45f;
 		}
 
-		
 		public TipSignal(string text)
 		{
 			if (text == null)
@@ -33,13 +41,12 @@ namespace Verse
 				text = "";
 			}
 			this.text = text;
-			this.textGetter = null;
-			this.uniqueId = text.GetHashCode();
-			this.priority = TooltipPriority.Default;
-			this.delay = 0.45f;
+			textGetter = null;
+			uniqueId = text.GetHashCode();
+			priority = TooltipPriority.Default;
+			delay = 0.45f;
 		}
 
-		
 		public TipSignal(string text, float delay)
 		{
 			if (text == null)
@@ -47,97 +54,65 @@ namespace Verse
 				text = "";
 			}
 			this.text = text;
-			this.textGetter = null;
-			this.uniqueId = text.GetHashCode();
-			this.priority = TooltipPriority.Default;
+			textGetter = null;
+			uniqueId = text.GetHashCode();
+			priority = TooltipPriority.Default;
 			this.delay = delay;
 		}
 
-		
 		public TipSignal(TaggedString text)
 		{
-			if (text == null)
+			if ((string)text == null)
 			{
 				text = "";
 			}
 			this.text = text.Resolve();
-			this.textGetter = null;
-			this.uniqueId = text.GetHashCode();
-			this.priority = TooltipPriority.Default;
-			this.delay = 0.45f;
+			textGetter = null;
+			uniqueId = text.GetHashCode();
+			priority = TooltipPriority.Default;
+			delay = 0.45f;
 		}
 
-		
 		public TipSignal(Func<string> textGetter, int uniqueId)
 		{
-			this.text = "";
+			text = "";
 			this.textGetter = textGetter;
 			this.uniqueId = uniqueId;
-			this.priority = TooltipPriority.Default;
-			this.delay = 0.45f;
+			priority = TooltipPriority.Default;
+			delay = 0.45f;
 		}
 
-		
 		public TipSignal(Func<string> textGetter, int uniqueId, TooltipPriority priority)
 		{
-			this.text = "";
+			text = "";
 			this.textGetter = textGetter;
 			this.uniqueId = uniqueId;
 			this.priority = priority;
-			this.delay = 0.45f;
+			delay = 0.45f;
 		}
 
-		
 		public TipSignal(TipSignal cloneSource)
 		{
-			this.text = cloneSource.text;
-			this.textGetter = null;
-			this.priority = cloneSource.priority;
-			this.uniqueId = cloneSource.uniqueId;
-			this.delay = 0.45f;
+			text = cloneSource.text;
+			textGetter = null;
+			priority = cloneSource.priority;
+			uniqueId = cloneSource.uniqueId;
+			delay = 0.45f;
 		}
 
-		
 		public static implicit operator TipSignal(string str)
 		{
 			return new TipSignal(str);
 		}
 
-		
 		public static implicit operator TipSignal(TaggedString str)
 		{
 			return new TipSignal(str);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"Tip(",
-				this.text,
-				", ",
-				this.uniqueId,
-				")"
-			});
+			return "Tip(" + text + ", " + uniqueId + ")";
 		}
-
-		
-		public const float DefaultDelay = 0.45f;
-
-		
-		public string text;
-
-		
-		public Func<string> textGetter;
-
-		
-		public int uniqueId;
-
-		
-		public TooltipPriority priority;
-
-		
-		public float delay;
 	}
 }

@@ -1,100 +1,101 @@
-﻿using RimWorld;
 using System;
 using UnityEngine;
 using Verse;
 
-public class SkillRecord : IExposable
+namespace RimWorld
 {
-	private Pawn pawn;
-
-	public SkillDef def;
-
-	public int levelInt;
-
-	public Passion passion;
-
-	public float xpSinceLastLevel;
-
-	public float xpSinceMidnight;
-
-	private BoolUnknown cachedTotallyDisabled = BoolUnknown.Unknown;
-
-	public const int IntervalTicks = 200;
-
-	public const int MinLevel = 0;
-
-	public const int MaxLevel = 20;
-
-	public const int MaxFullRateXpPerDay = 4000;
-
-	public const int MasterSkillThreshold = 14;
-
-	public const float SaturatedLearningFactor = 0.2f;
-
-	public const float LearnFactorPassionNone = 0.35f;
-
-	public const float LearnFactorPassionMinor = 1f;
-
-	public const float LearnFactorPassionMajor = 1.5f;
-
-	private static readonly SimpleCurve XpForLevelUpCurve = new SimpleCurve
+	public class SkillRecord : IExposable
 	{
-		new CurvePoint(0f, 1000f),
-		new CurvePoint(9f, 10000f),
-		new CurvePoint(19f, 30000f)
-	};
+		private Pawn pawn;
 
-	public int Level
-	{
-		get
+		public SkillDef def;
+
+		public int levelInt;
+
+		public Passion passion;
+
+		public float xpSinceLastLevel;
+
+		public float xpSinceMidnight;
+
+		private BoolUnknown cachedTotallyDisabled = BoolUnknown.Unknown;
+
+		public const int IntervalTicks = 200;
+
+		public const int MinLevel = 0;
+
+		public const int MaxLevel = 20;
+
+		public const int MaxFullRateXpPerDay = 4000;
+
+		public const int MasterSkillThreshold = 14;
+
+		public const float SaturatedLearningFactor = 0.2f;
+
+		public const float LearnFactorPassionNone = 0.35f;
+
+		public const float LearnFactorPassionMinor = 1f;
+
+		public const float LearnFactorPassionMajor = 1.5f;
+
+		private static readonly SimpleCurve XpForLevelUpCurve = new SimpleCurve
 		{
-			if (TotallyDisabled)
+			new CurvePoint(0f, 1000f),
+			new CurvePoint(9f, 10000f),
+			new CurvePoint(19f, 30000f)
+		};
+
+		public int Level
+		{
+			get
 			{
-				return 0;
+				if (TotallyDisabled)
+				{
+					return 0;
+				}
+				return levelInt;
 			}
-			return levelInt;
-		}
-		set
-		{
-			levelInt = Mathf.Clamp(value, 0, 20);
-		}
-	}
-
-	public float XpRequiredForLevelUp => XpRequiredToLevelUpFrom(levelInt);
-
-	public float XpProgressPercent => xpSinceLastLevel / XpRequiredForLevelUp;
-
-	public float XpTotalEarned
-	{
-		get
-		{
-			float num = 0f;
-			for (int i = 0; i < levelInt; i++)
+			set
 			{
-				num += XpRequiredToLevelUpFrom(i);
+				levelInt = Mathf.Clamp(value, 0, 20);
 			}
-			return num;
 		}
-	}
 
-	public bool TotallyDisabled
-	{
-		get
+		public float XpRequiredForLevelUp => XpRequiredToLevelUpFrom(levelInt);
+
+		public float XpProgressPercent => xpSinceLastLevel / XpRequiredForLevelUp;
+
+		public float XpTotalEarned
 		{
-			if (cachedTotallyDisabled == BoolUnknown.Unknown)
+			get
 			{
-				cachedTotallyDisabled = ((!CalculateTotallyDisabled()) ? BoolUnknown.False : BoolUnknown.True);
+				float num = 0f;
+				for (int i = 0; i < levelInt; i++)
+				{
+					num += XpRequiredToLevelUpFrom(i);
+				}
+				return num;
 			}
-			return cachedTotallyDisabled == BoolUnknown.True;
 		}
-	}
 
-	public string LevelDescriptor
-	{
-		get
+		public bool TotallyDisabled
 		{
-			switch (levelInt)
+			get
 			{
+				if (cachedTotallyDisabled == BoolUnknown.Unknown)
+				{
+					cachedTotallyDisabled = ((!CalculateTotallyDisabled()) ? BoolUnknown.False : BoolUnknown.True);
+				}
+				return cachedTotallyDisabled == BoolUnknown.True;
+			}
+		}
+
+		public string LevelDescriptor
+		{
+			get
+			{
+				switch (levelInt)
+				{
 				case 0:
 					return "Skill0".Translate();
 				case 1:
@@ -139,41 +140,41 @@ public class SkillRecord : IExposable
 					return "Skill20".Translate();
 				default:
 					return "Unknown";
+				}
 			}
 		}
-	}
 
-	public bool LearningSaturatedToday => xpSinceMidnight > 4000f;
+		public bool LearningSaturatedToday => xpSinceMidnight > 4000f;
 
-	public SkillRecord()
-	{
-	}
-
-	public SkillRecord(Pawn pawn)
-	{
-		this.pawn = pawn;
-	}
-
-	public SkillRecord(Pawn pawn, SkillDef def)
-	{
-		this.pawn = pawn;
-		this.def = def;
-	}
-
-	public void ExposeData()
-	{
-		Scribe_Defs.Look(ref def, "def");
-		Scribe_Values.Look(ref levelInt, "level", 0);
-		Scribe_Values.Look(ref xpSinceLastLevel, "xpSinceLastLevel", 0f);
-		Scribe_Values.Look(ref passion, "passion", Passion.None);
-		Scribe_Values.Look(ref xpSinceMidnight, "xpSinceMidnight", 0f);
-	}
-
-	public void Interval()
-	{
-		float num = pawn.story.traits.HasTrait(TraitDefOf.GreatMemory) ? 0.5f : 1f;
-		switch (levelInt)
+		public SkillRecord()
 		{
+		}
+
+		public SkillRecord(Pawn pawn)
+		{
+			this.pawn = pawn;
+		}
+
+		public SkillRecord(Pawn pawn, SkillDef def)
+		{
+			this.pawn = pawn;
+			this.def = def;
+		}
+
+		public void ExposeData()
+		{
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Values.Look(ref levelInt, "level", 0);
+			Scribe_Values.Look(ref xpSinceLastLevel, "xpSinceLastLevel", 0f);
+			Scribe_Values.Look(ref passion, "passion", Passion.None);
+			Scribe_Values.Look(ref xpSinceMidnight, "xpSinceMidnight", 0f);
+		}
+
+		public void Interval()
+		{
+			float num = pawn.story.traits.HasTrait(TraitDefOf.GreatMemory) ? 0.5f : 1f;
+			switch (levelInt)
+			{
 			case 10:
 				Learn(-0.1f * num);
 				break;
@@ -207,79 +208,79 @@ public class SkillRecord : IExposable
 			case 20:
 				Learn(-12f * num);
 				break;
+			}
 		}
-	}
 
-	public static float XpRequiredToLevelUpFrom(int startingLevel)
-	{
-		return XpForLevelUpCurve.Evaluate(startingLevel);
-	}
+		public static float XpRequiredToLevelUpFrom(int startingLevel)
+		{
+			return XpForLevelUpCurve.Evaluate(startingLevel);
+		}
 
-	public void Learn(float xp, bool direct = false)
-	{
-		if (TotallyDisabled || (xp < 0f && levelInt == 0))
+		public void Learn(float xp, bool direct = false)
 		{
-			return;
-		}
-		if (xp > 0f)
-		{
-			xp *= LearnRateFactor(direct);
-		}
-		xpSinceLastLevel += xp;
-		if (!direct)
-		{
-			xpSinceMidnight += xp;
-		}
-		if (levelInt == 20 && xpSinceLastLevel > XpRequiredForLevelUp - 1f)
-		{
-			xpSinceLastLevel = XpRequiredForLevelUp - 1f;
-		}
-		while (xpSinceLastLevel >= XpRequiredForLevelUp)
-		{
-			xpSinceLastLevel -= XpRequiredForLevelUp;
-			levelInt++;
-			if (levelInt == 14)
+			if (TotallyDisabled || (xp < 0f && levelInt == 0))
 			{
-				if (passion == Passion.None)
+				return;
+			}
+			if (xp > 0f)
+			{
+				xp *= LearnRateFactor(direct);
+			}
+			xpSinceLastLevel += xp;
+			if (!direct)
+			{
+				xpSinceMidnight += xp;
+			}
+			if (levelInt == 20 && xpSinceLastLevel > XpRequiredForLevelUp - 1f)
+			{
+				xpSinceLastLevel = XpRequiredForLevelUp - 1f;
+			}
+			while (xpSinceLastLevel >= XpRequiredForLevelUp)
+			{
+				xpSinceLastLevel -= XpRequiredForLevelUp;
+				levelInt++;
+				if (levelInt == 14)
 				{
-					TaleRecorder.RecordTale(TaleDefOf.GainedMasterSkillWithoutPassion, pawn, def);
+					if (passion == Passion.None)
+					{
+						TaleRecorder.RecordTale(TaleDefOf.GainedMasterSkillWithoutPassion, pawn, def);
+					}
+					else
+					{
+						TaleRecorder.RecordTale(TaleDefOf.GainedMasterSkillWithPassion, pawn, def);
+					}
 				}
-				else
+				if (levelInt >= 20)
 				{
-					TaleRecorder.RecordTale(TaleDefOf.GainedMasterSkillWithPassion, pawn, def);
+					levelInt = 20;
+					xpSinceLastLevel = Mathf.Clamp(xpSinceLastLevel, 0f, XpRequiredForLevelUp - 1f);
+					break;
 				}
 			}
-			if (levelInt >= 20)
+			do
 			{
-				levelInt = 20;
-				xpSinceLastLevel = Mathf.Clamp(xpSinceLastLevel, 0f, XpRequiredForLevelUp - 1f);
-				break;
+				if (xpSinceLastLevel < 0f)
+				{
+					levelInt--;
+					xpSinceLastLevel += XpRequiredForLevelUp;
+					continue;
+				}
+				return;
 			}
+			while (levelInt > 0);
+			levelInt = 0;
+			xpSinceLastLevel = 0f;
 		}
-		do
-		{
-			if (xpSinceLastLevel < 0f)
-			{
-				levelInt--;
-				xpSinceLastLevel += XpRequiredForLevelUp;
-				continue;
-			}
-			return;
-		}
-		while (levelInt > 0);
-		levelInt = 0;
-		xpSinceLastLevel = 0f;
-	}
 
-	public float LearnRateFactor(bool direct = false)
-	{
-		if (DebugSettings.fastLearning)
+		public float LearnRateFactor(bool direct = false)
 		{
-			return 200f;
-		}
-		float num;
-		switch (passion)
-		{
+			if (DebugSettings.fastLearning)
+			{
+				return 200f;
+			}
+			float num;
+			switch (passion)
+			{
 			case Passion.None:
 				num = 0.35f;
 				break;
@@ -291,39 +292,40 @@ public class SkillRecord : IExposable
 				break;
 			default:
 				throw new NotImplementedException("Passion level " + passion);
-		}
-		if (!direct)
-		{
-			num *= pawn.GetStatValue(StatDefOf.GlobalLearningFactor);
-			if (LearningSaturatedToday)
+			}
+			if (!direct)
 			{
-				num *= 0.2f;
+				num *= pawn.GetStatValue(StatDefOf.GlobalLearningFactor);
+				if (LearningSaturatedToday)
+				{
+					num *= 0.2f;
+				}
+			}
+			return num;
+		}
+
+		public void EnsureMinLevelWithMargin(int minLevel)
+		{
+			if (!TotallyDisabled && (Level < minLevel || (Level == minLevel && xpSinceLastLevel < XpRequiredForLevelUp / 2f)))
+			{
+				Level = minLevel;
+				xpSinceLastLevel = XpRequiredForLevelUp / 2f;
 			}
 		}
-		return num;
-	}
 
-	public void EnsureMinLevelWithMargin(int minLevel)
-	{
-		if (!TotallyDisabled && (Level < minLevel || (Level == minLevel && xpSinceLastLevel < XpRequiredForLevelUp / 2f)))
+		public void Notify_SkillDisablesChanged()
 		{
-			Level = minLevel;
-			xpSinceLastLevel = XpRequiredForLevelUp / 2f;
+			cachedTotallyDisabled = BoolUnknown.Unknown;
 		}
-	}
 
-	public void Notify_SkillDisablesChanged()
-	{
-		cachedTotallyDisabled = BoolUnknown.Unknown;
-	}
+		private bool CalculateTotallyDisabled()
+		{
+			return def.IsDisabled(pawn.story.DisabledWorkTagsBackstoryAndTraits, pawn.GetDisabledWorkTypes(permanentOnly: true));
+		}
 
-	private bool CalculateTotallyDisabled()
-	{
-		return def.IsDisabled(pawn.story.DisabledWorkTagsBackstoryAndTraits, pawn.GetDisabledWorkTypes(permanentOnly: true));
-	}
-
-	public override string ToString()
-	{
-		return def.defName + ": " + levelInt + " (" + xpSinceLastLevel + "xp)";
+		public override string ToString()
+		{
+			return def.defName + ": " + levelInt + " (" + xpSinceLastLevel + "xp)";
+		}
 	}
 }

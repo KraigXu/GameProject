@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,48 +6,22 @@ using System.Xml;
 
 namespace Verse
 {
-	
 	public static class LoadedModManager
 	{
-		
-		
-		public static List<ModContentPack> RunningModsListForReading
-		{
-			get
-			{
-				return LoadedModManager.runningMods;
-			}
-		}
-		
-		public static IEnumerable<ModContentPack> RunningMods
-		{
-			get
-			{
-				return LoadedModManager.runningMods;
-			}
-		}
+		private static List<ModContentPack> runningMods = new List<ModContentPack>();
 
-		
-		
-		public static List<Def> PatchedDefsForReading
-		{
-			get
-			{
-				return LoadedModManager.patchedDefs;
-			}
-		}
+		private static Dictionary<Type, Mod> runningModClasses = new Dictionary<Type, Mod>();
 
-		
-		
-		public static IEnumerable<Mod> ModHandles
-		{
-			get
-			{
-				return LoadedModManager.runningModClasses.Values;
-			}
-		}
+		private static List<Def> patchedDefs = new List<Def>();
 
-		
+		public static List<ModContentPack> RunningModsListForReading => runningMods;
+
+		public static IEnumerable<ModContentPack> RunningMods => runningMods;
+
+		public static List<Def> PatchedDefsForReading => patchedDefs;
+
+		public static IEnumerable<Mod> ModHandles => runningModClasses.Values;
+
 		public static void LoadAllActiveMods()
 		{
 			DeepProfiler.Start("XmlInheritance.Clear()");
@@ -62,7 +36,7 @@ namespace Verse
 			DeepProfiler.Start("InitializeMods()");
 			try
 			{
-				LoadedModManager.InitializeMods();
+				InitializeMods();
 			}
 			finally
 			{
@@ -71,7 +45,7 @@ namespace Verse
 			DeepProfiler.Start("LoadModContent()");
 			try
 			{
-				LoadedModManager.LoadModContent();
+				LoadModContent();
 			}
 			finally
 			{
@@ -80,7 +54,7 @@ namespace Verse
 			DeepProfiler.Start("CreateModClasses()");
 			try
 			{
-				LoadedModManager.CreateModClasses();
+				CreateModClasses();
 			}
 			finally
 			{
@@ -90,7 +64,7 @@ namespace Verse
 			DeepProfiler.Start("LoadModXML()");
 			try
 			{
-				xmls = LoadedModManager.LoadModXML();
+				xmls = LoadModXML();
 			}
 			finally
 			{
@@ -101,7 +75,7 @@ namespace Verse
 			DeepProfiler.Start("CombineIntoUnifiedXML()");
 			try
 			{
-				xmlDocument = LoadedModManager.CombineIntoUnifiedXML(xmls, assetlookup);
+				xmlDocument = CombineIntoUnifiedXML(xmls, assetlookup);
 			}
 			finally
 			{
@@ -120,7 +94,7 @@ namespace Verse
 			DeepProfiler.Start("ApplyPatches()");
 			try
 			{
-				LoadedModManager.ApplyPatches(xmlDocument, assetlookup);
+				ApplyPatches(xmlDocument, assetlookup);
 			}
 			finally
 			{
@@ -129,7 +103,7 @@ namespace Verse
 			DeepProfiler.Start("ParseAndProcessXML()");
 			try
 			{
-				LoadedModManager.ParseAndProcessXML(xmlDocument, assetlookup);
+				ParseAndProcessXML(xmlDocument, assetlookup);
 			}
 			finally
 			{
@@ -138,7 +112,7 @@ namespace Verse
 			DeepProfiler.Start("ClearCachedPatches()");
 			try
 			{
-				LoadedModManager.ClearCachedPatches();
+				ClearCachedPatches();
 			}
 			finally
 			{
@@ -155,39 +129,30 @@ namespace Verse
 			}
 		}
 
-		
 		public static void InitializeMods()
 		{
 			int num = 0;
-			foreach (ModMetaData modMetaData in ModsConfig.ActiveModsInLoadOrder.ToList<ModMetaData>())
+			foreach (ModMetaData item2 in ModsConfig.ActiveModsInLoadOrder.ToList())
 			{
-				DeepProfiler.Start("Initializing " + modMetaData);
+				DeepProfiler.Start("Initializing " + item2);
 				try
 				{
-					if (!modMetaData.RootDir.Exists)
+					if (!item2.RootDir.Exists)
 					{
-						ModsConfig.SetActive(modMetaData.PackageId, false);
-						Log.Warning(string.Concat(new object[]
-						{
-							"Failed to find active mod ",
-							modMetaData.Name,
-							"(",
-							modMetaData.PackageIdPlayerFacing,
-							") at ",
-							modMetaData.RootDir
-						}), false);
+						ModsConfig.SetActive(item2.PackageId, active: false);
+						Log.Warning("Failed to find active mod " + item2.Name + "(" + item2.PackageIdPlayerFacing + ") at " + item2.RootDir);
 					}
 					else
 					{
-						ModContentPack item = new ModContentPack(modMetaData.RootDir, modMetaData.PackageId, modMetaData.PackageIdPlayerFacing, num, modMetaData.Name);
+						ModContentPack item = new ModContentPack(item2.RootDir, item2.PackageId, item2.PackageIdPlayerFacing, num, item2.Name);
 						num++;
-						LoadedModManager.runningMods.Add(item);
+						runningMods.Add(item);
 					}
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Error initializing mod: " + arg, false);
-					ModsConfig.SetActive(modMetaData.PackageId, false);
+					Log.Error("Error initializing mod: " + arg);
+					ModsConfig.SetActive(item2.PackageId, active: false);
 				}
 				finally
 				{
@@ -196,16 +161,15 @@ namespace Verse
 			}
 		}
 
-		
 		public static void LoadModContent()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
 			{
 				DeepProfiler.Start("LoadModContent");
 			});
-			for (int i = 0; i < LoadedModManager.runningMods.Count; i++)
+			for (int i = 0; i < runningMods.Count; i++)
 			{
-				ModContentPack modContentPack = LoadedModManager.runningMods[i];
+				ModContentPack modContentPack = runningMods[i];
 				DeepProfiler.Start("Loading " + modContentPack + " content");
 				try
 				{
@@ -213,13 +177,7 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Could not reload mod content for mod ",
-						modContentPack.PackageIdPlayerFacing,
-						": ",
-						ex
-					}), false);
+					Log.Error("Could not reload mod content for mod " + modContentPack.PackageIdPlayerFacing + ": " + ex);
 				}
 				finally
 				{
@@ -229,64 +187,47 @@ namespace Verse
 			LongEventHandler.ExecuteWhenFinished(delegate
 			{
 				DeepProfiler.End();
-				for (int j = 0; j < LoadedModManager.runningMods.Count; j++)
+				for (int j = 0; j < runningMods.Count; j++)
 				{
-					ModContentPack modContentPack2 = LoadedModManager.runningMods[j];
+					ModContentPack modContentPack2 = runningMods[j];
 					if (!modContentPack2.AnyContentLoaded())
 					{
-						Log.Error("Mod " + modContentPack2.Name + " did not load any content. Following load folders were used:\n" + modContentPack2.foldersToLoadDescendingOrder.ToLineList("  - "), false);
+						Log.Error("Mod " + modContentPack2.Name + " did not load any content. Following load folders were used:\n" + modContentPack2.foldersToLoadDescendingOrder.ToLineList("  - "));
 					}
 				}
 			});
 		}
 
-		
 		public static void CreateModClasses()
 		{
-			IEnumerator<Type> enumerator = typeof(Mod).InstantiableDescendantsAndSelf().GetEnumerator();
+			foreach (Type type in typeof(Mod).InstantiableDescendantsAndSelf())
 			{
-				while (enumerator.MoveNext())
+				DeepProfiler.Start("Loading " + type + " mod class");
+				try
 				{
-					Type type = enumerator.Current;
-					DeepProfiler.Start("Loading " + type + " mod class");
-					try
+					if (!runningModClasses.ContainsKey(type))
 					{
-						if (!LoadedModManager.runningModClasses.ContainsKey(type))
-						{
-							ModContentPack modContentPack = (from modpack in LoadedModManager.runningMods
-							where modpack.assemblies.loadedAssemblies.Contains(type.Assembly)
-							select modpack).FirstOrDefault<ModContentPack>();
-							LoadedModManager.runningModClasses[type] = (Mod)Activator.CreateInstance(type, new object[]
-							{
-								modContentPack
-							});
-						}
+						ModContentPack modContentPack = runningMods.Where((ModContentPack modpack) => modpack.assemblies.loadedAssemblies.Contains(type.Assembly)).FirstOrDefault();
+						runningModClasses[type] = (Mod)Activator.CreateInstance(type, modContentPack);
 					}
-					catch (Exception ex)
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error while instantiating a mod of type ",
-							type,
-							": ",
-							ex
-						}), false);
-					}
-					finally
-					{
-						DeepProfiler.End();
-					}
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Error while instantiating a mod of type " + type + ": " + ex);
+				}
+				finally
+				{
+					DeepProfiler.End();
 				}
 			}
 		}
 
-		
 		public static List<LoadableXmlAsset> LoadModXML()
 		{
 			List<LoadableXmlAsset> list = new List<LoadableXmlAsset>();
-			for (int i = 0; i < LoadedModManager.runningMods.Count; i++)
+			for (int i = 0; i < runningMods.Count; i++)
 			{
-				ModContentPack modContentPack = LoadedModManager.runningMods[i];
+				ModContentPack modContentPack = runningMods[i];
 				DeepProfiler.Start("Loading " + modContentPack);
 				try
 				{
@@ -294,13 +235,7 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Could not load defs for mod ",
-						modContentPack.PackageIdPlayerFacing,
-						": ",
-						ex
-					}), false);
+					Log.Error("Could not load defs for mod " + modContentPack.PackageIdPlayerFacing + ": " + ex);
 				}
 				finally
 				{
@@ -310,44 +245,41 @@ namespace Verse
 			return list;
 		}
 
-		
 		public static void ApplyPatches(XmlDocument xmlDoc, Dictionary<XmlNode, LoadableXmlAsset> assetlookup)
 		{
-			foreach (PatchOperation patchOperation in LoadedModManager.runningMods.SelectMany((ModContentPack rm) => rm.Patches))
+			foreach (PatchOperation item in runningMods.SelectMany((ModContentPack rm) => rm.Patches))
 			{
 				try
 				{
-					patchOperation.Apply(xmlDoc);
+					item.Apply(xmlDoc);
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Error in patch.Apply(): " + arg, false);
+					Log.Error("Error in patch.Apply(): " + arg);
 				}
 			}
 		}
 
-		
 		public static XmlDocument CombineIntoUnifiedXML(List<LoadableXmlAsset> xmls, Dictionary<XmlNode, LoadableXmlAsset> assetlookup)
 		{
 			XmlDocument xmlDocument = new XmlDocument();
 			xmlDocument.AppendChild(xmlDocument.CreateElement("Defs"));
-			foreach (LoadableXmlAsset loadableXmlAsset in xmls)
+			foreach (LoadableXmlAsset xml in xmls)
 			{
-				if (loadableXmlAsset.xmlDoc == null || loadableXmlAsset.xmlDoc.DocumentElement == null)
+				if (xml.xmlDoc == null || xml.xmlDoc.DocumentElement == null)
 				{
-					Log.Error(string.Format("{0}: unknown parse failure", loadableXmlAsset.fullFolderPath + "/" + loadableXmlAsset.name), false);
+					Log.Error(string.Format("{0}: unknown parse failure", xml.fullFolderPath + "/" + xml.name));
 				}
 				else
 				{
-					if (loadableXmlAsset.xmlDoc.DocumentElement.Name != "Defs")
+					if (xml.xmlDoc.DocumentElement.Name != "Defs")
 					{
-						Log.Error(string.Format("{0}: root element named {1}; should be named Defs", loadableXmlAsset.fullFolderPath + "/" + loadableXmlAsset.name, loadableXmlAsset.xmlDoc.DocumentElement.Name), false);
+						Log.Error(string.Format("{0}: root element named {1}; should be named Defs", xml.fullFolderPath + "/" + xml.name, xml.xmlDoc.DocumentElement.Name));
 					}
-					foreach (object obj in loadableXmlAsset.xmlDoc.DocumentElement.ChildNodes)
+					foreach (XmlNode childNode in xml.xmlDoc.DocumentElement.ChildNodes)
 					{
-						XmlNode node = (XmlNode)obj;
-						XmlNode xmlNode = xmlDocument.ImportNode(node, true);
-						assetlookup[xmlNode] = loadableXmlAsset;
+						XmlNode xmlNode = xmlDocument.ImportNode(childNode, deep: true);
+						assetlookup[xmlNode] = xml;
 						xmlDocument.DocumentElement.AppendChild(xmlNode);
 					}
 				}
@@ -355,14 +287,13 @@ namespace Verse
 			return xmlDocument;
 		}
 
-		
 		public static void ParseAndProcessXML(XmlDocument xmlDoc, Dictionary<XmlNode, LoadableXmlAsset> assetlookup)
 		{
 			XmlNodeList childNodes = xmlDoc.DocumentElement.ChildNodes;
 			List<XmlNode> list = new List<XmlNode>();
-			foreach (object obj in childNodes)
+			foreach (object item in childNodes)
 			{
-				list.Add(obj as XmlNode);
+				list.Add(item as XmlNode);
 			}
 			DeepProfiler.Start("Loading asset nodes " + list.Count);
 			try
@@ -371,11 +302,11 @@ namespace Verse
 				{
 					if (list[i].NodeType == XmlNodeType.Element)
 					{
-						LoadableXmlAsset loadableXmlAsset = null;
+						LoadableXmlAsset value = null;
 						DeepProfiler.Start("assetlookup.TryGetValue");
 						try
 						{
-							assetlookup.TryGetValue(list[i], out loadableXmlAsset);
+							assetlookup.TryGetValue(list[i], out value);
 						}
 						finally
 						{
@@ -384,7 +315,7 @@ namespace Verse
 						DeepProfiler.Start("XmlInheritance.TryRegister");
 						try
 						{
-							XmlInheritance.TryRegister(list[i], (loadableXmlAsset != null) ? loadableXmlAsset.mod : null);
+							XmlInheritance.TryRegister(list[i], value?.mod);
 						}
 						finally
 						{
@@ -406,24 +337,24 @@ namespace Verse
 			{
 				DeepProfiler.End();
 			}
-			LoadedModManager.runningMods.FirstOrDefault<ModContentPack>();
+			runningMods.FirstOrDefault();
 			DeepProfiler.Start("Loading defs for " + list.Count + " nodes");
 			try
 			{
-				foreach (XmlNode xmlNode in list)
+				foreach (XmlNode item2 in list)
 				{
-					LoadableXmlAsset loadableXmlAsset2 = assetlookup.TryGetValue(xmlNode, null);
-					Def def = DirectXmlLoader.DefFromNode(xmlNode, loadableXmlAsset2);
+					LoadableXmlAsset loadableXmlAsset = assetlookup.TryGetValue(item2);
+					Def def = DirectXmlLoader.DefFromNode(item2, loadableXmlAsset);
 					if (def != null)
 					{
-						ModContentPack modContentPack = (loadableXmlAsset2 != null) ? loadableXmlAsset2.mod : null;
+						ModContentPack modContentPack = loadableXmlAsset?.mod;
 						if (modContentPack != null)
 						{
-							modContentPack.AddDef(def, loadableXmlAsset2.name);
+							modContentPack.AddDef(def, loadableXmlAsset.name);
 						}
 						else
 						{
-							LoadedModManager.patchedDefs.Add(def);
+							patchedDefs.Add(def);
 						}
 					}
 				}
@@ -434,72 +365,64 @@ namespace Verse
 			}
 		}
 
-		
 		public static void ClearCachedPatches()
 		{
-			foreach (ModContentPack modContentPack in LoadedModManager.runningMods)
+			foreach (ModContentPack runningMod in runningMods)
 			{
-				foreach (PatchOperation patchOperation in modContentPack.Patches)
+				foreach (PatchOperation patch in runningMod.Patches)
 				{
 					try
 					{
-						patchOperation.Complete(modContentPack.Name);
+						patch.Complete(runningMod.Name);
 					}
 					catch (Exception arg)
 					{
-						Log.Error("Error in patch.Complete(): " + arg, false);
+						Log.Error("Error in patch.Complete(): " + arg);
 					}
 				}
-				modContentPack.ClearPatchesCache();
+				runningMod.ClearPatchesCache();
 			}
 		}
 
-		
 		public static void ClearDestroy()
 		{
-			foreach (ModContentPack modContentPack in LoadedModManager.runningMods)
+			foreach (ModContentPack runningMod in runningMods)
 			{
 				try
 				{
-					modContentPack.ClearDestroy();
+					runningMod.ClearDestroy();
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Error in mod.ClearDestroy(): " + arg, false);
+					Log.Error("Error in mod.ClearDestroy(): " + arg);
 				}
 			}
-			LoadedModManager.runningMods.Clear();
+			runningMods.Clear();
 		}
 
-		
 		public static T GetMod<T>() where T : Mod
 		{
-			return LoadedModManager.GetMod(typeof(T)) as T;
+			return GetMod(typeof(T)) as T;
 		}
 
-		
 		public static Mod GetMod(Type type)
 		{
-			if (LoadedModManager.runningModClasses.ContainsKey(type))
+			if (runningModClasses.ContainsKey(type))
 			{
-				return LoadedModManager.runningModClasses[type];
+				return runningModClasses[type];
 			}
-			return (from kvp in LoadedModManager.runningModClasses
-			where type.IsAssignableFrom(kvp.Key)
-			select kvp).FirstOrDefault<KeyValuePair<Type, Mod>>().Value;
+			return runningModClasses.Where((KeyValuePair<Type, Mod> kvp) => type.IsAssignableFrom(kvp.Key)).FirstOrDefault().Value;
 		}
 
-		
 		private static string GetSettingsFilename(string modIdentifier, string modHandleName)
 		{
-			return Path.Combine(GenFilePaths.ConfigFolderPath, GenText.SanitizeFilename(string.Format("Mod_{0}_{1}.xml", modIdentifier, modHandleName)));
+			return Path.Combine(GenFilePaths.ConfigFolderPath, GenText.SanitizeFilename($"Mod_{modIdentifier}_{modHandleName}.xml"));
 		}
 
-		
 		public static T ReadModSettings<T>(string modIdentifier, string modHandleName) where T : ModSettings, new()
 		{
-			string settingsFilename = LoadedModManager.GetSettingsFilename(modIdentifier, modHandleName);
-			T t = default(T);
+			string settingsFilename = GetSettingsFilename(modIdentifier, modHandleName);
+			T target = null;
 			try
 			{
 				if (File.Exists(settingsFilename))
@@ -507,7 +430,7 @@ namespace Verse
 					Scribe.loader.InitLoading(settingsFilename);
 					try
 					{
-						Scribe_Deep.Look<T>(ref t, "ModSettings", Array.Empty<object>());
+						Scribe_Deep.Look(ref target, "ModSettings");
 					}
 					finally
 					{
@@ -517,37 +440,27 @@ namespace Verse
 			}
 			catch (Exception ex)
 			{
-				Log.Warning(string.Format("Caught exception while loading mod settings data for {0}. Generating fresh settings. The exception was: {1}", modIdentifier, ex.ToString()), false);
-				t = default(T);
+				Log.Warning($"Caught exception while loading mod settings data for {modIdentifier}. Generating fresh settings. The exception was: {ex.ToString()}");
+				target = null;
 			}
-			if (t == null)
+			if (target == null)
 			{
-				t = Activator.CreateInstance<T>();
+				return new T();
 			}
-			return t;
+			return target;
 		}
 
-		
 		public static void WriteModSettings(string modIdentifier, string modHandleName, ModSettings settings)
 		{
-			Scribe.saver.InitSaving(LoadedModManager.GetSettingsFilename(modIdentifier, modHandleName), "SettingsBlock");
+			Scribe.saver.InitSaving(GetSettingsFilename(modIdentifier, modHandleName), "SettingsBlock");
 			try
 			{
-				Scribe_Deep.Look<ModSettings>(ref settings, "ModSettings", Array.Empty<object>());
+				Scribe_Deep.Look(ref settings, "ModSettings");
 			}
 			finally
 			{
 				Scribe.saver.FinalizeSaving();
 			}
 		}
-
-		
-		private static List<ModContentPack> runningMods = new List<ModContentPack>();
-
-		
-		private static Dictionary<Type, Mod> runningModClasses = new Dictionary<Type, Mod>();
-
-		
-		private static List<Def> patchedDefs = new List<Def>();
 	}
 }

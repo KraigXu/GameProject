@@ -1,53 +1,42 @@
-﻿using System;
-using System.Reflection;
 using RimWorld;
+using System.Reflection;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Dialog_DebugSettingsMenu : Dialog_DebugOptionLister
 	{
-		
-		
-		public override bool IsDebug
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool IsDebug => true;
 
-		
 		public Dialog_DebugSettingsMenu()
 		{
-			this.forcePause = true;
+			forcePause = true;
 		}
 
-		
 		protected override void DoListingItems()
 		{
 			if (KeyBindingDefOf.Dev_ToggleDebugSettingsMenu.KeyDownEvent)
 			{
 				Event.current.Use();
-				this.Close(true);
+				Close();
 			}
 			Text.Font = GameFont.Small;
-			this.listing.Label("Gameplay", -1f, null);
-			foreach (FieldInfo fi in typeof(DebugSettings).GetFields())
+			listing.Label("Gameplay");
+			FieldInfo[] fields = typeof(DebugSettings).GetFields();
+			foreach (FieldInfo fi in fields)
 			{
-				this.DoField(fi);
+				DoField(fi);
 			}
-			this.listing.Gap(36f);
+			listing.Gap(36f);
 			Text.Font = GameFont.Small;
-			this.listing.Label("View", -1f, null);
-			foreach (FieldInfo fi2 in typeof(DebugViewSettings).GetFields())
+			listing.Label("View");
+			fields = typeof(DebugViewSettings).GetFields();
+			foreach (FieldInfo fi2 in fields)
 			{
-				this.DoField(fi2);
+				DoField(fi2);
 			}
 		}
 
-		
 		private void DoField(FieldInfo fi)
 		{
 			if (fi.IsLiteral)
@@ -55,12 +44,12 @@ namespace Verse
 				return;
 			}
 			string label = GenText.SplitCamelCase(fi.Name).CapitalizeFirst();
-			bool flag = (bool)fi.GetValue(null);
-			bool flag2 = flag;
-			base.CheckboxLabeledDebug(label, ref flag);
-			if (flag != flag2)
+			bool checkOn = (bool)fi.GetValue(null);
+			bool flag = checkOn;
+			CheckboxLabeledDebug(label, ref checkOn);
+			if (checkOn != flag)
 			{
-				fi.SetValue(null, flag);
+				fi.SetValue(null, checkOn);
 				MethodInfo method = fi.DeclaringType.GetMethod(fi.Name + "Toggled", BindingFlags.Static | BindingFlags.Public);
 				if (method != null)
 				{

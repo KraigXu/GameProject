@@ -1,22 +1,13 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ColorGenerator_StandardApparel : ColorGenerator
 	{
-		
-		
-		public override Color ExemplaryColor
-		{
-			get
-			{
-				return new Color(0.7f, 0.7f, 0.7f);
-			}
-		}
+		private const float DarkAmp = 0.4f;
 
-		
+		public override Color ExemplaryColor => new Color(0.7f, 0.7f, 0.7f);
+
 		public override Color NewRandomizedColor()
 		{
 			if (Rand.Value < 0.1f)
@@ -40,8 +31,5 @@ namespace Verse
 			}
 			return white;
 		}
-
-		
-		private const float DarkAmp = 0.4f;
 	}
 }

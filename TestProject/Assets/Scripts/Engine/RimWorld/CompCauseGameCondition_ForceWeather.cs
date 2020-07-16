@@ -1,62 +1,54 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompCauseGameCondition_ForceWeather : CompCauseGameCondition
 	{
-		
+		public WeatherDef weather;
+
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.weather = base.Props.conditionDef.weatherDef;
+			weather = base.Props.conditionDef.weatherDef;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Defs.Look<WeatherDef>(ref this.weather, "weather");
+			Scribe_Defs.Look(ref weather, "weather");
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				yield break;
-			}
-			yield return new Command_Action
-			{
-				defaultLabel = this.weather.LabelCap,
-				action = delegate
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = weather.LabelCap;
+				command_Action.action = delegate
 				{
 					List<WeatherDef> allDefsListForReading = DefDatabase<WeatherDef>.AllDefsListForReading;
-					int num = allDefsListForReading.FindIndex((WeatherDef w) => w == this.weather);
+					int num = allDefsListForReading.FindIndex((WeatherDef w) => w == weather);
 					num++;
 					if (num >= allDefsListForReading.Count)
 					{
 						num = 0;
 					}
-					this.weather = allDefsListForReading[num];
-					base.ReSetupAllConditions();
-				},
-				hotKey = KeyBindingDefOf.Misc1
-			};
-			yield break;
+					weather = allDefsListForReading[num];
+					ReSetupAllConditions();
+				};
+				command_Action.hotKey = KeyBindingDefOf.Misc1;
+				yield return command_Action;
+			}
 		}
 
-		
 		protected override void SetupCondition(GameCondition condition, Map map)
 		{
 			base.SetupCondition(condition, map);
-			((GameCondition_ForceWeather)condition).weather = this.weather;
+			((GameCondition_ForceWeather)condition).weather = weather;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			string text = base.CompInspectStringExtra();
@@ -64,18 +56,12 @@ namespace RimWorld
 			{
 				text += "\n";
 			}
-			return text + "Weather".Translate() + ": " + this.weather.LabelCap;
+			return text + "Weather".Translate() + ": " + weather.LabelCap;
 		}
 
-		
 		public override void RandomizeSettings()
 		{
-			this.weather = (from x in DefDatabase<WeatherDef>.AllDefsListForReading
-			where x.isBad
-			select x).RandomElement<WeatherDef>();
+			weather = DefDatabase<WeatherDef>.AllDefsListForReading.Where((WeatherDef x) => x.isBad).RandomElement();
 		}
-
-		
-		public WeatherDef weather;
 	}
 }

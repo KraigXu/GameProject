@@ -1,40 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using RimWorld.BaseGen;
 using RimWorld.IO;
 using RimWorld.QuestGen;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class PlayDataLoader
 	{
-
-
 		private static bool loadedInt;
-		public static bool Loaded
-		{
-			get
-			{
-				return PlayDataLoader.loadedInt;
-			}
-		}
 
-		
+		public static bool Loaded => loadedInt;
+
 		public static void LoadAllPlayData(bool recovering = false)
 		{
-			if (PlayDataLoader.loadedInt)
+			if (loadedInt)
 			{
-				Log.Error("Loading play data when already loaded. Call ClearAllPlayData first.", false);
+				Log.Error("Loading play data when already loaded. Call ClearAllPlayData first.");
 				return;
 			}
 			DeepProfiler.Start("LoadAllPlayData");
 			try
 			{
-				PlayDataLoader.DoPlayLoad();
+				DoPlayLoad();
 			}
 			catch (Exception arg)
 			{
@@ -44,44 +35,40 @@ namespace Verse
 				}
 				if (recovering)
 				{
-					Log.Warning("Could not recover from errors loading play data. Giving up.", false);
+					Log.Warning("Could not recover from errors loading play data. Giving up.");
 					throw;
 				}
 				IEnumerable<ModMetaData> activeModsInLoadOrder = ModsConfig.ActiveModsInLoadOrder;
-				if (!activeModsInLoadOrder.Any((ModMetaData x) => !x.Official))
+				if (!activeModsInLoadOrder.Any((ModMetaData x) => !x.Official) && activeModsInLoadOrder.Any((ModMetaData x) => x.IsCoreMod))
 				{
-					if (activeModsInLoadOrder.Any((ModMetaData x) => x.IsCoreMod))
-					{
-						throw;
-					}
+					throw;
 				}
-				Log.Warning("Caught exception while loading play data but there are active mods other than Core. Resetting mods config and trying again.\nThe exception was: " + arg, false);
+				Log.Warning("Caught exception while loading play data but there are active mods other than Core. Resetting mods config and trying again.\nThe exception was: " + arg);
 				try
 				{
-					PlayDataLoader.ClearAllPlayData();
+					ClearAllPlayData();
 				}
 				catch
 				{
-					Log.Warning("Caught exception while recovering from errors and trying to clear all play data. Ignoring it.\nThe exception was: " + arg, false);
+					Log.Warning("Caught exception while recovering from errors and trying to clear all play data. Ignoring it.\nThe exception was: " + arg);
 				}
 				ModsConfig.Reset();
 				DirectXmlCrossRefLoader.Clear();
-				PlayDataLoader.LoadAllPlayData(true);
+				LoadAllPlayData(recovering: true);
 				return;
 			}
 			finally
 			{
 				DeepProfiler.End();
 			}
-			PlayDataLoader.loadedInt = true;
+			loadedInt = true;
 			if (recovering)
 			{
-				Log.Message("Successfully recovered from errors and loaded play data.", false);
+				Log.Message("Successfully recovered from errors and loaded play data.");
 				DelayedErrorWindowRequest.Add("RecoveredFromErrorsText".Translate(), "RecoveredFromErrorsDialogTitle".Translate());
 			}
 		}
 
-		
 		private static void DoPlayLoad()
 		{
 			DeepProfiler.Start("GraphicDatabase.Clear()");
@@ -115,9 +102,9 @@ namespace Verse
 			DeepProfiler.Start("Copy all Defs from mods to global databases.");
 			try
 			{
-				foreach (Type genericParam in typeof(Def).AllSubclasses())
+				foreach (Type item in typeof(Def).AllSubclasses())
 				{
-					GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam, "AddAllInMods");
+					GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), item, "AddAllInMods");
 				}
 			}
 			finally
@@ -136,7 +123,7 @@ namespace Verse
 			DeepProfiler.Start("Rebind defs (early).");
 			try
 			{
-				DefOfHelper.RebindAllDefOfs(true);
+				DefOfHelper.RebindAllDefOfs(earlyTryMode: true);
 			}
 			finally
 			{
@@ -182,7 +169,7 @@ namespace Verse
 			DeepProfiler.Start("Rebind DefOfs (final).");
 			try
 			{
-				DefOfHelper.RebindAllDefOfs(false);
+				DefOfHelper.RebindAllDefOfs(earlyTryMode: false);
 			}
 			finally
 			{
@@ -208,7 +195,7 @@ namespace Verse
 				GraphicDatabaseHeadRecords.Reset();
 				DateReadout.Reset();
 				ResearchProjectDef.GenerateNonOverlappingCoordinates();
-				BaseGenCore.Reset();
+				BaseGen.Reset();
 				ResourceCounter.ResetDefs();
 				ApparelProperties.ResetStaticData();
 				WildPlantSpawner.ResetStaticData();
@@ -243,7 +230,7 @@ namespace Verse
 				DeepProfiler.Start("ThingCategoryDef resolver");
 				try
 				{
-					DefDatabase<ThingCategoryDef>.ResolveAllReferences(true, false);
+					DefDatabase<ThingCategoryDef>.ResolveAllReferences();
 				}
 				finally
 				{
@@ -253,7 +240,7 @@ namespace Verse
 				try
 				{
 					DeepProfiler.enabled = false;
-					DefDatabase<RecipeDef>.ResolveAllReferences(true, true);
+					DefDatabase<RecipeDef>.ResolveAllReferences(onlyExactlyMyType: true, parallel: true);
 					DeepProfiler.enabled = true;
 				}
 				finally
@@ -263,15 +250,11 @@ namespace Verse
 				DeepProfiler.Start("Static resolver calls");
 				try
 				{
-					foreach (Type type in typeof(Def).AllSubclasses())
+					foreach (Type item2 in typeof(Def).AllSubclasses())
 					{
-						if (!(type == typeof(ThingDef)) && !(type == typeof(ThingCategoryDef)) && !(type == typeof(RecipeDef)))
+						if (!(item2 == typeof(ThingDef)) && !(item2 == typeof(ThingCategoryDef)) && !(item2 == typeof(RecipeDef)))
 						{
-							GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), type, "ResolveAllReferences", new object[]
-							{
-								true,
-								false
-							});
+							GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), item2, "ResolveAllReferences", true, false);
 						}
 					}
 				}
@@ -282,7 +265,7 @@ namespace Verse
 				DeepProfiler.Start("ThingDef resolver");
 				try
 				{
-					DefDatabase<ThingDef>.ResolveAllReferences(true, false);
+					DefDatabase<ThingDef>.ResolveAllReferences();
 				}
 				finally
 				{
@@ -318,9 +301,9 @@ namespace Verse
 				DeepProfiler.Start("Error check all defs.");
 				try
 				{
-					foreach (Type genericParam2 in typeof(Def).AllSubclasses())
+					foreach (Type item3 in typeof(Def).AllSubclasses())
 					{
-						GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam2, "ErrorCheckAllDefs");
+						GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), item3, "ErrorCheckAllDefs");
 					}
 				}
 				finally
@@ -400,22 +383,19 @@ namespace Verse
 			});
 		}
 
-		
 		public static void ClearAllPlayData()
 		{
 			LanguageDatabase.Clear();
 			LoadedModManager.ClearDestroy();
-			foreach (Type genericParam in typeof(Def).AllSubclasses())
+			foreach (Type item in typeof(Def).AllSubclasses())
 			{
-				GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), genericParam, "Clear");
+				GenGeneric.InvokeStaticMethodOnGenericType(typeof(DefDatabase<>), item, "Clear");
 			}
 			ThingCategoryNodeDatabase.Clear();
 			BackstoryDatabase.Clear();
 			SolidBioDatabase.Clear();
 			Current.Game = null;
-			PlayDataLoader.loadedInt = false;
+			loadedInt = false;
 		}
-
-
 	}
 }

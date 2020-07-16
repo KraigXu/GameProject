@@ -1,18 +1,14 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SocialProperness
 	{
-		
 		public static bool IsSociallyProper(this Thing t, Pawn p)
 		{
-			return t.IsSociallyProper(p, p.IsPrisonerOfColony, false);
+			return t.IsSociallyProper(p, p.IsPrisonerOfColony);
 		}
 
-		
 		public static bool IsSociallyProper(this Thing t, Pawn p, bool forPrisoner, bool animalsCare = false)
 		{
 			if (!animalsCare && p != null && !p.RaceProps.Humanlike)
@@ -30,7 +26,11 @@ namespace RimWorld
 			IntVec3 intVec = t.def.hasInteractionCell ? t.InteractionCell : t.Position;
 			if (forPrisoner)
 			{
-				return p == null || intVec.GetRoom(t.Map, RegionType.Set_Passable) == p.GetRoom(RegionType.Set_Passable);
+				if (p != null)
+				{
+					return intVec.GetRoom(t.Map) == p.GetRoom();
+				}
+				return true;
 			}
 			return !intVec.IsInPrisonCell(t.Map);
 		}

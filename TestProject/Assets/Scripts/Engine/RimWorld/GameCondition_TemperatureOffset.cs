@@ -1,32 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class GameCondition_TemperatureOffset : GameCondition
 	{
-		
+		public float tempOffset;
+
 		public override void Init()
 		{
 			base.Init();
-			this.tempOffset = this.def.temperatureOffset;
+			tempOffset = def.temperatureOffset;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.tempOffset, "tempOffset", 0f, false);
+			Scribe_Values.Look(ref tempOffset, "tempOffset", 0f);
 		}
 
-		
 		public override float TemperatureOffset()
 		{
-			return this.tempOffset;
+			return tempOffset;
 		}
-
-		
-		public float tempOffset;
 	}
 }

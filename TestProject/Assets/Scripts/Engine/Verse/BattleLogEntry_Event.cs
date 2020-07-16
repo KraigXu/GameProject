@@ -1,149 +1,143 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse.Grammar;
 
 namespace Verse
 {
-	
 	public class BattleLogEntry_Event : LogEntry
 	{
-		
-		
+		protected RulePackDef eventDef;
+
+		protected Pawn subjectPawn;
+
+		protected ThingDef subjectThing;
+
+		protected Pawn initiatorPawn;
+
+		protected ThingDef initiatorThing;
+
 		private string SubjectName
 		{
 			get
 			{
-				if (this.subjectPawn == null)
+				if (subjectPawn == null)
 				{
 					return "null";
 				}
-				return this.subjectPawn.LabelShort;
+				return subjectPawn.LabelShort;
 			}
 		}
 
-		
-		public BattleLogEntry_Event() : base(null)
+		public BattleLogEntry_Event()
 		{
 		}
 
-		
-		public BattleLogEntry_Event(Thing subject, RulePackDef eventDef, Thing initiator) : base(null)
+		public BattleLogEntry_Event(Thing subject, RulePackDef eventDef, Thing initiator)
 		{
 			if (subject is Pawn)
 			{
-				this.subjectPawn = (subject as Pawn);
+				subjectPawn = (subject as Pawn);
 			}
 			else if (subject != null)
 			{
-				this.subjectThing = subject.def;
+				subjectThing = subject.def;
 			}
 			if (initiator is Pawn)
 			{
-				this.initiatorPawn = (initiator as Pawn);
+				initiatorPawn = (initiator as Pawn);
 			}
 			else if (initiator != null)
 			{
-				this.initiatorThing = initiator.def;
+				initiatorThing = initiator.def;
 			}
 			this.eventDef = eventDef;
 		}
 
-		
 		public override bool Concerns(Thing t)
 		{
-			return t == this.subjectPawn || t == this.initiatorPawn;
+			if (t != subjectPawn)
+			{
+				return t == initiatorPawn;
+			}
+			return true;
 		}
 
-		
 		public override IEnumerable<Thing> GetConcerns()
 		{
-			if (this.subjectPawn != null)
+			if (subjectPawn != null)
 			{
-				yield return this.subjectPawn;
+				yield return subjectPawn;
 			}
-			if (this.initiatorPawn != null)
+			if (initiatorPawn != null)
 			{
-				yield return this.initiatorPawn;
+				yield return initiatorPawn;
 			}
-			yield break;
 		}
 
-		
 		public override bool CanBeClickedFromPOV(Thing pov)
 		{
-			return (pov == this.subjectPawn && CameraJumper.CanJump(this.initiatorPawn)) || (pov == this.initiatorPawn && CameraJumper.CanJump(this.subjectPawn));
+			if (pov != subjectPawn || !CameraJumper.CanJump(initiatorPawn))
+			{
+				if (pov == initiatorPawn)
+				{
+					return CameraJumper.CanJump(subjectPawn);
+				}
+				return false;
+			}
+			return true;
 		}
 
-		
 		public override void ClickedFromPOV(Thing pov)
 		{
-			if (pov == this.subjectPawn)
+			if (pov == subjectPawn)
 			{
-				CameraJumper.TryJumpAndSelect(this.initiatorPawn);
+				CameraJumper.TryJumpAndSelect(initiatorPawn);
 				return;
 			}
-			if (pov == this.initiatorPawn)
+			if (pov == initiatorPawn)
 			{
-				CameraJumper.TryJumpAndSelect(this.subjectPawn);
+				CameraJumper.TryJumpAndSelect(subjectPawn);
 				return;
 			}
 			throw new NotImplementedException();
 		}
 
-		
 		protected override GrammarRequest GenerateGrammarRequest()
 		{
 			GrammarRequest result = base.GenerateGrammarRequest();
-			result.Includes.Add(this.eventDef);
-			if (this.subjectPawn != null)
+			result.Includes.Add(eventDef);
+			if (subjectPawn != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForPawn("SUBJECT", this.subjectPawn, result.Constants, true, true));
+				result.Rules.AddRange(GrammarUtility.RulesForPawn("SUBJECT", subjectPawn, result.Constants));
 			}
-			else if (this.subjectThing != null)
+			else if (subjectThing != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("SUBJECT", this.subjectThing));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("SUBJECT", subjectThing));
 			}
-			if (this.initiatorPawn != null)
+			if (initiatorPawn != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForPawn("INITIATOR", this.initiatorPawn, result.Constants, true, true));
+				result.Rules.AddRange(GrammarUtility.RulesForPawn("INITIATOR", initiatorPawn, result.Constants));
 			}
-			else if (this.initiatorThing != null)
+			else if (initiatorThing != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("INITIATOR", this.initiatorThing));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("INITIATOR", initiatorThing));
 			}
 			return result;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<RulePackDef>(ref this.eventDef, "eventDef");
-			Scribe_References.Look<Pawn>(ref this.subjectPawn, "subjectPawn", true);
-			Scribe_Defs.Look<ThingDef>(ref this.subjectThing, "subjectThing");
-			Scribe_References.Look<Pawn>(ref this.initiatorPawn, "initiatorPawn", true);
-			Scribe_Defs.Look<ThingDef>(ref this.initiatorThing, "initiatorThing");
+			Scribe_Defs.Look(ref eventDef, "eventDef");
+			Scribe_References.Look(ref subjectPawn, "subjectPawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref subjectThing, "subjectThing");
+			Scribe_References.Look(ref initiatorPawn, "initiatorPawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref initiatorThing, "initiatorThing");
 		}
 
-		
 		public override string ToString()
 		{
-			return this.eventDef.defName + ": " + this.subjectPawn;
+			return eventDef.defName + ": " + subjectPawn;
 		}
-
-		
-		protected RulePackDef eventDef;
-
-		
-		protected Pawn subjectPawn;
-
-		
-		protected ThingDef subjectThing;
-
-		
-		protected Pawn initiatorPawn;
-
-		
-		protected ThingDef initiatorThing;
 	}
 }

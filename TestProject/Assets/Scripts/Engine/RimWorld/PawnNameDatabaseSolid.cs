@@ -1,54 +1,43 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnNameDatabaseSolid
 	{
-		
+		private static Dictionary<GenderPossibility, List<NameTriple>> solidNames;
+
+		private const float PreferredNameChance = 0.5f;
+
 		static PawnNameDatabaseSolid()
 		{
-			foreach (object obj in Enum.GetValues(typeof(GenderPossibility)))
+			solidNames = new Dictionary<GenderPossibility, List<NameTriple>>();
+			foreach (GenderPossibility value in Enum.GetValues(typeof(GenderPossibility)))
 			{
-				GenderPossibility key = (GenderPossibility)obj;
-				PawnNameDatabaseSolid.solidNames.Add(key, new List<NameTriple>());
+				solidNames.Add(value, new List<NameTriple>());
 			}
 		}
 
-		
 		public static void AddPlayerContentName(NameTriple newName, GenderPossibility genderPos)
 		{
-			PawnNameDatabaseSolid.solidNames[genderPos].Add(newName);
+			solidNames[genderPos].Add(newName);
 		}
 
-		
 		public static List<NameTriple> GetListForGender(GenderPossibility gp)
 		{
-			return PawnNameDatabaseSolid.solidNames[gp];
+			return solidNames[gp];
 		}
 
-		
 		public static IEnumerable<NameTriple> AllNames()
 		{
-			foreach (KeyValuePair<GenderPossibility, List<NameTriple>> keyValuePair in PawnNameDatabaseSolid.solidNames)
+			foreach (KeyValuePair<GenderPossibility, List<NameTriple>> solidName in solidNames)
 			{
-				foreach (NameTriple nameTriple in keyValuePair.Value)
+				foreach (NameTriple item in solidName.Value)
 				{
-					yield return nameTriple;
+					yield return item;
 				}
-				List<NameTriple>.Enumerator enumerator2 = default(List<NameTriple>.Enumerator);
 			}
-			Dictionary<GenderPossibility, List<NameTriple>>.Enumerator enumerator = default(Dictionary<GenderPossibility, List<NameTriple>>.Enumerator);
-			yield break;
-			yield break;
 		}
-
-		
-		private static Dictionary<GenderPossibility, List<NameTriple>> solidNames = new Dictionary<GenderPossibility, List<NameTriple>>();
-
-		
-		private const float PreferredNameChance = 0.5f;
 	}
 }

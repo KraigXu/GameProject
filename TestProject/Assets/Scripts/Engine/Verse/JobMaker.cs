@@ -1,12 +1,11 @@
-﻿using System;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class JobMaker
 	{
-		
+		private const int MaxJobPoolSize = 1000;
+
 		public static Job MakeJob()
 		{
 			Job job = SimplePool<Job>.Get();
@@ -14,37 +13,33 @@ namespace Verse
 			return job;
 		}
 
-		
 		public static Job MakeJob(JobDef def)
 		{
-			Job job = JobMaker.MakeJob();
+			Job job = MakeJob();
 			job.def = def;
 			return job;
 		}
 
-		
 		public static Job MakeJob(JobDef def, LocalTargetInfo targetA)
 		{
-			Job job = JobMaker.MakeJob();
+			Job job = MakeJob();
 			job.def = def;
 			job.targetA = targetA;
 			return job;
 		}
 
-		
 		public static Job MakeJob(JobDef def, LocalTargetInfo targetA, LocalTargetInfo targetB)
 		{
-			Job job = JobMaker.MakeJob();
+			Job job = MakeJob();
 			job.def = def;
 			job.targetA = targetA;
 			job.targetB = targetB;
 			return job;
 		}
 
-		
 		public static Job MakeJob(JobDef def, LocalTargetInfo targetA, LocalTargetInfo targetB, LocalTargetInfo targetC)
 		{
-			Job job = JobMaker.MakeJob();
+			Job job = MakeJob();
 			job.def = def;
 			job.targetA = targetA;
 			job.targetB = targetB;
@@ -52,10 +47,9 @@ namespace Verse
 			return job;
 		}
 
-		
 		public static Job MakeJob(JobDef def, LocalTargetInfo targetA, int expiryInterval, bool checkOverrideOnExpiry = false)
 		{
-			Job job = JobMaker.MakeJob();
+			Job job = MakeJob();
 			job.def = def;
 			job.targetA = targetA;
 			job.expiryInterval = expiryInterval;
@@ -63,32 +57,22 @@ namespace Verse
 			return job;
 		}
 
-		
 		public static Job MakeJob(JobDef def, int expiryInterval, bool checkOverrideOnExpiry = false)
 		{
-			Job job = JobMaker.MakeJob();
+			Job job = MakeJob();
 			job.def = def;
 			job.expiryInterval = expiryInterval;
 			job.checkOverrideOnExpire = checkOverrideOnExpiry;
 			return job;
 		}
 
-		
 		public static void ReturnToPool(Job job)
 		{
-			if (job == null)
+			if (job != null && SimplePool<Job>.FreeItemsCount < 1000)
 			{
-				return;
+				job.Clear();
+				SimplePool<Job>.Return(job);
 			}
-			if (SimplePool<Job>.FreeItemsCount >= 1000)
-			{
-				return;
-			}
-			job.Clear();
-			SimplePool<Job>.Return(job);
 		}
-
-		
-		private const int MaxJobPoolSize = 1000;
 	}
 }

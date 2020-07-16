@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,36 +5,25 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_TakeToBed : JobDriver
 	{
-		
-		
-		protected Pawn Takee
-		{
-			get
-			{
-				return (Pawn)this.job.GetTarget(TargetIndex.A).Thing;
-			}
-		}
+		private const TargetIndex TakeeIndex = TargetIndex.A;
 
-		
-		
-		protected Building_Bed DropBed
-		{
-			get
-			{
-				return (Building_Bed)this.job.GetTarget(TargetIndex.B).Thing;
-			}
-		}
+		private const TargetIndex BedIndex = TargetIndex.B;
 
-		
+		protected Pawn Takee => (Pawn)job.GetTarget(TargetIndex.A).Thing;
+
+		protected Building_Bed DropBed => (Building_Bed)job.GetTarget(TargetIndex.B).Thing;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.Takee, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.DropBed, this.job, this.DropBed.SleepingSlotsCount, 0, null, errorOnFailed);
+			if (pawn.Reserve(Takee, job, 1, -1, null, errorOnFailed))
+			{
+				return pawn.Reserve(DropBed, job, DropBed.SleepingSlotsCount, 0, null, errorOnFailed);
+			}
+			return false;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDestroyedOrNull(TargetIndex.A);
@@ -43,125 +31,112 @@ namespace RimWorld
 			this.FailOnAggroMentalStateAndHostile(TargetIndex.A);
 			this.FailOn(delegate
 			{
-				if (this.job.def.makeTargetPrisoner)
+				if (job.def.makeTargetPrisoner)
 				{
-					if (!this.DropBed.ForPrisoners)
+					if (!DropBed.ForPrisoners)
 					{
 						return true;
 					}
 				}
-				else if (this.DropBed.ForPrisoners != this.Takee.IsPrisoner)
+				else if (DropBed.ForPrisoners != Takee.IsPrisoner)
 				{
 					return true;
 				}
 				return false;
 			});
 			yield return Toils_Bed.ClaimBedIfNonMedical(TargetIndex.B, TargetIndex.A);
-			base.AddFinishAction(delegate
+			AddFinishAction(delegate
 			{
-				if (this.job.def.makeTargetPrisoner && this.Takee.ownership.OwnedBed == this.DropBed && this.Takee.Position != RestUtility.GetBedSleepingSlotPosFor(this.Takee, this.DropBed))
+				if (job.def.makeTargetPrisoner && Takee.ownership.OwnedBed == DropBed && Takee.Position != RestUtility.GetBedSleepingSlotPosFor(Takee, DropBed))
 				{
-					this.Takee.ownership.UnclaimBed();
+					Takee.ownership.UnclaimBed();
 				}
 			});
-			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.A).FailOnDespawnedNullOrForbidden(TargetIndex.B).FailOn(() => this.job.def == JobDefOf.Arrest && !this.Takee.CanBeArrestedBy(this.pawn)).FailOn(() => !this.pawn.CanReach(this.DropBed, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn)).FailOn(() => (this.job.def == JobDefOf.Rescue || this.job.def == JobDefOf.Capture) && !this.Takee.Downed).FailOnSomeonePhysicallyInteracting(TargetIndex.A);
-			yield return new Toil
+			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.A).FailOnDespawnedNullOrForbidden(TargetIndex.B)
+				.FailOn(() => job.def == JobDefOf.Arrest && !Takee.CanBeArrestedBy(pawn))
+				.FailOn(() => !pawn.CanReach(DropBed, PathEndMode.OnCell, Danger.Deadly))
+				.FailOn(() => (job.def == JobDefOf.Rescue || job.def == JobDefOf.Capture) && !Takee.Downed)
+				.FailOnSomeonePhysicallyInteracting(TargetIndex.A);
+			Toil toil = new Toil();
+			toil.initAction = delegate
 			{
-				initAction = delegate
+				if (job.def.makeTargetPrisoner)
 				{
-					if (this.job.def.makeTargetPrisoner)
+					Pawn pawn = (Pawn)job.targetA.Thing;
+					pawn.GetLord()?.Notify_PawnAttemptArrested(pawn);
+					GenClamor.DoClamor(pawn, 10f, ClamorDefOf.Harm);
+					if (job.def == JobDefOf.Arrest && !pawn.CheckAcceptArrest(base.pawn))
 					{
-						Pawn pawn = (Pawn)this.job.targetA.Thing;
-						Lord lord = pawn.GetLord();
-						if (lord != null)
-						{
-							lord.Notify_PawnAttemptArrested(pawn);
-						}
-						GenClamor.DoClamor(pawn, 10f, ClamorDefOf.Harm);
-						if (this.job.def == JobDefOf.Arrest && !pawn.CheckAcceptArrest(this.pawn))
-						{
-							this.pawn.jobs.EndCurrentJob(JobCondition.Incompletable, true, true);
-						}
-						if (!pawn.IsPrisoner)
-						{
-							QuestUtility.SendQuestTargetSignals(pawn.questTags, "Arrested", pawn.Named("SUBJECT"));
-						}
+						base.pawn.jobs.EndCurrentJob(JobCondition.Incompletable);
+					}
+					if (!pawn.IsPrisoner)
+					{
+						QuestUtility.SendQuestTargetSignals(pawn.questTags, "Arrested", pawn.Named("SUBJECT"));
 					}
 				}
 			};
-			Toil toil = Toils_Haul.StartCarryThing(TargetIndex.A, false, false, false).FailOnNonMedicalBedNotOwned(TargetIndex.B, TargetIndex.A);
-			toil.AddPreInitAction(new Action(this.CheckMakeTakeeGuest));
 			yield return toil;
+			Toil toil2 = Toils_Haul.StartCarryThing(TargetIndex.A).FailOnNonMedicalBedNotOwned(TargetIndex.B, TargetIndex.A);
+			toil2.AddPreInitAction(CheckMakeTakeeGuest);
+			yield return toil2;
 			yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch);
-			yield return new Toil
+			Toil toil3 = new Toil();
+			toil3.initAction = delegate
 			{
-				initAction = delegate
+				CheckMakeTakeePrisoner();
+				if (Takee.playerSettings == null)
 				{
-					this.CheckMakeTakeePrisoner();
-					if (this.Takee.playerSettings == null)
-					{
-						this.Takee.playerSettings = new Pawn_PlayerSettings(this.Takee);
-					}
+					Takee.playerSettings = new Pawn_PlayerSettings(Takee);
 				}
 			};
+			yield return toil3;
 			yield return Toils_Reserve.Release(TargetIndex.B);
-			yield return new Toil
+			Toil toil4 = new Toil();
+			toil4.initAction = delegate
 			{
-				initAction = delegate
+				IntVec3 position = DropBed.Position;
+				pawn.carryTracker.TryDropCarriedThing(position, ThingPlaceMode.Direct, out Thing _);
+				if (!DropBed.Destroyed && (DropBed.OwnersForReading.Contains(Takee) || (DropBed.Medical && DropBed.AnyUnoccupiedSleepingSlot) || Takee.ownership == null))
 				{
-					IntVec3 position = this.DropBed.Position;
-					Thing thing;
-					this.pawn.carryTracker.TryDropCarriedThing(position, ThingPlaceMode.Direct, out thing, null);
-					if (!this.DropBed.Destroyed && (this.DropBed.OwnersForReading.Contains(this.Takee) || (this.DropBed.Medical && this.DropBed.AnyUnoccupiedSleepingSlot) || this.Takee.ownership == null))
+					Takee.jobs.Notify_TuckedIntoBed(DropBed);
+					if (Takee.RaceProps.Humanlike && job.def != JobDefOf.Arrest && !Takee.IsPrisonerOfColony)
 					{
-						this.Takee.jobs.Notify_TuckedIntoBed(this.DropBed);
-						if (this.Takee.RaceProps.Humanlike && this.job.def != JobDefOf.Arrest && !this.Takee.IsPrisonerOfColony)
-						{
-							this.Takee.relations.Notify_RescuedBy(this.pawn);
-						}
-						this.Takee.mindState.Notify_TuckedIntoBed();
+						Takee.relations.Notify_RescuedBy(pawn);
 					}
-					if (this.Takee.IsPrisonerOfColony)
-					{
-						LessonAutoActivator.TeachOpportunity(ConceptDefOf.PrisonerTab, this.Takee, OpportunityType.GoodToKnow);
-					}
-				},
-				defaultCompleteMode = ToilCompleteMode.Instant
+					Takee.mindState.Notify_TuckedIntoBed();
+				}
+				if (Takee.IsPrisonerOfColony)
+				{
+					LessonAutoActivator.TeachOpportunity(ConceptDefOf.PrisonerTab, Takee, OpportunityType.GoodToKnow);
+				}
 			};
-			yield break;
+			toil4.defaultCompleteMode = ToilCompleteMode.Instant;
+			yield return toil4;
 		}
 
-		
 		private void CheckMakeTakeePrisoner()
 		{
-			if (this.job.def.makeTargetPrisoner)
+			if (job.def.makeTargetPrisoner)
 			{
-				if (this.Takee.guest.Released)
+				if (Takee.guest.Released)
 				{
-					this.Takee.guest.Released = false;
-					this.Takee.guest.interactionMode = PrisonerInteractionModeDefOf.NoInteraction;
-					GenGuest.RemoveHealthyPrisonerReleasedThoughts(this.Takee);
+					Takee.guest.Released = false;
+					Takee.guest.interactionMode = PrisonerInteractionModeDefOf.NoInteraction;
+					GenGuest.RemoveHealthyPrisonerReleasedThoughts(Takee);
 				}
-				if (!this.Takee.IsPrisonerOfColony)
+				if (!Takee.IsPrisonerOfColony)
 				{
-					this.Takee.guest.CapturedBy(Faction.OfPlayer, this.pawn);
+					Takee.guest.CapturedBy(Faction.OfPlayer, pawn);
 				}
 			}
 		}
 
-		
 		private void CheckMakeTakeeGuest()
 		{
-			if (!this.job.def.makeTargetPrisoner && this.Takee.Faction != Faction.OfPlayer && this.Takee.HostFaction != Faction.OfPlayer && this.Takee.guest != null && !this.Takee.IsWildMan())
+			if (!job.def.makeTargetPrisoner && Takee.Faction != Faction.OfPlayer && Takee.HostFaction != Faction.OfPlayer && Takee.guest != null && !Takee.IsWildMan())
 			{
-				this.Takee.guest.SetGuestStatus(Faction.OfPlayer, false);
+				Takee.guest.SetGuestStatus(Faction.OfPlayer);
 			}
 		}
-
-		
-		private const TargetIndex TakeeIndex = TargetIndex.A;
-
-		
-		private const TargetIndex BedIndex = TargetIndex.B;
 	}
 }

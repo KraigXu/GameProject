@@ -1,29 +1,46 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class CompPowerPlantWater : CompPowerPlant
 	{
-		
-		
+		private float spinPosition;
+
+		private bool cacheDirty = true;
+
+		private bool waterUsable;
+
+		private bool waterDoubleUsed;
+
+		private float spinRate = 1f;
+
+		private const float PowerFactorIfWaterDoubleUsed = 0.3f;
+
+		private const float SpinRateFactor = 0.006666667f;
+
+		private const float BladeOffset = 2.36f;
+
+		private const int BladeCount = 9;
+
+		public static readonly Material BladesMat = MaterialPool.MatFrom("Things/Building/Power/WatermillGenerator/WatermillGeneratorBlades");
+
 		protected override float DesiredPowerOutput
 		{
 			get
 			{
-				if (this.cacheDirty)
+				if (cacheDirty)
 				{
-					this.RebuildCache();
+					RebuildCache();
 				}
-				if (!this.waterUsable)
+				if (!waterUsable)
 				{
 					return 0f;
 				}
-				if (this.waterDoubleUsed)
+				if (waterDoubleUsed)
 				{
 					return base.DesiredPowerOutput * 0.3f;
 				}
@@ -31,101 +48,93 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			this.spinPosition = Rand.Range(0f, 15f);
-			this.RebuildCache();
-			this.ForceOthersToRebuildCache(this.parent.Map);
+			spinPosition = Rand.Range(0f, 15f);
+			RebuildCache();
+			ForceOthersToRebuildCache(parent.Map);
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
-			this.ForceOthersToRebuildCache(map);
+			ForceOthersToRebuildCache(map);
 		}
 
-		
 		private void ClearCache()
 		{
-			this.cacheDirty = true;
+			cacheDirty = true;
 		}
 
-		
 		private void RebuildCache()
 		{
-			this.waterUsable = true;
-			foreach (IntVec3 c in this.WaterCells())
+			waterUsable = true;
+			foreach (IntVec3 item in WaterCells())
 			{
-				if (c.InBounds(this.parent.Map) && !this.parent.Map.terrainGrid.TerrainAt(c).affordances.Contains(TerrainAffordanceDefOf.MovingFluid))
+				if (item.InBounds(parent.Map) && !parent.Map.terrainGrid.TerrainAt(item).affordances.Contains(TerrainAffordanceDefOf.MovingFluid))
 				{
-					this.waterUsable = false;
+					waterUsable = false;
 					break;
 				}
 			}
-			this.waterDoubleUsed = false;
-			IEnumerable<Building> enumerable = this.parent.Map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.WatermillGenerator);
-			foreach (IntVec3 c2 in this.WaterUseCells())
+			waterDoubleUsed = false;
+			IEnumerable<Building> enumerable = parent.Map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.WatermillGenerator);
+			foreach (IntVec3 item2 in WaterUseCells())
 			{
-				if (c2.InBounds(this.parent.Map))
+				if (item2.InBounds(parent.Map))
 				{
-					foreach (Building building in enumerable)
+					foreach (Building item3 in enumerable)
 					{
-						if (building != this.parent && building.GetComp<CompPowerPlantWater>().WaterUseRect().Contains(c2))
+						if (item3 != parent && item3.GetComp<CompPowerPlantWater>().WaterUseRect().Contains(item2))
 						{
-							this.waterDoubleUsed = true;
+							waterDoubleUsed = true;
 							break;
 						}
 					}
 				}
 			}
-			if (!this.waterUsable)
+			if (!waterUsable)
 			{
-				this.spinRate = 0f;
+				spinRate = 0f;
 				return;
 			}
-			Vector3 vector = Vector3.zero;
-			foreach (IntVec3 intVec in this.WaterCells())
+			Vector3 zero = Vector3.zero;
+			foreach (IntVec3 item4 in WaterCells())
 			{
-				vector += this.parent.Map.waterInfo.GetWaterMovement(intVec.ToVector3Shifted());
+				zero += parent.Map.waterInfo.GetWaterMovement(item4.ToVector3Shifted());
 			}
-			this.spinRate = Mathf.Sign(Vector3.Dot(vector, this.parent.Rotation.Rotated(RotationDirection.Clockwise).FacingCell.ToVector3()));
-			this.spinRate *= Rand.RangeSeeded(0.9f, 1.1f, this.parent.thingIDNumber * 60509 + 33151);
-			if (this.waterDoubleUsed)
+			spinRate = Mathf.Sign(Vector3.Dot(zero, parent.Rotation.Rotated(RotationDirection.Clockwise).FacingCell.ToVector3()));
+			spinRate *= Rand.RangeSeeded(0.9f, 1.1f, parent.thingIDNumber * 60509 + 33151);
+			if (waterDoubleUsed)
 			{
-				this.spinRate *= 0.5f;
+				spinRate *= 0.5f;
 			}
-			this.cacheDirty = false;
+			cacheDirty = false;
 		}
 
-		
 		private void ForceOthersToRebuildCache(Map map)
 		{
-			foreach (Building building in map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.WatermillGenerator))
+			foreach (Building item in map.listerBuildings.AllBuildingsColonistOfDef(ThingDefOf.WatermillGenerator))
 			{
-				building.GetComp<CompPowerPlantWater>().ClearCache();
+				item.GetComp<CompPowerPlantWater>().ClearCache();
 			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
 			if (base.PowerOutput > 0.01f)
 			{
-				this.spinPosition = (this.spinPosition + 0.006666667f * this.spinRate + 6.28318548f) % 6.28318548f;
+				spinPosition = (spinPosition + 0.006666667f * spinRate + (float)Math.PI * 2f) % ((float)Math.PI * 2f);
 			}
 		}
 
-		
 		public IEnumerable<IntVec3> WaterCells()
 		{
-			return CompPowerPlantWater.WaterCells(this.parent.Position, this.parent.Rotation);
+			return WaterCells(parent.Position, parent.Rotation);
 		}
 
-		
 		public static IEnumerable<IntVec3> WaterCells(IntVec3 loc, Rot4 rot)
 		{
 			IntVec3 perpOffset = rot.Rotated(RotationDirection.Counterclockwise).FacingCell;
@@ -134,16 +143,13 @@ namespace RimWorld
 			yield return loc + rot.FacingCell * 3 - perpOffset * 2;
 			yield return loc + rot.FacingCell * 3 + perpOffset;
 			yield return loc + rot.FacingCell * 3 + perpOffset * 2;
-			yield break;
 		}
 
-		
 		public CellRect WaterUseRect()
 		{
-			return CompPowerPlantWater.WaterUseRect(this.parent.Position, this.parent.Rotation);
+			return WaterUseRect(parent.Position, parent.Rotation);
 		}
 
-		
 		public static CellRect WaterUseRect(IntVec3 loc, Rot4 rot)
 		{
 			int width = rot.IsHorizontal ? 7 : 13;
@@ -151,30 +157,24 @@ namespace RimWorld
 			return CellRect.CenteredOn(loc + rot.FacingCell * 4, width, height);
 		}
 
-		
 		public IEnumerable<IntVec3> WaterUseCells()
 		{
-			return CompPowerPlantWater.WaterUseCells(this.parent.Position, this.parent.Rotation);
+			return WaterUseCells(parent.Position, parent.Rotation);
 		}
 
-		
 		public static IEnumerable<IntVec3> WaterUseCells(IntVec3 loc, Rot4 rot)
 		{
-			foreach (IntVec3 intVec in CompPowerPlantWater.WaterUseRect(loc, rot))
+			foreach (IntVec3 item in WaterUseRect(loc, rot))
 			{
-				yield return intVec;
+				yield return item;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public IEnumerable<IntVec3> GroundCells()
 		{
-			return CompPowerPlantWater.GroundCells(this.parent.Position, this.parent.Rotation);
+			return GroundCells(parent.Position, parent.Rotation);
 		}
 
-		
 		public static IEnumerable<IntVec3> GroundCells(IntVec3 loc, Rot4 rot)
 		{
 			IntVec3 perpOffset = rot.Rotated(RotationDirection.Counterclockwise).FacingCell;
@@ -187,67 +187,34 @@ namespace RimWorld
 			yield return loc + rot.FacingCell;
 			yield return loc + rot.FacingCell - perpOffset;
 			yield return loc + rot.FacingCell + perpOffset;
-			yield break;
 		}
 
-		
 		public override void PostDraw()
 		{
 			base.PostDraw();
-			Vector3 a = this.parent.TrueCenter();
-			a += this.parent.Rotation.FacingCell.ToVector3() * 2.36f;
+			Vector3 a = parent.TrueCenter();
+			a += parent.Rotation.FacingCell.ToVector3() * 2.36f;
 			for (int i = 0; i < 9; i++)
 			{
-				float num = this.spinPosition + 6.28318548f * (float)i / 9f;
+				float num = spinPosition + (float)Math.PI * 2f * (float)i / 9f;
 				float x = Mathf.Abs(4f * Mathf.Sin(num));
-				bool flag = num % 6.28318548f < 3.14159274f;
+				bool num2 = num % ((float)Math.PI * 2f) < (float)Math.PI;
 				Vector2 vector = new Vector2(x, 1f);
 				Vector3 s = new Vector3(vector.x, 1f, vector.y);
 				Matrix4x4 matrix = default(Matrix4x4);
-				matrix.SetTRS(a + Vector3.up * 0.0454545468f * Mathf.Cos(num), this.parent.Rotation.AsQuat, s);
-				Graphics.DrawMesh(flag ? MeshPool.plane10 : MeshPool.plane10Flip, matrix, CompPowerPlantWater.BladesMat, 0);
+				matrix.SetTRS(a + Vector3.up * 0.0454545468f * Mathf.Cos(num), parent.Rotation.AsQuat, s);
+				Graphics.DrawMesh(num2 ? MeshPool.plane10 : MeshPool.plane10Flip, matrix, BladesMat, 0);
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			string text = base.CompInspectStringExtra();
-			if (this.waterUsable && this.waterDoubleUsed)
+			if (waterUsable && waterDoubleUsed)
 			{
 				text += "\n" + "Watermill_WaterUsedTwice".Translate();
 			}
 			return text;
 		}
-
-		
-		private float spinPosition;
-
-		
-		private bool cacheDirty = true;
-
-		
-		private bool waterUsable;
-
-		
-		private bool waterDoubleUsed;
-
-		
-		private float spinRate = 1f;
-
-		
-		private const float PowerFactorIfWaterDoubleUsed = 0.3f;
-
-		
-		private const float SpinRateFactor = 0.006666667f;
-
-		
-		private const float BladeOffset = 2.36f;
-
-		
-		private const int BladeCount = 9;
-
-		
-		public static readonly Material BladesMat = MaterialPool.MatFrom("Things/Building/Power/WatermillGenerator/WatermillGeneratorBlades");
 	}
 }

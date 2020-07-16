@@ -1,4 +1,3 @@
-﻿using System;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
@@ -6,24 +5,25 @@ using Verse.Noise;
 
 namespace RimWorld
 {
-	
 	public class BiomeWorker_SeaIce : BiomeWorker
 	{
-		
+		private ModuleBase cachedSeaIceAllowedNoise;
+
+		private int cachedSeaIceAllowedNoiseForSeed;
+
 		public override float GetScore(Tile tile, int tileID)
 		{
 			if (!tile.WaterCovered)
 			{
 				return -100f;
 			}
-			if (!this.AllowedAt(tileID))
+			if (!AllowedAt(tileID))
 			{
 				return -100f;
 			}
 			return BiomeWorker_IceSheet.PermaIceScore(tile) - 23f;
 		}
 
-		
 		private bool AllowedAt(int tile)
 		{
 			Vector3 tileCenter = Find.WorldGrid.GetTileCenter(tile);
@@ -36,20 +36,14 @@ namespace RimWorld
 			{
 				return true;
 			}
-			if (this.cachedSeaIceAllowedNoise == null || this.cachedSeaIceAllowedNoiseForSeed != Find.World.info.Seed)
+			if (cachedSeaIceAllowedNoise == null || cachedSeaIceAllowedNoiseForSeed != Find.World.info.Seed)
 			{
-				this.cachedSeaIceAllowedNoise = new Perlin(0.017000000923871994, 2.0, 0.5, 6, Find.World.info.Seed, QualityMode.Medium);
-				this.cachedSeaIceAllowedNoiseForSeed = Find.World.info.Seed;
+				cachedSeaIceAllowedNoise = new Perlin(0.017000000923871994, 2.0, 0.5, 6, Find.World.info.Seed, QualityMode.Medium);
+				cachedSeaIceAllowedNoiseForSeed = Find.World.info.Seed;
 			}
 			float headingFromTo = Find.WorldGrid.GetHeadingFromTo(viewCenter, tileCenter);
-			float num3 = (float)this.cachedSeaIceAllowedNoise.GetValue((double)headingFromTo, 0.0, 0.0) * 0.5f + 0.5f;
+			float num3 = (float)cachedSeaIceAllowedNoise.GetValue(headingFromTo, 0.0, 0.0) * 0.5f + 0.5f;
 			return num2 <= num3;
 		}
-
-		
-		private ModuleBase cachedSeaIceAllowedNoise;
-
-		
-		private int cachedSeaIceAllowedNoiseForSeed;
 	}
 }

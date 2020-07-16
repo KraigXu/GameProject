@@ -1,46 +1,43 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompReportWorkSpeed : ThingComp
 	{
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.parent.def.statBases == null)
+			if (parent.def.statBases == null)
 			{
 				return null;
 			}
 			bool flag = false;
 			bool flag2 = false;
 			bool flag3 = false;
-			foreach (StatDef statDef in DefDatabase<StatDef>.AllDefsListForReading)
+			foreach (StatDef item in DefDatabase<StatDef>.AllDefsListForReading)
 			{
-				if (statDef != null && statDef.parts != null && !statDef.Worker.IsDisabledFor(this.parent))
+				if (item != null && item.parts != null && !item.Worker.IsDisabledFor(parent))
 				{
-					foreach (StatPart statPart in statDef.parts)
+					foreach (StatPart part in item.parts)
 					{
-						if (statPart is StatPart_WorkTableOutdoors || statPart is StatPart_Outdoors)
+						if (part is StatPart_WorkTableOutdoors || part is StatPart_Outdoors)
 						{
 							flag = true;
 						}
-						else if (statPart is StatPart_WorkTableTemperature)
+						else if (part is StatPart_WorkTableTemperature)
 						{
 							flag2 = true;
 						}
-						else if (statPart is StatPart_WorkTableUnpowered)
+						else if (part is StatPart_WorkTableUnpowered)
 						{
 							flag3 = true;
 						}
 					}
 				}
 			}
-			bool flag4 = flag && StatPart_WorkTableOutdoors.Applies(this.parent.def, this.parent.Map, this.parent.Position);
-			bool flag5 = flag2 && StatPart_WorkTableTemperature.Applies(this.parent);
-			bool flag6 = flag3 && StatPart_WorkTableUnpowered.Applies(this.parent);
-			if (flag4 || flag5 || flag6)
+			bool flag4 = flag && StatPart_WorkTableOutdoors.Applies(parent.def, parent.Map, parent.Position);
+			bool flag5 = flag2 && StatPart_WorkTableTemperature.Applies(parent);
+			bool flag6 = flag3 && StatPart_WorkTableUnpowered.Applies(parent);
+			if (flag4 | flag5 | flag6)
 			{
 				string str = "WorkSpeedPenalty".Translate() + ": ";
 				string text = "";

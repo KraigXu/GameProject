@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,111 +5,103 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Screen_Credits : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2((float)UI.screenWidth, (float)UI.screenHeight);
-			}
-		}
+		private List<CreditsEntry> creds;
 
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public bool wonGame;
 
-		
-		
-		private float ViewWidth
-		{
-			get
-			{
-				return 800f;
-			}
-		}
+		private float timeUntilAutoScroll;
 
-		
-		
+		private float scrollPosition;
+
+		private bool playedMusic;
+
+		public float creationRealtime = -1f;
+
+		private float victoryTextHeight;
+
+		private const int ColumnWidth = 800;
+
+		private const float InitialAutoScrollDelay = 1f;
+
+		private const float InitialAutoScrollDelayWonGame = 6f;
+
+		private const float AutoScrollDelayAfterManualScroll = 3f;
+
+		private const float SongStartDelay = 5f;
+
+		private const float VictoryTextScrollSpeed = 20f;
+
+		private const float ScrollSpeedLerpHeight = 200f;
+
+		private const GameFont Font = GameFont.Medium;
+
+		public override Vector2 InitialSize => new Vector2(UI.screenWidth, UI.screenHeight);
+
+		protected override float Margin => 0f;
+
+		private float ViewWidth => 800f;
+
 		private float ViewHeight
 		{
 			get
 			{
 				GameFont font = Text.Font;
 				Text.Font = GameFont.Medium;
-				float result = this.creds.Sum((CreditsEntry c) => c.DrawHeight(this.ViewWidth)) + 20f;
+				float result = creds.Sum((CreditsEntry c) => c.DrawHeight(ViewWidth)) + 20f;
 				Text.Font = font;
 				return result;
 			}
 		}
 
-		
-		
-		private float MaxScrollPosition
-		{
-			get
-			{
-				return Mathf.Max(this.ViewHeight - (float)UI.screenHeight / 2f, 0f);
-			}
-		}
+		private float MaxScrollPosition => Mathf.Max(ViewHeight - (float)UI.screenHeight / 2f, 0f);
 
-		
-		
 		private float AutoScrollRate
 		{
 			get
 			{
-				if (!this.wonGame)
+				if (wonGame)
 				{
-					return 30f;
+					if (scrollPosition < victoryTextHeight - 200f)
+					{
+						return 20f;
+					}
+					float num = SongDefOf.EndCreditsSong.clip.length + 5f - 6f - victoryTextHeight / 20f;
+					float t = (scrollPosition - victoryTextHeight) / 200f;
+					return Mathf.Lerp(20f, MaxScrollPosition / num, t);
 				}
-				if (this.scrollPosition < this.victoryTextHeight - 200f)
-				{
-					return 20f;
-				}
-				float num = SongDefOf.EndCreditsSong.clip.length + 5f - 6f - this.victoryTextHeight / 20f;
-				float t = (this.scrollPosition - this.victoryTextHeight) / 200f;
-				return Mathf.Lerp(20f, this.MaxScrollPosition / num, t);
+				return 30f;
 			}
 		}
 
-		
-		public Screen_Credits() : this("")
+		public Screen_Credits()
+			: this("")
 		{
 		}
 
-		
 		public Screen_Credits(string preCreditsMessage)
 		{
-			this.doWindowBackground = false;
-			this.doCloseButton = false;
-			this.doCloseX = false;
-			this.forcePause = true;
-			this.creds = CreditsAssembler.AllCredits().ToList<CreditsEntry>();
-			this.creds.Insert(0, new CreditRecord_Space(100f));
+			doWindowBackground = false;
+			doCloseButton = false;
+			doCloseX = false;
+			forcePause = true;
+			creds = CreditsAssembler.AllCredits().ToList();
+			creds.Insert(0, new CreditRecord_Space(100f));
 			if (!preCreditsMessage.NullOrEmpty())
 			{
-				this.creds.Insert(1, new CreditRecord_Space(200f));
-				this.creds.Insert(2, new CreditRecord_Text(preCreditsMessage, TextAnchor.UpperLeft));
-				this.creds.Insert(3, new CreditRecord_Space(50f));
+				creds.Insert(1, new CreditRecord_Space(200f));
+				creds.Insert(2, new CreditRecord_Text(preCreditsMessage));
+				creds.Insert(3, new CreditRecord_Space(50f));
 				Text.Font = GameFont.Medium;
-				this.victoryTextHeight = this.creds.Take(4).Sum((CreditsEntry c) => c.DrawHeight(this.ViewWidth));
+				victoryTextHeight = creds.Take(4).Sum((CreditsEntry c) => c.DrawHeight(ViewWidth));
 			}
-			this.creds.Add(new CreditRecord_Space(300f));
-			this.creds.Add(new CreditRecord_Text("ThanksForPlaying".Translate(), TextAnchor.UpperCenter));
+			creds.Add(new CreditRecord_Space(300f));
+			creds.Add(new CreditRecord_Text("ThanksForPlaying".Translate(), TextAnchor.UpperCenter));
 			string text = string.Empty;
-			foreach (CreditsEntry creditsEntry in this.creds)
+			foreach (CreditsEntry cred in creds)
 			{
-				CreditRecord_Role creditRecord_Role = creditsEntry as CreditRecord_Role;
+				CreditRecord_Role creditRecord_Role = cred as CreditRecord_Role;
 				if (creditRecord_Role == null)
 				{
 					text = string.Empty;
@@ -123,136 +114,89 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void PreOpen()
 		{
 			base.PreOpen();
-			this.creationRealtime = Time.realtimeSinceStartup;
-			if (this.wonGame)
+			creationRealtime = Time.realtimeSinceStartup;
+			if (wonGame)
 			{
-				this.timeUntilAutoScroll = 6f;
-				return;
-			}
-			this.timeUntilAutoScroll = 1f;
-		}
-
-		
-		public override void WindowUpdate()
-		{
-			base.WindowUpdate();
-			if (this.timeUntilAutoScroll > 0f)
-			{
-				this.timeUntilAutoScroll -= Time.deltaTime;
+				timeUntilAutoScroll = 6f;
 			}
 			else
 			{
-				this.scrollPosition += this.AutoScrollRate * Time.deltaTime;
-			}
-			if (this.wonGame && !this.playedMusic && Time.realtimeSinceStartup > this.creationRealtime + 5f)
-			{
-				Find.MusicManagerPlay.ForceStartSong(SongDefOf.EndCreditsSong, true);
-				this.playedMusic = true;
+				timeUntilAutoScroll = 1f;
 			}
 		}
 
-		
+		public override void WindowUpdate()
+		{
+			base.WindowUpdate();
+			if (timeUntilAutoScroll > 0f)
+			{
+				timeUntilAutoScroll -= Time.deltaTime;
+			}
+			else
+			{
+				scrollPosition += AutoScrollRate * Time.deltaTime;
+			}
+			if (wonGame && !playedMusic && Time.realtimeSinceStartup > creationRealtime + 5f)
+			{
+				Find.MusicManagerPlay.ForceStartSong(SongDefOf.EndCreditsSong, ignorePrefsVolume: true);
+				playedMusic = true;
+			}
+		}
+
 		public override void DoWindowContents(Rect inRect)
 		{
-			Rect rect = new Rect(0f, 0f, (float)UI.screenWidth, (float)UI.screenHeight);
+			Rect rect = new Rect(0f, 0f, UI.screenWidth, UI.screenHeight);
 			GUI.DrawTexture(rect, BaseContent.BlackTex);
 			Rect position = new Rect(rect);
 			position.yMin += 30f;
 			position.yMax -= 30f;
 			position.xMin = rect.center.x - 400f;
 			position.width = 800f;
-			float viewWidth = this.ViewWidth;
-			float viewHeight = this.ViewHeight;
-			this.scrollPosition = Mathf.Clamp(this.scrollPosition, 0f, this.MaxScrollPosition);
+			float viewWidth = ViewWidth;
+			float viewHeight = ViewHeight;
+			scrollPosition = Mathf.Clamp(scrollPosition, 0f, MaxScrollPosition);
 			GUI.BeginGroup(position);
 			Rect position2 = new Rect(0f, 0f, viewWidth, viewHeight);
-			position2.y -= this.scrollPosition;
+			position2.y -= scrollPosition;
 			GUI.BeginGroup(position2);
 			Text.Font = GameFont.Medium;
 			float num = 0f;
-			foreach (CreditsEntry creditsEntry in this.creds)
+			foreach (CreditsEntry cred in creds)
 			{
-				float num2 = creditsEntry.DrawHeight(position2.width);
+				float num2 = cred.DrawHeight(position2.width);
 				Rect rect2 = new Rect(0f, num, position2.width, num2);
-				creditsEntry.Draw(rect2);
+				cred.Draw(rect2);
 				num += num2;
 			}
 			GUI.EndGroup();
 			GUI.EndGroup();
 			if (Event.current.type == EventType.ScrollWheel)
 			{
-				this.Scroll(Event.current.delta.y * 25f);
+				Scroll(Event.current.delta.y * 25f);
 				Event.current.Use();
 			}
 			if (Event.current.type == EventType.KeyDown)
 			{
 				if (Event.current.keyCode == KeyCode.DownArrow)
 				{
-					this.Scroll(250f);
+					Scroll(250f);
 					Event.current.Use();
 				}
 				if (Event.current.keyCode == KeyCode.UpArrow)
 				{
-					this.Scroll(-250f);
+					Scroll(-250f);
 					Event.current.Use();
 				}
 			}
 		}
 
-		
 		private void Scroll(float offset)
 		{
-			this.scrollPosition += offset;
-			this.timeUntilAutoScroll = 3f;
+			scrollPosition += offset;
+			timeUntilAutoScroll = 3f;
 		}
-
-		
-		private List<CreditsEntry> creds;
-
-		
-		public bool wonGame;
-
-		
-		private float timeUntilAutoScroll;
-
-		
-		private float scrollPosition;
-
-		
-		private bool playedMusic;
-
-		
-		public float creationRealtime = -1f;
-
-		
-		private float victoryTextHeight;
-
-		
-		private const int ColumnWidth = 800;
-
-		
-		private const float InitialAutoScrollDelay = 1f;
-
-		
-		private const float InitialAutoScrollDelayWonGame = 6f;
-
-		
-		private const float AutoScrollDelayAfterManualScroll = 3f;
-
-		
-		private const float SongStartDelay = 5f;
-
-		
-		private const float VictoryTextScrollSpeed = 20f;
-
-		
-		private const float ScrollSpeedLerpHeight = 200f;
-
-		
-		private const GameFont Font = GameFont.Medium;
 	}
 }

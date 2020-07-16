@@ -1,69 +1,60 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedMeditationSpot : Alert
 	{
-		
-		
+		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
+
+		private List<string> pawnNames = new List<string>();
+
 		private List<GlobalTargetInfo> Targets
 		{
 			get
 			{
-				this.targets.Clear();
-				this.pawnNames.Clear();
-				foreach (Pawn pawn in PawnsFinder.HomeMaps_FreeColonistsSpawned)
+				targets.Clear();
+				pawnNames.Clear();
+				foreach (Pawn item in PawnsFinder.HomeMaps_FreeColonistsSpawned)
 				{
 					bool flag = false;
-					for (int i = 0; i < pawn.timetable.times.Count; i++)
+					for (int i = 0; i < item.timetable.times.Count; i++)
 					{
-						if (pawn.timetable.times[i] == TimeAssignmentDefOf.Meditate)
+						if (item.timetable.times[i] == TimeAssignmentDefOf.Meditate)
 						{
 							flag = true;
 							break;
 						}
 					}
-					if ((pawn.HasPsylink || flag) && !MeditationUtility.AllMeditationSpotCandidates(pawn, false).Any<LocalTargetInfo>())
+					if ((item.HasPsylink | flag) && !MeditationUtility.AllMeditationSpotCandidates(item, allowFallbackSpots: false).Any())
 					{
-						this.targets.Add(pawn);
-						this.pawnNames.Add(pawn.LabelShort);
+						targets.Add(item);
+						pawnNames.Add(item.LabelShort);
 					}
 				}
-				return this.targets;
+				return targets;
 			}
 		}
 
-		
 		public Alert_NeedMeditationSpot()
 		{
-			this.defaultLabel = "NeedMeditationSpotAlert".Translate();
+			defaultLabel = "NeedMeditationSpotAlert".Translate();
 		}
 
-		
 		public override TaggedString GetExplanation()
 		{
-			return "NeedMeditationSpotAlertDesc".Translate(this.pawnNames.ToLineList("  - "));
+			return "NeedMeditationSpotAlertDesc".Translate(pawnNames.ToLineList("  - "));
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
 			{
 				return false;
 			}
-			return AlertReport.CulpritsAre(this.Targets);
+			return AlertReport.CulpritsAre(Targets);
 		}
-
-		
-		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
-
-		
-		private List<string> pawnNames = new List<string>();
 	}
 }

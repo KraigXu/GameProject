@@ -1,20 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedResearchProject : Alert
 	{
-		
 		public Alert_NeedResearchProject()
 		{
-			this.defaultLabel = "NeedResearchProject".Translate();
-			this.defaultExplanation = "NeedResearchProjectDesc".Translate();
+			defaultLabel = "NeedResearchProject".Translate();
+			defaultExplanation = "NeedResearchProjectDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (Find.AnyPlayerHomeMap == null)

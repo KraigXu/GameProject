@@ -1,78 +1,52 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_ApparelTracker : IThingHolder, IExposable
 	{
-		
-		
-		public IThingHolder ParentHolder
-		{
-			get
-			{
-				return this.pawn;
-			}
-		}
+		public Pawn pawn;
 
-		
-		
-		public List<Apparel> WornApparel
-		{
-			get
-			{
-				return this.wornApparel.InnerListForReading;
-			}
-		}
+		private ThingOwner<Apparel> wornApparel;
 
-		
-		
-		public int WornApparelCount
-		{
-			get
-			{
-				return this.wornApparel.Count;
-			}
-		}
+		private List<Apparel> lockedApparel;
 
-		
-		
-		public bool AnyApparel
-		{
-			get
-			{
-				return this.wornApparel.Count != 0;
-			}
-		}
+		private int lastApparelWearoutTick = -1;
 
-		
-		
-		public bool AnyApparelLocked
-		{
-			get
-			{
-				return !this.lockedApparel.NullOrEmpty<Apparel>();
-			}
-		}
+		private const int RecordWalkedNakedTaleIntervalTicks = 60000;
 
-		
-		
+		private const float AutoUnlockHealthPctThreshold = 0.5f;
+
+		private static readonly List<Apparel> EmptyApparel = new List<Apparel>();
+
+		private static List<Apparel> tmpApparelList = new List<Apparel>();
+
+		private static List<Apparel> tmpApparel = new List<Apparel>();
+
+		public IThingHolder ParentHolder => pawn;
+
+		public List<Apparel> WornApparel => wornApparel.InnerListForReading;
+
+		public int WornApparelCount => wornApparel.Count;
+
+		public bool AnyApparel => wornApparel.Count != 0;
+
+		public bool AnyApparelLocked => !lockedApparel.NullOrEmpty();
+
 		public bool AnyApparelUnlocked
 		{
 			get
 			{
-				if (!this.AnyApparelLocked)
+				if (!AnyApparelLocked)
 				{
-					return this.AnyApparel;
+					return AnyApparel;
 				}
-				for (int i = 0; i < this.wornApparel.Count; i++)
+				for (int i = 0; i < wornApparel.Count; i++)
 				{
-					if (!this.IsLocked(this.wornApparel[i]))
+					if (!IsLocked(wornApparel[i]))
 					{
 						return true;
 					}
@@ -81,15 +55,13 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool AllApparelLocked
 		{
 			get
 			{
-				for (int i = 0; i < this.wornApparel.Count; i++)
+				for (int i = 0; i < wornApparel.Count; i++)
 				{
-					if (!this.IsLocked(this.wornApparel[i]))
+					if (!IsLocked(wornApparel[i]))
 					{
 						return false;
 					}
@@ -98,209 +70,192 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public List<Apparel> LockedApparel
 		{
 			get
 			{
-				if (this.lockedApparel == null)
+				if (lockedApparel == null)
 				{
-					return Pawn_ApparelTracker.EmptyApparel;
+					return EmptyApparel;
 				}
-				return this.lockedApparel;
+				return lockedApparel;
 			}
 		}
 
-		
-		
 		public IEnumerable<Apparel> UnlockedApparel
 		{
 			get
 			{
-				if (!this.AnyApparelLocked)
+				if (!AnyApparelLocked)
 				{
-					return this.WornApparel;
+					return WornApparel;
 				}
-				return from x in this.WornApparel
-				where !this.IsLocked(x)
-				select x;
+				return WornApparel.Where((Apparel x) => !IsLocked(x));
 			}
 		}
 
-		
-		
 		public bool PsychologicallyNude
 		{
 			get
 			{
-				if (this.pawn.gender == Gender.None)
+				if (pawn.gender == Gender.None)
 				{
 					return false;
 				}
-				if (this.pawn.IsWildMan())
+				if (pawn.IsWildMan())
 				{
 					return false;
 				}
-				bool flag;
-				bool flag2;
-				this.HasBasicApparel(out flag, out flag2);
-				if (!flag)
+				HasBasicApparel(out bool hasPants, out bool hasShirt);
+				if (!hasPants)
 				{
-					bool flag3 = false;
-					IEnumerator<BodyPartRecord> enumerator = this.pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null).GetEnumerator();
+					bool flag = false;
+					foreach (BodyPartRecord notMissingPart in pawn.health.hediffSet.GetNotMissingParts())
 					{
-						while (enumerator.MoveNext())
+						if (notMissingPart.IsInGroup(BodyPartGroupDefOf.Legs))
 						{
-							if (enumerator.Current.IsInGroup(BodyPartGroupDefOf.Legs))
-							{
-								flag3 = true;
-								break;
-							}
+							flag = true;
+							break;
 						}
 					}
-					if (!flag3)
+					if (!flag)
 					{
-						flag = true;
+						hasPants = true;
 					}
 				}
-				if (this.pawn.gender == Gender.Male)
+				if (pawn.gender == Gender.Male)
 				{
-					return !flag;
+					return !hasPants;
 				}
-				return this.pawn.gender == Gender.Female && (!flag || !flag2);
+				if (pawn.gender == Gender.Female)
+				{
+					if (hasPants)
+					{
+						return !hasShirt;
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public Pawn_ApparelTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.wornApparel = new ThingOwner<Apparel>(this);
+			wornApparel = new ThingOwner<Apparel>(this);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<ThingOwner<Apparel>>(ref this.wornApparel, "wornApparel", new object[]
-			{
-				this
-			});
-			Scribe_Collections.Look<Apparel>(ref this.lockedApparel, "lockedApparel", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<int>(ref this.lastApparelWearoutTick, "lastApparelWearoutTick", 0, false);
+			Scribe_Deep.Look(ref wornApparel, "wornApparel", this);
+			Scribe_Collections.Look(ref lockedApparel, "lockedApparel", LookMode.Reference);
+			Scribe_Values.Look(ref lastApparelWearoutTick, "lastApparelWearoutTick", 0);
 			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs)
 			{
-				this.SortWornApparelIntoDrawOrder();
+				SortWornApparelIntoDrawOrder();
 			}
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.lockedApparel != null)
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && lockedApparel != null)
 			{
-				this.lockedApparel.RemoveAll((Apparel x) => x == null);
+				lockedApparel.RemoveAll((Apparel x) => x == null);
 			}
 		}
 
-		
 		public void ApparelTrackerTickRare()
 		{
 			int ticksGame = Find.TickManager.TicksGame;
-			if (this.lastApparelWearoutTick < 0)
+			if (lastApparelWearoutTick < 0)
 			{
-				this.lastApparelWearoutTick = ticksGame;
+				lastApparelWearoutTick = ticksGame;
 			}
-			if (ticksGame - this.lastApparelWearoutTick >= 60000)
+			if (ticksGame - lastApparelWearoutTick < 60000)
 			{
-				if (!this.pawn.IsWorldPawn())
+				return;
+			}
+			if (!pawn.IsWorldPawn())
+			{
+				for (int num = wornApparel.Count - 1; num >= 0; num--)
 				{
-					for (int i = this.wornApparel.Count - 1; i >= 0; i--)
-					{
-						this.TakeWearoutDamageForDay(this.wornApparel[i]);
-					}
+					TakeWearoutDamageForDay(wornApparel[num]);
 				}
-				this.lastApparelWearoutTick = ticksGame;
 			}
+			lastApparelWearoutTick = ticksGame;
 		}
 
-		
 		public void ApparelTrackerTick()
 		{
-			this.wornApparel.ThingOwnerTick(true);
-			if (this.pawn.IsColonist && this.pawn.Spawned && !this.pawn.Dead && this.pawn.IsHashIntervalTick(60000) && this.PsychologicallyNude)
+			wornApparel.ThingOwnerTick();
+			if (pawn.IsColonist && pawn.Spawned && !pawn.Dead && pawn.IsHashIntervalTick(60000) && PsychologicallyNude)
 			{
-				TaleRecorder.RecordTale(TaleDefOf.WalkedNaked, new object[]
-				{
-					this.pawn
-				});
+				TaleRecorder.RecordTale(TaleDefOf.WalkedNaked, pawn);
 			}
-			if (this.lockedApparel != null)
+			if (lockedApparel == null)
 			{
-				for (int i = this.lockedApparel.Count - 1; i >= 0; i--)
+				return;
+			}
+			for (int num = lockedApparel.Count - 1; num >= 0; num--)
+			{
+				if (lockedApparel[num].def.useHitPoints && (float)lockedApparel[num].HitPoints / (float)lockedApparel[num].MaxHitPoints < 0.5f)
 				{
-					if (this.lockedApparel[i].def.useHitPoints && (float)this.lockedApparel[i].HitPoints / (float)this.lockedApparel[i].MaxHitPoints < 0.5f)
-					{
-						this.Unlock(this.lockedApparel[i]);
-					}
+					Unlock(lockedApparel[num]);
 				}
 			}
 		}
 
-		
 		public bool IsLocked(Apparel apparel)
 		{
-			return this.lockedApparel != null && this.lockedApparel.Contains(apparel);
+			if (lockedApparel != null)
+			{
+				return lockedApparel.Contains(apparel);
+			}
+			return false;
 		}
 
-		
 		public void Lock(Apparel apparel)
 		{
-			if (this.IsLocked(apparel))
+			if (!IsLocked(apparel))
 			{
-				return;
+				if (lockedApparel == null)
+				{
+					lockedApparel = new List<Apparel>();
+				}
+				lockedApparel.Add(apparel);
 			}
-			if (this.lockedApparel == null)
-			{
-				this.lockedApparel = new List<Apparel>();
-			}
-			this.lockedApparel.Add(apparel);
 		}
 
-		
 		public void Unlock(Apparel apparel)
 		{
-			if (!this.IsLocked(apparel))
+			if (IsLocked(apparel))
 			{
-				return;
+				lockedApparel.Remove(apparel);
 			}
-			this.lockedApparel.Remove(apparel);
 		}
 
-		
 		public void LockAll()
 		{
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				this.Lock(this.wornApparel[i]);
+				Lock(wornApparel[i]);
 			}
 		}
 
-		
 		private void TakeWearoutDamageForDay(Thing ap)
 		{
 			int num = GenMath.RoundRandom(ap.def.apparel.wearPerDay);
 			if (num > 0)
 			{
-				ap.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, (float)num, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+				ap.TakeDamage(new DamageInfo(DamageDefOf.Deterioration, num));
 			}
-			if (ap.Destroyed && PawnUtility.ShouldSendNotificationAbout(this.pawn) && !this.pawn.Dead)
+			if (ap.Destroyed && PawnUtility.ShouldSendNotificationAbout(pawn) && !pawn.Dead)
 			{
-				Messages.Message("MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(ap.def, ap.Stuff, 1), this.pawn).CapitalizeFirst(), this.pawn, MessageTypeDefOf.NegativeEvent, true);
+				Messages.Message(GenText.CapitalizeFirst("MessageWornApparelDeterioratedAway".Translate(GenLabel.ThingLabel(ap.def, ap.Stuff), pawn)), pawn, MessageTypeDefOf.NegativeEvent);
 			}
 		}
 
-		
 		public bool CanWearWithoutDroppingAnything(ThingDef apDef)
 		{
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				if (!ApparelUtility.CanWearTogether(apDef, this.wornApparel[i].def, this.pawn.RaceProps.body))
+				if (!ApparelUtility.CanWearTogether(apDef, wornApparel[i].def, pawn.RaceProps.body))
 				{
 					return false;
 				}
@@ -308,151 +263,118 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public void Wear(Apparel newApparel, bool dropReplacedApparel = true, bool locked = false)
 		{
 			if (newApparel.Spawned)
 			{
-				newApparel.DeSpawn(DestroyMode.Vanish);
+				newApparel.DeSpawn();
 			}
-			if (!ApparelUtility.HasPartsToWear(this.pawn, newApparel.def))
+			if (!ApparelUtility.HasPartsToWear(pawn, newApparel.def))
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					this.pawn,
-					" tried to wear ",
-					newApparel,
-					" but he has no body parts required to wear it."
-				}), false);
+				Log.Warning(pawn + " tried to wear " + newApparel + " but he has no body parts required to wear it.");
 				return;
 			}
-			if (EquipmentUtility.IsBiocoded(newApparel) && !EquipmentUtility.IsBiocodedFor(newApparel, this.pawn))
+			if (EquipmentUtility.IsBiocoded(newApparel) && !EquipmentUtility.IsBiocodedFor(newApparel, pawn))
 			{
 				CompBiocodable compBiocodable = newApparel.TryGetComp<CompBiocodable>();
-				Log.Warning(string.Concat(new object[]
-				{
-					this.pawn,
-					" tried to wear ",
-					newApparel,
-					" but it is biocoded for ",
-					compBiocodable.CodedPawnLabel,
-					" ."
-				}), false);
+				Log.Warning(pawn + " tried to wear " + newApparel + " but it is biocoded for " + compBiocodable.CodedPawnLabel + " .");
 				return;
 			}
-			for (int i = this.wornApparel.Count - 1; i >= 0; i--)
+			for (int num = wornApparel.Count - 1; num >= 0; num--)
 			{
-				Apparel apparel = this.wornApparel[i];
-				if (!ApparelUtility.CanWearTogether(newApparel.def, apparel.def, this.pawn.RaceProps.body))
+				Apparel apparel = wornApparel[num];
+				if (!ApparelUtility.CanWearTogether(newApparel.def, apparel.def, pawn.RaceProps.body))
 				{
 					if (dropReplacedApparel)
 					{
-						bool forbid = this.pawn.Faction != null && this.pawn.Faction.HostileTo(Faction.OfPlayer);
-						Apparel apparel2;
-						if (!this.TryDrop(apparel, out apparel2, this.pawn.PositionHeld, forbid))
+						bool forbid = pawn.Faction != null && pawn.Faction.HostileTo(Faction.OfPlayer);
+						if (!TryDrop(apparel, out Apparel _, pawn.PositionHeld, forbid))
 						{
-							Log.Error(this.pawn + " could not drop " + apparel, false);
+							Log.Error(pawn + " could not drop " + apparel);
 							return;
 						}
 					}
 					else
 					{
-						this.Remove(apparel);
+						Remove(apparel);
 					}
 				}
 			}
 			if (newApparel.Wearer != null)
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					this.pawn,
-					" is trying to wear ",
-					newApparel,
-					" but this apparel already has a wearer (",
-					newApparel.Wearer,
-					"). This may or may not cause bugs."
-				}), false);
+				Log.Warning(pawn + " is trying to wear " + newApparel + " but this apparel already has a wearer (" + newApparel.Wearer + "). This may or may not cause bugs.");
 			}
-			this.wornApparel.TryAdd(newApparel, false);
+			wornApparel.TryAdd(newApparel, canMergeWithExistingStacks: false);
 			if (locked)
 			{
-				this.Lock(newApparel);
+				Lock(newApparel);
 			}
 		}
 
-		
 		public void Remove(Apparel ap)
 		{
-			this.wornApparel.Remove(ap);
+			wornApparel.Remove(ap);
 		}
 
-		
 		public bool TryDrop(Apparel ap)
 		{
-			Apparel apparel;
-			return this.TryDrop(ap, out apparel);
+			Apparel resultingAp;
+			return TryDrop(ap, out resultingAp);
 		}
 
-		
 		public bool TryDrop(Apparel ap, out Apparel resultingAp)
 		{
-			return this.TryDrop(ap, out resultingAp, this.pawn.PositionHeld, true);
+			return TryDrop(ap, out resultingAp, pawn.PositionHeld);
 		}
 
-		
 		public bool TryDrop(Apparel ap, out Apparel resultingAp, IntVec3 pos, bool forbid = true)
 		{
-			if (this.wornApparel.TryDrop(ap, pos, this.pawn.MapHeld, ThingPlaceMode.Near, out resultingAp, null, null))
+			if (wornApparel.TryDrop(ap, pos, pawn.MapHeld, ThingPlaceMode.Near, out resultingAp))
 			{
 				if (resultingAp != null)
 				{
-					resultingAp.SetForbidden(forbid, false);
+					resultingAp.SetForbidden(forbid, warnOnFail: false);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public void DropAll(IntVec3 pos, bool forbid = true, bool dropLocked = true)
 		{
-			Pawn_ApparelTracker.tmpApparelList.Clear();
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			tmpApparelList.Clear();
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				if (dropLocked || !this.IsLocked(this.wornApparel[i]))
+				if (dropLocked || !IsLocked(wornApparel[i]))
 				{
-					Pawn_ApparelTracker.tmpApparelList.Add(this.wornApparel[i]);
+					tmpApparelList.Add(wornApparel[i]);
 				}
 			}
-			for (int j = 0; j < Pawn_ApparelTracker.tmpApparelList.Count; j++)
+			for (int j = 0; j < tmpApparelList.Count; j++)
 			{
-				Apparel apparel;
-				this.TryDrop(Pawn_ApparelTracker.tmpApparelList[j], out apparel, pos, forbid);
+				TryDrop(tmpApparelList[j], out Apparel _, pos, forbid);
 			}
 		}
 
-		
 		public void DestroyAll(DestroyMode mode = DestroyMode.Vanish)
 		{
-			this.wornApparel.ClearAndDestroyContents(mode);
+			wornApparel.ClearAndDestroyContents(mode);
 		}
 
-		
 		public bool Contains(Thing apparel)
 		{
-			return this.wornApparel.Contains(apparel);
+			return wornApparel.Contains(apparel);
 		}
 
-		
 		public bool WouldReplaceLockedApparel(Apparel newApparel)
 		{
-			if (!this.AnyApparelLocked)
+			if (!AnyApparelLocked)
 			{
 				return false;
 			}
-			for (int i = 0; i < this.lockedApparel.Count; i++)
+			for (int i = 0; i < lockedApparel.Count; i++)
 			{
-				if (!ApparelUtility.CanWearTogether(newApparel.def, this.lockedApparel[i].def, this.pawn.RaceProps.body))
+				if (!ApparelUtility.CanWearTogether(newApparel.def, lockedApparel[i].def, pawn.RaceProps.body))
 				{
 					return true;
 				}
@@ -460,58 +382,54 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public void Notify_PawnKilled(DamageInfo? dinfo)
 		{
-			if (dinfo != null && dinfo.Value.Def.ExternalViolenceFor(this.pawn))
+			if (dinfo.HasValue && dinfo.Value.Def.ExternalViolenceFor(pawn))
 			{
-				for (int i = 0; i < this.wornApparel.Count; i++)
+				for (int i = 0; i < wornApparel.Count; i++)
 				{
-					if (this.wornApparel[i].def.useHitPoints)
+					if (wornApparel[i].def.useHitPoints)
 					{
-						int num = Mathf.RoundToInt((float)this.wornApparel[i].HitPoints * Rand.Range(0.15f, 0.4f));
-						this.wornApparel[i].TakeDamage(new DamageInfo(dinfo.Value.Def, (float)num, 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+						int num = Mathf.RoundToInt((float)wornApparel[i].HitPoints * Rand.Range(0.15f, 0.4f));
+						wornApparel[i].TakeDamage(new DamageInfo(dinfo.Value.Def, num));
 					}
 				}
 			}
-			for (int j = 0; j < this.wornApparel.Count; j++)
+			for (int j = 0; j < wornApparel.Count; j++)
 			{
-				this.wornApparel[j].Notify_PawnKilled();
+				wornApparel[j].Notify_PawnKilled();
 			}
 		}
 
-		
 		public void Notify_LostBodyPart()
 		{
-			Pawn_ApparelTracker.tmpApparel.Clear();
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			tmpApparel.Clear();
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				Pawn_ApparelTracker.tmpApparel.Add(this.wornApparel[i]);
+				tmpApparel.Add(wornApparel[i]);
 			}
-			for (int j = 0; j < Pawn_ApparelTracker.tmpApparel.Count; j++)
+			for (int j = 0; j < tmpApparel.Count; j++)
 			{
-				Apparel apparel = Pawn_ApparelTracker.tmpApparel[j];
-				if (!ApparelUtility.HasPartsToWear(this.pawn, apparel.def))
+				Apparel apparel = tmpApparel[j];
+				if (!ApparelUtility.HasPartsToWear(pawn, apparel.def))
 				{
-					this.Remove(apparel);
+					Remove(apparel);
 				}
 			}
 		}
 
-		
 		private void SortWornApparelIntoDrawOrder()
 		{
-			this.wornApparel.InnerListForReading.Sort((Apparel a, Apparel b) => a.def.apparel.LastLayer.drawOrder.CompareTo(b.def.apparel.LastLayer.drawOrder));
+			wornApparel.InnerListForReading.Sort((Apparel a, Apparel b) => a.def.apparel.LastLayer.drawOrder.CompareTo(b.def.apparel.LastLayer.drawOrder));
 		}
 
-		
 		public void HasBasicApparel(out bool hasPants, out bool hasShirt)
 		{
 			hasShirt = false;
 			hasPants = false;
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				Apparel apparel = this.wornApparel[i];
+				Apparel apparel = wornApparel[i];
 				for (int j = 0; j < apparel.def.apparel.bodyPartGroups.Count; j++)
 				{
 					if (apparel.def.apparel.bodyPartGroups[j] == BodyPartGroupDefOf.Torso)
@@ -530,12 +448,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public Apparel FirstApparelOnBodyPartGroup(BodyPartGroupDef g)
 		{
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				Apparel apparel = this.wornApparel[i];
+				Apparel apparel = wornApparel[i];
 				for (int j = 0; j < apparel.def.apparel.bodyPartGroups.Count; j++)
 				{
 					if (apparel.def.apparel.bodyPartGroups[j] == BodyPartGroupDefOf.Torso)
@@ -547,12 +464,11 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public bool BodyPartGroupIsCovered(BodyPartGroupDef bp)
 		{
-			for (int i = 0; i < this.wornApparel.Count; i++)
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				Apparel apparel = this.wornApparel[i];
+				Apparel apparel = wornApparel[i];
 				for (int j = 0; j < apparel.def.apparel.bodyPartGroups.Count; j++)
 				{
 					if (apparel.def.apparel.bodyPartGroups[j] == bp)
@@ -564,99 +480,61 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public IEnumerable<Gizmo> GetGizmos()
 		{
-			int num;
-			for (int i = 0; i < this.wornApparel.Count; i = num + 1)
+			for (int i = 0; i < wornApparel.Count; i++)
 			{
-				foreach (Gizmo gizmo in this.wornApparel[i].GetWornGizmos())
+				foreach (Gizmo wornGizmo in wornApparel[i].GetWornGizmos())
 				{
-					yield return gizmo;
+					yield return wornGizmo;
 				}
-				IEnumerator<Gizmo> enumerator = null;
-				num = i;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		private void ApparelChanged()
 		{
 			LongEventHandler.ExecuteWhenFinished(delegate
 			{
-				this.pawn.Drawer.renderer.graphics.SetApparelGraphicsDirty();
-				PortraitsCache.SetDirty(this.pawn);
+				pawn.Drawer.renderer.graphics.SetApparelGraphicsDirty();
+				PortraitsCache.SetDirty(pawn);
 			});
 		}
 
-		
 		public void Notify_ApparelAdded(Apparel apparel)
 		{
-			this.SortWornApparelIntoDrawOrder();
-			this.ApparelChanged();
-			if (!apparel.def.equippedStatOffsets.NullOrEmpty<StatModifier>())
+			SortWornApparelIntoDrawOrder();
+			ApparelChanged();
+			if (!apparel.def.equippedStatOffsets.NullOrEmpty())
 			{
-				this.pawn.health.capacities.Notify_CapacityLevelsDirty();
+				pawn.health.capacities.Notify_CapacityLevelsDirty();
 			}
 		}
 
-		
 		public void Notify_ApparelRemoved(Apparel apparel)
 		{
-			this.ApparelChanged();
-			if (this.pawn.outfits != null && this.pawn.outfits.forcedHandler != null)
+			ApparelChanged();
+			if (pawn.outfits != null && pawn.outfits.forcedHandler != null)
 			{
-				this.pawn.outfits.forcedHandler.SetForced(apparel, false);
+				pawn.outfits.forcedHandler.SetForced(apparel, forced: false);
 			}
-			if (this.IsLocked(apparel))
+			if (IsLocked(apparel))
 			{
-				this.Unlock(apparel);
+				Unlock(apparel);
 			}
-			if (!apparel.def.equippedStatOffsets.NullOrEmpty<StatModifier>())
+			if (!apparel.def.equippedStatOffsets.NullOrEmpty())
 			{
-				this.pawn.health.capacities.Notify_CapacityLevelsDirty();
+				pawn.health.capacities.Notify_CapacityLevelsDirty();
 			}
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.wornApparel;
+			return wornApparel;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
-
-		
-		public Pawn pawn;
-
-		
-		private ThingOwner<Apparel> wornApparel;
-
-		
-		private List<Apparel> lockedApparel;
-
-		
-		private int lastApparelWearoutTick = -1;
-
-		
-		private const int RecordWalkedNakedTaleIntervalTicks = 60000;
-
-		
-		private const float AutoUnlockHealthPctThreshold = 0.5f;
-
-		
-		private static readonly List<Apparel> EmptyApparel = new List<Apparel>();
-
-		
-		private static List<Apparel> tmpApparelList = new List<Apparel>();
-
-		
-		private static List<Apparel> tmpApparel = new List<Apparel>();
 	}
 }

@@ -1,26 +1,26 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Hediff_Addiction : HediffWithComps
 	{
-		
-		
+		private const int DefaultStageIndex = 0;
+
+		private const int WithdrawalStageIndex = 1;
+
 		public Need_Chemical Need
 		{
 			get
 			{
-				if (this.pawn.Dead)
+				if (pawn.Dead)
 				{
 					return null;
 				}
-				List<Need> allNeeds = this.pawn.needs.AllNeeds;
+				List<Need> allNeeds = pawn.needs.AllNeeds;
 				for (int i = 0; i < allNeeds.Count; i++)
 				{
-					if (allNeeds[i].def == this.def.causesNeed)
+					if (allNeeds[i].def == def.causesNeed)
 					{
 						return (Need_Chemical)allNeeds[i];
 					}
@@ -29,8 +29,6 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public ChemicalDef Chemical
 		{
 			get
@@ -38,7 +36,7 @@ namespace RimWorld
 				List<ChemicalDef> allDefsListForReading = DefDatabase<ChemicalDef>.AllDefsListForReading;
 				for (int i = 0; i < allDefsListForReading.Count; i++)
 				{
-					if (allDefsListForReading[i].addictionHediff == this.def)
+					if (allDefsListForReading[i].addictionHediff == def)
 					{
 						return allDefsListForReading[i];
 					}
@@ -47,33 +45,29 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override string LabelInBrackets
 		{
 			get
 			{
 				string labelInBrackets = base.LabelInBrackets;
-				string text = (1f - this.Severity).ToStringPercent("F0");
-				if (this.def.CompProps<HediffCompProperties_SeverityPerDay>() == null)
+				string text = (1f - Severity).ToStringPercent("F0");
+				if (def.CompProps<HediffCompProperties_SeverityPerDay>() != null)
 				{
-					return labelInBrackets;
+					if (!labelInBrackets.NullOrEmpty())
+					{
+						return labelInBrackets + " " + text;
+					}
+					return text;
 				}
-				if (!labelInBrackets.NullOrEmpty())
-				{
-					return labelInBrackets + " " + text;
-				}
-				return text;
+				return labelInBrackets;
 			}
 		}
 
-		
-		
 		public override string TipStringExtra
 		{
 			get
 			{
-				Need_Chemical need = this.Need;
+				Need_Chemical need = Need;
 				if (need != null)
 				{
 					return "CreatesNeed".Translate() + ": " + need.LabelCap + " (" + need.CurLevelPercentage.ToStringPercent("F0") + ")";
@@ -82,14 +76,12 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override int CurStageIndex
 		{
 			get
 			{
-				Need_Chemical need = this.Need;
-				if (need == null || need.CurCategory != DrugDesireCategory.Withdrawal)
+				Need_Chemical need = Need;
+				if (need == null || need.CurCategory != 0)
 				{
 					return 0;
 				}
@@ -97,16 +89,9 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void Notify_NeedCategoryChanged()
 		{
-			this.pawn.health.Notify_HediffChanged(this);
+			pawn.health.Notify_HediffChanged(this);
 		}
-
-		
-		private const int DefaultStageIndex = 0;
-
-		
-		private const int WithdrawalStageIndex = 1;
 	}
 }

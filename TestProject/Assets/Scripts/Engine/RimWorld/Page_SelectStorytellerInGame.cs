@@ -1,44 +1,31 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Page_SelectStorytellerInGame : Page
 	{
-		
-		
-		public override string PageTitle
-		{
-			get
-			{
-				return "ChooseAIStoryteller".Translate();
-			}
-		}
+		private Listing_Standard selectedStorytellerInfoListing = new Listing_Standard();
 
-		
+		public override string PageTitle => "ChooseAIStoryteller".Translate();
+
 		public Page_SelectStorytellerInGame()
 		{
-			this.doCloseButton = true;
-			this.doCloseX = true;
+			doCloseButton = true;
+			doCloseX = true;
 		}
 
-		
 		public override void DoWindowContents(Rect rect)
 		{
-			base.DrawPageTitle(rect);
-			Rect mainRect = base.GetMainRect(rect, 0f, false);
+			DrawPageTitle(rect);
+			Rect mainRect = GetMainRect(rect);
 			Storyteller storyteller = Current.Game.storyteller;
 			StorytellerDef def = Current.Game.storyteller.def;
-			StorytellerUI.DrawStorytellerSelectionInterface(mainRect, ref storyteller.def, ref storyteller.difficulty, this.selectedStorytellerInfoListing);
+			StorytellerUI.DrawStorytellerSelectionInterface(mainRect, ref storyteller.def, ref storyteller.difficulty, selectedStorytellerInfoListing);
 			if (storyteller.def != def)
 			{
 				storyteller.Notify_DefChanged();
 			}
 		}
-
-		
-		private Listing_Standard selectedStorytellerInfoListing = new Listing_Standard();
 	}
 }

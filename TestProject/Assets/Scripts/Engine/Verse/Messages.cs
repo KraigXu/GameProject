@@ -1,109 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	[StaticConstructorOnStartup]
 	public static class Messages
 	{
-		
+		private static List<Message> liveMessages = new List<Message>();
+
+		private static int mouseoverMessageIndex = -1;
+
+		public static readonly Vector2 MessagesTopLeftStandard = new Vector2(140f, 16f);
+
+		private const int MessageYInterval = 26;
+
+		private const int MaxLiveMessages = 12;
+
 		public static void Update()
 		{
-			if (Current.ProgramState == ProgramState.Playing && Messages.mouseoverMessageIndex >= 0 && Messages.mouseoverMessageIndex < Messages.liveMessages.Count)
+			if (Current.ProgramState == ProgramState.Playing && mouseoverMessageIndex >= 0 && mouseoverMessageIndex < liveMessages.Count)
 			{
-				Messages.liveMessages[Messages.mouseoverMessageIndex].lookTargets.TryHighlight(true, true, false);
+				liveMessages[mouseoverMessageIndex].lookTargets.TryHighlight();
 			}
-			Messages.mouseoverMessageIndex = -1;
-			Messages.liveMessages.RemoveAll((Message m) => m.Expired);
+			mouseoverMessageIndex = -1;
+			liveMessages.RemoveAll((Message m) => m.Expired);
 		}
 
-		
 		public static void Message(string text, LookTargets lookTargets, MessageTypeDef def, Quest quest, bool historical = true)
 		{
-			if (!Messages.AcceptsMessage(text, lookTargets))
+			if (AcceptsMessage(text, lookTargets))
 			{
-				return;
+				Message(new Message(text.CapitalizeFirst(), def, lookTargets, quest), historical);
 			}
-			Messages.Message(new Message(text.CapitalizeFirst(), def, lookTargets, quest), historical);
 		}
 
-		
 		public static void Message(string text, LookTargets lookTargets, MessageTypeDef def, bool historical = true)
 		{
-			if (!Messages.AcceptsMessage(text, lookTargets))
+			if (AcceptsMessage(text, lookTargets))
 			{
-				return;
+				Message(new Message(text.CapitalizeFirst(), def, lookTargets), historical);
 			}
-			Messages.Message(new Message(text.CapitalizeFirst(), def, lookTargets), historical);
 		}
 
-		
 		public static void Message(string text, MessageTypeDef def, bool historical = true)
 		{
-			if (!Messages.AcceptsMessage(text, TargetInfo.Invalid))
+			if (AcceptsMessage(text, TargetInfo.Invalid))
 			{
-				return;
+				Message(new Message(text.CapitalizeFirst(), def), historical);
 			}
-			Messages.Message(new Message(text.CapitalizeFirst(), def), historical);
 		}
 
-		
 		public static void Message(Message msg, bool historical = true)
 		{
-			if (!Messages.AcceptsMessage(msg.text, msg.lookTargets))
+			if (AcceptsMessage(msg.text, msg.lookTargets))
 			{
-				return;
-			}
-			if (historical && Find.Archive != null)
-			{
-				Find.Archive.Add(msg);
-			}
-			Messages.liveMessages.Add(msg);
-			while (Messages.liveMessages.Count > 12)
-			{
-				Messages.liveMessages.RemoveAt(0);
-			}
-			if (msg.def.sound != null)
-			{
-				msg.def.sound.PlayOneShotOnCamera(null);
+				if (historical && Find.Archive != null)
+				{
+					Find.Archive.Add(msg);
+				}
+				liveMessages.Add(msg);
+				while (liveMessages.Count > 12)
+				{
+					liveMessages.RemoveAt(0);
+				}
+				if (msg.def.sound != null)
+				{
+					msg.def.sound.PlayOneShotOnCamera();
+				}
 			}
 		}
 
-		
 		public static bool IsLive(Message msg)
 		{
-			return Messages.liveMessages.Contains(msg);
+			return liveMessages.Contains(msg);
 		}
 
-		
 		public static void MessagesDoGUI()
 		{
 			Text.Font = GameFont.Small;
-			int xOffset = (int)Messages.MessagesTopLeftStandard.x;
-			int num = (int)Messages.MessagesTopLeftStandard.y;
+			int xOffset = (int)MessagesTopLeftStandard.x;
+			int num = (int)MessagesTopLeftStandard.y;
 			if (Current.Game != null && Find.ActiveLesson.ActiveLessonVisible)
 			{
 				num += (int)Find.ActiveLesson.Current.MessagesYOffset;
 			}
-			for (int i = Messages.liveMessages.Count - 1; i >= 0; i--)
+			for (int num2 = liveMessages.Count - 1; num2 >= 0; num2--)
 			{
-				Messages.liveMessages[i].Draw(xOffset, num);
+				liveMessages[num2].Draw(xOffset, num);
 				num += 26;
 			}
 		}
 
-		
 		public static bool CollidesWithAnyMessage(Rect rect, out float messageAlpha)
 		{
 			bool result = false;
 			float num = 0f;
-			for (int i = 0; i < Messages.liveMessages.Count; i++)
+			for (int i = 0; i < liveMessages.Count; i++)
 			{
-				Message message = Messages.liveMessages[i];
+				Message message = liveMessages[i];
 				if (rect.Overlaps(message.lastDrawRect))
 				{
 					result = true;
@@ -114,31 +110,28 @@ namespace Verse
 			return result;
 		}
 
-		
 		public static void Clear()
 		{
-			Messages.liveMessages.Clear();
+			liveMessages.Clear();
 		}
 
-		
 		public static void Notify_LoadedLevelChanged()
 		{
-			for (int i = 0; i < Messages.liveMessages.Count; i++)
+			for (int i = 0; i < liveMessages.Count; i++)
 			{
-				Messages.liveMessages[i].lookTargets = null;
+				liveMessages[i].lookTargets = null;
 			}
 		}
 
-		
 		private static bool AcceptsMessage(string text, LookTargets lookTargets)
 		{
 			if (text.NullOrEmpty())
 			{
 				return false;
 			}
-			for (int i = 0; i < Messages.liveMessages.Count; i++)
+			for (int i = 0; i < liveMessages.Count; i++)
 			{
-				if (Messages.liveMessages[i].text == text && Messages.liveMessages[i].startingFrame == RealTime.frameCount && LookTargets.SameTargets(Messages.liveMessages[i].lookTargets, lookTargets))
+				if (liveMessages[i].text == text && liveMessages[i].startingFrame == RealTime.frameCount && LookTargets.SameTargets(liveMessages[i].lookTargets, lookTargets))
 				{
 					return false;
 				}
@@ -146,25 +139,9 @@ namespace Verse
 			return true;
 		}
 
-		
 		public static void Notify_Mouseover(Message msg)
 		{
-			Messages.mouseoverMessageIndex = Messages.liveMessages.IndexOf(msg);
+			mouseoverMessageIndex = liveMessages.IndexOf(msg);
 		}
-
-		
-		private static List<Message> liveMessages = new List<Message>();
-
-		
-		private static int mouseoverMessageIndex = -1;
-
-		
-		public static readonly Vector2 MessagesTopLeftStandard = new Vector2(140f, 16f);
-
-		
-		private const int MessageYInterval = 26;
-
-		
-		private const int MaxLiveMessages = 12;
 	}
 }

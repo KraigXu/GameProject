@@ -1,8 +1,8 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Verse.AI;
@@ -12,36 +12,23 @@ using Verse.Steam;
 
 namespace Verse
 {
-	
 	public class EditWindow_DebugInspector : EditWindow
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(400f, 600f);
-			}
-		}
+		private StringBuilder debugStringBuilder = new StringBuilder();
 
-		
-		
-		public override bool IsDebug
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public bool fullMode;
 
-		
+		private float columnWidth = 360f;
+
+		public override Vector2 InitialSize => new Vector2(400f, 600f);
+
+		public override bool IsDebug => true;
+
 		public EditWindow_DebugInspector()
 		{
-			this.optionalTitle = "Debug inspector";
+			optionalTitle = "Debug inspector";
 		}
 
-		
 		public override void WindowUpdate()
 		{
 			base.WindowUpdate();
@@ -51,59 +38,54 @@ namespace Verse
 			}
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			if (KeyBindingDefOf.Dev_ToggleDebugInspector.KeyDownEvent)
 			{
 				Event.current.Use();
-				this.Close(true);
+				Close();
 			}
 			Text.Font = GameFont.Tiny;
-			WidgetRow widgetRow = new WidgetRow(0f, 0f, UIDirection.RightThenUp, 99999f, 4f);
-			widgetRow.ToggleableIcon(ref this.fullMode, TexButton.InspectModeToggle, "Toggle deep inspection mode for things on the map.", null, null);
-			widgetRow.ToggleableIcon(ref DebugViewSettings.writeCellContents, TexButton.InspectModeToggle, "Toggle shallow inspection for things on the map.", null, null);
-			if (widgetRow.ButtonText("Visibility", "Toggle what information should be reported by the inspector.", true, true))
+			WidgetRow widgetRow = new WidgetRow(0f, 0f);
+			widgetRow.ToggleableIcon(ref fullMode, TexButton.InspectModeToggle, "Toggle deep inspection mode for things on the map.");
+			widgetRow.ToggleableIcon(ref DebugViewSettings.writeCellContents, TexButton.InspectModeToggle, "Toggle shallow inspection for things on the map.");
+			if (widgetRow.ButtonText("Visibility", "Toggle what information should be reported by the inspector."))
 			{
 				Find.WindowStack.Add(new Dialog_DebugSettingsMenu());
 			}
-			if (widgetRow.ButtonText("Column Width +", "Make the columns wider.", true, true))
+			if (widgetRow.ButtonText("Column Width +", "Make the columns wider."))
 			{
-				this.columnWidth += 20f;
-				this.columnWidth = Mathf.Clamp(this.columnWidth, 200f, 1600f);
+				columnWidth += 20f;
+				columnWidth = Mathf.Clamp(columnWidth, 200f, 1600f);
 			}
-			if (widgetRow.ButtonText("Column Width -", "Make the columns narrower.", true, true))
+			if (widgetRow.ButtonText("Column Width -", "Make the columns narrower."))
 			{
-				this.columnWidth -= 20f;
-				this.columnWidth = Mathf.Clamp(this.columnWidth, 200f, 1600f);
+				columnWidth -= 20f;
+				columnWidth = Mathf.Clamp(columnWidth, 200f, 1600f);
 			}
 			inRect.yMin += 30f;
 			Listing_Standard listing_Standard = new Listing_Standard(GameFont.Tiny);
-			listing_Standard.ColumnWidth = Mathf.Min(this.columnWidth, inRect.width);
+			listing_Standard.ColumnWidth = Mathf.Min(columnWidth, inRect.width);
 			listing_Standard.Begin(inRect);
-			foreach (string label in this.debugStringBuilder.ToString().Split(new char[]
+			string[] array = debugStringBuilder.ToString().Split('\n');
+			foreach (string label in array)
 			{
-				'\n'
-			}))
-			{
-				listing_Standard.Label(label, -1f, null);
+				listing_Standard.Label(label);
 				listing_Standard.Gap(-9f);
 			}
 			listing_Standard.End();
 			if (Event.current.type == EventType.Repaint)
 			{
-				this.debugStringBuilder = new StringBuilder();
-				this.debugStringBuilder.Append(this.CurrentDebugString());
+				debugStringBuilder = new StringBuilder();
+				debugStringBuilder.Append(CurrentDebugString());
 			}
 		}
 
-		
 		public void AppendDebugString(string str)
 		{
-			this.debugStringBuilder.AppendLine(str);
+			debugStringBuilder.AppendLine(str);
 		}
 
-		
 		private string CurrentDebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -121,15 +103,15 @@ namespace Verse
 			{
 				stringBuilder.AppendLine("---");
 				stringBuilder.AppendLine("Sustainers:");
-				foreach (Sustainer sustainer in Find.SoundRoot.sustainerManager.AllSustainers)
+				foreach (Sustainer allSustainer in Find.SoundRoot.sustainerManager.AllSustainers)
 				{
-					stringBuilder.AppendLine(sustainer.DebugString());
+					stringBuilder.AppendLine(allSustainer.DebugString());
 				}
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine("OneShots:");
-				foreach (SampleOneShot sampleOneShot in Find.SoundRoot.oneShotManager.PlayingOneShots)
+				foreach (SampleOneShot playingOneShot in Find.SoundRoot.oneShotManager.PlayingOneShots)
 				{
-					stringBuilder.AppendLine(sampleOneShot.ToString());
+					stringBuilder.AppendLine(playingOneShot.ToString());
 				}
 			}
 			if (DebugViewSettings.writeSoundEventsRecord)
@@ -151,17 +133,16 @@ namespace Verse
 			if (DebugViewSettings.writeReservations && Find.CurrentMap != null)
 			{
 				stringBuilder.AppendLine("---");
-				stringBuilder.AppendLine(string.Join("\r\n", (from r in Find.CurrentMap.reservationManager.ReservationsReadOnly
-				select r.ToString()).ToArray<string>()));
+				stringBuilder.AppendLine(string.Join("\r\n", Find.CurrentMap.reservationManager.ReservationsReadOnly.Select((ReservationManager.Reservation r) => r.ToString()).ToArray()));
 			}
 			if (DebugViewSettings.writeMemoryUsage)
 			{
 				stringBuilder.AppendLine("---");
-				stringBuilder.AppendLine("Total allocated: " + Profiler.GetTotalAllocatedMemoryLong().ToStringBytes("F2"));
-				stringBuilder.AppendLine("Total reserved: " + Profiler.GetTotalReservedMemoryLong().ToStringBytes("F2"));
-				stringBuilder.AppendLine("Total reserved unused: " + Profiler.GetTotalUnusedReservedMemoryLong().ToStringBytes("F2"));
-				stringBuilder.AppendLine("Mono heap size: " + Profiler.GetMonoHeapSizeLong().ToStringBytes("F2"));
-				stringBuilder.AppendLine("Mono used size: " + Profiler.GetMonoUsedSizeLong().ToStringBytes("F2"));
+				stringBuilder.AppendLine("Total allocated: " + Profiler.GetTotalAllocatedMemoryLong().ToStringBytes());
+				stringBuilder.AppendLine("Total reserved: " + Profiler.GetTotalReservedMemoryLong().ToStringBytes());
+				stringBuilder.AppendLine("Total reserved unused: " + Profiler.GetTotalUnusedReservedMemoryLong().ToStringBytes());
+				stringBuilder.AppendLine("Mono heap size: " + Profiler.GetMonoHeapSizeLong().ToStringBytes());
+				stringBuilder.AppendLine("Mono used size: " + Profiler.GetMonoUsedSizeLong().ToStringBytes());
 			}
 			if (Current.ProgramState == ProgramState.Playing)
 			{
@@ -249,21 +230,15 @@ namespace Verse
 					}
 					if (DebugViewSettings.writeAttackTargets)
 					{
-						foreach (Pawn pawn in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell()).OfType<Pawn>())
+						foreach (Pawn item in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell()).OfType<Pawn>())
 						{
 							stringBuilder.AppendLine("---");
-							stringBuilder.AppendLine("Potential attack targets for " + pawn.LabelShort + ":");
-							List<IAttackTarget> potentialTargetsFor = Find.CurrentMap.attackTargetsCache.GetPotentialTargetsFor(pawn);
+							stringBuilder.AppendLine("Potential attack targets for " + item.LabelShort + ":");
+							List<IAttackTarget> potentialTargetsFor = Find.CurrentMap.attackTargetsCache.GetPotentialTargetsFor(item);
 							for (int i = 0; i < potentialTargetsFor.Count; i++)
 							{
 								Thing thing = (Thing)potentialTargetsFor[i];
-								stringBuilder.AppendLine(string.Concat(new object[]
-								{
-									thing.LabelShort,
-									", ",
-									thing.Faction,
-									potentialTargetsFor[i].ThreatDisabled(null) ? " (threat disabled)" : ""
-								}));
+								stringBuilder.AppendLine(thing.LabelShort + ", " + thing.Faction + (potentialTargetsFor[i].ThreatDisabled(null) ? " (threat disabled)" : ""));
 							}
 						}
 					}
@@ -286,23 +261,23 @@ namespace Verse
 					if (DebugViewSettings.writeMentalStateCalcs)
 					{
 						stringBuilder.AppendLine("---");
-						foreach (Pawn pawn2 in (from t in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell())
-						where t is Pawn
-						select t).Cast<Pawn>())
+						foreach (Pawn item2 in (from t in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell())
+							where t is Pawn
+							select t).Cast<Pawn>())
 						{
-							stringBuilder.AppendLine(pawn2.mindState.mentalBreaker.DebugString());
+							stringBuilder.AppendLine(item2.mindState.mentalBreaker.DebugString());
 						}
 					}
 					if (DebugViewSettings.writeWorkSettings)
 					{
-						foreach (Pawn pawn3 in (from t in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell())
-						where t is Pawn
-						select t).Cast<Pawn>())
+						foreach (Pawn item3 in (from t in Find.CurrentMap.thingGrid.ThingsAt(UI.MouseCell())
+							where t is Pawn
+							select t).Cast<Pawn>())
 						{
-							if (pawn3.workSettings != null)
+							if (item3.workSettings != null)
 							{
 								stringBuilder.AppendLine("---");
-								stringBuilder.AppendLine(pawn3.workSettings.DebugString());
+								stringBuilder.AppendLine(item3.workSettings.DebugString());
 							}
 						}
 					}
@@ -311,9 +286,9 @@ namespace Verse
 						stringBuilder.AppendLine("---");
 						if (intVec.InBounds(Find.CurrentMap))
 						{
-							foreach (Thing thing2 in intVec.GetThingList(Find.CurrentMap))
+							foreach (Thing thing3 in intVec.GetThingList(Find.CurrentMap))
 							{
-								Apparel apparel = thing2 as Apparel;
+								Apparel apparel = thing3 as Apparel;
 								if (apparel != null)
 								{
 									stringBuilder.AppendLine(apparel.Label + ": " + JobGiver_OptimizeApparel.ApparelScoreRaw(null, apparel).ToString("F2"));
@@ -321,24 +296,24 @@ namespace Verse
 							}
 						}
 					}
-					if (DebugViewSettings.writeCellContents || this.fullMode)
+					if (DebugViewSettings.writeCellContents || fullMode)
 					{
 						stringBuilder.AppendLine("---");
 						if (intVec.InBounds(Find.CurrentMap))
 						{
-							foreach (Designation designation in Find.CurrentMap.designationManager.AllDesignationsAt(intVec))
+							foreach (Designation item4 in Find.CurrentMap.designationManager.AllDesignationsAt(intVec))
 							{
-								stringBuilder.AppendLine(designation.ToString());
+								stringBuilder.AppendLine(item4.ToString());
 							}
-							foreach (Thing thing3 in Find.CurrentMap.thingGrid.ThingsAt(intVec))
+							foreach (Thing item5 in Find.CurrentMap.thingGrid.ThingsAt(intVec))
 							{
-								if (!this.fullMode)
+								if (!fullMode)
 								{
-									stringBuilder.AppendLine(thing3.LabelCap + " - " + thing3.ToString());
+									stringBuilder.AppendLine(item5.LabelCap + " - " + item5.ToString());
 								}
 								else
 								{
-									stringBuilder.AppendLine(Scribe.saver.DebugOutputFor(thing3));
+									stringBuilder.AppendLine(Scribe.saver.DebugOutputFor(item5));
 									stringBuilder.AppendLine();
 								}
 							}
@@ -347,18 +322,18 @@ namespace Verse
 					if (DebugViewSettings.debugApparelOptimize)
 					{
 						stringBuilder.AppendLine("---");
-						foreach (Thing thing4 in Find.CurrentMap.thingGrid.ThingsAt(intVec))
+						foreach (Thing item6 in Find.CurrentMap.thingGrid.ThingsAt(intVec))
 						{
-							Apparel apparel2 = thing4 as Apparel;
+							Apparel apparel2 = item6 as Apparel;
 							if (apparel2 != null)
 							{
 								stringBuilder.AppendLine(apparel2.LabelCap);
 								stringBuilder.AppendLine("   raw: " + JobGiver_OptimizeApparel.ApparelScoreRaw(null, apparel2).ToString("F2"));
-								Pawn pawn4 = Find.Selector.SingleSelectedThing as Pawn;
-								if (pawn4 != null)
+								Pawn pawn = Find.Selector.SingleSelectedThing as Pawn;
+								if (pawn != null)
 								{
-									stringBuilder.AppendLine("  Pawn: " + pawn4);
-									stringBuilder.AppendLine("  gain: " + JobGiver_OptimizeApparel.ApparelScoreGain(pawn4, apparel2).ToString("F2"));
+									stringBuilder.AppendLine("  Pawn: " + pawn);
+									stringBuilder.AppendLine("  gain: " + JobGiver_OptimizeApparel.ApparelScoreGain(pawn, apparel2).ToString("F2"));
 								}
 							}
 						}
@@ -398,7 +373,7 @@ namespace Verse
 					if (DebugViewSettings.drawGlow)
 					{
 						stringBuilder.AppendLine("---");
-						stringBuilder.AppendLine("Game glow: " + Find.CurrentMap.glowGrid.GameGlowAt(intVec, false));
+						stringBuilder.AppendLine("Game glow: " + Find.CurrentMap.glowGrid.GameGlowAt(intVec));
 						stringBuilder.AppendLine("Psych glow: " + Find.CurrentMap.glowGrid.PsychGlowAt(intVec));
 						stringBuilder.AppendLine("Visual Glow: " + Find.CurrentMap.glowGrid.VisualGlowAt(intVec));
 						stringBuilder.AppendLine("GlowReport:\n" + ((SectionLayer_LightingOverlay)Find.CurrentMap.mapDrawer.SectionAt(intVec).GetLayer(typeof(SectionLayer_LightingOverlay))).GlowReportAt(intVec));
@@ -408,7 +383,7 @@ namespace Verse
 					{
 						stringBuilder.AppendLine("---");
 						stringBuilder.AppendLine("Perceived path cost: " + Find.CurrentMap.pathGrid.PerceivedPathCostAt(intVec));
-						stringBuilder.AppendLine("Real path cost: " + Find.CurrentMap.pathGrid.CalculatedCostAt(intVec, false, IntVec3.Invalid));
+						stringBuilder.AppendLine("Real path cost: " + Find.CurrentMap.pathGrid.CalculatedCostAt(intVec, perceivedStatic: false, IntVec3.Invalid));
 					}
 					if (DebugViewSettings.writeFertility)
 					{
@@ -419,11 +394,11 @@ namespace Verse
 					{
 						stringBuilder.AppendLine("---");
 						stringBuilder.AppendLine("\nLinkFlags: ");
-						foreach (object obj in Enum.GetValues(typeof(LinkFlags)))
+						foreach (object value in Enum.GetValues(typeof(LinkFlags)))
 						{
-							if ((Find.CurrentMap.linkGrid.LinkFlagsAt(intVec) & (LinkFlags)obj) != LinkFlags.None)
+							if ((Find.CurrentMap.linkGrid.LinkFlagsAt(intVec) & (LinkFlags)value) != 0)
 							{
-								stringBuilder.Append(" " + obj);
+								stringBuilder.Append(" " + value);
 							}
 						}
 					}
@@ -436,22 +411,22 @@ namespace Verse
 					{
 						stringBuilder.AppendLine("---");
 						stringBuilder.Append("Cover: ");
-						Thing thing5 = Find.CurrentMap.coverGrid[intVec];
-						if (thing5 == null)
+						Thing thing2 = Find.CurrentMap.coverGrid[intVec];
+						if (thing2 == null)
 						{
 							stringBuilder.AppendLine("null");
 						}
 						else
 						{
-							stringBuilder.AppendLine(thing5.ToString());
+							stringBuilder.AppendLine(thing2.ToString());
 						}
 					}
 					if (DebugViewSettings.drawPower)
 					{
 						stringBuilder.AppendLine("---");
-						foreach (Thing thing6 in Find.CurrentMap.thingGrid.ThingsAt(intVec))
+						foreach (Thing item7 in Find.CurrentMap.thingGrid.ThingsAt(intVec))
 						{
-							ThingWithComps thingWithComps = thing6 as ThingWithComps;
+							ThingWithComps thingWithComps = item7 as ThingWithComps;
 							if (thingWithComps != null && thingWithComps.GetComp<CompPowerTrader>() != null)
 							{
 								stringBuilder.AppendLine(" " + thingWithComps.GetComp<CompPowerTrader>().DebugString);
@@ -469,28 +444,25 @@ namespace Verse
 					}
 					if (DebugViewSettings.drawPreyInfo)
 					{
-						Pawn pawn5 = Find.Selector.SingleSelectedThing as Pawn;
-						if (pawn5 != null)
+						Pawn pawn2 = Find.Selector.SingleSelectedThing as Pawn;
+						if (pawn2 != null)
 						{
 							List<Thing> thingList = intVec.GetThingList(Find.CurrentMap);
-							int j = 0;
-							while (j < thingList.Count)
+							for (int j = 0; j < thingList.Count; j++)
 							{
-								Pawn pawn6 = thingList[j] as Pawn;
-								if (pawn6 != null)
+								Pawn pawn3 = thingList[j] as Pawn;
+								if (pawn3 != null)
 								{
 									stringBuilder.AppendLine("---");
-									if (FoodUtility.IsAcceptablePreyFor(pawn5, pawn6))
+									if (FoodUtility.IsAcceptablePreyFor(pawn2, pawn3))
 									{
-										stringBuilder.AppendLine("Prey score: " + FoodUtility.GetPreyScoreFor(pawn5, pawn6));
-										break;
+										stringBuilder.AppendLine("Prey score: " + FoodUtility.GetPreyScoreFor(pawn2, pawn3));
 									}
-									stringBuilder.AppendLine("Prey score: None");
+									else
+									{
+										stringBuilder.AppendLine("Prey score: None");
+									}
 									break;
-								}
-								else
-								{
-									j++;
 								}
 							}
 						}
@@ -499,14 +471,5 @@ namespace Verse
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		private StringBuilder debugStringBuilder = new StringBuilder();
-
-		
-		public bool fullMode;
-
-		
-		private float columnWidth = 360f;
 	}
 }

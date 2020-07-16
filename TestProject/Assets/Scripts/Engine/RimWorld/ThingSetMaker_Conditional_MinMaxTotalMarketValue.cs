@@ -1,17 +1,16 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_Conditional_MinMaxTotalMarketValue : ThingSetMaker_Conditional
 	{
-		
+		public float minMaxTotalMarketValue;
+
 		protected override bool Condition(ThingSetMakerParams parms)
 		{
-			return parms.totalMarketValueRange != null && parms.totalMarketValueRange.Value.max >= this.minMaxTotalMarketValue;
+			if (parms.totalMarketValueRange.HasValue)
+			{
+				return parms.totalMarketValueRange.Value.max >= minMaxTotalMarketValue;
+			}
+			return false;
 		}
-
-		
-		public float minMaxTotalMarketValue;
 	}
 }

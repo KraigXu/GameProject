@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Recipe_ChangeImplantLevel : Recipe_Surgery
 	{
-		
 		private bool Operable(Hediff target, RecipeDef recipe)
 		{
 			int hediffLevelOffset = recipe.hediffLevelOffset;
@@ -22,42 +19,36 @@ namespace RimWorld
 				return false;
 			}
 			int level = hediff_ImplantWithLevel.level;
-			if (hediff_ImplantWithLevel.def != recipe.changesHediffLevel)
+			if (hediff_ImplantWithLevel.def == recipe.changesHediffLevel)
 			{
-				return false;
+				if (hediffLevelOffset <= 0)
+				{
+					return level > 0;
+				}
+				return (float)level < hediff_ImplantWithLevel.def.maxSeverity;
 			}
-			if (hediffLevelOffset <= 0)
-			{
-				return level > 0;
-			}
-			return (float)level < hediff_ImplantWithLevel.def.maxSeverity;
+			return false;
 		}
 
-		
 		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
 		{
-			return MedicalRecipesUtility.GetFixedPartsToApplyOn(recipe, pawn, (BodyPartRecord record) => pawn.health.hediffSet.hediffs.Any((Hediff x) => x.Part == record && this.Operable(x, recipe)));
+			return MedicalRecipesUtility.GetFixedPartsToApplyOn(recipe, pawn, (BodyPartRecord record) => pawn.health.hediffSet.hediffs.Any((Hediff x) => x.Part == record && Operable(x, recipe)) ? true : false);
 		}
 
-		
 		public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
 			if (billDoer != null)
 			{
-				TaleRecorder.RecordTale(TaleDefOf.DidSurgery, new object[]
-				{
-					billDoer,
-					pawn
-				});
+				TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
 			}
-			Hediff_ImplantWithLevel hediff_ImplantWithLevel = (Hediff_ImplantWithLevel)pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h) => this.Operable(h, this.recipe) && h.Part == part);
+			Hediff_ImplantWithLevel hediff_ImplantWithLevel = (Hediff_ImplantWithLevel)pawn.health.hediffSet.hediffs.FirstOrDefault((Hediff h) => Operable(h, recipe) && h.Part == part);
 			if (hediff_ImplantWithLevel != null)
 			{
-				if (this.IsViolationOnPawn(pawn, part, Faction.OfPlayer))
+				if (IsViolationOnPawn(pawn, part, Faction.OfPlayer))
 				{
-					base.ReportViolation(pawn, billDoer, pawn.FactionOrExtraHomeFaction, -70, "GoodwillChangedReason_DowngradedImplant".Translate(hediff_ImplantWithLevel.Label));
+					ReportViolation(pawn, billDoer, pawn.FactionOrExtraHomeFaction, -70, "GoodwillChangedReason_DowngradedImplant".Translate(hediff_ImplantWithLevel.Label));
 				}
-				hediff_ImplantWithLevel.ChangeLevel(this.recipe.hediffLevelOffset);
+				hediff_ImplantWithLevel.ChangeLevel(recipe.hediffLevelOffset);
 			}
 		}
 	}

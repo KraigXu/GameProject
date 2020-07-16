@@ -1,177 +1,109 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public abstract class Building_Turret : Building, IAttackTarget, ILoadReferenceable, IAttackTargetSearcher
 	{
-		
-		
-		public abstract LocalTargetInfo CurrentTarget { get; }
+		protected StunHandler stunner;
 
-		
-		
-		public abstract Verb AttackVerb { get; }
+		protected LocalTargetInfo forcedTarget = LocalTargetInfo.Invalid;
 
-		
-		
-		Thing IAttackTarget.Thing
+		private LocalTargetInfo lastAttackedTarget;
+
+		private int lastAttackTargetTick;
+
+		private const float SightRadiusTurret = 13.4f;
+
+		public abstract LocalTargetInfo CurrentTarget
 		{
-			get
-			{
-				return this;
-			}
+			get;
 		}
 
-		
-		
-		public LocalTargetInfo TargetCurrentlyAimingAt
+		public abstract Verb AttackVerb
 		{
-			get
-			{
-				return this.CurrentTarget;
-			}
+			get;
 		}
 
-		
-		
-		Thing IAttackTargetSearcher.Thing
-		{
-			get
-			{
-				return this;
-			}
-		}
+		Thing IAttackTarget.Thing => this;
 
-		
-		
-		public Verb CurrentEffectiveVerb
-		{
-			get
-			{
-				return this.AttackVerb;
-			}
-		}
+		public LocalTargetInfo TargetCurrentlyAimingAt => CurrentTarget;
 
-		
-		
-		public LocalTargetInfo LastAttackedTarget
-		{
-			get
-			{
-				return this.lastAttackedTarget;
-			}
-		}
+		Thing IAttackTargetSearcher.Thing => this;
 
-		
-		
-		public int LastAttackTargetTick
-		{
-			get
-			{
-				return this.lastAttackTargetTick;
-			}
-		}
+		public Verb CurrentEffectiveVerb => AttackVerb;
 
-		
-		
-		public float TargetPriorityFactor
-		{
-			get
-			{
-				return 1f;
-			}
-		}
+		public LocalTargetInfo LastAttackedTarget => lastAttackedTarget;
 
-		
+		public int LastAttackTargetTick => lastAttackTargetTick;
+
+		public float TargetPriorityFactor => 1f;
+
 		public Building_Turret()
 		{
-			this.stunner = new StunHandler(this);
+			stunner = new StunHandler(this);
 		}
 
-		
 		public override void Tick()
 		{
 			base.Tick();
-			if (this.forcedTarget.HasThing && (!this.forcedTarget.Thing.Spawned || !base.Spawned || this.forcedTarget.Thing.Map != base.Map))
+			if (forcedTarget.HasThing && (!forcedTarget.Thing.Spawned || !base.Spawned || forcedTarget.Thing.Map != base.Map))
 			{
-				this.forcedTarget = LocalTargetInfo.Invalid;
+				forcedTarget = LocalTargetInfo.Invalid;
 			}
-			this.stunner.StunHandlerTick();
+			stunner.StunHandlerTick();
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_TargetInfo.Look(ref this.forcedTarget, "forcedTarget");
-			Scribe_TargetInfo.Look(ref this.lastAttackedTarget, "lastAttackedTarget");
-			Scribe_Deep.Look<StunHandler>(ref this.stunner, "stunner", new object[]
-			{
-				this
-			});
-			Scribe_Values.Look<int>(ref this.lastAttackTargetTick, "lastAttackTargetTick", 0, false);
+			Scribe_TargetInfo.Look(ref forcedTarget, "forcedTarget");
+			Scribe_TargetInfo.Look(ref lastAttackedTarget, "lastAttackedTarget");
+			Scribe_Deep.Look(ref stunner, "stunner", this);
+			Scribe_Values.Look(ref lastAttackTargetTick, "lastAttackTargetTick", 0);
 		}
 
-		
 		public override void PreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
 		{
 			base.PreApplyDamage(ref dinfo, out absorbed);
-			if (absorbed)
+			if (!absorbed)
 			{
-				return;
+				stunner.Notify_DamageApplied(dinfo, affectedByEMP: true);
+				absorbed = false;
 			}
-			this.stunner.Notify_DamageApplied(dinfo, true);
-			absorbed = false;
 		}
 
-		
 		public abstract void OrderAttack(LocalTargetInfo targ);
 
-		
 		public bool ThreatDisabled(IAttackTargetSearcher disabledFor)
 		{
-			CompPowerTrader comp = base.GetComp<CompPowerTrader>();
+			CompPowerTrader comp = GetComp<CompPowerTrader>();
 			if (comp != null && !comp.PowerOn)
 			{
 				return true;
 			}
-			CompMannable comp2 = base.GetComp<CompMannable>();
+			CompMannable comp2 = GetComp<CompMannable>();
 			if (comp2 != null && !comp2.MannedNow)
 			{
 				return true;
 			}
-			CompCanBeDormant comp3 = base.GetComp<CompCanBeDormant>();
+			CompCanBeDormant comp3 = GetComp<CompCanBeDormant>();
 			if (comp3 != null && !comp3.Awake)
 			{
 				return true;
 			}
-			CompInitiatable comp4 = base.GetComp<CompInitiatable>();
-			return comp4 != null && !comp4.Initiated;
+			CompInitiatable comp4 = GetComp<CompInitiatable>();
+			if (comp4 != null && !comp4.Initiated)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		protected void OnAttackedTarget(LocalTargetInfo target)
 		{
-			this.lastAttackTargetTick = Find.TickManager.TicksGame;
-			this.lastAttackedTarget = target;
+			lastAttackTargetTick = Find.TickManager.TicksGame;
+			lastAttackedTarget = target;
 		}
-
-		
-		protected StunHandler stunner;
-
-		
-		protected LocalTargetInfo forcedTarget = LocalTargetInfo.Invalid;
-
-		
-		private LocalTargetInfo lastAttackedTarget;
-
-		
-		private int lastAttackTargetTick;
-
-		
-		private const float SightRadiusTurret = 13.4f;
 	}
 }

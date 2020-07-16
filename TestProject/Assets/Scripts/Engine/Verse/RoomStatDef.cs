@@ -1,90 +1,73 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class RoomStatDef : Def
 	{
-		
-		
+		public Type workerClass;
+
+		public float updatePriority;
+
+		public bool displayRounded;
+
+		public bool isHidden;
+
+		public float roomlessScore;
+
+		public List<RoomStatScoreStage> scoreStages;
+
+		public RoomStatDef inputStat;
+
+		public SimpleCurve curve;
+
+		[Unsaved(false)]
+		private RoomStatWorker workerInt;
+
 		public RoomStatWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (RoomStatWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.def = this;
+					workerInt = (RoomStatWorker)Activator.CreateInstance(workerClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
 		public RoomStatScoreStage GetScoreStage(float score)
 		{
-			if (this.scoreStages.NullOrEmpty<RoomStatScoreStage>())
+			if (scoreStages.NullOrEmpty())
 			{
 				return null;
 			}
-			return this.scoreStages[this.GetScoreStageIndex(score)];
+			return scoreStages[GetScoreStageIndex(score)];
 		}
 
-		
 		public int GetScoreStageIndex(float score)
 		{
-			if (this.scoreStages.NullOrEmpty<RoomStatScoreStage>())
+			if (scoreStages.NullOrEmpty())
 			{
 				throw new InvalidOperationException("No score stages available.");
 			}
 			int result = 0;
-			int num = 0;
-			while (num < this.scoreStages.Count && score >= this.scoreStages[num].minScore)
+			for (int i = 0; i < scoreStages.Count && score >= scoreStages[i].minScore; i++)
 			{
-				result = num;
-				num++;
+				result = i;
 			}
 			return result;
 		}
 
-		
 		public string ScoreToString(float score)
 		{
-			if (this.displayRounded)
+			if (displayRounded)
 			{
 				return Mathf.RoundToInt(score).ToString();
 			}
 			return score.ToString("F2");
 		}
-
-		
-		public Type workerClass;
-
-		
-		public float updatePriority;
-
-		
-		public bool displayRounded;
-
-		
-		public bool isHidden;
-
-		
-		public float roomlessScore;
-
-		
-		public List<RoomStatScoreStage> scoreStages;
-
-		
-		public RoomStatDef inputStat;
-
-		
-		public SimpleCurve curve;
-
-		
-		[Unsaved(false)]
-		private RoomStatWorker workerInt;
 	}
 }

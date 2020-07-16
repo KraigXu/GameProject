@@ -1,357 +1,307 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class Explosion : Thing
 	{
-		
+		public float radius;
+
+		public DamageDef damType;
+
+		public int damAmount;
+
+		public float armorPenetration;
+
+		public Thing instigator;
+
+		public ThingDef weapon;
+
+		public ThingDef projectile;
+
+		public Thing intendedTarget;
+
+		public bool applyDamageToExplosionCellsNeighbors;
+
+		public ThingDef preExplosionSpawnThingDef;
+
+		public float preExplosionSpawnChance;
+
+		public int preExplosionSpawnThingCount = 1;
+
+		public ThingDef postExplosionSpawnThingDef;
+
+		public float postExplosionSpawnChance;
+
+		public int postExplosionSpawnThingCount = 1;
+
+		public float chanceToStartFire;
+
+		public bool damageFalloff;
+
+		public IntVec3? needLOSToCell1;
+
+		public IntVec3? needLOSToCell2;
+
+		private int startTick;
+
+		private List<IntVec3> cellsToAffect;
+
+		private List<Thing> damagedThings;
+
+		private List<Thing> ignoredThings;
+
+		private HashSet<IntVec3> addedCellsAffectedOnlyByDamage;
+
+		private const float DamageFactorAtEdge = 0.2f;
+
+		private static HashSet<IntVec3> tmpCells = new HashSet<IntVec3>();
+
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			if (!respawningAfterLoad)
 			{
-				this.cellsToAffect = SimplePool<List<IntVec3>>.Get();
-				this.cellsToAffect.Clear();
-				this.damagedThings = SimplePool<List<Thing>>.Get();
-				this.damagedThings.Clear();
-				this.addedCellsAffectedOnlyByDamage = SimplePool<HashSet<IntVec3>>.Get();
-				this.addedCellsAffectedOnlyByDamage.Clear();
+				cellsToAffect = SimplePool<List<IntVec3>>.Get();
+				cellsToAffect.Clear();
+				damagedThings = SimplePool<List<Thing>>.Get();
+				damagedThings.Clear();
+				addedCellsAffectedOnlyByDamage = SimplePool<HashSet<IntVec3>>.Get();
+				addedCellsAffectedOnlyByDamage.Clear();
 			}
 		}
 
-		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.DeSpawn(mode);
-			this.cellsToAffect.Clear();
-			SimplePool<List<IntVec3>>.Return(this.cellsToAffect);
-			this.cellsToAffect = null;
-			this.damagedThings.Clear();
-			SimplePool<List<Thing>>.Return(this.damagedThings);
-			this.damagedThings = null;
-			this.addedCellsAffectedOnlyByDamage.Clear();
-			SimplePool<HashSet<IntVec3>>.Return(this.addedCellsAffectedOnlyByDamage);
-			this.addedCellsAffectedOnlyByDamage = null;
+			cellsToAffect.Clear();
+			SimplePool<List<IntVec3>>.Return(cellsToAffect);
+			cellsToAffect = null;
+			damagedThings.Clear();
+			SimplePool<List<Thing>>.Return(damagedThings);
+			damagedThings = null;
+			addedCellsAffectedOnlyByDamage.Clear();
+			SimplePool<HashSet<IntVec3>>.Return(addedCellsAffectedOnlyByDamage);
+			addedCellsAffectedOnlyByDamage = null;
 		}
 
-		
 		public virtual void StartExplosion(SoundDef explosionSound, List<Thing> ignoredThings)
 		{
 			if (!base.Spawned)
 			{
-				Log.Error("Called StartExplosion() on unspawned thing.", false);
+				Log.Error("Called StartExplosion() on unspawned thing.");
 				return;
 			}
-			this.startTick = Find.TickManager.TicksGame;
+			startTick = Find.TickManager.TicksGame;
 			this.ignoredThings = ignoredThings;
-			this.cellsToAffect.Clear();
-			this.damagedThings.Clear();
-			this.addedCellsAffectedOnlyByDamage.Clear();
-			this.cellsToAffect.AddRange(this.damType.Worker.ExplosionCellsToHit(this));
-			if (this.applyDamageToExplosionCellsNeighbors)
+			cellsToAffect.Clear();
+			damagedThings.Clear();
+			addedCellsAffectedOnlyByDamage.Clear();
+			cellsToAffect.AddRange(damType.Worker.ExplosionCellsToHit(this));
+			if (applyDamageToExplosionCellsNeighbors)
 			{
-				this.AddCellsNeighbors(this.cellsToAffect);
+				AddCellsNeighbors(cellsToAffect);
 			}
-			this.damType.Worker.ExplosionStart(this, this.cellsToAffect);
-			this.PlayExplosionSound(explosionSound);
-			MoteMaker.MakeWaterSplash(base.Position.ToVector3Shifted(), base.Map, this.radius * 6f, 20f);
-			this.cellsToAffect.Sort((IntVec3 a, IntVec3 b) => this.GetCellAffectTick(b).CompareTo(this.GetCellAffectTick(a)));
+			damType.Worker.ExplosionStart(this, cellsToAffect);
+			PlayExplosionSound(explosionSound);
+			MoteMaker.MakeWaterSplash(base.Position.ToVector3Shifted(), base.Map, radius * 6f, 20f);
+			cellsToAffect.Sort((IntVec3 a, IntVec3 b) => GetCellAffectTick(b).CompareTo(GetCellAffectTick(a)));
 			RegionTraverser.BreadthFirstTraverse(base.Position, base.Map, (Region from, Region to) => true, delegate(Region x)
 			{
 				List<Thing> allThings = x.ListerThings.AllThings;
-				for (int i = allThings.Count - 1; i >= 0; i--)
+				for (int num = allThings.Count - 1; num >= 0; num--)
 				{
-					if (allThings[i].Spawned)
+					if (allThings[num].Spawned)
 					{
-						allThings[i].Notify_Explosion(this);
+						allThings[num].Notify_Explosion(this);
 					}
 				}
 				return false;
-			}, 25, RegionType.Set_Passable);
+			}, 25);
 		}
 
-		
 		public override void Tick()
 		{
 			int ticksGame = Find.TickManager.TicksGame;
-			int num = this.cellsToAffect.Count - 1;
-			while (num >= 0 && ticksGame >= this.GetCellAffectTick(this.cellsToAffect[num]))
+			int num = cellsToAffect.Count - 1;
+			while (num >= 0 && ticksGame >= GetCellAffectTick(cellsToAffect[num]))
 			{
 				try
 				{
-					this.AffectCell(this.cellsToAffect[num]);
+					AffectCell(cellsToAffect[num]);
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Explosion could not affect cell ",
-						this.cellsToAffect[num],
-						": ",
-						ex
-					}), false);
+					Log.Error("Explosion could not affect cell " + cellsToAffect[num] + ": " + ex);
 				}
-				this.cellsToAffect.RemoveAt(num);
+				cellsToAffect.RemoveAt(num);
 				num--;
 			}
-			if (!this.cellsToAffect.Any<IntVec3>())
+			if (!cellsToAffect.Any())
 			{
-				this.Destroy(DestroyMode.Vanish);
+				Destroy();
 			}
 		}
 
-		
 		public int GetDamageAmountAt(IntVec3 c)
 		{
-			if (!this.damageFalloff)
+			if (!damageFalloff)
 			{
-				return this.damAmount;
+				return damAmount;
 			}
-			float t = c.DistanceTo(base.Position) / this.radius;
-			return Mathf.Max(GenMath.RoundRandom(Mathf.Lerp((float)this.damAmount, (float)this.damAmount * 0.2f, t)), 1);
+			float t = c.DistanceTo(base.Position) / radius;
+			return Mathf.Max(GenMath.RoundRandom(Mathf.Lerp(damAmount, (float)damAmount * 0.2f, t)), 1);
 		}
 
-		
 		public float GetArmorPenetrationAt(IntVec3 c)
 		{
-			if (!this.damageFalloff)
+			if (!damageFalloff)
 			{
-				return this.armorPenetration;
+				return armorPenetration;
 			}
-			float t = c.DistanceTo(base.Position) / this.radius;
-			return Mathf.Lerp(this.armorPenetration, this.armorPenetration * 0.2f, t);
+			float t = c.DistanceTo(base.Position) / radius;
+			return Mathf.Lerp(armorPenetration, armorPenetration * 0.2f, t);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.radius, "radius", 0f, false);
-			Scribe_Defs.Look<DamageDef>(ref this.damType, "damType");
-			Scribe_Values.Look<int>(ref this.damAmount, "damAmount", 0, false);
-			Scribe_Values.Look<float>(ref this.armorPenetration, "armorPenetration", 0f, false);
-			Scribe_References.Look<Thing>(ref this.instigator, "instigator", false);
-			Scribe_Defs.Look<ThingDef>(ref this.weapon, "weapon");
-			Scribe_Defs.Look<ThingDef>(ref this.projectile, "projectile");
-			Scribe_References.Look<Thing>(ref this.intendedTarget, "intendedTarget", false);
-			Scribe_Values.Look<bool>(ref this.applyDamageToExplosionCellsNeighbors, "applyDamageToExplosionCellsNeighbors", false, false);
-			Scribe_Defs.Look<ThingDef>(ref this.preExplosionSpawnThingDef, "preExplosionSpawnThingDef");
-			Scribe_Values.Look<float>(ref this.preExplosionSpawnChance, "preExplosionSpawnChance", 0f, false);
-			Scribe_Values.Look<int>(ref this.preExplosionSpawnThingCount, "preExplosionSpawnThingCount", 1, false);
-			Scribe_Defs.Look<ThingDef>(ref this.postExplosionSpawnThingDef, "postExplosionSpawnThingDef");
-			Scribe_Values.Look<float>(ref this.postExplosionSpawnChance, "postExplosionSpawnChance", 0f, false);
-			Scribe_Values.Look<int>(ref this.postExplosionSpawnThingCount, "postExplosionSpawnThingCount", 1, false);
-			Scribe_Values.Look<float>(ref this.chanceToStartFire, "chanceToStartFire", 0f, false);
-			Scribe_Values.Look<bool>(ref this.damageFalloff, "dealMoreDamageAtCenter", false, false);
-			Scribe_Values.Look<IntVec3?>(ref this.needLOSToCell1, "needLOSToCell1", null, false);
-			Scribe_Values.Look<IntVec3?>(ref this.needLOSToCell2, "needLOSToCell2", null, false);
-			Scribe_Values.Look<int>(ref this.startTick, "startTick", 0, false);
-			Scribe_Collections.Look<IntVec3>(ref this.cellsToAffect, "cellsToAffect", LookMode.Value, Array.Empty<object>());
-			Scribe_Collections.Look<Thing>(ref this.damagedThings, "damagedThings", LookMode.Reference, Array.Empty<object>());
-			Scribe_Collections.Look<Thing>(ref this.ignoredThings, "ignoredThings", LookMode.Reference, Array.Empty<object>());
-			Scribe_Collections.Look<IntVec3>(ref this.addedCellsAffectedOnlyByDamage, "addedCellsAffectedOnlyByDamage", LookMode.Value);
+			Scribe_Values.Look(ref radius, "radius", 0f);
+			Scribe_Defs.Look(ref damType, "damType");
+			Scribe_Values.Look(ref damAmount, "damAmount", 0);
+			Scribe_Values.Look(ref armorPenetration, "armorPenetration", 0f);
+			Scribe_References.Look(ref instigator, "instigator");
+			Scribe_Defs.Look(ref weapon, "weapon");
+			Scribe_Defs.Look(ref projectile, "projectile");
+			Scribe_References.Look(ref intendedTarget, "intendedTarget");
+			Scribe_Values.Look(ref applyDamageToExplosionCellsNeighbors, "applyDamageToExplosionCellsNeighbors", defaultValue: false);
+			Scribe_Defs.Look(ref preExplosionSpawnThingDef, "preExplosionSpawnThingDef");
+			Scribe_Values.Look(ref preExplosionSpawnChance, "preExplosionSpawnChance", 0f);
+			Scribe_Values.Look(ref preExplosionSpawnThingCount, "preExplosionSpawnThingCount", 1);
+			Scribe_Defs.Look(ref postExplosionSpawnThingDef, "postExplosionSpawnThingDef");
+			Scribe_Values.Look(ref postExplosionSpawnChance, "postExplosionSpawnChance", 0f);
+			Scribe_Values.Look(ref postExplosionSpawnThingCount, "postExplosionSpawnThingCount", 1);
+			Scribe_Values.Look(ref chanceToStartFire, "chanceToStartFire", 0f);
+			Scribe_Values.Look(ref damageFalloff, "dealMoreDamageAtCenter", defaultValue: false);
+			Scribe_Values.Look(ref needLOSToCell1, "needLOSToCell1");
+			Scribe_Values.Look(ref needLOSToCell2, "needLOSToCell2");
+			Scribe_Values.Look(ref startTick, "startTick", 0);
+			Scribe_Collections.Look(ref cellsToAffect, "cellsToAffect", LookMode.Value);
+			Scribe_Collections.Look(ref damagedThings, "damagedThings", LookMode.Reference);
+			Scribe_Collections.Look(ref ignoredThings, "ignoredThings", LookMode.Reference);
+			Scribe_Collections.Look(ref addedCellsAffectedOnlyByDamage, "addedCellsAffectedOnlyByDamage", LookMode.Value);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.damagedThings != null)
+				if (damagedThings != null)
 				{
-					this.damagedThings.RemoveAll((Thing x) => x == null);
+					damagedThings.RemoveAll((Thing x) => x == null);
 				}
-				if (this.ignoredThings != null)
+				if (ignoredThings != null)
 				{
-					this.ignoredThings.RemoveAll((Thing x) => x == null);
+					ignoredThings.RemoveAll((Thing x) => x == null);
 				}
 			}
 		}
 
-		
 		private int GetCellAffectTick(IntVec3 cell)
 		{
-			return this.startTick + (int)((cell - base.Position).LengthHorizontal * 1.5f);
+			return startTick + (int)((cell - base.Position).LengthHorizontal * 1.5f);
 		}
 
-		
 		private void AffectCell(IntVec3 c)
 		{
-			if (!c.InBounds(base.Map))
+			if (c.InBounds(base.Map))
 			{
-				return;
-			}
-			bool flag = this.ShouldCellBeAffectedOnlyByDamage(c);
-			if (!flag && Rand.Chance(this.preExplosionSpawnChance) && c.Walkable(base.Map))
-			{
-				this.TrySpawnExplosionThing(this.preExplosionSpawnThingDef, c, this.preExplosionSpawnThingCount);
-			}
-			this.damType.Worker.ExplosionAffectCell(this, c, this.damagedThings, this.ignoredThings, !flag);
-			if (!flag && Rand.Chance(this.postExplosionSpawnChance) && c.Walkable(base.Map))
-			{
-				this.TrySpawnExplosionThing(this.postExplosionSpawnThingDef, c, this.postExplosionSpawnThingCount);
-			}
-			float num = this.chanceToStartFire;
-			if (this.damageFalloff)
-			{
-				num *= Mathf.Lerp(1f, 0.2f, c.DistanceTo(base.Position) / this.radius);
-			}
-			if (Rand.Chance(num))
-			{
-				FireUtility.TryStartFireIn(c, base.Map, Rand.Range(0.1f, 0.925f));
+				bool flag = ShouldCellBeAffectedOnlyByDamage(c);
+				if (!flag && Rand.Chance(preExplosionSpawnChance) && c.Walkable(base.Map))
+				{
+					TrySpawnExplosionThing(preExplosionSpawnThingDef, c, preExplosionSpawnThingCount);
+				}
+				damType.Worker.ExplosionAffectCell(this, c, damagedThings, ignoredThings, !flag);
+				if (!flag && Rand.Chance(postExplosionSpawnChance) && c.Walkable(base.Map))
+				{
+					TrySpawnExplosionThing(postExplosionSpawnThingDef, c, postExplosionSpawnThingCount);
+				}
+				float num = chanceToStartFire;
+				if (damageFalloff)
+				{
+					num *= Mathf.Lerp(1f, 0.2f, c.DistanceTo(base.Position) / radius);
+				}
+				if (Rand.Chance(num))
+				{
+					FireUtility.TryStartFireIn(c, base.Map, Rand.Range(0.1f, 0.925f));
+				}
 			}
 		}
 
-		
 		private void TrySpawnExplosionThing(ThingDef thingDef, IntVec3 c, int count)
 		{
-			if (thingDef == null)
+			if (thingDef != null)
 			{
-				return;
+				if (thingDef.IsFilth)
+				{
+					FilthMaker.TryMakeFilth(c, base.Map, thingDef, count);
+					return;
+				}
+				Thing thing = ThingMaker.MakeThing(thingDef);
+				thing.stackCount = count;
+				GenSpawn.Spawn(thing, c, base.Map);
 			}
-			if (thingDef.IsFilth)
-			{
-				FilthMaker.TryMakeFilth(c, base.Map, thingDef, count, FilthSourceFlags.None);
-				return;
-			}
-			Thing thing = ThingMaker.MakeThing(thingDef, null);
-			thing.stackCount = count;
-			GenSpawn.Spawn(thing, c, base.Map, WipeMode.Vanish);
 		}
 
-		
 		private void PlayExplosionSound(SoundDef explosionSound)
 		{
-			bool flag;
-			if (Prefs.DevMode)
+			if ((!Prefs.DevMode) ? (!explosionSound.NullOrUndefined()) : (explosionSound != null))
 			{
-				flag = (explosionSound != null);
+				explosionSound.PlayOneShot(new TargetInfo(base.Position, base.Map));
 			}
 			else
 			{
-				flag = !explosionSound.NullOrUndefined();
+				damType.soundExplosion.PlayOneShot(new TargetInfo(base.Position, base.Map));
 			}
-			if (flag)
-			{
-				explosionSound.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
-				return;
-			}
-			this.damType.soundExplosion.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
 		}
 
-		
 		private void AddCellsNeighbors(List<IntVec3> cells)
 		{
-			Explosion.tmpCells.Clear();
-			this.addedCellsAffectedOnlyByDamage.Clear();
+			tmpCells.Clear();
+			addedCellsAffectedOnlyByDamage.Clear();
 			for (int i = 0; i < cells.Count; i++)
 			{
-				Explosion.tmpCells.Add(cells[i]);
+				tmpCells.Add(cells[i]);
 			}
 			for (int j = 0; j < cells.Count; j++)
 			{
-				if (cells[j].Walkable(base.Map))
+				if (!cells[j].Walkable(base.Map))
 				{
-					for (int k = 0; k < GenAdj.AdjacentCells.Length; k++)
+					continue;
+				}
+				for (int k = 0; k < GenAdj.AdjacentCells.Length; k++)
+				{
+					IntVec3 intVec = cells[j] + GenAdj.AdjacentCells[k];
+					if (intVec.InBounds(base.Map) && tmpCells.Add(intVec))
 					{
-						IntVec3 intVec = cells[j] + GenAdj.AdjacentCells[k];
-						if (intVec.InBounds(base.Map) && Explosion.tmpCells.Add(intVec))
-						{
-							this.addedCellsAffectedOnlyByDamage.Add(intVec);
-						}
+						addedCellsAffectedOnlyByDamage.Add(intVec);
 					}
 				}
 			}
 			cells.Clear();
-			foreach (IntVec3 item in Explosion.tmpCells)
+			foreach (IntVec3 tmpCell in tmpCells)
 			{
-				cells.Add(item);
+				cells.Add(tmpCell);
 			}
-			Explosion.tmpCells.Clear();
+			tmpCells.Clear();
 		}
 
-		
 		private bool ShouldCellBeAffectedOnlyByDamage(IntVec3 c)
 		{
-			return this.applyDamageToExplosionCellsNeighbors && this.addedCellsAffectedOnlyByDamage.Contains(c);
+			if (!applyDamageToExplosionCellsNeighbors)
+			{
+				return false;
+			}
+			return addedCellsAffectedOnlyByDamage.Contains(c);
 		}
-
-		
-		public float radius;
-
-		
-		public DamageDef damType;
-
-		
-		public int damAmount;
-
-		
-		public float armorPenetration;
-
-		
-		public Thing instigator;
-
-		
-		public ThingDef weapon;
-
-		
-		public ThingDef projectile;
-
-		
-		public Thing intendedTarget;
-
-		
-		public bool applyDamageToExplosionCellsNeighbors;
-
-		
-		public ThingDef preExplosionSpawnThingDef;
-
-		
-		public float preExplosionSpawnChance;
-
-		
-		public int preExplosionSpawnThingCount = 1;
-
-		
-		public ThingDef postExplosionSpawnThingDef;
-
-		
-		public float postExplosionSpawnChance;
-
-		
-		public int postExplosionSpawnThingCount = 1;
-
-		
-		public float chanceToStartFire;
-
-		
-		public bool damageFalloff;
-
-		
-		public IntVec3? needLOSToCell1;
-
-		
-		public IntVec3? needLOSToCell2;
-
-		
-		private int startTick;
-
-		
-		private List<IntVec3> cellsToAffect;
-
-		
-		private List<Thing> damagedThings;
-
-		
-		private List<Thing> ignoredThings;
-
-		
-		private HashSet<IntVec3> addedCellsAffectedOnlyByDamage;
-
-		
-		private const float DamageFactorAtEdge = 0.2f;
-
-		
-		private static HashSet<IntVec3> tmpCells = new HashSet<IntVec3>();
 	}
 }

@@ -1,80 +1,53 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public sealed class IngredientCount
 	{
-		
-		
-		public bool IsFixedIngredient
-		{
-			get
-			{
-				return this.filter.AllowedDefCount == 1;
-			}
-		}
+		public ThingFilter filter = new ThingFilter();
 
-		
-		
+		private float count = 1f;
+
+		public bool IsFixedIngredient => filter.AllowedDefCount == 1;
+
 		public ThingDef FixedIngredient
 		{
 			get
 			{
-				if (!this.IsFixedIngredient)
+				if (!IsFixedIngredient)
 				{
-					Log.Error("Called for SingleIngredient on an IngredientCount that is not IsSingleIngredient: " + this, false);
+					Log.Error("Called for SingleIngredient on an IngredientCount that is not IsSingleIngredient: " + this);
 				}
-				return this.filter.AnyAllowedDef;
+				return filter.AnyAllowedDef;
 			}
 		}
 
-		
-		
-		public string Summary
-		{
-			get
-			{
-				return this.count + "x " + this.filter.Summary;
-			}
-		}
+		public string Summary => count + "x " + filter.Summary;
 
-		
 		public int CountRequiredOfFor(ThingDef thingDef, RecipeDef recipe)
 		{
 			float num = recipe.IngredientValueGetter.ValuePerUnitOf(thingDef);
-			return Mathf.CeilToInt(this.count / num);
+			return Mathf.CeilToInt(count / num);
 		}
 
-		
 		public float GetBaseCount()
 		{
-			return this.count;
+			return count;
 		}
 
-		
 		public void SetBaseCount(float count)
 		{
 			this.count = count;
 		}
 
-		
 		public void ResolveReferences()
 		{
-			this.filter.ResolveReferences();
+			filter.ResolveReferences();
 		}
 
-		
 		public override string ToString()
 		{
-			return "(" + this.Summary + ")";
+			return "(" + Summary + ")";
 		}
-
-		
-		public ThingFilter filter = new ThingFilter();
-
-		
-		private float count = 1f;
 	}
 }

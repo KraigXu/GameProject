@@ -1,30 +1,27 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_SeekAllowedArea : ThinkNode_JobGiver
 	{
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (!pawn.Position.IsForbidden(pawn))
 			{
 				return null;
 			}
-			if (this.HasJobWithSpawnedAllowedTarget(pawn))
+			if (HasJobWithSpawnedAllowedTarget(pawn))
 			{
 				return null;
 			}
-			Region region = pawn.GetRegion(RegionType.Set_Passable);
+			Region region = pawn.GetRegion();
 			if (region == null)
 			{
 				return null;
 			}
-			TraverseParms traverseParms = TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false);
-			RegionEntryPredicate entryCondition = (Region from, Region r) => r.Allows(traverseParms, false);
+			TraverseParms traverseParms = TraverseParms.For(pawn);
+			RegionEntryPredicate entryCondition = (Region from, Region r) => r.Allows(traverseParms, isDestination: false);
 			Region reg = null;
 			RegionProcessor regionProcessor = delegate(Region r)
 			{
@@ -39,27 +36,32 @@ namespace RimWorld
 				}
 				return false;
 			};
-			RegionTraverser.BreadthFirstTraverse(region, entryCondition, regionProcessor, 9999, RegionType.Set_Passable);
-			if (reg == null)
+			RegionTraverser.BreadthFirstTraverse(region, entryCondition, regionProcessor, 9999);
+			if (reg != null)
 			{
-				return null;
+				if (!reg.TryFindRandomCellInRegionUnforbidden(pawn, null, out IntVec3 result))
+				{
+					return null;
+				}
+				return JobMaker.MakeJob(JobDefOf.Goto, result);
 			}
-			IntVec3 c;
-			if (!reg.TryFindRandomCellInRegionUnforbidden(pawn, null, out c))
-			{
-				return null;
-			}
-			return JobMaker.MakeJob(JobDefOf.Goto, c);
+			return null;
 		}
 
-		
 		private bool HasJobWithSpawnedAllowedTarget(Pawn pawn)
 		{
 			Job curJob = pawn.CurJob;
-			return curJob != null && (this.IsSpawnedAllowedTarget(curJob.targetA, pawn) || this.IsSpawnedAllowedTarget(curJob.targetB, pawn) || this.IsSpawnedAllowedTarget(curJob.targetC, pawn));
+			if (curJob == null)
+			{
+				return false;
+			}
+			if (!IsSpawnedAllowedTarget(curJob.targetA, pawn) && !IsSpawnedAllowedTarget(curJob.targetB, pawn))
+			{
+				return IsSpawnedAllowedTarget(curJob.targetC, pawn);
+			}
+			return true;
 		}
 
-		
 		private bool IsSpawnedAllowedTarget(LocalTargetInfo target, Pawn pawn)
 		{
 			if (!target.IsValid)
@@ -68,9 +70,17 @@ namespace RimWorld
 			}
 			if (target.HasThing)
 			{
-				return target.Thing.Spawned && !target.Thing.Position.IsForbidden(pawn);
+				if (target.Thing.Spawned)
+				{
+					return !target.Thing.Position.IsForbidden(pawn);
+				}
+				return false;
 			}
-			return target.Cell.InBounds(pawn.Map) && !target.Cell.IsForbidden(pawn);
+			if (target.Cell.InBounds(pawn.Map))
+			{
+				return !target.Cell.IsForbidden(pawn);
+			}
+			return false;
 		}
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -7,88 +6,60 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_LinkPsylinkable : JobDriver
 	{
-		
-		
-		private Thing PsylinkableThing
-		{
-			get
-			{
-				return base.TargetA.Thing;
-			}
-		}
+		public const int LinkTimeTicks = 15000;
 
-		
-		
-		private CompPsylinkable Psylinkable
-		{
-			get
-			{
-				return this.PsylinkableThing.TryGetComp<CompPsylinkable>();
-			}
-		}
+		public const int EffectsTickInterval = 720;
 
-		
-		
-		private LocalTargetInfo LinkSpot
-		{
-			get
-			{
-				return this.job.targetB;
-			}
-		}
+		protected const TargetIndex PsylinkableInd = TargetIndex.A;
 
-		
+		protected const TargetIndex LinkSpotInd = TargetIndex.B;
+
+		private Thing PsylinkableThing => base.TargetA.Thing;
+
+		private CompPsylinkable Psylinkable => PsylinkableThing.TryGetComp<CompPsylinkable>();
+
+		private LocalTargetInfo LinkSpot => job.targetB;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.PsylinkableThing, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.LinkSpot, this.job, 1, -1, null, errorOnFailed);
+			if (pawn.Reserve(PsylinkableThing, job, 1, -1, null, errorOnFailed))
+			{
+				return pawn.Reserve(LinkSpot, job, 1, -1, null, errorOnFailed);
+			}
+			return false;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Psylinkables are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 5464564, false);
+				Log.ErrorOnce("Psylinkables are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 5464564);
 				yield break;
 			}
-			base.AddFailCondition(() => !this.Psylinkable.CanPsylink(this.pawn, new LocalTargetInfo?(this.LinkSpot)).Accepted);
+			AddFailCondition(() => !Psylinkable.CanPsylink(pawn, LinkSpot).Accepted);
 			yield return Toils_Goto.GotoCell(TargetIndex.B, PathEndMode.OnCell);
-			Toil toil = Toils_General.Wait(15000, TargetIndex.None);
+			Toil toil = Toils_General.Wait(15000);
 			toil.tickAction = delegate
 			{
-				this.pawn.rotationTracker.FaceTarget(this.PsylinkableThing);
+				pawn.rotationTracker.FaceTarget(PsylinkableThing);
 				if (Find.TickManager.TicksGame % 720 == 0)
 				{
-					Vector3 vector = this.pawn.Position.ToVector3();
-					vector += (this.PsylinkableThing.Position.ToVector3() - vector) * Rand.Value;
-					MoteMaker.MakeStaticMote(vector, this.pawn.Map, ThingDefOf.Mote_PsycastAreaEffect, 0.5f);
-					this.Psylinkable.Props.linkSound.PlayOneShot(SoundInfo.InMap(new TargetInfo(this.PsylinkableThing), MaintenanceType.None));
+					Vector3 vector = pawn.Position.ToVector3();
+					vector += (PsylinkableThing.Position.ToVector3() - vector) * Rand.Value;
+					MoteMaker.MakeStaticMote(vector, pawn.Map, ThingDefOf.Mote_PsycastAreaEffect, 0.5f);
+					Psylinkable.Props.linkSound.PlayOneShot(SoundInfo.InMap(new TargetInfo(PsylinkableThing)));
 				}
 			};
 			toil.handlingFacing = false;
 			toil.socialMode = RandomSocialMode.Off;
-			toil.WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
+			toil.WithProgressBarToilDelay(TargetIndex.A);
 			yield return toil;
 			yield return Toils_General.Do(delegate
 			{
-				this.Psylinkable.FinishLinkingRitual(this.pawn);
+				Psylinkable.FinishLinkingRitual(pawn);
 			});
-			yield break;
 		}
-
-		
-		public const int LinkTimeTicks = 15000;
-
-		
-		public const int EffectsTickInterval = 720;
-
-		
-		protected const TargetIndex PsylinkableInd = TargetIndex.A;
-
-		
-		protected const TargetIndex LinkSpotInd = TargetIndex.B;
 	}
 }

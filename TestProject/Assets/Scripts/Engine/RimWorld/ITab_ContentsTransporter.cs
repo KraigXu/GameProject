@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -7,56 +6,43 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class ITab_ContentsTransporter : ITab_ContentsBase
 	{
-		
-		
-		public override IList<Thing> container
-		{
-			get
-			{
-				return this.Transporter.innerContainer;
-			}
-		}
+		public override IList<Thing> container => Transporter.innerContainer;
 
-		
-		
-		public CompTransporter Transporter
-		{
-			get
-			{
-				return base.SelThing.TryGetComp<CompTransporter>();
-			}
-		}
+		public CompTransporter Transporter => base.SelThing.TryGetComp<CompTransporter>();
 
-		
-		
 		public override bool IsVisible
 		{
 			get
 			{
-				return (base.SelThing.Faction == null || base.SelThing.Faction == Faction.OfPlayer) && this.Transporter != null && (this.Transporter.LoadingInProgressOrReadyToLaunch || this.Transporter.innerContainer.Any);
+				if ((base.SelThing.Faction == null || base.SelThing.Faction == Faction.OfPlayer) && Transporter != null)
+				{
+					if (!Transporter.LoadingInProgressOrReadyToLaunch)
+					{
+						return Transporter.innerContainer.Any;
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public ITab_ContentsTransporter()
 		{
-			this.labelKey = "TabTransporterContents";
-			this.containedItemsKey = "ContainedItems";
+			labelKey = "TabTransporterContents";
+			containedItemsKey = "ContainedItems";
 		}
 
-		
 		protected override void DoItemsLists(Rect inRect, ref float curY)
 		{
-			CompTransporter transporter = this.Transporter;
+			CompTransporter transporter = Transporter;
 			Rect position = new Rect(0f, curY, (inRect.width - 10f) / 2f, inRect.height);
 			Text.Font = GameFont.Small;
 			bool flag = false;
-			float a = 0f;
+			float curY2 = 0f;
 			GUI.BeginGroup(position);
-			Widgets.ListSeparator(ref a, position.width, "ItemsToLoad".Translate());
+			Widgets.ListSeparator(ref curY2, position.width, "ItemsToLoad".Translate());
 			if (transporter.leftToLoad != null)
 			{
 				for (int i = 0; i < transporter.leftToLoad.Count; i++)
@@ -65,61 +51,57 @@ namespace RimWorld
 					if (t.CountToTransfer > 0 && t.HasAnyThing)
 					{
 						flag = true;
-						base.DoThingRow(t.ThingDef, t.CountToTransfer, t.things, position.width, ref a, delegate(int x)
+						DoThingRow(t.ThingDef, t.CountToTransfer, t.things, position.width, ref curY2, delegate(int x)
 						{
-							this.OnDropToLoadThing(t, x);
+							OnDropToLoadThing(t, x);
 						});
 					}
 				}
 			}
 			if (!flag)
 			{
-				Widgets.NoneLabel(ref a, position.width, null);
+				Widgets.NoneLabel(ref curY2, position.width);
 			}
 			GUI.EndGroup();
 			Rect inRect2 = new Rect((inRect.width + 10f) / 2f, curY, (inRect.width - 10f) / 2f, inRect.height);
-			float b = 0f;
-			base.DoItemsLists(inRect2, ref b);
-			curY += Mathf.Max(a, b);
+			float curY3 = 0f;
+			base.DoItemsLists(inRect2, ref curY3);
+			curY += Mathf.Max(curY2, curY3);
 		}
 
-		
 		protected override void OnDropThing(Thing t, int count)
 		{
 			base.OnDropThing(t, count);
 			Pawn pawn = t as Pawn;
 			if (pawn != null)
 			{
-				this.RemovePawnFromLoadLord(pawn);
+				RemovePawnFromLoadLord(pawn);
 			}
 		}
 
-		
 		private void RemovePawnFromLoadLord(Pawn pawn)
 		{
 			Lord lord = pawn.GetLord();
 			if (lord != null && lord.LordJob is LordJob_LoadAndEnterTransporters)
 			{
-				lord.Notify_PawnLost(pawn, PawnLostCondition.LeftVoluntarily, null);
+				lord.Notify_PawnLost(pawn, PawnLostCondition.LeftVoluntarily);
 			}
 		}
 
-		
 		private void OnDropToLoadThing(TransferableOneWay t, int count)
 		{
 			t.ForceTo(t.CountToTransfer - count);
-			this.EndJobForEveryoneHauling(t);
+			EndJobForEveryoneHauling(t);
 			foreach (Thing thing in t.things)
 			{
 				Pawn pawn = thing as Pawn;
 				if (pawn != null)
 				{
-					this.RemovePawnFromLoadLord(pawn);
+					RemovePawnFromLoadLord(pawn);
 				}
 			}
 		}
 
-		
 		private void EndJobForEveryoneHauling(TransferableOneWay t)
 		{
 			List<Pawn> allPawnsSpawned = base.SelThing.Map.mapPawns.AllPawnsSpawned;
@@ -128,9 +110,9 @@ namespace RimWorld
 				if (allPawnsSpawned[i].CurJobDef == JobDefOf.HaulToTransporter)
 				{
 					JobDriver_HaulToTransporter jobDriver_HaulToTransporter = (JobDriver_HaulToTransporter)allPawnsSpawned[i].jobs.curDriver;
-					if (jobDriver_HaulToTransporter.Transporter == this.Transporter && jobDriver_HaulToTransporter.ThingToCarry != null && jobDriver_HaulToTransporter.ThingToCarry.def == t.ThingDef)
+					if (jobDriver_HaulToTransporter.Transporter == Transporter && jobDriver_HaulToTransporter.ThingToCarry != null && jobDriver_HaulToTransporter.ThingToCarry.def == t.ThingDef)
 					{
-						allPawnsSpawned[i].jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+						allPawnsSpawned[i].jobs.EndCurrentJob(JobCondition.InterruptForced);
 					}
 				}
 			}

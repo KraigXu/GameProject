@@ -1,102 +1,59 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class NameSingle : Name
 	{
-		
-		
-		public string Name
-		{
-			get
-			{
-				return this.nameInt;
-			}
-		}
+		private string nameInt;
 
-		
-		
-		public override string ToStringFull
-		{
-			get
-			{
-				return this.nameInt;
-			}
-		}
+		private bool numerical;
 
-		
-		
-		public override string ToStringShort
-		{
-			get
-			{
-				return this.nameInt;
-			}
-		}
+		public string Name => nameInt;
 
-		
-		
-		public override bool IsValid
-		{
-			get
-			{
-				return !this.nameInt.NullOrEmpty();
-			}
-		}
+		public override string ToStringFull => nameInt;
 
-		
-		
-		public override bool Numerical
-		{
-			get
-			{
-				return this.numerical;
-			}
-		}
+		public override string ToStringShort => nameInt;
 
-		
-		
+		public override bool IsValid => !nameInt.NullOrEmpty();
+
+		public override bool Numerical => numerical;
+
 		private int FirstDigitPosition
 		{
 			get
 			{
-				if (!this.numerical)
+				if (!numerical)
 				{
 					return -1;
 				}
-				if (this.nameInt.NullOrEmpty() || !char.IsDigit(this.nameInt[this.nameInt.Length - 1]))
+				if (nameInt.NullOrEmpty() || !char.IsDigit(nameInt[nameInt.Length - 1]))
 				{
 					return -1;
 				}
-				for (int i = this.nameInt.Length - 2; i >= 0; i--)
+				for (int num = nameInt.Length - 2; num >= 0; num--)
 				{
-					if (!char.IsDigit(this.nameInt[i]))
+					if (!char.IsDigit(nameInt[num]))
 					{
-						return i + 1;
+						return num + 1;
 					}
 				}
 				return 0;
 			}
 		}
 
-		
-		
 		public string NameWithoutNumber
 		{
 			get
 			{
-				if (!this.numerical)
+				if (!numerical)
 				{
-					return this.nameInt;
+					return nameInt;
 				}
-				int firstDigitPosition = this.FirstDigitPosition;
+				int firstDigitPosition = FirstDigitPosition;
 				if (firstDigitPosition < 0)
 				{
-					return this.nameInt;
+					return nameInt;
 				}
 				int num = firstDigitPosition;
-				if (num - 1 >= 0 && this.nameInt[num - 1] == ' ')
+				if (num - 1 >= 0 && nameInt[num - 1] == ' ')
 				{
 					num--;
 				}
@@ -104,67 +61,63 @@ namespace Verse
 				{
 					return "";
 				}
-				return this.nameInt.Substring(0, num);
+				return nameInt.Substring(0, num);
 			}
 		}
 
-		
-		
 		public int Number
 		{
 			get
 			{
-				if (!this.numerical)
+				if (!numerical)
 				{
 					return 0;
 				}
-				int firstDigitPosition = this.FirstDigitPosition;
+				int firstDigitPosition = FirstDigitPosition;
 				if (firstDigitPosition < 0)
 				{
 					return 0;
 				}
-				return int.Parse(this.nameInt.Substring(firstDigitPosition));
+				return int.Parse(nameInt.Substring(firstDigitPosition));
 			}
 		}
 
-		
 		public NameSingle()
 		{
 		}
 
-		
 		public NameSingle(string name, bool numerical = false)
 		{
-			this.nameInt = name;
+			nameInt = name;
 			this.numerical = numerical;
 		}
 
-		
 		public override void ExposeData()
 		{
-			Scribe_Values.Look<string>(ref this.nameInt, "name", null, false);
-			Scribe_Values.Look<bool>(ref this.numerical, "numerical", false, false);
+			Scribe_Values.Look(ref nameInt, "name");
+			Scribe_Values.Look(ref numerical, "numerical", defaultValue: false);
 		}
 
-		
 		public override bool ConfusinglySimilarTo(Name other)
 		{
 			NameSingle nameSingle = other as NameSingle;
-			if (nameSingle != null && nameSingle.nameInt == this.nameInt)
+			if (nameSingle != null && nameSingle.nameInt == nameInt)
 			{
 				return true;
 			}
 			NameTriple nameTriple = other as NameTriple;
-			return nameTriple != null && nameTriple.Nick == this.nameInt;
+			if (nameTriple != null && nameTriple.Nick == nameInt)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override string ToString()
 		{
-			return this.nameInt;
+			return nameInt;
 		}
 
-		
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
@@ -176,19 +129,12 @@ namespace Verse
 				return false;
 			}
 			NameSingle nameSingle = (NameSingle)obj;
-			return this.nameInt == nameSingle.nameInt;
+			return nameInt == nameSingle.nameInt;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombineInt(this.nameInt.GetHashCode(), 1384661390);
+			return Gen.HashCombineInt(nameInt.GetHashCode(), 1384661390);
 		}
-
-		
-		private string nameInt;
-
-		
-		private bool numerical;
 	}
 }

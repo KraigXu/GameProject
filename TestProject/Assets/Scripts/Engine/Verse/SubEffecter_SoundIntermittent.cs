@@ -1,29 +1,25 @@
-﻿using System;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class SubEffecter_SoundIntermittent : SubEffecter
 	{
-		
-		public SubEffecter_SoundIntermittent(SubEffecterDef def, Effecter parent) : base(def, parent)
+		protected int ticksUntilSound;
+
+		public SubEffecter_SoundIntermittent(SubEffecterDef def, Effecter parent)
+			: base(def, parent)
 		{
-			this.ticksUntilSound = def.intermittentSoundInterval.RandomInRange;
+			ticksUntilSound = def.intermittentSoundInterval.RandomInRange;
 		}
 
-		
 		public override void SubEffectTick(TargetInfo A, TargetInfo B)
 		{
-			this.ticksUntilSound--;
-			if (this.ticksUntilSound <= 0)
+			ticksUntilSound--;
+			if (ticksUntilSound <= 0)
 			{
-				this.def.soundDef.PlayOneShot(A);
-				this.ticksUntilSound = this.def.intermittentSoundInterval.RandomInRange;
+				def.soundDef.PlayOneShot(A);
+				ticksUntilSound = def.intermittentSoundInterval.RandomInRange;
 			}
 		}
-
-		
-		protected int ticksUntilSound;
 	}
 }

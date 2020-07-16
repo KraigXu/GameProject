@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class RecipeWorkerCounter_MakeStoneBlocks : RecipeWorkerCounter
 	{
-		
 		public override bool CanCountProducts(Bill_Production bill)
 		{
 			return true;
 		}
 
-		
 		public override int CountProducts(Bill_Production bill)
 		{
 			int num = 0;
@@ -25,21 +21,19 @@ namespace Verse
 			return num;
 		}
 
-		
 		public override string ProductsDescription(Bill_Production bill)
 		{
 			return ThingCategoryDefOf.StoneBlocks.label;
 		}
 
-		
 		public override bool CanPossiblyStoreInStockpile(Bill_Production bill, Zone_Stockpile stockpile)
 		{
-			foreach (ThingDef thingDef in bill.ingredientFilter.AllowedThingDefs)
+			foreach (ThingDef allowedThingDef in bill.ingredientFilter.AllowedThingDefs)
 			{
-				if (!thingDef.butcherProducts.NullOrEmpty<ThingDefCountClass>())
+				if (!allowedThingDef.butcherProducts.NullOrEmpty())
 				{
-					ThingDef thingDef2 = thingDef.butcherProducts[0].thingDef;
-					if (!stockpile.GetStoreSettings().AllowedToAccept(thingDef2))
+					ThingDef thingDef = allowedThingDef.butcherProducts[0].thingDef;
+					if (!stockpile.GetStoreSettings().AllowedToAccept(thingDef))
 					{
 						return false;
 					}

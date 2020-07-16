@@ -1,12 +1,9 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class CompColorableUtility
 	{
-		
 		public static void SetColor(this Thing t, Color newColor, bool reportFailure = true)
 		{
 			ThingWithComps thingWithComps = t as ThingWithComps;
@@ -14,7 +11,7 @@ namespace Verse
 			{
 				if (reportFailure)
 				{
-					Log.Error("SetColor on non-ThingWithComps " + t, false);
+					Log.Error("SetColor on non-ThingWithComps " + t);
 				}
 				return;
 			}
@@ -23,11 +20,10 @@ namespace Verse
 			{
 				if (reportFailure)
 				{
-					Log.Error("SetColor on Thing without CompColorable " + t, false);
+					Log.Error("SetColor on Thing without CompColorable " + t);
 				}
-				return;
 			}
-			if (comp.Color != newColor)
+			else if (comp.Color != newColor)
 			{
 				comp.Color = newColor;
 			}

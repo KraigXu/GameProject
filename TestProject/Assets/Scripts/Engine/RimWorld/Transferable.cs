@@ -1,218 +1,191 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Transferable : IExposable
 	{
-		
-		
-		public abstract Thing AnyThing { get; }
+		private string editBuffer = "0";
 
-		
-		
-		public abstract ThingDef ThingDef { get; }
-
-		
-		
-		public abstract bool Interactive { get; }
-
-		
-		
-		public abstract bool HasAnyThing { get; }
-
-		
-		
-		public virtual bool IsThing
+		public abstract Thing AnyThing
 		{
-			get
-			{
-				return true;
-			}
+			get;
 		}
 
-		
-		
-		public abstract string Label { get; }
-
-		
-		
-		public string LabelCap
+		public abstract ThingDef ThingDef
 		{
-			get
-			{
-				return this.Label.CapitalizeFirst(this.ThingDef);
-			}
+			get;
 		}
 
-		
-		
-		public abstract string TipDescription { get; }
+		public abstract bool Interactive
+		{
+			get;
+		}
 
-		
-		
-		public abstract TransferablePositiveCountDirection PositiveCountDirection { get; }
+		public abstract bool HasAnyThing
+		{
+			get;
+		}
 
-		
-		
-		
-		public abstract int CountToTransfer { get; protected set; }
+		public virtual bool IsThing => true;
 
-		
-		
+		public abstract string Label
+		{
+			get;
+		}
+
+		public string LabelCap => Label.CapitalizeFirst(ThingDef);
+
+		public abstract string TipDescription
+		{
+			get;
+		}
+
+		public abstract TransferablePositiveCountDirection PositiveCountDirection
+		{
+			get;
+		}
+
+		public abstract int CountToTransfer
+		{
+			get;
+			protected set;
+		}
+
 		public int CountToTransferToSource
 		{
 			get
 			{
-				if (this.PositiveCountDirection != TransferablePositiveCountDirection.Source)
+				if (PositiveCountDirection != 0)
 				{
-					return -this.CountToTransfer;
+					return -CountToTransfer;
 				}
-				return this.CountToTransfer;
+				return CountToTransfer;
 			}
 		}
 
-		
-		
 		public int CountToTransferToDestination
 		{
 			get
 			{
-				if (this.PositiveCountDirection != TransferablePositiveCountDirection.Source)
+				if (PositiveCountDirection != 0)
 				{
-					return this.CountToTransfer;
+					return CountToTransfer;
 				}
-				return -this.CountToTransfer;
+				return -CountToTransfer;
 			}
 		}
 
-		
-		
-		
 		public string EditBuffer
 		{
 			get
 			{
-				return this.editBuffer;
+				return editBuffer;
 			}
 			set
 			{
-				this.editBuffer = value;
+				editBuffer = value;
 			}
 		}
 
-		
 		public abstract int GetMinimumToTransfer();
 
-		
 		public abstract int GetMaximumToTransfer();
 
-		
 		public int GetRange()
 		{
-			return this.GetMaximumToTransfer() - this.GetMinimumToTransfer();
+			return GetMaximumToTransfer() - GetMinimumToTransfer();
 		}
 
-		
 		public int ClampAmount(int amount)
 		{
-			return Mathf.Clamp(amount, this.GetMinimumToTransfer(), this.GetMaximumToTransfer());
+			return Mathf.Clamp(amount, GetMinimumToTransfer(), GetMaximumToTransfer());
 		}
 
-		
 		public AcceptanceReport CanAdjustBy(int adjustment)
 		{
-			return this.CanAdjustTo(this.CountToTransfer + adjustment);
+			return CanAdjustTo(CountToTransfer + adjustment);
 		}
 
-		
 		public AcceptanceReport CanAdjustTo(int destination)
 		{
-			if (destination == this.CountToTransfer)
+			if (destination == CountToTransfer)
 			{
 				return AcceptanceReport.WasAccepted;
 			}
-			if (this.ClampAmount(destination) != this.CountToTransfer)
+			if (ClampAmount(destination) != CountToTransfer)
 			{
 				return AcceptanceReport.WasAccepted;
 			}
-			if (destination < this.CountToTransfer)
+			if (destination < CountToTransfer)
 			{
-				return this.UnderflowReport();
+				return UnderflowReport();
 			}
-			return this.OverflowReport();
+			return OverflowReport();
 		}
 
-		
 		public void AdjustBy(int adjustment)
 		{
-			this.AdjustTo(this.CountToTransfer + adjustment);
+			AdjustTo(CountToTransfer + adjustment);
 		}
 
-		
 		public void AdjustTo(int destination)
 		{
-			if (!this.CanAdjustTo(destination).Accepted)
+			if (!CanAdjustTo(destination).Accepted)
 			{
-				Log.Error("Failed to adjust transferable counts", false);
-				return;
+				Log.Error("Failed to adjust transferable counts");
 			}
-			this.CountToTransfer = this.ClampAmount(destination);
+			else
+			{
+				CountToTransfer = ClampAmount(destination);
+			}
 		}
 
-		
 		public void ForceTo(int value)
 		{
-			this.CountToTransfer = value;
+			CountToTransfer = value;
 		}
 
-		
 		public void ForceToSource(int value)
 		{
-			if (this.PositiveCountDirection == TransferablePositiveCountDirection.Source)
+			if (PositiveCountDirection == TransferablePositiveCountDirection.Source)
 			{
-				this.ForceTo(value);
-				return;
+				ForceTo(value);
 			}
-			this.ForceTo(-value);
+			else
+			{
+				ForceTo(-value);
+			}
 		}
 
-		
 		public void ForceToDestination(int value)
 		{
-			if (this.PositiveCountDirection == TransferablePositiveCountDirection.Source)
+			if (PositiveCountDirection == TransferablePositiveCountDirection.Source)
 			{
-				this.ForceTo(-value);
-				return;
+				ForceTo(-value);
 			}
-			this.ForceTo(value);
+			else
+			{
+				ForceTo(value);
+			}
 		}
 
-		
 		public virtual void DrawIcon(Rect iconRect)
 		{
 		}
 
-		
 		public virtual AcceptanceReport UnderflowReport()
 		{
 			return false;
 		}
 
-		
 		public virtual AcceptanceReport OverflowReport()
 		{
 			return false;
 		}
 
-		
 		public virtual void ExposeData()
 		{
 		}
-
-		
-		private string editBuffer = "0";
 	}
 }

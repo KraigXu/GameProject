@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -6,67 +6,48 @@ using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class StaticConstructorOnStartupUtility
 	{
-		
+		public static bool coreStaticAssetsLoaded;
+
 		public static void CallAll()
 		{
-			foreach (Type type in GenTypes.AllTypesWithAttribute<StaticConstructorOnStartup>())
+			foreach (Type item in GenTypes.AllTypesWithAttribute<StaticConstructorOnStartup>())
 			{
 				try
 				{
-					RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+					RuntimeHelpers.RunClassConstructor(item.TypeHandle);
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Error in static constructor of ",
-						type,
-						": ",
-						ex
-					}), false);
+					Log.Error("Error in static constructor of " + item + ": " + ex);
 				}
 			}
-			StaticConstructorOnStartupUtility.coreStaticAssetsLoaded = true;
+			coreStaticAssetsLoaded = true;
 		}
 
-		
 		public static void ReportProbablyMissingAttributes()
 		{
 			BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-			foreach (Type type in GenTypes.AllTypes)
+			foreach (Type allType in GenTypes.AllTypes)
 			{
-				if (!type.HasAttribute<StaticConstructorOnStartup>())
+				if (!allType.HasAttribute<StaticConstructorOnStartup>())
 				{
-					FieldInfo fieldInfo = type.GetFields(bindingAttr).FirstOrDefault(delegate(FieldInfo x)
+					FieldInfo fieldInfo = allType.GetFields(bindingAttr).FirstOrDefault(delegate(FieldInfo x)
 					{
-						Type type2 = x.FieldType;
-						if (type2.IsArray)
+						Type type = x.FieldType;
+						if (type.IsArray)
 						{
-							type2 = type2.GetElementType();
+							type = type.GetElementType();
 						}
-						return typeof(Texture).IsAssignableFrom(type2) || typeof(Material).IsAssignableFrom(type2) || typeof(Shader).IsAssignableFrom(type2) || typeof(Graphic).IsAssignableFrom(type2) || typeof(GameObject).IsAssignableFrom(type2) || typeof(MaterialPropertyBlock).IsAssignableFrom(type2);
+						return typeof(Texture).IsAssignableFrom(type) || typeof(Material).IsAssignableFrom(type) || typeof(Shader).IsAssignableFrom(type) || typeof(Graphic).IsAssignableFrom(type) || typeof(GameObject).IsAssignableFrom(type) || typeof(MaterialPropertyBlock).IsAssignableFrom(type);
 					});
 					if (fieldInfo != null)
 					{
-						Log.Warning(string.Concat(new string[]
-						{
-							"Type ",
-							type.Name,
-							" probably needs a StaticConstructorOnStartup attribute, because it has a field ",
-							fieldInfo.Name,
-							" of type ",
-							fieldInfo.FieldType.Name,
-							". All assets must be loaded in the main thread."
-						}), false);
+						Log.Warning("Type " + allType.Name + " probably needs a StaticConstructorOnStartup attribute, because it has a field " + fieldInfo.Name + " of type " + fieldInfo.FieldType.Name + ". All assets must be loaded in the main thread.");
 					}
 				}
 			}
 		}
-
-		
-		public static bool coreStaticAssetsLoaded;
 	}
 }

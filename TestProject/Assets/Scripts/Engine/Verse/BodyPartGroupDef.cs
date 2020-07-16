@@ -1,51 +1,41 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class BodyPartGroupDef : Def
 	{
-		
-		
+		[MustTranslate]
+		public string labelShort;
+
+		public int listOrder;
+
+		[Unsaved(false)]
+		private string cachedLabelShortCap;
+
 		public string LabelShort
 		{
 			get
 			{
-				if (!this.labelShort.NullOrEmpty())
+				if (!labelShort.NullOrEmpty())
 				{
-					return this.labelShort;
+					return labelShort;
 				}
-				return this.label;
+				return label;
 			}
 		}
 
-		
-		
 		public string LabelShortCap
 		{
 			get
 			{
-				if (this.labelShort.NullOrEmpty())
+				if (labelShort.NullOrEmpty())
 				{
 					return base.LabelCap;
 				}
-				if (this.cachedLabelShortCap == null)
+				if (cachedLabelShortCap == null)
 				{
-					this.cachedLabelShortCap = this.labelShort.CapitalizeFirst();
+					cachedLabelShortCap = labelShort.CapitalizeFirst();
 				}
-				return this.cachedLabelShortCap;
+				return cachedLabelShortCap;
 			}
 		}
-
-		
-		[MustTranslate]
-		public string labelShort;
-
-		
-		public int listOrder;
-
-		
-		[Unsaved(false)]
-		private string cachedLabelShortCap;
 	}
 }

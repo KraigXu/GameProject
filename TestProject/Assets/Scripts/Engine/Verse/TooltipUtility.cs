@@ -1,13 +1,10 @@
-﻿using System;
-using System.Text;
 using RimWorld;
+using System.Text;
 
 namespace Verse
 {
-	
 	public static class TooltipUtility
 	{
-		
 		public static string ShotCalculationTipString(Thing target)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -39,19 +36,11 @@ namespace Verse
 					Pawn pawn2 = target as Pawn;
 					if (pawn2 != null && pawn2.Faction == null && !pawn2.InAggroMentalState && pawn2.AnimalOrWildMan())
 					{
-						float manhunterOnDamageChance;
-						if (verb.IsMeleeAttack)
-						{
-							manhunterOnDamageChance = PawnUtility.GetManhunterOnDamageChance(pawn2, 0f, singleSelectedThing);
-						}
-						else
-						{
-							manhunterOnDamageChance = PawnUtility.GetManhunterOnDamageChance(pawn2, singleSelectedThing);
-						}
-						if (manhunterOnDamageChance > 0f)
+						float num = (!verb.IsMeleeAttack) ? PawnUtility.GetManhunterOnDamageChance(pawn2, singleSelectedThing) : PawnUtility.GetManhunterOnDamageChance(pawn2, 0f, singleSelectedThing);
+						if (num > 0f)
 						{
 							stringBuilder.AppendLine();
-							stringBuilder.AppendLine(string.Format("{0}: {1}", "ManhunterPerHit".Translate(), manhunterOnDamageChance.ToStringPercent()));
+							stringBuilder.AppendLine(string.Format("{0}: {1}", "ManhunterPerHit".Translate(), num.ToStringPercent()));
 						}
 					}
 				}

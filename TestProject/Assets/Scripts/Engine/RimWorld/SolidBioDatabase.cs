@@ -1,48 +1,43 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SolidBioDatabase
 	{
-		
+		public static List<PawnBio> allBios = new List<PawnBio>();
+
 		public static void Clear()
 		{
-			SolidBioDatabase.allBios.Clear();
+			allBios.Clear();
 		}
 
-		
 		public static void LoadAllBios()
 		{
-			foreach (PawnBio pawnBio in DirectXmlLoader.LoadXmlDataInResourcesFolder<PawnBio>("Backstories/Solid"))
+			foreach (PawnBio item in DirectXmlLoader.LoadXmlDataInResourcesFolder<PawnBio>("Backstories/Solid"))
 			{
-				pawnBio.name.ResolveMissingPieces(null);
-				if (pawnBio.childhood == null || pawnBio.adulthood == null)
+				item.name.ResolveMissingPieces();
+				if (item.childhood == null || item.adulthood == null)
 				{
-					PawnNameDatabaseSolid.AddPlayerContentName(pawnBio.name, pawnBio.gender);
+					PawnNameDatabaseSolid.AddPlayerContentName(item.name, item.gender);
 				}
 				else
 				{
-					pawnBio.PostLoad();
-					pawnBio.ResolveReferences();
-					foreach (string text in pawnBio.ConfigErrors())
+					item.PostLoad();
+					item.ResolveReferences();
+					foreach (string item2 in item.ConfigErrors())
 					{
-						Log.Error(text, false);
+						Log.Error(item2);
 					}
-					SolidBioDatabase.allBios.Add(pawnBio);
-					pawnBio.childhood.shuffleable = false;
-					pawnBio.childhood.slot = BackstorySlot.Childhood;
-					pawnBio.adulthood.shuffleable = false;
-					pawnBio.adulthood.slot = BackstorySlot.Adulthood;
-					BackstoryDatabase.AddBackstory(pawnBio.childhood);
-					BackstoryDatabase.AddBackstory(pawnBio.adulthood);
+					allBios.Add(item);
+					item.childhood.shuffleable = false;
+					item.childhood.slot = BackstorySlot.Childhood;
+					item.adulthood.shuffleable = false;
+					item.adulthood.slot = BackstorySlot.Adulthood;
+					BackstoryDatabase.AddBackstory(item.childhood);
+					BackstoryDatabase.AddBackstory(item.adulthood);
 				}
 			}
 		}
-
-		
-		public static List<PawnBio> allBios = new List<PawnBio>();
 	}
 }

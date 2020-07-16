@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -8,103 +8,86 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompSpawnerPawn : ThingComp
 	{
-		
-		
-		private CompProperties_SpawnerPawn Props
-		{
-			get
-			{
-				return (CompProperties_SpawnerPawn)this.props;
-			}
-		}
+		public int nextPawnSpawnTick = -1;
 
-		
-		
-		public Lord Lord
-		{
-			get
-			{
-				return CompSpawnerPawn.FindLordToJoin(this.parent, this.Props.lordJob, this.Props.shouldJoinParentLord, null);
-			}
-		}
+		public int pawnsLeftToSpawn = -1;
 
-		
-		
+		public List<Pawn> spawnedPawns = new List<Pawn>();
+
+		public bool aggressive = true;
+
+		public bool canSpawnPawns = true;
+
+		private PawnKindDef chosenKind;
+
+		private CompCanBeDormant dormancyCompCached;
+
+		private CompProperties_SpawnerPawn Props => (CompProperties_SpawnerPawn)props;
+
+		public Lord Lord => FindLordToJoin(parent, Props.lordJob, Props.shouldJoinParentLord);
+
 		private float SpawnedPawnsPoints
 		{
 			get
 			{
-				this.FilterOutUnspawnedPawns();
+				FilterOutUnspawnedPawns();
 				float num = 0f;
-				for (int i = 0; i < this.spawnedPawns.Count; i++)
+				for (int i = 0; i < spawnedPawns.Count; i++)
 				{
-					num += this.spawnedPawns[i].kindDef.combatPower;
+					num += spawnedPawns[i].kindDef.combatPower;
 				}
 				return num;
 			}
 		}
 
-		
-		
 		public bool Active
 		{
 			get
 			{
-				return this.pawnsLeftToSpawn != 0 && !this.Dormant;
-			}
-		}
-
-		
-		
-		public CompCanBeDormant DormancyComp
-		{
-			get
-			{
-				CompCanBeDormant result;
-				if ((result = this.dormancyCompCached) == null)
+				if (pawnsLeftToSpawn == 0)
 				{
-					result = (this.dormancyCompCached = this.parent.TryGetComp<CompCanBeDormant>());
+					return false;
 				}
-				return result;
+				return !Dormant;
 			}
 		}
 
-		
-		
+		public CompCanBeDormant DormancyComp => dormancyCompCached ?? (dormancyCompCached = parent.TryGetComp<CompCanBeDormant>());
+
 		public bool Dormant
 		{
 			get
 			{
-				return this.DormancyComp != null && !this.DormancyComp.Awake;
+				if (DormancyComp != null)
+				{
+					return !DormancyComp.Awake;
+				}
+				return false;
 			}
 		}
 
-		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			if (this.chosenKind == null)
+			if (chosenKind == null)
 			{
-				this.chosenKind = this.RandomPawnKindDef();
+				chosenKind = RandomPawnKindDef();
 			}
-			if (this.Props.maxPawnsToSpawn != IntRange.zero)
+			if (Props.maxPawnsToSpawn != IntRange.zero)
 			{
-				this.pawnsLeftToSpawn = this.Props.maxPawnsToSpawn.RandomInRange;
+				pawnsLeftToSpawn = Props.maxPawnsToSpawn.RandomInRange;
 			}
 		}
 
-		
 		public static Lord FindLordToJoin(Thing spawner, Type lordJobType, bool shouldTryJoinParentLord, Func<Thing, List<Pawn>> spawnedPawnSelector = null)
 		{
 			if (spawner.Spawned)
 			{
 				if (shouldTryJoinParentLord)
 				{
-					Building building = spawner as Building;
-					Lord lord = (building != null) ? building.GetLord() : null;
+					Lord lord = (spawner as Building)?.GetLord();
 					if (lord != null)
 					{
 						return lord;
@@ -112,15 +95,7 @@ namespace RimWorld
 				}
 				if (spawnedPawnSelector == null)
 				{
-					spawnedPawnSelector = delegate(Thing s)
-					{
-						CompSpawnerPawn compSpawnerPawn = s.TryGetComp<CompSpawnerPawn>();
-						if (compSpawnerPawn != null)
-						{
-							return compSpawnerPawn.spawnedPawns;
-						}
-						return null;
-					};
+					spawnedPawnSelector = ((Thing s) => s.TryGetComp<CompSpawnerPawn>()?.spawnedPawns);
 				}
 				Predicate<Pawn> hasJob = delegate(Pawn x)
 				{
@@ -128,7 +103,7 @@ namespace RimWorld
 					return lord2 != null && lord2.LordJob.GetType() == lordJobType;
 				};
 				Pawn foundPawn = null;
-				RegionTraverser.BreadthFirstTraverse(spawner.GetRegion(RegionType.Set_Passable), (Region from, Region to) => true, delegate(Region r)
+				RegionTraverser.BreadthFirstTraverse(spawner.GetRegion(), (Region from, Region to) => true, delegate(Region r)
 				{
 					List<Thing> list = r.ListerThings.ThingsOfDef(spawner.def);
 					for (int i = 0; i < list.Count; i++)
@@ -147,7 +122,7 @@ namespace RimWorld
 						}
 					}
 					return false;
-				}, 40, RegionType.Set_Passable);
+				}, 40);
 				if (foundPawn != null)
 				{
 					return foundPawn.GetLord();
@@ -156,274 +131,229 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static Lord CreateNewLord(Thing byThing, bool aggressive, float defendRadius, Type lordJobType)
 		{
-			IntVec3 invalid;
-			if (!CellFinder.TryFindRandomCellNear(byThing.Position, byThing.Map, 5, (IntVec3 c) => c.Standable(byThing.Map) && byThing.Map.reachability.CanReach(c, byThing, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false)), out invalid, -1))
+			if (!CellFinder.TryFindRandomCellNear(byThing.Position, byThing.Map, 5, (IntVec3 c) => c.Standable(byThing.Map) && byThing.Map.reachability.CanReach(c, byThing, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors)), out IntVec3 result))
 			{
-				Log.Error("Found no place for mechanoids to defend " + byThing, false);
-				invalid = IntVec3.Invalid;
+				Log.Error("Found no place for mechanoids to defend " + byThing);
+				result = IntVec3.Invalid;
 			}
-			return LordMaker.MakeNewLord(byThing.Faction, Activator.CreateInstance(lordJobType, new object[]
+			return LordMaker.MakeNewLord(byThing.Faction, Activator.CreateInstance(lordJobType, new SpawnedPawnParams
 			{
-				new SpawnedPawnParams
-				{
-					aggressive = aggressive,
-					defendRadius = defendRadius,
-					defSpot = invalid,
-					spawnerThing = byThing
-				}
-			}) as LordJob, byThing.Map, null);
+				aggressive = aggressive,
+				defendRadius = defendRadius,
+				defSpot = result,
+				spawnerThing = byThing
+			}) as LordJob, byThing.Map);
 		}
 
-		
 		private void SpawnInitialPawns()
 		{
-			int num = 0;
-			Pawn pawn;
-			while (num < this.Props.initialPawnsCount && this.TrySpawnPawn(out pawn))
+			for (int i = 0; i < Props.initialPawnsCount; i++)
 			{
-				num++;
+				if (!TrySpawnPawn(out Pawn _))
+				{
+					break;
+				}
 			}
-			this.SpawnPawnsUntilPoints(this.Props.initialPawnsPoints);
-			this.CalculateNextPawnSpawnTick();
+			SpawnPawnsUntilPoints(Props.initialPawnsPoints);
+			CalculateNextPawnSpawnTick();
 		}
 
-		
 		public void SpawnPawnsUntilPoints(float points)
 		{
 			int num = 0;
-			while (this.SpawnedPawnsPoints < points)
+			while (SpawnedPawnsPoints < points)
 			{
 				num++;
 				if (num > 1000)
 				{
-					Log.Error("Too many iterations.", false);
+					Log.Error("Too many iterations.");
 					break;
 				}
-				Pawn pawn;
-				if (!this.TrySpawnPawn(out pawn))
+				if (!TrySpawnPawn(out Pawn _))
 				{
 					break;
 				}
 			}
-			this.CalculateNextPawnSpawnTick();
+			CalculateNextPawnSpawnTick();
 		}
 
-		
 		private void CalculateNextPawnSpawnTick()
 		{
-			this.CalculateNextPawnSpawnTick(this.Props.pawnSpawnIntervalDays.RandomInRange * 60000f);
+			CalculateNextPawnSpawnTick(Props.pawnSpawnIntervalDays.RandomInRange * 60000f);
 		}
 
-		
 		public void CalculateNextPawnSpawnTick(float delayTicks)
 		{
-			float num = GenMath.LerpDouble(0f, 5f, 1f, 0.5f, (float)this.spawnedPawns.Count);
-			this.nextPawnSpawnTick = Find.TickManager.TicksGame + (int)(delayTicks / (num * Find.Storyteller.difficulty.enemyReproductionRateFactor));
+			float num = GenMath.LerpDouble(0f, 5f, 1f, 0.5f, spawnedPawns.Count);
+			nextPawnSpawnTick = Find.TickManager.TicksGame + (int)(delayTicks / (num * Find.Storyteller.difficulty.enemyReproductionRateFactor));
 		}
 
-		
 		private void FilterOutUnspawnedPawns()
 		{
-			for (int i = this.spawnedPawns.Count - 1; i >= 0; i--)
+			for (int num = spawnedPawns.Count - 1; num >= 0; num--)
 			{
-				if (!this.spawnedPawns[i].Spawned)
+				if (!spawnedPawns[num].Spawned)
 				{
-					this.spawnedPawns.RemoveAt(i);
+					spawnedPawns.RemoveAt(num);
 				}
 			}
 		}
 
-		
 		private PawnKindDef RandomPawnKindDef()
 		{
-			float curPoints = this.SpawnedPawnsPoints;
-			IEnumerable<PawnKindDef> source = this.Props.spawnablePawnKinds;
-			if (this.Props.maxSpawnedPawnsPoints > -1f)
+			float curPoints = SpawnedPawnsPoints;
+			IEnumerable<PawnKindDef> source = Props.spawnablePawnKinds;
+			if (Props.maxSpawnedPawnsPoints > -1f)
 			{
-				source = from x in source
-				where curPoints + x.combatPower <= this.Props.maxSpawnedPawnsPoints
-				select x;
+				source = source.Where((PawnKindDef x) => curPoints + x.combatPower <= Props.maxSpawnedPawnsPoints);
 			}
-			PawnKindDef result;
-			if (source.TryRandomElement(out result))
+			if (source.TryRandomElement(out PawnKindDef result))
 			{
 				return result;
 			}
 			return null;
 		}
 
-		
 		private bool TrySpawnPawn(out Pawn pawn)
 		{
-			if (!this.canSpawnPawns)
+			if (!canSpawnPawns)
 			{
 				pawn = null;
 				return false;
 			}
-			if (!this.Props.chooseSingleTypeToSpawn)
+			if (!Props.chooseSingleTypeToSpawn)
 			{
-				this.chosenKind = this.RandomPawnKindDef();
+				chosenKind = RandomPawnKindDef();
 			}
-			if (this.chosenKind == null)
+			if (chosenKind == null)
 			{
 				pawn = null;
 				return false;
 			}
-			int index = this.chosenKind.lifeStages.Count - 1;
-			pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(this.chosenKind, this.parent.Faction, PawnGenerationContext.NonPlayer, -1, false, false, false, false, true, false, 1f, false, true, true, true, false, false, false, false, 0f, null, 1f, null, null, null, null, null, new float?(this.chosenKind.race.race.lifeStageAges[index].minAge), null, null, null, null, null, null));
-			this.spawnedPawns.Add(pawn);
-			GenSpawn.Spawn(pawn, CellFinder.RandomClosewalkCellNear(this.parent.Position, this.parent.Map, this.Props.pawnSpawnRadius, null), this.parent.Map, WipeMode.Vanish);
-			Lord lord = this.Lord;
+			int index = chosenKind.lifeStages.Count - 1;
+			pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(chosenKind, parent.Faction, PawnGenerationContext.NonPlayer, -1, forceGenerateNewPawn: false, newborn: false, allowDead: false, allowDowned: false, canGeneratePawnRelations: true, mustBeCapableOfViolence: false, 1f, forceAddFreeWarmLayerIfNeeded: false, allowGay: true, allowFood: true, allowAddictions: true, inhabitant: false, certainlyBeenInCryptosleep: false, forceRedressWorldPawnIfFormerColonist: false, worldPawnFactionDoesntMatter: false, 0f, null, 1f, null, null, null, null, null, chosenKind.race.race.lifeStageAges[index].minAge));
+			spawnedPawns.Add(pawn);
+			GenSpawn.Spawn(pawn, CellFinder.RandomClosewalkCellNear(parent.Position, parent.Map, Props.pawnSpawnRadius), parent.Map);
+			Lord lord = Lord;
 			if (lord == null)
 			{
-				lord = CompSpawnerPawn.CreateNewLord(this.parent, this.aggressive, this.Props.defendRadius, this.Props.lordJob);
+				lord = CreateNewLord(parent, aggressive, Props.defendRadius, Props.lordJob);
 			}
 			lord.AddPawn(pawn);
-			if (this.Props.spawnSound != null)
+			if (Props.spawnSound != null)
 			{
-				this.Props.spawnSound.PlayOneShot(this.parent);
+				Props.spawnSound.PlayOneShot(parent);
 			}
-			if (this.pawnsLeftToSpawn > 0)
+			if (pawnsLeftToSpawn > 0)
 			{
-				this.pawnsLeftToSpawn--;
+				pawnsLeftToSpawn--;
 			}
-			this.SendMessage();
+			SendMessage();
 			return true;
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			if (!respawningAfterLoad && this.Active && this.nextPawnSpawnTick == -1)
+			if (!respawningAfterLoad && Active && nextPawnSpawnTick == -1)
 			{
-				this.SpawnInitialPawns();
+				SpawnInitialPawns();
 			}
 		}
 
-		
 		public override void CompTick()
 		{
-			if (this.Active && this.parent.Spawned && this.nextPawnSpawnTick == -1)
+			if (Active && parent.Spawned && nextPawnSpawnTick == -1)
 			{
-				this.SpawnInitialPawns();
+				SpawnInitialPawns();
 			}
-			if (this.parent.Spawned)
+			if (!parent.Spawned)
 			{
-				this.FilterOutUnspawnedPawns();
-				if (this.Active && Find.TickManager.TicksGame >= this.nextPawnSpawnTick)
+				return;
+			}
+			FilterOutUnspawnedPawns();
+			if (Active && Find.TickManager.TicksGame >= nextPawnSpawnTick)
+			{
+				if ((Props.maxSpawnedPawnsPoints < 0f || SpawnedPawnsPoints < Props.maxSpawnedPawnsPoints) && TrySpawnPawn(out Pawn pawn) && pawn.caller != null)
 				{
-					Pawn pawn;
-					if ((this.Props.maxSpawnedPawnsPoints < 0f || this.SpawnedPawnsPoints < this.Props.maxSpawnedPawnsPoints) && this.TrySpawnPawn(out pawn) && pawn.caller != null)
-					{
-						pawn.caller.DoCall();
-					}
-					this.CalculateNextPawnSpawnTick();
+					pawn.caller.DoCall();
 				}
+				CalculateNextPawnSpawnTick();
 			}
 		}
 
-		
 		public void SendMessage()
 		{
-			if (!this.Props.spawnMessageKey.NullOrEmpty() && MessagesRepeatAvoider.MessageShowAllowed(this.Props.spawnMessageKey, 0.1f))
+			if (!Props.spawnMessageKey.NullOrEmpty() && MessagesRepeatAvoider.MessageShowAllowed(Props.spawnMessageKey, 0.1f))
 			{
-				Messages.Message(this.Props.spawnMessageKey.Translate(), this.parent, MessageTypeDefOf.NegativeEvent, true);
+				Messages.Message(Props.spawnMessageKey.Translate(), parent, MessageTypeDefOf.NegativeEvent);
 			}
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
 			if (Prefs.DevMode)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEBUG: Spawn pawn";
+				command_Action.icon = TexCommand.ReleaseAnimals;
+				command_Action.action = delegate
 				{
-					defaultLabel = "DEBUG: Spawn pawn",
-					icon = TexCommand.ReleaseAnimals,
-					action = delegate
-					{
-						Pawn pawn;
-						this.TrySpawnPawn(out pawn);
-					}
+					TrySpawnPawn(out Pawn _);
 				};
+				yield return command_Action;
 			}
-			yield break;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Props.showNextSpawnInInspect || this.nextPawnSpawnTick <= 0 || this.chosenKind == null)
+			if (!Props.showNextSpawnInInspect || nextPawnSpawnTick <= 0 || chosenKind == null)
 			{
 				return null;
 			}
-			if (this.pawnsLeftToSpawn == 0 && !this.Props.noPawnsLeftToSpawnKey.NullOrEmpty())
+			if (pawnsLeftToSpawn == 0 && !Props.noPawnsLeftToSpawnKey.NullOrEmpty())
 			{
-				return this.Props.noPawnsLeftToSpawnKey.Translate();
+				return Props.noPawnsLeftToSpawnKey.Translate();
 			}
 			string text;
-			if (!this.Dormant)
+			if (!Dormant)
 			{
-				text = (this.Props.nextSpawnInspectStringKey ?? "SpawningNextPawnIn").Translate(this.chosenKind.LabelCap, (this.nextPawnSpawnTick - Find.TickManager.TicksGame).ToStringTicksToDays("F1"));
+				text = (Props.nextSpawnInspectStringKey ?? "SpawningNextPawnIn").Translate(chosenKind.LabelCap, (nextPawnSpawnTick - Find.TickManager.TicksGame).ToStringTicksToDays());
 			}
 			else
 			{
-				if (this.Props.nextSpawnInspectStringKeyDormant == null)
+				if (Props.nextSpawnInspectStringKeyDormant == null)
 				{
 					return null;
 				}
-				text = this.Props.nextSpawnInspectStringKeyDormant.Translate() + ": " + this.chosenKind.LabelCap;
+				text = Props.nextSpawnInspectStringKeyDormant.Translate() + ": " + chosenKind.LabelCap;
 			}
-			if (this.pawnsLeftToSpawn > 0 && !this.Props.pawnsLeftToSpawnKey.NullOrEmpty())
+			if (pawnsLeftToSpawn > 0 && !Props.pawnsLeftToSpawnKey.NullOrEmpty())
 			{
-				text = text + ("\n" + this.Props.pawnsLeftToSpawnKey.Translate() + ": ") + this.pawnsLeftToSpawn;
+				text = text + (string)("\n" + Props.pawnsLeftToSpawnKey.Translate() + ": ") + pawnsLeftToSpawn;
 			}
 			return text;
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.nextPawnSpawnTick, "nextPawnSpawnTick", 0, false);
-			Scribe_Values.Look<int>(ref this.pawnsLeftToSpawn, "pawnsLeftToSpawn", -1, false);
-			Scribe_Collections.Look<Pawn>(ref this.spawnedPawns, "spawnedPawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.aggressive, "aggressive", false, false);
-			Scribe_Values.Look<bool>(ref this.canSpawnPawns, "canSpawnPawns", true, false);
-			Scribe_Defs.Look<PawnKindDef>(ref this.chosenKind, "chosenKind");
+			Scribe_Values.Look(ref nextPawnSpawnTick, "nextPawnSpawnTick", 0);
+			Scribe_Values.Look(ref pawnsLeftToSpawn, "pawnsLeftToSpawn", -1);
+			Scribe_Collections.Look(ref spawnedPawns, "spawnedPawns", LookMode.Reference);
+			Scribe_Values.Look(ref aggressive, "aggressive", defaultValue: false);
+			Scribe_Values.Look(ref canSpawnPawns, "canSpawnPawns", defaultValue: true);
+			Scribe_Defs.Look(ref chosenKind, "chosenKind");
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.spawnedPawns.RemoveAll((Pawn x) => x == null);
-				if (this.pawnsLeftToSpawn == -1 && this.Props.maxPawnsToSpawn != IntRange.zero)
+				spawnedPawns.RemoveAll((Pawn x) => x == null);
+				if (pawnsLeftToSpawn == -1 && Props.maxPawnsToSpawn != IntRange.zero)
 				{
-					this.pawnsLeftToSpawn = this.Props.maxPawnsToSpawn.RandomInRange;
+					pawnsLeftToSpawn = Props.maxPawnsToSpawn.RandomInRange;
 				}
 			}
 		}
-
-		
-		public int nextPawnSpawnTick = -1;
-
-		
-		public int pawnsLeftToSpawn = -1;
-
-		
-		public List<Pawn> spawnedPawns = new List<Pawn>();
-
-		
-		public bool aggressive = true;
-
-		
-		public bool canSpawnPawns = true;
-
-		
-		private PawnKindDef chosenKind;
-
-		
-		private CompCanBeDormant dormancyCompCached;
 	}
 }

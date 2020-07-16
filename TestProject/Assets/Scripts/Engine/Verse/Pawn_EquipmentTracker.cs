@@ -1,362 +1,285 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class Pawn_EquipmentTracker : IThingHolder, IExposable
 	{
-		
-		
-		
+		public Pawn pawn;
+
+		private ThingOwner<ThingWithComps> equipment;
+
 		public ThingWithComps Primary
 		{
 			get
 			{
-				for (int i = 0; i < this.equipment.Count; i++)
+				for (int i = 0; i < equipment.Count; i++)
 				{
-					if (this.equipment[i].def.equipmentType == EquipmentType.Primary)
+					if (equipment[i].def.equipmentType == EquipmentType.Primary)
 					{
-						return this.equipment[i];
+						return equipment[i];
 					}
 				}
 				return null;
 			}
 			private set
 			{
-				if (this.Primary == value)
+				if (Primary == value)
 				{
 					return;
 				}
 				if (value != null && value.def.equipmentType != EquipmentType.Primary)
 				{
-					Log.Error("Tried to set non-primary equipment as primary.", false);
+					Log.Error("Tried to set non-primary equipment as primary.");
 					return;
 				}
-				if (this.Primary != null)
+				if (Primary != null)
 				{
-					this.equipment.Remove(this.Primary);
+					equipment.Remove(Primary);
 				}
 				if (value != null)
 				{
-					this.equipment.TryAdd(value, true);
+					equipment.TryAdd(value);
 				}
-				if (this.pawn.drafter != null)
+				if (pawn.drafter != null)
 				{
-					this.pawn.drafter.Notify_PrimaryWeaponChanged();
+					pawn.drafter.Notify_PrimaryWeaponChanged();
 				}
 			}
 		}
 
-		
-		
 		public CompEquippable PrimaryEq
 		{
 			get
 			{
-				if (this.Primary == null)
+				if (Primary == null)
 				{
 					return null;
 				}
-				return this.Primary.GetComp<CompEquippable>();
+				return Primary.GetComp<CompEquippable>();
 			}
 		}
 
-		
-		
-		public List<ThingWithComps> AllEquipmentListForReading
-		{
-			get
-			{
-				return this.equipment.InnerListForReading;
-			}
-		}
+		public List<ThingWithComps> AllEquipmentListForReading => equipment.InnerListForReading;
 
-		
-		
 		public IEnumerable<Verb> AllEquipmentVerbs
 		{
 			get
 			{
-				List<ThingWithComps> list = this.AllEquipmentListForReading;
-				int num;
-				for (int i = 0; i < list.Count; i = num + 1)
+				List<ThingWithComps> list = AllEquipmentListForReading;
+				for (int j = 0; j < list.Count; j++)
 				{
-					ThingWithComps thingWithComps = list[i];
+					ThingWithComps thingWithComps = list[j];
 					List<Verb> verbs = thingWithComps.GetComp<CompEquippable>().AllVerbs;
-					for (int j = 0; j < verbs.Count; j = num + 1)
+					for (int i = 0; i < verbs.Count; i++)
 					{
-						yield return verbs[j];
-						num = j;
+						yield return verbs[i];
 					}
-					verbs = null;
-					num = i;
 				}
-				yield break;
 			}
 		}
 
-		
-		
-		public IThingHolder ParentHolder
-		{
-			get
-			{
-				return this.pawn;
-			}
-		}
+		public IThingHolder ParentHolder => pawn;
 
-		
 		public Pawn_EquipmentTracker(Pawn newPawn)
 		{
-			this.pawn = newPawn;
-			this.equipment = new ThingOwner<ThingWithComps>(this);
+			pawn = newPawn;
+			equipment = new ThingOwner<ThingWithComps>(this);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<ThingOwner<ThingWithComps>>(ref this.equipment, "equipment", new object[]
-			{
-				this
-			});
+			Scribe_Deep.Look(ref equipment, "equipment", this);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				List<ThingWithComps> allEquipmentListForReading = this.AllEquipmentListForReading;
+				List<ThingWithComps> allEquipmentListForReading = AllEquipmentListForReading;
 				for (int i = 0; i < allEquipmentListForReading.Count; i++)
 				{
-					foreach (Verb verb in allEquipmentListForReading[i].GetComp<CompEquippable>().AllVerbs)
+					foreach (Verb allVerb in allEquipmentListForReading[i].GetComp<CompEquippable>().AllVerbs)
 					{
-						verb.caster = this.pawn;
+						allVerb.caster = pawn;
 					}
 				}
 			}
 		}
 
-		
 		public void EquipmentTrackerTick()
 		{
-			List<ThingWithComps> allEquipmentListForReading = this.AllEquipmentListForReading;
+			List<ThingWithComps> allEquipmentListForReading = AllEquipmentListForReading;
 			for (int i = 0; i < allEquipmentListForReading.Count; i++)
 			{
 				allEquipmentListForReading[i].GetComp<CompEquippable>().verbTracker.VerbsTick();
 			}
 		}
 
-		
 		public bool HasAnything()
 		{
-			return this.equipment.Any;
+			return equipment.Any;
 		}
 
-		
 		public void MakeRoomFor(ThingWithComps eq)
 		{
-			if (eq.def.equipmentType == EquipmentType.Primary && this.Primary != null)
+			if (eq.def.equipmentType == EquipmentType.Primary && Primary != null)
 			{
-				ThingWithComps thingWithComps;
-				if (this.TryDropEquipment(this.Primary, out thingWithComps, this.pawn.Position, true))
+				if (TryDropEquipment(Primary, out ThingWithComps resultingEq, pawn.Position))
 				{
-					if (thingWithComps != null)
-					{
-						thingWithComps.SetForbidden(false, true);
-						return;
-					}
+					resultingEq?.SetForbidden(value: false);
 				}
 				else
 				{
-					Log.Error(this.pawn + " couldn't make room for equipment " + eq, false);
+					Log.Error(pawn + " couldn't make room for equipment " + eq);
 				}
 			}
 		}
 
-		
 		public void Remove(ThingWithComps eq)
 		{
-			this.equipment.Remove(eq);
+			equipment.Remove(eq);
 		}
 
-		
 		public bool TryDropEquipment(ThingWithComps eq, out ThingWithComps resultingEq, IntVec3 pos, bool forbid = true)
 		{
 			if (!pos.IsValid)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					this.pawn,
-					" tried to drop ",
-					eq,
-					" at invalid cell."
-				}), false);
+				Log.Error(pawn + " tried to drop " + eq + " at invalid cell.");
 				resultingEq = null;
 				return false;
 			}
-			if (this.equipment.TryDrop(eq, pos, this.pawn.MapHeld, ThingPlaceMode.Near, out resultingEq, null, null))
+			if (equipment.TryDrop(eq, pos, pawn.MapHeld, ThingPlaceMode.Near, out resultingEq))
 			{
 				if (resultingEq != null)
 				{
-					resultingEq.SetForbidden(forbid, false);
+					resultingEq.SetForbidden(forbid, warnOnFail: false);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public void DropAllEquipment(IntVec3 pos, bool forbid = true)
 		{
-			for (int i = this.equipment.Count - 1; i >= 0; i--)
+			for (int num = equipment.Count - 1; num >= 0; num--)
 			{
-				ThingWithComps thingWithComps;
-				this.TryDropEquipment(this.equipment[i], out thingWithComps, pos, forbid);
+				TryDropEquipment(equipment[num], out ThingWithComps _, pos, forbid);
 			}
 		}
 
-		
 		public bool TryTransferEquipmentToContainer(ThingWithComps eq, ThingOwner container)
 		{
-			return this.equipment.TryTransferToContainer(eq, container, true);
+			return equipment.TryTransferToContainer(eq, container);
 		}
 
-		
 		public void DestroyEquipment(ThingWithComps eq)
 		{
-			if (!this.equipment.Contains(eq))
+			if (!equipment.Contains(eq))
 			{
-				Log.Warning("Tried to destroy equipment " + eq + " but it's not here.", false);
+				Log.Warning("Tried to destroy equipment " + eq + " but it's not here.");
 				return;
 			}
-			this.Remove(eq);
-			eq.Destroy(DestroyMode.Vanish);
+			Remove(eq);
+			eq.Destroy();
 		}
 
-		
 		public void DestroyAllEquipment(DestroyMode mode = DestroyMode.Vanish)
 		{
-			this.equipment.ClearAndDestroyContents(mode);
+			equipment.ClearAndDestroyContents(mode);
 		}
 
-		
 		public bool Contains(Thing eq)
 		{
-			return this.equipment.Contains(eq);
+			return equipment.Contains(eq);
 		}
 
-		
 		internal void Notify_PrimaryDestroyed()
 		{
-			if (this.Primary != null)
+			if (Primary != null)
 			{
-				this.Remove(this.Primary);
+				Remove(Primary);
 			}
-			if (this.pawn.Spawned)
+			if (pawn.Spawned)
 			{
-				this.pawn.stances.CancelBusyStanceSoft();
+				pawn.stances.CancelBusyStanceSoft();
 			}
 		}
 
-		
 		public void AddEquipment(ThingWithComps newEq)
 		{
-			if (newEq.def.equipmentType == EquipmentType.Primary && this.Primary != null)
+			if (newEq.def.equipmentType == EquipmentType.Primary && Primary != null)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Pawn ",
-					this.pawn.LabelCap,
-					" got primaryInt equipment ",
-					newEq,
-					" while already having primaryInt equipment ",
-					this.Primary
-				}), false);
-				return;
+				Log.Error("Pawn " + pawn.LabelCap + " got primaryInt equipment " + newEq + " while already having primaryInt equipment " + Primary);
 			}
-			this.equipment.TryAdd(newEq, true);
+			else
+			{
+				equipment.TryAdd(newEq);
+			}
 		}
 
-		
 		public IEnumerable<Gizmo> GetGizmos()
 		{
 			if (PawnAttackGizmoUtility.CanShowEquipmentGizmos())
 			{
-				List<ThingWithComps> list = this.AllEquipmentListForReading;
-				int num;
-				for (int i = 0; i < list.Count; i = num + 1)
+				List<ThingWithComps> list = AllEquipmentListForReading;
+				for (int i = 0; i < list.Count; i++)
 				{
 					ThingWithComps thingWithComps = list[i];
-					foreach (Command command in thingWithComps.GetComp<CompEquippable>().GetVerbsCommands())
+					foreach (Command verbsCommand in thingWithComps.GetComp<CompEquippable>().GetVerbsCommands())
 					{
 						switch (i)
 						{
 						case 0:
-							command.hotKey = KeyBindingDefOf.Misc1;
+							verbsCommand.hotKey = KeyBindingDefOf.Misc1;
 							break;
 						case 1:
-							command.hotKey = KeyBindingDefOf.Misc2;
+							verbsCommand.hotKey = KeyBindingDefOf.Misc2;
 							break;
 						case 2:
-							command.hotKey = KeyBindingDefOf.Misc3;
+							verbsCommand.hotKey = KeyBindingDefOf.Misc3;
 							break;
 						}
-						yield return command;
+						yield return verbsCommand;
 					}
-					IEnumerator<Command> enumerator = null;
-					num = i;
 				}
-				list = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public void Notify_EquipmentAdded(ThingWithComps eq)
 		{
-			foreach (Verb verb in eq.GetComp<CompEquippable>().AllVerbs)
+			foreach (Verb allVerb in eq.GetComp<CompEquippable>().AllVerbs)
 			{
-				verb.caster = this.pawn;
-				verb.Notify_PickedUp();
+				allVerb.caster = pawn;
+				allVerb.Notify_PickedUp();
 			}
-			eq.Notify_Equipped(this.pawn);
+			eq.Notify_Equipped(pawn);
 		}
 
-		
 		public void Notify_EquipmentRemoved(ThingWithComps eq)
 		{
 			eq.GetComp<CompEquippable>().Notify_EquipmentLost();
 		}
 
-		
 		public void Notify_PawnSpawned()
 		{
-			if (this.HasAnything() && this.pawn.Downed && this.pawn.GetPosture() != PawnPosture.LayingInBed)
+			if (HasAnything() && pawn.Downed && pawn.GetPosture() != PawnPosture.LayingInBed)
 			{
-				if (this.pawn.kindDef.destroyGearOnDrop)
+				if (pawn.kindDef.destroyGearOnDrop)
 				{
-					this.DestroyAllEquipment(DestroyMode.Vanish);
-					return;
+					DestroyAllEquipment();
 				}
-				this.DropAllEquipment(this.pawn.Position, true);
+				else
+				{
+					DropAllEquipment(pawn.Position);
+				}
 			}
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.equipment;
+			return equipment;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
-
-		
-		public Pawn pawn;
-
-		
-		private ThingOwner<ThingWithComps> equipment;
 	}
 }

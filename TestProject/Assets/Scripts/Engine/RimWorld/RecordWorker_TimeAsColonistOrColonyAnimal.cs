@@ -1,15 +1,16 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RecordWorker_TimeAsColonistOrColonyAnimal : RecordWorker
 	{
-		
 		public override bool ShouldMeasureTimeNow(Pawn pawn)
 		{
-			return pawn.Faction == Faction.OfPlayer && !pawn.HasExtraHomeFaction(null);
+			if (pawn.Faction == Faction.OfPlayer)
+			{
+				return !pawn.HasExtraHomeFaction();
+			}
+			return false;
 		}
 	}
 }

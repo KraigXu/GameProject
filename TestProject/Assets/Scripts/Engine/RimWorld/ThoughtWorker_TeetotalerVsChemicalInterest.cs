@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_TeetotalerVsChemicalInterest : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn other)
 		{
 			if (!p.RaceProps.Humanlike)

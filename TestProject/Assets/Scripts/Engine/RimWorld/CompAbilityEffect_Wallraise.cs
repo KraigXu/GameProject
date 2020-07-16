@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,115 +5,97 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompAbilityEffect_Wallraise : CompAbilityEffect
 	{
-		
-		
-		public new CompProperties_AbilityWallraise Props
-		{
-			get
-			{
-				return (CompProperties_AbilityWallraise)this.props;
-			}
-		}
+		public static Color DustColor = new Color(0.55f, 0.55f, 0.55f, 4f);
 
-		
+		public new CompProperties_AbilityWallraise Props => (CompProperties_AbilityWallraise)props;
+
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			base.Apply(target, dest);
-			Map map = this.parent.pawn.Map;
+			Map map = parent.pawn.Map;
 			List<Thing> list = new List<Thing>();
-			list.AddRange(this.AffectedCells(target, map).SelectMany((IntVec3 c) => from t in c.GetThingList(map)
-			where t.def.category == ThingCategory.Item
-			select t));
-			foreach (Thing thing in list)
+			list.AddRange(AffectedCells(target, map).SelectMany((IntVec3 c) => from t in c.GetThingList(map)
+				where t.def.category == ThingCategory.Item
+				select t));
+			foreach (Thing item in list)
 			{
-				thing.DeSpawn(DestroyMode.Vanish);
+				item.DeSpawn();
 			}
-			foreach (IntVec3 intVec in this.AffectedCells(target, map))
+			foreach (IntVec3 item2 in AffectedCells(target, map))
 			{
-				GenSpawn.Spawn(ThingDefOf.RaisedRocks, intVec, map, WipeMode.Vanish);
-				MoteMaker.ThrowDustPuffThick(intVec.ToVector3Shifted(), map, Rand.Range(1.5f, 3f), CompAbilityEffect_Wallraise.DustColor);
-				if (intVec != target.Cell)
+				GenSpawn.Spawn(ThingDefOf.RaisedRocks, item2, map);
+				MoteMaker.ThrowDustPuffThick(item2.ToVector3Shifted(), map, Rand.Range(1.5f, 3f), DustColor);
+				if (item2 != target.Cell)
 				{
-					MoteMaker.MakeStaticMote(intVec, this.parent.pawn.Map, ThingDefOf.Mote_PsycastSkipEffect, 1f);
+					MoteMaker.MakeStaticMote(item2, parent.pawn.Map, ThingDefOf.Mote_PsycastSkipEffect);
 				}
 			}
-			foreach (Thing thing2 in list)
+			foreach (Thing item3 in list)
 			{
-				IntVec3 intVec2 = IntVec3.Invalid;
+				IntVec3 intVec = IntVec3.Invalid;
 				for (int i = 0; i < 9; i++)
 				{
-					IntVec3 intVec3 = thing2.Position + GenRadial.RadialPattern[i];
-					if (intVec3.InBounds(map) && intVec3.Walkable(map) && map.thingGrid.ThingsListAtFast(intVec3).Count <= 0)
+					IntVec3 intVec2 = item3.Position + GenRadial.RadialPattern[i];
+					if (intVec2.InBounds(map) && intVec2.Walkable(map) && map.thingGrid.ThingsListAtFast(intVec2).Count <= 0)
 					{
-						intVec2 = intVec3;
+						intVec = intVec2;
 						break;
 					}
 				}
-				if (intVec2 != IntVec3.Invalid)
+				if (intVec != IntVec3.Invalid)
 				{
-					GenSpawn.Spawn(thing2, intVec2, map, WipeMode.Vanish);
+					GenSpawn.Spawn(item3, intVec, map);
 				}
 				else
 				{
-					GenPlace.TryPlaceThing(thing2, thing2.Position, map, ThingPlaceMode.Near, null, null, default(Rot4));
+					GenPlace.TryPlaceThing(item3, item3.Position, map, ThingPlaceMode.Near);
 				}
 			}
 		}
 
-		
 		public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			return this.Valid(target, true);
+			return Valid(target, throwMessages: true);
 		}
 
-		
 		public override void DrawEffectPreview(LocalTargetInfo target)
 		{
-			GenDraw.DrawFieldEdges(this.AffectedCells(target, this.parent.pawn.Map).ToList<IntVec3>(), this.Valid(target, false) ? Color.white : Color.red);
+			GenDraw.DrawFieldEdges(AffectedCells(target, parent.pawn.Map).ToList(), Valid(target) ? Color.white : Color.red);
 		}
 
-		
 		private IEnumerable<IntVec3> AffectedCells(LocalTargetInfo target, Map map)
 		{
-			foreach (IntVec2 intVec in this.Props.pattern)
+			foreach (IntVec2 item in Props.pattern)
 			{
-				IntVec3 intVec2 = target.Cell + new IntVec3(intVec.x, 0, intVec.z);
-				if (intVec2.InBounds(map))
+				IntVec3 intVec = target.Cell + new IntVec3(item.x, 0, item.z);
+				if (intVec.InBounds(map))
 				{
-					yield return intVec2;
+					yield return intVec;
 				}
 			}
-			List<IntVec2>.Enumerator enumerator = default(List<IntVec2>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public override bool Valid(LocalTargetInfo target, bool throwMessages = false)
 		{
-			if (this.AffectedCells(target, this.parent.pawn.Map).Any((IntVec3 c) => c.Filled(this.parent.pawn.Map)))
+			if (AffectedCells(target, parent.pawn.Map).Any((IntVec3 c) => c.Filled(parent.pawn.Map)))
 			{
 				if (throwMessages)
 				{
-					Messages.Message("AbilityOccupiedCells".Translate(this.parent.def.LabelCap), target.ToTargetInfo(this.parent.pawn.Map), MessageTypeDefOf.RejectInput, false);
+					Messages.Message("AbilityOccupiedCells".Translate(parent.def.LabelCap), target.ToTargetInfo(parent.pawn.Map), MessageTypeDefOf.RejectInput, historical: false);
 				}
 				return false;
 			}
-			if (this.AffectedCells(target, this.parent.pawn.Map).Any((IntVec3 c) => !c.Standable(this.parent.pawn.Map)))
+			if (AffectedCells(target, parent.pawn.Map).Any((IntVec3 c) => !c.Standable(parent.pawn.Map)))
 			{
 				if (throwMessages)
 				{
-					Messages.Message("AbilityUnwalkable".Translate(this.parent.def.LabelCap), target.ToTargetInfo(this.parent.pawn.Map), MessageTypeDefOf.RejectInput, false);
+					Messages.Message("AbilityUnwalkable".Translate(parent.def.LabelCap), target.ToTargetInfo(parent.pawn.Map), MessageTypeDefOf.RejectInput, historical: false);
 				}
 				return false;
 			}
 			return true;
 		}
-
-		
-		public static Color DustColor = new Color(0.55f, 0.55f, 0.55f, 4f);
 	}
 }

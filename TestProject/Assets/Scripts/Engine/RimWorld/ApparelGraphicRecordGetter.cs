@@ -1,18 +1,15 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ApparelGraphicRecordGetter
 	{
-		
 		public static bool TryGetGraphicApparel(Apparel apparel, BodyTypeDef bodyType, out ApparelGraphicRecord rec)
 		{
 			if (bodyType == null)
 			{
-				Log.Error("Getting apparel graphic with undefined body type.", false);
+				Log.Error("Getting apparel graphic with undefined body type.");
 				bodyType = BodyTypeDefOf.Male;
 			}
 			if (apparel.def.apparel.wornGraphicPath.NullOrEmpty())
@@ -20,15 +17,7 @@ namespace RimWorld
 				rec = new ApparelGraphicRecord(null, null);
 				return false;
 			}
-			string path;
-			if (apparel.def.apparel.LastLayer == ApparelLayerDefOf.Overhead || apparel.def.apparel.wornGraphicPath == BaseContent.PlaceholderImagePath)
-			{
-				path = apparel.def.apparel.wornGraphicPath;
-			}
-			else
-			{
-				path = apparel.def.apparel.wornGraphicPath + "_" + bodyType.defName;
-			}
+			string path = (apparel.def.apparel.LastLayer != ApparelLayerDefOf.Overhead && !(apparel.def.apparel.wornGraphicPath == BaseContent.PlaceholderImagePath)) ? (apparel.def.apparel.wornGraphicPath + "_" + bodyType.defName) : apparel.def.apparel.wornGraphicPath;
 			Shader shader = ShaderDatabase.Cutout;
 			if (apparel.def.apparel.useWornGraphicMask)
 			{

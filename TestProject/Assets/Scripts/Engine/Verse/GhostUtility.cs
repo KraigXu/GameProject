@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class GhostUtility
 	{
-		
+		private static Dictionary<int, Graphic> ghostGraphics = new Dictionary<int, Graphic>();
+
 		public static Graphic GhostGraphicFor(Graphic baseGraphic, ThingDef thingDef, Color ghostCol)
 		{
 			if (thingDef.useSameGraphicForGhost)
 			{
 				return baseGraphic;
 			}
-			int num = 0;
-			num = Gen.HashCombine<Graphic>(num, baseGraphic);
-			num = Gen.HashCombine<ThingDef>(num, thingDef);
-			num = Gen.HashCombineStruct<Color>(num, ghostCol);
-			Graphic graphic;
-			if (!GhostUtility.ghostGraphics.TryGetValue(num, out graphic))
+			int seed = 0;
+			seed = Gen.HashCombine(seed, baseGraphic);
+			seed = Gen.HashCombine(seed, thingDef);
+			seed = Gen.HashCombineStruct(seed, ghostCol);
+			if (!ghostGraphics.TryGetValue(seed, out Graphic value))
 			{
 				if (thingDef.graphicData.Linked || thingDef.IsDoor)
 				{
-					graphic = GraphicDatabase.Get<Graphic_Single>(thingDef.uiIconPath, ShaderTypeDefOf.EdgeDetect.Shader, thingDef.graphicData.drawSize, ghostCol);
+					value = GraphicDatabase.Get<Graphic_Single>(thingDef.uiIconPath, ShaderTypeDefOf.EdgeDetect.Shader, thingDef.graphicData.drawSize, ghostCol);
 				}
 				else
 				{
@@ -39,14 +37,11 @@ namespace Verse
 						graphicData.CopyFrom(baseGraphic.data);
 						graphicData.shadowData = null;
 					}
-					graphic = GraphicDatabase.Get(baseGraphic.GetType(), baseGraphic.path, ShaderTypeDefOf.EdgeDetect.Shader, baseGraphic.drawSize, ghostCol, Color.white, graphicData, null);
+					value = GraphicDatabase.Get(baseGraphic.GetType(), baseGraphic.path, ShaderTypeDefOf.EdgeDetect.Shader, baseGraphic.drawSize, ghostCol, Color.white, graphicData, null);
 				}
-				GhostUtility.ghostGraphics.Add(num, graphic);
+				ghostGraphics.Add(seed, value);
 			}
-			return graphic;
+			return value;
 		}
-
-		
-		private static Dictionary<int, Graphic> ghostGraphics = new Dictionary<int, Graphic>();
 	}
 }

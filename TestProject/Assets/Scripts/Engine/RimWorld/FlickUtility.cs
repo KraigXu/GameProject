@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FlickUtility
 	{
-		
 		public static void UpdateFlickDesignation(Thing t)
 		{
 			bool flag = false;
@@ -28,14 +25,13 @@ namespace RimWorld
 			{
 				t.Map.designationManager.AddDesignation(new Designation(t, DesignationDefOf.Flick));
 			}
-			else if (!flag && designation != null)
+			else if (!flag)
 			{
-				designation.Delete();
+				designation?.Delete();
 			}
-			TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.SwitchFlickingDesignation, Array.Empty<string>());
+			TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.SwitchFlickingDesignation);
 		}
 
-		
 		public static bool WantsToBeOn(Thing t)
 		{
 			CompFlickable compFlickable = t.TryGetComp<CompFlickable>();
@@ -44,7 +40,11 @@ namespace RimWorld
 				return false;
 			}
 			CompSchedule compSchedule = t.TryGetComp<CompSchedule>();
-			return compSchedule == null || compSchedule.Allowed;
+			if (compSchedule != null && !compSchedule.Allowed)
+			{
+				return false;
+			}
+			return true;
 		}
 	}
 }

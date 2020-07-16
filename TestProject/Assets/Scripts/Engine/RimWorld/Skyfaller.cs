@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,17 +6,36 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class Skyfaller : Thing, IThingHolder
 	{
-		
-		
+		public ThingOwner innerContainer;
+
+		public int ticksToImpact;
+
+		public float angle;
+
+		public float shrapnelDirection;
+
+		private int ticksToImpactMax = 220;
+
+		private Material cachedShadowMaterial;
+
+		private bool anticipationSoundPlayed;
+
+		private static MaterialPropertyBlock shadowPropertyBlock = new MaterialPropertyBlock();
+
+		public const float DefaultAngle = -33.7f;
+
+		private const int RoofHitPreDelay = 15;
+
+		private const int LeaveMapAfterTicks = 220;
+
 		public override Graphic Graphic
 		{
 			get
 			{
-				Thing thingForGraphic = this.GetThingForGraphic();
+				Thing thingForGraphic = GetThingForGraphic();
 				if (thingForGraphic == this)
 				{
 					return base.Graphic;
@@ -26,254 +44,233 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override Vector3 DrawPos
 		{
 			get
 			{
-				switch (this.def.skyfaller.movementType)
+				switch (def.skyfaller.movementType)
 				{
 				case SkyfallerMovementType.Accelerate:
-					return SkyfallerDrawPosUtility.DrawPos_Accelerate(base.DrawPos, this.ticksToImpact, this.angle, this.CurrentSpeed);
+					return SkyfallerDrawPosUtility.DrawPos_Accelerate(base.DrawPos, ticksToImpact, angle, CurrentSpeed);
 				case SkyfallerMovementType.ConstantSpeed:
-					return SkyfallerDrawPosUtility.DrawPos_ConstantSpeed(base.DrawPos, this.ticksToImpact, this.angle, this.CurrentSpeed);
+					return SkyfallerDrawPosUtility.DrawPos_ConstantSpeed(base.DrawPos, ticksToImpact, angle, CurrentSpeed);
 				case SkyfallerMovementType.Decelerate:
-					return SkyfallerDrawPosUtility.DrawPos_Decelerate(base.DrawPos, this.ticksToImpact, this.angle, this.CurrentSpeed);
+					return SkyfallerDrawPosUtility.DrawPos_Decelerate(base.DrawPos, ticksToImpact, angle, CurrentSpeed);
 				default:
-					Log.ErrorOnce("SkyfallerMovementType not handled: " + this.def.skyfaller.movementType, this.thingIDNumber ^ 1948576711, false);
-					return SkyfallerDrawPosUtility.DrawPos_Accelerate(base.DrawPos, this.ticksToImpact, this.angle, this.CurrentSpeed);
+					Log.ErrorOnce("SkyfallerMovementType not handled: " + def.skyfaller.movementType, thingIDNumber ^ 0x7424EBC7);
+					return SkyfallerDrawPosUtility.DrawPos_Accelerate(base.DrawPos, ticksToImpact, angle, CurrentSpeed);
 				}
 			}
 		}
 
-		
-		
 		private Material ShadowMaterial
 		{
 			get
 			{
-				if (this.cachedShadowMaterial == null && !this.def.skyfaller.shadow.NullOrEmpty())
+				if (cachedShadowMaterial == null && !def.skyfaller.shadow.NullOrEmpty())
 				{
-					this.cachedShadowMaterial = MaterialPool.MatFrom(this.def.skyfaller.shadow, ShaderDatabase.Transparent);
+					cachedShadowMaterial = MaterialPool.MatFrom(def.skyfaller.shadow, ShaderDatabase.Transparent);
 				}
-				return this.cachedShadowMaterial;
+				return cachedShadowMaterial;
 			}
 		}
 
-		
-		
 		private float TimeInAnimation
 		{
 			get
 			{
-				if (this.def.skyfaller.reversed)
+				if (def.skyfaller.reversed)
 				{
-					return (float)this.ticksToImpact / 220f;
+					return (float)ticksToImpact / 220f;
 				}
-				return 1f - (float)this.ticksToImpact / (float)this.ticksToImpactMax;
+				return 1f - (float)ticksToImpact / (float)ticksToImpactMax;
 			}
 		}
 
-		
-		
 		private float CurrentSpeed
 		{
 			get
 			{
-				if (this.def.skyfaller.speedCurve == null)
+				if (def.skyfaller.speedCurve == null)
 				{
-					return this.def.skyfaller.speed;
+					return def.skyfaller.speed;
 				}
-				return this.def.skyfaller.speedCurve.Evaluate(this.TimeInAnimation) * this.def.skyfaller.speed;
+				return def.skyfaller.speedCurve.Evaluate(TimeInAnimation) * def.skyfaller.speed;
 			}
 		}
 
-		
-		
 		private bool SpawnTimedMotes
 		{
 			get
 			{
-				return this.def.skyfaller.moteSpawnTime != float.MinValue && Mathf.Approximately(this.def.skyfaller.moteSpawnTime, this.TimeInAnimation);
+				if (def.skyfaller.moteSpawnTime == float.MinValue)
+				{
+					return false;
+				}
+				return Mathf.Approximately(def.skyfaller.moteSpawnTime, TimeInAnimation);
 			}
 		}
 
-		
 		public Skyfaller()
 		{
-			this.innerContainer = new ThingOwner<Thing>(this);
+			innerContainer = new ThingOwner<Thing>(this);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Deep.Look<ThingOwner>(ref this.innerContainer, "innerContainer", new object[]
-			{
-				this
-			});
-			Scribe_Values.Look<int>(ref this.ticksToImpact, "ticksToImpact", 0, false);
-			Scribe_Values.Look<int>(ref this.ticksToImpactMax, "ticksToImpactMax", 220, false);
-			Scribe_Values.Look<float>(ref this.angle, "angle", 0f, false);
-			Scribe_Values.Look<float>(ref this.shrapnelDirection, "shrapnelDirection", 0f, false);
+			Scribe_Deep.Look(ref innerContainer, "innerContainer", this);
+			Scribe_Values.Look(ref ticksToImpact, "ticksToImpact", 0);
+			Scribe_Values.Look(ref ticksToImpactMax, "ticksToImpactMax", 220);
+			Scribe_Values.Look(ref angle, "angle", 0f);
+			Scribe_Values.Look(ref shrapnelDirection, "shrapnelDirection", 0f);
 		}
 
-		
 		public override void PostMake()
 		{
 			base.PostMake();
-			if (this.def.skyfaller.MakesShrapnel)
+			if (def.skyfaller.MakesShrapnel)
 			{
-				this.shrapnelDirection = Rand.Range(0f, 360f);
+				shrapnelDirection = Rand.Range(0f, 360f);
 			}
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			if (!respawningAfterLoad)
+			if (respawningAfterLoad)
 			{
-				this.ticksToImpact = (this.ticksToImpactMax = this.def.skyfaller.ticksToImpactRange.RandomInRange);
-				if (this.def.skyfaller.MakesShrapnel)
+				return;
+			}
+			ticksToImpact = (ticksToImpactMax = def.skyfaller.ticksToImpactRange.RandomInRange);
+			if (def.skyfaller.MakesShrapnel)
+			{
+				float num = GenMath.PositiveMod(shrapnelDirection, 360f);
+				if (num < 270f && num >= 90f)
 				{
-					float num = GenMath.PositiveMod(this.shrapnelDirection, 360f);
-					if (num < 270f && num >= 90f)
-					{
-						this.angle = Rand.Range(0f, 33f);
-					}
-					else
-					{
-						this.angle = Rand.Range(-33f, 0f);
-					}
-				}
-				else if (this.def.skyfaller.angleCurve != null)
-				{
-					this.angle = this.def.skyfaller.angleCurve.Evaluate(0f);
+					angle = Rand.Range(0f, 33f);
 				}
 				else
 				{
-					this.angle = -33.7f;
+					angle = Rand.Range(-33f, 0f);
 				}
-				if (this.def.rotatable && this.innerContainer.Any)
-				{
-					base.Rotation = this.innerContainer[0].Rotation;
-				}
+			}
+			else if (def.skyfaller.angleCurve != null)
+			{
+				angle = def.skyfaller.angleCurve.Evaluate(0f);
+			}
+			else
+			{
+				angle = -33.7f;
+			}
+			if (def.rotatable && innerContainer.Any)
+			{
+				base.Rotation = innerContainer[0].Rotation;
 			}
 		}
 
-		
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
 			base.Destroy(mode);
-			this.innerContainer.ClearAndDestroyContents(DestroyMode.Vanish);
+			innerContainer.ClearAndDestroyContents();
 		}
 
-		
 		public override void DrawAt(Vector3 drawLoc, bool flip = false)
 		{
-			Thing thingForGraphic = this.GetThingForGraphic();
+			Thing thingForGraphic = GetThingForGraphic();
 			float num = 0f;
-			if (this.def.skyfaller.rotateGraphicTowardsDirection)
+			if (def.skyfaller.rotateGraphicTowardsDirection)
 			{
-				num = this.angle;
+				num = angle;
 			}
-			if (this.def.skyfaller.angleCurve != null)
+			if (def.skyfaller.angleCurve != null)
 			{
-				this.angle = this.def.skyfaller.angleCurve.Evaluate(this.TimeInAnimation);
+				angle = def.skyfaller.angleCurve.Evaluate(TimeInAnimation);
 			}
-			if (this.def.skyfaller.rotationCurve != null)
+			if (def.skyfaller.rotationCurve != null)
 			{
-				num += this.def.skyfaller.rotationCurve.Evaluate(this.TimeInAnimation);
+				num += def.skyfaller.rotationCurve.Evaluate(TimeInAnimation);
 			}
-			if (this.def.skyfaller.xPositionCurve != null)
+			if (def.skyfaller.xPositionCurve != null)
 			{
-				drawLoc.x += this.def.skyfaller.xPositionCurve.Evaluate(this.TimeInAnimation);
+				drawLoc.x += def.skyfaller.xPositionCurve.Evaluate(TimeInAnimation);
 			}
-			if (this.def.skyfaller.zPositionCurve != null)
+			if (def.skyfaller.zPositionCurve != null)
 			{
-				drawLoc.z += this.def.skyfaller.zPositionCurve.Evaluate(this.TimeInAnimation);
+				drawLoc.z += def.skyfaller.zPositionCurve.Evaluate(TimeInAnimation);
 			}
-			this.Graphic.Draw(drawLoc, flip ? thingForGraphic.Rotation.Opposite : thingForGraphic.Rotation, thingForGraphic, num);
-			this.DrawDropSpotShadow();
+			Graphic.Draw(drawLoc, flip ? thingForGraphic.Rotation.Opposite : thingForGraphic.Rotation, thingForGraphic, num);
+			DrawDropSpotShadow();
 		}
 
-		
 		public override void Tick()
 		{
-			this.innerContainer.ThingOwnerTick(true);
-			if (this.SpawnTimedMotes)
+			innerContainer.ThingOwnerTick();
+			if (SpawnTimedMotes)
 			{
 				CellRect cellRect = this.OccupiedRect();
-				for (int i = 0; i < cellRect.Area * this.def.skyfaller.motesPerCell; i++)
+				for (int i = 0; i < cellRect.Area * def.skyfaller.motesPerCell; i++)
 				{
 					MoteMaker.ThrowDustPuff(cellRect.RandomVector3, base.Map, 2f);
 				}
 			}
-			if (this.def.skyfaller.reversed)
+			if (def.skyfaller.reversed)
 			{
-				this.ticksToImpact++;
-				if (!this.anticipationSoundPlayed && this.def.skyfaller.anticipationSound != null && this.ticksToImpact > this.def.skyfaller.anticipationSoundTicks)
+				ticksToImpact++;
+				if (!anticipationSoundPlayed && def.skyfaller.anticipationSound != null && ticksToImpact > def.skyfaller.anticipationSoundTicks)
 				{
-					this.anticipationSoundPlayed = true;
-					this.def.skyfaller.anticipationSound.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
+					anticipationSoundPlayed = true;
+					def.skyfaller.anticipationSound.PlayOneShot(new TargetInfo(base.Position, base.Map));
 				}
-				if (this.ticksToImpact == 220)
+				if (ticksToImpact == 220)
 				{
-					this.LeaveMap();
-					return;
+					LeaveMap();
 				}
-				if (this.ticksToImpact > 220)
+				else if (ticksToImpact > 220)
 				{
-					Log.Error("ticksToImpact > LeaveMapAfterTicks. Was there an exception? Destroying skyfaller.", false);
-					this.Destroy(DestroyMode.Vanish);
-					return;
+					Log.Error("ticksToImpact > LeaveMapAfterTicks. Was there an exception? Destroying skyfaller.");
+					Destroy();
 				}
+				return;
 			}
-			else
+			ticksToImpact--;
+			if (ticksToImpact == 15)
 			{
-				this.ticksToImpact--;
-				if (this.ticksToImpact == 15)
-				{
-					this.HitRoof();
-				}
-				if (!this.anticipationSoundPlayed && this.def.skyfaller.anticipationSound != null && this.ticksToImpact < this.def.skyfaller.anticipationSoundTicks)
-				{
-					this.anticipationSoundPlayed = true;
-					this.def.skyfaller.anticipationSound.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
-				}
-				if (this.ticksToImpact == 0)
-				{
-					this.Impact();
-					return;
-				}
-				if (this.ticksToImpact < 0)
-				{
-					Log.Error("ticksToImpact < 0. Was there an exception? Destroying skyfaller.", false);
-					this.Destroy(DestroyMode.Vanish);
-				}
+				HitRoof();
+			}
+			if (!anticipationSoundPlayed && def.skyfaller.anticipationSound != null && ticksToImpact < def.skyfaller.anticipationSoundTicks)
+			{
+				anticipationSoundPlayed = true;
+				def.skyfaller.anticipationSound.PlayOneShot(new TargetInfo(base.Position, base.Map));
+			}
+			if (ticksToImpact == 0)
+			{
+				Impact();
+			}
+			else if (ticksToImpact < 0)
+			{
+				Log.Error("ticksToImpact < 0. Was there an exception? Destroying skyfaller.");
+				Destroy();
 			}
 		}
 
-		
 		protected virtual void HitRoof()
 		{
-			if (!this.def.skyfaller.hitRoof)
+			if (!def.skyfaller.hitRoof)
 			{
 				return;
 			}
 			CellRect cr = this.OccupiedRect();
-			if (cr.Cells.Any((IntVec3 x) => x.Roofed(this.Map)))
+			if (cr.Cells.Any((IntVec3 x) => x.Roofed(base.Map)))
 			{
-				RoofDef roof = cr.Cells.First((IntVec3 x) => x.Roofed(this.Map)).GetRoof(base.Map);
+				RoofDef roof = cr.Cells.First((IntVec3 x) => x.Roofed(base.Map)).GetRoof(base.Map);
 				if (!roof.soundPunchThrough.NullOrUndefined())
 				{
-					roof.soundPunchThrough.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
+					roof.soundPunchThrough.PlayOneShot(new TargetInfo(base.Position, base.Map));
 				}
 				RoofCollapserImmediate.DropRoofInCells(cr.ExpandedBy(1).ClipInsideMap(base.Map).Cells.Where(delegate(IntVec3 c)
 				{
-					if (!c.InBounds(this.Map))
+					if (!c.InBounds(base.Map))
 					{
 						return false;
 					}
@@ -281,106 +278,97 @@ namespace RimWorld
 					{
 						return true;
 					}
-					if (c.GetFirstPawn(this.Map) != null)
+					if (c.GetFirstPawn(base.Map) != null)
 					{
 						return false;
 					}
-					Building edifice = c.GetEdifice(this.Map);
-					return edifice == null || !edifice.def.holdsRoof;
-				}), base.Map, null);
+					Building edifice = c.GetEdifice(base.Map);
+					return (edifice == null || !edifice.def.holdsRoof) ? true : false;
+				}), base.Map);
 			}
 		}
 
-		
 		protected virtual void SpawnThings()
 		{
-			for (int i = this.innerContainer.Count - 1; i >= 0; i--)
+			for (int num = innerContainer.Count - 1; num >= 0; num--)
 			{
-				GenPlace.TryPlaceThing(this.innerContainer[i], base.Position, base.Map, ThingPlaceMode.Near, delegate(Thing thing, int count)
+				GenPlace.TryPlaceThing(innerContainer[num], base.Position, base.Map, ThingPlaceMode.Near, delegate(Thing thing, int count)
 				{
 					PawnUtility.RecoverFromUnwalkablePositionOrKill(thing.Position, thing.Map);
-					if (thing.def.Fillage == FillCategory.Full && this.def.skyfaller.CausesExplosion && this.def.skyfaller.explosionDamage.isExplosive && thing.Position.InHorDistOf(base.Position, this.def.skyfaller.explosionRadius))
+					if (thing.def.Fillage == FillCategory.Full && def.skyfaller.CausesExplosion && def.skyfaller.explosionDamage.isExplosive && thing.Position.InHorDistOf(base.Position, def.skyfaller.explosionRadius))
 					{
 						base.Map.terrainGrid.Notify_TerrainDestroyed(thing.Position);
 					}
-				}, null, this.innerContainer[i].def.defaultPlacingRot);
+				}, null, innerContainer[num].def.defaultPlacingRot);
 			}
 		}
 
-		
 		protected virtual void Impact()
 		{
-			if (this.def.skyfaller.CausesExplosion)
+			if (def.skyfaller.CausesExplosion)
 			{
-				GenExplosion.DoExplosion(base.Position, base.Map, this.def.skyfaller.explosionRadius, this.def.skyfaller.explosionDamage, null, GenMath.RoundRandom((float)this.def.skyfaller.explosionDamage.defaultDamage * this.def.skyfaller.explosionDamageFactor), -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, (!this.def.skyfaller.damageSpawnedThings) ? this.innerContainer.ToList<Thing>() : null);
+				GenExplosion.DoExplosion(base.Position, base.Map, def.skyfaller.explosionRadius, def.skyfaller.explosionDamage, null, GenMath.RoundRandom((float)def.skyfaller.explosionDamage.defaultDamage * def.skyfaller.explosionDamageFactor), -1f, null, null, null, null, null, 0f, 1, applyDamageToExplosionCellsNeighbors: false, null, 0f, 1, 0f, damageFalloff: false, null, (!def.skyfaller.damageSpawnedThings) ? innerContainer.ToList() : null);
 			}
-			this.SpawnThings();
-			this.innerContainer.ClearAndDestroyContents(DestroyMode.Vanish);
+			SpawnThings();
+			innerContainer.ClearAndDestroyContents();
 			CellRect cellRect = this.OccupiedRect();
-			for (int i = 0; i < cellRect.Area * this.def.skyfaller.motesPerCell; i++)
+			for (int i = 0; i < cellRect.Area * def.skyfaller.motesPerCell; i++)
 			{
 				MoteMaker.ThrowDustPuff(cellRect.RandomVector3, base.Map, 2f);
 			}
-			if (this.def.skyfaller.MakesShrapnel)
+			if (def.skyfaller.MakesShrapnel)
 			{
-				SkyfallerShrapnelUtility.MakeShrapnel(base.Position, base.Map, this.shrapnelDirection, this.def.skyfaller.shrapnelDistanceFactor, this.def.skyfaller.metalShrapnelCountRange.RandomInRange, this.def.skyfaller.rubbleShrapnelCountRange.RandomInRange, true);
+				SkyfallerShrapnelUtility.MakeShrapnel(base.Position, base.Map, shrapnelDirection, def.skyfaller.shrapnelDistanceFactor, def.skyfaller.metalShrapnelCountRange.RandomInRange, def.skyfaller.rubbleShrapnelCountRange.RandomInRange, spawnMotes: true);
 			}
-			if (this.def.skyfaller.cameraShake > 0f && base.Map == Find.CurrentMap)
+			if (def.skyfaller.cameraShake > 0f && base.Map == Find.CurrentMap)
 			{
-				Find.CameraDriver.shaker.DoShake(this.def.skyfaller.cameraShake);
+				Find.CameraDriver.shaker.DoShake(def.skyfaller.cameraShake);
 			}
-			if (this.def.skyfaller.impactSound != null)
+			if (def.skyfaller.impactSound != null)
 			{
-				this.def.skyfaller.impactSound.PlayOneShot(SoundInfo.InMap(new TargetInfo(base.Position, base.Map, false), MaintenanceType.None));
+				def.skyfaller.impactSound.PlayOneShot(SoundInfo.InMap(new TargetInfo(base.Position, base.Map)));
 			}
-			this.Destroy(DestroyMode.Vanish);
+			Destroy();
 		}
 
-		
 		protected virtual void LeaveMap()
 		{
-			this.Destroy(DestroyMode.Vanish);
+			Destroy();
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.innerContainer;
+			return innerContainer;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
 
-		
 		private Thing GetThingForGraphic()
 		{
-			if (this.def.graphicData != null || !this.innerContainer.Any)
+			if (def.graphicData != null || !innerContainer.Any)
 			{
 				return this;
 			}
-			return this.innerContainer[0];
+			return innerContainer[0];
 		}
 
-		
 		private void DrawDropSpotShadow()
 		{
-			Material shadowMaterial = this.ShadowMaterial;
-			if (shadowMaterial == null)
+			Material shadowMaterial = ShadowMaterial;
+			if (!(shadowMaterial == null))
 			{
-				return;
+				DrawDropSpotShadow(base.DrawPos, base.Rotation, shadowMaterial, def.skyfaller.shadowSize, ticksToImpact);
 			}
-			Skyfaller.DrawDropSpotShadow(base.DrawPos, base.Rotation, shadowMaterial, this.def.skyfaller.shadowSize, this.ticksToImpact);
 		}
 
-		
 		public static void DrawDropSpotShadow(Vector3 center, Rot4 rot, Material material, Vector2 shadowSize, int ticksToImpact)
 		{
 			if (rot.IsHorizontal)
 			{
-				Gen.Swap<float>(ref shadowSize.x, ref shadowSize.y);
+				Gen.Swap(ref shadowSize.x, ref shadowSize.y);
 			}
 			ticksToImpact = Mathf.Max(ticksToImpact, 0);
 			Vector3 pos = center;
@@ -390,45 +378,12 @@ namespace RimWorld
 			Color white = Color.white;
 			if (ticksToImpact > 150)
 			{
-				white.a = Mathf.InverseLerp(200f, 150f, (float)ticksToImpact);
+				white.a = Mathf.InverseLerp(200f, 150f, ticksToImpact);
 			}
-			Skyfaller.shadowPropertyBlock.SetColor(ShaderPropertyIDs.Color, white);
+			shadowPropertyBlock.SetColor(ShaderPropertyIDs.Color, white);
 			Matrix4x4 matrix = default(Matrix4x4);
 			matrix.SetTRS(pos, rot.AsQuat, s);
-			Graphics.DrawMesh(MeshPool.plane10Back, matrix, material, 0, null, 0, Skyfaller.shadowPropertyBlock);
+			Graphics.DrawMesh(MeshPool.plane10Back, matrix, material, 0, null, 0, shadowPropertyBlock);
 		}
-
-		
-		public ThingOwner innerContainer;
-
-		
-		public int ticksToImpact;
-
-		
-		public float angle;
-
-		
-		public float shrapnelDirection;
-
-		
-		private int ticksToImpactMax = 220;
-
-		
-		private Material cachedShadowMaterial;
-
-		
-		private bool anticipationSoundPlayed;
-
-		
-		private static MaterialPropertyBlock shadowPropertyBlock = new MaterialPropertyBlock();
-
-		
-		public const float DefaultAngle = -33.7f;
-
-		
-		private const int RoofHitPreDelay = 15;
-
-		
-		private const int LeaveMapAfterTicks = 220;
 	}
 }

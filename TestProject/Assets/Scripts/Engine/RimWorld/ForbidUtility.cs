@@ -1,20 +1,17 @@
-﻿using System;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class ForbidUtility
 	{
-		
 		public static void SetForbidden(this Thing t, bool value, bool warnOnFail = true)
 		{
 			if (t == null)
 			{
 				if (warnOnFail)
 				{
-					Log.Error("Tried to SetForbidden on null Thing.", false);
+					Log.Error("Tried to SetForbidden on null Thing.");
 				}
 				return;
 			}
@@ -23,7 +20,7 @@ namespace RimWorld
 			{
 				if (warnOnFail)
 				{
-					Log.Error("Tried to SetForbidden on non-ThingWithComps Thing " + t, false);
+					Log.Error("Tried to SetForbidden on non-ThingWithComps Thing " + t);
 				}
 				return;
 			}
@@ -32,33 +29,44 @@ namespace RimWorld
 			{
 				if (warnOnFail)
 				{
-					Log.Error("Tried to SetForbidden on non-Forbiddable Thing " + t, false);
+					Log.Error("Tried to SetForbidden on non-Forbiddable Thing " + t);
 				}
-				return;
 			}
-			comp.Forbidden = value;
+			else
+			{
+				comp.Forbidden = value;
+			}
 		}
 
-		
 		public static void SetForbiddenIfOutsideHomeArea(this Thing t)
 		{
 			if (!t.Spawned)
 			{
-				Log.Error("SetForbiddenIfOutsideHomeArea unspawned thing " + t, false);
+				Log.Error("SetForbiddenIfOutsideHomeArea unspawned thing " + t);
 			}
 			if (t.Position.InBounds(t.Map) && !t.Map.areaManager.Home[t.Position])
 			{
-				t.SetForbidden(true, false);
+				t.SetForbidden(value: true, warnOnFail: false);
 			}
 		}
 
-		
 		public static bool CaresAboutForbidden(Pawn pawn, bool cellTarget)
 		{
-			return (pawn.HostFaction == null || (pawn.HostFaction == Faction.OfPlayer && pawn.Spawned && !pawn.Map.IsPlayerHome && (pawn.GetRoom(RegionType.Set_Passable) == null || !pawn.GetRoom(RegionType.Set_Passable).isPrisonCell) && (!pawn.IsPrisoner || pawn.guest.PrisonerIsSecure))) && !pawn.InMentalState && (!cellTarget || !ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(pawn));
+			if (pawn.HostFaction != null && (pawn.HostFaction != Faction.OfPlayer || !pawn.Spawned || pawn.Map.IsPlayerHome || (pawn.GetRoom() != null && pawn.GetRoom().isPrisonCell) || (pawn.IsPrisoner && !pawn.guest.PrisonerIsSecure)))
+			{
+				return false;
+			}
+			if (pawn.InMentalState)
+			{
+				return false;
+			}
+			if (cellTarget && ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(pawn))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool InAllowedArea(this IntVec3 c, Pawn forPawn)
 		{
 			if (forPawn.playerSettings != null)
@@ -72,10 +80,9 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool IsForbidden(this Thing t, Pawn pawn)
 		{
-			if (!ForbidUtility.CaresAboutForbidden(pawn, false))
+			if (!CaresAboutForbidden(pawn, cellTarget: false))
 			{
 				return false;
 			}
@@ -88,25 +95,46 @@ namespace RimWorld
 				return true;
 			}
 			Lord lord = pawn.GetLord();
-			return lord != null && lord.extraForbiddenThings.Contains(t);
+			if (lord != null && lord.extraForbiddenThings.Contains(t))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static bool IsForbiddenToPass(this Building_Door t, Pawn pawn)
 		{
-			return ForbidUtility.CaresAboutForbidden(pawn, false) && t.IsForbidden(pawn.Faction);
+			if (!CaresAboutForbidden(pawn, cellTarget: false))
+			{
+				return false;
+			}
+			if (t.IsForbidden(pawn.Faction))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static bool IsForbidden(this IntVec3 c, Pawn pawn)
 		{
-			return ForbidUtility.CaresAboutForbidden(pawn, true) && (!c.InAllowedArea(pawn) || (pawn.mindState.maxDistToSquadFlag > 0f && !c.InHorDistOf(pawn.DutyLocation(), pawn.mindState.maxDistToSquadFlag)));
+			if (!CaresAboutForbidden(pawn, cellTarget: true))
+			{
+				return false;
+			}
+			if (!c.InAllowedArea(pawn))
+			{
+				return true;
+			}
+			if (pawn.mindState.maxDistToSquadFlag > 0f && !c.InHorDistOf(pawn.DutyLocation(), pawn.mindState.maxDistToSquadFlag))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static bool IsForbiddenEntirely(this Region r, Pawn pawn)
 		{
-			if (!ForbidUtility.CaresAboutForbidden(pawn, true))
+			if (!CaresAboutForbidden(pawn, cellTarget: true))
 			{
 				return false;
 			}
@@ -121,7 +149,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static bool IsForbidden(this Thing t, Faction faction)
 		{
 			if (faction == null)
@@ -137,8 +164,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			CompForbiddable comp = thingWithComps.GetComp<CompForbiddable>();
-			return comp != null && comp.Forbidden;
+			return thingWithComps.GetComp<CompForbiddable>()?.Forbidden ?? false;
 		}
 	}
 }

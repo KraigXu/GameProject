@@ -1,49 +1,33 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Building_Heater : Building_TempControl
 	{
-		
+		private const float EfficiencyFalloffSpan = 100f;
+
 		public override void TickRare()
 		{
-			if (this.compPowerTrader.PowerOn)
+			if (compPowerTrader.PowerOn)
 			{
 				float ambientTemperature = base.AmbientTemperature;
-				float num;
-				if (ambientTemperature < 20f)
-				{
-					num = 1f;
-				}
-				else if (ambientTemperature > 120f)
-				{
-					num = 0f;
-				}
-				else
-				{
-					num = Mathf.InverseLerp(120f, 20f, ambientTemperature);
-				}
-				float energyLimit = this.compTempControl.Props.energyPerSecond * num * 4.16666651f;
-				float num2 = GenTemperature.ControlTemperatureTempChange(base.Position, base.Map, energyLimit, this.compTempControl.targetTemperature);
+				float num = (ambientTemperature < 20f) ? 1f : ((!(ambientTemperature > 120f)) ? Mathf.InverseLerp(120f, 20f, ambientTemperature) : 0f);
+				float energyLimit = compTempControl.Props.energyPerSecond * num * 4.16666651f;
+				float num2 = GenTemperature.ControlTemperatureTempChange(base.Position, base.Map, energyLimit, compTempControl.targetTemperature);
 				bool flag = !Mathf.Approximately(num2, 0f);
-				CompProperties_Power props = this.compPowerTrader.Props;
+				CompProperties_Power props = compPowerTrader.Props;
 				if (flag)
 				{
 					this.GetRoomGroup().Temperature += num2;
-					this.compPowerTrader.PowerOutput = -props.basePowerConsumption;
+					compPowerTrader.PowerOutput = 0f - props.basePowerConsumption;
 				}
 				else
 				{
-					this.compPowerTrader.PowerOutput = -props.basePowerConsumption * this.compTempControl.Props.lowPowerConsumptionFactor;
+					compPowerTrader.PowerOutput = (0f - props.basePowerConsumption) * compTempControl.Props.lowPowerConsumptionFactor;
 				}
-				this.compTempControl.operatingAtHighPower = flag;
+				compTempControl.operatingAtHighPower = flag;
 			}
 		}
-
-		
-		private const float EfficiencyFalloffSpan = 100f;
 	}
 }

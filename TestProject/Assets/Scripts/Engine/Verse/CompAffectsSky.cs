@@ -1,113 +1,58 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class CompAffectsSky : ThingComp
 	{
-		
-		
-		public CompProperties_AffectsSky Props
-		{
-			get
-			{
-				return (CompProperties_AffectsSky)this.props;
-			}
-		}
+		private int autoAnimationStartTick;
 
-		
-		
+		private int fadeInDuration;
+
+		private int holdDuration;
+
+		private int fadeOutDuration;
+
+		private float autoAnimationTarget;
+
+		public CompProperties_AffectsSky Props => (CompProperties_AffectsSky)props;
+
 		public virtual float LerpFactor
 		{
 			get
 			{
-				if (this.HasAutoAnimation)
+				if (HasAutoAnimation)
 				{
 					int ticksGame = Find.TickManager.TicksGame;
-					float num;
-					if (ticksGame < this.autoAnimationStartTick + this.fadeInDuration)
-					{
-						num = (float)(ticksGame - this.autoAnimationStartTick) / (float)this.fadeInDuration;
-					}
-					else if (ticksGame < this.autoAnimationStartTick + this.fadeInDuration + this.holdDuration)
-					{
-						num = 1f;
-					}
-					else
-					{
-						num = 1f - (float)(ticksGame - this.autoAnimationStartTick - this.fadeInDuration - this.holdDuration) / (float)this.fadeOutDuration;
-					}
-					return Mathf.Clamp01(num * this.autoAnimationTarget);
+					float num = (ticksGame < autoAnimationStartTick + fadeInDuration) ? ((float)(ticksGame - autoAnimationStartTick) / (float)fadeInDuration) : ((ticksGame >= autoAnimationStartTick + fadeInDuration + holdDuration) ? (1f - (float)(ticksGame - autoAnimationStartTick - fadeInDuration - holdDuration) / (float)fadeOutDuration) : 1f);
+					return Mathf.Clamp01(num * autoAnimationTarget);
 				}
 				return 0f;
 			}
 		}
 
-		
-		
-		public bool HasAutoAnimation
-		{
-			get
-			{
-				return Find.TickManager.TicksGame < this.autoAnimationStartTick + this.fadeInDuration + this.holdDuration + this.fadeOutDuration;
-			}
-		}
+		public bool HasAutoAnimation => Find.TickManager.TicksGame < autoAnimationStartTick + fadeInDuration + holdDuration + fadeOutDuration;
 
-		
-		
-		public virtual SkyTarget SkyTarget
-		{
-			get
-			{
-				return new SkyTarget(this.Props.glow, this.Props.skyColors, this.Props.lightsourceShineSize, this.Props.lightsourceShineIntensity);
-			}
-		}
+		public virtual SkyTarget SkyTarget => new SkyTarget(Props.glow, Props.skyColors, Props.lightsourceShineSize, Props.lightsourceShineIntensity);
 
-		
-		
-		public virtual Vector2? OverrideShadowVector
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public virtual Vector2? OverrideShadowVector => null;
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.autoAnimationStartTick, "autoAnimationStartTick", 0, false);
-			Scribe_Values.Look<int>(ref this.fadeInDuration, "fadeInDuration", 0, false);
-			Scribe_Values.Look<int>(ref this.holdDuration, "holdDuration", 0, false);
-			Scribe_Values.Look<int>(ref this.fadeOutDuration, "fadeOutDuration", 0, false);
-			Scribe_Values.Look<float>(ref this.autoAnimationTarget, "autoAnimationTarget", 0f, false);
+			Scribe_Values.Look(ref autoAnimationStartTick, "autoAnimationStartTick", 0);
+			Scribe_Values.Look(ref fadeInDuration, "fadeInDuration", 0);
+			Scribe_Values.Look(ref holdDuration, "holdDuration", 0);
+			Scribe_Values.Look(ref fadeOutDuration, "fadeOutDuration", 0);
+			Scribe_Values.Look(ref autoAnimationTarget, "autoAnimationTarget", 0f);
 		}
 
-		
 		public void StartFadeInHoldFadeOut(int fadeInDuration, int holdDuration, int fadeOutDuration, float target = 1f)
 		{
-			this.autoAnimationStartTick = Find.TickManager.TicksGame;
+			autoAnimationStartTick = Find.TickManager.TicksGame;
 			this.fadeInDuration = fadeInDuration;
 			this.holdDuration = holdDuration;
 			this.fadeOutDuration = fadeOutDuration;
-			this.autoAnimationTarget = target;
+			autoAnimationTarget = target;
 		}
-
-		
-		private int autoAnimationStartTick;
-
-		
-		private int fadeInDuration;
-
-		
-		private int holdDuration;
-
-		
-		private int fadeOutDuration;
-
-		
-		private float autoAnimationTarget;
 	}
 }

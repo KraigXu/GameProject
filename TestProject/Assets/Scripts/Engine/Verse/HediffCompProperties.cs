@@ -1,37 +1,30 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class HediffCompProperties
 	{
-		
+		[TranslationHandle]
+		public Type compClass;
+
 		public virtual void PostLoad()
 		{
 		}
 
-		
 		public virtual IEnumerable<string> ConfigErrors(HediffDef parentDef)
 		{
-			if (this.compClass == null)
+			if (compClass == null)
 			{
 				yield return "compClass is null";
 			}
-			int num;
-			for (int i = 0; i < parentDef.comps.Count; i = num + 1)
+			for (int i = 0; i < parentDef.comps.Count; i++)
 			{
-				if (parentDef.comps[i] != this && parentDef.comps[i].compClass == this.compClass)
+				if (parentDef.comps[i] != this && parentDef.comps[i].compClass == compClass)
 				{
-					yield return "two comps with same compClass: " + this.compClass;
+					yield return "two comps with same compClass: " + compClass;
 				}
-				num = i;
 			}
-			yield break;
 		}
-
-		
-		[TranslationHandle]
-		public Type compClass;
 	}
 }

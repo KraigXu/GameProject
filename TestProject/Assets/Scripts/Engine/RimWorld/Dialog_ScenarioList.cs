@@ -1,25 +1,23 @@
-﻿using System;
+using System;
 using System.IO;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Dialog_ScenarioList : Dialog_FileList
 	{
-		
 		protected override void ReloadFiles()
 		{
-			this.files.Clear();
-			foreach (FileInfo fileInfo in GenFilePaths.AllCustomScenarioFiles)
+			files.Clear();
+			foreach (FileInfo allCustomScenarioFile in GenFilePaths.AllCustomScenarioFiles)
 			{
 				try
 				{
-					this.files.Add(new SaveFileInfo(fileInfo));
+					files.Add(new SaveFileInfo(allCustomScenarioFile));
 				}
 				catch (Exception ex)
 				{
-					Log.Error("Exception loading " + fileInfo.Name + ": " + ex.ToString(), false);
+					Log.Error("Exception loading " + allCustomScenarioFile.Name + ": " + ex.ToString());
 				}
 			}
 		}

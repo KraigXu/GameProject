@@ -1,44 +1,34 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRequirement_AllThingsAreGlowing : RoomRequirement
 	{
-		
+		public ThingDef thingDef;
+
 		public override bool Met(Room r, Pawn p = null)
 		{
-			IEnumerator<Thing> enumerator = r.ContainedThings(this.thingDef).GetEnumerator();
+			foreach (Thing item in r.ContainedThings(thingDef))
 			{
-				while (enumerator.MoveNext())
+				if (!item.TryGetComp<CompGlower>().Glows)
 				{
-					if (!enumerator.Current.TryGetComp<CompGlower>().Glows)
-					{
-						return false;
-					}
+					return false;
 				}
 			}
 			return true;
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			if (this.thingDef == null)
+			if (thingDef == null)
 			{
 				yield return "thingDef is null";
-				yield break;
 			}
-			if (this.thingDef.GetCompProperties<CompProperties_Glower>() == null)
+			else if (thingDef.GetCompProperties<CompProperties_Glower>() == null)
 			{
 				yield return "No comp glower on thingDef";
 			}
-			yield break;
 		}
-
-		
-		public ThingDef thingDef;
 	}
 }

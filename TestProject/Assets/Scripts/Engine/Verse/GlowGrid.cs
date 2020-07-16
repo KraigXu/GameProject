@@ -1,39 +1,58 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public sealed class GlowGrid
 	{
-		
+		private Map map;
+
+		public Color32[] glowGrid;
+
+		public Color32[] glowGridNoCavePlants;
+
+		private bool glowGridDirty;
+
+		private HashSet<CompGlower> litGlowers = new HashSet<CompGlower>();
+
+		private List<IntVec3> initialGlowerLocs = new List<IntVec3>();
+
+		public const int AlphaOfNotOverlit = 0;
+
+		public const int AlphaOfOverlit = 1;
+
+		private const float GameGlowLitThreshold = 0.3f;
+
+		private const float GameGlowOverlitThreshold = 0.9f;
+
+		private const float GroundGameGlowFactor = 3.6f;
+
+		private const float MaxGameGlowFromNonOverlitGroundLights = 0.5f;
+
 		public GlowGrid(Map map)
 		{
 			this.map = map;
-			this.glowGrid = new Color32[map.cellIndices.NumGridCells];
-			this.glowGridNoCavePlants = new Color32[map.cellIndices.NumGridCells];
+			glowGrid = new Color32[map.cellIndices.NumGridCells];
+			glowGridNoCavePlants = new Color32[map.cellIndices.NumGridCells];
 		}
 
-		
 		public Color32 VisualGlowAt(IntVec3 c)
 		{
-			return this.glowGrid[this.map.cellIndices.CellToIndex(c)];
+			return glowGrid[map.cellIndices.CellToIndex(c)];
 		}
 
-		
 		public float GameGlowAt(IntVec3 c, bool ignoreCavePlants = false)
 		{
 			float num = 0f;
-			if (!this.map.roofGrid.Roofed(c))
+			if (!map.roofGrid.Roofed(c))
 			{
-				num = this.map.skyManager.CurSkyGlow;
+				num = map.skyManager.CurSkyGlow;
 				if (num == 1f)
 				{
 					return num;
 				}
 			}
-			Color32 color = (ignoreCavePlants ? this.glowGridNoCavePlants : this.glowGrid)[this.map.cellIndices.CellToIndex(c)];
+			Color32 color = (ignoreCavePlants ? glowGridNoCavePlants : glowGrid)[map.cellIndices.CellToIndex(c)];
 			if (color.a == 1)
 			{
 				return 1f;
@@ -43,13 +62,11 @@ namespace Verse
 			return Mathf.Max(num, b);
 		}
 
-		
 		public PsychGlow PsychGlowAt(IntVec3 c)
 		{
-			return GlowGrid.PsychGlowAtGlow(this.GameGlowAt(c, false));
+			return PsychGlowAtGlow(GameGlowAt(c));
 		}
 
-		
 		public static PsychGlow PsychGlowAtGlow(float glow)
 		{
 			if (glow > 0.9f)
@@ -63,106 +80,64 @@ namespace Verse
 			return PsychGlow.Dark;
 		}
 
-		
 		public void RegisterGlower(CompGlower newGlow)
 		{
-			this.litGlowers.Add(newGlow);
-			this.MarkGlowGridDirty(newGlow.parent.Position);
+			litGlowers.Add(newGlow);
+			MarkGlowGridDirty(newGlow.parent.Position);
 			if (Current.ProgramState != ProgramState.Playing)
 			{
-				this.initialGlowerLocs.Add(newGlow.parent.Position);
+				initialGlowerLocs.Add(newGlow.parent.Position);
 			}
 		}
 
-		
 		public void DeRegisterGlower(CompGlower oldGlow)
 		{
-			this.litGlowers.Remove(oldGlow);
-			this.MarkGlowGridDirty(oldGlow.parent.Position);
+			litGlowers.Remove(oldGlow);
+			MarkGlowGridDirty(oldGlow.parent.Position);
 		}
 
-		
 		public void MarkGlowGridDirty(IntVec3 loc)
 		{
-			this.glowGridDirty = true;
-			this.map.mapDrawer.MapMeshDirty(loc, MapMeshFlag.GroundGlow);
+			glowGridDirty = true;
+			map.mapDrawer.MapMeshDirty(loc, MapMeshFlag.GroundGlow);
 		}
 
-		
 		public void GlowGridUpdate_First()
 		{
-			if (this.glowGridDirty)
+			if (glowGridDirty)
 			{
-				this.RecalculateAllGlow();
-				this.glowGridDirty = false;
+				RecalculateAllGlow();
+				glowGridDirty = false;
 			}
 		}
 
-		
 		private void RecalculateAllGlow()
 		{
-			if (Current.ProgramState != ProgramState.Playing)
+			if (Current.ProgramState == ProgramState.Playing)
 			{
-				return;
-			}
-			if (this.initialGlowerLocs != null)
-			{
-				foreach (IntVec3 loc in this.initialGlowerLocs)
+				if (initialGlowerLocs != null)
 				{
-					this.MarkGlowGridDirty(loc);
+					foreach (IntVec3 initialGlowerLoc in initialGlowerLocs)
+					{
+						MarkGlowGridDirty(initialGlowerLoc);
+					}
+					initialGlowerLocs = null;
 				}
-				this.initialGlowerLocs = null;
-			}
-			int numGridCells = this.map.cellIndices.NumGridCells;
-			for (int i = 0; i < numGridCells; i++)
-			{
-				this.glowGrid[i] = new Color32(0, 0, 0, 0);
-				this.glowGridNoCavePlants[i] = new Color32(0, 0, 0, 0);
-			}
-			foreach (CompGlower compGlower in this.litGlowers)
-			{
-				this.map.glowFlooder.AddFloodGlowFor(compGlower, this.glowGrid);
-				if (compGlower.parent.def.category != ThingCategory.Plant || !compGlower.parent.def.plant.cavePlant)
+				int numGridCells = map.cellIndices.NumGridCells;
+				for (int i = 0; i < numGridCells; i++)
 				{
-					this.map.glowFlooder.AddFloodGlowFor(compGlower, this.glowGridNoCavePlants);
+					glowGrid[i] = new Color32(0, 0, 0, 0);
+					glowGridNoCavePlants[i] = new Color32(0, 0, 0, 0);
+				}
+				foreach (CompGlower litGlower in litGlowers)
+				{
+					map.glowFlooder.AddFloodGlowFor(litGlower, glowGrid);
+					if (litGlower.parent.def.category != ThingCategory.Plant || !litGlower.parent.def.plant.cavePlant)
+					{
+						map.glowFlooder.AddFloodGlowFor(litGlower, glowGridNoCavePlants);
+					}
 				}
 			}
 		}
-
-		
-		private Map map;
-
-		
-		public Color32[] glowGrid;
-
-		
-		public Color32[] glowGridNoCavePlants;
-
-		
-		private bool glowGridDirty;
-
-		
-		private HashSet<CompGlower> litGlowers = new HashSet<CompGlower>();
-
-		
-		private List<IntVec3> initialGlowerLocs = new List<IntVec3>();
-
-		
-		public const int AlphaOfNotOverlit = 0;
-
-		
-		public const int AlphaOfOverlit = 1;
-
-		
-		private const float GameGlowLitThreshold = 0.3f;
-
-		
-		private const float GameGlowOverlitThreshold = 0.9f;
-
-		
-		private const float GroundGameGlowFactor = 3.6f;
-
-		
-		private const float MaxGameGlowFromNonOverlitGroundLights = 0.5f;
 	}
 }

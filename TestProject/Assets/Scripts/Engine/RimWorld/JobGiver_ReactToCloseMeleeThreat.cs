@@ -1,13 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_ReactToCloseMeleeThreat : ThinkNode_JobGiver
 	{
-		
+		private const int MaxMeleeChaseTicks = 200;
+
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			Pawn meleeThreat = pawn.mindState.meleeThreat;
@@ -19,7 +18,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			if (this.IsHunting(pawn, meleeThreat))
+			if (IsHunting(pawn, meleeThreat))
 			{
 				return null;
 			}
@@ -46,7 +45,6 @@ namespace RimWorld
 			return job;
 		}
 
-		
 		private bool IsHunting(Pawn pawn, Pawn prey)
 		{
 			if (pawn.CurJob == null)
@@ -59,10 +57,11 @@ namespace RimWorld
 				return jobDriver_Hunt.Victim == prey;
 			}
 			JobDriver_PredatorHunt jobDriver_PredatorHunt = pawn.jobs.curDriver as JobDriver_PredatorHunt;
-			return jobDriver_PredatorHunt != null && jobDriver_PredatorHunt.Prey == prey;
+			if (jobDriver_PredatorHunt != null)
+			{
+				return jobDriver_PredatorHunt.Prey == prey;
+			}
+			return false;
 		}
-
-		
-		private const int MaxMeleeChaseTicks = 200;
 	}
 }

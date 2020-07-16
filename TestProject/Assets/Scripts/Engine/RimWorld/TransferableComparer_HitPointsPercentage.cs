@@ -1,18 +1,14 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TransferableComparer_HitPointsPercentage : TransferableComparer
 	{
-		
 		public override int Compare(Transferable lhs, Transferable rhs)
 		{
-			return this.GetValueFor(lhs).CompareTo(this.GetValueFor(rhs));
+			return GetValueFor(lhs).CompareTo(GetValueFor(rhs));
 		}
 
-		
 		private float GetValueFor(Transferable t)
 		{
 			Thing anyThing = t.AnyThing;

@@ -1,25 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class FloatMenuUtility
 	{
-		
 		public static void MakeMenu<T>(IEnumerable<T> objects, Func<T, string> labelGetter, Func<T, Action> actionGetter)
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (T arg in objects)
+			foreach (T @object in objects)
 			{
-				list.Add(new FloatMenuOption(labelGetter(arg), actionGetter(arg), MenuOptionPriority.Default, null, null, 0f, null, null));
+				list.Add(new FloatMenuOption(labelGetter(@object), actionGetter(@object)));
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		
 		public static Action GetRangedAttackAction(Pawn pawn, LocalTargetInfo target, out string failStr)
 		{
 			failStr = "";
@@ -67,7 +64,7 @@ namespace RimWorld
 					return delegate
 					{
 						Job job = JobMaker.MakeJob(JobDefOf.AttackStatic, target);
-						pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+						pawn.jobs.TryTakeOrderedJob(job);
 					};
 				}
 				failStr = "CannotAttackSelf".Translate();
@@ -76,7 +73,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static Action GetMeleeAttackAction(Pawn pawn, LocalTargetInfo target, out string failStr)
 		{
 			failStr = "";
@@ -88,7 +84,7 @@ namespace RimWorld
 			{
 				failStr = "CannotOrderNonControlledLower".Translate();
 			}
-			else if (target.IsValid && !pawn.CanReach(target, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+			else if (target.IsValid && !pawn.CanReach(target, PathEndMode.Touch, Danger.Deadly))
 			{
 				failStr = "NoPath".Translate();
 			}
@@ -112,7 +108,7 @@ namespace RimWorld
 						{
 							job.killIncappedTarget = pawn2.Downed;
 						}
-						pawn.jobs.TryTakeOrderedJob(job, JobTag.Misc);
+						pawn.jobs.TryTakeOrderedJob(job);
 					};
 				}
 				failStr = "CannotAttackSelf".Translate();
@@ -121,24 +117,22 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static Action GetAttackAction(Pawn pawn, LocalTargetInfo target, out string failStr)
 		{
 			if (pawn.equipment.Primary != null && !pawn.equipment.PrimaryEq.PrimaryVerb.verbProps.IsMeleeAttack)
 			{
-				return FloatMenuUtility.GetRangedAttackAction(pawn, target, out failStr);
+				return GetRangedAttackAction(pawn, target, out failStr);
 			}
-			return FloatMenuUtility.GetMeleeAttackAction(pawn, target, out failStr);
+			return GetMeleeAttackAction(pawn, target, out failStr);
 		}
 
-		
 		public static FloatMenuOption DecoratePrioritizedTask(FloatMenuOption option, Pawn pawn, LocalTargetInfo target, string reservedText = "ReservedBy")
 		{
 			if (option.action == null)
 			{
 				return option;
 			}
-			if (pawn != null && !pawn.CanReserve(target, 1, -1, null, false) && pawn.CanReserve(target, 1, -1, null, true))
+			if (pawn != null && !pawn.CanReserve(target) && pawn.CanReserve(target, 1, -1, null, ignoreOtherReservations: true))
 			{
 				Pawn pawn2 = pawn.Map.reservationManager.FirstRespectedReserver(target, pawn);
 				if (pawn2 == null)
@@ -152,7 +146,7 @@ namespace RimWorld
 			}
 			if (option.revalidateClickTarget != null && option.revalidateClickTarget != target.Thing)
 			{
-				Log.ErrorOnce(string.Format("Click target mismatch; {0} vs {1} in {2}", option.revalidateClickTarget, target.Thing, option.Label), 52753118, false);
+				Log.ErrorOnce($"Click target mismatch; {option.revalidateClickTarget} vs {target.Thing} in {option.Label}", 52753118);
 			}
 			option.revalidateClickTarget = target.Thing;
 			return option;

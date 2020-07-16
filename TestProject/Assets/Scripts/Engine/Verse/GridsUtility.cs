@@ -1,99 +1,86 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public static class GridsUtility
 	{
-		
 		public static float GetTemperature(this IntVec3 loc, Map map)
 		{
 			return GenTemperature.GetTemperatureForCell(loc, map);
 		}
 
-		
 		public static Region GetRegion(this IntVec3 loc, Map map, RegionType allowedRegionTypes = RegionType.Set_Passable)
 		{
 			return RegionAndRoomQuery.RegionAt(loc, map, allowedRegionTypes);
 		}
 
-		
 		public static Room GetRoom(this IntVec3 loc, Map map, RegionType allowedRegionTypes = RegionType.Set_Passable)
 		{
 			return RegionAndRoomQuery.RoomAt(loc, map, allowedRegionTypes);
 		}
 
-		
 		public static RoomGroup GetRoomGroup(this IntVec3 loc, Map map)
 		{
 			return RegionAndRoomQuery.RoomGroupAt(loc, map);
 		}
 
-		
 		public static Room GetRoomOrAdjacent(this IntVec3 loc, Map map, RegionType allowedRegionTypes = RegionType.Set_Passable)
 		{
 			return RegionAndRoomQuery.RoomAtOrAdjacent(loc, map, allowedRegionTypes);
 		}
 
-		
 		public static List<Thing> GetThingList(this IntVec3 c, Map map)
 		{
 			return map.thingGrid.ThingsListAt(c);
 		}
 
-		
 		public static float GetSnowDepth(this IntVec3 c, Map map)
 		{
 			return map.snowGrid.GetDepth(c);
 		}
 
-		
 		public static bool Fogged(this Thing t)
 		{
 			return t.Map.fogGrid.IsFogged(t.Position);
 		}
 
-		
 		public static bool Fogged(this IntVec3 c, Map map)
 		{
 			return map.fogGrid.IsFogged(c);
 		}
 
-		
 		public static RoofDef GetRoof(this IntVec3 c, Map map)
 		{
 			return map.roofGrid.RoofAt(c);
 		}
 
-		
 		public static bool Roofed(this IntVec3 c, Map map)
 		{
 			return map.roofGrid.Roofed(c);
 		}
 
-		
 		public static bool Filled(this IntVec3 c, Map map)
 		{
 			Building edifice = c.GetEdifice(map);
-			return edifice != null && edifice.def.Fillage == FillCategory.Full;
+			if (edifice != null)
+			{
+				return edifice.def.Fillage == FillCategory.Full;
+			}
+			return false;
 		}
 
-		
 		public static TerrainDef GetTerrain(this IntVec3 c, Map map)
 		{
 			return map.terrainGrid.TerrainAt(c);
 		}
 
-		
 		public static Zone GetZone(this IntVec3 c, Map map)
 		{
 			return map.zoneManager.ZoneAt(c);
 		}
 
-		
 		public static Plant GetPlant(this IntVec3 c, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -107,7 +94,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Thing GetRoofHolderOrImpassable(this IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -121,7 +107,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Thing GetFirstThing(this IntVec3 c, Map map, ThingDef def)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -134,20 +119,6 @@ namespace Verse
 			}
 			return null;
 		}
-
-		public static Thing GetFirstThingMap(this IntVec3 c, Map map, ThingDef def)
-		{
-			List<Thing> thingList = c.GetThingList(map);
-			for (int i = 0; i < thingList.Count; i++)
-			{
-				if (thingList[i].def == def)
-				{
-					return thingList[i];
-				}
-			}
-			return null;
-		}
-
 
 		public static ThingWithComps GetFirstThingWithComp<TComp>(this IntVec3 c, Map map) where TComp : ThingComp
 		{
@@ -162,22 +133,20 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static T GetFirstThing<T>(this IntVec3 c, Map map) where T : Thing
 		{
 			List<Thing> thingList = c.GetThingList(map);
 			for (int i = 0; i < thingList.Count; i++)
 			{
-				T t = thingList[i] as T;
-				if (t != null)
+				T val = thingList[i] as T;
+				if (val != null)
 				{
-					return t;
+					return val;
 				}
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		public static Thing GetFirstHaulable(this IntVec3 c, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -191,7 +160,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Thing GetFirstItem(this IntVec3 c, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -205,7 +173,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Building GetFirstBuilding(this IntVec3 c, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -220,7 +187,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Pawn GetFirstPawn(this IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -235,7 +201,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Mineable GetFirstMineable(this IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -250,7 +215,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Blight GetFirstBlight(this IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -265,7 +229,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Skyfaller GetFirstSkyfaller(this IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -280,7 +243,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static IPlantToGrowSettable GetPlantToGrowSettable(this IntVec3 c, Map map)
 		{
 			IPlantToGrowSettable plantToGrowSettable = c.GetEdifice(map) as IPlantToGrowSettable;
@@ -291,7 +253,6 @@ namespace Verse
 			return plantToGrowSettable;
 		}
 
-		
 		public static Building GetTransmitter(this IntVec3 c, Map map)
 		{
 			List<Thing> list = map.thingGrid.ThingsListAt(c);
@@ -305,7 +266,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Building_Door GetDoor(this IntVec3 c, Map map)
 		{
 			Building_Door result;
@@ -316,19 +276,16 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Building GetEdifice(this IntVec3 c, Map map)
 		{
 			return map.edificeGrid[c];
 		}
 
-		
 		public static Thing GetCover(this IntVec3 c, Map map)
 		{
 			return map.coverGrid[c];
 		}
 
-		
 		public static Gas GetGas(this IntVec3 c, Map map)
 		{
 			List<Thing> thingList = c.GetThingList(map);
@@ -342,19 +299,17 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static bool IsInPrisonCell(this IntVec3 c, Map map)
 		{
-			Room roomOrAdjacent = c.GetRoomOrAdjacent(map, RegionType.Set_Passable);
+			Room roomOrAdjacent = c.GetRoomOrAdjacent(map);
 			if (roomOrAdjacent != null)
 			{
 				return roomOrAdjacent.isPrisonCell;
 			}
-			Log.Error("Checking prison cell status of " + c + " which is not in or adjacent to a room.", false);
+			Log.Error("Checking prison cell status of " + c + " which is not in or adjacent to a room.");
 			return false;
 		}
 
-		
 		public static bool UsesOutdoorTemperature(this IntVec3 c, Map map)
 		{
 			Room room = c.GetRoom(map, RegionType.Set_All);
@@ -365,7 +320,7 @@ namespace Verse
 			Building edifice = c.GetEdifice(map);
 			if (edifice != null)
 			{
-				IntVec3[] array = GenAdj.CellsAdjacent8Way(edifice).ToArray<IntVec3>();
+				IntVec3[] array = GenAdj.CellsAdjacent8Way(edifice).ToArray();
 				for (int i = 0; i < array.Length; i++)
 				{
 					if (array[i].InBounds(map))

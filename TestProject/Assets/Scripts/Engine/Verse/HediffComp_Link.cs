@@ -1,24 +1,18 @@
-﻿using System;
-using System.Linq;
 using RimWorld;
+using System.Linq;
 
 namespace Verse
 {
-	
 	public class HediffComp_Link : HediffComp
 	{
-		
-		
-		public HediffCompProperties_Link Props
-		{
-			get
-			{
-				return (HediffCompProperties_Link)this.props;
-			}
-		}
+		public Pawn other;
 
-		
-		
+		private MoteDualAttached mote;
+
+		public bool drawConnection;
+
+		public HediffCompProperties_Link Props => (HediffCompProperties_Link)props;
+
 		public override bool CompShouldRemove
 		{
 			get
@@ -27,21 +21,21 @@ namespace Verse
 				{
 					return true;
 				}
-				if (this.other == null || !this.parent.pawn.Spawned || !this.other.Spawned)
+				if (other == null || !parent.pawn.Spawned || !other.Spawned)
 				{
 					return true;
 				}
-				if (this.Props.maxDistance > 0f && !this.parent.pawn.Position.InHorDistOf(this.other.Position, this.Props.maxDistance))
+				if (Props.maxDistance > 0f && !parent.pawn.Position.InHorDistOf(other.Position, Props.maxDistance))
 				{
 					return true;
 				}
-				foreach (Hediff hediff in this.other.health.hediffSet.hediffs)
+				foreach (Hediff hediff in other.health.hediffSet.hediffs)
 				{
 					HediffWithComps hediffWithComps = hediff as HediffWithComps;
 					if (hediffWithComps != null && hediffWithComps.comps.FirstOrDefault(delegate(HediffComp c)
 					{
 						HediffComp_Link hediffComp_Link = c as HediffComp_Link;
-						return hediffComp_Link != null && hediffComp_Link.other == this.parent.pawn && hediffComp_Link.parent.def == this.parent.def;
+						return hediffComp_Link != null && hediffComp_Link.other == parent.pawn && hediffComp_Link.parent.def == parent.def;
 					}) != null)
 					{
 						return false;
@@ -51,48 +45,35 @@ namespace Verse
 			}
 		}
 
-		
-		public override void CompPostTick(ref float severityAdjustment)
-		{
-			base.CompPostTick(ref severityAdjustment);
-			if (this.drawConnection)
-			{
-				if (this.mote == null)
-				{
-					this.mote = MoteMaker.MakeInteractionOverlay(ThingDefOf.Mote_PsychicLinkLine, this.parent.pawn, this.other);
-				}
-				this.mote.Maintain();
-			}
-		}
-
-		
-		public override void CompExposeData()
-		{
-			base.CompExposeData();
-			Scribe_References.Look<Pawn>(ref this.other, "other", false);
-		}
-
-		
-		
 		public override string CompLabelInBracketsExtra
 		{
 			get
 			{
-				if (!this.Props.showName || this.other == null)
+				if (!Props.showName || other == null)
 				{
 					return null;
 				}
-				return this.other.LabelShort;
+				return other.LabelShort;
 			}
 		}
 
-		
-		public Pawn other;
+		public override void CompPostTick(ref float severityAdjustment)
+		{
+			base.CompPostTick(ref severityAdjustment);
+			if (drawConnection)
+			{
+				if (mote == null)
+				{
+					mote = MoteMaker.MakeInteractionOverlay(ThingDefOf.Mote_PsychicLinkLine, parent.pawn, other);
+				}
+				mote.Maintain();
+			}
+		}
 
-		
-		private MoteDualAttached mote;
-
-		
-		public bool drawConnection;
+		public override void CompExposeData()
+		{
+			base.CompExposeData();
+			Scribe_References.Look(ref other, "other");
+		}
 	}
 }

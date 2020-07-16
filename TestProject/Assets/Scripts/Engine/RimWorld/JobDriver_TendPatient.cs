@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,54 +5,40 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_TendPatient : JobDriver
 	{
-		
-		
-		protected Thing MedicineUsed
-		{
-			get
-			{
-				return this.job.targetB.Thing;
-			}
-		}
+		private bool usesMedicine;
 
-		
-		
-		protected Pawn Deliveree
-		{
-			get
-			{
-				return (Pawn)this.job.targetA.Thing;
-			}
-		}
+		private const int BaseTendDuration = 600;
 
-		
+		private const int TicksBetweenSelfTendMotes = 100;
+
+		protected Thing MedicineUsed => job.targetB.Thing;
+
+		protected Pawn Deliveree => (Pawn)job.targetA.Thing;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.usesMedicine, "usesMedicine", false, false);
+			Scribe_Values.Look(ref usesMedicine, "usesMedicine", defaultValue: false);
 		}
 
-		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
-			this.usesMedicine = (this.MedicineUsed != null);
+			usesMedicine = (MedicineUsed != null);
 		}
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			if (this.Deliveree != this.pawn && !this.pawn.Reserve(this.Deliveree, this.job, 1, -1, null, errorOnFailed))
+			if (Deliveree != pawn && !pawn.Reserve(Deliveree, job, 1, -1, null, errorOnFailed))
 			{
 				return false;
 			}
-			if (this.usesMedicine)
+			if (usesMedicine)
 			{
-				int num = this.pawn.Map.reservationManager.CanReserveStack(this.pawn, this.MedicineUsed, 10, null, false);
-				if (num <= 0 || !this.pawn.Reserve(this.MedicineUsed, this.job, 10, Mathf.Min(num, Medicine.GetMedicineCountToFullyHeal(this.Deliveree)), null, errorOnFailed))
+				int num = pawn.Map.reservationManager.CanReserveStack(pawn, MedicineUsed, 10);
+				if (num <= 0 || !pawn.Reserve(MedicineUsed, job, 10, Mathf.Min(num, Medicine.GetMedicineCountToFullyHeal(Deliveree)), null, errorOnFailed))
 				{
 					return false;
 				}
@@ -61,107 +46,91 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			this.FailOn(delegate
 			{
-				if (!WorkGiver_Tend.GoodLayingStatusForTend(this.Deliveree, this.pawn))
+				if (!WorkGiver_Tend.GoodLayingStatusForTend(Deliveree, pawn))
 				{
 					return true;
 				}
-				if (this.MedicineUsed != null && this.pawn.Faction == Faction.OfPlayer)
+				if (MedicineUsed != null && pawn.Faction == Faction.OfPlayer)
 				{
-					if (this.Deliveree.playerSettings == null)
+					if (Deliveree.playerSettings == null)
 					{
 						return true;
 					}
-					if (!this.Deliveree.playerSettings.medCare.AllowsMedicine(this.MedicineUsed.def))
+					if (!Deliveree.playerSettings.medCare.AllowsMedicine(MedicineUsed.def))
 					{
 						return true;
 					}
 				}
-				return this.pawn == this.Deliveree && this.pawn.Faction == Faction.OfPlayer && !this.pawn.playerSettings.selfTend;
+				return (pawn == Deliveree && pawn.Faction == Faction.OfPlayer && !pawn.playerSettings.selfTend) ? true : false;
 			});
-			base.AddEndCondition(delegate
+			AddEndCondition(delegate
 			{
-				if (this.pawn.Faction == Faction.OfPlayer && HealthAIUtility.ShouldBeTendedNowByPlayer(this.Deliveree))
+				if (pawn.Faction == Faction.OfPlayer && HealthAIUtility.ShouldBeTendedNowByPlayer(Deliveree))
 				{
 					return JobCondition.Ongoing;
 				}
-				if (this.pawn.Faction != Faction.OfPlayer && this.Deliveree.health.HasHediffsNeedingTend(false))
-				{
-					return JobCondition.Ongoing;
-				}
-				return JobCondition.Succeeded;
+				return (pawn.Faction != Faction.OfPlayer && Deliveree.health.HasHediffsNeedingTend()) ? JobCondition.Ongoing : JobCondition.Succeeded;
 			});
 			this.FailOnAggroMentalState(TargetIndex.A);
 			Toil reserveMedicine = null;
-			if (this.usesMedicine)
+			if (usesMedicine)
 			{
-				reserveMedicine = Toils_Tend.ReserveMedicine(TargetIndex.B, this.Deliveree).FailOnDespawnedNullOrForbidden(TargetIndex.B);
+				reserveMedicine = Toils_Tend.ReserveMedicine(TargetIndex.B, Deliveree).FailOnDespawnedNullOrForbidden(TargetIndex.B);
 				yield return reserveMedicine;
 				yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.B);
-				yield return Toils_Tend.PickupMedicine(TargetIndex.B, this.Deliveree).FailOnDestroyedOrNull(TargetIndex.B);
-				yield return Toils_Haul.CheckForGetOpportunityDuplicate(reserveMedicine, TargetIndex.B, TargetIndex.None, true, null);
+				yield return Toils_Tend.PickupMedicine(TargetIndex.B, Deliveree).FailOnDestroyedOrNull(TargetIndex.B);
+				yield return Toils_Haul.CheckForGetOpportunityDuplicate(reserveMedicine, TargetIndex.B, TargetIndex.None, takeFromValidStorage: true);
 			}
-			PathEndMode interactionCell = (this.Deliveree == this.pawn) ? PathEndMode.OnCell : PathEndMode.InteractionCell;
+			PathEndMode interactionCell = (Deliveree == pawn) ? PathEndMode.OnCell : PathEndMode.InteractionCell;
 			Toil gotoToil = Toils_Goto.GotoThing(TargetIndex.A, interactionCell);
 			yield return gotoToil;
-			Toil toil = Toils_General.Wait((int)(1f / this.pawn.GetStatValue(StatDefOf.MedicalTendSpeed, true) * 600f), TargetIndex.None).FailOnCannotTouch(TargetIndex.A, interactionCell).WithProgressBarToilDelay(TargetIndex.A, false, -0.5f).PlaySustainerOrSound(SoundDefOf.Interact_Tend);
+			Toil toil = Toils_General.Wait((int)(1f / pawn.GetStatValue(StatDefOf.MedicalTendSpeed) * 600f)).FailOnCannotTouch(TargetIndex.A, interactionCell).WithProgressBarToilDelay(TargetIndex.A)
+				.PlaySustainerOrSound(SoundDefOf.Interact_Tend);
 			toil.activeSkill = (() => SkillDefOf.Medicine);
-			if (this.pawn == this.Deliveree && this.pawn.Faction != Faction.OfPlayer)
+			if (pawn == Deliveree && pawn.Faction != Faction.OfPlayer)
 			{
 				toil.tickAction = delegate
 				{
-					if (this.pawn.IsHashIntervalTick(100) && !this.pawn.Position.Fogged(this.pawn.Map))
+					if (pawn.IsHashIntervalTick(100) && !pawn.Position.Fogged(pawn.Map))
 					{
-						MoteMaker.ThrowMetaIcon(this.pawn.Position, this.pawn.Map, ThingDefOf.Mote_HealingCross);
+						MoteMaker.ThrowMetaIcon(pawn.Position, pawn.Map, ThingDefOf.Mote_HealingCross);
 					}
 				};
 			}
 			yield return toil;
-			yield return Toils_Tend.FinalizeTend(this.Deliveree);
-			if (this.usesMedicine)
+			yield return Toils_Tend.FinalizeTend(Deliveree);
+			if (usesMedicine)
 			{
-				yield return new Toil
+				Toil toil2 = new Toil();
+				toil2.initAction = delegate
 				{
-					initAction = delegate
+					if (MedicineUsed.DestroyedOrNull())
 					{
-						if (this.MedicineUsed.DestroyedOrNull())
+						Thing thing = HealthAIUtility.FindBestMedicine(pawn, Deliveree);
+						if (thing != null)
 						{
-							Thing thing = HealthAIUtility.FindBestMedicine(this.pawn, this.Deliveree);
-							if (thing != null)
-							{
-								this.job.targetB = thing;
-								this.JumpToToil(reserveMedicine);
-							}
+							job.targetB = thing;
+							JumpToToil(reserveMedicine);
 						}
 					}
 				};
+				yield return toil2;
 			}
 			yield return Toils_Jump.Jump(gotoToil);
-			yield break;
 		}
 
-		
 		public override void Notify_DamageTaken(DamageInfo dinfo)
 		{
 			base.Notify_DamageTaken(dinfo);
-			if (dinfo.Def.ExternalViolenceFor(this.pawn) && this.pawn.Faction != Faction.OfPlayer && this.pawn == this.Deliveree)
+			if (dinfo.Def.ExternalViolenceFor(pawn) && pawn.Faction != Faction.OfPlayer && pawn == Deliveree)
 			{
-				this.pawn.jobs.CheckForJobOverride();
+				pawn.jobs.CheckForJobOverride();
 			}
 		}
-
-		
-		private bool usesMedicine;
-
-		
-		private const int BaseTendDuration = 600;
-
-		
-		private const int TicksBetweenSelfTendMotes = 100;
 	}
 }

@@ -1,62 +1,44 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Verse
 {
-	
 	public static class HediffGiverUtility
 	{
-		
 		public static bool TryApply(Pawn pawn, HediffDef hediff, IEnumerable<BodyPartDef> partsToAffect, bool canAffectAnyLivePart = false, int countToAffect = 1, List<Hediff> outAddedHediffs = null)
 		{
 			if (canAffectAnyLivePart || partsToAffect != null)
 			{
 				bool result = false;
-
 				for (int i = 0; i < countToAffect; i++)
 				{
-					IEnumerable<BodyPartRecord> enumerable = pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null);
+					IEnumerable<BodyPartRecord> source = pawn.health.hediffSet.GetNotMissingParts();
 					if (partsToAffect != null)
 					{
-						IEnumerable<BodyPartRecord> source = enumerable;
-						Func<BodyPartRecord, bool> predicate = ((BodyPartRecord p) => partsToAffect.Contains(p.def)); 
-
-						enumerable = source.Where(predicate);
+						source = source.Where((BodyPartRecord p) => partsToAffect.Contains(p.def));
 					}
 					if (canAffectAnyLivePart)
 					{
-						enumerable = from p in enumerable
-						where p.def.alive
-						select p;
+						source = source.Where((BodyPartRecord p) => p.def.alive);
 					}
-					IEnumerable<BodyPartRecord> source2 = enumerable;
-					Func<BodyPartRecord, bool> predicate2= ((BodyPartRecord p) => !pawn.health.hediffSet.HasHediff(hediff, p, false) && !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(p)); ;
-
-					enumerable = source2.Where(predicate2);
-					if (!enumerable.Any<BodyPartRecord>())
+					source = source.Where((BodyPartRecord p) => !pawn.health.hediffSet.HasHediff(hediff, p) && !pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(p));
+					if (!source.Any())
 					{
 						break;
 					}
-					BodyPartRecord partRecord = enumerable.RandomElementByWeight((BodyPartRecord x) => x.coverageAbs);
+					BodyPartRecord partRecord = source.RandomElementByWeight((BodyPartRecord x) => x.coverageAbs);
 					Hediff hediff2 = HediffMaker.MakeHediff(hediff, pawn, partRecord);
-					pawn.health.AddHediff(hediff2, null, null, null);
-					if (outAddedHediffs != null)
-					{
-						outAddedHediffs.Add(hediff2);
-					}
+					pawn.health.AddHediff(hediff2);
+					outAddedHediffs?.Add(hediff2);
 					result = true;
 				}
 				return result;
 			}
-			if (!pawn.health.hediffSet.HasHediff(hediff, false))
+			if (!pawn.health.hediffSet.HasHediff(hediff))
 			{
-				Hediff hediff3 = HediffMaker.MakeHediff(hediff, pawn, null);
-				pawn.health.AddHediff(hediff3, null, null, null);
-				if (outAddedHediffs != null)
-				{
-					outAddedHediffs.Add(hediff3);
-				}
+				Hediff hediff3 = HediffMaker.MakeHediff(hediff, pawn);
+				pawn.health.AddHediff(hediff3);
+				outAddedHediffs?.Add(hediff3);
 				return true;
 			}
 			return false;

@@ -1,155 +1,140 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_SpawnThing : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Thing thing;
+
+		public Faction factionForFindingSpot;
+
+		public MapParent mapParent;
+
+		public IntVec3 cell = IntVec3.Invalid;
+
+		public bool questLookTarget = true;
+
+		public bool lookForSafeSpot;
+
+		public bool tryLandInShipLandingZone;
+
+		private Thing innerSkyfallerThing;
+
+		private bool spawned;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.questLookTarget)
+				foreach (GlobalTargetInfo questLookTarget2 in base.QuestLookTargets)
 				{
-					yield return this.innerSkyfallerThing ?? this.thing;
+					yield return questLookTarget2;
 				}
-				yield break;
-				yield break;
+				if (questLookTarget)
+				{
+					yield return innerSkyfallerThing ?? thing;
+				}
 			}
 		}
 
-		
-		
 		public override bool IncreasesPopulation
 		{
 			get
 			{
-				Pawn pawn = this.thing as Pawn;
-				return pawn != null && PawnsArriveQuestPartUtility.IncreasesPopulation(Gen.YieldSingle<Pawn>(pawn), false, false);
+				Pawn pawn = thing as Pawn;
+				if (pawn == null)
+				{
+					return false;
+				}
+				return PawnsArriveQuestPartUtility.IncreasesPopulation(Gen.YieldSingle(pawn), joinPlayer: false, makePrisoners: false);
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.mapParent.HasMap)
+			if (!(signal.tag == inSignal) || !mapParent.HasMap)
 			{
-				IntVec3 center = IntVec3.Invalid;
-				if (this.cell.IsValid)
-				{
-					center = this.cell;
-				}
-				else
-				{
-					Thing thing;
-					if (this.tryLandInShipLandingZone && !DropCellFinder.TryFindShipLandingArea(this.mapParent.Map, out center, out thing))
-					{
-						if (thing != null)
-						{
-							Messages.Message("ShuttleBlocked".Translate("BlockedBy".Translate(thing).CapitalizeFirst()), thing, MessageTypeDefOf.NeutralEvent, true);
-						}
-						center = DropCellFinder.TryFindSafeLandingSpotCloseToColony(this.mapParent.Map, this.thing.def.Size, this.factionForFindingSpot, 2);
-					}
-					if (!center.IsValid && (!this.lookForSafeSpot || !DropCellFinder.FindSafeLandingSpot(out center, this.factionForFindingSpot, this.mapParent.Map, 35, 15, 25, new IntVec2?(this.thing.def.size))))
-					{
-						IntVec3 intVec = DropCellFinder.RandomDropSpot(this.mapParent.Map);
-						if (!DropCellFinder.TryFindDropSpotNear(intVec, this.mapParent.Map, out center, false, false, false, new IntVec2?(this.thing.def.size)))
-						{
-							center = intVec;
-						}
-					}
-				}
-				GenPlace.TryPlaceThing(this.thing, center, this.mapParent.Map, ThingPlaceMode.Near, null, null, default(Rot4));
-				this.spawned = true;
-				Skyfaller skyfaller = this.thing as Skyfaller;
-				if (skyfaller != null && skyfaller.innerContainer.Count == 1)
-				{
-					this.innerSkyfallerThing = skyfaller.innerContainer.First<Thing>();
-					return;
-				}
-				this.innerSkyfallerThing = null;
+				return;
 			}
-		}
-
-		
-		public override bool QuestPartReserves(Pawn p)
-		{
-			return p == this.thing;
-		}
-
-		
-		public override void ExposeData()
-		{
-			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<bool>(ref this.spawned, "spawned", false, false);
-			if (!this.spawned && (this.thing == null || !(this.thing is Pawn)))
+			IntVec3 result = IntVec3.Invalid;
+			if (cell.IsValid)
 			{
-				Scribe_Deep.Look<Thing>(ref this.thing, "thing", Array.Empty<object>());
+				result = cell;
 			}
 			else
 			{
-				Scribe_References.Look<Thing>(ref this.thing, "thing", false);
+				if (tryLandInShipLandingZone && !DropCellFinder.TryFindShipLandingArea(mapParent.Map, out result, out Thing firstBlockingThing))
+				{
+					if (firstBlockingThing != null)
+					{
+						Messages.Message("ShuttleBlocked".Translate("BlockedBy".Translate(firstBlockingThing).CapitalizeFirst()), firstBlockingThing, MessageTypeDefOf.NeutralEvent);
+					}
+					result = DropCellFinder.TryFindSafeLandingSpotCloseToColony(mapParent.Map, thing.def.Size, factionForFindingSpot);
+				}
+				if (!result.IsValid && (!lookForSafeSpot || !DropCellFinder.FindSafeLandingSpot(out result, factionForFindingSpot, mapParent.Map, 35, 15, 25, thing.def.size)))
+				{
+					IntVec3 intVec = DropCellFinder.RandomDropSpot(mapParent.Map);
+					if (!DropCellFinder.TryFindDropSpotNear(intVec, mapParent.Map, out result, allowFogged: false, canRoofPunch: false, allowIndoors: false, thing.def.size))
+					{
+						result = intVec;
+					}
+				}
 			}
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Values.Look<IntVec3>(ref this.cell, "cell", default(IntVec3), false);
-			Scribe_Values.Look<bool>(ref this.lookForSafeSpot, "lookForSafeSpot", false, false);
-			Scribe_References.Look<Faction>(ref this.factionForFindingSpot, "factionForFindingSpot", false);
-			Scribe_Values.Look<bool>(ref this.questLookTarget, "questLookTarget", true, false);
-			Scribe_References.Look<Thing>(ref this.innerSkyfallerThing, "innerSkyfallerThing", false);
-			Scribe_Values.Look<bool>(ref this.tryLandInShipLandingZone, "tryLandInShipLandingZone", false, false);
+			GenPlace.TryPlaceThing(thing, result, mapParent.Map, ThingPlaceMode.Near);
+			spawned = true;
+			Skyfaller skyfaller = thing as Skyfaller;
+			if (skyfaller != null && skyfaller.innerContainer.Count == 1)
+			{
+				innerSkyfallerThing = skyfaller.innerContainer.First();
+			}
+			else
+			{
+				innerSkyfallerThing = null;
+			}
 		}
 
-		
+		public override bool QuestPartReserves(Pawn p)
+		{
+			return p == thing;
+		}
+
+		public override void ExposeData()
+		{
+			base.ExposeData();
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref spawned, "spawned", defaultValue: false);
+			if (!spawned && (thing == null || !(thing is Pawn)))
+			{
+				Scribe_Deep.Look(ref thing, "thing");
+			}
+			else
+			{
+				Scribe_References.Look(ref thing, "thing");
+			}
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Values.Look(ref cell, "cell");
+			Scribe_Values.Look(ref lookForSafeSpot, "lookForSafeSpot", defaultValue: false);
+			Scribe_References.Look(ref factionForFindingSpot, "factionForFindingSpot");
+			Scribe_Values.Look(ref questLookTarget, "questLookTarget", defaultValue: true);
+			Scribe_References.Look(ref innerSkyfallerThing, "innerSkyfallerThing");
+			Scribe_Values.Look(ref tryLandInShipLandingZone, "tryLandInShipLandingZone", defaultValue: false);
+		}
+
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				this.mapParent = Find.RandomPlayerHomeMap.Parent;
-				this.thing = ThingMaker.MakeThing(ThingDefOf.Silver, null);
+				mapParent = Find.RandomPlayerHomeMap.Parent;
+				thing = ThingMaker.MakeThing(ThingDefOf.Silver);
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public Thing thing;
-
-		
-		public Faction factionForFindingSpot;
-
-		
-		public MapParent mapParent;
-
-		
-		public IntVec3 cell = IntVec3.Invalid;
-
-		
-		public bool questLookTarget = true;
-
-		
-		public bool lookForSafeSpot;
-
-		
-		public bool tryLandInShipLandingZone;
-
-		
-		private Thing innerSkyfallerThing;
-
-		
-		private bool spawned;
 	}
 }

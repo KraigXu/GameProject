@@ -1,20 +1,36 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class RelationsUtility
 	{
-		
 		public static bool PawnsKnowEachOther(Pawn p1, Pawn p2)
 		{
-			return (p1.Faction != null && p1.Faction == p2.Faction) || (p1.RaceProps.IsFlesh && p1.relations.DirectRelations.Find((DirectPawnRelation x) => x.otherPawn == p2) != null) || (p2.RaceProps.IsFlesh && p2.relations.DirectRelations.Find((DirectPawnRelation x) => x.otherPawn == p1) != null) || RelationsUtility.HasAnySocialMemoryWith(p1, p2) || RelationsUtility.HasAnySocialMemoryWith(p2, p1);
+			if (p1.Faction != null && p1.Faction == p2.Faction)
+			{
+				return true;
+			}
+			if (p1.RaceProps.IsFlesh && p1.relations.DirectRelations.Find((DirectPawnRelation x) => x.otherPawn == p2) != null)
+			{
+				return true;
+			}
+			if (p2.RaceProps.IsFlesh && p2.relations.DirectRelations.Find((DirectPawnRelation x) => x.otherPawn == p1) != null)
+			{
+				return true;
+			}
+			if (HasAnySocialMemoryWith(p1, p2))
+			{
+				return true;
+			}
+			if (HasAnySocialMemoryWith(p2, p1))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static bool IsDisfigured(Pawn pawn)
 		{
 			List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
@@ -28,7 +44,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static bool TryDevelopBondRelation(Pawn humanlike, Pawn animal, float baseChance)
 		{
 			if (!animal.RaceProps.Animal)
@@ -75,22 +90,18 @@ namespace RimWorld
 			}
 			if (num > 0)
 			{
-				baseChance *= Mathf.Pow(0.2f, (float)num);
+				baseChance *= Mathf.Pow(0.2f, num);
 			}
 			if (num2 > 0)
 			{
-				baseChance *= Mathf.Pow(0.55f, (float)num2);
+				baseChance *= Mathf.Pow(0.55f, num2);
 			}
 			if (Rand.Value < baseChance)
 			{
 				humanlike.relations.AddDirectRelation(PawnRelationDefOf.Bond, animal);
 				if (humanlike.Faction == Faction.OfPlayer || animal.Faction == Faction.OfPlayer)
 				{
-					TaleRecorder.RecordTale(TaleDefOf.BondedWithAnimal, new object[]
-					{
-						humanlike,
-						animal
-					});
+					TaleRecorder.RecordTale(TaleDefOf.BondedWithAnimal, humanlike, animal);
 				}
 				bool flag = false;
 				string value = null;
@@ -98,27 +109,18 @@ namespace RimWorld
 				{
 					flag = true;
 					value = ((animal.Name == null) ? animal.LabelIndefinite() : animal.Name.ToStringFull);
-					animal.Name = PawnBioAndNameGenerator.GeneratePawnName(animal, NameStyle.Full, null);
+					animal.Name = PawnBioAndNameGenerator.GeneratePawnName(animal);
 				}
 				if (PawnUtility.ShouldSendNotificationAbout(humanlike) || PawnUtility.ShouldSendNotificationAbout(animal))
 				{
-					string text;
-					if (flag)
-					{
-						text = "MessageNewBondRelationNewName".Translate(humanlike.LabelShort, value, animal.Name.ToStringFull, humanlike.Named("HUMAN"), animal.Named("ANIMAL")).AdjustedFor(animal, "PAWN", true).CapitalizeFirst();
-					}
-					else
-					{
-						text = "MessageNewBondRelation".Translate(humanlike.LabelShort, animal.LabelShort, humanlike.Named("HUMAN"), animal.Named("ANIMAL")).CapitalizeFirst();
-					}
-					Messages.Message(text, humanlike, MessageTypeDefOf.PositiveEvent, true);
+					string text = (!flag) ? ((string)"MessageNewBondRelation".Translate(humanlike.LabelShort, animal.LabelShort, humanlike.Named("HUMAN"), animal.Named("ANIMAL")).CapitalizeFirst()) : ((string)"MessageNewBondRelationNewName".Translate(humanlike.LabelShort, value, animal.Name.ToStringFull, humanlike.Named("HUMAN"), animal.Named("ANIMAL")).AdjustedFor(animal).CapitalizeFirst());
+					Messages.Message(text, humanlike, MessageTypeDefOf.PositiveEvent);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public static string LabelWithBondInfo(Pawn humanlike, Pawn animal)
 		{
 			string text = humanlike.LabelShort;
@@ -129,7 +131,6 @@ namespace RimWorld
 			return text;
 		}
 
-		
 		private static bool HasAnySocialMemoryWith(Pawn p, Pawn otherPawn)
 		{
 			if (p.Dead)

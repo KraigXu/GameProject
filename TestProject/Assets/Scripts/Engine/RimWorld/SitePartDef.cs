@@ -1,193 +1,172 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SitePartDef : Def
 	{
-		
-		
+		public ThingDef conditionCauserDef;
+
+		public float activeThreatDisturbanceFactor = 1f;
+
+		public bool defaultHidden;
+
+		public Type workerClass = typeof(SitePartWorker);
+
+		[NoTranslate]
+		public string siteTexture;
+
+		[NoTranslate]
+		public string expandingIconTexture;
+
+		public bool applyFactionColorToSiteTexture;
+
+		public bool showFactionInInspectString;
+
+		public bool requiresFaction;
+
+		public TechLevel minFactionTechLevel;
+
+		[MustTranslate]
+		public string approachOrderString;
+
+		[MustTranslate]
+		public string approachingReportString;
+
+		[NoTranslate]
+		public List<string> tags = new List<string>();
+
+		[NoTranslate]
+		public List<string> excludesTags = new List<string>();
+
+		[MustTranslate]
+		public string arrivedLetter;
+
+		[MustTranslate]
+		public string arrivedLetterLabelPart;
+
+		public List<HediffDef> arrivedLetterHediffHyperlinks;
+
+		public LetterDef arrivedLetterDef;
+
+		public bool wantsThreatPoints;
+
+		public float minThreatPoints;
+
+		public bool increasesPopulation;
+
+		public bool badEvenIfNoMap;
+
+		public float forceExitAndRemoveMapCountdownDurationDays = 3f;
+
+		public bool handlesWorldObjectTimeoutInspectString;
+
+		[Unsaved(false)]
+		private SitePartWorker workerInt;
+
+		[Unsaved(false)]
+		private Texture2D expandingIconTextureInt;
+
+		[Unsaved(false)]
+		private List<GenStepDef> extraGenSteps;
+
 		public SitePartWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null)
+				if (workerInt == null)
 				{
-					this.workerInt = (SitePartWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.def = this;
+					workerInt = (SitePartWorker)Activator.CreateInstance(workerClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
-		
 		public Texture2D ExpandingIconTexture
 		{
 			get
 			{
-				if (this.expandingIconTextureInt == null)
+				if (expandingIconTextureInt == null)
 				{
-					if (!this.expandingIconTexture.NullOrEmpty())
+					if (!expandingIconTexture.NullOrEmpty())
 					{
-						this.expandingIconTextureInt = ContentFinder<Texture2D>.Get(this.expandingIconTexture, true);
+						expandingIconTextureInt = ContentFinder<Texture2D>.Get(expandingIconTexture);
 					}
 					else
 					{
-						this.expandingIconTextureInt = BaseContent.BadTex;
+						expandingIconTextureInt = BaseContent.BadTex;
 					}
 				}
-				return this.expandingIconTextureInt;
+				return expandingIconTextureInt;
 			}
 		}
 
-		
-		
 		public List<GenStepDef> ExtraGenSteps
 		{
 			get
 			{
-				if (this.extraGenSteps == null)
+				if (extraGenSteps == null)
 				{
-					this.extraGenSteps = new List<GenStepDef>();
+					extraGenSteps = new List<GenStepDef>();
 					List<GenStepDef> allDefsListForReading = DefDatabase<GenStepDef>.AllDefsListForReading;
 					for (int i = 0; i < allDefsListForReading.Count; i++)
 					{
 						if (allDefsListForReading[i].linkWithSite == this)
 						{
-							this.extraGenSteps.Add(allDefsListForReading[i]);
+							extraGenSteps.Add(allDefsListForReading[i]);
 						}
 					}
 				}
-				return this.extraGenSteps;
+				return extraGenSteps;
 			}
 		}
 
-		
 		public SitePartDef()
 		{
-			this.workerClass = typeof(SitePartWorker);
+			workerClass = typeof(SitePartWorker);
 		}
 
-		
 		public bool FactionCanOwn(Faction faction)
 		{
-			return (!this.requiresFaction || faction != null) && (this.minFactionTechLevel == TechLevel.Undefined || (faction != null && faction.def.techLevel >= this.minFactionTechLevel)) && (faction == null || (!faction.IsPlayer && !faction.defeated && !faction.def.hidden)) && this.Worker.FactionCanOwn(faction);
+			if (requiresFaction && faction == null)
+			{
+				return false;
+			}
+			if (minFactionTechLevel != 0 && (faction == null || (int)faction.def.techLevel < (int)minFactionTechLevel))
+			{
+				return false;
+			}
+			if (faction != null && (faction.IsPlayer || faction.defeated || faction.def.hidden))
+			{
+				return false;
+			}
+			if (!Worker.FactionCanOwn(faction))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public bool CompatibleWith(SitePartDef part)
 		{
 			for (int i = 0; i < part.excludesTags.Count; i++)
 			{
-				if (this.tags.Contains(part.excludesTags[i]))
+				if (tags.Contains(part.excludesTags[i]))
 				{
 					return false;
 				}
 			}
-			for (int j = 0; j < this.excludesTags.Count; j++)
+			for (int j = 0; j < excludesTags.Count; j++)
 			{
-				if (part.tags.Contains(this.excludesTags[j]))
+				if (part.tags.Contains(excludesTags[j]))
 				{
 					return false;
 				}
 			}
 			return true;
 		}
-
-		
-		public ThingDef conditionCauserDef;
-
-		
-		public float activeThreatDisturbanceFactor = 1f;
-
-		
-		public bool defaultHidden;
-
-		
-		public Type workerClass = typeof(SitePartWorker);
-
-		
-		[NoTranslate]
-		public string siteTexture;
-
-		
-		[NoTranslate]
-		public string expandingIconTexture;
-
-		
-		public bool applyFactionColorToSiteTexture;
-
-		
-		public bool showFactionInInspectString;
-
-		
-		public bool requiresFaction;
-
-		
-		public TechLevel minFactionTechLevel;
-
-		
-		[MustTranslate]
-		public string approachOrderString;
-
-		
-		[MustTranslate]
-		public string approachingReportString;
-
-		
-		[NoTranslate]
-		public List<string> tags = new List<string>();
-
-		
-		[NoTranslate]
-		public List<string> excludesTags = new List<string>();
-
-		
-		[MustTranslate]
-		public string arrivedLetter;
-
-		
-		[MustTranslate]
-		public string arrivedLetterLabelPart;
-
-		
-		public List<HediffDef> arrivedLetterHediffHyperlinks;
-
-		
-		public LetterDef arrivedLetterDef;
-
-		
-		public bool wantsThreatPoints;
-
-		
-		public float minThreatPoints;
-
-		
-		public bool increasesPopulation;
-
-		
-		public bool badEvenIfNoMap;
-
-		
-		public float forceExitAndRemoveMapCountdownDurationDays = 3f;
-
-		
-		public bool handlesWorldObjectTimeoutInspectString;
-
-		
-		[Unsaved(false)]
-		private SitePartWorker workerInt;
-
-		
-		[Unsaved(false)]
-		private Texture2D expandingIconTextureInt;
-
-		
-		[Unsaved(false)]
-		private List<GenStepDef> extraGenSteps;
 	}
 }

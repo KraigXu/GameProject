@@ -1,93 +1,89 @@
-﻿using System;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class PawnDiedOrDownedThoughtsUtility
 	{
-		
+		private static List<IndividualThoughtToAdd> tmpIndividualThoughtsToAdd = new List<IndividualThoughtToAdd>();
+
+		private static List<ThoughtToAddToAll> tmpAllColonistsThoughts = new List<ThoughtToAddToAll>();
+
 		public static void TryGiveThoughts(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind)
 		{
 			try
 			{
-				if (!PawnGenerator.IsBeingGenerated(victim))
+				if (!PawnGenerator.IsBeingGenerated(victim) && Current.ProgramState == ProgramState.Playing)
 				{
-					if (Current.ProgramState == ProgramState.Playing)
+					GetThoughts(victim, dinfo, thoughtsKind, tmpIndividualThoughtsToAdd, tmpAllColonistsThoughts);
+					for (int i = 0; i < tmpIndividualThoughtsToAdd.Count; i++)
 					{
-						PawnDiedOrDownedThoughtsUtility.GetThoughts(victim, dinfo, thoughtsKind, PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd, PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts);
-						for (int i = 0; i < PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd.Count; i++)
+						tmpIndividualThoughtsToAdd[i].Add();
+					}
+					if (tmpAllColonistsThoughts.Any())
+					{
+						foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_Colonist in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
 						{
-							PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd[i].Add();
-						}
-						if (PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts.Any<ThoughtToAddToAll>())
-						{
-							foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
+							if (allMapsCaravansAndTravelingTransportPods_Alive_Colonist != victim)
 							{
-								if (pawn != victim)
+								for (int j = 0; j < tmpAllColonistsThoughts.Count; j++)
 								{
-									for (int j = 0; j < PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts.Count; j++)
-									{
-										PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts[j].Add(pawn);
-									}
+									tmpAllColonistsThoughts[j].Add(allMapsCaravansAndTravelingTransportPods_Alive_Colonist);
 								}
 							}
 						}
-						PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd.Clear();
-						PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts.Clear();
 					}
+					tmpIndividualThoughtsToAdd.Clear();
+					tmpAllColonistsThoughts.Clear();
 				}
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Could not give thoughts: " + arg, false);
+				Log.Error("Could not give thoughts: " + arg);
 			}
 		}
 
-		
 		public static void TryGiveThoughts(IEnumerable<Pawn> victims, PawnDiedOrDownedThoughtsKind thoughtsKind)
 		{
 			foreach (Pawn victim in victims)
 			{
-				PawnDiedOrDownedThoughtsUtility.TryGiveThoughts(victim, null, thoughtsKind);
+				TryGiveThoughts(victim, null, thoughtsKind);
 			}
 		}
 
-		
 		public static void GetThoughts(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
 		{
 			outIndividualThoughts.Clear();
 			outAllColonistsThoughts.Clear();
 			if (victim.RaceProps.Humanlike)
 			{
-				PawnDiedOrDownedThoughtsUtility.AppendThoughts_ForHumanlike(victim, dinfo, thoughtsKind, outIndividualThoughts, outAllColonistsThoughts);
+				AppendThoughts_ForHumanlike(victim, dinfo, thoughtsKind, outIndividualThoughts, outAllColonistsThoughts);
 			}
 			if (victim.relations != null && victim.relations.everSeenByPlayer)
 			{
-				PawnDiedOrDownedThoughtsUtility.AppendThoughts_Relations(victim, dinfo, thoughtsKind, outIndividualThoughts, outAllColonistsThoughts);
+				AppendThoughts_Relations(victim, dinfo, thoughtsKind, outIndividualThoughts, outAllColonistsThoughts);
 			}
 		}
 
-		
 		public static void BuildMoodThoughtsListString(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, StringBuilder sb, string individualThoughtsHeader, string allColonistsThoughtsHeader)
 		{
-			PawnDiedOrDownedThoughtsUtility.GetThoughts(victim, dinfo, thoughtsKind, PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd, PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts);
-			if (PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts.Any<ThoughtToAddToAll>())
+			GetThoughts(victim, dinfo, thoughtsKind, tmpIndividualThoughtsToAdd, tmpAllColonistsThoughts);
+			if (tmpAllColonistsThoughts.Any())
 			{
 				if (!allColonistsThoughtsHeader.NullOrEmpty())
 				{
 					sb.Append(allColonistsThoughtsHeader);
 					sb.AppendLine();
 				}
-				for (int i = 0; i < PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts.Count; i++)
+				for (int i = 0; i < tmpAllColonistsThoughts.Count; i++)
 				{
-					ThoughtToAddToAll thoughtToAddToAll = PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts[i];
+					ThoughtToAddToAll thoughtToAddToAll = tmpAllColonistsThoughts[i];
 					if (sb.Length > 0)
 					{
 						sb.AppendLine();
@@ -95,47 +91,46 @@ namespace RimWorld
 					sb.Append("  - " + thoughtToAddToAll.thoughtDef.stages[0].LabelCap + " " + Mathf.RoundToInt(thoughtToAddToAll.thoughtDef.stages[0].baseMoodEffect).ToStringWithSign());
 				}
 			}
-			if (PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd.Any((IndividualThoughtToAdd x) => x.thought.MoodOffset() != 0f))
+			if (tmpIndividualThoughtsToAdd.Any((IndividualThoughtToAdd x) => x.thought.MoodOffset() != 0f))
 			{
 				if (!individualThoughtsHeader.NullOrEmpty())
 				{
 					sb.Append(individualThoughtsHeader);
 				}
-				foreach (IGrouping<Pawn, IndividualThoughtToAdd> grouping in from x in PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd
-				where x.thought.MoodOffset() != 0f
-				group x by x.addTo)
+				foreach (IGrouping<Pawn, IndividualThoughtToAdd> item in from x in tmpIndividualThoughtsToAdd
+					where x.thought.MoodOffset() != 0f
+					group x by x.addTo)
 				{
 					if (sb.Length > 0)
 					{
 						sb.AppendLine();
 						sb.AppendLine();
 					}
-					string value = grouping.Key.KindLabel.CapitalizeFirst() + " " + grouping.Key.LabelShort;
+					string value = item.Key.KindLabel.CapitalizeFirst() + " " + item.Key.LabelShort;
 					sb.Append(value);
 					sb.Append(":");
-					foreach (IndividualThoughtToAdd individualThoughtToAdd in grouping)
+					foreach (IndividualThoughtToAdd item2 in item)
 					{
 						sb.AppendLine();
-						sb.Append("    " + individualThoughtToAdd.LabelCap);
+						sb.Append("    " + item2.LabelCap);
 					}
 				}
 			}
 		}
 
-		
 		public static void BuildMoodThoughtsListString(IEnumerable<Pawn> victims, PawnDiedOrDownedThoughtsKind thoughtsKind, StringBuilder sb, string individualThoughtsHeader, string allColonistsThoughtsHeader, string victimLabelKey)
 		{
-			foreach (Pawn pawn in victims)
+			foreach (Pawn victim in victims)
 			{
-				PawnDiedOrDownedThoughtsUtility.GetThoughts(pawn, null, thoughtsKind, PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd, PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts);
-				if (PawnDiedOrDownedThoughtsUtility.tmpIndividualThoughtsToAdd.Any<IndividualThoughtToAdd>() || PawnDiedOrDownedThoughtsUtility.tmpAllColonistsThoughts.Any<ThoughtToAddToAll>())
+				GetThoughts(victim, null, thoughtsKind, tmpIndividualThoughtsToAdd, tmpAllColonistsThoughts);
+				if (tmpIndividualThoughtsToAdd.Any() || tmpAllColonistsThoughts.Any())
 				{
 					if (sb.Length > 0)
 					{
 						sb.AppendLine();
 						sb.AppendLine();
 					}
-					string text = pawn.KindLabel.CapitalizeFirst() + " " + pawn.LabelShort;
+					string text = victim.KindLabel.CapitalizeFirst() + " " + victim.LabelShort;
 					if (victimLabelKey.NullOrEmpty())
 					{
 						sb.Append(text + ":");
@@ -144,61 +139,60 @@ namespace RimWorld
 					{
 						sb.Append(victimLabelKey.Translate(text));
 					}
-					PawnDiedOrDownedThoughtsUtility.BuildMoodThoughtsListString(pawn, null, thoughtsKind, sb, individualThoughtsHeader, allColonistsThoughtsHeader);
+					BuildMoodThoughtsListString(victim, null, thoughtsKind, sb, individualThoughtsHeader, allColonistsThoughtsHeader);
 				}
 			}
 		}
 
-		
 		private static void AppendThoughts_ForHumanlike(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
 		{
-			bool flag = dinfo != null && dinfo.Value.Def.execution;
+			bool flag = dinfo.HasValue && dinfo.Value.Def.execution;
 			bool flag2 = victim.IsPrisonerOfColony && !victim.guilt.IsGuilty && !victim.InAggroMentalState;
-			if (dinfo != null && dinfo.Value.Def.ExternalViolenceFor(victim) && dinfo.Value.Instigator != null && dinfo.Value.Instigator is Pawn)
+			if (dinfo.HasValue && dinfo.Value.Def.ExternalViolenceFor(victim) && dinfo.Value.Instigator != null && dinfo.Value.Instigator is Pawn)
 			{
 				Pawn pawn = (Pawn)dinfo.Value.Instigator;
 				if (!pawn.Dead && pawn.needs.mood != null && pawn.story != null && pawn != victim)
 				{
 					if (thoughtsKind == PawnDiedOrDownedThoughtsKind.Died)
 					{
-						outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KilledHumanlikeBloodlust, pawn, null, 1f, 1f));
+						outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KilledHumanlikeBloodlust, pawn));
 					}
 					if (thoughtsKind == PawnDiedOrDownedThoughtsKind.Died && victim.HostileTo(pawn) && victim.Faction != null && PawnUtility.IsFactionLeader(victim) && victim.Faction.HostileTo(pawn.Faction))
 					{
-						outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.DefeatedHostileFactionLeader, pawn, victim, 1f, 1f));
+						outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.DefeatedHostileFactionLeader, pawn, victim));
 					}
 				}
 			}
 			if (thoughtsKind == PawnDiedOrDownedThoughtsKind.Died && !flag)
 			{
-				foreach (Pawn pawn2 in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
 				{
-					if (pawn2 != victim && pawn2.needs != null && pawn2.needs.mood != null && (pawn2.MentalStateDef != MentalStateDefOf.SocialFighting || ((MentalState_SocialFighting)pawn2.MentalState).otherPawn != victim))
+					if (item != victim && item.needs != null && item.needs.mood != null && (item.MentalStateDef != MentalStateDefOf.SocialFighting || ((MentalState_SocialFighting)item.MentalState).otherPawn != victim))
 					{
-						if (PawnDiedOrDownedThoughtsUtility.Witnessed(pawn2, victim))
+						if (Witnessed(item, victim))
 						{
-							bool flag3 = pawn2.Faction == Faction.OfPlayer && victim.IsQuestLodger();
-							if (pawn2.Faction == victim.Faction && !flag3)
+							bool flag3 = item.Faction == Faction.OfPlayer && victim.IsQuestLodger();
+							if (item.Faction == victim.Faction && !flag3)
 							{
-								outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathAlly, pawn2, null, 1f, 1f));
+								outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathAlly, item));
 							}
-							else if (victim.Faction == null || !victim.Faction.HostileTo(pawn2.Faction) || flag3)
+							else if ((victim.Faction == null || !victim.Faction.HostileTo(item.Faction)) | flag3)
 							{
-								outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathNonAlly, pawn2, null, 1f, 1f));
+								outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathNonAlly, item));
 							}
-							if (pawn2.relations.FamilyByBlood.Contains(victim))
+							if (item.relations.FamilyByBlood.Contains(victim))
 							{
-								outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathFamily, pawn2, null, 1f, 1f));
+								outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathFamily, item));
 							}
-							outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathBloodlust, pawn2, null, 1f, 1f));
+							outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.WitnessedDeathBloodlust, item));
 						}
-						else if (victim.Faction == Faction.OfPlayer && victim.Faction == pawn2.Faction && victim.HostFaction != pawn2.Faction && !victim.IsQuestLodger())
+						else if (victim.Faction == Faction.OfPlayer && victim.Faction == item.Faction && victim.HostFaction != item.Faction && !victim.IsQuestLodger())
 						{
-							outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KnowColonistDied, pawn2, victim, 1f, 1f));
+							outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KnowColonistDied, item, victim));
 						}
-						if (flag2 && pawn2.Faction == Faction.OfPlayer && !pawn2.IsPrisoner)
+						if (flag2 && item.Faction == Faction.OfPlayer && !item.IsPrisoner)
 						{
-							outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KnowPrisonerDiedInnocent, pawn2, victim, 1f, 1f));
+							outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KnowPrisonerDiedInnocent, item, victim));
 						}
 					}
 				}
@@ -224,7 +218,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		private static void AppendThoughts_Relations(Pawn victim, DamageInfo? dinfo, PawnDiedOrDownedThoughtsKind thoughtsKind, List<IndividualThoughtToAdd> outIndividualThoughts, List<ThoughtToAddToAll> outAllColonistsThoughts)
 		{
 			if (thoughtsKind == PawnDiedOrDownedThoughtsKind.Banished && victim.RaceProps.Animal)
@@ -234,86 +227,86 @@ namespace RimWorld
 				{
 					if (directRelations[i].otherPawn.needs != null && directRelations[i].otherPawn.needs.mood != null && PawnUtility.ShouldGetThoughtAbout(directRelations[i].otherPawn, victim) && directRelations[i].def == PawnRelationDefOf.Bond)
 					{
-						outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.BondedAnimalBanished, directRelations[i].otherPawn, victim, 1f, 1f));
+						outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.BondedAnimalBanished, directRelations[i].otherPawn, victim));
 					}
 				}
 			}
-			if (thoughtsKind == PawnDiedOrDownedThoughtsKind.Died || thoughtsKind == PawnDiedOrDownedThoughtsKind.BanishedToDie || thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost)
+			if (thoughtsKind != 0 && thoughtsKind != PawnDiedOrDownedThoughtsKind.BanishedToDie && thoughtsKind != PawnDiedOrDownedThoughtsKind.Lost)
 			{
-				bool flag = thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost;
-				foreach (Pawn pawn in victim.relations.PotentiallyRelatedPawns)
+				return;
+			}
+			bool flag = thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost;
+			foreach (Pawn potentiallyRelatedPawn in victim.relations.PotentiallyRelatedPawns)
+			{
+				if (potentiallyRelatedPawn.needs != null && potentiallyRelatedPawn.needs.mood != null && PawnUtility.ShouldGetThoughtAbout(potentiallyRelatedPawn, victim))
 				{
-					if (pawn.needs != null && pawn.needs.mood != null && PawnUtility.ShouldGetThoughtAbout(pawn, victim))
+					PawnRelationDef mostImportantRelation = potentiallyRelatedPawn.GetMostImportantRelation(victim);
+					if (mostImportantRelation != null)
 					{
-						PawnRelationDef mostImportantRelation = pawn.GetMostImportantRelation(victim);
-						if (mostImportantRelation != null)
+						ThoughtDef thoughtDef = flag ? mostImportantRelation.GetGenderSpecificLostThought(victim) : mostImportantRelation.GetGenderSpecificDiedThought(victim);
+						if (thoughtDef != null)
 						{
-							ThoughtDef thoughtDef = flag ? mostImportantRelation.GetGenderSpecificLostThought(victim) : mostImportantRelation.GetGenderSpecificDiedThought(victim);
-							if (thoughtDef != null)
+							outIndividualThoughts.Add(new IndividualThoughtToAdd(thoughtDef, potentiallyRelatedPawn, victim));
+						}
+					}
+				}
+			}
+			if (dinfo.HasValue && thoughtsKind != PawnDiedOrDownedThoughtsKind.Lost)
+			{
+				Pawn pawn = dinfo.Value.Instigator as Pawn;
+				if (pawn != null && pawn != victim)
+				{
+					foreach (Pawn potentiallyRelatedPawn2 in victim.relations.PotentiallyRelatedPawns)
+					{
+						if (pawn != potentiallyRelatedPawn2 && potentiallyRelatedPawn2.needs != null && potentiallyRelatedPawn2.needs.mood != null)
+						{
+							PawnRelationDef mostImportantRelation2 = potentiallyRelatedPawn2.GetMostImportantRelation(victim);
+							if (mostImportantRelation2 != null)
 							{
-								outIndividualThoughts.Add(new IndividualThoughtToAdd(thoughtDef, pawn, victim, 1f, 1f));
+								ThoughtDef genderSpecificKilledThought = mostImportantRelation2.GetGenderSpecificKilledThought(victim);
+								if (genderSpecificKilledThought != null)
+								{
+									outIndividualThoughts.Add(new IndividualThoughtToAdd(genderSpecificKilledThought, potentiallyRelatedPawn2, pawn));
+								}
+							}
+							if (potentiallyRelatedPawn2.RaceProps.IsFlesh)
+							{
+								int num = potentiallyRelatedPawn2.relations.OpinionOf(victim);
+								if (num >= 20)
+								{
+									outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KilledMyFriend, potentiallyRelatedPawn2, pawn, 1f, victim.relations.GetFriendDiedThoughtPowerFactor(num)));
+								}
+								else if (num <= -20)
+								{
+									outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KilledMyRival, potentiallyRelatedPawn2, pawn, 1f, victim.relations.GetRivalDiedThoughtPowerFactor(num)));
+								}
 							}
 						}
 					}
 				}
-				if (dinfo != null && thoughtsKind != PawnDiedOrDownedThoughtsKind.Lost)
+			}
+			ThoughtDef thoughtDef2 = (thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost) ? ThoughtDefOf.PawnWithGoodOpinionLost : ThoughtDefOf.PawnWithGoodOpinionDied;
+			ThoughtDef thoughtDef3 = (thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost) ? ThoughtDefOf.PawnWithBadOpinionLost : ThoughtDefOf.PawnWithBadOpinionDied;
+			if (victim.RaceProps.Humanlike)
+			{
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
 				{
-					Pawn pawn2 = dinfo.Value.Instigator as Pawn;
-					if (pawn2 != null && pawn2 != victim)
+					if (item.needs != null && item.RaceProps.IsFlesh && item.needs.mood != null && PawnUtility.ShouldGetThoughtAbout(item, victim))
 					{
-						foreach (Pawn pawn3 in victim.relations.PotentiallyRelatedPawns)
+						int num2 = item.relations.OpinionOf(victim);
+						if (num2 >= 20)
 						{
-							if (pawn2 != pawn3 && pawn3.needs != null && pawn3.needs.mood != null)
-							{
-								PawnRelationDef mostImportantRelation2 = pawn3.GetMostImportantRelation(victim);
-								if (mostImportantRelation2 != null)
-								{
-									ThoughtDef genderSpecificKilledThought = mostImportantRelation2.GetGenderSpecificKilledThought(victim);
-									if (genderSpecificKilledThought != null)
-									{
-										outIndividualThoughts.Add(new IndividualThoughtToAdd(genderSpecificKilledThought, pawn3, pawn2, 1f, 1f));
-									}
-								}
-								if (pawn3.RaceProps.IsFlesh)
-								{
-									int num = pawn3.relations.OpinionOf(victim);
-									if (num >= 20)
-									{
-										outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KilledMyFriend, pawn3, pawn2, 1f, victim.relations.GetFriendDiedThoughtPowerFactor(num)));
-									}
-									else if (num <= -20)
-									{
-										outIndividualThoughts.Add(new IndividualThoughtToAdd(ThoughtDefOf.KilledMyRival, pawn3, pawn2, 1f, victim.relations.GetRivalDiedThoughtPowerFactor(num)));
-									}
-								}
-							}
+							outIndividualThoughts.Add(new IndividualThoughtToAdd(thoughtDef2, item, victim, victim.relations.GetFriendDiedThoughtPowerFactor(num2)));
 						}
-					}
-				}
-				ThoughtDef thoughtDef2 = (thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost) ? ThoughtDefOf.PawnWithGoodOpinionLost : ThoughtDefOf.PawnWithGoodOpinionDied;
-				ThoughtDef thoughtDef3 = (thoughtsKind == PawnDiedOrDownedThoughtsKind.Lost) ? ThoughtDefOf.PawnWithBadOpinionLost : ThoughtDefOf.PawnWithBadOpinionDied;
-				if (victim.RaceProps.Humanlike)
-				{
-					foreach (Pawn pawn4 in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive)
-					{
-						if (pawn4.needs != null && pawn4.RaceProps.IsFlesh && pawn4.needs.mood != null && PawnUtility.ShouldGetThoughtAbout(pawn4, victim))
+						else if (num2 <= -20)
 						{
-							int num2 = pawn4.relations.OpinionOf(victim);
-							if (num2 >= 20)
-							{
-								outIndividualThoughts.Add(new IndividualThoughtToAdd(thoughtDef2, pawn4, victim, victim.relations.GetFriendDiedThoughtPowerFactor(num2), 1f));
-							}
-							else if (num2 <= -20)
-							{
-								outIndividualThoughts.Add(new IndividualThoughtToAdd(thoughtDef3, pawn4, victim, victim.relations.GetRivalDiedThoughtPowerFactor(num2), 1f));
-							}
+							outIndividualThoughts.Add(new IndividualThoughtToAdd(thoughtDef3, item, victim, victim.relations.GetRivalDiedThoughtPowerFactor(num2)));
 						}
 					}
 				}
 			}
 		}
 
-		
 		private static bool Witnessed(Pawn p, Pawn victim)
 		{
 			if (!p.Awake() || !p.health.capacities.CapableOf(PawnCapacityDefOf.Sight))
@@ -324,17 +317,28 @@ namespace RimWorld
 			{
 				return victim.GetCaravan() == p.GetCaravan();
 			}
-			return victim.Spawned && p.Spawned && p.Position.InHorDistOf(victim.Position, 12f) && GenSight.LineOfSight(victim.Position, p.Position, victim.Map, false, null, 0, 0);
+			if (!victim.Spawned || !p.Spawned)
+			{
+				return false;
+			}
+			if (!p.Position.InHorDistOf(victim.Position, 12f))
+			{
+				return false;
+			}
+			if (!GenSight.LineOfSight(victim.Position, p.Position, victim.Map))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static void RemoveDiedThoughts(Pawn pawn)
 		{
-			foreach (Pawn pawn2 in PawnsFinder.AllMapsWorldAndTemporary_Alive)
+			foreach (Pawn item in PawnsFinder.AllMapsWorldAndTemporary_Alive)
 			{
-				if (pawn2.needs != null && pawn2.needs.mood != null && pawn2 != pawn)
+				if (item.needs != null && item.needs.mood != null && item != pawn)
 				{
-					MemoryThoughtHandler memories = pawn2.needs.mood.thoughts.memories;
+					MemoryThoughtHandler memories = item.needs.mood.thoughts.memories;
 					memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.KnowColonistDied, pawn);
 					memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.KnowPrisonerDiedInnocent, pawn);
 					memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.PawnWithGoodOpinionDied, pawn);
@@ -352,14 +356,13 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void RemoveLostThoughts(Pawn pawn)
 		{
-			foreach (Pawn pawn2 in PawnsFinder.AllMapsWorldAndTemporary_Alive)
+			foreach (Pawn item in PawnsFinder.AllMapsWorldAndTemporary_Alive)
 			{
-				if (pawn2.needs != null && pawn2.needs.mood != null && pawn2 != pawn)
+				if (item.needs != null && item.needs.mood != null && item != pawn)
 				{
-					MemoryThoughtHandler memories = pawn2.needs.mood.thoughts.memories;
+					MemoryThoughtHandler memories = item.needs.mood.thoughts.memories;
 					memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.ColonistLost, pawn);
 					memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.PawnWithGoodOpinionLost, pawn);
 					memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.PawnWithBadOpinionLost, pawn);
@@ -375,11 +378,5 @@ namespace RimWorld
 				}
 			}
 		}
-
-		
-		private static List<IndividualThoughtToAdd> tmpIndividualThoughtsToAdd = new List<IndividualThoughtToAdd>();
-
-		
-		private static List<ThoughtToAddToAll> tmpAllColonistsThoughts = new List<ThoughtToAddToAll>();
 	}
 }

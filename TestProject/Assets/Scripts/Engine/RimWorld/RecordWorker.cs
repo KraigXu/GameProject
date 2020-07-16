@@ -1,16 +1,15 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class RecordWorker
 	{
-		
+		public RecordDef def;
+
 		public virtual bool ShouldMeasureTimeNow(Pawn pawn)
 		{
-			if (this.def.measuredTimeJobs == null)
+			if (def.measuredTimeJobs == null)
 			{
 				return false;
 			}
@@ -19,17 +18,14 @@ namespace RimWorld
 			{
 				return false;
 			}
-			for (int i = 0; i < this.def.measuredTimeJobs.Count; i++)
+			for (int i = 0; i < def.measuredTimeJobs.Count; i++)
 			{
-				if (curJob.def == this.def.measuredTimeJobs[i])
+				if (curJob.def == def.measuredTimeJobs[i])
 				{
 					return true;
 				}
 			}
 			return false;
 		}
-
-		
-		public RecordDef def;
 	}
 }

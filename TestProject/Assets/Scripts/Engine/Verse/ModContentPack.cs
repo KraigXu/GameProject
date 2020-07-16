@@ -1,11 +1,11 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using UnityEngine;
-using Verse;
+
 namespace Verse
 {
 	public class ModContentPack
@@ -470,5 +470,4 @@ namespace Verse
 			return PackageIdPlayerFacing;
 		}
 	}
-
 }

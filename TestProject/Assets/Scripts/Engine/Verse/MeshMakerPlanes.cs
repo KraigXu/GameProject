@@ -1,36 +1,33 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class MeshMakerPlanes
 	{
-		
+		private const float BackLiftAmount = 0.00227272743f;
+
+		private const float TwistAmount = 0.00113636372f;
+
 		public static Mesh NewPlaneMesh(float size)
 		{
-			return MeshMakerPlanes.NewPlaneMesh(size, false);
+			return NewPlaneMesh(size, flipped: false);
 		}
 
-		
 		public static Mesh NewPlaneMesh(float size, bool flipped)
 		{
-			return MeshMakerPlanes.NewPlaneMesh(size, flipped, false);
+			return NewPlaneMesh(size, flipped, backLift: false);
 		}
 
-		
 		public static Mesh NewPlaneMesh(float size, bool flipped, bool backLift)
 		{
-			return MeshMakerPlanes.NewPlaneMesh(new Vector2(size, size), flipped, backLift, false);
+			return NewPlaneMesh(new Vector2(size, size), flipped, backLift, twist: false);
 		}
 
-		
 		public static Mesh NewPlaneMesh(float size, bool flipped, bool backLift, bool twist)
 		{
-			return MeshMakerPlanes.NewPlaneMesh(new Vector2(size, size), flipped, backLift, twist);
+			return NewPlaneMesh(new Vector2(size, size), flipped, backLift, twist);
 		}
 
-		
 		public static Mesh NewPlaneMesh(Vector2 size, bool flipped, bool backLift, bool twist)
 		{
 			Vector3[] array = new Vector3[4];
@@ -83,10 +80,9 @@ namespace Verse
 			return mesh;
 		}
 
-		
 		public static Mesh NewWholeMapPlane()
 		{
-			Mesh mesh = MeshMakerPlanes.NewPlaneMesh(2000f, false, false);
+			Mesh mesh = NewPlaneMesh(2000f, flipped: false, backLift: false);
 			Vector2[] array = new Vector2[4];
 			for (int i = 0; i < 4; i++)
 			{
@@ -95,11 +91,5 @@ namespace Verse
 			mesh.uv = array;
 			return mesh;
 		}
-
-		
-		private const float BackLiftAmount = 0.00227272743f;
-
-		
-		private const float TwistAmount = 0.00113636372f;
 	}
 }

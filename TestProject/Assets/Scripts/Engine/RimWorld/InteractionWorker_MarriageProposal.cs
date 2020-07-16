@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,10 +5,14 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class InteractionWorker_MarriageProposal : InteractionWorker
 	{
-		
+		private const float BaseSelectionWeight = 0.4f;
+
+		private const float BaseAcceptanceChance = 0.9f;
+
+		private const float BreakupChanceOnRejection = 0.4f;
+
 		public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
 		{
 			DirectPawnRelation directRelation = initiator.relations.GetDirectRelation(PawnRelationDefOf.Lover, recipient);
@@ -26,7 +29,7 @@ namespace RimWorld
 			float num = 0.4f;
 			float value = (float)(Find.TickManager.TicksGame - directRelation.startTicks) / 60000f;
 			num *= Mathf.InverseLerp(0f, 60f, value);
-			num *= Mathf.InverseLerp(0f, 60f, (float)initiator.relations.OpinionOf(recipient));
+			num *= Mathf.InverseLerp(0f, 60f, initiator.relations.OpinionOf(recipient));
 			if (recipient.relations.OpinionOf(initiator) < 0)
 			{
 				num *= 0.3f;
@@ -38,10 +41,9 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
 		{
-			float num = this.AcceptanceChance(initiator, recipient);
+			float num = AcceptanceChance(initiator, recipient);
 			bool flag = Rand.Value < num;
 			bool flag2 = false;
 			if (flag)
@@ -89,19 +91,17 @@ namespace RimWorld
 					letterLabel = "LetterLabelAcceptedProposal".Translate();
 					letterDef = LetterDefOf.PositiveEvent;
 					stringBuilder.AppendLine("LetterAcceptedProposal".Translate(initiator.Named("INITIATOR"), recipient.Named("RECIPIENT")));
-					if (initiator.relations.nextMarriageNameChange != MarriageNameChange.NoChange)
+					if (initiator.relations.nextMarriageNameChange != 0)
 					{
-						Pawn pawn;
-						Pawn pawn2;
-						SpouseRelationUtility.DetermineManAndWomanSpouses(initiator, recipient, out pawn, out pawn2);
+						SpouseRelationUtility.DetermineManAndWomanSpouses(initiator, recipient, out Pawn man, out Pawn woman);
 						stringBuilder.AppendLine();
 						if (initiator.relations.nextMarriageNameChange == MarriageNameChange.MansName)
 						{
-							stringBuilder.AppendLine("LetterAcceptedProposal_NameChange".Translate(pawn2.Named("PAWN"), (pawn.Name as NameTriple).Last));
+							stringBuilder.AppendLine("LetterAcceptedProposal_NameChange".Translate(woman.Named("PAWN"), (man.Name as NameTriple).Last));
 						}
 						else
 						{
-							stringBuilder.AppendLine("LetterAcceptedProposal_NameChange".Translate(pawn.Named("PAWN"), (pawn2.Name as NameTriple).Last));
+							stringBuilder.AppendLine("LetterAcceptedProposal_NameChange".Translate(man.Named("PAWN"), (woman.Name as NameTriple).Last));
 						}
 					}
 				}
@@ -117,32 +117,20 @@ namespace RimWorld
 					}
 				}
 				letterText = stringBuilder.ToString().TrimEndNewlines();
-				lookTargets = new LookTargets(new TargetInfo[]
-				{
-					initiator,
-					recipient
-				});
-				return;
+				lookTargets = new LookTargets(initiator, recipient);
 			}
-			letterLabel = null;
-			letterText = null;
-			letterDef = null;
-			lookTargets = null;
+			else
+			{
+				letterLabel = null;
+				letterText = null;
+				letterDef = null;
+				lookTargets = null;
+			}
 		}
 
-		
 		public float AcceptanceChance(Pawn initiator, Pawn recipient)
 		{
-			return Mathf.Clamp01(0.9f * Mathf.Clamp01(GenMath.LerpDouble(-20f, 60f, 0f, 1f, (float)recipient.relations.OpinionOf(initiator))));
+			return Mathf.Clamp01(0.9f * Mathf.Clamp01(GenMath.LerpDouble(-20f, 60f, 0f, 1f, recipient.relations.OpinionOf(initiator))));
 		}
-
-		
-		private const float BaseSelectionWeight = 0.4f;
-
-		
-		private const float BaseAcceptanceChance = 0.9f;
-
-		
-		private const float BreakupChanceOnRejection = 0.4f;
 	}
 }

@@ -1,14 +1,11 @@
-﻿using System;
 using System.Linq;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JoyGiver_InPrivateRoom : JoyGiver
 	{
-		
 		public override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.ownership == null)
@@ -20,20 +17,16 @@ namespace RimWorld
 			{
 				return null;
 			}
-			IntVec3 c2;
-			if (!(from c in ownedRoom.Cells
-			where c.Standable(pawn.Map) && !c.IsForbidden(pawn) && pawn.CanReserveAndReach(c, PathEndMode.OnCell, Danger.None, 1, -1, null, false)
-			select c).TryRandomElement(out c2))
+			if (!ownedRoom.Cells.Where((IntVec3 c) => c.Standable(pawn.Map) && !c.IsForbidden(pawn) && pawn.CanReserveAndReach(c, PathEndMode.OnCell, Danger.None)).TryRandomElement(out IntVec3 result))
 			{
 				return null;
 			}
-			return JobMaker.MakeJob(this.def.jobDef, c2);
+			return JobMaker.MakeJob(def.jobDef, result);
 		}
 
-		
 		public override Job TryGiveJobWhileInBed(Pawn pawn)
 		{
-			return JobMaker.MakeJob(this.def.jobDef, pawn.CurrentBed());
+			return JobMaker.MakeJob(def.jobDef, pawn.CurrentBed());
 		}
 	}
 }

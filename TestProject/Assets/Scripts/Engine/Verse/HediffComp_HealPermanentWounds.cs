@@ -1,76 +1,55 @@
-﻿using System;
-using System.Linq;
 using RimWorld;
+using System.Linq;
 
 namespace Verse
 {
-	
 	public class HediffComp_HealPermanentWounds : HediffComp
 	{
-		
-		
-		public HediffCompProperties_HealPermanentWounds Props
-		{
-			get
-			{
-				return (HediffCompProperties_HealPermanentWounds)this.props;
-			}
-		}
+		private int ticksToHeal;
 
-		
+		public HediffCompProperties_HealPermanentWounds Props => (HediffCompProperties_HealPermanentWounds)props;
+
 		public override void CompPostMake()
 		{
 			base.CompPostMake();
-			this.ResetTicksToHeal();
+			ResetTicksToHeal();
 		}
 
-		
 		private void ResetTicksToHeal()
 		{
-			this.ticksToHeal = Rand.Range(15, 30) * 60000;
+			ticksToHeal = Rand.Range(15, 30) * 60000;
 		}
 
-		
 		public override void CompPostTick(ref float severityAdjustment)
 		{
-			this.ticksToHeal--;
-			if (this.ticksToHeal <= 0)
+			ticksToHeal--;
+			if (ticksToHeal <= 0)
 			{
-				this.TryHealRandomPermanentWound();
-				this.ResetTicksToHeal();
+				TryHealRandomPermanentWound();
+				ResetTicksToHeal();
 			}
 		}
 
-		
 		private void TryHealRandomPermanentWound()
 		{
-			Hediff hediff;
-			if (!(from hd in base.Pawn.health.hediffSet.hediffs
-			where hd.IsPermanent() || hd.def.chronic
-			select hd).TryRandomElement(out hediff))
+			if (base.Pawn.health.hediffSet.hediffs.Where((Hediff hd) => hd.IsPermanent() || hd.def.chronic).TryRandomElement(out Hediff result))
 			{
-				return;
-			}
-			HealthUtility.CureHediff(hediff);
-			if (PawnUtility.ShouldSendNotificationAbout(base.Pawn))
-			{
-				Messages.Message("MessagePermanentWoundHealed".Translate(this.parent.LabelCap, base.Pawn.LabelShort, hediff.Label, base.Pawn.Named("PAWN")), base.Pawn, MessageTypeDefOf.PositiveEvent, true);
+				HealthUtility.CureHediff(result);
+				if (PawnUtility.ShouldSendNotificationAbout(base.Pawn))
+				{
+					Messages.Message("MessagePermanentWoundHealed".Translate(parent.LabelCap, base.Pawn.LabelShort, result.Label, base.Pawn.Named("PAWN")), base.Pawn, MessageTypeDefOf.PositiveEvent);
+				}
 			}
 		}
 
-		
 		public override void CompExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ticksToHeal, "ticksToHeal", 0, false);
+			Scribe_Values.Look(ref ticksToHeal, "ticksToHeal", 0);
 		}
 
-		
 		public override string CompDebugString()
 		{
-			return "ticksToHeal: " + this.ticksToHeal;
+			return "ticksToHeal: " + ticksToHeal;
 		}
-
-		
-		private int ticksToHeal;
 	}
 }

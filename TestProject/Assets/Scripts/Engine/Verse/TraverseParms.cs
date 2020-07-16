@@ -1,136 +1,110 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public struct TraverseParms : IEquatable<TraverseParms>
 	{
-		
+		public Pawn pawn;
+
+		public TraverseMode mode;
+
+		public Danger maxDanger;
+
+		public bool canBash;
+
 		public static TraverseParms For(Pawn pawn, Danger maxDanger = Danger.Deadly, TraverseMode mode = TraverseMode.ByPawn, bool canBash = false)
 		{
 			if (pawn == null)
 			{
-				Log.Error("TraverseParms for null pawn.", false);
-				return TraverseParms.For(TraverseMode.NoPassClosedDoors, maxDanger, canBash);
+				Log.Error("TraverseParms for null pawn.");
+				return For(TraverseMode.NoPassClosedDoors, maxDanger, canBash);
 			}
-			return new TraverseParms
-			{
-				pawn = pawn,
-				maxDanger = maxDanger,
-				mode = mode,
-				canBash = canBash
-			};
+			TraverseParms result = default(TraverseParms);
+			result.pawn = pawn;
+			result.maxDanger = maxDanger;
+			result.mode = mode;
+			result.canBash = canBash;
+			return result;
 		}
 
-		
 		public static TraverseParms For(TraverseMode mode, Danger maxDanger = Danger.Deadly, bool canBash = false)
 		{
-			return new TraverseParms
-			{
-				pawn = null,
-				mode = mode,
-				maxDanger = maxDanger,
-				canBash = canBash
-			};
+			TraverseParms result = default(TraverseParms);
+			result.pawn = null;
+			result.mode = mode;
+			result.maxDanger = maxDanger;
+			result.canBash = canBash;
+			return result;
 		}
 
-		
 		public void Validate()
 		{
-			if (this.mode == TraverseMode.ByPawn && this.pawn == null)
+			if (mode == TraverseMode.ByPawn && pawn == null)
 			{
-				Log.Error("Invalid traverse parameters: IfPawnAllowed but traverser = null.", false);
+				Log.Error("Invalid traverse parameters: IfPawnAllowed but traverser = null.");
 			}
 		}
 
-		
 		public static implicit operator TraverseParms(TraverseMode m)
 		{
 			if (m == TraverseMode.ByPawn)
 			{
 				throw new InvalidOperationException("Cannot implicitly convert TraverseMode.ByPawn to RegionTraverseParameters.");
 			}
-			return TraverseParms.For(m, Danger.Deadly, false);
+			return For(m);
 		}
 
-		
 		public static bool operator ==(TraverseParms a, TraverseParms b)
 		{
-			return a.pawn == b.pawn && a.mode == b.mode && a.canBash == b.canBash && a.maxDanger == b.maxDanger;
+			if (a.pawn == b.pawn && a.mode == b.mode && a.canBash == b.canBash)
+			{
+				return a.maxDanger == b.maxDanger;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(TraverseParms a, TraverseParms b)
 		{
-			return a.pawn != b.pawn || a.mode != b.mode || a.canBash != b.canBash || a.maxDanger != b.maxDanger;
+			if (a.pawn == b.pawn && a.mode == b.mode && a.canBash == b.canBash)
+			{
+				return a.maxDanger != b.maxDanger;
+			}
+			return true;
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is TraverseParms && this.Equals((TraverseParms)obj);
+			if (!(obj is TraverseParms))
+			{
+				return false;
+			}
+			return Equals((TraverseParms)obj);
 		}
 
-		
 		public bool Equals(TraverseParms other)
 		{
-			return other.pawn == this.pawn && other.mode == this.mode && other.canBash == this.canBash && other.maxDanger == this.maxDanger;
+			if (other.pawn == pawn && other.mode == mode && other.canBash == canBash)
+			{
+				return other.maxDanger == maxDanger;
+			}
+			return false;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			int seed = this.canBash ? 1 : 0;
-			if (this.pawn != null)
-			{
-				seed = Gen.HashCombine<Pawn>(seed, this.pawn);
-			}
-			else
-			{
-				seed = Gen.HashCombineStruct<TraverseMode>(seed, this.mode);
-			}
-			return Gen.HashCombineStruct<Danger>(seed, this.maxDanger);
+			int seed = canBash ? 1 : 0;
+			seed = ((pawn == null) ? Gen.HashCombineStruct(seed, mode) : Gen.HashCombine(seed, pawn));
+			return Gen.HashCombineStruct(seed, maxDanger);
 		}
 
-		
 		public override string ToString()
 		{
-			string text = this.canBash ? " canBash" : "";
-			if (this.mode == TraverseMode.ByPawn)
+			string text = canBash ? " canBash" : "";
+			if (mode == TraverseMode.ByPawn)
 			{
-				return string.Concat(new object[]
-				{
-					"(",
-					this.mode,
-					" ",
-					this.maxDanger,
-					" ",
-					this.pawn,
-					text,
-					")"
-				});
+				return "(" + mode + " " + maxDanger + " " + pawn + text + ")";
 			}
-			return string.Concat(new object[]
-			{
-				"(",
-				this.mode,
-				" ",
-				this.maxDanger,
-				text,
-				")"
-			});
+			return "(" + mode + " " + maxDanger + text + ")";
 		}
-
-		
-		public Pawn pawn;
-
-		
-		public TraverseMode mode;
-
-		
-		public Danger maxDanger;
-
-		
-		public bool canBash;
 	}
 }

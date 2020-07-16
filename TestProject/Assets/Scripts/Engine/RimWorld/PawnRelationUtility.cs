@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,84 +6,69 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnRelationUtility
 	{
-		
 		public static IEnumerable<PawnRelationDef> GetRelations(this Pawn me, Pawn other)
 		{
-			if (me == other)
+			if (me != other && me.RaceProps.IsFlesh && other.RaceProps.IsFlesh && me.relations.RelatedToAnyoneOrAnyoneRelatedToMe && other.relations.RelatedToAnyoneOrAnyoneRelatedToMe)
 			{
-				yield break;
-			}
-			if (!me.RaceProps.IsFlesh || !other.RaceProps.IsFlesh)
-			{
-				yield break;
-			}
-			if (!me.relations.RelatedToAnyoneOrAnyoneRelatedToMe || !other.relations.RelatedToAnyoneOrAnyoneRelatedToMe)
-			{
-				yield break;
-			}
-			bool anyNonKinFamilyByBloodRelation = false;
-			List<PawnRelationDef> defs = DefDatabase<PawnRelationDef>.AllDefsListForReading;
-			int i = 0;
-			int count = defs.Count;
-			while (i < count)
-			{
-				PawnRelationDef pawnRelationDef = defs[i];
-				if (pawnRelationDef != PawnRelationDefOf.Kin && pawnRelationDef.Worker.InRelation(me, other))
+				try
 				{
-					if (pawnRelationDef.familyByBloodRelation)
+					bool anyNonKinFamilyByBloodRelation = false;
+					List<PawnRelationDef> defs = DefDatabase<PawnRelationDef>.AllDefsListForReading;
+					int i = 0;
+					for (int count = defs.Count; i < count; i++)
 					{
-						anyNonKinFamilyByBloodRelation = true;
+						PawnRelationDef pawnRelationDef = defs[i];
+						if (pawnRelationDef != PawnRelationDefOf.Kin && pawnRelationDef.Worker.InRelation(me, other))
+						{
+							if (pawnRelationDef.familyByBloodRelation)
+							{
+								anyNonKinFamilyByBloodRelation = true;
+							}
+							yield return pawnRelationDef;
+						}
 					}
-					yield return pawnRelationDef;
+					if (!anyNonKinFamilyByBloodRelation && PawnRelationDefOf.Kin.Worker.InRelation(me, other))
+					{
+						yield return PawnRelationDefOf.Kin;
+					}
 				}
-				int num = i;
-				i = num + 1;
+				finally
+				{
+				}
 			}
-			if (!anyNonKinFamilyByBloodRelation && PawnRelationDefOf.Kin.Worker.InRelation(me, other))
-			{
-				yield return PawnRelationDefOf.Kin;
-			}
-			defs = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public static PawnRelationDef GetMostImportantRelation(this Pawn me, Pawn other)
 		{
 			PawnRelationDef pawnRelationDef = null;
-			foreach (PawnRelationDef pawnRelationDef2 in me.GetRelations(other))
+			foreach (PawnRelationDef relation in me.GetRelations(other))
 			{
-				if (pawnRelationDef == null || pawnRelationDef2.importance > pawnRelationDef.importance)
+				if (pawnRelationDef == null || relation.importance > pawnRelationDef.importance)
 				{
-					pawnRelationDef = pawnRelationDef2;
+					pawnRelationDef = relation;
 				}
 			}
 			return pawnRelationDef;
 		}
 
-		
 		public static void Notify_PawnsSeenByPlayer(IEnumerable<Pawn> seenPawns, out string pawnRelationsInfo, bool informEvenIfSeenBefore = false, bool writeSeenPawnsNames = true)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			IEnumerable<Pawn> enumerable = from x in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners
-			where x.relations.everSeenByPlayer
-			select x;
+			IEnumerable<Pawn> enumerable = PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners.Where((Pawn x) => x.relations.everSeenByPlayer);
 			bool flag = false;
-			foreach (Pawn pawn in seenPawns)
+			foreach (Pawn seenPawn in seenPawns)
 			{
-				if (pawn.RaceProps.IsFlesh && (informEvenIfSeenBefore || !pawn.relations.everSeenByPlayer))
+				if (seenPawn.RaceProps.IsFlesh && (informEvenIfSeenBefore || !seenPawn.relations.everSeenByPlayer))
 				{
-					pawn.relations.everSeenByPlayer = true;
+					seenPawn.relations.everSeenByPlayer = true;
 					bool flag2 = false;
-					foreach (Pawn pawn2 in enumerable)
+					foreach (Pawn item in enumerable)
 					{
-						if (pawn != pawn2)
+						if (seenPawn != item)
 						{
-							PawnRelationDef mostImportantRelation = pawn2.GetMostImportantRelation(pawn);
+							PawnRelationDef mostImportantRelation = item.GetMostImportantRelation(seenPawn);
 							if (mostImportantRelation != null)
 							{
 								if (!flag2)
@@ -96,11 +80,11 @@ namespace RimWorld
 									}
 									if (writeSeenPawnsNames)
 									{
-										stringBuilder.AppendLine(pawn.KindLabel.CapitalizeFirst() + " " + pawn.NameShortColored.Resolve() + ":");
+										stringBuilder.AppendLine(seenPawn.KindLabel.CapitalizeFirst() + " " + seenPawn.NameShortColored.Resolve() + ":");
 									}
 								}
 								flag = true;
-								stringBuilder.AppendLine("  - " + "Relationship".Translate(mostImportantRelation.GetGenderSpecificLabelCap(pawn), pawn2.KindLabel + " " + pawn2.NameShortColored.Resolve(), pawn2));
+								stringBuilder.AppendLine("  - " + "Relationship".Translate(mostImportantRelation.GetGenderSpecificLabelCap(seenPawn), item.KindLabel + " " + item.NameShortColored.Resolve(), item));
 							}
 						}
 					}
@@ -109,17 +93,17 @@ namespace RimWorld
 			if (flag)
 			{
 				pawnRelationsInfo = stringBuilder.ToString().TrimEndNewlines();
-				return;
 			}
-			pawnRelationsInfo = null;
+			else
+			{
+				pawnRelationsInfo = null;
+			}
 		}
 
-		
 		public static void Notify_PawnsSeenByPlayer_Letter(IEnumerable<Pawn> seenPawns, ref TaggedString letterLabel, ref TaggedString letterText, string relationsInfoHeader, bool informEvenIfSeenBefore = false, bool writeSeenPawnsNames = true)
 		{
-			string text;
-			PawnRelationUtility.Notify_PawnsSeenByPlayer(seenPawns, out text, informEvenIfSeenBefore, writeSeenPawnsNames);
-			if (!text.NullOrEmpty())
+			Notify_PawnsSeenByPlayer(seenPawns, out string pawnRelationsInfo, informEvenIfSeenBefore, writeSeenPawnsNames);
+			if (!pawnRelationsInfo.NullOrEmpty())
 			{
 				if (letterLabel.NullOrEmpty())
 				{
@@ -133,91 +117,84 @@ namespace RimWorld
 				{
 					letterText += "\n\n";
 				}
-				letterText += relationsInfoHeader + "\n\n" + text;
+				letterText += relationsInfoHeader + "\n\n" + pawnRelationsInfo;
 			}
 		}
 
-		
 		public static void Notify_PawnsSeenByPlayer_Letter_Send(IEnumerable<Pawn> seenPawns, string relationsInfoHeader, LetterDef letterDef, bool informEvenIfSeenBefore = false, bool writeSeenPawnsNames = true)
 		{
-			TaggedString label = "";
-			TaggedString text = "";
-			PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(seenPawns, ref label, ref text, relationsInfoHeader, informEvenIfSeenBefore, writeSeenPawnsNames);
-			if (!text.NullOrEmpty())
+			TaggedString letterLabel = "";
+			TaggedString letterText = "";
+			Notify_PawnsSeenByPlayer_Letter(seenPawns, ref letterLabel, ref letterText, relationsInfoHeader, informEvenIfSeenBefore, writeSeenPawnsNames);
+			if (!letterText.NullOrEmpty())
 			{
 				Pawn pawn = null;
-				foreach (Pawn pawn2 in seenPawns)
+				foreach (Pawn seenPawn in seenPawns)
 				{
-					if (PawnRelationUtility.GetMostImportantColonyRelative(pawn2) != null)
+					if (GetMostImportantColonyRelative(seenPawn) != null)
 					{
-						pawn = pawn2;
+						pawn = seenPawn;
 						break;
 					}
 				}
 				if (pawn == null)
 				{
-					pawn = seenPawns.FirstOrDefault<Pawn>();
+					pawn = seenPawns.FirstOrDefault();
 				}
-				Find.LetterStack.ReceiveLetter(label, text, letterDef, pawn, null, null, null, null);
+				Find.LetterStack.ReceiveLetter(letterLabel, letterText, letterDef, pawn);
 			}
 		}
 
-		
 		public static bool TryAppendRelationsWithColonistsInfo(ref TaggedString text, Pawn pawn)
 		{
-			TaggedString taggedString = null;
-			return PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref text, ref taggedString, pawn);
+			TaggedString title = null;
+			return TryAppendRelationsWithColonistsInfo(ref text, ref title, pawn);
 		}
 
-		
 		public static bool TryAppendRelationsWithColonistsInfo(ref TaggedString text, ref TaggedString title, Pawn pawn)
 		{
-			Pawn mostImportantColonyRelative = PawnRelationUtility.GetMostImportantColonyRelative(pawn);
+			Pawn mostImportantColonyRelative = GetMostImportantColonyRelative(pawn);
 			if (mostImportantColonyRelative == null)
 			{
 				return false;
 			}
-			if (title != null)
+			if ((string)title != null)
 			{
 				title += " (" + "RelationshipAppendedLetterSuffix".Translate() + ")";
 			}
 			string genderSpecificLabel = mostImportantColonyRelative.GetMostImportantRelation(pawn).GetGenderSpecificLabel(pawn);
 			if (mostImportantColonyRelative.IsColonist)
 			{
-				text += "\n\n" + "RelationshipAppendedLetterTextColonist".Translate(mostImportantColonyRelative.LabelShort, genderSpecificLabel, mostImportantColonyRelative.Named("RELATIVE"), pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", false);
+				text += "\n\n" + "RelationshipAppendedLetterTextColonist".Translate(mostImportantColonyRelative.LabelShort, genderSpecificLabel, mostImportantColonyRelative.Named("RELATIVE"), pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", addRelationInfoSymbol: false);
 			}
 			else
 			{
-				text += "\n\n" + "RelationshipAppendedLetterTextPrisoner".Translate(mostImportantColonyRelative.LabelShort, genderSpecificLabel, mostImportantColonyRelative.Named("RELATIVE"), pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", false);
+				text += "\n\n" + "RelationshipAppendedLetterTextPrisoner".Translate(mostImportantColonyRelative.LabelShort, genderSpecificLabel, mostImportantColonyRelative.Named("RELATIVE"), pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", addRelationInfoSymbol: false);
 			}
 			return true;
 		}
 
-		
 		public static Pawn GetMostImportantColonyRelative(Pawn pawn)
 		{
 			if (pawn.relations == null || !pawn.relations.RelatedToAnyoneOrAnyoneRelatedToMe)
 			{
 				return null;
 			}
-			IEnumerable<Pawn> enumerable = from x in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners
-			where x.relations.everSeenByPlayer
-			select x;
+			IEnumerable<Pawn> enumerable = PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners.Where((Pawn x) => x.relations.everSeenByPlayer);
 			float num = 0f;
 			Pawn pawn2 = null;
-			foreach (Pawn pawn3 in enumerable)
+			foreach (Pawn item in enumerable)
 			{
-				PawnRelationDef mostImportantRelation = pawn.GetMostImportantRelation(pawn3);
+				PawnRelationDef mostImportantRelation = pawn.GetMostImportantRelation(item);
 				if (mostImportantRelation != null && (pawn2 == null || mostImportantRelation.importance > num))
 				{
 					num = mostImportantRelation.importance;
-					pawn2 = pawn3;
+					pawn2 = item;
 				}
 			}
 			return pawn2;
 		}
 
-		
 		public static float MaxPossibleBioAgeAt(float myBiologicalAge, float myChronologicalAge, float atChronologicalAge)
 		{
 			float num = Mathf.Min(myBiologicalAge, myChronologicalAge - atChronologicalAge);
@@ -228,7 +205,6 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public static float MinPossibleBioAgeAt(float myBiologicalAge, float atChronologicalAge)
 		{
 			return Mathf.Max(myBiologicalAge - atChronologicalAge, 0f);

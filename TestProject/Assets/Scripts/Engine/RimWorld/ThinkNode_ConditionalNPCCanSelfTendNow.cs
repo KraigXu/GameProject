@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,13 +5,11 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class ThinkNode_ConditionalNPCCanSelfTendNow : ThinkNode_Conditional
 	{
-		
 		protected override bool Satisfied(Pawn pawn)
 		{
-			if (!pawn.health.hediffSet.hediffs.Any<Hediff>())
+			if (!pawn.health.hediffSet.hediffs.Any())
 			{
 				return false;
 			}
@@ -57,7 +54,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (!pawn.health.HasHediffsNeedingTend(false))
+			if (!pawn.health.HasHediffsNeedingTend())
 			{
 				return false;
 			}
@@ -76,7 +73,7 @@ namespace RimWorld
 						}
 					}
 					return foundActiveThreat;
-				}, 5, RegionType.Set_Passable);
+				}, 5);
 				if (foundActiveThreat)
 				{
 					return false;

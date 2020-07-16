@@ -1,42 +1,30 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PortraitCameraManager
 	{
-		
-		
-		public static Camera PortraitCamera
+		private static Camera portraitCameraInt;
+
+		private static PortraitRenderer portraitRendererInt;
+
+		public static Camera PortraitCamera => portraitCameraInt;
+
+		public static PortraitRenderer PortraitRenderer => portraitRendererInt;
+
+		static PortraitCameraManager()
 		{
-			get
-			{
-				return PortraitCameraManager.portraitCameraInt;
-			}
+			portraitCameraInt = CreatePortraitCamera();
+			portraitRendererInt = portraitCameraInt.GetComponent<PortraitRenderer>();
 		}
 
-		
-		
-		public static PortraitRenderer PortraitRenderer
-		{
-			get
-			{
-				return PortraitCameraManager.portraitRendererInt;
-			}
-		}
-
-		
 		private static Camera CreatePortraitCamera()
 		{
-			GameObject gameObject = new GameObject("PortraitCamera", new Type[]
-			{
-				typeof(Camera)
-			});
-			gameObject.SetActive(false);
+			GameObject gameObject = new GameObject("PortraitCamera", typeof(Camera));
+			gameObject.SetActive(value: false);
 			gameObject.AddComponent<PortraitRenderer>();
-			UnityEngine.Object.DontDestroyOnLoad(gameObject);
+			Object.DontDestroyOnLoad(gameObject);
 			Camera component = gameObject.GetComponent<Camera>();
 			component.transform.position = new Vector3(0f, 15f, 0f);
 			component.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
@@ -52,11 +40,5 @@ namespace RimWorld
 			component.farClipPlane = camera.farClipPlane;
 			return component;
 		}
-
-		
-		private static Camera portraitCameraInt = PortraitCameraManager.CreatePortraitCamera();
-
-		
-		private static PortraitRenderer portraitRendererInt = PortraitCameraManager.portraitCameraInt.GetComponent<PortraitRenderer>();
 	}
 }

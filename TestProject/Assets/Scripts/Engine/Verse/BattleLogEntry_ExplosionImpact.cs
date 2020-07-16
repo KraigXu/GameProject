@@ -1,232 +1,220 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.Grammar;
 
 namespace Verse
 {
-	
 	public class BattleLogEntry_ExplosionImpact : LogEntry_DamageResult
 	{
-		
-		
+		private Pawn initiatorPawn;
+
+		private ThingDef initiatorThing;
+
+		private Pawn recipientPawn;
+
+		private ThingDef recipientThing;
+
+		private ThingDef weaponDef;
+
+		private ThingDef projectileDef;
+
+		private DamageDef damageDef;
+
 		private string InitiatorName
 		{
 			get
 			{
-				if (this.initiatorPawn != null)
+				if (initiatorPawn != null)
 				{
-					return this.initiatorPawn.LabelShort;
+					return initiatorPawn.LabelShort;
 				}
-				if (this.initiatorThing != null)
+				if (initiatorThing != null)
 				{
-					return this.initiatorThing.defName;
+					return initiatorThing.defName;
 				}
 				return "null";
 			}
 		}
 
-		
-		
 		private string RecipientName
 		{
 			get
 			{
-				if (this.recipientPawn != null)
+				if (recipientPawn != null)
 				{
-					return this.recipientPawn.LabelShort;
+					return recipientPawn.LabelShort;
 				}
-				if (this.recipientThing != null)
+				if (recipientThing != null)
 				{
-					return this.recipientThing.defName;
+					return recipientThing.defName;
 				}
 				return "null";
 			}
 		}
 
-		
-		public BattleLogEntry_ExplosionImpact() : base(null)
+		public BattleLogEntry_ExplosionImpact()
 		{
 		}
 
-		
-		public BattleLogEntry_ExplosionImpact(Thing initiator, Thing recipient, ThingDef weaponDef, ThingDef projectileDef, DamageDef damageDef) : base(null)
+		public BattleLogEntry_ExplosionImpact(Thing initiator, Thing recipient, ThingDef weaponDef, ThingDef projectileDef, DamageDef damageDef)
 		{
 			if (initiator is Pawn)
 			{
-				this.initiatorPawn = (initiator as Pawn);
+				initiatorPawn = (initiator as Pawn);
 			}
 			else if (initiator != null)
 			{
-				this.initiatorThing = initiator.def;
+				initiatorThing = initiator.def;
 			}
 			if (recipient is Pawn)
 			{
-				this.recipientPawn = (recipient as Pawn);
+				recipientPawn = (recipient as Pawn);
 			}
 			else if (recipient != null)
 			{
-				this.recipientThing = recipient.def;
+				recipientThing = recipient.def;
 			}
 			this.weaponDef = weaponDef;
 			this.projectileDef = projectileDef;
 			this.damageDef = damageDef;
 		}
 
-		
 		public override bool Concerns(Thing t)
 		{
-			return t == this.initiatorPawn || t == this.recipientPawn;
+			if (t != initiatorPawn)
+			{
+				return t == recipientPawn;
+			}
+			return true;
 		}
 
-		
 		public override IEnumerable<Thing> GetConcerns()
 		{
-			if (this.initiatorPawn != null)
+			if (initiatorPawn != null)
 			{
-				yield return this.initiatorPawn;
+				yield return initiatorPawn;
 			}
-			if (this.recipientPawn != null)
+			if (recipientPawn != null)
 			{
-				yield return this.recipientPawn;
+				yield return recipientPawn;
 			}
-			yield break;
 		}
 
-		
 		public override bool CanBeClickedFromPOV(Thing pov)
 		{
-			return (pov == this.initiatorPawn && this.recipientPawn != null && CameraJumper.CanJump(this.recipientPawn)) || (pov == this.recipientPawn && CameraJumper.CanJump(this.initiatorPawn));
+			if (pov != initiatorPawn || recipientPawn == null || !CameraJumper.CanJump(recipientPawn))
+			{
+				if (pov == recipientPawn)
+				{
+					return CameraJumper.CanJump(initiatorPawn);
+				}
+				return false;
+			}
+			return true;
 		}
 
-		
 		public override void ClickedFromPOV(Thing pov)
 		{
-			if (this.recipientPawn == null)
+			if (recipientPawn == null)
 			{
 				return;
 			}
-			if (pov == this.initiatorPawn)
+			if (pov == initiatorPawn)
 			{
-				CameraJumper.TryJumpAndSelect(this.recipientPawn);
+				CameraJumper.TryJumpAndSelect(recipientPawn);
 				return;
 			}
-			if (pov == this.recipientPawn)
+			if (pov == recipientPawn)
 			{
-				CameraJumper.TryJumpAndSelect(this.initiatorPawn);
+				CameraJumper.TryJumpAndSelect(initiatorPawn);
 				return;
 			}
 			throw new NotImplementedException();
 		}
 
-		
 		public override Texture2D IconFromPOV(Thing pov)
 		{
-			if (this.damagedParts.NullOrEmpty<BodyPartRecord>())
+			if (damagedParts.NullOrEmpty())
 			{
 				return null;
 			}
-			if (pov == null || pov == this.recipientPawn)
+			if (pov == null || pov == recipientPawn)
 			{
 				return LogEntry.Blood;
 			}
-			if (pov == this.initiatorPawn)
+			if (pov == initiatorPawn)
 			{
 				return LogEntry.BloodTarget;
 			}
 			return null;
 		}
 
-		
 		protected override BodyDef DamagedBody()
 		{
-			if (this.recipientPawn == null)
+			if (recipientPawn == null)
 			{
 				return null;
 			}
-			return this.recipientPawn.RaceProps.body;
+			return recipientPawn.RaceProps.body;
 		}
 
-		
 		protected override GrammarRequest GenerateGrammarRequest()
 		{
 			GrammarRequest result = base.GenerateGrammarRequest();
 			result.Includes.Add(RulePackDefOf.Combat_ExplosionImpact);
-			if (this.initiatorPawn != null)
+			if (initiatorPawn != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForPawn("INITIATOR", this.initiatorPawn, result.Constants, true, true));
+				result.Rules.AddRange(GrammarUtility.RulesForPawn("INITIATOR", initiatorPawn, result.Constants));
 			}
-			else if (this.initiatorThing != null)
+			else if (initiatorThing != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("INITIATOR", this.initiatorThing));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("INITIATOR", initiatorThing));
 			}
 			else
 			{
 				result.Constants["INITIATOR_missing"] = "True";
 			}
-			if (this.recipientPawn != null)
+			if (recipientPawn != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForPawn("RECIPIENT", this.recipientPawn, result.Constants, true, true));
+				result.Rules.AddRange(GrammarUtility.RulesForPawn("RECIPIENT", recipientPawn, result.Constants));
 			}
-			else if (this.recipientThing != null)
+			else if (recipientThing != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("RECIPIENT", this.recipientThing));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("RECIPIENT", recipientThing));
 			}
 			else
 			{
 				result.Constants["RECIPIENT_missing"] = "True";
 			}
-			result.Rules.AddRange(PlayLogEntryUtility.RulesForOptionalWeapon("WEAPON", this.weaponDef, this.projectileDef));
-			if (this.projectileDef != null)
+			result.Rules.AddRange(PlayLogEntryUtility.RulesForOptionalWeapon("WEAPON", weaponDef, projectileDef));
+			if (projectileDef != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("PROJECTILE", this.projectileDef));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("PROJECTILE", projectileDef));
 			}
-			if (this.damageDef != null && this.damageDef.combatLogRules != null)
+			if (damageDef != null && damageDef.combatLogRules != null)
 			{
-				result.Includes.Add(this.damageDef.combatLogRules);
+				result.Includes.Add(damageDef.combatLogRules);
 			}
 			return result;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Pawn>(ref this.initiatorPawn, "initiatorPawn", true);
-			Scribe_Defs.Look<ThingDef>(ref this.initiatorThing, "initiatorThing");
-			Scribe_References.Look<Pawn>(ref this.recipientPawn, "recipientPawn", true);
-			Scribe_Defs.Look<ThingDef>(ref this.recipientThing, "recipientThing");
-			Scribe_Defs.Look<ThingDef>(ref this.weaponDef, "weaponDef");
-			Scribe_Defs.Look<ThingDef>(ref this.projectileDef, "projectileDef");
-			Scribe_Defs.Look<DamageDef>(ref this.damageDef, "damageDef");
+			Scribe_References.Look(ref initiatorPawn, "initiatorPawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref initiatorThing, "initiatorThing");
+			Scribe_References.Look(ref recipientPawn, "recipientPawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref recipientThing, "recipientThing");
+			Scribe_Defs.Look(ref weaponDef, "weaponDef");
+			Scribe_Defs.Look(ref projectileDef, "projectileDef");
+			Scribe_Defs.Look(ref damageDef, "damageDef");
 		}
 
-		
 		public override string ToString()
 		{
-			return "BattleLogEntry_ExplosionImpact: " + this.InitiatorName + "->" + this.RecipientName;
+			return "BattleLogEntry_ExplosionImpact: " + InitiatorName + "->" + RecipientName;
 		}
-
-		
-		private Pawn initiatorPawn;
-
-		
-		private ThingDef initiatorThing;
-
-		
-		private Pawn recipientPawn;
-
-		
-		private ThingDef recipientThing;
-
-		
-		private ThingDef weaponDef;
-
-		
-		private ThingDef projectileDef;
-
-		
-		private DamageDef damageDef;
 	}
 }

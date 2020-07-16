@@ -1,124 +1,76 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Area_Allowed : Area
 	{
-		
-		
-		public override string Label
-		{
-			get
-			{
-				return this.labelInt;
-			}
-		}
+		private string labelInt;
 
-		
-		
-		public override Color Color
-		{
-			get
-			{
-				return this.colorInt;
-			}
-		}
+		private Color colorInt = Color.red;
 
-		
-		
-		public override bool Mutable
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override string Label => labelInt;
 
-		
-		
-		public override int ListPriority
-		{
-			get
-			{
-				return 500;
-			}
-		}
+		public override Color Color => colorInt;
 
-		
+		public override bool Mutable => true;
+
+		public override int ListPriority => 500;
+
 		public Area_Allowed()
 		{
 		}
 
-		
-		public Area_Allowed(AreaManager areaManager, string label = null) : base(areaManager)
+		public Area_Allowed(AreaManager areaManager, string label = null)
+			: base(areaManager)
 		{
-			this.areaManager = areaManager;
+			base.areaManager = areaManager;
 			if (!label.NullOrEmpty())
 			{
-				this.labelInt = label;
+				labelInt = label;
 			}
 			else
 			{
 				int num = 1;
-				for (;;)
+				while (true)
 				{
-					this.labelInt = "AreaDefaultLabel".Translate(num);
-					if (areaManager.GetLabeled(this.labelInt) == null)
+					labelInt = "AreaDefaultLabel".Translate(num);
+					if (areaManager.GetLabeled(labelInt) == null)
 					{
 						break;
 					}
 					num++;
 				}
 			}
-			this.colorInt = new Color(Rand.Value, Rand.Value, Rand.Value);
-			this.colorInt = Color.Lerp(this.colorInt, Color.gray, 0.5f);
+			colorInt = new Color(Rand.Value, Rand.Value, Rand.Value);
+			colorInt = Color.Lerp(colorInt, Color.gray, 0.5f);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.labelInt, "label", null, false);
-			Scribe_Values.Look<Color>(ref this.colorInt, "color", default(Color), false);
+			Scribe_Values.Look(ref labelInt, "label");
+			Scribe_Values.Look(ref colorInt, "color");
 		}
 
-		
 		public override bool AssignableAsAllowed()
 		{
 			return true;
 		}
 
-		
 		public override void SetLabel(string label)
 		{
-			this.labelInt = label;
+			labelInt = label;
 		}
 
-		
 		public override string GetUniqueLoadID()
 		{
-			return string.Concat(new object[]
-			{
-				"Area_",
-				this.ID,
-				"_Named_",
-				this.labelInt
-			});
+			return "Area_" + ID + "_Named_" + labelInt;
 		}
 
-		
 		public override string ToString()
 		{
-			return this.labelInt;
+			return labelInt;
 		}
-
-		
-		private string labelInt;
-
-		
-		private Color colorInt = Color.red;
 	}
 }

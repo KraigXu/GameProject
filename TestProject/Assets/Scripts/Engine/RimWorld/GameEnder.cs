@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public sealed class GameEnder : IExposable
 	{
-		
+		public bool gameEnding;
+
+		private int ticksToGameOver = -1;
+
+		private const int GameEndCountdownDuration = 400;
+
 		public void ExposeData()
 		{
-			Scribe_Values.Look<bool>(ref this.gameEnding, "gameEnding", false, false);
-			Scribe_Values.Look<int>(ref this.ticksToGameOver, "ticksToGameOver", -1, false);
+			Scribe_Values.Look(ref gameEnding, "gameEnding", defaultValue: false);
+			Scribe_Values.Look(ref ticksToGameOver, "ticksToGameOver", -1);
 		}
 
-		
 		public void CheckOrUpdateGameOver()
 		{
 			if (Find.TickManager.TicksGame < 300)
@@ -24,7 +26,7 @@ namespace RimWorld
 			}
 			if (ShipCountdown.CountingDown)
 			{
-				this.gameEnding = false;
+				gameEnding = false;
 				return;
 			}
 			List<Map> maps = Find.Maps;
@@ -32,7 +34,7 @@ namespace RimWorld
 			{
 				if (maps[i].mapPawns.FreeColonistsSpawnedOrInPlayerEjectablePodsCount >= 1)
 				{
-					this.gameEnding = false;
+					gameEnding = false;
 					return;
 				}
 			}
@@ -46,7 +48,7 @@ namespace RimWorld
 						Pawn pawn = allPawnsSpawned[k].carryTracker.CarriedThing as Pawn;
 						if (pawn != null && pawn.IsFreeColonist)
 						{
-							this.gameEnding = false;
+							gameEnding = false;
 							return;
 						}
 					}
@@ -55,9 +57,9 @@ namespace RimWorld
 			List<Caravan> caravans = Find.WorldObjects.Caravans;
 			for (int l = 0; l < caravans.Count; l++)
 			{
-				if (this.IsPlayerControlledWithFreeColonist(caravans[l]))
+				if (IsPlayerControlledWithFreeColonist(caravans[l]))
 				{
-					this.gameEnding = false;
+					gameEnding = false;
 					return;
 				}
 			}
@@ -66,36 +68,29 @@ namespace RimWorld
 			{
 				if (travelingTransportPods[m].PodsHaveAnyFreeColonist)
 				{
-					this.gameEnding = false;
+					gameEnding = false;
 					return;
 				}
 			}
-			if (QuestUtility.TotalBorrowedColonistCount() > 0)
+			if (QuestUtility.TotalBorrowedColonistCount() <= 0 && !gameEnding)
 			{
-				return;
+				gameEnding = true;
+				ticksToGameOver = 400;
 			}
-			if (this.gameEnding)
-			{
-				return;
-			}
-			this.gameEnding = true;
-			this.ticksToGameOver = 400;
 		}
 
-		
 		public void GameEndTick()
 		{
-			if (this.gameEnding)
+			if (gameEnding)
 			{
-				this.ticksToGameOver--;
-				if (this.ticksToGameOver == 0)
+				ticksToGameOver--;
+				if (ticksToGameOver == 0)
 				{
-					GenGameEnd.EndGameDialogMessage("GameOverEveryoneDead".Translate(), true);
+					GenGameEnd.EndGameDialogMessage("GameOverEveryoneDead".Translate());
 				}
 			}
 		}
 
-		
 		private bool IsPlayerControlledWithFreeColonist(Caravan caravan)
 		{
 			if (!caravan.IsPlayerControlled)
@@ -113,14 +108,5 @@ namespace RimWorld
 			}
 			return false;
 		}
-
-		
-		public bool gameEnding;
-
-		
-		private int ticksToGameOver = -1;
-
-		
-		private const int GameEndCountdownDuration = 400;
 	}
 }

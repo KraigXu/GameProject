@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public static class ThingRequestGroupUtility
 	{
-		
 		public static bool StoreInRegion(this ThingRequestGroup group)
 		{
 			switch (group)
@@ -56,9 +54,9 @@ namespace Verse
 				return true;
 			case ThingRequestGroup.Fire:
 				return true;
-			case ThingRequestGroup.Bed:
-				return true;
 			case ThingRequestGroup.Plant:
+				return true;
+			case ThingRequestGroup.Bed:
 				return true;
 			case ThingRequestGroup.Construction:
 				return false;

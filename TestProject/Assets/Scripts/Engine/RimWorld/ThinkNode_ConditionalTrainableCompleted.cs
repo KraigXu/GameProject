@@ -1,27 +1,26 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class ThinkNode_ConditionalTrainableCompleted : ThinkNode_Conditional
 	{
-		
+		private TrainableDef trainable;
+
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
-			ThinkNode_ConditionalTrainableCompleted thinkNode_ConditionalTrainableCompleted = (ThinkNode_ConditionalTrainableCompleted)base.DeepCopy(resolve);
-			thinkNode_ConditionalTrainableCompleted.trainable = this.trainable;
-			return thinkNode_ConditionalTrainableCompleted;
+			ThinkNode_ConditionalTrainableCompleted obj = (ThinkNode_ConditionalTrainableCompleted)base.DeepCopy(resolve);
+			obj.trainable = trainable;
+			return obj;
 		}
 
-		
 		protected override bool Satisfied(Pawn pawn)
 		{
-			return pawn.training != null && pawn.training.HasLearned(this.trainable);
+			if (pawn.training != null)
+			{
+				return pawn.training.HasLearned(trainable);
+			}
+			return false;
 		}
-
-		
-		private TrainableDef trainable;
 	}
 }

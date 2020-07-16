@@ -1,24 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_DeepDrillInfestation : StorytellerComp
 	{
-		
-		
-		protected StorytellerCompProperties_DeepDrillInfestation Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_DeepDrillInfestation)this.props;
-			}
-		}
+		private static List<Thing> tmpDrills = new List<Thing>();
 
-		
-		
+		protected StorytellerCompProperties_DeepDrillInfestation Props => (StorytellerCompProperties_DeepDrillInfestation)props;
+
 		private float DeepDrillInfestationMTBDaysPerDrill
 		{
 			get
@@ -28,43 +18,35 @@ namespace RimWorld
 				{
 					return -1f;
 				}
-				return this.Props.baseMtbDaysPerDrill / difficulty.deepDrillInfestationChanceFactor;
+				return Props.baseMtbDaysPerDrill / difficulty.deepDrillInfestationChanceFactor;
 			}
 		}
 
-		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			Map map = (Map)target;
-			StorytellerComp_DeepDrillInfestation.tmpDrills.Clear();
-			DeepDrillInfestationIncidentUtility.GetUsableDeepDrills(map, StorytellerComp_DeepDrillInfestation.tmpDrills);
-			if (!StorytellerComp_DeepDrillInfestation.tmpDrills.Any<Thing>())
+			tmpDrills.Clear();
+			DeepDrillInfestationIncidentUtility.GetUsableDeepDrills(map, tmpDrills);
+			if (!tmpDrills.Any())
 			{
 				yield break;
 			}
-			float mtb = this.DeepDrillInfestationMTBDaysPerDrill;
+			float mtb = DeepDrillInfestationMTBDaysPerDrill;
 			if (mtb < 0f)
 			{
 				yield break;
 			}
-			int num;
-			for (int i = 0; i < StorytellerComp_DeepDrillInfestation.tmpDrills.Count; i = num + 1)
+			for (int i = 0; i < tmpDrills.Count; i++)
 			{
 				if (Rand.MTBEventOccurs(mtb, 60000f, 1000f))
 				{
-					IncidentParms parms = this.GenerateParms(IncidentCategoryDefOf.DeepDrillInfestation, target);
-					IncidentDef def;
-					if (base.UsableIncidentsInCategory(IncidentCategoryDefOf.DeepDrillInfestation, parms).TryRandomElement(out def))
+					IncidentParms parms = GenerateParms(IncidentCategoryDefOf.DeepDrillInfestation, target);
+					if (UsableIncidentsInCategory(IncidentCategoryDefOf.DeepDrillInfestation, parms).TryRandomElement(out IncidentDef result))
 					{
-						yield return new FiringIncident(def, this, parms);
+						yield return new FiringIncident(result, this, parms);
 					}
 				}
-				num = i;
 			}
-			yield break;
 		}
-
-		
-		private static List<Thing> tmpDrills = new List<Thing>();
 	}
 }

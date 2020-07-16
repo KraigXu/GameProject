@@ -1,44 +1,40 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class FocusStrengthOffset_Curve : FocusStrengthOffset
 	{
-		
+		public SimpleCurve curve;
+
+		protected abstract string ExplanationKey
+		{
+			get;
+		}
+
 		protected abstract float SourceValue(Thing parent);
 
-		
-		
-		protected abstract string ExplanationKey { get; }
-
-		
 		public override float GetOffset(Thing parent, Pawn user = null)
 		{
-			return Mathf.Round(this.curve.Evaluate(this.SourceValue(parent)) * 100f) / 100f;
+			return Mathf.Round(curve.Evaluate(SourceValue(parent)) * 100f) / 100f;
 		}
 
-		
 		public override string GetExplanation(Thing parent)
 		{
-			return this.ExplanationKey.Translate() + ": " + this.GetOffset(parent, null).ToStringWithSign("0%");
+			return ExplanationKey.Translate() + ": " + GetOffset(parent).ToStringWithSign("0%");
 		}
 
-		
 		public override string GetExplanationAbstract(ThingDef def = null)
 		{
-			return this.ExplanationKey.Translate() + ": " + (this.curve[0].y.ToStringWithSign("0%") + " " + "RangeTo".Translate() + " " + this.curve[this.curve.PointsCount - 1].y.ToStringWithSign("0%"));
+			return ExplanationKey.Translate() + ": " + (curve[0].y.ToStringWithSign("0%") + " " + "RangeTo".Translate() + " " + curve[curve.PointsCount - 1].y.ToStringWithSign("0%"));
 		}
 
-		
 		public override float MaxOffset(bool forAbstract = false)
 		{
 			float num = 0f;
-			for (int i = 0; i < this.curve.PointsCount; i++)
+			for (int i = 0; i < curve.PointsCount; i++)
 			{
-				float y = this.curve[i].y;
+				float y = curve[i].y;
 				if (Mathf.Abs(y) > Mathf.Abs(num))
 				{
 					num = y;
@@ -46,8 +42,5 @@ namespace RimWorld
 			}
 			return num;
 		}
-
-		
-		public SimpleCurve curve;
 	}
 }

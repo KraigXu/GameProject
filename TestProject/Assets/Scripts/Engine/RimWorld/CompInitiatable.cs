@@ -1,77 +1,66 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompInitiatable : ThingComp
 	{
-		
-		
+		private int spawnedTick = -1;
+
+		public int initiationDelayTicksOverride;
+
 		public bool Initiated
 		{
 			get
 			{
-				return this.Delay <= 0 || (this.spawnedTick >= 0 && Find.TickManager.TicksGame >= this.spawnedTick + this.Delay);
+				if (Delay > 0)
+				{
+					if (spawnedTick >= 0)
+					{
+						return Find.TickManager.TicksGame >= spawnedTick + Delay;
+					}
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		private int Delay
 		{
 			get
 			{
-				if (this.initiationDelayTicksOverride <= 0)
+				if (initiationDelayTicksOverride <= 0)
 				{
-					return this.Props.initiationDelayTicks;
+					return Props.initiationDelayTicks;
 				}
-				return this.initiationDelayTicksOverride;
+				return initiationDelayTicksOverride;
 			}
 		}
 
-		
-		
-		private CompProperties_Initiatable Props
-		{
-			get
-			{
-				return (CompProperties_Initiatable)this.props;
-			}
-		}
+		private CompProperties_Initiatable Props => (CompProperties_Initiatable)props;
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 			if (!respawningAfterLoad)
 			{
-				this.spawnedTick = Find.TickManager.TicksGame;
+				spawnedTick = Find.TickManager.TicksGame;
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Initiated)
+			if (!Initiated)
 			{
-				return "InitiatesIn".Translate() + ": " + (this.spawnedTick + this.Delay - Find.TickManager.TicksGame).ToStringTicksToPeriod(true, false, true, true);
+				return "InitiatesIn".Translate() + ": " + (spawnedTick + Delay - Find.TickManager.TicksGame).ToStringTicksToPeriod();
 			}
 			return base.CompInspectStringExtra();
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.spawnedTick, "spawnedTick", -1, false);
-			Scribe_Values.Look<int>(ref this.initiationDelayTicksOverride, "initiationDelayTicksOverride", 0, false);
+			Scribe_Values.Look(ref spawnedTick, "spawnedTick", -1);
+			Scribe_Values.Look(ref initiationDelayTicksOverride, "initiationDelayTicksOverride", 0);
 		}
-
-		
-		private int spawnedTick = -1;
-
-		
-		public int initiationDelayTicksOverride;
 	}
 }

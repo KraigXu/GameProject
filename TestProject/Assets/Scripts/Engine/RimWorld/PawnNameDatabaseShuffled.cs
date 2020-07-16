@@ -1,44 +1,40 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class PawnNameDatabaseShuffled
 	{
-		
+		private static Dictionary<PawnNameCategory, NameBank> banks;
+
 		static PawnNameDatabaseShuffled()
 		{
-			foreach (object obj in Enum.GetValues(typeof(PawnNameCategory)))
+			banks = new Dictionary<PawnNameCategory, NameBank>();
+			foreach (PawnNameCategory value in Enum.GetValues(typeof(PawnNameCategory)))
 			{
-				PawnNameCategory pawnNameCategory = (PawnNameCategory)obj;
-				if (pawnNameCategory != PawnNameCategory.NoName)
+				if (value != 0)
 				{
-					PawnNameDatabaseShuffled.banks.Add(pawnNameCategory, new NameBank(pawnNameCategory));
+					banks.Add(value, new NameBank(value));
 				}
 			}
-			NameBank nameBank = PawnNameDatabaseShuffled.BankOf(PawnNameCategory.HumanStandard);
+			NameBank nameBank = BankOf(PawnNameCategory.HumanStandard);
 			nameBank.AddNamesFromFile(PawnNameSlot.First, Gender.Male, "First_Male");
 			nameBank.AddNamesFromFile(PawnNameSlot.First, Gender.Female, "First_Female");
 			nameBank.AddNamesFromFile(PawnNameSlot.Nick, Gender.Male, "Nick_Male");
 			nameBank.AddNamesFromFile(PawnNameSlot.Nick, Gender.Female, "Nick_Female");
 			nameBank.AddNamesFromFile(PawnNameSlot.Nick, Gender.None, "Nick_Unisex");
 			nameBank.AddNamesFromFile(PawnNameSlot.Last, Gender.None, "Last");
-			foreach (NameBank nameBank2 in PawnNameDatabaseShuffled.banks.Values)
+			foreach (NameBank value2 in banks.Values)
 			{
-				nameBank2.ErrorCheck();
+				value2.ErrorCheck();
 			}
 		}
 
-		
 		public static NameBank BankOf(PawnNameCategory category)
 		{
-			return PawnNameDatabaseShuffled.banks[category];
+			return banks[category];
 		}
-
-		
-		private static Dictionary<PawnNameCategory, NameBank> banks = new Dictionary<PawnNameCategory, NameBank>();
 	}
 }

@@ -1,115 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_RandomRaid : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public MapParent mapParent;
+
+		public FloatRange pointsRange;
+
+		public Faction faction;
+
+		public bool useCurrentThreatPoints;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.mapParent != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.mapParent;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (mapParent != null)
+				{
+					yield return mapParent;
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
+				foreach (Faction involvedFaction in base.InvolvedFactions)
+				{
+					yield return involvedFaction;
+				}
+				if (faction != null)
 				{
 					yield return faction;
 				}
-				IEnumerator<Faction> enumerator = null;
-				if (this.faction != null)
-				{
-					yield return this.faction;
-				}
-				yield break;
-				yield break;
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.mapParent != null && this.mapParent.HasMap)
+			if (signal.tag == inSignal && mapParent != null && mapParent.HasMap)
 			{
 				IncidentParms incidentParms = new IncidentParms();
 				incidentParms.forced = true;
-				incidentParms.quest = this.quest;
-				incidentParms.target = this.mapParent.Map;
-				incidentParms.points = (this.useCurrentThreatPoints ? StorytellerUtility.DefaultThreatPointsNow(this.mapParent.Map) : this.pointsRange.RandomInRange);
-				incidentParms.faction = this.faction;
-				IncidentDef incidentDef;
-				if (this.faction == null || this.faction.HostileTo(Faction.OfPlayer))
-				{
-					incidentDef = IncidentDefOf.RaidEnemy;
-				}
-				else
-				{
-					incidentDef = IncidentDefOf.RaidFriendly;
-				}
-				if (incidentDef.Worker.CanFireNow(incidentParms, true))
+				incidentParms.quest = quest;
+				incidentParms.target = mapParent.Map;
+				incidentParms.points = (useCurrentThreatPoints ? StorytellerUtility.DefaultThreatPointsNow(mapParent.Map) : pointsRange.RandomInRange);
+				incidentParms.faction = faction;
+				IncidentDef incidentDef = (faction != null && !faction.HostileTo(Faction.OfPlayer)) ? IncidentDefOf.RaidFriendly : IncidentDefOf.RaidEnemy;
+				if (incidentDef.Worker.CanFireNow(incidentParms, forced: true))
 				{
 					incidentDef.Worker.TryExecute(incidentParms);
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Values.Look<FloatRange>(ref this.pointsRange, "pointsRange", default(FloatRange), false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-			Scribe_Values.Look<bool>(ref this.useCurrentThreatPoints, "useCurrentThreatPoints", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Values.Look(ref pointsRange, "pointsRange");
+			Scribe_References.Look(ref faction, "faction");
+			Scribe_Values.Look(ref useCurrentThreatPoints, "useCurrentThreatPoints", defaultValue: false);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				this.mapParent = Find.RandomPlayerHomeMap.Parent;
-				this.pointsRange = new FloatRange(500f, 1500f);
+				mapParent = Find.RandomPlayerHomeMap.Parent;
+				pointsRange = new FloatRange(500f, 1500f);
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public MapParent mapParent;
-
-		
-		public FloatRange pointsRange;
-
-		
-		public Faction faction;
-
-		
-		public bool useCurrentThreatPoints;
 	}
 }

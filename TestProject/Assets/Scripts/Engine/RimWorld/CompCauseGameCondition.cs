@@ -1,169 +1,146 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompCauseGameCondition : ThingComp
 	{
-		
-		
-		public CompProperties_CausesGameCondition Props
-		{
-			get
-			{
-				return (CompProperties_CausesGameCondition)this.props;
-			}
-		}
+		protected CompInitiatable initiatableComp;
 
-		
-		
-		public GameConditionDef ConditionDef
-		{
-			get
-			{
-				return this.Props.conditionDef;
-			}
-		}
+		protected Site siteLink;
 
-		
-		
-		public IEnumerable<GameCondition> CausedConditions
-		{
-			get
-			{
-				return this.causedConditions.Values;
-			}
-		}
+		private Dictionary<Map, GameCondition> causedConditions = new Dictionary<Map, GameCondition>();
 
-		
-		
+		private static List<Map> tmpDeadConditionMaps = new List<Map>();
+
+		public CompProperties_CausesGameCondition Props => (CompProperties_CausesGameCondition)props;
+
+		public GameConditionDef ConditionDef => Props.conditionDef;
+
+		public IEnumerable<GameCondition> CausedConditions => causedConditions.Values;
+
 		public bool Active
 		{
 			get
 			{
-				return this.initiatableComp == null || this.initiatableComp.Initiated;
+				if (initiatableComp != null)
+				{
+					return initiatableComp.Initiated;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public int MyTile
 		{
 			get
 			{
-				if (this.siteLink != null)
+				if (siteLink != null)
 				{
-					return this.siteLink.Tile;
+					return siteLink.Tile;
 				}
-				if (this.parent.SpawnedOrAnyParentSpawned)
+				if (parent.SpawnedOrAnyParentSpawned)
 				{
-					return this.parent.Tile;
+					return parent.Tile;
 				}
 				return -1;
 			}
 		}
 
-		
 		public void LinkWithSite(Site site)
 		{
-			this.siteLink = site;
+			siteLink = site;
 		}
 
-		
 		public override void PostPostMake()
 		{
 			base.PostPostMake();
-			this.CacheComps();
+			CacheComps();
 		}
 
-		
 		private void CacheComps()
 		{
-			this.initiatableComp = this.parent.GetComp<CompInitiatable>();
+			initiatableComp = parent.GetComp<CompInitiatable>();
 		}
 
-		
 		public override void PostExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
-				this.causedConditions.RemoveAll((KeyValuePair<Map, GameCondition> x) => !Find.Maps.Contains(x.Key));
+				causedConditions.RemoveAll((KeyValuePair<Map, GameCondition> x) => !Find.Maps.Contains(x.Key));
 			}
-			Scribe_References.Look<Site>(ref this.siteLink, "siteLink", false);
-			Scribe_Collections.Look<Map, GameCondition>(ref this.causedConditions, "causedConditions", LookMode.Reference, LookMode.Reference);
+			Scribe_References.Look(ref siteLink, "siteLink");
+			Scribe_Collections.Look(ref causedConditions, "causedConditions", LookMode.Reference, LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs)
 			{
-				this.causedConditions.RemoveAll((KeyValuePair<Map, GameCondition> x) => x.Value == null);
-				foreach (KeyValuePair<Map, GameCondition> keyValuePair in this.causedConditions)
+				causedConditions.RemoveAll((KeyValuePair<Map, GameCondition> x) => x.Value == null);
+				foreach (KeyValuePair<Map, GameCondition> causedCondition in causedConditions)
 				{
-					keyValuePair.Value.conditionCauser = this.parent;
+					causedCondition.Value.conditionCauser = parent;
 				}
 			}
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.CacheComps();
+				CacheComps();
 			}
 		}
 
-		
 		public bool InAoE(int tile)
 		{
-			return this.MyTile != -1 && this.Active && Find.WorldGrid.TraversalDistanceBetween(this.MyTile, tile, true, this.Props.worldRange + 1) <= this.Props.worldRange;
+			if (MyTile == -1 || !Active)
+			{
+				return false;
+			}
+			return Find.WorldGrid.TraversalDistanceBetween(MyTile, tile, passImpassable: true, Props.worldRange + 1) <= Props.worldRange;
 		}
 
-		
 		protected GameCondition GetConditionInstance(Map map)
 		{
-			GameCondition activeCondition;
-			if (!this.causedConditions.TryGetValue(map, out activeCondition) && this.Props.preventConditionStacking)
+			if (!causedConditions.TryGetValue(map, out GameCondition value) && Props.preventConditionStacking)
 			{
-				activeCondition = map.GameConditionManager.GetActiveCondition(this.Props.conditionDef);
-				if (activeCondition != null)
+				value = map.GameConditionManager.GetActiveCondition(Props.conditionDef);
+				if (value != null)
 				{
-					this.causedConditions.Add(map, activeCondition);
-					this.SetupCondition(activeCondition, map);
+					causedConditions.Add(map, value);
+					SetupCondition(value, map);
 				}
 			}
-			return activeCondition;
+			return value;
 		}
 
-		
 		public override void CompTick()
 		{
-			if (this.Active)
+			if (Active)
 			{
 				foreach (Map map in Find.Maps)
 				{
-					if (this.InAoE(map.Tile))
+					if (InAoE(map.Tile))
 					{
-						this.EnforceConditionOn(map);
+						EnforceConditionOn(map);
 					}
 				}
 			}
-			CompCauseGameCondition.tmpDeadConditionMaps.Clear();
-			foreach (KeyValuePair<Map, GameCondition> keyValuePair in this.causedConditions)
+			tmpDeadConditionMaps.Clear();
+			foreach (KeyValuePair<Map, GameCondition> causedCondition in causedConditions)
 			{
-				if (keyValuePair.Value.Expired || !keyValuePair.Key.GameConditionManager.ConditionIsActive(keyValuePair.Value.def))
+				if (causedCondition.Value.Expired || !causedCondition.Key.GameConditionManager.ConditionIsActive(causedCondition.Value.def))
 				{
-					CompCauseGameCondition.tmpDeadConditionMaps.Add(keyValuePair.Key);
+					tmpDeadConditionMaps.Add(causedCondition.Key);
 				}
 			}
-			foreach (Map key in CompCauseGameCondition.tmpDeadConditionMaps)
+			foreach (Map tmpDeadConditionMap in tmpDeadConditionMaps)
 			{
-				this.causedConditions.Remove(key);
+				causedConditions.Remove(tmpDeadConditionMap);
 			}
 		}
 
-		
 		private GameCondition EnforceConditionOn(Map map)
 		{
-			GameCondition gameCondition = this.GetConditionInstance(map);
+			GameCondition gameCondition = GetConditionInstance(map);
 			if (gameCondition == null)
 			{
-				gameCondition = this.CreateConditionOn(map);
+				gameCondition = CreateConditionOn(map);
 			}
 			else
 			{
@@ -172,75 +149,51 @@ namespace RimWorld
 			return gameCondition;
 		}
 
-		
 		protected virtual GameCondition CreateConditionOn(Map map)
 		{
-			GameCondition gameCondition = GameConditionMaker.MakeCondition(this.ConditionDef, -1);
+			GameCondition gameCondition = GameConditionMaker.MakeCondition(ConditionDef);
 			gameCondition.Duration = gameCondition.TransitionTicks;
-			gameCondition.conditionCauser = this.parent;
+			gameCondition.conditionCauser = parent;
 			map.gameConditionManager.RegisterCondition(gameCondition);
-			this.causedConditions.Add(map, gameCondition);
-			this.SetupCondition(gameCondition, map);
+			causedConditions.Add(map, gameCondition);
+			SetupCondition(gameCondition, map);
 			return gameCondition;
 		}
 
-		
 		protected virtual void SetupCondition(GameCondition condition, Map map)
 		{
 			condition.suppressEndMessage = true;
 		}
 
-		
 		protected void ReSetupAllConditions()
 		{
-			foreach (KeyValuePair<Map, GameCondition> keyValuePair in this.causedConditions)
+			foreach (KeyValuePair<Map, GameCondition> causedCondition in causedConditions)
 			{
-				this.SetupCondition(keyValuePair.Value, keyValuePair.Key);
+				SetupCondition(causedCondition.Value, causedCondition.Key);
 			}
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
-			Messages.Message("MessageConditionCauserDespawned".Translate(this.parent.def.LabelCap), new TargetInfo(this.parent.Position, map, false), MessageTypeDefOf.NeutralEvent, true);
+			Messages.Message("MessageConditionCauserDespawned".Translate(parent.def.LabelCap), new TargetInfo(parent.Position, map), MessageTypeDefOf.NeutralEvent);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				return base.CompInspectStringExtra();
+				GameCondition gameCondition = parent.Map.GameConditionManager.ActiveConditions.Find((GameCondition c) => c.def == Props.conditionDef);
+				if (gameCondition == null)
+				{
+					return base.CompInspectStringExtra();
+				}
+				return "[DEV] Current map condition\n[DEV] Ticks Passed: " + gameCondition.TicksPassed + "\n[DEV] Ticks Left: " + gameCondition.TicksLeft;
 			}
-			GameCondition gameCondition = this.parent.Map.GameConditionManager.ActiveConditions.Find((GameCondition c) => c.def == this.Props.conditionDef);
-			if (gameCondition == null)
-			{
-				return base.CompInspectStringExtra();
-			}
-			return string.Concat(new object[]
-			{
-				"[DEV] Current map condition\n[DEV] Ticks Passed: ",
-				gameCondition.TicksPassed,
-				"\n[DEV] Ticks Left: ",
-				gameCondition.TicksLeft
-			});
+			return base.CompInspectStringExtra();
 		}
 
-		
 		public virtual void RandomizeSettings()
 		{
 		}
-
-		
-		protected CompInitiatable initiatableComp;
-
-		
-		protected Site siteLink;
-
-		
-		private Dictionary<Map, GameCondition> causedConditions = new Dictionary<Map, GameCondition>();
-
-		
-		private static List<Map> tmpDeadConditionMaps = new List<Map>();
 	}
 }

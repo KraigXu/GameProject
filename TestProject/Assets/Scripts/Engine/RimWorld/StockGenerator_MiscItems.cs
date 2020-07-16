@@ -1,46 +1,38 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class StockGenerator_MiscItems : StockGenerator
 	{
-		
 		public override IEnumerable<Thing> GenerateThings(int forTile, Faction faction = null)
 		{
-			int count = this.countRange.RandomInRange;
-			int num;
-			for (int i = 0; i < count; i = num + 1)
+			int count = countRange.RandomInRange;
+			for (int i = 0; i < count; i++)
 			{
-				ThingDef def;
-				if (!(from t in DefDatabase<ThingDef>.AllDefs
-				where this.HandlesThingDef(t) && t.tradeability.TraderCanSell() && t.techLevel <= this.maxTechLevelGenerate
-				select t).TryRandomElementByWeight(new Func<ThingDef, float>(this.SelectionWeight), out def))
+				if (!DefDatabase<ThingDef>.AllDefs.Where((ThingDef t) => HandlesThingDef(t) && t.tradeability.TraderCanSell() && (int)t.techLevel <= (int)maxTechLevelGenerate).TryRandomElementByWeight(SelectionWeight, out ThingDef result))
 				{
-					yield break;
+					break;
 				}
-				yield return this.MakeThing(def);
-				num = i;
+				yield return MakeThing(result);
 			}
-			yield break;
 		}
 
-		
 		protected virtual Thing MakeThing(ThingDef def)
 		{
 			return StockGeneratorUtility.TryMakeForStockSingle(def, 1);
 		}
 
-		
 		public override bool HandlesThingDef(ThingDef thingDef)
 		{
-			return thingDef.tradeability != Tradeability.None && thingDef.techLevel <= this.maxTechLevelBuy;
+			if (thingDef.tradeability != 0)
+			{
+				return (int)thingDef.techLevel <= (int)maxTechLevelBuy;
+			}
+			return false;
 		}
 
-		
 		protected virtual float SelectionWeight(ThingDef thingDef)
 		{
 			return 1f;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,44 +6,44 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ThingDefGenerator_Buildings
 	{
-		
+		public static readonly string BlueprintDefNamePrefix = "Blueprint_";
+
+		public static readonly string InstallBlueprintDefNamePrefix = "Install_";
+
+		public static readonly string BuildingFrameDefNamePrefix = "Frame_";
+
+		private static readonly string TerrainBlueprintGraphicPath = "Things/Special/TerrainBlueprint";
+
+		private static Color BlueprintColor = new Color(0.8235294f, 47f / 51f, 1f, 0.6f);
+
 		public static IEnumerable<ThingDef> ImpliedBlueprintAndFrameDefs()
 		{
-			foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs.ToList<ThingDef>())
+			foreach (ThingDef def in DefDatabase<ThingDef>.AllDefs.ToList())
 			{
 				ThingDef blueprint = null;
 				if (def.BuildableByPlayer)
 				{
-					blueprint = ThingDefGenerator_Buildings.NewBlueprintDef_Thing(def, false, null);
+					blueprint = NewBlueprintDef_Thing(def, isInstallBlueprint: false);
 					yield return blueprint;
-					yield return ThingDefGenerator_Buildings.NewFrameDef_Thing(def);
+					yield return NewFrameDef_Thing(def);
 				}
 				if (def.Minifiable)
 				{
-					yield return ThingDefGenerator_Buildings.NewBlueprintDef_Thing(def, true, blueprint);
+					yield return NewBlueprintDef_Thing(def, isInstallBlueprint: true, blueprint);
 				}
-				blueprint = null;
-				
 			}
-			List<ThingDef>.Enumerator enumerator = default(List<ThingDef>.Enumerator);
 			foreach (TerrainDef terrDef in DefDatabase<TerrainDef>.AllDefs)
 			{
 				if (terrDef.BuildableByPlayer)
 				{
-					yield return ThingDefGenerator_Buildings.NewBlueprintDef_Terrain(terrDef);
-					yield return ThingDefGenerator_Buildings.NewFrameDef_Terrain(terrDef);
-				
+					yield return NewBlueprintDef_Terrain(terrDef);
+					yield return NewFrameDef_Terrain(terrDef);
 				}
 			}
-			IEnumerator<TerrainDef> enumerator2 = null;
-			yield break;
-			yield break;
 		}
 
-		
 		private static ThingDef BaseBlueprintDef()
 		{
 			return new ThingDef
@@ -56,13 +56,12 @@ namespace RimWorld
 				seeThroughFog = true,
 				comps = 
 				{
-					new CompProperties_Forbiddable()
+					(CompProperties)new CompProperties_Forbiddable()
 				},
 				drawerType = DrawerType.MapMeshAndRealTime
 			};
 		}
 
-		
 		private static ThingDef BaseFrameDef()
 		{
 			return new ThingDef
@@ -77,18 +76,17 @@ namespace RimWorld
 				building = new BuildingProperties(),
 				comps = 
 				{
-					new CompProperties_Forbiddable()
+					(CompProperties)new CompProperties_Forbiddable()
 				},
 				scatterableOnMapGen = false,
 				leaveResourcesWhenKilled = true
 			};
 		}
 
-		
 		private static ThingDef NewBlueprintDef_Thing(ThingDef def, bool isInstallBlueprint, ThingDef normalBlueprint = null)
 		{
-			ThingDef thingDef = ThingDefGenerator_Buildings.BaseBlueprintDef();
-			thingDef.defName = ThingDefGenerator_Buildings.BlueprintDefNamePrefix + def.defName;
+			ThingDef thingDef = BaseBlueprintDef();
+			thingDef.defName = BlueprintDefNamePrefix + def.defName;
 			thingDef.label = def.label + "BlueprintLabelExtra".Translate();
 			thingDef.size = def.size;
 			thingDef.clearBuildingArea = def.clearBuildingArea;
@@ -105,7 +103,7 @@ namespace RimWorld
 			}
 			if (isInstallBlueprint)
 			{
-				thingDef.defName = ThingDefGenerator_Buildings.BlueprintDefNamePrefix + ThingDefGenerator_Buildings.InstallBlueprintDefNamePrefix + def.defName;
+				thingDef.defName = BlueprintDefNamePrefix + InstallBlueprintDefNamePrefix + def.defName;
 			}
 			if (isInstallBlueprint && normalBlueprint != null)
 			{
@@ -131,20 +129,20 @@ namespace RimWorld
 						thingDef.graphicData.linkFlags = def.graphicData.linkFlags;
 						thingDef.graphicData.linkType = def.graphicData.linkType;
 					}
-					thingDef.graphicData.color = ThingDefGenerator_Buildings.BlueprintColor;
+					thingDef.graphicData.color = BlueprintColor;
 				}
 				else
 				{
 					thingDef.graphicData.CopyFrom(def.graphicData);
 					thingDef.graphicData.shaderType = ShaderTypeDefOf.EdgeDetect;
-					thingDef.graphicData.color = ThingDefGenerator_Buildings.BlueprintColor;
+					thingDef.graphicData.color = BlueprintColor;
 					thingDef.graphicData.colorTwo = Color.white;
 					thingDef.graphicData.shadowData = null;
 				}
 			}
 			if (thingDef.graphicData.shadowData != null)
 			{
-				Log.Error("Blueprint has shadow: " + def, false);
+				Log.Error("Blueprint has shadow: " + def);
 			}
 			if (isInstallBlueprint)
 			{
@@ -174,11 +172,10 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		
 		private static ThingDef NewFrameDef_Thing(ThingDef def)
 		{
-			ThingDef thingDef = ThingDefGenerator_Buildings.BaseFrameDef();
-			thingDef.defName = ThingDefGenerator_Buildings.BuildingFrameDefNamePrefix + def.defName;
+			ThingDef thingDef = BaseFrameDef();
+			thingDef.defName = BuildingFrameDefNamePrefix + def.defName;
 			thingDef.label = def.label + "FrameLabelExtra".Translate();
 			thingDef.size = def.size;
 			thingDef.SetStatBaseValue(StatDefOf.MaxHitPoints, (float)def.BaseMaxHitPoints * 0.25f);
@@ -188,7 +185,7 @@ namespace RimWorld
 			thingDef.pathCost = 10;
 			thingDef.description = def.description;
 			thingDef.passability = def.passability;
-			if (thingDef.passability > Traversability.PassThroughOnly)
+			if ((int)thingDef.passability > 1)
 			{
 				thingDef.passability = Traversability.PassThroughOnly;
 			}
@@ -217,17 +214,16 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		
 		private static ThingDef NewBlueprintDef_Terrain(TerrainDef terrDef)
 		{
-			ThingDef thingDef = ThingDefGenerator_Buildings.BaseBlueprintDef();
+			ThingDef thingDef = BaseBlueprintDef();
 			thingDef.thingClass = typeof(Blueprint_Build);
-			thingDef.defName = ThingDefGenerator_Buildings.BlueprintDefNamePrefix + terrDef.defName;
+			thingDef.defName = BlueprintDefNamePrefix + terrDef.defName;
 			thingDef.label = terrDef.label + "BlueprintLabelExtra".Translate();
 			thingDef.entityDefToBuild = terrDef;
 			thingDef.graphicData = new GraphicData();
 			thingDef.graphicData.shaderType = ShaderTypeDefOf.MetaOverlay;
-			thingDef.graphicData.texPath = ThingDefGenerator_Buildings.TerrainBlueprintGraphicPath;
+			thingDef.graphicData.texPath = TerrainBlueprintGraphicPath;
 			thingDef.graphicData.graphicClass = typeof(Graphic_Single);
 			thingDef.constructionSkillPrerequisite = terrDef.constructionSkillPrerequisite;
 			thingDef.artisticSkillPrerequisite = terrDef.artisticSkillPrerequisite;
@@ -238,12 +234,11 @@ namespace RimWorld
 			return thingDef;
 		}
 
-		
 		private static ThingDef NewFrameDef_Terrain(TerrainDef terrDef)
 		{
-			ThingDef thingDef = ThingDefGenerator_Buildings.BaseFrameDef();
+			ThingDef thingDef = BaseFrameDef();
 			thingDef.building.artificialForMeditationPurposes = false;
-			thingDef.defName = ThingDefGenerator_Buildings.BuildingFrameDefNamePrefix + terrDef.defName;
+			thingDef.defName = BuildingFrameDefNamePrefix + terrDef.defName;
 			thingDef.label = terrDef.label + "FrameLabelExtra".Translate();
 			thingDef.entityDefToBuild = terrDef;
 			thingDef.useHitPoints = false;
@@ -262,24 +257,9 @@ namespace RimWorld
 			terrDef.frameDef = thingDef;
 			if (!thingDef.IsFrame)
 			{
-				Log.Error("Framedef is not frame: " + thingDef, false);
+				Log.Error("Framedef is not frame: " + thingDef);
 			}
 			return thingDef;
 		}
-
-		
-		public static readonly string BlueprintDefNamePrefix = "Blueprint_";
-
-		
-		public static readonly string InstallBlueprintDefNamePrefix = "Install_";
-
-		
-		public static readonly string BuildingFrameDefNamePrefix = "Frame_";
-
-		
-		private static readonly string TerrainBlueprintGraphicPath = "Things/Special/TerrainBlueprint";
-
-		
-		private static Color BlueprintColor = new Color(0.8235294f, 0.921568632f, 1f, 0.6f);
 	}
 }

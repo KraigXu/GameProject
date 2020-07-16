@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnGenerationContextUtility
 	{
-		
 		public static string ToStringHuman(this PawnGenerationContext context)
 		{
 			switch (context)
@@ -22,23 +20,32 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static bool Includes(this PawnGenerationContext includer, PawnGenerationContext other)
 		{
-			return includer == PawnGenerationContext.All || includer == other;
+			if (includer == PawnGenerationContext.All)
+			{
+				return true;
+			}
+			return includer == other;
 		}
 
-		
 		public static PawnGenerationContext GetRandom()
 		{
 			Array values = Enum.GetValues(typeof(PawnGenerationContext));
 			return (PawnGenerationContext)values.GetValue(Rand.Range(0, values.Length));
 		}
 
-		
 		public static bool OverlapsWith(this PawnGenerationContext a, PawnGenerationContext b)
 		{
-			return a == PawnGenerationContext.All || b == PawnGenerationContext.All || a == b;
+			if (a == PawnGenerationContext.All || b == PawnGenerationContext.All)
+			{
+				return true;
+			}
+			if (a == b)
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

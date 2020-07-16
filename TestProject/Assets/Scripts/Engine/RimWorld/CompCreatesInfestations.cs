@@ -1,47 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompCreatesInfestations : ThingComp
 	{
-		
-		
+		private int lastCreatedInfestationTick = -999999;
+
+		private const float MinRefireDays = 7f;
+
+		private const float PreventInfestationsDist = 10f;
+
 		public bool CanCreateInfestationNow
 		{
 			get
 			{
-				CompDeepDrill comp = this.parent.GetComp<CompDeepDrill>();
-				return (comp == null || comp.UsedLastTick()) && !this.CantFireBecauseCreatedInfestationRecently && !this.CantFireBecauseSomethingElseCreatedInfestationRecently;
+				CompDeepDrill comp = parent.GetComp<CompDeepDrill>();
+				if (comp != null && !comp.UsedLastTick())
+				{
+					return false;
+				}
+				if (CantFireBecauseCreatedInfestationRecently)
+				{
+					return false;
+				}
+				if (CantFireBecauseSomethingElseCreatedInfestationRecently)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public bool CantFireBecauseCreatedInfestationRecently
-		{
-			get
-			{
-				return Find.TickManager.TicksGame <= this.lastCreatedInfestationTick + 420000;
-			}
-		}
+		public bool CantFireBecauseCreatedInfestationRecently => Find.TickManager.TicksGame <= lastCreatedInfestationTick + 420000;
 
-		
-		
 		public bool CantFireBecauseSomethingElseCreatedInfestationRecently
 		{
 			get
 			{
-				if (!this.parent.Spawned)
+				if (!parent.Spawned)
 				{
 					return false;
 				}
-				List<Thing> list = this.parent.Map.listerThings.ThingsInGroup(ThingRequestGroup.CreatesInfestations);
+				List<Thing> list = parent.Map.listerThings.ThingsInGroup(ThingRequestGroup.CreatesInfestations);
 				for (int i = 0; i < list.Count; i++)
 				{
-					if (list[i] != this.parent && list[i].Position.InHorDistOf(this.parent.Position, 10f) && list[i].TryGetComp<CompCreatesInfestations>().CantFireBecauseCreatedInfestationRecently)
+					if (list[i] != parent && list[i].Position.InHorDistOf(parent.Position, 10f) && list[i].TryGetComp<CompCreatesInfestations>().CantFireBecauseCreatedInfestationRecently)
 					{
 						return true;
 					}
@@ -50,25 +54,14 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.lastCreatedInfestationTick, "lastCreatedInfestationTick", -999999, false);
+			Scribe_Values.Look(ref lastCreatedInfestationTick, "lastCreatedInfestationTick", -999999);
 		}
 
-		
 		public void Notify_CreatedInfestation()
 		{
-			this.lastCreatedInfestationTick = Find.TickManager.TicksGame;
+			lastCreatedInfestationTick = Find.TickManager.TicksGame;
 		}
-
-		
-		private int lastCreatedInfestationTick = -999999;
-
-		
-		private const float MinRefireDays = 7f;
-
-		
-		private const float PreventInfestationsDist = 10f;
 	}
 }

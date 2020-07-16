@@ -1,43 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Building_Trap : Building
 	{
-		
-		
+		private bool autoRearm;
+
+		private List<Pawn> touchingPawns = new List<Pawn>();
+
+		private const float KnowerSpringChanceFactorSameFaction = 0.005f;
+
+		private const float KnowerSpringChanceFactorWildAnimal = 0.2f;
+
+		private const float KnowerSpringChanceFactorFactionlessHuman = 0.3f;
+
+		private const float KnowerSpringChanceFactorOther = 0f;
+
+		private const ushort KnowerPathFindCost = 800;
+
+		private const ushort KnowerPathWalkCost = 40;
+
 		private bool CanSetAutoRearm
 		{
 			get
 			{
-				return base.Faction == Faction.OfPlayer && this.def.blueprintDef != null && this.def.IsResearchFinished;
+				if (base.Faction == Faction.OfPlayer && def.blueprintDef != null)
+				{
+					return def.IsResearchFinished;
+				}
+				return false;
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.autoRearm, "autoRearm", false, false);
-			Scribe_Collections.Look<Pawn>(ref this.touchingPawns, "testees", LookMode.Reference, Array.Empty<object>());
+			Scribe_Values.Look(ref autoRearm, "autoRearm", defaultValue: false);
+			Scribe_Collections.Look(ref touchingPawns, "testees", LookMode.Reference);
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			if (!respawningAfterLoad)
 			{
-				this.autoRearm = (this.CanSetAutoRearm && map.areaManager.Home[base.Position]);
+				autoRearm = (CanSetAutoRearm && map.areaManager.Home[base.Position]);
 			}
 		}
 
-		
 		public override void Tick()
 		{
 			if (base.Spawned)
@@ -46,121 +59,134 @@ namespace RimWorld
 				for (int i = 0; i < thingList.Count; i++)
 				{
 					Pawn pawn = thingList[i] as Pawn;
-					if (pawn != null && !this.touchingPawns.Contains(pawn))
+					if (pawn != null && !touchingPawns.Contains(pawn))
 					{
-						this.touchingPawns.Add(pawn);
-						this.CheckSpring(pawn);
+						touchingPawns.Add(pawn);
+						CheckSpring(pawn);
 					}
 				}
-				for (int j = 0; j < this.touchingPawns.Count; j++)
+				for (int j = 0; j < touchingPawns.Count; j++)
 				{
-					Pawn pawn2 = this.touchingPawns[j];
+					Pawn pawn2 = touchingPawns[j];
 					if (!pawn2.Spawned || pawn2.Position != base.Position)
 					{
-						this.touchingPawns.Remove(pawn2);
+						touchingPawns.Remove(pawn2);
 					}
 				}
 			}
 			base.Tick();
 		}
 
-		
 		private void CheckSpring(Pawn p)
 		{
-			if (Rand.Chance(this.SpringChance(p)))
+			if (Rand.Chance(SpringChance(p)))
 			{
 				Map map = base.Map;
-				this.Spring(p);
+				Spring(p);
 				if (p.Faction == Faction.OfPlayer || p.HostFaction == Faction.OfPlayer)
 				{
-					Find.LetterStack.ReceiveLetter("LetterFriendlyTrapSprungLabel".Translate(p.LabelShort, p).CapitalizeFirst(), "LetterFriendlyTrapSprung".Translate(p.LabelShort, p).CapitalizeFirst(), LetterDefOf.NegativeEvent, new TargetInfo(base.Position, map, false), null, null, null, null);
+					Find.LetterStack.ReceiveLetter("LetterFriendlyTrapSprungLabel".Translate(p.LabelShort, p).CapitalizeFirst(), "LetterFriendlyTrapSprung".Translate(p.LabelShort, p).CapitalizeFirst(), LetterDefOf.NegativeEvent, new TargetInfo(base.Position, map));
 				}
 			}
 		}
 
-		
 		protected virtual float SpringChance(Pawn p)
 		{
 			float num = 1f;
-			if (this.KnowsOfTrap(p))
+			if (KnowsOfTrap(p))
 			{
-				if (p.Faction == null)
+				if (p.Faction != null)
 				{
-					if (p.RaceProps.Animal)
-					{
-						num = 0.2f;
-						num *= this.def.building.trapPeacefulWildAnimalsSpringChanceFactor;
-					}
-					else
-					{
-						num = 0.3f;
-					}
+					num = ((p.Faction != base.Faction) ? 0f : 0.005f);
 				}
-				else if (p.Faction == base.Faction)
+				else if (p.RaceProps.Animal)
 				{
-					num = 0.005f;
+					num = 0.2f;
+					num *= def.building.trapPeacefulWildAnimalsSpringChanceFactor;
 				}
 				else
 				{
-					num = 0f;
+					num = 0.3f;
 				}
 			}
-			num *= this.GetStatValue(StatDefOf.TrapSpringChance, true) * p.GetStatValue(StatDefOf.PawnTrapSpringChance, true);
+			num *= this.GetStatValue(StatDefOf.TrapSpringChance) * p.GetStatValue(StatDefOf.PawnTrapSpringChance);
 			return Mathf.Clamp01(num);
 		}
 
-		
 		public bool KnowsOfTrap(Pawn p)
 		{
-			return (p.Faction != null && !p.Faction.HostileTo(base.Faction)) || (p.Faction == null && p.RaceProps.Animal && !p.InAggroMentalState) || (p.guest != null && p.guest.Released) || (!p.IsPrisoner && base.Faction != null && p.HostFaction == base.Faction) || (p.RaceProps.Humanlike && p.IsFormingCaravan()) || (p.IsPrisoner && p.guest.ShouldWaitInsteadOfEscaping && base.Faction == p.HostFaction) || (p.Faction == null && p.RaceProps.Humanlike);
+			if (p.Faction != null && !p.Faction.HostileTo(base.Faction))
+			{
+				return true;
+			}
+			if (p.Faction == null && p.RaceProps.Animal && !p.InAggroMentalState)
+			{
+				return true;
+			}
+			if (p.guest != null && p.guest.Released)
+			{
+				return true;
+			}
+			if (!p.IsPrisoner && base.Faction != null && p.HostFaction == base.Faction)
+			{
+				return true;
+			}
+			if (p.RaceProps.Humanlike && p.IsFormingCaravan())
+			{
+				return true;
+			}
+			if (p.IsPrisoner && p.guest.ShouldWaitInsteadOfEscaping && base.Faction == p.HostFaction)
+			{
+				return true;
+			}
+			if (p.Faction == null && p.RaceProps.Humanlike)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override ushort PathFindCostFor(Pawn p)
 		{
-			if (!this.KnowsOfTrap(p))
+			if (!KnowsOfTrap(p))
 			{
 				return 0;
 			}
 			return 800;
 		}
 
-		
 		public override ushort PathWalkCostFor(Pawn p)
 		{
-			if (!this.KnowsOfTrap(p))
+			if (!KnowsOfTrap(p))
 			{
 				return 0;
 			}
 			return 40;
 		}
 
-		
 		public override bool IsDangerousFor(Pawn p)
 		{
-			return this.KnowsOfTrap(p);
+			return KnowsOfTrap(p);
 		}
 
-		
 		public void Spring(Pawn p)
 		{
 			bool spawned = base.Spawned;
 			Map map = base.Map;
-			this.SpringSub(p);
-			if (this.def.building.trapDestroyOnSpring)
+			SpringSub(p);
+			if (def.building.trapDestroyOnSpring)
 			{
 				if (!base.Destroyed)
 				{
-					this.Destroy(DestroyMode.Vanish);
+					Destroy();
 				}
 				if (spawned)
 				{
-					this.CheckAutoRebuild(map);
+					CheckAutoRebuild(map);
 				}
 			}
 		}
 
-		
 		public override void Kill(DamageInfo? dinfo = null, Hediff exactCulprit = null)
 		{
 			bool spawned = base.Spawned;
@@ -168,68 +194,40 @@ namespace RimWorld
 			base.Kill(dinfo, exactCulprit);
 			if (spawned)
 			{
-				this.CheckAutoRebuild(map);
+				CheckAutoRebuild(map);
 			}
 		}
 
-		
 		protected abstract void SpringSub(Pawn p);
 
-		
 		private void CheckAutoRebuild(Map map)
 		{
-			if (this.autoRearm && this.CanSetAutoRearm && map != null && GenConstruct.CanPlaceBlueprintAt(this.def, base.Position, base.Rotation, map, false, null, null, base.Stuff).Accepted)
+			if (autoRearm && CanSetAutoRearm && map != null && GenConstruct.CanPlaceBlueprintAt(def, base.Position, base.Rotation, map, godMode: false, null, null, base.Stuff).Accepted)
 			{
-				GenConstruct.PlaceBlueprintForBuild(this.def, base.Position, map, base.Rotation, Faction.OfPlayer, base.Stuff);
+				GenConstruct.PlaceBlueprintForBuild(def, base.Position, map, base.Rotation, Faction.OfPlayer, base.Stuff);
 			}
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (this.CanSetAutoRearm)
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				yield return new Command_Toggle
-				{
-					defaultLabel = "CommandAutoRearm".Translate(),
-					defaultDesc = "CommandAutoRearmDesc".Translate(),
-					hotKey = KeyBindingDefOf.Misc3,
-					icon = TexCommand.RearmTrap,
-					isActive = (() => this.autoRearm),
-					toggleAction = delegate
-					{
-						this.autoRearm = !this.autoRearm;
-					}
-				};
+				yield return gizmo;
 			}
-			yield break;
-			yield break;
+			if (CanSetAutoRearm)
+			{
+				Command_Toggle command_Toggle = new Command_Toggle();
+				command_Toggle.defaultLabel = "CommandAutoRearm".Translate();
+				command_Toggle.defaultDesc = "CommandAutoRearmDesc".Translate();
+				command_Toggle.hotKey = KeyBindingDefOf.Misc3;
+				command_Toggle.icon = TexCommand.RearmTrap;
+				command_Toggle.isActive = (() => autoRearm);
+				command_Toggle.toggleAction = delegate
+				{
+					autoRearm = !autoRearm;
+				};
+				yield return command_Toggle;
+			}
 		}
-
-		
-		private bool autoRearm;
-
-		
-		private List<Pawn> touchingPawns = new List<Pawn>();
-
-		
-		private const float KnowerSpringChanceFactorSameFaction = 0.005f;
-
-		
-		private const float KnowerSpringChanceFactorWildAnimal = 0.2f;
-
-		
-		private const float KnowerSpringChanceFactorFactionlessHuman = 0.3f;
-
-		
-		private const float KnowerSpringChanceFactorOther = 0f;
-
-		
-		private const ushort KnowerPathFindCost = 800;
-
-		
-		private const ushort KnowerPathWalkCost = 40;
 	}
 }

@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class Direction8WayUtility
 	{
-		
 		public static string LabelShort(this Direction8Way dir)
 		{
 			switch (dir)

@@ -1,20 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Strip : JobDriver
 	{
-		
+		private const int StripTicks = 60;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -23,46 +21,32 @@ namespace RimWorld
 			Toil toil = new Toil();
 			toil.initAction = delegate
 			{
-				this.pawn.pather.StartPath(base.TargetThingA, PathEndMode.ClosestTouch);
+				pawn.pather.StartPath(base.TargetThingA, PathEndMode.ClosestTouch);
 			};
 			toil.defaultCompleteMode = ToilCompleteMode.PatherArrival;
 			toil.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			yield return toil;
-			yield return Toils_General.Wait(60, TargetIndex.None).WithProgressBarToilDelay(TargetIndex.A, false, -0.5f);
-			yield return new Toil
+			yield return Toils_General.Wait(60).WithProgressBarToilDelay(TargetIndex.A);
+			Toil toil2 = new Toil();
+			toil2.initAction = delegate
 			{
-				initAction = delegate
-				{
-					Thing thing = this.job.targetA.Thing;
-					Designation designation = base.Map.designationManager.DesignationOn(thing, DesignationDefOf.Strip);
-					if (designation != null)
-					{
-						designation.Delete();
-					}
-					IStrippable strippable = thing as IStrippable;
-					if (strippable != null)
-					{
-						strippable.Strip();
-					}
-					this.pawn.records.Increment(RecordDefOf.BodiesStripped);
-				},
-				defaultCompleteMode = ToilCompleteMode.Instant
+				Thing thing = job.targetA.Thing;
+				base.Map.designationManager.DesignationOn(thing, DesignationDefOf.Strip)?.Delete();
+				(thing as IStrippable)?.Strip();
+				pawn.records.Increment(RecordDefOf.BodiesStripped);
 			};
-			yield break;
+			toil2.defaultCompleteMode = ToilCompleteMode.Instant;
+			yield return toil2;
 		}
 
-		
 		public override object[] TaleParameters()
 		{
 			Corpse corpse = base.TargetA.Thing as Corpse;
-			return new object[]
+			return new object[2]
 			{
-				this.pawn,
+				pawn,
 				(corpse != null) ? corpse.InnerPawn : base.TargetA.Thing
 			};
 		}
-
-		
-		private const int StripTicks = 60;
 	}
 }

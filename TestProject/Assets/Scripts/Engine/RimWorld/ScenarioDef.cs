@@ -1,44 +1,36 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenarioDef : Def
 	{
-		
+		public Scenario scenario;
+
 		public override void PostLoad()
 		{
 			base.PostLoad();
-			if (this.scenario.name.NullOrEmpty())
+			if (scenario.name.NullOrEmpty())
 			{
-				this.scenario.name = this.label;
+				scenario.name = label;
 			}
-			if (this.scenario.description.NullOrEmpty())
+			if (scenario.description.NullOrEmpty())
 			{
-				this.scenario.description = this.description;
+				scenario.description = description;
 			}
-			this.scenario.Category = ScenarioCategory.FromDef;
+			scenario.Category = ScenarioCategory.FromDef;
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			if (this.scenario == null)
+			if (scenario == null)
 			{
 				yield return "null scenario";
 			}
-			foreach (string text in this.scenario.ConfigErrors())
+			foreach (string item in scenario.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			yield break;
-			yield break;
 		}
-
-		
-		public Scenario scenario;
 	}
 }

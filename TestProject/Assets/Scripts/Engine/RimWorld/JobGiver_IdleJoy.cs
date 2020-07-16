@@ -1,13 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_IdleJoy : JobGiver_GetJoy
 	{
-		
+		private const int GameStartNoIdleJoyTicks = 60000;
+
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.needs.joy == null)
@@ -24,8 +23,5 @@ namespace RimWorld
 			}
 			return base.TryGiveJob(pawn);
 		}
-
-		
-		private const int GameStartNoIdleJoyTicks = 60000;
 	}
 }

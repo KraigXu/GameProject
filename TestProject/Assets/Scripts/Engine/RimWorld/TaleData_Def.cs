@@ -1,42 +1,43 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class TaleData_Def : TaleData
 	{
-		
+		public Def def;
+
+		private string tmpDefName;
+
+		private Type tmpDefType;
+
 		public override void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
-				this.tmpDefName = ((this.def != null) ? this.def.defName : null);
-				this.tmpDefType = ((this.def != null) ? this.def.GetType() : null);
+				tmpDefName = ((def != null) ? def.defName : null);
+				tmpDefType = ((def != null) ? def.GetType() : null);
 			}
-			Scribe_Values.Look<string>(ref this.tmpDefName, "defName", null, false);
-			Scribe_Values.Look<Type>(ref this.tmpDefType, "defType", null, false);
-			if (Scribe.mode == LoadSaveMode.LoadingVars && this.tmpDefName != null)
+			Scribe_Values.Look(ref tmpDefName, "defName");
+			Scribe_Values.Look(ref tmpDefType, "defType");
+			if (Scribe.mode == LoadSaveMode.LoadingVars && tmpDefName != null)
 			{
-				this.def = GenDefDatabase.GetDef(this.tmpDefType, BackCompatibility.BackCompatibleDefName(this.tmpDefType, this.tmpDefName, false, null), true);
+				def = GenDefDatabase.GetDef(tmpDefType, BackCompatibility.BackCompatibleDefName(tmpDefType, tmpDefName));
 			}
 		}
 
-		
 		public override IEnumerable<Rule> GetRules(string prefix)
 		{
-			if (this.def != null)
+			if (def != null)
 			{
-				yield return new Rule_String(prefix + "_label", this.def.label);
-				yield return new Rule_String(prefix + "_definite", Find.ActiveLanguageWorker.WithDefiniteArticle(this.def.label, false, false));
-				yield return new Rule_String(prefix + "_indefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(this.def.label, false, false));
+				yield return new Rule_String(prefix + "_label", def.label);
+				yield return new Rule_String(prefix + "_definite", Find.ActiveLanguageWorker.WithDefiniteArticle(def.label));
+				yield return new Rule_String(prefix + "_indefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(def.label));
 			}
-			yield break;
 		}
 
-		
 		public static TaleData_Def GenerateFrom(Def def)
 		{
 			return new TaleData_Def
@@ -44,14 +45,5 @@ namespace RimWorld
 				def = def
 			};
 		}
-
-		
-		public Def def;
-
-		
-		private string tmpDefName;
-
-		
-		private Type tmpDefType;
 	}
 }

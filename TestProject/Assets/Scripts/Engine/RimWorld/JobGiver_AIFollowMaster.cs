@@ -1,22 +1,15 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_AIFollowMaster : JobGiver_AIFollowPawn
 	{
-		
-		
-		protected override int FollowJobExpireInterval
-		{
-			get
-			{
-				return 200;
-			}
-		}
+		public const float RadiusUnreleased = 3f;
 
-		
+		public const float RadiusReleased = 50f;
+
+		protected override int FollowJobExpireInterval => 200;
+
 		protected override Pawn GetFollowee(Pawn pawn)
 		{
 			if (pawn.playerSettings == null)
@@ -26,7 +19,6 @@ namespace RimWorld
 			return pawn.playerSettings.Master;
 		}
 
-		
 		protected override float GetRadius(Pawn pawn)
 		{
 			if (pawn.playerSettings.Master.playerSettings.animalsReleased && pawn.training.HasLearned(TrainableDefOf.Release))
@@ -35,11 +27,5 @@ namespace RimWorld
 			}
 			return 3f;
 		}
-
-		
-		public const float RadiusUnreleased = 3f;
-
-		
-		public const float RadiusReleased = 50f;
 	}
 }

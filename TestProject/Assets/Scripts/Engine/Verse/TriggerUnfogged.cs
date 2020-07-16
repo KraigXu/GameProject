@@ -1,44 +1,46 @@
-﻿using RimWorld;
-using Verse;
+using RimWorld;
 
-public class TriggerUnfogged : Thing
+namespace Verse
 {
-	public string signalTag;
-
-	private bool everFogged;
-
-	public override void Tick()
+	public class TriggerUnfogged : Thing
 	{
-		if (base.Spawned)
+		public string signalTag;
+
+		private bool everFogged;
+
+		public override void Tick()
 		{
-			if (base.Position.Fogged(base.Map))
+			if (base.Spawned)
 			{
-				everFogged = true;
+				if (base.Position.Fogged(base.Map))
+				{
+					everFogged = true;
+				}
+				else if (everFogged)
+				{
+					Activated();
+				}
+				else
+				{
+					Destroy();
+				}
 			}
-			else if (everFogged)
-			{
-				Activated();
-			}
-			else
+		}
+
+		public void Activated()
+		{
+			Find.SignalManager.SendSignal(new Signal(signalTag));
+			if (!base.Destroyed)
 			{
 				Destroy();
 			}
 		}
-	}
 
-	public void Activated()
-	{
-		Find.SignalManager.SendSignal(new RimWorld.Signal(signalTag));
-		if (!base.Destroyed)
+		public override void ExposeData()
 		{
-			Destroy();
+			base.ExposeData();
+			Scribe_Values.Look(ref signalTag, "signalTag");
+			Scribe_Values.Look(ref everFogged, "everFogged", defaultValue: false);
 		}
-	}
-
-	public override void ExposeData()
-	{
-		base.ExposeData();
-		Scribe_Values.Look(ref signalTag, "signalTag");
-		Scribe_Values.Look(ref everFogged, "everFogged", defaultValue: false);
 	}
 }

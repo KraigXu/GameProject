@@ -1,47 +1,44 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class PawnCapacityModifier
 	{
-		
-		
+		public PawnCapacityDef capacity;
+
+		public float offset;
+
+		public float setMax = 999f;
+
+		public float postFactor = 1f;
+
+		public SimpleCurve setMaxCurveOverride;
+
+		public StatDef setMaxCurveEvaluateStat;
+
 		public bool SetMaxDefined
 		{
 			get
 			{
-				return this.setMax != 999f || (this.setMaxCurveOverride != null && this.setMaxCurveEvaluateStat != null);
+				if (setMax == 999f)
+				{
+					if (setMaxCurveOverride != null)
+					{
+						return setMaxCurveEvaluateStat != null;
+					}
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
 		public float EvaluateSetMax(Pawn pawn)
 		{
-			if (this.setMaxCurveOverride == null || this.setMaxCurveEvaluateStat == null)
+			if (setMaxCurveOverride == null || setMaxCurveEvaluateStat == null)
 			{
-				return this.setMax;
+				return setMax;
 			}
-			return this.setMaxCurveOverride.Evaluate(pawn.GetStatValue(this.setMaxCurveEvaluateStat, true));
+			return setMaxCurveOverride.Evaluate(pawn.GetStatValue(setMaxCurveEvaluateStat));
 		}
-
-		
-		public PawnCapacityDef capacity;
-
-		
-		public float offset;
-
-		
-		public float setMax = 999f;
-
-		
-		public float postFactor = 1f;
-
-		
-		public SimpleCurve setMaxCurveOverride;
-
-		
-		public StatDef setMaxCurveEvaluateStat;
 	}
 }

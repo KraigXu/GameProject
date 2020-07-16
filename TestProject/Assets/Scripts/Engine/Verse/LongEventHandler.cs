@@ -1,58 +1,18 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using RimWorld;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Verse
 {
-	
 	public static class LongEventHandler
 	{
-		private static Queue<QueuedLongEvent> eventQueue = new Queue<QueuedLongEvent>();
-
-		private static QueuedLongEvent currentEvent = null;
-
-		private static Thread eventThread = null;
-
-		private static AsyncOperation levelLoadOp = null;
-
-		private static List<Action> toExecuteWhenFinished = new List<Action>();
-
-		private static bool executingToExecuteWhenFinished = false;
-
-		private static readonly object CurrentEventTextLock = new object();
-
-		private static readonly Vector2 StatusRectSize = new Vector2(240f, 75f);
-
-
 		private class QueuedLongEvent
 		{
-			public bool UseAnimatedDots
-			{
-				get
-				{
-					return this.doAsynchronously || this.eventActionEnumerator != null;
-				}
-			}
-			public bool ShouldWaitUntilDisplayed
-			{
-				get
-				{
-					return !this.alreadyDisplayed && this.UseStandardWindow && !this.eventText.NullOrEmpty();
-				}
-			}
-			public bool UseStandardWindow
-			{
-				get
-				{
-					return this.canEverUseStandardWindow && !this.doAsynchronously && this.eventActionEnumerator == null;
-				}
-			}
-
 			public Action eventAction;
 
 			public IEnumerator eventActionEnumerator;
@@ -72,288 +32,328 @@ namespace Verse
 			public bool canEverUseStandardWindow = true;
 
 			public bool showExtraUIInfo = true;
+
+			public bool UseAnimatedDots
+			{
+				get
+				{
+					if (!doAsynchronously)
+					{
+						return eventActionEnumerator != null;
+					}
+					return true;
+				}
+			}
+
+			public bool ShouldWaitUntilDisplayed
+			{
+				get
+				{
+					if (!alreadyDisplayed && UseStandardWindow)
+					{
+						return !eventText.NullOrEmpty();
+					}
+					return false;
+				}
+			}
+
+			public bool UseStandardWindow
+			{
+				get
+				{
+					if (canEverUseStandardWindow && !doAsynchronously)
+					{
+						return eventActionEnumerator == null;
+					}
+					return false;
+				}
+			}
 		}
+
+		private static Queue<QueuedLongEvent> eventQueue = new Queue<QueuedLongEvent>();
+
+		private static QueuedLongEvent currentEvent = null;
+
+		private static Thread eventThread = null;
+
+		private static AsyncOperation levelLoadOp = null;
+
+		private static List<Action> toExecuteWhenFinished = new List<Action>();
+
+		private static bool executingToExecuteWhenFinished = false;
+
+		private static readonly object CurrentEventTextLock = new object();
+
+		private static readonly Vector2 StatusRectSize = new Vector2(240f, 75f);
 
 		public static bool ShouldWaitForEvent
 		{
 			get
 			{
-				return LongEventHandler.AnyEventNowOrWaiting && ((LongEventHandler.currentEvent != null && !LongEventHandler.currentEvent.UseStandardWindow) || (Find.UIRoot == null || Find.WindowStack == null));
+				if (!AnyEventNowOrWaiting)
+				{
+					return false;
+				}
+				if (currentEvent != null && !currentEvent.UseStandardWindow)
+				{
+					return true;
+				}
+				if (Find.UIRoot == null || Find.WindowStack == null)
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public static bool AnyEventNowOrWaiting
 		{
 			get
 			{
-				return LongEventHandler.currentEvent != null || LongEventHandler.eventQueue.Count > 0;
+				if (currentEvent == null)
+				{
+					return eventQueue.Count > 0;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public static bool AnyEventWhichDoesntUseStandardWindowNowOrWaiting
 		{
 			get
 			{
-				LongEventHandler.QueuedLongEvent queuedLongEvent = LongEventHandler.currentEvent;
+				QueuedLongEvent queuedLongEvent = currentEvent;
 				if (queuedLongEvent != null && !queuedLongEvent.UseStandardWindow)
 				{
 					return true;
 				}
-				return LongEventHandler.eventQueue.Any((LongEventHandler.QueuedLongEvent x) => !x.UseStandardWindow);
+				return eventQueue.Any((QueuedLongEvent x) => !x.UseStandardWindow);
 			}
 		}
 
-		
-		
-		public static bool ForcePause
-		{
-			get
-			{
-				return LongEventHandler.AnyEventNowOrWaiting;
-			}
-		}
+		public static bool ForcePause => AnyEventNowOrWaiting;
 
-		
 		public static void QueueLongEvent(Action action, string textKey, bool doAsynchronously, Action<Exception> exceptionHandler, bool showExtraUIInfo = true)
 		{
-			LongEventHandler.QueuedLongEvent queuedLongEvent = new LongEventHandler.QueuedLongEvent();
+			QueuedLongEvent queuedLongEvent = new QueuedLongEvent();
 			queuedLongEvent.eventAction = action;
 			queuedLongEvent.eventTextKey = textKey;
 			queuedLongEvent.doAsynchronously = doAsynchronously;
 			queuedLongEvent.exceptionHandler = exceptionHandler;
-			queuedLongEvent.canEverUseStandardWindow = !LongEventHandler.AnyEventWhichDoesntUseStandardWindowNowOrWaiting;
+			queuedLongEvent.canEverUseStandardWindow = !AnyEventWhichDoesntUseStandardWindowNowOrWaiting;
 			queuedLongEvent.showExtraUIInfo = showExtraUIInfo;
-			LongEventHandler.eventQueue.Enqueue(queuedLongEvent);
+			eventQueue.Enqueue(queuedLongEvent);
 		}
 
-		
 		public static void QueueLongEvent(IEnumerable action, string textKey, Action<Exception> exceptionHandler = null, bool showExtraUIInfo = true)
 		{
-			LongEventHandler.QueuedLongEvent queuedLongEvent = new LongEventHandler.QueuedLongEvent();
+			QueuedLongEvent queuedLongEvent = new QueuedLongEvent();
 			queuedLongEvent.eventActionEnumerator = action.GetEnumerator();
 			queuedLongEvent.eventTextKey = textKey;
 			queuedLongEvent.doAsynchronously = false;
 			queuedLongEvent.exceptionHandler = exceptionHandler;
-			queuedLongEvent.canEverUseStandardWindow = !LongEventHandler.AnyEventWhichDoesntUseStandardWindowNowOrWaiting;
+			queuedLongEvent.canEverUseStandardWindow = !AnyEventWhichDoesntUseStandardWindowNowOrWaiting;
 			queuedLongEvent.showExtraUIInfo = showExtraUIInfo;
-			LongEventHandler.eventQueue.Enqueue(queuedLongEvent);
+			eventQueue.Enqueue(queuedLongEvent);
 		}
 
-		
 		public static void QueueLongEvent(Action preLoadLevelAction, string levelToLoad, string textKey, bool doAsynchronously, Action<Exception> exceptionHandler, bool showExtraUIInfo = true)
 		{
-			LongEventHandler.QueuedLongEvent queuedLongEvent = new LongEventHandler.QueuedLongEvent();
+			QueuedLongEvent queuedLongEvent = new QueuedLongEvent();
 			queuedLongEvent.eventAction = preLoadLevelAction;
 			queuedLongEvent.levelToLoad = levelToLoad;
 			queuedLongEvent.eventTextKey = textKey;
 			queuedLongEvent.doAsynchronously = doAsynchronously;
 			queuedLongEvent.exceptionHandler = exceptionHandler;
-			queuedLongEvent.canEverUseStandardWindow = !LongEventHandler.AnyEventWhichDoesntUseStandardWindowNowOrWaiting;
+			queuedLongEvent.canEverUseStandardWindow = !AnyEventWhichDoesntUseStandardWindowNowOrWaiting;
 			queuedLongEvent.showExtraUIInfo = showExtraUIInfo;
-			LongEventHandler.eventQueue.Enqueue(queuedLongEvent);
+			eventQueue.Enqueue(queuedLongEvent);
 		}
 
-		
 		public static void ClearQueuedEvents()
 		{
-			LongEventHandler.eventQueue.Clear();
+			eventQueue.Clear();
 		}
 
 		public static void LongEventsOnGUI()
 		{
-			if (LongEventHandler.currentEvent == null)
+			if (currentEvent == null)
 			{
 				GameplayTipWindow.ResetTipTimer();
 				return;
 			}
-			float num = LongEventHandler.StatusRectSize.x;
-			object currentEventTextLock = LongEventHandler.CurrentEventTextLock;
-			lock (currentEventTextLock)
+			float num = StatusRectSize.x;
+			lock (CurrentEventTextLock)
 			{
 				Text.Font = GameFont.Small;
-				num = Mathf.Max(num, Text.CalcSize(LongEventHandler.currentEvent.eventText + "...").x + 40f);
+				num = Mathf.Max(num, Text.CalcSize(currentEvent.eventText + "...").x + 40f);
 			}
-			bool flag2 = Find.UIRoot != null && !LongEventHandler.currentEvent.UseStandardWindow && LongEventHandler.currentEvent.showExtraUIInfo;
-			bool flag3 = Find.UIRoot != null && Current.Game != null && !LongEventHandler.currentEvent.UseStandardWindow && LongEventHandler.currentEvent.showExtraUIInfo;
-			Vector2 vector = flag3 ? ModSummaryWindow.GetEffectiveSize() : Vector2.zero;
-			float num2 = LongEventHandler.StatusRectSize.y;
-			if (flag3)
+			bool flag = Find.UIRoot != null && !currentEvent.UseStandardWindow && currentEvent.showExtraUIInfo;
+			bool flag2 = Find.UIRoot != null && Current.Game != null && !currentEvent.UseStandardWindow && currentEvent.showExtraUIInfo;
+			Vector2 vector = flag2 ? ModSummaryWindow.GetEffectiveSize() : Vector2.zero;
+			float num2 = StatusRectSize.y;
+			if (flag2)
 			{
 				num2 += 17f + vector.y;
 			}
-			if (flag2)
+			if (flag)
 			{
 				num2 += 17f + GameplayTipWindow.WindowSize.y;
 			}
 			float num3 = ((float)UI.screenHeight - num2) / 2f;
-			Vector2 vector2 = new Vector2(((float)UI.screenWidth - GameplayTipWindow.WindowSize.x) / 2f, num3 + LongEventHandler.StatusRectSize.y + 17f);
-			Vector2 offset = new Vector2(((float)UI.screenWidth - vector.x) / 2f, vector2.y + GameplayTipWindow.WindowSize.y + 17f);
-			Rect rect = new Rect(((float)UI.screenWidth - num) / 2f, num3, num, LongEventHandler.StatusRectSize.y);
-			rect = rect.Rounded();
-			if (!LongEventHandler.currentEvent.UseStandardWindow || Find.UIRoot == null || Find.WindowStack == null)
+			Vector2 offset = new Vector2(((float)UI.screenWidth - GameplayTipWindow.WindowSize.x) / 2f, num3 + StatusRectSize.y + 17f);
+			Vector2 offset2 = new Vector2(((float)UI.screenWidth - vector.x) / 2f, offset.y + GameplayTipWindow.WindowSize.y + 17f);
+			Rect r = new Rect(((float)UI.screenWidth - num) / 2f, num3, num, StatusRectSize.y);
+			r = r.Rounded();
+			if (!currentEvent.UseStandardWindow || Find.UIRoot == null || Find.WindowStack == null)
 			{
 				if (UIMenuBackgroundManager.background == null)
 				{
 					UIMenuBackgroundManager.background = new UI_BackgroundMain();
 				}
 				UIMenuBackgroundManager.background.BackgroundOnGUI();
-				Widgets.DrawShadowAround(rect);
-				Widgets.DrawWindowBackground(rect);
-				LongEventHandler.DrawLongEventWindowContents(rect);
+				Widgets.DrawShadowAround(r);
+				Widgets.DrawWindowBackground(r);
+				DrawLongEventWindowContents(r);
+				if (flag)
+				{
+					GameplayTipWindow.DrawWindow(offset, useWindowStack: false);
+				}
 				if (flag2)
 				{
-					GameplayTipWindow.DrawWindow(vector2, false);
-				}
-				if (flag3)
-				{
-					ModSummaryWindow.DrawWindow(offset, false);
+					ModSummaryWindow.DrawWindow(offset2, useWindowStack: false);
 					TooltipHandler.DoTooltipGUI();
-					return;
 				}
 			}
 			else
 			{
-				LongEventHandler.DrawLongEventWindow(rect);
-				if (flag2)
+				DrawLongEventWindow(r);
+				if (flag)
 				{
-					GameplayTipWindow.DrawWindow(vector2, true);
+					GameplayTipWindow.DrawWindow(offset, useWindowStack: true);
 				}
 			}
 		}
 
-		
 		private static void DrawLongEventWindow(Rect statusRect)
 		{
 			Find.WindowStack.ImmediateWindow(62893994, statusRect, WindowLayer.Super, delegate
 			{
-				LongEventHandler.DrawLongEventWindowContents(statusRect.AtZero());
-			}, true, false, 1f);
+				DrawLongEventWindowContents(statusRect.AtZero());
+			});
 		}
 
-		
 		public static void LongEventsUpdate(out bool sceneChanged)
 		{
 			sceneChanged = false;
-			if (LongEventHandler.currentEvent != null)
+			if (currentEvent != null)
 			{
-				if (LongEventHandler.currentEvent.eventActionEnumerator != null)
+				if (currentEvent.eventActionEnumerator != null)
 				{
-					LongEventHandler.UpdateCurrentEnumeratorEvent();
+					UpdateCurrentEnumeratorEvent();
 				}
-				else if (LongEventHandler.currentEvent.doAsynchronously)
+				else if (currentEvent.doAsynchronously)
 				{
-					LongEventHandler.UpdateCurrentAsynchronousEvent();
+					UpdateCurrentAsynchronousEvent();
 				}
 				else
 				{
-					LongEventHandler.UpdateCurrentSynchronousEvent(out sceneChanged);
+					UpdateCurrentSynchronousEvent(out sceneChanged);
 				}
 			}
-			if (LongEventHandler.currentEvent == null && LongEventHandler.eventQueue.Count > 0)
+			if (currentEvent == null && eventQueue.Count > 0)
 			{
-				LongEventHandler.currentEvent = LongEventHandler.eventQueue.Dequeue();
-				if (LongEventHandler.currentEvent.eventTextKey == null)
+				currentEvent = eventQueue.Dequeue();
+				if (currentEvent.eventTextKey == null)
 				{
-					LongEventHandler.currentEvent.eventText = "";
-					return;
+					currentEvent.eventText = "";
 				}
-				LongEventHandler.currentEvent.eventText = LongEventHandler.currentEvent.eventTextKey.Translate();
+				else
+				{
+					currentEvent.eventText = currentEvent.eventTextKey.Translate();
+				}
 			}
 		}
 
-		
 		public static void ExecuteWhenFinished(Action action)
 		{
-			LongEventHandler.toExecuteWhenFinished.Add(action);
-			if ((LongEventHandler.currentEvent == null || LongEventHandler.currentEvent.ShouldWaitUntilDisplayed) && !LongEventHandler.executingToExecuteWhenFinished)
+			toExecuteWhenFinished.Add(action);
+			if ((currentEvent == null || currentEvent.ShouldWaitUntilDisplayed) && !executingToExecuteWhenFinished)
 			{
-				LongEventHandler.ExecuteToExecuteWhenFinished();
+				ExecuteToExecuteWhenFinished();
 			}
 		}
 
-		
 		public static void SetCurrentEventText(string newText)
 		{
-			object currentEventTextLock = LongEventHandler.CurrentEventTextLock;
-			lock (currentEventTextLock)
+			lock (CurrentEventTextLock)
 			{
-				if (LongEventHandler.currentEvent != null)
+				if (currentEvent != null)
 				{
-					LongEventHandler.currentEvent.eventText = newText;
+					currentEvent.eventText = newText;
 				}
 			}
 		}
 
-		
 		private static void UpdateCurrentEnumeratorEvent()
 		{
 			try
 			{
 				float num = Time.realtimeSinceStartup + 0.1f;
-				while (LongEventHandler.currentEvent.eventActionEnumerator.MoveNext())
+				while (currentEvent.eventActionEnumerator.MoveNext())
 				{
 					if (num <= Time.realtimeSinceStartup)
 					{
 						return;
 					}
 				}
-				IDisposable disposable = LongEventHandler.currentEvent.eventActionEnumerator as IDisposable;
-				if (disposable != null)
-				{
-					disposable.Dispose();
-				}
-				LongEventHandler.currentEvent = null;
-				LongEventHandler.eventThread = null;
-				LongEventHandler.levelLoadOp = null;
-				LongEventHandler.ExecuteToExecuteWhenFinished();
+				(currentEvent.eventActionEnumerator as IDisposable)?.Dispose();
+				currentEvent = null;
+				eventThread = null;
+				levelLoadOp = null;
+				ExecuteToExecuteWhenFinished();
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Exception from long event: " + ex, false);
-				if (LongEventHandler.currentEvent != null)
+				Log.Error("Exception from long event: " + ex);
+				if (currentEvent != null)
 				{
-					IDisposable disposable2 = LongEventHandler.currentEvent.eventActionEnumerator as IDisposable;
-					if (disposable2 != null)
+					(currentEvent.eventActionEnumerator as IDisposable)?.Dispose();
+					if (currentEvent.exceptionHandler != null)
 					{
-						disposable2.Dispose();
-					}
-					if (LongEventHandler.currentEvent.exceptionHandler != null)
-					{
-						LongEventHandler.currentEvent.exceptionHandler(ex);
+						currentEvent.exceptionHandler(ex);
 					}
 				}
-				LongEventHandler.currentEvent = null;
-				LongEventHandler.eventThread = null;
-				LongEventHandler.levelLoadOp = null;
+				currentEvent = null;
+				eventThread = null;
+				levelLoadOp = null;
 			}
-		}
-
-		private static void RunEventFromAnotherThread()
-        {
-			LongEventHandler.RunEventFromAnotherThread(LongEventHandler.currentEvent.eventAction);
 		}
 
 		private static void UpdateCurrentAsynchronousEvent()
 		{
-			if (LongEventHandler.eventThread == null)
+			if (eventThread == null)
 			{
-                LongEventHandler.eventThread = new Thread(RunEventFromAnotherThread);
-                LongEventHandler.eventThread.Start();
-                return;
-			}
-			if (!LongEventHandler.eventThread.IsAlive)
-			{
-				bool flag = false;
-				if (!LongEventHandler.currentEvent.levelToLoad.NullOrEmpty())
+				eventThread = new Thread((ThreadStart)delegate
 				{
-					if (LongEventHandler.levelLoadOp == null)
+					RunEventFromAnotherThread(currentEvent.eventAction);
+				});
+				eventThread.Start();
+			}
+			else
+			{
+				if (eventThread.IsAlive)
+				{
+					return;
+				}
+				bool flag = false;
+				if (!currentEvent.levelToLoad.NullOrEmpty())
+				{
+					if (levelLoadOp == null)
 					{
-						LongEventHandler.levelLoadOp = SceneManager.LoadSceneAsync(LongEventHandler.currentEvent.levelToLoad);
+						levelLoadOp = SceneManager.LoadSceneAsync(currentEvent.levelToLoad);
 					}
-					else if (LongEventHandler.levelLoadOp.isDone)
+					else if (levelLoadOp.isDone)
 					{
 						flag = true;
 					}
@@ -364,10 +364,10 @@ namespace Verse
 				}
 				if (flag)
 				{
-					LongEventHandler.currentEvent = null;
-					LongEventHandler.eventThread = null;
-					LongEventHandler.levelLoadOp = null;
-					LongEventHandler.ExecuteToExecuteWhenFinished();
+					currentEvent = null;
+					eventThread = null;
+					levelLoadOp = null;
+					ExecuteToExecuteWhenFinished();
 				}
 			}
 		}
@@ -375,124 +375,117 @@ namespace Verse
 		private static void UpdateCurrentSynchronousEvent(out bool sceneChanged)
 		{
 			sceneChanged = false;
-			if (LongEventHandler.currentEvent.ShouldWaitUntilDisplayed)
+			if (!currentEvent.ShouldWaitUntilDisplayed)
 			{
-				return;
-			}
-			try
-			{
-				if (LongEventHandler.currentEvent.eventAction != null)
+				try
 				{
-					LongEventHandler.currentEvent.eventAction();
+					if (currentEvent.eventAction != null)
+					{
+						currentEvent.eventAction();
+					}
+					if (!currentEvent.levelToLoad.NullOrEmpty())
+					{
+						SceneManager.LoadScene(currentEvent.levelToLoad);
+						sceneChanged = true;
+					}
+					currentEvent = null;
+					eventThread = null;
+					levelLoadOp = null;
+					ExecuteToExecuteWhenFinished();
 				}
-				if (!LongEventHandler.currentEvent.levelToLoad.NullOrEmpty())
+				catch (Exception ex)
 				{
-					SceneManager.LoadScene(LongEventHandler.currentEvent.levelToLoad);
-					sceneChanged = true;
+					Log.Error("Exception from long event: " + ex);
+					if (currentEvent != null && currentEvent.exceptionHandler != null)
+					{
+						currentEvent.exceptionHandler(ex);
+					}
+					currentEvent = null;
+					eventThread = null;
+					levelLoadOp = null;
 				}
-				LongEventHandler.currentEvent = null;
-				LongEventHandler.eventThread = null;
-				LongEventHandler.levelLoadOp = null;
-				LongEventHandler.ExecuteToExecuteWhenFinished();
-			}
-			catch (Exception ex)
-			{
-				Log.Error("Exception from long event: " + ex, false);
-				if (LongEventHandler.currentEvent != null && LongEventHandler.currentEvent.exceptionHandler != null)
-				{
-					LongEventHandler.currentEvent.exceptionHandler(ex);
-				}
-				LongEventHandler.currentEvent = null;
-				LongEventHandler.eventThread = null;
-				LongEventHandler.levelLoadOp = null;
 			}
 		}
 
-		
 		private static void RunEventFromAnotherThread(Action action)
 		{
 			CultureInfoUtility.EnsureEnglish();
 			try
 			{
-				if (action != null)
-				{
-					action();
-				}
+				action?.Invoke();
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Exception from asynchronous event: " + ex, false);
+				Log.Error("Exception from asynchronous event: " + ex);
 				try
 				{
-					if (LongEventHandler.currentEvent != null && LongEventHandler.currentEvent.exceptionHandler != null)
+					if (currentEvent != null && currentEvent.exceptionHandler != null)
 					{
-						LongEventHandler.currentEvent.exceptionHandler(ex);
+						currentEvent.exceptionHandler(ex);
 					}
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Exception was thrown while trying to handle exception. Exception: " + arg, false);
+					Log.Error("Exception was thrown while trying to handle exception. Exception: " + arg);
 				}
 			}
 		}
 
-		
 		private static void ExecuteToExecuteWhenFinished()
 		{
-			if (LongEventHandler.executingToExecuteWhenFinished)
+			if (executingToExecuteWhenFinished)
 			{
-				Log.Warning("Already executing.", false);
+				Log.Warning("Already executing.");
 				return;
 			}
-			LongEventHandler.executingToExecuteWhenFinished = true;
-			if (LongEventHandler.toExecuteWhenFinished.Count > 0)
+			executingToExecuteWhenFinished = true;
+			if (toExecuteWhenFinished.Count > 0)
 			{
 				DeepProfiler.Start("ExecuteToExecuteWhenFinished()");
 			}
-			for (int i = 0; i < LongEventHandler.toExecuteWhenFinished.Count; i++)
+			for (int i = 0; i < toExecuteWhenFinished.Count; i++)
 			{
-				DeepProfiler.Start(LongEventHandler.toExecuteWhenFinished[i].Method.DeclaringType.ToString() + " -> " + LongEventHandler.toExecuteWhenFinished[i].Method.ToString());
+				DeepProfiler.Start(toExecuteWhenFinished[i].Method.DeclaringType.ToString() + " -> " + toExecuteWhenFinished[i].Method.ToString());
 				try
 				{
-					LongEventHandler.toExecuteWhenFinished[i]();
+					toExecuteWhenFinished[i]();
 				}
 				catch (Exception arg)
 				{
-					Log.Error("Could not execute post-long-event action. Exception: " + arg, false);
+					Log.Error("Could not execute post-long-event action. Exception: " + arg);
 				}
 				finally
 				{
 					DeepProfiler.End();
 				}
 			}
-			if (LongEventHandler.toExecuteWhenFinished.Count > 0)
+			if (toExecuteWhenFinished.Count > 0)
 			{
 				DeepProfiler.End();
 			}
-			LongEventHandler.toExecuteWhenFinished.Clear();
-			LongEventHandler.executingToExecuteWhenFinished = false;
+			toExecuteWhenFinished.Clear();
+			executingToExecuteWhenFinished = false;
 		}
 
-		
 		private static void DrawLongEventWindowContents(Rect rect)
 		{
-			if (LongEventHandler.currentEvent == null)
+			if (currentEvent == null)
 			{
 				return;
 			}
 			if (Event.current.type == EventType.Repaint)
 			{
-				LongEventHandler.currentEvent.alreadyDisplayed = true;
+				currentEvent.alreadyDisplayed = true;
 			}
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.MiddleCenter;
 			float num = 0f;
-			if (LongEventHandler.levelLoadOp != null)
+			if (levelLoadOp != null)
 			{
 				float f = 1f;
-				if (!LongEventHandler.levelLoadOp.isDone)
+				if (!levelLoadOp.isDone)
 				{
-					f = LongEventHandler.levelLoadOp.progress;
+					f = levelLoadOp.progress;
 				}
 				TaggedString taggedString = "LoadingAssets".Translate() + " " + f.ToStringPercent();
 				num = Text.CalcSize(taggedString).x;
@@ -500,20 +493,16 @@ namespace Verse
 			}
 			else
 			{
-				object currentEventTextLock = LongEventHandler.CurrentEventTextLock;
-				lock (currentEventTextLock)
+				lock (CurrentEventTextLock)
 				{
-					num = Text.CalcSize(LongEventHandler.currentEvent.eventText).x;
-					Widgets.Label(rect, LongEventHandler.currentEvent.eventText);
+					num = Text.CalcSize(currentEvent.eventText).x;
+					Widgets.Label(rect, currentEvent.eventText);
 				}
 			}
 			Text.Anchor = TextAnchor.MiddleLeft;
 			rect.xMin = rect.center.x + num / 2f;
-			Widgets.Label(rect, (!LongEventHandler.currentEvent.UseAnimatedDots) ? "..." : GenText.MarchingEllipsis(0f));
+			Widgets.Label(rect, (!currentEvent.UseAnimatedDots) ? "..." : GenText.MarchingEllipsis());
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
-
-		
-		
 	}
 }

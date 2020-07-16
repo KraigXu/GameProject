@@ -1,16 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Delay : QuestPartActivable
 	{
-		
-		
+		public int delayTicks;
+
+		public string expiryInfoPart;
+
+		public string expiryInfoPartTip;
+
+		public string inspectString;
+
+		public List<ISelectable> inspectStringTargets;
+
+		public bool isBad;
+
 		public int TicksLeft
 		{
 			get
@@ -19,147 +27,107 @@ namespace RimWorld
 				{
 					return 0;
 				}
-				return this.enableTick + this.delayTicks - Find.TickManager.TicksGame;
+				return enableTick + delayTicks - Find.TickManager.TicksGame;
 			}
 		}
 
-		
-		
 		public override string ExpiryInfoPart
 		{
 			get
 			{
-				if (this.quest.Historical)
+				if (quest.Historical)
 				{
 					return null;
 				}
-				return this.expiryInfoPart.Formatted(this.TicksLeft.ToStringTicksToPeriod(true, false, true, true));
+				return expiryInfoPart.Formatted(TicksLeft.ToStringTicksToPeriod());
 			}
 		}
 
-		
-		
-		public override string ExpiryInfoPartTip
-		{
-			get
-			{
-				return this.expiryInfoPartTip.Formatted(GenDate.DateFullStringWithHourAt((long)GenDate.TickGameToAbs(this.enableTick + this.delayTicks), QuestUtility.GetLocForDates()));
-			}
-		}
+		public override string ExpiryInfoPartTip => expiryInfoPartTip.Formatted(GenDate.DateFullStringWithHourAt(GenDate.TickGameToAbs(enableTick + delayTicks), QuestUtility.GetLocForDates()));
 
-		
-		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-				
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.inspectStringTargets != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					int num;
-					for (int i = 0; i < this.inspectStringTargets.Count; i = num + 1)
+					yield return questLookTarget;
+				}
+				if (inspectStringTargets == null)
+				{
+					yield break;
+				}
+				for (int i = 0; i < inspectStringTargets.Count; i++)
+				{
+					ISelectable selectable = inspectStringTargets[i];
+					if (selectable is Thing)
 					{
-						ISelectable selectable = this.inspectStringTargets[i];
-						if (selectable is Thing)
-						{
-							yield return (Thing)selectable;
-						}
-						else if (selectable is WorldObject)
-						{
-							yield return (WorldObject)selectable;
-						}
-						num = i;
+						yield return (Thing)selectable;
+					}
+					else if (selectable is WorldObject)
+					{
+						yield return (WorldObject)selectable;
 					}
 				}
-				yield break;
-				yield break;
 			}
 		}
 
-		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
-			if (Find.TickManager.TicksGame >= this.enableTick + this.delayTicks)
+			if (Find.TickManager.TicksGame >= enableTick + delayTicks)
 			{
-				this.DelayFinished();
+				DelayFinished();
 			}
 		}
 
-		
 		protected virtual void DelayFinished()
 		{
-			base.Complete();
+			Complete();
 		}
 
-		
 		public override string ExtraInspectString(ISelectable target)
 		{
-			if (this.inspectStringTargets != null && this.inspectStringTargets.Contains(target))
+			if (inspectStringTargets != null && inspectStringTargets.Contains(target))
 			{
-				return this.inspectString.Formatted(this.TicksLeft.ToStringTicksToPeriod(true, false, true, true));
+				return inspectString.Formatted(TicksLeft.ToStringTicksToPeriod());
 			}
 			return null;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.delayTicks, "delayTicks", 0, false);
-			Scribe_Values.Look<string>(ref this.expiryInfoPart, "expiryInfoPart", null, false);
-			Scribe_Values.Look<string>(ref this.expiryInfoPartTip, "expiryInfoPartTip", null, false);
-			Scribe_Values.Look<string>(ref this.inspectString, "inspectString", null, false);
-			Scribe_Collections.Look<ISelectable>(ref this.inspectStringTargets, "inspectStringTargets", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.isBad, "isBad", false, false);
+			Scribe_Values.Look(ref delayTicks, "delayTicks", 0);
+			Scribe_Values.Look(ref expiryInfoPart, "expiryInfoPart");
+			Scribe_Values.Look(ref expiryInfoPartTip, "expiryInfoPartTip");
+			Scribe_Values.Look(ref inspectString, "inspectString");
+			Scribe_Collections.Look(ref inspectStringTargets, "inspectStringTargets", LookMode.Reference);
+			Scribe_Values.Look(ref isBad, "isBad", defaultValue: false);
 		}
 
-		
 		public override void DoDebugWindowContents(Rect innerRect, ref float curY)
 		{
-			if (base.State != QuestPartState.Enabled)
+			if (base.State == QuestPartState.Enabled)
 			{
-				return;
+				Rect rect = new Rect(innerRect.x, curY, 500f, 25f);
+				if (Widgets.ButtonText(rect, "End " + ToString()))
+				{
+					DelayFinished();
+				}
+				curY += rect.height + 4f;
 			}
-			Rect rect = new Rect(innerRect.x, curY, 500f, 25f);
-			if (Widgets.ButtonText(rect, "End " + this.ToString(), true, true, true))
-			{
-				this.DelayFinished();
-			}
-			curY += rect.height + 4f;
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.delayTicks = Rand.RangeInclusive(833, 2500);
+			delayTicks = Rand.RangeInclusive(833, 2500);
 		}
 
-		
 		public void DebugForceEnd()
 		{
-			this.DelayFinished();
+			DelayFinished();
 		}
-
-		
-		public int delayTicks;
-
-		
-		public string expiryInfoPart;
-
-		
-		public string expiryInfoPartTip;
-
-		
-		public string inspectString;
-
-		
-		public List<ISelectable> inspectStringTargets;
-
-		
-		public bool isBad;
 	}
 }

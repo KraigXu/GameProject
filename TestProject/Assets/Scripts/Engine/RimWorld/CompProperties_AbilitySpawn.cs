@@ -1,18 +1,14 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompProperties_AbilitySpawn : CompProperties_AbilityEffect
 	{
-		
+		public ThingDef thingDef;
+
 		public CompProperties_AbilitySpawn()
 		{
-			this.compClass = typeof(CompAbilityEffect_Spawn);
+			compClass = typeof(CompAbilityEffect_Spawn);
 		}
-
-		
-		public ThingDef thingDef;
 	}
 }

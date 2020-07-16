@@ -1,98 +1,79 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class SimpleCurveView
 	{
-		
-		
+		public Rect rect;
+
+		private Dictionary<object, float> debugInputValues = new Dictionary<object, float>();
+
+		private const float ResetZoomBuffer = 0.1f;
+
+		private static Rect identityRect = new Rect(0f, 0f, 1f, 1f);
+
 		public IEnumerable<float> DebugInputValues
 		{
 			get
 			{
-				if (this.debugInputValues == null)
+				if (debugInputValues != null)
 				{
-					yield break;
+					foreach (float value in debugInputValues.Values)
+					{
+						yield return value;
+					}
 				}
-				foreach (float num in this.debugInputValues.Values)
-				{
-					yield return num;
-				}
-				Dictionary<object, float>.ValueCollection.Enumerator enumerator = default(Dictionary<object, float>.ValueCollection.Enumerator);
-				yield break;
-				yield break;
 			}
 		}
 
-		
 		public void SetDebugInput(object key, float value)
 		{
-			this.debugInputValues[key] = value;
+			debugInputValues[key] = value;
 		}
 
-		
 		public void ClearDebugInputFrom(object key)
 		{
-			if (this.debugInputValues.ContainsKey(key))
+			if (debugInputValues.ContainsKey(key))
 			{
-				this.debugInputValues.Remove(key);
+				debugInputValues.Remove(key);
 			}
 		}
 
-		
 		public void SetViewRectAround(SimpleCurve curve)
 		{
 			if (curve.PointsCount == 0)
 			{
-				this.rect = SimpleCurveView.identityRect;
+				rect = identityRect;
 				return;
 			}
-			this.rect.xMin = (from pt in curve.Points
-			select pt.Loc.x).Min();
-			this.rect.xMax = (from pt in curve.Points
-			select pt.Loc.x).Max();
-			this.rect.yMin = (from pt in curve.Points
-			select pt.Loc.y).Min();
-			this.rect.yMax = (from pt in curve.Points
-			select pt.Loc.y).Max();
-			if (Mathf.Approximately(this.rect.width, 0f))
+			rect.xMin = curve.Points.Select((CurvePoint pt) => pt.Loc.x).Min();
+			rect.xMax = curve.Points.Select((CurvePoint pt) => pt.Loc.x).Max();
+			rect.yMin = curve.Points.Select((CurvePoint pt) => pt.Loc.y).Min();
+			rect.yMax = curve.Points.Select((CurvePoint pt) => pt.Loc.y).Max();
+			if (Mathf.Approximately(rect.width, 0f))
 			{
-				this.rect.width = this.rect.xMin * 2f;
+				rect.width = rect.xMin * 2f;
 			}
-			if (Mathf.Approximately(this.rect.height, 0f))
+			if (Mathf.Approximately(rect.height, 0f))
 			{
-				this.rect.height = this.rect.yMin * 2f;
+				rect.height = rect.yMin * 2f;
 			}
-			if (Mathf.Approximately(this.rect.width, 0f))
+			if (Mathf.Approximately(rect.width, 0f))
 			{
-				this.rect.width = 1f;
+				rect.width = 1f;
 			}
-			if (Mathf.Approximately(this.rect.height, 0f))
+			if (Mathf.Approximately(rect.height, 0f))
 			{
-				this.rect.height = 1f;
+				rect.height = 1f;
 			}
-			float width = this.rect.width;
-			float height = this.rect.height;
-			this.rect.xMin = this.rect.xMin - width * 0.1f;
-			this.rect.xMax = this.rect.xMax + width * 0.1f;
-			this.rect.yMin = this.rect.yMin - height * 0.1f;
-			this.rect.yMax = this.rect.yMax + height * 0.1f;
+			float width = rect.width;
+			float height = rect.height;
+			rect.xMin -= width * 0.1f;
+			rect.xMax += width * 0.1f;
+			rect.yMin -= height * 0.1f;
+			rect.yMax += height * 0.1f;
 		}
-
-		
-		public Rect rect;
-
-		
-		private Dictionary<object, float> debugInputValues = new Dictionary<object, float>();
-
-		
-		private const float ResetZoomBuffer = 0.1f;
-
-		
-		private static Rect identityRect = new Rect(0f, 0f, 1f, 1f);
 	}
 }

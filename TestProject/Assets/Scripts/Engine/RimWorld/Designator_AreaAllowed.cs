@@ -1,67 +1,39 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Designator_AreaAllowed : Designator_Area
 	{
-		
-		
-		public override int DraggableDimensions
-		{
-			get
-			{
-				return 2;
-			}
-		}
+		private static Area selectedArea;
 
-		
-		
-		public override bool DragDrawMeasurements
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override int DraggableDimensions => 2;
 
-		
-		
-		public static Area SelectedArea
-		{
-			get
-			{
-				return Designator_AreaAllowed.selectedArea;
-			}
-		}
+		public override bool DragDrawMeasurements => true;
 
-		
+		public static Area SelectedArea => selectedArea;
+
 		public Designator_AreaAllowed(DesignateMode mode)
 		{
-			this.soundDragSustain = SoundDefOf.Designate_DragStandard;
-			this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-			this.useMouseIcon = true;
+			soundDragSustain = SoundDefOf.Designate_DragStandard;
+			soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+			useMouseIcon = true;
 		}
 
-		
 		public static void ClearSelectedArea()
 		{
-			Designator_AreaAllowed.selectedArea = null;
+			selectedArea = null;
 		}
 
-		
 		public override void SelectedUpdate()
 		{
 			GenUI.RenderMouseoverBracket();
-			if (Designator_AreaAllowed.selectedArea != null && Find.WindowStack.FloatMenu == null)
+			if (selectedArea != null && Find.WindowStack.FloatMenu == null)
 			{
-				Designator_AreaAllowed.selectedArea.MarkForDraw();
+				selectedArea.MarkForDraw();
 			}
 		}
 
-		
 		public override void ProcessInput(Event ev)
 		{
 			if (CheckCanInteract())
@@ -70,7 +42,7 @@ namespace RimWorld
 				{
 					base.ProcessInput(ev);
 				}
-				AreaUtility.MakeAllowedAreaListFloatMenu(delegate (Area a)
+				AreaUtility.MakeAllowedAreaListFloatMenu(delegate(Area a)
 				{
 					selectedArea = a;
 					base.ProcessInput(ev);
@@ -78,14 +50,10 @@ namespace RimWorld
 			}
 		}
 
-		
 		protected override void FinalizeDesignationSucceeded()
 		{
 			base.FinalizeDesignationSucceeded();
 			PlayerKnowledgeDatabase.KnowledgeDemonstrated(ConceptDefOf.AllowedAreas, KnowledgeAmount.SpecificInteraction);
 		}
-
-		
-		private static Area selectedArea;
 	}
 }

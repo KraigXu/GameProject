@@ -1,16 +1,12 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class InfestationUtility
 	{
-		
 		public static Thing SpawnTunnels(int hiveCount, Map map, bool spawnAnywhereIfNoGoodCell = false, bool ignoreRoofedRequirement = false, string questTag = null)
 		{
-			IntVec3 loc;
-			if (!InfestationCellFinder.TryFindCell(out loc, map))
+			if (!InfestationCellFinder.TryFindCell(out IntVec3 cell, map))
 			{
 				if (!spawnAnywhereIfNoGoodCell)
 				{
@@ -22,7 +18,7 @@ namespace RimWorld
 					{
 						return false;
 					}
-					bool result = false;
+					bool flag = false;
 					int num = GenRadial.NumCellsInRadius(3f);
 					for (int j = 0; j < num; j++)
 					{
@@ -32,25 +28,25 @@ namespace RimWorld
 							RoofDef roof = c.GetRoof(map);
 							if (roof != null && roof.isThickRoof)
 							{
-								result = true;
+								flag = true;
 								break;
 							}
 						}
 					}
-					return result;
-				}, map, out loc))
+					return flag ? true : false;
+				}, map, out cell))
 				{
 					return null;
 				}
 			}
-			Thing thing = GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.TunnelHiveSpawner, null), loc, map, WipeMode.FullRefund);
+			Thing thing = GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.TunnelHiveSpawner), cell, map, WipeMode.FullRefund);
 			QuestUtility.AddQuestTag(thing, questTag);
 			for (int i = 0; i < hiveCount - 1; i++)
 			{
-				loc = CompSpawnerHives.FindChildHiveLocation(thing.Position, map, ThingDefOf.Hive, ThingDefOf.Hive.GetCompProperties<CompProperties_SpawnerHives>(), ignoreRoofedRequirement, true);
-				if (loc.IsValid)
+				cell = CompSpawnerHives.FindChildHiveLocation(thing.Position, map, ThingDefOf.Hive, ThingDefOf.Hive.GetCompProperties<CompProperties_SpawnerHives>(), ignoreRoofedRequirement, allowUnreachable: true);
+				if (cell.IsValid)
 				{
-					thing = GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.TunnelHiveSpawner, null), loc, map, WipeMode.FullRefund);
+					thing = GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.TunnelHiveSpawner), cell, map, WipeMode.FullRefund);
 					QuestUtility.AddQuestTag(thing, questTag);
 				}
 			}

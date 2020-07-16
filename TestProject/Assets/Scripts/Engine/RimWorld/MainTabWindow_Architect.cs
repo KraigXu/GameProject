@@ -1,84 +1,67 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class MainTabWindow_Architect : MainTabWindow
 	{
-		
-		
+		private List<ArchitectCategoryTab> desPanelsCached;
+
+		public ArchitectCategoryTab selectedDesPanel;
+
+		public const float WinWidth = 200f;
+
+		private const float ButHeight = 32f;
+
 		public float WinHeight
 		{
 			get
 			{
-				if (this.desPanelsCached == null)
+				if (desPanelsCached == null)
 				{
-					this.CacheDesPanels();
+					CacheDesPanels();
 				}
-				return (float)Mathf.CeilToInt((float)this.desPanelsCached.Count / 2f) * 32f;
+				return (float)Mathf.CeilToInt((float)desPanelsCached.Count / 2f) * 32f;
 			}
 		}
 
-		
-		
-		public override Vector2 RequestedTabSize
-		{
-			get
-			{
-				return new Vector2(200f, this.WinHeight);
-			}
-		}
+		public override Vector2 RequestedTabSize => new Vector2(200f, WinHeight);
 
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		protected override float Margin => 0f;
 
-		
 		public MainTabWindow_Architect()
 		{
-			this.CacheDesPanels();
+			CacheDesPanels();
 		}
 
-		
 		public override void PostOpen()
 		{
 			base.PostOpen();
 			Find.World.renderer.wantedMode = WorldRenderMode.None;
 		}
 
-		
 		public override void WindowUpdate()
 		{
 			base.WindowUpdate();
-			if (this.selectedDesPanel != null && this.selectedDesPanel.def.showPowerGrid)
+			if (selectedDesPanel != null && selectedDesPanel.def.showPowerGrid)
 			{
 				OverlayDrawHandler.DrawPowerGridOverlayThisFrame();
 			}
 		}
 
-		
 		public override void ExtraOnGUI()
 		{
 			base.ExtraOnGUI();
-			if (this.selectedDesPanel != null)
+			if (selectedDesPanel != null)
 			{
-				this.selectedDesPanel.DesignationTabOnGUI();
+				selectedDesPanel.DesignationTabOnGUI();
 			}
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			base.DoWindowContents(inRect);
@@ -86,7 +69,7 @@ namespace RimWorld
 			float num = inRect.width / 2f;
 			float num2 = 0f;
 			float num3 = 0f;
-			for (int i = 0; i < this.desPanelsCached.Count; i++)
+			for (int i = 0; i < desPanelsCached.Count; i++)
 			{
 				Rect rect = new Rect(num2 * num, num3 * 32f, num, 32f);
 				float height = rect.height;
@@ -95,13 +78,13 @@ namespace RimWorld
 				{
 					rect.width += 1f;
 				}
-				if (Widgets.ButtonTextSubtle(rect, this.desPanelsCached[i].def.LabelCap, 0f, 8f, SoundDefOf.Mouseover_Category, new Vector2(-1f, -1f)))
+				if (Widgets.ButtonTextSubtle(rect, desPanelsCached[i].def.LabelCap, 0f, 8f, SoundDefOf.Mouseover_Category, new Vector2(-1f, -1f)))
 				{
-					this.ClickedCategory(this.desPanelsCached[i]);
+					ClickedCategory(desPanelsCached[i]);
 				}
-				if (this.selectedDesPanel != this.desPanelsCached[i])
+				if (selectedDesPanel != desPanelsCached[i])
 				{
-					UIHighlighter.HighlightOpportunity(rect, this.desPanelsCached[i].def.cachedHighlightClosedTag);
+					UIHighlighter.HighlightOpportunity(rect, desPanelsCached[i].def.cachedHighlightClosedTag);
 				}
 				num2 += 1f;
 				if (num2 > 1f)
@@ -112,42 +95,26 @@ namespace RimWorld
 			}
 		}
 
-		
 		private void CacheDesPanels()
 		{
-			this.desPanelsCached = new List<ArchitectCategoryTab>();
-			foreach (DesignationCategoryDef def in from dc in DefDatabase<DesignationCategoryDef>.AllDefs
-			orderby dc.order descending
-			select dc)
+			desPanelsCached = new List<ArchitectCategoryTab>();
+			foreach (DesignationCategoryDef item in DefDatabase<DesignationCategoryDef>.AllDefs.OrderByDescending((DesignationCategoryDef dc) => dc.order))
 			{
-				this.desPanelsCached.Add(new ArchitectCategoryTab(def));
+				desPanelsCached.Add(new ArchitectCategoryTab(item));
 			}
 		}
 
-		
 		protected void ClickedCategory(ArchitectCategoryTab Pan)
 		{
-			if (this.selectedDesPanel == Pan)
+			if (selectedDesPanel == Pan)
 			{
-				this.selectedDesPanel = null;
+				selectedDesPanel = null;
 			}
 			else
 			{
-				this.selectedDesPanel = Pan;
+				selectedDesPanel = Pan;
 			}
-			SoundDefOf.ArchitectCategorySelect.PlayOneShotOnCamera(null);
+			SoundDefOf.ArchitectCategorySelect.PlayOneShotOnCamera();
 		}
-
-		
-		private List<ArchitectCategoryTab> desPanelsCached;
-
-		
-		public ArchitectCategoryTab selectedDesPanel;
-
-		
-		public const float WinWidth = 200f;
-
-		
-		private const float ButHeight = 32f;
 	}
 }

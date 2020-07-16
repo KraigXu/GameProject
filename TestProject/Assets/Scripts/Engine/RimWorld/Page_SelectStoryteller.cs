@@ -1,41 +1,36 @@
-﻿using System;
+using System;
 using System.Linq;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Page_SelectStoryteller : Page
 	{
-		
-		
-		public override string PageTitle
-		{
-			get
-			{
-				return "ChooseAIStoryteller".Translate();
-			}
-		}
+		private StorytellerDef storyteller;
 
-		
+		private DifficultyDef difficulty;
+
+		private Listing_Standard selectedStorytellerInfoListing = new Listing_Standard();
+
+		public override string PageTitle => "ChooseAIStoryteller".Translate();
+
 		public override void PreOpen()
 		{
 			base.PreOpen();
-			if (this.storyteller == null)
+			if (storyteller == null)
 			{
-				this.storyteller = (from d in DefDatabase<StorytellerDef>.AllDefs
-				where d.listVisible
-				orderby d.listOrder
-				select d).First<StorytellerDef>();
+				storyteller = (from d in DefDatabase<StorytellerDef>.AllDefs
+					where d.listVisible
+					orderby d.listOrder
+					select d).First();
 			}
 		}
 
-		
 		public override void DoWindowContents(Rect rect)
 		{
-			base.DrawPageTitle(rect);
-			StorytellerUI.DrawStorytellerSelectionInterface(base.GetMainRect(rect, 0f, false), ref this.storyteller, ref this.difficulty, this.selectedStorytellerInfoListing);
+			DrawPageTitle(rect);
+			StorytellerUI.DrawStorytellerSelectionInterface(GetMainRect(rect), ref storyteller, ref difficulty, selectedStorytellerInfoListing);
 			string midLabel = null;
 			Action midAct = null;
 			if (!Prefs.ExtremeDifficultyUnlocked)
@@ -43,10 +38,10 @@ namespace RimWorld
 				midLabel = "UnlockExtremeDifficulty".Translate();
 				midAct = delegate
 				{
-					this.OpenDifficultyUnlockConfirmation();
+					OpenDifficultyUnlockConfirmation();
 				};
 			}
-			base.DoBottomButtons(rect, null, midLabel, midAct, true, true);
+			DoBottomButtons(rect, null, midLabel, midAct);
 			Rect rect2 = new Rect(rect.xMax - Page.BottomButSize.x - 200f - 6f, rect.yMax - Page.BottomButSize.y, 200f, Page.BottomButSize.y);
 			Text.Font = GameFont.Tiny;
 			Text.Anchor = TextAnchor.MiddleRight;
@@ -54,55 +49,44 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		
 		private void OpenDifficultyUnlockConfirmation()
 		{
 			Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmUnlockExtremeDifficulty".Translate(), delegate
 			{
 				Prefs.ExtremeDifficultyUnlocked = true;
 				Prefs.Save();
-			}, true, null));
+			}, destructive: true));
 		}
 
-		
 		protected override bool CanDoNext()
 		{
 			if (!base.CanDoNext())
 			{
 				return false;
 			}
-			if (this.difficulty == null)
+			if (difficulty == null)
 			{
 				if (!Prefs.DevMode)
 				{
-					Messages.Message("MustChooseDifficulty".Translate(), MessageTypeDefOf.RejectInput, false);
+					Messages.Message("MustChooseDifficulty".Translate(), MessageTypeDefOf.RejectInput, historical: false);
 					return false;
 				}
-				Messages.Message("Difficulty has been automatically selected (debug mode only)", MessageTypeDefOf.SilentInput, false);
-				this.difficulty = DifficultyDefOf.Rough;
+				Messages.Message("Difficulty has been automatically selected (debug mode only)", MessageTypeDefOf.SilentInput, historical: false);
+				difficulty = DifficultyDefOf.Rough;
 			}
 			if (!Find.GameInitData.permadeathChosen)
 			{
 				if (!Prefs.DevMode)
 				{
-					Messages.Message("MustChoosePermadeath".Translate(), MessageTypeDefOf.RejectInput, false);
+					Messages.Message("MustChoosePermadeath".Translate(), MessageTypeDefOf.RejectInput, historical: false);
 					return false;
 				}
-				Messages.Message("Reload anytime mode has been automatically selected (debug mode only)", MessageTypeDefOf.SilentInput, false);
+				Messages.Message("Reload anytime mode has been automatically selected (debug mode only)", MessageTypeDefOf.SilentInput, historical: false);
 				Find.GameInitData.permadeathChosen = true;
 				Find.GameInitData.permadeath = false;
 			}
-			Current.Game.storyteller = new Storyteller(this.storyteller, this.difficulty);
+			Current.Game.storyteller = new Storyteller(storyteller, difficulty);
 			return true;
 		}
-
-		
-		private StorytellerDef storyteller;
-
-		
-		private DifficultyDef difficulty;
-
-		
-		private Listing_Standard selectedStorytellerInfoListing = new Listing_Standard();
 	}
 }

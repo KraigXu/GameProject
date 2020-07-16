@@ -1,15 +1,21 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_Conditional_FactionRelation : ThingSetMaker_Conditional
 	{
-		
+		public FactionDef factionDef;
+
+		public bool allowHostile;
+
+		public bool allowNeutral;
+
+		public bool allowAlly;
+
 		protected override bool Condition(ThingSetMakerParams parms)
 		{
-			Faction faction = Find.FactionManager.FirstFactionOfDef(this.factionDef);
+			Faction faction = Find.FactionManager.FirstFactionOfDef(factionDef);
 			if (faction == null)
 			{
 				return false;
@@ -17,26 +23,14 @@ namespace RimWorld
 			switch (faction.RelationKindWith(Faction.OfPlayer))
 			{
 			case FactionRelationKind.Hostile:
-				return this.allowHostile;
+				return allowHostile;
 			case FactionRelationKind.Neutral:
-				return this.allowNeutral;
+				return allowNeutral;
 			case FactionRelationKind.Ally:
-				return this.allowAlly;
+				return allowAlly;
 			default:
 				throw new NotImplementedException();
 			}
 		}
-
-		
-		public FactionDef factionDef;
-
-		
-		public bool allowHostile;
-
-		
-		public bool allowNeutral;
-
-		
-		public bool allowAlly;
 	}
 }

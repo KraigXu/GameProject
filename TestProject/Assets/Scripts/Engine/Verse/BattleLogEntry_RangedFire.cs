@@ -1,217 +1,209 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using Verse.Grammar;
 
 namespace Verse
 {
-	
 	public class BattleLogEntry_RangedFire : LogEntry
 	{
-		
-		
+		private Pawn initiatorPawn;
+
+		private ThingDef initiatorThing;
+
+		private Pawn recipientPawn;
+
+		private ThingDef recipientThing;
+
+		private ThingDef weaponDef;
+
+		private ThingDef projectileDef;
+
+		private bool burst;
+
+		[TweakValue("LogFilter", 0f, 1f)]
+		private static float DisplayChance = 0.25f;
+
 		private string InitiatorName
 		{
 			get
 			{
-				if (this.initiatorPawn == null)
+				if (initiatorPawn == null)
 				{
 					return "null";
 				}
-				return this.initiatorPawn.LabelShort;
+				return initiatorPawn.LabelShort;
 			}
 		}
 
-		
-		
 		private string RecipientName
 		{
 			get
 			{
-				if (this.recipientPawn == null)
+				if (recipientPawn == null)
 				{
 					return "null";
 				}
-				return this.recipientPawn.LabelShort;
+				return recipientPawn.LabelShort;
 			}
 		}
 
-		
-		public BattleLogEntry_RangedFire() : base(null)
+		public BattleLogEntry_RangedFire()
 		{
 		}
 
-		
-		public BattleLogEntry_RangedFire(Thing initiator, Thing target, ThingDef weaponDef, ThingDef projectileDef, bool burst) : base(null)
+		public BattleLogEntry_RangedFire(Thing initiator, Thing target, ThingDef weaponDef, ThingDef projectileDef, bool burst)
 		{
 			if (initiator is Pawn)
 			{
-				this.initiatorPawn = (initiator as Pawn);
+				initiatorPawn = (initiator as Pawn);
 			}
 			else if (initiator != null)
 			{
-				this.initiatorThing = initiator.def;
+				initiatorThing = initiator.def;
 			}
 			if (target is Pawn)
 			{
-				this.recipientPawn = (target as Pawn);
+				recipientPawn = (target as Pawn);
 			}
 			else if (target != null)
 			{
-				this.recipientThing = target.def;
+				recipientThing = target.def;
 			}
 			this.weaponDef = weaponDef;
 			this.projectileDef = projectileDef;
 			this.burst = burst;
 		}
 
-		
 		public override bool Concerns(Thing t)
 		{
-			return t == this.initiatorPawn || t == this.recipientPawn;
+			if (t != initiatorPawn)
+			{
+				return t == recipientPawn;
+			}
+			return true;
 		}
 
-		
 		public override IEnumerable<Thing> GetConcerns()
 		{
-			if (this.initiatorPawn != null)
+			if (initiatorPawn != null)
 			{
-				yield return this.initiatorPawn;
+				yield return initiatorPawn;
 			}
-			if (this.recipientPawn != null)
+			if (recipientPawn != null)
 			{
-				yield return this.recipientPawn;
+				yield return recipientPawn;
 			}
-			yield break;
 		}
 
-		
 		public override bool CanBeClickedFromPOV(Thing pov)
 		{
-			return this.recipientPawn != null && ((pov == this.initiatorPawn && CameraJumper.CanJump(this.recipientPawn)) || (pov == this.recipientPawn && CameraJumper.CanJump(this.initiatorPawn)));
+			if (recipientPawn != null)
+			{
+				if (pov != initiatorPawn || !CameraJumper.CanJump(recipientPawn))
+				{
+					if (pov == recipientPawn)
+					{
+						return CameraJumper.CanJump(initiatorPawn);
+					}
+					return false;
+				}
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override void ClickedFromPOV(Thing pov)
 		{
-			if (this.recipientPawn == null)
+			if (recipientPawn == null)
 			{
 				return;
 			}
-			if (pov == this.initiatorPawn)
+			if (pov == initiatorPawn)
 			{
-				CameraJumper.TryJumpAndSelect(this.recipientPawn);
+				CameraJumper.TryJumpAndSelect(recipientPawn);
 				return;
 			}
-			if (pov == this.recipientPawn)
+			if (pov == recipientPawn)
 			{
-				CameraJumper.TryJumpAndSelect(this.initiatorPawn);
+				CameraJumper.TryJumpAndSelect(initiatorPawn);
 				return;
 			}
 			throw new NotImplementedException();
 		}
 
-		
 		protected override GrammarRequest GenerateGrammarRequest()
 		{
 			GrammarRequest result = base.GenerateGrammarRequest();
-			if (this.initiatorPawn == null && this.initiatorThing == null)
+			if (initiatorPawn == null && initiatorThing == null)
 			{
-				Log.ErrorOnce("BattleLogEntry_RangedFire has a null initiator.", 60465709, false);
+				Log.ErrorOnce("BattleLogEntry_RangedFire has a null initiator.", 60465709);
 			}
-			if (this.weaponDef != null && this.weaponDef.Verbs[0].rangedFireRulepack != null)
+			if (weaponDef != null && weaponDef.Verbs[0].rangedFireRulepack != null)
 			{
-				result.Includes.Add(this.weaponDef.Verbs[0].rangedFireRulepack);
+				result.Includes.Add(weaponDef.Verbs[0].rangedFireRulepack);
 			}
 			else
 			{
 				result.Includes.Add(RulePackDefOf.Combat_RangedFire);
 			}
-			if (this.initiatorPawn != null)
+			if (initiatorPawn != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForPawn("INITIATOR", this.initiatorPawn, result.Constants, true, true));
+				result.Rules.AddRange(GrammarUtility.RulesForPawn("INITIATOR", initiatorPawn, result.Constants));
 			}
-			else if (this.initiatorThing != null)
+			else if (initiatorThing != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("INITIATOR", this.initiatorThing));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("INITIATOR", initiatorThing));
 			}
 			else
 			{
 				result.Constants["INITIATOR_missing"] = "True";
 			}
-			if (this.recipientPawn != null)
+			if (recipientPawn != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForPawn("RECIPIENT", this.recipientPawn, result.Constants, true, true));
+				result.Rules.AddRange(GrammarUtility.RulesForPawn("RECIPIENT", recipientPawn, result.Constants));
 			}
-			else if (this.recipientThing != null)
+			else if (recipientThing != null)
 			{
-				result.Rules.AddRange(GrammarUtility.RulesForDef("RECIPIENT", this.recipientThing));
+				result.Rules.AddRange(GrammarUtility.RulesForDef("RECIPIENT", recipientThing));
 			}
 			else
 			{
 				result.Constants["RECIPIENT_missing"] = "True";
 			}
-			result.Rules.AddRange(PlayLogEntryUtility.RulesForOptionalWeapon("WEAPON", this.weaponDef, this.projectileDef));
-			if (this.initiatorPawn != null && this.initiatorPawn.skills != null)
+			result.Rules.AddRange(PlayLogEntryUtility.RulesForOptionalWeapon("WEAPON", weaponDef, projectileDef));
+			if (initiatorPawn != null && initiatorPawn.skills != null)
 			{
-				result.Constants["INITIATOR_skill"] = this.initiatorPawn.skills.GetSkill(SkillDefOf.Shooting).Level.ToStringCached();
+				result.Constants["INITIATOR_skill"] = initiatorPawn.skills.GetSkill(SkillDefOf.Shooting).Level.ToStringCached();
 			}
-			if (this.recipientPawn != null && this.recipientPawn.skills != null)
+			if (recipientPawn != null && recipientPawn.skills != null)
 			{
-				result.Constants["RECIPIENT_skill"] = this.recipientPawn.skills.GetSkill(SkillDefOf.Shooting).Level.ToStringCached();
+				result.Constants["RECIPIENT_skill"] = recipientPawn.skills.GetSkill(SkillDefOf.Shooting).Level.ToStringCached();
 			}
-			result.Constants["BURST"] = this.burst.ToString();
+			result.Constants["BURST"] = burst.ToString();
 			return result;
 		}
 
-		
 		public override bool ShowInCompactView()
 		{
-			return Rand.ChanceSeeded(BattleLogEntry_RangedFire.DisplayChance, this.logID);
+			return Rand.ChanceSeeded(DisplayChance, logID);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Pawn>(ref this.initiatorPawn, "initiatorPawn", true);
-			Scribe_Defs.Look<ThingDef>(ref this.initiatorThing, "initiatorThing");
-			Scribe_References.Look<Pawn>(ref this.recipientPawn, "recipientPawn", true);
-			Scribe_Defs.Look<ThingDef>(ref this.recipientThing, "recipientThing");
-			Scribe_Defs.Look<ThingDef>(ref this.weaponDef, "weaponDef");
-			Scribe_Defs.Look<ThingDef>(ref this.projectileDef, "projectileDef");
-			Scribe_Values.Look<bool>(ref this.burst, "burst", false, false);
+			Scribe_References.Look(ref initiatorPawn, "initiatorPawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref initiatorThing, "initiatorThing");
+			Scribe_References.Look(ref recipientPawn, "recipientPawn", saveDestroyedThings: true);
+			Scribe_Defs.Look(ref recipientThing, "recipientThing");
+			Scribe_Defs.Look(ref weaponDef, "weaponDef");
+			Scribe_Defs.Look(ref projectileDef, "projectileDef");
+			Scribe_Values.Look(ref burst, "burst", defaultValue: false);
 		}
 
-		
 		public override string ToString()
 		{
-			return "BattleLogEntry_RangedFire: " + this.InitiatorName + "->" + this.RecipientName;
+			return "BattleLogEntry_RangedFire: " + InitiatorName + "->" + RecipientName;
 		}
-
-		
-		private Pawn initiatorPawn;
-
-		
-		private ThingDef initiatorThing;
-
-		
-		private Pawn recipientPawn;
-
-		
-		private ThingDef recipientThing;
-
-		
-		private ThingDef weaponDef;
-
-		
-		private ThingDef projectileDef;
-
-		
-		private bool burst;
-
-		
-		[TweakValue("LogFilter", 0f, 1f)]
-		private static float DisplayChance = 0.25f;
 	}
 }

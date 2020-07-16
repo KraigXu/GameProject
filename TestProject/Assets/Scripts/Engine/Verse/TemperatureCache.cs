@@ -1,98 +1,84 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public sealed class TemperatureCache : IExposable
 	{
-		
+		private Map map;
+
+		internal TemperatureSaveLoad temperatureSaveLoad;
+
+		public CachedTempInfo[] tempCache;
+
+		private HashSet<int> processedRoomGroupIDs = new HashSet<int>();
+
+		private List<CachedTempInfo> relevantTempInfoList = new List<CachedTempInfo>();
+
 		public TemperatureCache(Map map)
 		{
 			this.map = map;
-			this.tempCache = new CachedTempInfo[map.cellIndices.NumGridCells];
-			this.temperatureSaveLoad = new TemperatureSaveLoad(map);
+			tempCache = new CachedTempInfo[map.cellIndices.NumGridCells];
+			temperatureSaveLoad = new TemperatureSaveLoad(map);
 		}
 
-		
 		public void ResetTemperatureCache()
 		{
-			int numGridCells = this.map.cellIndices.NumGridCells;
+			int numGridCells = map.cellIndices.NumGridCells;
 			for (int i = 0; i < numGridCells; i++)
 			{
-				this.tempCache[i].Reset();
+				tempCache[i].Reset();
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			this.temperatureSaveLoad.DoExposeWork();
+			temperatureSaveLoad.DoExposeWork();
 		}
 
-		
 		public void ResetCachedCellInfo(IntVec3 c)
 		{
-			this.tempCache[this.map.cellIndices.CellToIndex(c)].Reset();
+			tempCache[map.cellIndices.CellToIndex(c)].Reset();
 		}
 
-		
 		private void SetCachedCellInfo(IntVec3 c, CachedTempInfo info)
 		{
-			this.tempCache[this.map.cellIndices.CellToIndex(c)] = info;
+			tempCache[map.cellIndices.CellToIndex(c)] = info;
 		}
 
-		
 		public void TryCacheRegionTempInfo(IntVec3 c, Region reg)
 		{
 			Room room = reg.Room;
 			if (room != null)
 			{
 				RoomGroup group = room.Group;
-				this.SetCachedCellInfo(c, new CachedTempInfo(group.ID, group.CellCount, group.Temperature));
+				SetCachedCellInfo(c, new CachedTempInfo(group.ID, group.CellCount, group.Temperature));
 			}
 		}
 
-		
 		public bool TryGetAverageCachedRoomGroupTemp(RoomGroup r, out float result)
 		{
-			CellIndices cellIndices = this.map.cellIndices;
-			foreach (IntVec3 c in r.Cells)
+			CellIndices cellIndices = map.cellIndices;
+			foreach (IntVec3 cell in r.Cells)
 			{
-				CachedTempInfo cachedTempInfo = this.map.temperatureCache.tempCache[cellIndices.CellToIndex(c)];
-				if (cachedTempInfo.numCells > 0 && !this.processedRoomGroupIDs.Contains(cachedTempInfo.roomGroupID))
+				CachedTempInfo item = map.temperatureCache.tempCache[cellIndices.CellToIndex(cell)];
+				if (item.numCells > 0 && !processedRoomGroupIDs.Contains(item.roomGroupID))
 				{
-					this.relevantTempInfoList.Add(cachedTempInfo);
-					this.processedRoomGroupIDs.Add(cachedTempInfo.roomGroupID);
+					relevantTempInfoList.Add(item);
+					processedRoomGroupIDs.Add(item.roomGroupID);
 				}
 			}
 			int num = 0;
 			float num2 = 0f;
-			foreach (CachedTempInfo cachedTempInfo2 in this.relevantTempInfoList)
+			foreach (CachedTempInfo relevantTempInfo in relevantTempInfoList)
 			{
-				num += cachedTempInfo2.numCells;
-				num2 += cachedTempInfo2.temperature * (float)cachedTempInfo2.numCells;
+				num += relevantTempInfo.numCells;
+				num2 += relevantTempInfo.temperature * (float)relevantTempInfo.numCells;
 			}
 			result = num2 / (float)num;
-			bool result2 = !this.relevantTempInfoList.NullOrEmpty<CachedTempInfo>();
-			this.processedRoomGroupIDs.Clear();
-			this.relevantTempInfoList.Clear();
+			bool result2 = !relevantTempInfoList.NullOrEmpty();
+			processedRoomGroupIDs.Clear();
+			relevantTempInfoList.Clear();
 			return result2;
 		}
-
-		
-		private Map map;
-
-		
-		internal TemperatureSaveLoad temperatureSaveLoad;
-
-		
-		public CachedTempInfo[] tempCache;
-
-		
-		private HashSet<int> processedRoomGroupIDs = new HashSet<int>();
-
-		
-		private List<CachedTempInfo> relevantTempInfoList = new List<CachedTempInfo>();
 	}
 }

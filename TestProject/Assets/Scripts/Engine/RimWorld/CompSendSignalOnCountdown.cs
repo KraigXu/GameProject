@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,117 +5,93 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompSendSignalOnCountdown : ThingComp
 	{
-		
-		
-		private CompProperties_SendSignalOnCountdown Props
-		{
-			get
-			{
-				return (CompProperties_SendSignalOnCountdown)this.props;
-			}
-		}
+		public string signalTag;
 
-		
+		public int ticksLeft;
+
+		private const float MaxDistActivationByOther = 40f;
+
+		private CompProperties_SendSignalOnCountdown Props => (CompProperties_SendSignalOnCountdown)props;
+
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.signalTag = this.Props.signalTag;
-			this.ticksLeft = Mathf.CeilToInt(Rand.ByCurve(this.Props.countdownCurveTicks));
+			signalTag = Props.signalTag;
+			ticksLeft = Mathf.CeilToInt(Rand.ByCurve(Props.countdownCurveTicks));
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				yield break;
-			}
-			yield return new Command_Action
-			{
-				defaultLabel = "DEV: Activate",
-				action = delegate
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEV: Activate";
+				command_Action.action = delegate
 				{
-					Find.SignalManager.SendSignal(new Signal(this.signalTag, this.parent.Named("SUBJECT")));
-					SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
-					this.ticksLeft = 0;
-				}
-			};
-			yield break;
+					Find.SignalManager.SendSignal(new Signal(signalTag, parent.Named("SUBJECT")));
+					SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
+					ticksLeft = 0;
+				};
+				yield return command_Action;
+			}
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (this.parent.IsHashIntervalTick(250))
+			if (parent.IsHashIntervalTick(250))
 			{
-				this.TickRareWorker();
+				TickRareWorker();
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
-			this.TickRareWorker();
+			TickRareWorker();
 		}
 
-		
 		public void TickRareWorker()
 		{
-			if (this.ticksLeft <= 0 || !this.parent.Spawned)
+			if (ticksLeft > 0 && parent.Spawned)
 			{
-				return;
-			}
-			this.ticksLeft -= 250;
-			if (this.ticksLeft <= 0)
-			{
-				Find.SignalManager.SendSignal(new Signal(this.signalTag, this.parent.Named("SUBJECT")));
-				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
+				ticksLeft -= 250;
+				if (ticksLeft <= 0)
+				{
+					Find.SignalManager.SendSignal(new Signal(signalTag, parent.Named("SUBJECT")));
+					SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
+				}
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.parent.Spawned)
+			if (!parent.Spawned)
 			{
 				return null;
 			}
-			if (this.ticksLeft <= 0)
+			if (ticksLeft <= 0)
 			{
 				return "expired".Translate().CapitalizeFirst();
 			}
-			return "SendSignalOnCountdownCompTime".Translate(this.ticksLeft.ToStringTicksToPeriod(true, false, true, true));
+			return "SendSignalOnCountdownCompTime".Translate(ticksLeft.ToStringTicksToPeriod());
 		}
 
-
-		//public override void Notify_SignalReceived(Signal signal)
-		//{
-		//	if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg("SUBJECT", out Thing arg) && arg != parent && arg != null && arg.Map == parent.Map && parent.Position.DistanceTo(arg.Position) <= 40f)
-		//	{
-		//		ticksLeft = 0;
-		//	}
-		//}
-
+		public override void Notify_SignalReceived(Signal signal)
+		{
+			if (signal.tag == "CompCanBeDormant.WakeUp" && signal.args.TryGetArg("SUBJECT", out Thing arg) && arg != parent && arg != null && arg.Map == parent.Map && parent.Position.DistanceTo(arg.Position) <= 40f)
+			{
+				ticksLeft = 0;
+			}
+		}
 
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.ticksLeft, "ticksLeft", 0, false);
-			Scribe_Values.Look<string>(ref this.signalTag, "signalTag", null, false);
+			Scribe_Values.Look(ref ticksLeft, "ticksLeft", 0);
+			Scribe_Values.Look(ref signalTag, "signalTag");
 		}
-
-		
-		public string signalTag;
-
-		
-		public int ticksLeft;
-
-		
-		private const float MaxDistActivationByOther = 40f;
 	}
 }

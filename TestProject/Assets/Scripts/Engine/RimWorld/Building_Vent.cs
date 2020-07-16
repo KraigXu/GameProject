@@ -1,39 +1,28 @@
-﻿using System;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Building_Vent : Building_TempControl
 	{
-		
-		
-		public override Graphic Graphic
-		{
-			get
-			{
-				return this.flickableComp.CurrentGraphic;
-			}
-		}
+		private CompFlickable flickableComp;
 
-		
+		public override Graphic Graphic => flickableComp.CurrentGraphic;
+
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.flickableComp = base.GetComp<CompFlickable>();
+			flickableComp = GetComp<CompFlickable>();
 		}
 
-		
 		public override void TickRare()
 		{
 			if (FlickUtility.WantsToBeOn(this))
 			{
-				GenTemperature.EqualizeTemperaturesThroughBuilding(this, 14f, true);
+				GenTemperature.EqualizeTemperaturesThroughBuilding(this, 14f, twoWay: true);
 			}
 		}
 
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -48,8 +37,5 @@ namespace RimWorld
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		private CompFlickable flickableComp;
 	}
 }

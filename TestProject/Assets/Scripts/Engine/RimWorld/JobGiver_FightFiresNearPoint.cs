@@ -1,34 +1,41 @@
-﻿using System;
+using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	internal class JobGiver_FightFiresNearPoint : ThinkNode_JobGiver
 	{
-		
+		public float maxDistFromPoint = -1f;
+
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
-			JobGiver_FightFiresNearPoint jobGiver_FightFiresNearPoint = (JobGiver_FightFiresNearPoint)base.DeepCopy(resolve);
-			jobGiver_FightFiresNearPoint.maxDistFromPoint = this.maxDistFromPoint;
-			return jobGiver_FightFiresNearPoint;
+			JobGiver_FightFiresNearPoint obj = (JobGiver_FightFiresNearPoint)base.DeepCopy(resolve);
+			obj.maxDistFromPoint = maxDistFromPoint;
+			return obj;
 		}
 
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
-			Predicate<Thing> validator = (Thing t) => !(((AttachableThing)t).parent is Pawn) && pawn.CanReserve(t, 1, -1, null, false) && !pawn.WorkTagIsDisabled(WorkTags.Firefighting);
-			Thing thing = GenClosest.ClosestThingReachable(pawn.GetLord().CurLordToil.FlagLoc, pawn.Map, ThingRequest.ForDef(ThingDefOf.Fire), PathEndMode.Touch, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), this.maxDistFromPoint, validator, null, 0, -1, false, RegionType.Set_Passable, false);
+			Predicate<Thing> validator = delegate(Thing t)
+			{
+				if (((AttachableThing)t).parent is Pawn)
+				{
+					return false;
+				}
+				if (!pawn.CanReserve(t))
+				{
+					return false;
+				}
+				return (!pawn.WorkTagIsDisabled(WorkTags.Firefighting)) ? true : false;
+			};
+			Thing thing = GenClosest.ClosestThingReachable(pawn.GetLord().CurLordToil.FlagLoc, pawn.Map, ThingRequest.ForDef(ThingDefOf.Fire), PathEndMode.Touch, TraverseParms.For(pawn), maxDistFromPoint, validator);
 			if (thing != null)
 			{
 				return JobMaker.MakeJob(JobDefOf.BeatFire, thing);
 			}
 			return null;
 		}
-
-		
-		public float maxDistFromPoint = -1f;
 	}
 }

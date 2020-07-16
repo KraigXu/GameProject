@@ -1,26 +1,15 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_TatteredApparel : Alert_Thought
 	{
-		
-		
-		protected override ThoughtDef Thought
-		{
-			get
-			{
-				return ThoughtDefOf.ApparelDamaged;
-			}
-		}
+		protected override ThoughtDef Thought => ThoughtDefOf.ApparelDamaged;
 
-		
 		public Alert_TatteredApparel()
 		{
-			this.defaultLabel = "AlertTatteredApparel".Translate();
-			this.explanationKey = "AlertTatteredApparelDesc";
+			defaultLabel = "AlertTatteredApparel".Translate();
+			explanationKey = "AlertTatteredApparelDesc";
 		}
 	}
 }

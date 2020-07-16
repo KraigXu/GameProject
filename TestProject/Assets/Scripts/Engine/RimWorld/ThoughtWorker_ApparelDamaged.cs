@@ -1,13 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_ApparelDamaged : ThoughtWorker
 	{
-		
+		public const float MinForFrayed = 0.5f;
+
+		public const float MinForTattered = 0.2f;
+
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			float num = 999f;
@@ -33,11 +34,5 @@ namespace RimWorld
 			}
 			return ThoughtState.Inactive;
 		}
-
-		
-		public const float MinForFrayed = 0.5f;
-
-		
-		public const float MinForTattered = 0.2f;
 	}
 }

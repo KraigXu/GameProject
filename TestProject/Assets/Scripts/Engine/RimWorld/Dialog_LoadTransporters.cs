@@ -1,8 +1,7 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -10,831 +9,692 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Dialog_LoadTransporters : Window
 	{
-		
-		
-		public bool CanChangeAssignedThingsAfterStarting
+		private enum Tab
 		{
-			get
-			{
-				return this.transporters[0].Props.canChangeAssignedThingsAfterStarting;
-			}
+			Pawns,
+			Items
 		}
 
-		
-		
-		public bool LoadingInProgressOrReadyToLaunch
-		{
-			get
-			{
-				return this.transporters[0].LoadingInProgressOrReadyToLaunch;
-			}
-		}
+		private Map map;
 
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(1024f, (float)UI.screenHeight);
-			}
-		}
+		private List<CompTransporter> transporters;
 
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		private List<TransferableOneWay> transferables;
 
-		
-		
+		private TransferableOneWayWidget pawnsTransfer;
+
+		private TransferableOneWayWidget itemsTransfer;
+
+		private Tab tab;
+
+		private float lastMassFlashTime = -9999f;
+
+		private bool massUsageDirty = true;
+
+		private float cachedMassUsage;
+
+		private bool caravanMassUsageDirty = true;
+
+		private float cachedCaravanMassUsage;
+
+		private bool caravanMassCapacityDirty = true;
+
+		private float cachedCaravanMassCapacity;
+
+		private string cachedCaravanMassCapacityExplanation;
+
+		private bool tilesPerDayDirty = true;
+
+		private float cachedTilesPerDay;
+
+		private string cachedTilesPerDayExplanation;
+
+		private bool daysWorthOfFoodDirty = true;
+
+		private Pair<float, float> cachedDaysWorthOfFood;
+
+		private bool foragedFoodPerDayDirty = true;
+
+		private Pair<ThingDef, float> cachedForagedFoodPerDay;
+
+		private string cachedForagedFoodPerDayExplanation;
+
+		private bool visibilityDirty = true;
+
+		private float cachedVisibility;
+
+		private string cachedVisibilityExplanation;
+
+		private const float TitleRectHeight = 35f;
+
+		private const float BottomAreaHeight = 55f;
+
+		private readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
+
+		private static List<TabRecord> tabsList = new List<TabRecord>();
+
+		private static List<List<TransferableOneWay>> tmpLeftToLoadCopy = new List<List<TransferableOneWay>>();
+
+		private static Dictionary<TransferableOneWay, int> tmpLeftCountToTransfer = new Dictionary<TransferableOneWay, int>();
+
+		public bool CanChangeAssignedThingsAfterStarting => transporters[0].Props.canChangeAssignedThingsAfterStarting;
+
+		public bool LoadingInProgressOrReadyToLaunch => transporters[0].LoadingInProgressOrReadyToLaunch;
+
+		public override Vector2 InitialSize => new Vector2(1024f, UI.screenHeight);
+
+		protected override float Margin => 0f;
+
 		private float MassCapacity
 		{
 			get
 			{
 				float num = 0f;
-				for (int i = 0; i < this.transporters.Count; i++)
+				for (int i = 0; i < transporters.Count; i++)
 				{
-					num += this.transporters[i].Props.massCapacity;
+					num += transporters[i].Props.massCapacity;
 				}
 				return num;
 			}
 		}
 
-		
-		
 		private float CaravanMassCapacity
 		{
 			get
 			{
-				if (this.caravanMassCapacityDirty)
+				if (caravanMassCapacityDirty)
 				{
-					this.caravanMassCapacityDirty = false;
+					caravanMassCapacityDirty = false;
 					StringBuilder stringBuilder = new StringBuilder();
-					this.cachedCaravanMassCapacity = CollectionsMassCalculator.CapacityTransferables(this.transferables, stringBuilder);
-					this.cachedCaravanMassCapacityExplanation = stringBuilder.ToString();
+					cachedCaravanMassCapacity = CollectionsMassCalculator.CapacityTransferables(transferables, stringBuilder);
+					cachedCaravanMassCapacityExplanation = stringBuilder.ToString();
 				}
-				return this.cachedCaravanMassCapacity;
+				return cachedCaravanMassCapacity;
 			}
 		}
 
-		
-		
 		private string TransportersLabel
 		{
 			get
 			{
-				if (this.transporters[0].Props.max1PerGroup)
+				if (transporters[0].Props.max1PerGroup)
 				{
-					return this.transporters[0].parent.Label;
+					return transporters[0].parent.Label;
 				}
-				return Find.ActiveLanguageWorker.Pluralize(this.transporters[0].parent.Label, -1);
+				return Find.ActiveLanguageWorker.Pluralize(transporters[0].parent.Label);
 			}
 		}
 
-		
-		
-		private string TransportersLabelCap
-		{
-			get
-			{
-				return this.TransportersLabel.CapitalizeFirst();
-			}
-		}
+		private string TransportersLabelCap => TransportersLabel.CapitalizeFirst();
 
-		
-		
-		private BiomeDef Biome
-		{
-			get
-			{
-				return this.map.Biome;
-			}
-		}
+		private BiomeDef Biome => map.Biome;
 
-		
-		
 		private float MassUsage
 		{
 			get
 			{
-				if (this.massUsageDirty)
+				if (massUsageDirty)
 				{
-					this.massUsageDirty = false;
-					this.cachedMassUsage = CollectionsMassCalculator.MassUsageTransferables(this.transferables, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, true, false);
+					massUsageDirty = false;
+					cachedMassUsage = CollectionsMassCalculator.MassUsageTransferables(transferables, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, includePawnsMass: true);
 				}
-				return this.cachedMassUsage;
+				return cachedMassUsage;
 			}
 		}
 
-		
-		
 		public float CaravanMassUsage
 		{
 			get
 			{
-				if (this.caravanMassUsageDirty)
+				if (caravanMassUsageDirty)
 				{
-					this.caravanMassUsageDirty = false;
-					this.cachedCaravanMassUsage = CollectionsMassCalculator.MassUsageTransferables(this.transferables, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, false, false);
+					caravanMassUsageDirty = false;
+					cachedCaravanMassUsage = CollectionsMassCalculator.MassUsageTransferables(transferables, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload);
 				}
-				return this.cachedCaravanMassUsage;
+				return cachedCaravanMassUsage;
 			}
 		}
 
-		
-		
 		private float TilesPerDay
 		{
 			get
 			{
-				if (this.tilesPerDayDirty)
+				if (tilesPerDayDirty)
 				{
-					this.tilesPerDayDirty = false;
+					tilesPerDayDirty = false;
 					StringBuilder stringBuilder = new StringBuilder();
-					this.cachedTilesPerDay = TilesPerDayCalculator.ApproxTilesPerDay(this.transferables, this.MassUsage, this.MassCapacity, this.map.Tile, -1, stringBuilder);
-					this.cachedTilesPerDayExplanation = stringBuilder.ToString();
+					cachedTilesPerDay = TilesPerDayCalculator.ApproxTilesPerDay(transferables, MassUsage, MassCapacity, map.Tile, -1, stringBuilder);
+					cachedTilesPerDayExplanation = stringBuilder.ToString();
 				}
-				return this.cachedTilesPerDay;
+				return cachedTilesPerDay;
 			}
 		}
 
-		
-		
 		private Pair<float, float> DaysWorthOfFood
 		{
 			get
 			{
-				if (this.daysWorthOfFoodDirty)
+				if (daysWorthOfFoodDirty)
 				{
-					this.daysWorthOfFoodDirty = false;
-					float first = DaysWorthOfFoodCalculator.ApproxDaysWorthOfFood(this.transferables, this.map.Tile, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, Faction.OfPlayer, null, 0f, 3300);
-					this.cachedDaysWorthOfFood = new Pair<float, float>(first, DaysUntilRotCalculator.ApproxDaysUntilRot(this.transferables, this.map.Tile, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, null, 0f, 3300));
+					daysWorthOfFoodDirty = false;
+					float first = DaysWorthOfFoodCalculator.ApproxDaysWorthOfFood(transferables, map.Tile, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, Faction.OfPlayer);
+					cachedDaysWorthOfFood = new Pair<float, float>(first, DaysUntilRotCalculator.ApproxDaysUntilRot(transferables, map.Tile, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload));
 				}
-				return this.cachedDaysWorthOfFood;
+				return cachedDaysWorthOfFood;
 			}
 		}
 
-		
-		
 		private Pair<ThingDef, float> ForagedFoodPerDay
 		{
 			get
 			{
-				if (this.foragedFoodPerDayDirty)
+				if (foragedFoodPerDayDirty)
 				{
-					this.foragedFoodPerDayDirty = false;
+					foragedFoodPerDayDirty = false;
 					StringBuilder stringBuilder = new StringBuilder();
-					this.cachedForagedFoodPerDay = ForagedFoodPerDayCalculator.ForagedFoodPerDay(this.transferables, this.Biome, Faction.OfPlayer, stringBuilder);
-					this.cachedForagedFoodPerDayExplanation = stringBuilder.ToString();
+					cachedForagedFoodPerDay = ForagedFoodPerDayCalculator.ForagedFoodPerDay(transferables, Biome, Faction.OfPlayer, stringBuilder);
+					cachedForagedFoodPerDayExplanation = stringBuilder.ToString();
 				}
-				return this.cachedForagedFoodPerDay;
+				return cachedForagedFoodPerDay;
 			}
 		}
 
-		
-		
 		private float Visibility
 		{
 			get
 			{
-				if (this.visibilityDirty)
+				if (visibilityDirty)
 				{
-					this.visibilityDirty = false;
+					visibilityDirty = false;
 					StringBuilder stringBuilder = new StringBuilder();
-					this.cachedVisibility = CaravanVisibilityCalculator.Visibility(this.transferables, stringBuilder);
-					this.cachedVisibilityExplanation = stringBuilder.ToString();
+					cachedVisibility = CaravanVisibilityCalculator.Visibility(transferables, stringBuilder);
+					cachedVisibilityExplanation = stringBuilder.ToString();
 				}
-				return this.cachedVisibility;
+				return cachedVisibility;
 			}
 		}
 
-		
 		public Dialog_LoadTransporters(Map map, List<CompTransporter> transporters)
 		{
 			this.map = map;
 			this.transporters = new List<CompTransporter>();
 			this.transporters.AddRange(transporters);
-			this.forcePause = true;
-			this.absorbInputAroundWindow = true;
+			forcePause = true;
+			absorbInputAroundWindow = true;
 		}
 
-		
 		public override void PostOpen()
 		{
 			base.PostOpen();
-			this.CalculateAndRecacheTransferables();
-			if (this.CanChangeAssignedThingsAfterStarting && this.LoadingInProgressOrReadyToLaunch)
+			CalculateAndRecacheTransferables();
+			if (CanChangeAssignedThingsAfterStarting && LoadingInProgressOrReadyToLaunch)
 			{
-				this.SetLoadedItemsToLoad();
+				SetLoadedItemsToLoad();
 			}
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Rect rect = new Rect(0f, 0f, inRect.width, 35f);
 			Text.Font = GameFont.Medium;
 			Text.Anchor = TextAnchor.MiddleCenter;
-			Widgets.Label(rect, "LoadTransporters".Translate(this.TransportersLabel));
+			Widgets.Label(rect, "LoadTransporters".Translate(TransportersLabel));
 			Text.Font = GameFont.Small;
 			Text.Anchor = TextAnchor.UpperLeft;
-			if (this.transporters[0].Props.showOverallStats)
+			if (transporters[0].Props.showOverallStats)
 			{
-				CaravanUIUtility.DrawCaravanInfo(new CaravanUIUtility.CaravanInfo(this.MassUsage, this.MassCapacity, "", this.TilesPerDay, this.cachedTilesPerDayExplanation, this.DaysWorthOfFood, this.ForagedFoodPerDay, this.cachedForagedFoodPerDayExplanation, this.Visibility, this.cachedVisibilityExplanation, this.CaravanMassUsage, this.CaravanMassCapacity, this.cachedCaravanMassCapacityExplanation), null, this.map.Tile, null, this.lastMassFlashTime, new Rect(12f, 35f, inRect.width - 24f, 40f), false, null, false);
+				CaravanUIUtility.DrawCaravanInfo(new CaravanUIUtility.CaravanInfo(MassUsage, MassCapacity, "", TilesPerDay, cachedTilesPerDayExplanation, DaysWorthOfFood, ForagedFoodPerDay, cachedForagedFoodPerDayExplanation, Visibility, cachedVisibilityExplanation, CaravanMassUsage, CaravanMassCapacity, cachedCaravanMassCapacityExplanation), null, map.Tile, null, lastMassFlashTime, new Rect(12f, 35f, inRect.width - 24f, 40f), lerpMassColor: false);
 				inRect.yMin += 52f;
 			}
-			Dialog_LoadTransporters.tabsList.Clear();
-			Dialog_LoadTransporters.tabsList.Add(new TabRecord("PawnsTab".Translate(), delegate
+			tabsList.Clear();
+			tabsList.Add(new TabRecord("PawnsTab".Translate(), delegate
 			{
-				this.tab = Dialog_LoadTransporters.Tab.Pawns;
-			}, this.tab == Dialog_LoadTransporters.Tab.Pawns));
-			Dialog_LoadTransporters.tabsList.Add(new TabRecord("ItemsTab".Translate(), delegate
+				tab = Tab.Pawns;
+			}, tab == Tab.Pawns));
+			tabsList.Add(new TabRecord("ItemsTab".Translate(), delegate
 			{
-				this.tab = Dialog_LoadTransporters.Tab.Items;
-			}, this.tab == Dialog_LoadTransporters.Tab.Items));
+				tab = Tab.Items;
+			}, tab == Tab.Items));
 			inRect.yMin += 67f;
 			Widgets.DrawMenuSection(inRect);
-			TabDrawer.DrawTabs(inRect, Dialog_LoadTransporters.tabsList, 200f);
+			TabDrawer.DrawTabs(inRect, tabsList);
 			inRect = inRect.ContractedBy(17f);
 			GUI.BeginGroup(inRect);
 			Rect rect2 = inRect.AtZero();
-			this.DoBottomButtons(rect2);
+			DoBottomButtons(rect2);
 			Rect inRect2 = rect2;
 			inRect2.yMax -= 59f;
-			bool flag = false;
-			Dialog_LoadTransporters.Tab tab = this.tab;
-			if (tab != Dialog_LoadTransporters.Tab.Pawns)
+			bool anythingChanged = false;
+			switch (tab)
 			{
-				if (tab == Dialog_LoadTransporters.Tab.Items)
-				{
-					this.itemsTransfer.OnGUI(inRect2, out flag);
-				}
+			case Tab.Pawns:
+				pawnsTransfer.OnGUI(inRect2, out anythingChanged);
+				break;
+			case Tab.Items:
+				itemsTransfer.OnGUI(inRect2, out anythingChanged);
+				break;
 			}
-			else
+			if (anythingChanged)
 			{
-				this.pawnsTransfer.OnGUI(inRect2, out flag);
-			}
-			if (flag)
-			{
-				this.CountToTransferChanged();
+				CountToTransferChanged();
 			}
 			GUI.EndGroup();
 		}
 
-		
 		public override bool CausesMessageBackground()
 		{
 			return true;
 		}
 
-		
 		private void AddToTransferables(Thing t)
 		{
-			TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatching<TransferableOneWay>(t, this.transferables, TransferAsOneMode.PodsOrCaravanPacking);
+			TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatching(t, transferables, TransferAsOneMode.PodsOrCaravanPacking);
 			if (transferableOneWay == null)
 			{
 				transferableOneWay = new TransferableOneWay();
-				this.transferables.Add(transferableOneWay);
+				transferables.Add(transferableOneWay);
 			}
 			if (transferableOneWay.things.Contains(t))
 			{
-				Log.Error("Tried to add the same thing twice to TransferableOneWay: " + t, false);
-				return;
+				Log.Error("Tried to add the same thing twice to TransferableOneWay: " + t);
 			}
-			transferableOneWay.things.Add(t);
+			else
+			{
+				transferableOneWay.things.Add(t);
+			}
 		}
 
-		
 		private void DoBottomButtons(Rect rect)
 		{
-			Rect rect2 = new Rect(rect.width / 2f - this.BottomButtonSize.x / 2f, rect.height - 55f, this.BottomButtonSize.x, this.BottomButtonSize.y);
-			if (Widgets.ButtonText(rect2, "AcceptButton".Translate(), true, true, true))
+			Rect rect2 = new Rect(rect.width / 2f - BottomButtonSize.x / 2f, rect.height - 55f, BottomButtonSize.x, BottomButtonSize.y);
+			if (Widgets.ButtonText(rect2, "AcceptButton".Translate()))
 			{
-				if (this.CaravanMassUsage > this.CaravanMassCapacity && this.CaravanMassCapacity != 0f)
+				if (CaravanMassUsage > CaravanMassCapacity && CaravanMassCapacity != 0f)
 				{
-					if (this.CheckForErrors(TransferableUtility.GetPawnsFromTransferables(this.transferables)))
+					if (CheckForErrors(TransferableUtility.GetPawnsFromTransferables(transferables)))
 					{
 						Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("TransportersCaravanWillBeImmobile".Translate(), delegate
 						{
-							if (this.TryAccept())
+							if (TryAccept())
 							{
-								SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-								this.Close(false);
+								SoundDefOf.Tick_High.PlayOneShotOnCamera();
+								Close(doCloseSound: false);
 							}
-						}, false, null));
+						}));
 					}
 				}
-				else if (this.TryAccept())
+				else if (TryAccept())
 				{
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-					this.Close(false);
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
+					Close(doCloseSound: false);
 				}
 			}
-			if (Widgets.ButtonText(new Rect(rect2.x - 10f - this.BottomButtonSize.x, rect2.y, this.BottomButtonSize.x, this.BottomButtonSize.y), "ResetButton".Translate(), true, true, true))
+			if (Widgets.ButtonText(new Rect(rect2.x - 10f - BottomButtonSize.x, rect2.y, BottomButtonSize.x, BottomButtonSize.y), "ResetButton".Translate()))
 			{
-				SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
-				this.CalculateAndRecacheTransferables();
+				SoundDefOf.Tick_Low.PlayOneShotOnCamera();
+				CalculateAndRecacheTransferables();
 			}
-			if (Widgets.ButtonText(new Rect(rect2.xMax + 10f, rect2.y, this.BottomButtonSize.x, this.BottomButtonSize.y), "CancelButton".Translate(), true, true, true))
+			if (Widgets.ButtonText(new Rect(rect2.xMax + 10f, rect2.y, BottomButtonSize.x, BottomButtonSize.y), "CancelButton".Translate()))
 			{
-				this.Close(true);
+				Close();
 			}
 			if (Prefs.DevMode)
 			{
 				float width = 200f;
-				float num = this.BottomButtonSize.y / 2f;
-				if (!this.LoadingInProgressOrReadyToLaunch && Widgets.ButtonText(new Rect(0f, rect.height - 55f, width, num), "Dev: Load instantly", true, true, true) && this.DebugTryLoadInstantly())
+				float num = BottomButtonSize.y / 2f;
+				if (!LoadingInProgressOrReadyToLaunch && Widgets.ButtonText(new Rect(0f, rect.height - 55f, width, num), "Dev: Load instantly") && DebugTryLoadInstantly())
 				{
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-					this.Close(false);
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
+					Close(doCloseSound: false);
 				}
-				if (Widgets.ButtonText(new Rect(0f, rect.height - 55f + num, width, num), "Dev: Select everything", true, true, true))
+				if (Widgets.ButtonText(new Rect(0f, rect.height - 55f + num, width, num), "Dev: Select everything"))
 				{
-					SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
-					this.SetToLoadEverything();
+					SoundDefOf.Tick_High.PlayOneShotOnCamera();
+					SetToLoadEverything();
 				}
 			}
 		}
 
-		
 		private void CalculateAndRecacheTransferables()
 		{
-			this.transferables = new List<TransferableOneWay>();
-			this.AddPawnsToTransferables();
-			this.AddItemsToTransferables();
-			if (this.CanChangeAssignedThingsAfterStarting && this.LoadingInProgressOrReadyToLaunch)
+			transferables = new List<TransferableOneWay>();
+			AddPawnsToTransferables();
+			AddItemsToTransferables();
+			if (CanChangeAssignedThingsAfterStarting && LoadingInProgressOrReadyToLaunch)
 			{
-				for (int i = 0; i < this.transporters.Count; i++)
+				for (int i = 0; i < transporters.Count; i++)
 				{
-					for (int j = 0; j < this.transporters[i].innerContainer.Count; j++)
+					for (int j = 0; j < transporters[i].innerContainer.Count; j++)
 					{
-						this.AddToTransferables(this.transporters[i].innerContainer[j]);
+						AddToTransferables(transporters[i].innerContainer[j]);
 					}
 				}
-				foreach (Thing t in TransporterUtility.ThingsBeingHauledTo(this.transporters, this.map))
+				foreach (Thing item in TransporterUtility.ThingsBeingHauledTo(transporters, map))
 				{
-					this.AddToTransferables(t);
+					AddToTransferables(item);
 				}
 			}
-			this.pawnsTransfer = new TransferableOneWayWidget(null, null, null, "FormCaravanColonyThingCountTip".Translate(), true, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, true, () => this.MassCapacity - this.MassUsage, 0f, false, this.map.Tile, true, true, true, false, true, false, false);
-			CaravanUIUtility.AddPawnsSections(this.pawnsTransfer, this.transferables);
-			this.itemsTransfer = new TransferableOneWayWidget(from x in this.transferables
-			where x.ThingDef.category != ThingCategory.Pawn
-			select x, null, null, "FormCaravanColonyThingCountTip".Translate(), true, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, true, () => this.MassCapacity - this.MassUsage, 0f, false, this.map.Tile, true, false, false, true, false, true, false);
-			this.CountToTransferChanged();
+			pawnsTransfer = new TransferableOneWayWidget(null, null, null, "FormCaravanColonyThingCountTip".Translate(), drawMass: true, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, includePawnsMassInMassUsage: true, () => MassCapacity - MassUsage, 0f, ignoreSpawnedCorpseGearAndInventoryMass: false, map.Tile, drawMarketValue: true, drawEquippedWeapon: true, drawNutritionEatenPerDay: true, drawItemNutrition: false, drawForagedFoodPerDay: true);
+			CaravanUIUtility.AddPawnsSections(pawnsTransfer, transferables);
+			itemsTransfer = new TransferableOneWayWidget(transferables.Where((TransferableOneWay x) => x.ThingDef.category != ThingCategory.Pawn), null, null, "FormCaravanColonyThingCountTip".Translate(), drawMass: true, IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload, includePawnsMassInMassUsage: true, () => MassCapacity - MassUsage, 0f, ignoreSpawnedCorpseGearAndInventoryMass: false, map.Tile, drawMarketValue: true, drawEquippedWeapon: false, drawNutritionEatenPerDay: false, drawItemNutrition: true, drawForagedFoodPerDay: false, drawDaysUntilRot: true);
+			CountToTransferChanged();
 		}
 
-		
 		private bool DebugTryLoadInstantly()
 		{
-			TransporterUtility.InitiateLoading(this.transporters);
+			TransporterUtility.InitiateLoading(transporters);
 			int i;
-			int j;
-			for (i = 0; i < this.transferables.Count; i = j + 1)
+			for (i = 0; i < transferables.Count; i++)
 			{
-				TransferableUtility.Transfer(this.transferables[i].things, this.transferables[i].CountToTransfer, delegate(Thing splitPiece, IThingHolder originalThing)
+				TransferableUtility.Transfer(transferables[i].things, transferables[i].CountToTransfer, delegate(Thing splitPiece, IThingHolder originalThing)
 				{
-					this.transporters[i % this.transporters.Count].GetDirectlyHeldThings().TryAdd(splitPiece, true);
+					transporters[i % transporters.Count].GetDirectlyHeldThings().TryAdd(splitPiece);
 				});
-				j = i;
 			}
 			return true;
 		}
 
-		
 		private bool TryAccept()
 		{
-			List<Pawn> pawnsFromTransferables = TransferableUtility.GetPawnsFromTransferables(this.transferables);
-			if (!this.CheckForErrors(pawnsFromTransferables))
+			List<Pawn> pawnsFromTransferables = TransferableUtility.GetPawnsFromTransferables(transferables);
+			if (!CheckForErrors(pawnsFromTransferables))
 			{
 				return false;
 			}
-			if (this.LoadingInProgressOrReadyToLaunch)
+			if (LoadingInProgressOrReadyToLaunch)
 			{
-				this.AssignTransferablesToRandomTransporters();
-				TransporterUtility.MakeLordsAsAppropriate(pawnsFromTransferables, this.transporters, this.map);
-				List<Pawn> allPawnsSpawned = this.map.mapPawns.AllPawnsSpawned;
+				AssignTransferablesToRandomTransporters();
+				TransporterUtility.MakeLordsAsAppropriate(pawnsFromTransferables, transporters, map);
+				List<Pawn> allPawnsSpawned = map.mapPawns.AllPawnsSpawned;
 				for (int i = 0; i < allPawnsSpawned.Count; i++)
 				{
-					if (allPawnsSpawned[i].CurJobDef == JobDefOf.HaulToTransporter && this.transporters.Contains(((JobDriver_HaulToTransporter)allPawnsSpawned[i].jobs.curDriver).Transporter))
+					if (allPawnsSpawned[i].CurJobDef == JobDefOf.HaulToTransporter && transporters.Contains(((JobDriver_HaulToTransporter)allPawnsSpawned[i].jobs.curDriver).Transporter))
 					{
-						allPawnsSpawned[i].jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+						allPawnsSpawned[i].jobs.EndCurrentJob(JobCondition.InterruptForced);
 					}
 				}
 			}
 			else
 			{
-				TransporterUtility.InitiateLoading(this.transporters);
-				this.AssignTransferablesToRandomTransporters();
-				TransporterUtility.MakeLordsAsAppropriate(pawnsFromTransferables, this.transporters, this.map);
-				if (this.transporters[0].Props.max1PerGroup)
+				TransporterUtility.InitiateLoading(transporters);
+				AssignTransferablesToRandomTransporters();
+				TransporterUtility.MakeLordsAsAppropriate(pawnsFromTransferables, transporters, map);
+				if (transporters[0].Props.max1PerGroup)
 				{
-					Messages.Message("MessageTransporterSingleLoadingProcessStarted".Translate(), this.transporters[0].parent, MessageTypeDefOf.TaskCompletion, false);
+					Messages.Message("MessageTransporterSingleLoadingProcessStarted".Translate(), transporters[0].parent, MessageTypeDefOf.TaskCompletion, historical: false);
 				}
 				else
 				{
-					Messages.Message("MessageTransportersLoadingProcessStarted".Translate(), this.transporters[0].parent, MessageTypeDefOf.TaskCompletion, false);
+					Messages.Message("MessageTransportersLoadingProcessStarted".Translate(), transporters[0].parent, MessageTypeDefOf.TaskCompletion, historical: false);
 				}
 			}
 			return true;
 		}
 
-		
 		private void SetLoadedItemsToLoad()
 		{
-			int i;
-			int num;
-			for (i = 0; i < this.transporters.Count; i = num + 1)
+			for (int j = 0; j < transporters.Count; j++)
 			{
-				int j;
-				for (j = 0; j < this.transporters[i].innerContainer.Count; j = num + 1)
+				int i;
+				for (i = 0; i < transporters[j].innerContainer.Count; i++)
 				{
-					TransferableOneWay transferableOneWay = this.transferables.Find((TransferableOneWay x) => x.things.Contains(this.transporters[i].innerContainer[j]));
-					if (transferableOneWay != null && transferableOneWay.CanAdjustBy(this.transporters[i].innerContainer[j].stackCount).Accepted)
+					TransferableOneWay transferableOneWay = transferables.Find((TransferableOneWay x) => x.things.Contains(transporters[j].innerContainer[i]));
+					if (transferableOneWay != null && transferableOneWay.CanAdjustBy(transporters[j].innerContainer[i].stackCount).Accepted)
 					{
-						transferableOneWay.AdjustBy(this.transporters[i].innerContainer[j].stackCount);
+						transferableOneWay.AdjustBy(transporters[j].innerContainer[i].stackCount);
 					}
-					num = j;
 				}
-				if (this.transporters[i].leftToLoad != null)
+				if (transporters[j].leftToLoad == null)
 				{
-					for (int k = 0; k < this.transporters[i].leftToLoad.Count; k++)
+					continue;
+				}
+				for (int k = 0; k < transporters[j].leftToLoad.Count; k++)
+				{
+					TransferableOneWay transferableOneWay2 = transporters[j].leftToLoad[k];
+					if (transferableOneWay2.CountToTransfer != 0 && transferableOneWay2.HasAnyThing)
 					{
-						TransferableOneWay transferableOneWay2 = this.transporters[i].leftToLoad[k];
-						if (transferableOneWay2.CountToTransfer != 0 && transferableOneWay2.HasAnyThing)
+						TransferableOneWay transferableOneWay3 = TransferableUtility.TransferableMatchingDesperate(transferableOneWay2.AnyThing, transferables, TransferAsOneMode.PodsOrCaravanPacking);
+						if (transferableOneWay3 != null && transferableOneWay3.CanAdjustBy(transferableOneWay2.CountToTransferToDestination).Accepted)
 						{
-							TransferableOneWay transferableOneWay3 = TransferableUtility.TransferableMatchingDesperate(transferableOneWay2.AnyThing, this.transferables, TransferAsOneMode.PodsOrCaravanPacking);
-							if (transferableOneWay3 != null && transferableOneWay3.CanAdjustBy(transferableOneWay2.CountToTransferToDestination).Accepted)
-							{
-								transferableOneWay3.AdjustBy(transferableOneWay2.CountToTransferToDestination);
-							}
+							transferableOneWay3.AdjustBy(transferableOneWay2.CountToTransferToDestination);
 						}
 					}
 				}
-				num = i;
 			}
 		}
 
-		
 		private void AssignTransferablesToRandomTransporters()
 		{
-			Dialog_LoadTransporters.tmpLeftToLoadCopy.Clear();
-			for (int i3 = 0; i3 < this.transporters.Count; i3++)
+			tmpLeftToLoadCopy.Clear();
+			for (int j = 0; j < transporters.Count; j++)
 			{
-				Dialog_LoadTransporters.tmpLeftToLoadCopy.Add((this.transporters[i3].leftToLoad != null) ? this.transporters[i3].leftToLoad.ToList<TransferableOneWay>() : new List<TransferableOneWay>());
-				if (this.transporters[i3].leftToLoad != null)
+				tmpLeftToLoadCopy.Add((transporters[j].leftToLoad != null) ? transporters[j].leftToLoad.ToList() : new List<TransferableOneWay>());
+				if (transporters[j].leftToLoad != null)
 				{
-					this.transporters[i3].leftToLoad.Clear();
+					transporters[j].leftToLoad.Clear();
 				}
 			}
-			Dialog_LoadTransporters.tmpLeftCountToTransfer.Clear();
-			for (int j = 0; j < this.transferables.Count; j++)
+			tmpLeftCountToTransfer.Clear();
+			for (int k = 0; k < transferables.Count; k++)
 			{
-				Dialog_LoadTransporters.tmpLeftCountToTransfer.Add(this.transferables[j], this.transferables[j].CountToTransfer);
+				tmpLeftCountToTransfer.Add(transferables[k], transferables[k].CountToTransfer);
 			}
-			if (this.LoadingInProgressOrReadyToLaunch)
+			if (LoadingInProgressOrReadyToLaunch)
 			{
-				int i2;
 				int i;
-				
-				for (i = 0; i < this.transferables.Count; i = i2 + 1)
+				for (i = 0; i < transferables.Count; i++)
 				{
-					if (this.transferables[i].HasAnyThing && Dialog_LoadTransporters.tmpLeftCountToTransfer[this.transferables[i]] > 0)
+					if (!transferables[i].HasAnyThing || tmpLeftCountToTransfer[transferables[i]] <= 0)
 					{
-						for (int k = 0; k < Dialog_LoadTransporters.tmpLeftToLoadCopy.Count; k++)
+						continue;
+					}
+					for (int l = 0; l < tmpLeftToLoadCopy.Count; l++)
+					{
+						TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatching(transferables[i].AnyThing, tmpLeftToLoadCopy[l], TransferAsOneMode.PodsOrCaravanPacking);
+						if (transferableOneWay != null)
 						{
-							TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatching<TransferableOneWay>(this.transferables[i].AnyThing, Dialog_LoadTransporters.tmpLeftToLoadCopy[k], TransferAsOneMode.PodsOrCaravanPacking);
-							if (transferableOneWay != null)
+							int num = Mathf.Min(tmpLeftCountToTransfer[transferables[i]], transferableOneWay.CountToTransfer);
+							if (num > 0)
 							{
-								int num = Mathf.Min(Dialog_LoadTransporters.tmpLeftCountToTransfer[this.transferables[i]], transferableOneWay.CountToTransfer);
-								if (num > 0)
-								{
-									this.transporters[k].AddToTheToLoadList(this.transferables[i], num);
-									Dictionary<TransferableOneWay, int> dictionary = Dialog_LoadTransporters.tmpLeftCountToTransfer;
-									TransferableOneWay key = this.transferables[i];
-									dictionary[key] -= num;
-								}
+								transporters[l].AddToTheToLoadList(transferables[i], num);
+								tmpLeftCountToTransfer[transferables[i]] -= num;
 							}
-							IEnumerable<Thing> innerContainer = this.transporters[k].innerContainer;
-							Func<Thing, bool> predicate;
-							if ((predicate=default ) == null)
+						}
+						Thing thing = transporters[l].innerContainer.FirstOrDefault((Thing x) => TransferableUtility.TransferAsOne(transferables[i].AnyThing, x, TransferAsOneMode.PodsOrCaravanPacking));
+						if (thing != null)
+						{
+							int num2 = Mathf.Min(tmpLeftCountToTransfer[transferables[i]], thing.stackCount);
+							if (num2 > 0)
 							{
-								predicate = ( ((Thing x) => TransferableUtility.TransferAsOne(this.transferables[i].AnyThing, x, TransferAsOneMode.PodsOrCaravanPacking)));
-							}
-							Thing thing = innerContainer.FirstOrDefault(predicate);
-							if (thing != null)
-							{
-								int num2 = Mathf.Min(Dialog_LoadTransporters.tmpLeftCountToTransfer[this.transferables[i]], thing.stackCount);
-								if (num2 > 0)
-								{
-									this.transporters[k].AddToTheToLoadList(this.transferables[i], num2);
-									Dictionary<TransferableOneWay, int> dictionary = Dialog_LoadTransporters.tmpLeftCountToTransfer;
-									TransferableOneWay key = this.transferables[i];
-									dictionary[key] -= num2;
-								}
+								transporters[l].AddToTheToLoadList(transferables[i], num2);
+								tmpLeftCountToTransfer[transferables[i]] -= num2;
 							}
 						}
 					}
-					i2 = i;
 				}
 			}
-			Dialog_LoadTransporters.tmpLeftToLoadCopy.Clear();
-			if (this.transferables.Any<TransferableOneWay>())
+			tmpLeftToLoadCopy.Clear();
+			if (transferables.Any())
 			{
-				TransferableOneWay transferableOneWay2 = this.transferables.MaxBy((TransferableOneWay x) => Dialog_LoadTransporters.tmpLeftCountToTransfer[x]);
+				TransferableOneWay transferableOneWay2 = transferables.MaxBy((TransferableOneWay x) => tmpLeftCountToTransfer[x]);
 				int num3 = 0;
-				for (int l = 0; l < this.transferables.Count; l++)
+				for (int m = 0; m < transferables.Count; m++)
 				{
-					if (this.transferables[l] != transferableOneWay2 && Dialog_LoadTransporters.tmpLeftCountToTransfer[this.transferables[l]] > 0)
+					if (transferables[m] != transferableOneWay2 && tmpLeftCountToTransfer[transferables[m]] > 0)
 					{
-						this.transporters[num3 % this.transporters.Count].AddToTheToLoadList(this.transferables[l], Dialog_LoadTransporters.tmpLeftCountToTransfer[this.transferables[l]]);
+						transporters[num3 % transporters.Count].AddToTheToLoadList(transferables[m], tmpLeftCountToTransfer[transferables[m]]);
 						num3++;
 					}
 				}
-				if (num3 < this.transporters.Count)
+				if (num3 < transporters.Count)
 				{
-					int num4 = Dialog_LoadTransporters.tmpLeftCountToTransfer[transferableOneWay2];
-					int num5 = num4 / (this.transporters.Count - num3);
-					for (int m = num3; m < this.transporters.Count; m++)
+					int num4 = tmpLeftCountToTransfer[transferableOneWay2];
+					int num5 = num4 / (transporters.Count - num3);
+					for (int n = num3; n < transporters.Count; n++)
 					{
-						int num6 = (m == this.transporters.Count - 1) ? num4 : num5;
+						int num6 = (n == transporters.Count - 1) ? num4 : num5;
 						if (num6 > 0)
 						{
-							this.transporters[m].AddToTheToLoadList(transferableOneWay2, num6);
+							transporters[n].AddToTheToLoadList(transferableOneWay2, num6);
 						}
 						num4 -= num6;
 					}
 				}
 				else
 				{
-					this.transporters[num3 % this.transporters.Count].AddToTheToLoadList(transferableOneWay2, Dialog_LoadTransporters.tmpLeftCountToTransfer[transferableOneWay2]);
+					transporters[num3 % transporters.Count].AddToTheToLoadList(transferableOneWay2, tmpLeftCountToTransfer[transferableOneWay2]);
 				}
 			}
-			Dialog_LoadTransporters.tmpLeftCountToTransfer.Clear();
-			for (int n = 0; n < this.transporters.Count; n++)
+			tmpLeftCountToTransfer.Clear();
+			for (int num7 = 0; num7 < transporters.Count; num7++)
 			{
-				for (int num7 = 0; num7 < this.transporters[n].innerContainer.Count; num7++)
+				for (int num8 = 0; num8 < transporters[num7].innerContainer.Count; num8++)
 				{
-					Thing thing2 = this.transporters[n].innerContainer[num7];
-					int num8 = this.transporters[n].SubtractFromToLoadList(thing2, thing2.stackCount, false);
-					if (num8 < thing2.stackCount)
+					Thing thing2 = transporters[num7].innerContainer[num8];
+					int num9 = transporters[num7].SubtractFromToLoadList(thing2, thing2.stackCount, sendMessageOnFinished: false);
+					if (num9 < thing2.stackCount)
 					{
-						Thing thing3;
-						this.transporters[n].innerContainer.TryDrop(thing2, ThingPlaceMode.Near, thing2.stackCount - num8, out thing3, null, null);
+						transporters[num7].innerContainer.TryDrop(thing2, ThingPlaceMode.Near, thing2.stackCount - num9, out Thing _);
 					}
 				}
 			}
 		}
 
-		
 		private bool CheckForErrors(List<Pawn> pawns)
 		{
-			if (!this.CanChangeAssignedThingsAfterStarting)
+			if (!CanChangeAssignedThingsAfterStarting && !transferables.Any((TransferableOneWay x) => x.CountToTransfer != 0))
 			{
-				if (!this.transferables.Any((TransferableOneWay x) => x.CountToTransfer != 0))
+				if (transporters[0].Props.max1PerGroup)
 				{
-					if (this.transporters[0].Props.max1PerGroup)
+					Messages.Message("CantSendEmptyTransporterSingle".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+				}
+				else
+				{
+					Messages.Message("CantSendEmptyTransportPods".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+				}
+				return false;
+			}
+			if (MassUsage > MassCapacity)
+			{
+				FlashMass();
+				if (transporters[0].Props.max1PerGroup)
+				{
+					Messages.Message("TooBigTransporterSingleMassUsage".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+				}
+				else
+				{
+					Messages.Message("TooBigTransportersMassUsage".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+				}
+				return false;
+			}
+			Pawn pawn = pawns.Find((Pawn x) => !x.MapHeld.reachability.CanReach(x.PositionHeld, transporters[0].parent, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors)) && !transporters.Any((CompTransporter y) => y.innerContainer.Contains(x)));
+			if (pawn != null)
+			{
+				if (transporters[0].Props.max1PerGroup)
+				{
+					Messages.Message("PawnCantReachTransporterSingle".Translate(pawn.LabelShort, pawn).CapitalizeFirst(), MessageTypeDefOf.RejectInput, historical: false);
+				}
+				else
+				{
+					Messages.Message("PawnCantReachTransporters".Translate(pawn.LabelShort, pawn).CapitalizeFirst(), MessageTypeDefOf.RejectInput, historical: false);
+				}
+				return false;
+			}
+			Map map = transporters[0].parent.Map;
+			for (int i = 0; i < transferables.Count; i++)
+			{
+				if (transferables[i].ThingDef.category != ThingCategory.Item)
+				{
+					continue;
+				}
+				int countToTransfer = transferables[i].CountToTransfer;
+				int num = 0;
+				if (countToTransfer <= 0)
+				{
+					continue;
+				}
+				for (int j = 0; j < transferables[i].things.Count; j++)
+				{
+					Thing t = transferables[i].things[j];
+					Pawn_CarryTracker pawn_CarryTracker = t.ParentHolder as Pawn_CarryTracker;
+					if (map.reachability.CanReach(t.Position, transporters[0].parent, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors)) || transporters.Any((CompTransporter x) => x.innerContainer.Contains(t)) || (pawn_CarryTracker != null && pawn_CarryTracker.pawn.MapHeld.reachability.CanReach(pawn_CarryTracker.pawn.PositionHeld, transporters[0].parent, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors))))
 					{
-						Messages.Message("CantSendEmptyTransporterSingle".Translate(), MessageTypeDefOf.RejectInput, false);
+						num += t.stackCount;
+						if (num >= countToTransfer)
+						{
+							break;
+						}
+					}
+				}
+				if (num >= countToTransfer)
+				{
+					continue;
+				}
+				if (countToTransfer == 1)
+				{
+					if (transporters[0].Props.max1PerGroup)
+					{
+						Messages.Message("TransporterSingleItemIsUnreachableSingle".Translate(transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, historical: false);
 					}
 					else
 					{
-						Messages.Message("CantSendEmptyTransportPods".Translate(), MessageTypeDefOf.RejectInput, false);
+						Messages.Message("TransporterItemIsUnreachableSingle".Translate(transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, historical: false);
 					}
-					return false;
 				}
-			}
-			if (this.MassUsage > this.MassCapacity)
-			{
-				this.FlashMass();
-				if (this.transporters[0].Props.max1PerGroup)
+				else if (transporters[0].Props.max1PerGroup)
 				{
-					Messages.Message("TooBigTransporterSingleMassUsage".Translate(), MessageTypeDefOf.RejectInput, false);
+					Messages.Message("TransporterSingleItemIsUnreachableMulti".Translate(countToTransfer, transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, historical: false);
 				}
 				else
 				{
-					Messages.Message("TooBigTransportersMassUsage".Translate(), MessageTypeDefOf.RejectInput, false);
+					Messages.Message("TransporterItemIsUnreachableMulti".Translate(countToTransfer, transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, historical: false);
 				}
 				return false;
-			}
-			Pawn pawn = pawns.Find((Pawn x) => !x.MapHeld.reachability.CanReach(x.PositionHeld, this.transporters[0].parent, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false)) && !this.transporters.Any((CompTransporter y) => y.innerContainer.Contains(x)));
-			if (pawn != null)
-			{
-				if (this.transporters[0].Props.max1PerGroup)
-				{
-					Messages.Message("PawnCantReachTransporterSingle".Translate(pawn.LabelShort, pawn).CapitalizeFirst(), MessageTypeDefOf.RejectInput, false);
-				}
-				else
-				{
-					Messages.Message("PawnCantReachTransporters".Translate(pawn.LabelShort, pawn).CapitalizeFirst(), MessageTypeDefOf.RejectInput, false);
-				}
-				return false;
-			}
-			Map map = this.transporters[0].parent.Map;
-			for (int i = 0; i < this.transferables.Count; i++)
-			{
-				if (this.transferables[i].ThingDef.category == ThingCategory.Item)
-				{
-					int countToTransfer = this.transferables[i].CountToTransfer;
-					int num = 0;
-					if (countToTransfer > 0)
-					{
-						for (int j = 0; j < this.transferables[i].things.Count; j++)
-						{
-							Thing t = this.transferables[i].things[j];
-							Pawn_CarryTracker pawn_CarryTracker = t.ParentHolder as Pawn_CarryTracker;
-							if (map.reachability.CanReach(t.Position, this.transporters[0].parent, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false)) || this.transporters.Any((CompTransporter x) => x.innerContainer.Contains(t)) || (pawn_CarryTracker != null && pawn_CarryTracker.pawn.MapHeld.reachability.CanReach(pawn_CarryTracker.pawn.PositionHeld, this.transporters[0].parent, PathEndMode.Touch, TraverseParms.For(TraverseMode.PassDoors, Danger.Deadly, false))))
-							{
-								num += t.stackCount;
-								if (num >= countToTransfer)
-								{
-									break;
-								}
-							}
-						}
-						if (num < countToTransfer)
-						{
-							if (countToTransfer == 1)
-							{
-								if (this.transporters[0].Props.max1PerGroup)
-								{
-									Messages.Message("TransporterSingleItemIsUnreachableSingle".Translate(this.transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, false);
-								}
-								else
-								{
-									Messages.Message("TransporterItemIsUnreachableSingle".Translate(this.transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, false);
-								}
-							}
-							else if (this.transporters[0].Props.max1PerGroup)
-							{
-								Messages.Message("TransporterSingleItemIsUnreachableMulti".Translate(countToTransfer, this.transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, false);
-							}
-							else
-							{
-								Messages.Message("TransporterItemIsUnreachableMulti".Translate(countToTransfer, this.transferables[i].ThingDef.label), MessageTypeDefOf.RejectInput, false);
-							}
-							return false;
-						}
-					}
-				}
 			}
 			return true;
 		}
 
-		
 		private void AddPawnsToTransferables()
 		{
-			foreach (Pawn t in TransporterUtility.AllSendablePawns(this.transporters, this.map))
+			foreach (Pawn item in TransporterUtility.AllSendablePawns(transporters, map))
 			{
-				this.AddToTransferables(t);
+				AddToTransferables(item);
 			}
 		}
 
-		
 		private void AddItemsToTransferables()
 		{
-			foreach (Thing t in TransporterUtility.AllSendableItems(this.transporters, this.map))
+			foreach (Thing item in TransporterUtility.AllSendableItems(transporters, map))
 			{
-				this.AddToTransferables(t);
+				AddToTransferables(item);
 			}
 		}
 
-		
 		private void FlashMass()
 		{
-			this.lastMassFlashTime = Time.time;
+			lastMassFlashTime = Time.time;
 		}
 
-		
 		private void SetToLoadEverything()
 		{
-			for (int i = 0; i < this.transferables.Count; i++)
+			for (int i = 0; i < transferables.Count; i++)
 			{
-				this.transferables[i].AdjustTo(this.transferables[i].GetMaximumToTransfer());
+				transferables[i].AdjustTo(transferables[i].GetMaximumToTransfer());
 			}
-			this.CountToTransferChanged();
+			CountToTransferChanged();
 		}
 
-		
 		private void CountToTransferChanged()
 		{
-			this.massUsageDirty = true;
-			this.caravanMassUsageDirty = true;
-			this.caravanMassCapacityDirty = true;
-			this.tilesPerDayDirty = true;
-			this.daysWorthOfFoodDirty = true;
-			this.foragedFoodPerDayDirty = true;
-			this.visibilityDirty = true;
-		}
-
-		
-		private Map map;
-
-		
-		private List<CompTransporter> transporters;
-
-		
-		private List<TransferableOneWay> transferables;
-
-		
-		private TransferableOneWayWidget pawnsTransfer;
-
-		
-		private TransferableOneWayWidget itemsTransfer;
-
-		
-		private Dialog_LoadTransporters.Tab tab;
-
-		
-		private float lastMassFlashTime = -9999f;
-
-		
-		private bool massUsageDirty = true;
-
-		
-		private float cachedMassUsage;
-
-		
-		private bool caravanMassUsageDirty = true;
-
-		
-		private float cachedCaravanMassUsage;
-
-		
-		private bool caravanMassCapacityDirty = true;
-
-		
-		private float cachedCaravanMassCapacity;
-
-		
-		private string cachedCaravanMassCapacityExplanation;
-
-		
-		private bool tilesPerDayDirty = true;
-
-		
-		private float cachedTilesPerDay;
-
-		
-		private string cachedTilesPerDayExplanation;
-
-		
-		private bool daysWorthOfFoodDirty = true;
-
-		
-		private Pair<float, float> cachedDaysWorthOfFood;
-
-		
-		private bool foragedFoodPerDayDirty = true;
-
-		
-		private Pair<ThingDef, float> cachedForagedFoodPerDay;
-
-		
-		private string cachedForagedFoodPerDayExplanation;
-
-		
-		private bool visibilityDirty = true;
-
-		
-		private float cachedVisibility;
-
-		
-		private string cachedVisibilityExplanation;
-
-		
-		private const float TitleRectHeight = 35f;
-
-		
-		private const float BottomAreaHeight = 55f;
-
-		
-		private readonly Vector2 BottomButtonSize = new Vector2(160f, 40f);
-
-		
-		private static List<TabRecord> tabsList = new List<TabRecord>();
-
-		
-		private static List<List<TransferableOneWay>> tmpLeftToLoadCopy = new List<List<TransferableOneWay>>();
-
-		
-		private static Dictionary<TransferableOneWay, int> tmpLeftCountToTransfer = new Dictionary<TransferableOneWay, int>();
-
-		
-		private enum Tab
-		{
-			
-			Pawns,
-			
-			Items
+			massUsageDirty = true;
+			caravanMassUsageDirty = true;
+			caravanMassCapacityDirty = true;
+			tilesPerDayDirty = true;
+			daysWorthOfFoodDirty = true;
+			foragedFoodPerDayDirty = true;
+			visibilityDirty = true;
 		}
 	}
 }

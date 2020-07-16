@@ -1,30 +1,25 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TransferableSorterDef : Def
 	{
-		
-		
+		public Type comparerClass;
+
+		[Unsaved(false)]
+		private TransferableComparer comparerInt;
+
 		public TransferableComparer Comparer
 		{
 			get
 			{
-				if (this.comparerInt == null)
+				if (comparerInt == null)
 				{
-					this.comparerInt = (TransferableComparer)Activator.CreateInstance(this.comparerClass);
+					comparerInt = (TransferableComparer)Activator.CreateInstance(comparerClass);
 				}
-				return this.comparerInt;
+				return comparerInt;
 			}
 		}
-
-		
-		public Type comparerClass;
-
-		
-		[Unsaved(false)]
-		private TransferableComparer comparerInt;
 	}
 }

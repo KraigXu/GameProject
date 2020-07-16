@@ -1,18 +1,23 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class TickList
 	{
-		
-		
+		private TickerType tickType;
+
+		private List<List<Thing>> thingLists = new List<List<Thing>>();
+
+		private List<Thing> thingsToRegister = new List<Thing>();
+
+		private List<Thing> thingsToDeregister = new List<Thing>();
+
 		private int TickInterval
 		{
 			get
 			{
-				switch (this.tickType)
+				switch (tickType)
 				{
 				case TickerType.Normal:
 					return 1;
@@ -26,69 +31,63 @@ namespace Verse
 			}
 		}
 
-		
 		public TickList(TickerType tickType)
 		{
 			this.tickType = tickType;
-			for (int i = 0; i < this.TickInterval; i++)
+			for (int i = 0; i < TickInterval; i++)
 			{
-				this.thingLists.Add(new List<Thing>());
+				thingLists.Add(new List<Thing>());
 			}
 		}
 
-		
 		public void Reset()
 		{
-			for (int i = 0; i < this.thingLists.Count; i++)
+			for (int i = 0; i < thingLists.Count; i++)
 			{
-				this.thingLists[i].Clear();
+				thingLists[i].Clear();
 			}
-			this.thingsToRegister.Clear();
-			this.thingsToDeregister.Clear();
+			thingsToRegister.Clear();
+			thingsToDeregister.Clear();
 		}
 
-		
 		public void RemoveWhere(Predicate<Thing> predicate)
 		{
-			for (int i = 0; i < this.thingLists.Count; i++)
+			for (int i = 0; i < thingLists.Count; i++)
 			{
-				this.thingLists[i].RemoveAll(predicate);
+				thingLists[i].RemoveAll(predicate);
 			}
-			this.thingsToRegister.RemoveAll(predicate);
-			this.thingsToDeregister.RemoveAll(predicate);
+			thingsToRegister.RemoveAll(predicate);
+			thingsToDeregister.RemoveAll(predicate);
 		}
 
-		
 		public void RegisterThing(Thing t)
 		{
-			this.thingsToRegister.Add(t);
+			thingsToRegister.Add(t);
 		}
 
-		
 		public void DeregisterThing(Thing t)
 		{
-			this.thingsToDeregister.Add(t);
+			thingsToDeregister.Add(t);
 		}
 
-		
 		public void Tick()
 		{
-			for (int i = 0; i < this.thingsToRegister.Count; i++)
+			for (int i = 0; i < thingsToRegister.Count; i++)
 			{
-				this.BucketOf(this.thingsToRegister[i]).Add(this.thingsToRegister[i]);
+				BucketOf(thingsToRegister[i]).Add(thingsToRegister[i]);
 			}
-			this.thingsToRegister.Clear();
-			for (int j = 0; j < this.thingsToDeregister.Count; j++)
+			thingsToRegister.Clear();
+			for (int j = 0; j < thingsToDeregister.Count; j++)
 			{
-				this.BucketOf(this.thingsToDeregister[j]).Remove(this.thingsToDeregister[j]);
+				BucketOf(thingsToDeregister[j]).Remove(thingsToDeregister[j]);
 			}
-			this.thingsToDeregister.Clear();
+			thingsToDeregister.Clear();
 			if (DebugSettings.fastEcology)
 			{
 				Find.World.tileTemperatures.ClearCaches();
-				for (int k = 0; k < this.thingLists.Count; k++)
+				for (int k = 0; k < thingLists.Count; k++)
 				{
-					List<Thing> list = this.thingLists[k];
+					List<Thing> list = thingLists[k];
 					for (int l = 0; l < list.Count; l++)
 					{
 						if (list[l].def.category == ThingCategory.Plant)
@@ -98,14 +97,14 @@ namespace Verse
 					}
 				}
 			}
-			List<Thing> list2 = this.thingLists[Find.TickManager.TicksGame % this.TickInterval];
+			List<Thing> list2 = thingLists[Find.TickManager.TicksGame % TickInterval];
 			for (int m = 0; m < list2.Count; m++)
 			{
 				if (!list2[m].Destroyed)
 				{
 					try
 					{
-						switch (this.tickType)
+						switch (tickType)
 						{
 						case TickerType.Normal:
 							list2[m].Tick();
@@ -123,32 +122,17 @@ namespace Verse
 						string text = list2[m].Spawned ? (" (at " + list2[m].Position + ")") : "";
 						if (Prefs.DevMode)
 						{
-							Log.Error(string.Concat(new object[]
-							{
-								"Exception ticking ",
-								list2[m].ToStringSafe<Thing>(),
-								text,
-								": ",
-								ex
-							}), false);
+							Log.Error("Exception ticking " + list2[m].ToStringSafe() + text + ": " + ex);
 						}
 						else
 						{
-							Log.ErrorOnce(string.Concat(new object[]
-							{
-								"Exception ticking ",
-								list2[m].ToStringSafe<Thing>(),
-								text,
-								". Suppressing further errors. Exception: ",
-								ex
-							}), list2[m].thingIDNumber ^ 576876901, false);
+							Log.ErrorOnce("Exception ticking " + list2[m].ToStringSafe() + text + ". Suppressing further errors. Exception: " + ex, list2[m].thingIDNumber ^ 0x22627165);
 						}
 					}
 				}
 			}
 		}
 
-		
 		private List<Thing> BucketOf(Thing t)
 		{
 			int num = t.GetHashCode();
@@ -156,20 +140,8 @@ namespace Verse
 			{
 				num *= -1;
 			}
-			int index = num % this.TickInterval;
-			return this.thingLists[index];
+			int index = num % TickInterval;
+			return thingLists[index];
 		}
-
-		
-		private TickerType tickType;
-
-		
-		private List<List<Thing>> thingLists = new List<List<Thing>>();
-
-		
-		private List<Thing> thingsToRegister = new List<Thing>();
-
-		
-		private List<Thing> thingsToDeregister = new List<Thing>();
 	}
 }

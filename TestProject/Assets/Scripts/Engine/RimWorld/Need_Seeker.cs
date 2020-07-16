@@ -1,19 +1,17 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Need_Seeker : Need
 	{
-		
-		
+		private const float GUIArrowTolerance = 0.05f;
+
 		public override int GUIChangeArrow
 		{
 			get
 			{
-				if (!this.pawn.Awake())
+				if (!pawn.Awake())
 				{
 					return 0;
 				}
@@ -30,31 +28,27 @@ namespace RimWorld
 			}
 		}
 
-		
-		public Need_Seeker(Pawn pawn) : base(pawn)
+		public Need_Seeker(Pawn pawn)
+			: base(pawn)
 		{
 		}
 
-		
 		public override void NeedInterval()
 		{
-			if (!this.IsFrozen)
+			if (!IsFrozen)
 			{
-				float curInstantLevel = this.CurInstantLevel;
-				if (curInstantLevel > this.CurLevel)
+				float curInstantLevel = CurInstantLevel;
+				if (curInstantLevel > CurLevel)
 				{
-					this.CurLevel += this.def.seekerRisePerHour * 0.06f;
-					this.CurLevel = Mathf.Min(this.CurLevel, curInstantLevel);
+					CurLevel += def.seekerRisePerHour * 0.06f;
+					CurLevel = Mathf.Min(CurLevel, curInstantLevel);
 				}
-				if (curInstantLevel < this.CurLevel)
+				if (curInstantLevel < CurLevel)
 				{
-					this.CurLevel -= this.def.seekerFallPerHour * 0.06f;
-					this.CurLevel = Mathf.Max(this.CurLevel, curInstantLevel);
+					CurLevel -= def.seekerFallPerHour * 0.06f;
+					CurLevel = Mathf.Max(CurLevel, curInstantLevel);
 				}
 			}
 		}
-
-		
-		private const float GUIArrowTolerance = 0.05f;
 	}
 }

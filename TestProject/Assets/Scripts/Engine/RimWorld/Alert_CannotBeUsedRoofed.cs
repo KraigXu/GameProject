@@ -1,67 +1,59 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_CannotBeUsedRoofed : Alert
 	{
-		
-		
+		private List<ThingDef> thingDefsToCheck;
+
+		private List<Thing> unusableBuildingsResult = new List<Thing>();
+
 		private List<Thing> UnusableBuildings
 		{
 			get
 			{
-				this.unusableBuildingsResult.Clear();
-				if (this.thingDefsToCheck == null)
+				unusableBuildingsResult.Clear();
+				if (thingDefsToCheck == null)
 				{
-					this.thingDefsToCheck = new List<ThingDef>();
-					foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefsListForReading)
+					thingDefsToCheck = new List<ThingDef>();
+					foreach (ThingDef item in DefDatabase<ThingDef>.AllDefsListForReading)
 					{
-						if (!thingDef.canBeUsedUnderRoof)
+						if (!item.canBeUsedUnderRoof)
 						{
-							this.thingDefsToCheck.Add(thingDef);
+							thingDefsToCheck.Add(item);
 						}
 					}
 				}
 				List<Map> maps = Find.Maps;
 				Faction ofPlayer = Faction.OfPlayer;
-				for (int i = 0; i < this.thingDefsToCheck.Count; i++)
+				for (int i = 0; i < thingDefsToCheck.Count; i++)
 				{
 					for (int j = 0; j < maps.Count; j++)
 					{
-						List<Thing> list = maps[j].listerThings.ThingsOfDef(this.thingDefsToCheck[i]);
+						List<Thing> list = maps[j].listerThings.ThingsOfDef(thingDefsToCheck[i]);
 						for (int k = 0; k < list.Count; k++)
 						{
 							if (list[k].Faction == ofPlayer && RoofUtility.IsAnyCellUnderRoof(list[k]))
 							{
-								this.unusableBuildingsResult.Add(list[k]);
+								unusableBuildingsResult.Add(list[k]);
 							}
 						}
 					}
 				}
-				return this.unusableBuildingsResult;
+				return unusableBuildingsResult;
 			}
 		}
 
-		
 		public Alert_CannotBeUsedRoofed()
 		{
-			this.defaultLabel = "BuildingCantBeUsedRoofed".Translate();
-			this.defaultExplanation = "BuildingCantBeUsedRoofedDesc".Translate();
+			defaultLabel = "BuildingCantBeUsedRoofed".Translate();
+			defaultExplanation = "BuildingCantBeUsedRoofedDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.UnusableBuildings);
+			return AlertReport.CulpritsAre(UnusableBuildings);
 		}
-
-		
-		private List<ThingDef> thingDefsToCheck;
-
-		
-		private List<Thing> unusableBuildingsResult = new List<Thing>();
 	}
 }

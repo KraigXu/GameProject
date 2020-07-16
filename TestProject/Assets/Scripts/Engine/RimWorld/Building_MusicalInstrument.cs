@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,117 +5,103 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Building_MusicalInstrument : Building
 	{
-		
-		public static bool IsAffectedByInstrument(ThingDef instrumentDef, IntVec3 instrumentPos, IntVec3 pawnPos, Map map)
-		{
-			return instrumentPos.DistanceTo(pawnPos) < instrumentDef.building.instrumentRange && instrumentPos.GetRoom(map, RegionType.Set_Passable) == pawnPos.GetRoom(map, RegionType.Set_Passable);
-		}
+		private Pawn currentPlayer;
 
-		
-		
-		public bool IsBeingPlayed
-		{
-			get
-			{
-				return this.currentPlayer != null;
-			}
-		}
+		private Sustainer soundPlaying;
 
-		
-		
+		public bool IsBeingPlayed => currentPlayer != null;
+
 		public FloatRange SoundRange
 		{
 			get
 			{
-				if (this.soundPlaying == null)
+				if (soundPlaying == null)
 				{
 					return FloatRange.Zero;
 				}
-				if (this.soundPlaying.def.subSounds.NullOrEmpty<SubSoundDef>())
+				if (soundPlaying.def.subSounds.NullOrEmpty())
 				{
 					return FloatRange.Zero;
 				}
-				return this.soundPlaying.def.subSounds.First<SubSoundDef>().distRange;
+				return soundPlaying.def.subSounds.First().distRange;
 			}
 		}
 
-		
+		public static bool IsAffectedByInstrument(ThingDef instrumentDef, IntVec3 instrumentPos, IntVec3 pawnPos, Map map)
+		{
+			if (instrumentPos.DistanceTo(pawnPos) < instrumentDef.building.instrumentRange)
+			{
+				return instrumentPos.GetRoom(map) == pawnPos.GetRoom(map);
+			}
+			return false;
+		}
+
 		public void StartPlaying(Pawn player)
 		{
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Musical instruments are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 19285, false);
-				return;
+				Log.ErrorOnce("Musical instruments are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 19285);
 			}
-			this.currentPlayer = player;
+			else
+			{
+				currentPlayer = player;
+			}
 		}
 
-		
 		public override void Tick()
 		{
 			base.Tick();
-			if (this.currentPlayer != null)
+			if (currentPlayer != null)
 			{
-				if (this.def.soundPlayInstrument != null && this.soundPlaying == null)
+				if (def.soundPlayInstrument != null && soundPlaying == null)
 				{
-					this.soundPlaying = this.def.soundPlayInstrument.TrySpawnSustainer(SoundInfo.InMap(new TargetInfo(base.Position, base.Map, false), MaintenanceType.PerTick));
+					soundPlaying = def.soundPlayInstrument.TrySpawnSustainer(SoundInfo.InMap(new TargetInfo(base.Position, base.Map), MaintenanceType.PerTick));
 				}
 			}
 			else
 			{
-				this.soundPlaying = null;
+				soundPlaying = null;
 			}
-			if (this.soundPlaying != null)
+			if (soundPlaying != null)
 			{
-				this.soundPlaying.Maintain();
+				soundPlaying.Maintain();
 			}
 		}
 
-		
 		public void StopPlaying()
 		{
-			this.currentPlayer = null;
+			currentPlayer = null;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Pawn>(ref this.currentPlayer, "currentPlayer", false);
+			Scribe_References.Look(ref currentPlayer, "currentPlayer");
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
 			if (!ModLister.RoyaltyInstalled)
 			{
-				Log.ErrorOnce("Musical instruments are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 19285, false);
+				Log.ErrorOnce("Musical instruments are a Royalty-specific game system. If you want to use this code please check ModLister.RoyaltyInstalled before calling it. See rules on the Ludeon forum for more info.", 19285);
 				yield break;
 			}
-
-			IEnumerator<Gizmo> enumerator = null;
+			foreach (Gizmo gizmo in base.GetGizmos())
+			{
+				yield return gizmo;
+			}
 			if (Prefs.DevMode)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "Debug: Toggle is playing";
+				command_Action.action = delegate
 				{
-					defaultLabel = "Debug: Toggle is playing",
-					action = delegate
-					{
-						this.currentPlayer = ((this.currentPlayer == null) ? PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>() : null);
-					}
+					currentPlayer = ((currentPlayer == null) ? PawnsFinder.AllMaps_FreeColonists.FirstOrDefault() : null);
 				};
+				yield return command_Action;
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		private Pawn currentPlayer;
-
-		
-		private Sustainer soundPlaying;
 	}
 }

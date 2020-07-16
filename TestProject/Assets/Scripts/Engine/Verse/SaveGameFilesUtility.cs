@@ -1,51 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 namespace Verse
 {
-	
 	public static class SaveGameFilesUtility
 	{
-		
 		public static bool IsAutoSave(string fileName)
 		{
-			return fileName.Length >= 8 && fileName.Substring(0, 8) == "Autosave";
+			if (fileName.Length < 8)
+			{
+				return false;
+			}
+			return fileName.Substring(0, 8) == "Autosave";
 		}
 
-		
 		public static bool SavedGameNamedExists(string fileName)
 		{
-			IEnumerator<string> enumerator = (from f in GenFilePaths.AllSavedGameFiles
-			select Path.GetFileNameWithoutExtension(f.Name)).GetEnumerator();
+			foreach (string item in GenFilePaths.AllSavedGameFiles.Select((FileInfo f) => Path.GetFileNameWithoutExtension(f.Name)))
 			{
-				while (enumerator.MoveNext())
+				if (item == fileName)
 				{
-					if (enumerator.Current == fileName)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 			return false;
 		}
 
-		
 		public static string UnusedDefaultFileName(string factionLabel)
 		{
+			string text = "";
 			int num = 1;
-			string text;
 			do
 			{
 				text = factionLabel + num.ToString();
 				num++;
 			}
-			while (SaveGameFilesUtility.SavedGameNamedExists(text));
+			while (SavedGameNamedExists(text));
 			return text;
 		}
 
-		
 		public static FileInfo GetAutostartSaveFile()
 		{
 			if (!Prefs.DevMode)

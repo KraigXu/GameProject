@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Ascetic : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (!p.IsColonist)
@@ -19,7 +16,7 @@ namespace RimWorld
 				return false;
 			}
 			int scoreStageIndex = RoomStatDefOf.Impressiveness.GetScoreStageIndex(ownedRoom.GetStat(RoomStatDefOf.Impressiveness));
-			if (this.def.stages[scoreStageIndex] != null)
+			if (def.stages[scoreStageIndex] != null)
 			{
 				return ThoughtState.ActiveAtStage(scoreStageIndex);
 			}

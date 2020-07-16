@@ -1,14 +1,11 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_PrepareCaravan_GatherItems : ThinkNode_JobGiver
 	{
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (!pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))

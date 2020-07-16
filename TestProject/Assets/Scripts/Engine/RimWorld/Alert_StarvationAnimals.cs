@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,58 +5,49 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_StarvationAnimals : Alert
 	{
-		
-		public Alert_StarvationAnimals()
-		{
-			this.defaultLabel = "StarvationAnimals".Translate();
-		}
+		private List<Pawn> starvingAnimalsResult = new List<Pawn>();
 
-		
-		
 		private List<Pawn> StarvingAnimals
 		{
 			get
 			{
-				this.starvingAnimalsResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction_NoCryptosleep)
+				starvingAnimalsResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction_NoCryptosleep)
 				{
-					if (pawn.HostFaction == null && !pawn.RaceProps.Humanlike && pawn.needs.food != null && (pawn.needs.food.TicksStarving > 30000 || (pawn.health.hediffSet.HasHediff(HediffDefOf.Pregnant, true) && pawn.needs.food.TicksStarving > 5000)))
+					if (item.HostFaction == null && !item.RaceProps.Humanlike && item.needs.food != null && (item.needs.food.TicksStarving > 30000 || (item.health.hediffSet.HasHediff(HediffDefOf.Pregnant, mustBeVisible: true) && item.needs.food.TicksStarving > 5000)))
 					{
-						this.starvingAnimalsResult.Add(pawn);
+						starvingAnimalsResult.Add(item);
 					}
 				}
-				return this.starvingAnimalsResult;
+				return starvingAnimalsResult;
 			}
 		}
 
-		
+		public Alert_StarvationAnimals()
+		{
+			defaultLabel = "StarvationAnimals".Translate();
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in from a in this.StarvingAnimals
-			orderby a.def.label
-			select a)
+			foreach (Pawn item in StarvingAnimals.OrderBy((Pawn a) => a.def.label))
 			{
-				stringBuilder.Append("    " + pawn.LabelShortCap);
-				if (pawn.Name.IsValid && !pawn.Name.Numerical)
+				stringBuilder.Append("    " + item.LabelShortCap);
+				if (item.Name.IsValid && !item.Name.Numerical)
 				{
-					stringBuilder.Append(" (" + pawn.def.label + ")");
+					stringBuilder.Append(" (" + item.def.label + ")");
 				}
 				stringBuilder.AppendLine();
 			}
 			return "StarvationAnimalsDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.StarvingAnimals);
+			return AlertReport.CulpritsAre(StarvingAnimals);
 		}
-
-		
-		private List<Pawn> starvingAnimalsResult = new List<Pawn>();
 	}
 }

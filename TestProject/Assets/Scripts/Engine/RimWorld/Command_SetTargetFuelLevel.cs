@@ -1,77 +1,64 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class Command_SetTargetFuelLevel : Command
 	{
-		
+		public CompRefuelable refuelable;
+
+		private List<CompRefuelable> refuelables;
+
 		public override void ProcessInput(Event ev)
 		{
 			base.ProcessInput(ev);
-			if (this.refuelables == null)
+			if (refuelables == null)
 			{
-				this.refuelables = new List<CompRefuelable>();
+				refuelables = new List<CompRefuelable>();
 			}
-			if (!this.refuelables.Contains(this.refuelable))
+			if (!refuelables.Contains(refuelable))
 			{
-				this.refuelables.Add(this.refuelable);
+				refuelables.Add(refuelable);
 			}
 			int num = int.MaxValue;
-			for (int i = 0; i < this.refuelables.Count; i++)
+			for (int i = 0; i < refuelables.Count; i++)
 			{
-				if ((int)this.refuelables[i].Props.fuelCapacity < num)
+				if ((int)refuelables[i].Props.fuelCapacity < num)
 				{
-					num = (int)this.refuelables[i].Props.fuelCapacity;
+					num = (int)refuelables[i].Props.fuelCapacity;
 				}
 			}
 			int startingValue = num / 2;
-			for (int j = 0; j < this.refuelables.Count; j++)
+			for (int j = 0; j < refuelables.Count; j++)
 			{
-				if ((int)this.refuelables[j].TargetFuelLevel <= num)
+				if ((int)refuelables[j].TargetFuelLevel <= num)
 				{
-					startingValue = (int)this.refuelables[j].TargetFuelLevel;
+					startingValue = (int)refuelables[j].TargetFuelLevel;
 					break;
 				}
 			}
-			Func<int, string> textGetter;
-			if (this.refuelable.parent.def.building.hasFuelingPort)
-			{
-				textGetter = ((int x) => "SetPodLauncherTargetFuelLevel".Translate(x, CompLaunchable.MaxLaunchDistanceAtFuelLevel((float)x)));
-			}
-			else
-			{
-				textGetter = ((int x) => "SetTargetFuelLevel".Translate(x));
-			}
+			Func<int, string> textGetter = (!refuelable.parent.def.building.hasFuelingPort) ? ((Func<int, string>)((int x) => "SetTargetFuelLevel".Translate(x))) : ((Func<int, string>)((int x) => "SetPodLauncherTargetFuelLevel".Translate(x, CompLaunchable.MaxLaunchDistanceAtFuelLevel(x))));
 			Dialog_Slider window = new Dialog_Slider(textGetter, 0, num, delegate(int value)
 			{
-				for (int k = 0; k < this.refuelables.Count; k++)
+				for (int k = 0; k < refuelables.Count; k++)
 				{
-					this.refuelables[k].TargetFuelLevel = (float)value;
+					refuelables[k].TargetFuelLevel = value;
 				}
 			}, startingValue);
 			Find.WindowStack.Add(window);
 		}
 
-		
 		public override bool InheritInteractionsFrom(Gizmo other)
 		{
-			if (this.refuelables == null)
+			if (refuelables == null)
 			{
-				this.refuelables = new List<CompRefuelable>();
+				refuelables = new List<CompRefuelable>();
 			}
-			this.refuelables.Add(((Command_SetTargetFuelLevel)other).refuelable);
+			refuelables.Add(((Command_SetTargetFuelLevel)other).refuelable);
 			return false;
 		}
-
-		
-		public CompRefuelable refuelable;
-
-		
-		private List<CompRefuelable> refuelables;
 	}
 }

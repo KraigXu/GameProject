@@ -1,13 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Verse
 {
-	
 	public static class PerfTest
 	{
-		
 		public static string TestStandardMilliseconds()
 		{
 			Stopwatch stopwatch = new Stopwatch();
@@ -22,7 +20,7 @@ namespace Verse
 			{
 				int num = list[0];
 				list.RemoveAt(0);
-				list2.Add(Math.Sqrt((double)num));
+				list2.Add(Math.Sqrt(num));
 			}
 			double num2 = 0.0;
 			for (int j = 0; j < list2.Count; j++)
@@ -30,15 +28,7 @@ namespace Verse
 				num2 += list2[j];
 			}
 			stopwatch.Stop();
-			return string.Concat(new object[]
-			{
-				"Elapsed: ",
-				stopwatch.Elapsed,
-				"\nMilliseconds: ",
-				stopwatch.ElapsedMilliseconds,
-				"\nSum: ",
-				num2
-			});
+			return "Elapsed: " + stopwatch.Elapsed + "\nMilliseconds: " + stopwatch.ElapsedMilliseconds + "\nSum: " + num2;
 		}
 	}
 }

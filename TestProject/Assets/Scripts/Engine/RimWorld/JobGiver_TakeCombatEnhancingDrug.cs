@@ -1,4 +1,3 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 using Verse.AI;
@@ -6,18 +5,19 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_TakeCombatEnhancingDrug : ThinkNode_JobGiver
 	{
-		
+		private bool onlyIfInDanger;
+
+		private const int TakeEveryTicks = 20000;
+
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
-			JobGiver_TakeCombatEnhancingDrug jobGiver_TakeCombatEnhancingDrug = (JobGiver_TakeCombatEnhancingDrug)base.DeepCopy(resolve);
-			jobGiver_TakeCombatEnhancingDrug.onlyIfInDanger = this.onlyIfInDanger;
-			return jobGiver_TakeCombatEnhancingDrug;
+			JobGiver_TakeCombatEnhancingDrug obj = (JobGiver_TakeCombatEnhancingDrug)base.DeepCopy(resolve);
+			obj.onlyIfInDanger = onlyIfInDanger;
+			return obj;
 		}
 
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.IsTeetotaler())
@@ -28,17 +28,17 @@ namespace RimWorld
 			{
 				return null;
 			}
-			Thing thing = this.FindCombatEnhancingDrug(pawn);
+			Thing thing = FindCombatEnhancingDrug(pawn);
 			if (thing == null)
 			{
 				return null;
 			}
-			if (this.onlyIfInDanger)
+			if (onlyIfInDanger)
 			{
 				Lord lord = pawn.GetLord();
 				if (lord == null)
 				{
-					if (!this.HarmedRecently(pawn))
+					if (!HarmedRecently(pawn))
 					{
 						return null;
 					}
@@ -49,7 +49,7 @@ namespace RimWorld
 					int num2 = Mathf.Clamp(lord.ownedPawns.Count / 2, 1, 4);
 					for (int i = 0; i < lord.ownedPawns.Count; i++)
 					{
-						if (this.HarmedRecently(lord.ownedPawns[i]))
+						if (HarmedRecently(lord.ownedPawns[i]))
 						{
 							num++;
 							if (num >= num2)
@@ -69,13 +69,11 @@ namespace RimWorld
 			return job;
 		}
 
-		
 		private bool HarmedRecently(Pawn pawn)
 		{
 			return Find.TickManager.TicksGame - pawn.mindState.lastHarmTick < 2500;
 		}
 
-		
 		private Thing FindCombatEnhancingDrug(Pawn pawn)
 		{
 			for (int i = 0; i < pawn.inventory.innerContainer.Count; i++)
@@ -89,11 +87,5 @@ namespace RimWorld
 			}
 			return null;
 		}
-
-		
-		private bool onlyIfInDanger;
-
-		
-		private const int TakeEveryTicks = 20000;
 	}
 }

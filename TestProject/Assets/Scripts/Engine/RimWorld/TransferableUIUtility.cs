@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,29 +6,100 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public static class TransferableUIUtility
 	{
-		
+		public struct ExtraInfo
+		{
+			public string key;
+
+			public string value;
+
+			public string secondValue;
+
+			public string tip;
+
+			public float lastFlashTime;
+
+			public Color color;
+
+			public Color secondColor;
+
+			public ExtraInfo(string key, string value, Color color, string tip, float lastFlashTime = -9999f)
+			{
+				this.key = key;
+				this.value = value;
+				this.color = color;
+				this.tip = tip;
+				this.lastFlashTime = lastFlashTime;
+				secondValue = null;
+				secondColor = default(Color);
+			}
+
+			public ExtraInfo(string key, string value, Color color, string tip, string secondValue, Color secondColor, float lastFlashTime = -9999f)
+			{
+				this.key = key;
+				this.value = value;
+				this.color = color;
+				this.tip = tip;
+				this.lastFlashTime = lastFlashTime;
+				this.secondValue = secondValue;
+				this.secondColor = secondColor;
+			}
+		}
+
+		private static List<TransferableCountToTransferStoppingPoint> stoppingPoints = new List<TransferableCountToTransferStoppingPoint>();
+
+		private const float AmountAreaWidth = 90f;
+
+		private const float AmountAreaHeight = 25f;
+
+		private const float AdjustArrowWidth = 30f;
+
+		public const float ResourceIconSize = 27f;
+
+		public const float SortersHeight = 27f;
+
+		public const float ExtraInfoHeight = 40f;
+
+		public const float ExtraInfoMargin = 12f;
+
+		public static readonly Color ZeroCountColor = new Color(0.5f, 0.5f, 0.5f);
+
+		public static readonly Texture2D FlashTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 0f, 0f, 0.4f));
+
+		private static readonly Texture2D TradeArrow = ContentFinder<Texture2D>.Get("UI/Widgets/TradeArrow");
+
+		private static readonly Texture2D DividerTex = ContentFinder<Texture2D>.Get("UI/Widgets/Divider");
+
+		private static readonly Texture2D PregnantIcon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Pregnant");
+
+		private static readonly Texture2D BondIcon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Bond");
+
+		[TweakValue("Interface", 0f, 50f)]
+		private static float PregnancyIconWidth = 24f;
+
+		[TweakValue("Interface", 0f, 50f)]
+		private static float BondIconWidth = 24f;
+
 		public static void DoCountAdjustInterface(Rect rect, Transferable trad, int index, int min, int max, bool flash = false, List<TransferableCountToTransferStoppingPoint> extraStoppingPoints = null, bool readOnly = false)
 		{
-			TransferableUIUtility.stoppingPoints.Clear();
+			stoppingPoints.Clear();
 			if (extraStoppingPoints != null)
 			{
-				TransferableUIUtility.stoppingPoints.AddRange(extraStoppingPoints);
+				stoppingPoints.AddRange(extraStoppingPoints);
 			}
-			for (int i = TransferableUIUtility.stoppingPoints.Count - 1; i >= 0; i--)
+			for (int num = stoppingPoints.Count - 1; num >= 0; num--)
 			{
-				if (TransferableUIUtility.stoppingPoints[i].threshold != 0 && (TransferableUIUtility.stoppingPoints[i].threshold <= min || TransferableUIUtility.stoppingPoints[i].threshold >= max))
+				if (stoppingPoints[num].threshold != 0 && (stoppingPoints[num].threshold <= min || stoppingPoints[num].threshold >= max))
 				{
-					TransferableUIUtility.stoppingPoints.RemoveAt(i);
+					stoppingPoints.RemoveAt(num);
 				}
 			}
 			bool flag = false;
-			for (int j = 0; j < TransferableUIUtility.stoppingPoints.Count; j++)
+			for (int i = 0; i < stoppingPoints.Count; i++)
 			{
-				if (TransferableUIUtility.stoppingPoints[j].threshold == 0)
+				if (stoppingPoints[i].threshold == 0)
 				{
 					flag = true;
 					break;
@@ -36,44 +107,43 @@ namespace RimWorld
 			}
 			if (!flag)
 			{
-				TransferableUIUtility.stoppingPoints.Add(new TransferableCountToTransferStoppingPoint(0, "0", "0"));
+				stoppingPoints.Add(new TransferableCountToTransferStoppingPoint(0, "0", "0"));
 			}
-			TransferableUIUtility.DoCountAdjustInterfaceInternal(rect, trad, index, min, max, flash, readOnly);
+			DoCountAdjustInterfaceInternal(rect, trad, index, min, max, flash, readOnly);
 		}
 
-		
 		private static void DoCountAdjustInterfaceInternal(Rect rect, Transferable trad, int index, int min, int max, bool flash, bool readOnly)
 		{
 			rect = rect.Rounded();
 			Rect rect2 = new Rect(rect.center.x - 45f, rect.center.y - 12.5f, 90f, 25f).Rounded();
 			if (flash)
 			{
-				GUI.DrawTexture(rect2, TransferableUIUtility.FlashTex);
+				GUI.DrawTexture(rect2, FlashTex);
 			}
 			TransferableOneWay transferableOneWay = trad as TransferableOneWay;
 			bool flag = transferableOneWay != null && transferableOneWay.HasAnyThing && transferableOneWay.AnyThing is Pawn && transferableOneWay.MaxCount == 1;
-			if (!trad.Interactive || readOnly)
+			if (!trad.Interactive | readOnly)
 			{
 				if (flag)
 				{
-					bool flag2 = trad.CountToTransfer != 0;
-					Widgets.Checkbox(rect2.position, ref flag2, 24f, true, false, null, null);
+					bool checkOn = trad.CountToTransfer != 0;
+					Widgets.Checkbox(rect2.position, ref checkOn, 24f, disabled: true);
 				}
 				else
 				{
-					GUI.color = ((trad.CountToTransfer == 0) ? TransferableUIUtility.ZeroCountColor : Color.white);
+					GUI.color = ((trad.CountToTransfer == 0) ? ZeroCountColor : Color.white);
 					Text.Anchor = TextAnchor.MiddleCenter;
 					Widgets.Label(rect2, trad.CountToTransfer.ToStringCached());
 				}
 			}
 			else if (flag)
 			{
-				bool flag3 = trad.CountToTransfer != 0;
-				bool flag4 = flag3;
-				Widgets.Checkbox(rect2.position, ref flag4, 24f, false, true, null, null);
-				if (flag4 != flag3)
+				bool flag2 = trad.CountToTransfer != 0;
+				bool checkOn2 = flag2;
+				Widgets.Checkbox(rect2.position, ref checkOn2, 24f, disabled: false, paintable: true);
+				if (checkOn2 != flag2)
 				{
-					if (flag4)
+					if (checkOn2)
 					{
 						trad.AdjustTo(trad.GetMaximumToTransfer());
 					}
@@ -88,59 +158,59 @@ namespace RimWorld
 				Rect rect3 = rect2.ContractedBy(2f);
 				rect3.xMax -= 15f;
 				rect3.xMin += 16f;
-				int countToTransfer = trad.CountToTransfer;
-				string editBuffer = trad.EditBuffer;
-				Widgets.TextFieldNumeric<int>(rect3, ref countToTransfer, ref editBuffer, (float)min, (float)max);
-				trad.AdjustTo(countToTransfer);
-				trad.EditBuffer = editBuffer;
+				int val = trad.CountToTransfer;
+				string buffer = trad.EditBuffer;
+				Widgets.TextFieldNumeric(rect3, ref val, ref buffer, min, max);
+				trad.AdjustTo(val);
+				trad.EditBuffer = buffer;
 			}
 			Text.Anchor = TextAnchor.UpperLeft;
 			GUI.color = Color.white;
 			if (trad.Interactive && !flag)
 			{
 				TransferablePositiveCountDirection positiveCountDirection = trad.PositiveCountDirection;
-				int num = (positiveCountDirection == TransferablePositiveCountDirection.Source) ? 1 : -1;
+				int num = (positiveCountDirection == TransferablePositiveCountDirection.Source) ? 1 : (-1);
 				int num2 = GenUI.CurrentAdjustmentMultiplier();
-				bool flag5 = trad.GetRange() == 1;
+				bool flag3 = trad.GetRange() == 1;
 				if (trad.CanAdjustBy(num * num2).Accepted)
 				{
 					Rect rect4 = new Rect(rect2.x - 30f, rect.y, 30f, rect.height);
-					if (flag5)
+					if (flag3)
 					{
 						rect4.x -= rect4.width;
 						rect4.width += rect4.width;
 					}
-					if (Widgets.ButtonText(rect4, "<", true, true, true))
+					if (Widgets.ButtonText(rect4, "<"))
 					{
 						trad.AdjustBy(num * num2);
-						SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+						SoundDefOf.Tick_High.PlayOneShotOnCamera();
 					}
-					if (!flag5)
+					if (!flag3)
 					{
 						string label = "<<";
 						int? num3 = null;
 						int num4 = 0;
-						for (int i = 0; i < TransferableUIUtility.stoppingPoints.Count; i++)
+						for (int i = 0; i < stoppingPoints.Count; i++)
 						{
-							TransferableCountToTransferStoppingPoint transferableCountToTransferStoppingPoint = TransferableUIUtility.stoppingPoints[i];
+							TransferableCountToTransferStoppingPoint transferableCountToTransferStoppingPoint = stoppingPoints[i];
 							if (positiveCountDirection == TransferablePositiveCountDirection.Source)
 							{
-								if (trad.CountToTransfer < transferableCountToTransferStoppingPoint.threshold && (transferableCountToTransferStoppingPoint.threshold < num4 || num3 == null))
+								if (trad.CountToTransfer < transferableCountToTransferStoppingPoint.threshold && (transferableCountToTransferStoppingPoint.threshold < num4 || !num3.HasValue))
 								{
 									label = transferableCountToTransferStoppingPoint.leftLabel;
-									num3 = new int?(transferableCountToTransferStoppingPoint.threshold);
+									num3 = transferableCountToTransferStoppingPoint.threshold;
 								}
 							}
-							else if (trad.CountToTransfer > transferableCountToTransferStoppingPoint.threshold && (transferableCountToTransferStoppingPoint.threshold > num4 || num3 == null))
+							else if (trad.CountToTransfer > transferableCountToTransferStoppingPoint.threshold && (transferableCountToTransferStoppingPoint.threshold > num4 || !num3.HasValue))
 							{
 								label = transferableCountToTransferStoppingPoint.leftLabel;
-								num3 = new int?(transferableCountToTransferStoppingPoint.threshold);
+								num3 = transferableCountToTransferStoppingPoint.threshold;
 							}
 						}
 						rect4.x -= rect4.width;
-						if (Widgets.ButtonText(rect4, label, true, true, true))
+						if (Widgets.ButtonText(rect4, label))
 						{
-							if (num3 != null)
+							if (num3.HasValue)
 							{
 								trad.AdjustTo(num3.Value);
 							}
@@ -152,48 +222,48 @@ namespace RimWorld
 							{
 								trad.AdjustTo(trad.GetMinimumToTransfer());
 							}
-							SoundDefOf.Tick_High.PlayOneShotOnCamera(null);
+							SoundDefOf.Tick_High.PlayOneShotOnCamera();
 						}
 					}
 				}
 				if (trad.CanAdjustBy(-num * num2).Accepted)
 				{
 					Rect rect5 = new Rect(rect2.xMax, rect.y, 30f, rect.height);
-					if (flag5)
+					if (flag3)
 					{
 						rect5.width += rect5.width;
 					}
-					if (Widgets.ButtonText(rect5, ">", true, true, true))
+					if (Widgets.ButtonText(rect5, ">"))
 					{
 						trad.AdjustBy(-num * num2);
-						SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+						SoundDefOf.Tick_Low.PlayOneShotOnCamera();
 					}
-					if (!flag5)
+					if (!flag3)
 					{
 						string label2 = ">>";
 						int? num5 = null;
 						int num6 = 0;
-						for (int j = 0; j < TransferableUIUtility.stoppingPoints.Count; j++)
+						for (int j = 0; j < stoppingPoints.Count; j++)
 						{
-							TransferableCountToTransferStoppingPoint transferableCountToTransferStoppingPoint2 = TransferableUIUtility.stoppingPoints[j];
+							TransferableCountToTransferStoppingPoint transferableCountToTransferStoppingPoint2 = stoppingPoints[j];
 							if (positiveCountDirection == TransferablePositiveCountDirection.Destination)
 							{
-								if (trad.CountToTransfer < transferableCountToTransferStoppingPoint2.threshold && (transferableCountToTransferStoppingPoint2.threshold < num6 || num5 == null))
+								if (trad.CountToTransfer < transferableCountToTransferStoppingPoint2.threshold && (transferableCountToTransferStoppingPoint2.threshold < num6 || !num5.HasValue))
 								{
 									label2 = transferableCountToTransferStoppingPoint2.rightLabel;
-									num5 = new int?(transferableCountToTransferStoppingPoint2.threshold);
+									num5 = transferableCountToTransferStoppingPoint2.threshold;
 								}
 							}
-							else if (trad.CountToTransfer > transferableCountToTransferStoppingPoint2.threshold && (transferableCountToTransferStoppingPoint2.threshold > num6 || num5 == null))
+							else if (trad.CountToTransfer > transferableCountToTransferStoppingPoint2.threshold && (transferableCountToTransferStoppingPoint2.threshold > num6 || !num5.HasValue))
 							{
 								label2 = transferableCountToTransferStoppingPoint2.rightLabel;
-								num5 = new int?(transferableCountToTransferStoppingPoint2.threshold);
+								num5 = transferableCountToTransferStoppingPoint2.threshold;
 							}
 						}
 						rect5.x += rect5.width;
-						if (Widgets.ButtonText(rect5, label2, true, true, true))
+						if (Widgets.ButtonText(rect5, label2))
 						{
-							if (num5 != null)
+							if (num5.HasValue)
 							{
 								trad.AdjustTo(num5.Value);
 							}
@@ -205,86 +275,81 @@ namespace RimWorld
 							{
 								trad.AdjustTo(trad.GetMaximumToTransfer());
 							}
-							SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
+							SoundDefOf.Tick_Low.PlayOneShotOnCamera();
 						}
 					}
 				}
 			}
 			if (trad.CountToTransfer != 0)
 			{
-				Rect position = new Rect(rect2.x + rect2.width / 2f - (float)(TransferableUIUtility.TradeArrow.width / 2), rect2.y + rect2.height / 2f - (float)(TransferableUIUtility.TradeArrow.height / 2), (float)TransferableUIUtility.TradeArrow.width, (float)TransferableUIUtility.TradeArrow.height);
+				Rect position = new Rect(rect2.x + rect2.width / 2f - (float)(TradeArrow.width / 2), rect2.y + rect2.height / 2f - (float)(TradeArrow.height / 2), TradeArrow.width, TradeArrow.height);
 				TransferablePositiveCountDirection positiveCountDirection2 = trad.PositiveCountDirection;
 				if ((positiveCountDirection2 == TransferablePositiveCountDirection.Source && trad.CountToTransfer > 0) || (positiveCountDirection2 == TransferablePositiveCountDirection.Destination && trad.CountToTransfer < 0))
 				{
 					position.x += position.width;
 					position.width *= -1f;
 				}
-				GUI.DrawTexture(position, TransferableUIUtility.TradeArrow);
+				GUI.DrawTexture(position, TradeArrow);
 			}
 		}
 
-		
 		public static void DrawTransferableInfo(Transferable trad, Rect idRect, Color labelColor)
 		{
-			if (!trad.HasAnyThing && trad.IsThing)
+			if (trad.HasAnyThing || !trad.IsThing)
 			{
-				return;
-			}
-			if (Mouse.IsOver(idRect))
-			{
-				Widgets.DrawHighlight(idRect);
-			}
-			Rect rect = new Rect(0f, 0f, 27f, 27f);
-			if (trad.IsThing)
-			{
-				Widgets.ThingIcon(rect, trad.AnyThing, 1f);
-			}
-			else
-			{
-				trad.DrawIcon(rect);
-			}
-			if (trad.IsThing)
-			{
-				Widgets.InfoCardButton(40f, 0f, trad.AnyThing);
-			}
-			Text.Anchor = TextAnchor.MiddleLeft;
-			Rect rect2 = new Rect(80f, 0f, idRect.width - 80f, idRect.height);
-			Text.WordWrap = false;
-			GUI.color = labelColor;
-			Widgets.Label(rect2, trad.LabelCap);
-			GUI.color = Color.white;
-			Text.WordWrap = true;
-			if (Mouse.IsOver(idRect))
-			{
-				Transferable localTrad = trad;
-				TooltipHandler.TipRegion(idRect, new TipSignal(delegate
+				if (Mouse.IsOver(idRect))
 				{
-					if (!localTrad.HasAnyThing && localTrad.IsThing)
+					Widgets.DrawHighlight(idRect);
+				}
+				Rect rect = new Rect(0f, 0f, 27f, 27f);
+				if (trad.IsThing)
+				{
+					Widgets.ThingIcon(rect, trad.AnyThing);
+				}
+				else
+				{
+					trad.DrawIcon(rect);
+				}
+				if (trad.IsThing)
+				{
+					Widgets.InfoCardButton(40f, 0f, trad.AnyThing);
+				}
+				Text.Anchor = TextAnchor.MiddleLeft;
+				Rect rect2 = new Rect(80f, 0f, idRect.width - 80f, idRect.height);
+				Text.WordWrap = false;
+				GUI.color = labelColor;
+				Widgets.Label(rect2, trad.LabelCap);
+				GUI.color = Color.white;
+				Text.WordWrap = true;
+				if (Mouse.IsOver(idRect))
+				{
+					TooltipHandler.TipRegion(idRect, new TipSignal(delegate
 					{
-						return "";
-					}
-					string text = localTrad.LabelCap;
-					string tipDescription = localTrad.TipDescription;
-					if (!tipDescription.NullOrEmpty())
-					{
-						text = text + ": " + tipDescription;
-					}
-					return text;
-				}, localTrad.GetHashCode()));
+						if (!trad.HasAnyThing && trad.IsThing)
+						{
+							return "";
+						}
+						string text = trad.LabelCap;
+						string tipDescription = trad.TipDescription;
+						if (!tipDescription.NullOrEmpty())
+						{
+							text = text + ": " + tipDescription;
+						}
+						return text;
+					}, trad.GetHashCode()));
+				}
 			}
 		}
 
-		
 		public static float DefaultListOrderPriority(Transferable transferable)
 		{
 			if (!transferable.HasAnyThing)
 			{
 				return 0f;
 			}
-			return TransferableUIUtility.DefaultListOrderPriority(transferable.ThingDef);
+			return DefaultListOrderPriority(transferable.ThingDef);
 		}
 
-		
 		public static float DefaultListOrderPriority(ThingDef def)
 		{
 			if (def == ThingDefOf.Silver)
@@ -322,7 +387,6 @@ namespace RimWorld
 			return 20f;
 		}
 
-		
 		public static void DoTransferableSorters(TransferableSorterDef sorter1, TransferableSorterDef sorter2, Action<TransferableSorterDef> sorter1Setter, Action<TransferableSorterDef> sorter2Setter)
 		{
 			GUI.BeginGroup(new Rect(0f, 0f, 350f, 27f));
@@ -332,51 +396,50 @@ namespace RimWorld
 			Widgets.Label(rect, "SortBy".Translate());
 			Text.Anchor = TextAnchor.UpperLeft;
 			Rect rect2 = new Rect(rect.xMax + 10f, 0f, 130f, 27f);
-			if (Widgets.ButtonText(rect2, sorter1.LabelCap, true, true, true))
+			if (Widgets.ButtonText(rect2, sorter1.LabelCap))
 			{
-				TransferableUIUtility.OpenSorterChangeFloatMenu(sorter1Setter);
+				OpenSorterChangeFloatMenu(sorter1Setter);
 			}
-			if (Widgets.ButtonText(new Rect(rect2.xMax + 10f, 0f, 130f, 27f), sorter2.LabelCap, true, true, true))
+			if (Widgets.ButtonText(new Rect(rect2.xMax + 10f, 0f, 130f, 27f), sorter2.LabelCap))
 			{
-				TransferableUIUtility.OpenSorterChangeFloatMenu(sorter2Setter);
+				OpenSorterChangeFloatMenu(sorter2Setter);
 			}
 			GUI.EndGroup();
 		}
 
-		
 		public static void DoExtraAnimalIcons(Transferable trad, Rect rect, ref float curX)
 		{
 			Pawn pawn = trad.AnyThing as Pawn;
-			if (pawn != null && pawn.RaceProps.Animal)
+			if (pawn == null || !pawn.RaceProps.Animal)
 			{
-				if (pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond, null) != null)
+				return;
+			}
+			if (pawn.relations.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond) != null)
+			{
+				Rect rect2 = new Rect(curX - BondIconWidth, (rect.height - BondIconWidth) / 2f, BondIconWidth, BondIconWidth);
+				curX -= BondIconWidth;
+				GUI.DrawTexture(rect2, BondIcon);
+				if (Mouse.IsOver(rect2))
 				{
-					Rect rect2 = new Rect(curX - TransferableUIUtility.BondIconWidth, (rect.height - TransferableUIUtility.BondIconWidth) / 2f, TransferableUIUtility.BondIconWidth, TransferableUIUtility.BondIconWidth);
-					curX -= TransferableUIUtility.BondIconWidth;
-					GUI.DrawTexture(rect2, TransferableUIUtility.BondIcon);
-					if (Mouse.IsOver(rect2))
+					string iconTooltipText = TrainableUtility.GetIconTooltipText(pawn);
+					if (!iconTooltipText.NullOrEmpty())
 					{
-						string iconTooltipText = TrainableUtility.GetIconTooltipText(pawn);
-						if (!iconTooltipText.NullOrEmpty())
-						{
-							TooltipHandler.TipRegion(rect2, iconTooltipText);
-						}
+						TooltipHandler.TipRegion(rect2, iconTooltipText);
 					}
 				}
-				if (pawn.health.hediffSet.HasHediff(HediffDefOf.Pregnant, true))
+			}
+			if (pawn.health.hediffSet.HasHediff(HediffDefOf.Pregnant, mustBeVisible: true))
+			{
+				Rect rect3 = new Rect(curX - PregnancyIconWidth, (rect.height - PregnancyIconWidth) / 2f, PregnancyIconWidth, PregnancyIconWidth);
+				curX -= PregnancyIconWidth;
+				if (Mouse.IsOver(rect3))
 				{
-					Rect rect3 = new Rect(curX - TransferableUIUtility.PregnancyIconWidth, (rect.height - TransferableUIUtility.PregnancyIconWidth) / 2f, TransferableUIUtility.PregnancyIconWidth, TransferableUIUtility.PregnancyIconWidth);
-					curX -= TransferableUIUtility.PregnancyIconWidth;
-					if (Mouse.IsOver(rect3))
-					{
-						TooltipHandler.TipRegion(rect3, PawnColumnWorker_Pregnant.GetTooltipText(pawn));
-					}
-					GUI.DrawTexture(rect3, TransferableUIUtility.PregnantIcon);
+					TooltipHandler.TipRegion(rect3, PawnColumnWorker_Pregnant.GetTooltipText(pawn));
 				}
+				GUI.DrawTexture(rect3, PregnantIcon);
 			}
 		}
 
-		
 		private static void OpenSorterChangeFloatMenu(Action<TransferableSorterDef> sorterSetter)
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -387,13 +450,12 @@ namespace RimWorld
 				list.Add(new FloatMenuOption(def.LabelCap, delegate
 				{
 					sorterSetter(def);
-				}, MenuOptionPriority.Default, null, null, 0f, null, null));
+				}));
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}
 
-		
-		public static void DrawExtraInfo(List<TransferableUIUtility.ExtraInfo> info, Rect rect)
+		public static void DrawExtraInfo(List<ExtraInfo> info, Rect rect)
 		{
 			if (rect.width > (float)info.Count * 230f)
 			{
@@ -411,7 +473,7 @@ namespace RimWorld
 				Rect rect4 = new Rect(num2, rect.height / 2f, num3, rect.height / 2f);
 				if (Time.time - info[i].lastFlashTime < 1f)
 				{
-					GUI.DrawTexture(rect2, TransferableUIUtility.FlashTex);
+					GUI.DrawTexture(rect2, FlashTex);
 				}
 				Text.Anchor = TextAnchor.LowerCenter;
 				Text.Font = GameFont.Tiny;
@@ -443,7 +505,7 @@ namespace RimWorld
 					position.width = 15f;
 					position.height = 15f;
 					GUI.color = Color.white;
-					GUI.DrawTexture(position, TransferableUIUtility.DividerTex);
+					GUI.DrawTexture(position, DividerTex);
 				}
 				GUI.color = Color.white;
 				Widgets.DrawHighlightIfMouseover(rect2);
@@ -452,105 +514,6 @@ namespace RimWorld
 			}
 			GUI.EndGroup();
 			Text.Anchor = TextAnchor.UpperLeft;
-		}
-
-		
-		private static List<TransferableCountToTransferStoppingPoint> stoppingPoints = new List<TransferableCountToTransferStoppingPoint>();
-
-		
-		private const float AmountAreaWidth = 90f;
-
-		
-		private const float AmountAreaHeight = 25f;
-
-		
-		private const float AdjustArrowWidth = 30f;
-
-		
-		public const float ResourceIconSize = 27f;
-
-		
-		public const float SortersHeight = 27f;
-
-		
-		public const float ExtraInfoHeight = 40f;
-
-		
-		public const float ExtraInfoMargin = 12f;
-
-		
-		public static readonly Color ZeroCountColor = new Color(0.5f, 0.5f, 0.5f);
-
-		
-		public static readonly Texture2D FlashTex = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 0f, 0f, 0.4f));
-
-		
-		private static readonly Texture2D TradeArrow = ContentFinder<Texture2D>.Get("UI/Widgets/TradeArrow", true);
-
-		
-		private static readonly Texture2D DividerTex = ContentFinder<Texture2D>.Get("UI/Widgets/Divider", true);
-
-		
-		private static readonly Texture2D PregnantIcon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Pregnant", true);
-
-		
-		private static readonly Texture2D BondIcon = ContentFinder<Texture2D>.Get("UI/Icons/Animal/Bond", true);
-
-		
-		[TweakValue("Interface", 0f, 50f)]
-		private static float PregnancyIconWidth = 24f;
-
-		
-		[TweakValue("Interface", 0f, 50f)]
-		private static float BondIconWidth = 24f;
-
-		
-		public struct ExtraInfo
-		{
-			
-			public ExtraInfo(string key, string value, Color color, string tip, float lastFlashTime = -9999f)
-			{
-				this.key = key;
-				this.value = value;
-				this.color = color;
-				this.tip = tip;
-				this.lastFlashTime = lastFlashTime;
-				this.secondValue = null;
-				this.secondColor = default(Color);
-			}
-
-			
-			public ExtraInfo(string key, string value, Color color, string tip, string secondValue, Color secondColor, float lastFlashTime = -9999f)
-			{
-				this.key = key;
-				this.value = value;
-				this.color = color;
-				this.tip = tip;
-				this.lastFlashTime = lastFlashTime;
-				this.secondValue = secondValue;
-				this.secondColor = secondColor;
-			}
-
-			
-			public string key;
-
-			
-			public string value;
-
-			
-			public string secondValue;
-
-			
-			public string tip;
-
-			
-			public float lastFlashTime;
-
-			
-			public Color color;
-
-			
-			public Color secondColor;
 		}
 	}
 }

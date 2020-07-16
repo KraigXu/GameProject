@@ -1,20 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_PlanAdd : Designator_Plan
 	{
-		
-		public Designator_PlanAdd() : base(DesignateMode.Add)
+		public Designator_PlanAdd()
+			: base(DesignateMode.Add)
 		{
-			this.defaultLabel = "DesignatorPlan".Translate();
-			this.defaultDesc = "DesignatorPlanDesc".Translate();
-			this.icon = ContentFinder<Texture2D>.Get("UI/Designators/PlanOn", true);
-			this.soundSucceeded = SoundDefOf.Designate_PlanAdd;
-			this.hotKey = KeyBindingDefOf.Misc9;
+			defaultLabel = "DesignatorPlan".Translate();
+			defaultDesc = "DesignatorPlanDesc".Translate();
+			icon = ContentFinder<Texture2D>.Get("UI/Designators/PlanOn");
+			soundSucceeded = SoundDefOf.Designate_PlanAdd;
+			hotKey = KeyBindingDefOf.Misc9;
 		}
 	}
 }

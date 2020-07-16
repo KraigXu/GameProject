@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,166 +6,127 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Blueprint_Install : Blueprint
 	{
-		
-		
+		private MinifiedThing miniToInstall;
+
+		private Building buildingToReinstall;
+
 		public Thing MiniToInstallOrBuildingToReinstall
 		{
 			get
 			{
-				if (this.miniToInstall != null)
+				if (miniToInstall != null)
 				{
-					return this.miniToInstall;
+					return miniToInstall;
 				}
-				if (this.buildingToReinstall != null)
+				if (buildingToReinstall != null)
 				{
-					return this.buildingToReinstall;
+					return buildingToReinstall;
 				}
 				throw new InvalidOperationException("Nothing to install.");
 			}
 		}
 
-		
-		
-		public Thing ThingToInstall
-		{
-			get
-			{
-				return this.MiniToInstallOrBuildingToReinstall.GetInnerIfMinified();
-			}
-		}
+		public Thing ThingToInstall => MiniToInstallOrBuildingToReinstall.GetInnerIfMinified();
 
-		
-		
-		public override Graphic Graphic
-		{
-			get
-			{
-				return this.ThingToInstall.def.installBlueprintDef.graphic.ExtractInnerGraphicFor(this.ThingToInstall);
-			}
-		}
+		public override Graphic Graphic => ThingToInstall.def.installBlueprintDef.graphic.ExtractInnerGraphicFor(ThingToInstall);
 
-		
-		
-		protected override float WorkTotal
-		{
-			get
-			{
-				return 150f;
-			}
-		}
+		protected override float WorkTotal => 150f;
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<MinifiedThing>(ref this.miniToInstall, "miniToInstall", false);
-			Scribe_References.Look<Building>(ref this.buildingToReinstall, "buildingToReinstall", false);
+			Scribe_References.Look(ref miniToInstall, "miniToInstall");
+			Scribe_References.Look(ref buildingToReinstall, "buildingToReinstall");
 		}
 
-		
 		public override ThingDef EntityToBuildStuff()
 		{
-			return this.ThingToInstall.Stuff;
+			return ThingToInstall.Stuff;
 		}
 
-		
 		public override List<ThingDefCountClass> MaterialsNeeded()
 		{
-			Log.Error("Called MaterialsNeeded on a Blueprint_Install.", false);
+			Log.Error("Called MaterialsNeeded on a Blueprint_Install.");
 			return new List<ThingDefCountClass>();
 		}
 
-		
 		protected override Thing MakeSolidThing()
 		{
-			Thing thingToInstall = this.ThingToInstall;
-			if (this.miniToInstall != null)
+			Thing thingToInstall = ThingToInstall;
+			if (miniToInstall != null)
 			{
-				this.miniToInstall.InnerThing = null;
-				this.miniToInstall.Destroy(DestroyMode.Vanish);
+				miniToInstall.InnerThing = null;
+				miniToInstall.Destroy();
 			}
 			return thingToInstall;
 		}
 
-		
 		public override bool TryReplaceWithSolidThing(Pawn workerPawn, out Thing createdThing, out bool jobEnded)
 		{
 			Map map = base.Map;
-			bool flag = base.TryReplaceWithSolidThing(workerPawn, out createdThing, out jobEnded);
-			if (flag)
+			bool num = base.TryReplaceWithSolidThing(workerPawn, out createdThing, out jobEnded);
+			if (num)
 			{
-				SoundDefOf.Building_Complete.PlayOneShot(new TargetInfo(base.Position, map, false));
+				SoundDefOf.Building_Complete.PlayOneShot(new TargetInfo(base.Position, map));
 				workerPawn.records.Increment(RecordDefOf.ThingsInstalled);
 			}
-			return flag;
+			return num;
 		}
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			Command command = BuildCopyCommandUtility.BuildCopyCommand(this.ThingToInstall.def, this.ThingToInstall.Stuff);
+			foreach (Gizmo gizmo in base.GetGizmos())
+			{
+				yield return gizmo;
+			}
+			Command command = BuildCopyCommandUtility.BuildCopyCommand(ThingToInstall.def, ThingToInstall.Stuff);
 			if (command != null)
 			{
 				yield return command;
 			}
 			if (base.Faction == Faction.OfPlayer)
 			{
-				foreach (Command command2 in BuildFacilityCommandUtility.BuildFacilityCommands(this.ThingToInstall.def))
+				foreach (Command item in BuildFacilityCommandUtility.BuildFacilityCommands(ThingToInstall.def))
 				{
-					yield return command2;
+					yield return item;
 				}
-				IEnumerator<Command> enumerator2 = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public override void DrawExtraSelectionOverlays()
 		{
 			base.DrawExtraSelectionOverlays();
-			if (this.buildingToReinstall != null)
+			if (buildingToReinstall != null)
 			{
-				GenDraw.DrawLineBetween(this.buildingToReinstall.TrueCenter(), this.TrueCenter());
+				GenDraw.DrawLineBetween(buildingToReinstall.TrueCenter(), this.TrueCenter());
 			}
-			if (this.ThingToInstall.def.drawPlaceWorkersWhileInstallBlueprintSelected && this.ThingToInstall.def.PlaceWorkers != null)
+			if (ThingToInstall.def.drawPlaceWorkersWhileInstallBlueprintSelected && ThingToInstall.def.PlaceWorkers != null)
 			{
-				List<PlaceWorker> placeWorkers = this.ThingToInstall.def.PlaceWorkers;
+				List<PlaceWorker> placeWorkers = ThingToInstall.def.PlaceWorkers;
 				for (int i = 0; i < placeWorkers.Count; i++)
 				{
-					placeWorkers[i].DrawGhost(this.ThingToInstall.def, base.Position, base.Rotation, Color.white, this.ThingToInstall);
+					placeWorkers[i].DrawGhost(ThingToInstall.def, base.Position, base.Rotation, Color.white, ThingToInstall);
 				}
 			}
 		}
 
-		
 		internal void SetThingToInstallFromMinified(MinifiedThing itemToInstall)
 		{
-			this.miniToInstall = itemToInstall;
-			this.buildingToReinstall = null;
+			miniToInstall = itemToInstall;
+			buildingToReinstall = null;
 		}
 
-		
 		internal void SetBuildingToReinstall(Building buildingToReinstall)
 		{
 			if (!buildingToReinstall.def.Minifiable)
 			{
-				Log.Error("Tried to reinstall non-minifiable building.", false);
+				Log.Error("Tried to reinstall non-minifiable building.");
 				return;
 			}
-			this.miniToInstall = null;
+			miniToInstall = null;
 			this.buildingToReinstall = buildingToReinstall;
 		}
-
-		
-		private MinifiedThing miniToInstall;
-
-		
-		private Building buildingToReinstall;
 	}
 }

@@ -1,33 +1,26 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_IsCorpseFresh : StatPart
 	{
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
-			float num;
-			if (this.TryGetIsFreshFactor(req, out num))
+			if (TryGetIsFreshFactor(req, out float factor))
 			{
-				val *= num;
+				val *= factor;
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
-			float num;
-			if (this.TryGetIsFreshFactor(req, out num) && num != 1f)
+			if (TryGetIsFreshFactor(req, out float factor) && factor != 1f)
 			{
-				return "StatsReport_NotFresh".Translate() + ": x" + num.ToStringPercent();
+				return "StatsReport_NotFresh".Translate() + ": x" + factor.ToStringPercent();
 			}
 			return null;
 		}
 
-		
 		private bool TryGetIsFreshFactor(StatRequest req, out float factor)
 		{
 			if (!req.HasThing)

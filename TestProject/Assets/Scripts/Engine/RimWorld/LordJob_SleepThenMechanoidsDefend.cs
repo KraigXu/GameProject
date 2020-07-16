@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -7,59 +7,43 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class LordJob_SleepThenMechanoidsDefend : LordJob_MechanoidDefendBase
 	{
-		
-		
-		public override bool GuiltyOnDowned
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override bool GuiltyOnDowned => true;
 
-		
 		public LordJob_SleepThenMechanoidsDefend()
 		{
 		}
 
-		
 		public LordJob_SleepThenMechanoidsDefend(List<Thing> things, Faction faction, float defendRadius, IntVec3 defSpot, bool canAssaultColony, bool isMechCluster)
 		{
 			if (things != null)
 			{
-				this.things.AddRange(things);
+				base.things.AddRange(things);
 			}
-			this.faction = faction;
-			this.defendRadius = defendRadius;
-			this.defSpot = defSpot;
-			this.canAssaultColony = canAssaultColony;
-			this.isMechCluster = isMechCluster;
+			base.faction = faction;
+			base.defendRadius = defendRadius;
+			base.defSpot = defSpot;
+			base.canAssaultColony = canAssaultColony;
+			base.isMechCluster = isMechCluster;
 		}
 
-		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
-			LordToil_Sleep lordToil_Sleep = new LordToil_Sleep();
-			stateGraph.StartingToil = lordToil_Sleep;
-			LordToil startingToil = stateGraph.AttachSubgraph(new LordJob_MechanoidsDefend(this.things, this.faction, this.defendRadius, this.defSpot, this.canAssaultColony, this.isMechCluster).CreateGraph()).StartingToil;
-			Transition transition = new Transition(lordToil_Sleep, startingToil, false, true);
+			LordToil_Sleep firstSource = (LordToil_Sleep)(stateGraph.StartingToil = new LordToil_Sleep());
+			LordToil startingToil = stateGraph.AttachSubgraph(new LordJob_MechanoidsDefend(things, faction, defendRadius, defSpot, canAssaultColony, isMechCluster).CreateGraph()).StartingToil;
+			Transition transition = new Transition(firstSource, startingToil);
 			transition.AddTrigger(new Trigger_Custom((TriggerSignal signal) => signal.type == TriggerSignalType.DormancyWakeup));
-			transition.AddTrigger(new Trigger_OnHumanlikeHarmAnyThing(this.things));
-			transition.AddPreAction(new TransitionAction_Message("MessageSleepingPawnsWokenUp".Translate(this.faction.def.pawnsPlural).CapitalizeFirst(), MessageTypeDefOf.ThreatBig, null, 1f));
+			transition.AddTrigger(new Trigger_OnHumanlikeHarmAnyThing(things));
+			transition.AddPreAction(new TransitionAction_Message("MessageSleepingPawnsWokenUp".Translate(faction.def.pawnsPlural).CapitalizeFirst(), MessageTypeDefOf.ThreatBig));
 			transition.AddPostAction(new TransitionAction_WakeAll());
-			transition.AddPostAction(new TransitionAction_Custom(CallFunction));
-
-			void CallFunction()
-            {
-				Find.SignalManager.SendSignal(new Signal("CompCanBeDormant.WakeUp", this.things.First<Thing>().Named("SUBJECT"), Faction.OfMechanoids.Named("FACTION")));
-				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(this.defSpot, base.Map, false));
-			}
-
-			stateGraph.AddTransition(transition, false);
+			transition.AddPostAction(new TransitionAction_Custom((Action)delegate
+			{
+				Find.SignalManager.SendSignal(new Signal("CompCanBeDormant.WakeUp", things.First().Named("SUBJECT"), Faction.OfMechanoids.Named("FACTION")));
+				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(defSpot, base.Map));
+			}));
+			stateGraph.AddTransition(transition);
 			return stateGraph;
 		}
 	}

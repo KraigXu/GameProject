@@ -1,52 +1,36 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenPart_StartingThing_Defined : ScenPart_ThingCount
 	{
-		
-		
-		public static string PlayerStartWithIntro
-		{
-			get
-			{
-				return "ScenPart_StartWith".Translate();
-			}
-		}
+		public const string PlayerStartWithTag = "PlayerStartsWith";
 
-		
+		public static string PlayerStartWithIntro => "ScenPart_StartWith".Translate();
+
 		public override string Summary(Scenario scen)
 		{
-			return ScenSummaryList.SummaryWithList(scen, "PlayerStartsWith", ScenPart_StartingThing_Defined.PlayerStartWithIntro);
+			return ScenSummaryList.SummaryWithList(scen, "PlayerStartsWith", PlayerStartWithIntro);
 		}
 
-		
 		public override IEnumerable<string> GetSummaryListEntries(string tag)
 		{
 			if (tag == "PlayerStartsWith")
 			{
-				yield return GenLabel.ThingLabel(this.thingDef, this.stuff, this.count).CapitalizeFirst();
+				yield return GenLabel.ThingLabel(thingDef, stuff, count).CapitalizeFirst();
 			}
-			yield break;
 		}
 
-		
 		public override IEnumerable<Thing> PlayerStartingThings()
 		{
-			Thing thing = ThingMaker.MakeThing(this.thingDef, this.stuff);
-			if (this.thingDef.Minifiable)
+			Thing thing = ThingMaker.MakeThing(thingDef, stuff);
+			if (thingDef.Minifiable)
 			{
 				thing = thing.MakeMinified();
 			}
-			thing.stackCount = this.count;
+			thing.stackCount = count;
 			yield return thing;
-			yield break;
 		}
-
-		
-		public const string PlayerStartWithTag = "PlayerStartsWith";
 	}
 }

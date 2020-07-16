@@ -1,106 +1,91 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompBreakdownable : ThingComp
 	{
-		
-		
-		public bool BrokenDown
-		{
-			get
-			{
-				return this.brokenDownInt;
-			}
-		}
+		private bool brokenDownInt;
 
-		
+		private CompPowerTrader powerComp;
+
+		private const int BreakdownMTBTicks = 13680000;
+
+		public const string BreakdownSignal = "Breakdown";
+
+		public bool BrokenDown => brokenDownInt;
+
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<bool>(ref this.brokenDownInt, "brokenDown", false, false);
+			Scribe_Values.Look(ref brokenDownInt, "brokenDown", defaultValue: false);
 		}
 
-		
 		public override void PostDraw()
 		{
-			if (this.brokenDownInt)
+			if (brokenDownInt)
 			{
-				this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.BrokenDown);
+				parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.BrokenDown);
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			this.powerComp = this.parent.GetComp<CompPowerTrader>();
-			this.parent.Map.GetComponent<BreakdownManager>().Register(this);
+			powerComp = parent.GetComp<CompPowerTrader>();
+			parent.Map.GetComponent<BreakdownManager>().Register(this);
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
 			map.GetComponent<BreakdownManager>().Deregister(this);
 		}
 
-		
 		public void CheckForBreakdown()
 		{
-			if (this.CanBreakdownNow() && Rand.MTBEventOccurs(1.368E+07f, 1f, 1041f))
+			if (CanBreakdownNow() && Rand.MTBEventOccurs(1.368E+07f, 1f, 1041f))
 			{
-				this.DoBreakdown();
+				DoBreakdown();
 			}
 		}
 
-		
 		protected bool CanBreakdownNow()
 		{
-			return !this.BrokenDown && (this.powerComp == null || this.powerComp.PowerOn);
+			if (!BrokenDown)
+			{
+				if (powerComp != null)
+				{
+					return powerComp.PowerOn;
+				}
+				return true;
+			}
+			return false;
 		}
 
-		
 		public void Notify_Repaired()
 		{
-			this.brokenDownInt = false;
-			this.parent.Map.GetComponent<BreakdownManager>().Notify_Repaired(this.parent);
-			if (this.parent is Building_PowerSwitch)
+			brokenDownInt = false;
+			parent.Map.GetComponent<BreakdownManager>().Notify_Repaired(parent);
+			if (parent is Building_PowerSwitch)
 			{
-				this.parent.Map.powerNetManager.Notfiy_TransmitterTransmitsPowerNowChanged(this.parent.GetComp<CompPower>());
+				parent.Map.powerNetManager.Notfiy_TransmitterTransmitsPowerNowChanged(parent.GetComp<CompPower>());
 			}
 		}
 
-		
 		public void DoBreakdown()
 		{
-			this.brokenDownInt = true;
-			this.parent.BroadcastCompSignal("Breakdown");
-			this.parent.Map.GetComponent<BreakdownManager>().Notify_BrokenDown(this.parent);
+			brokenDownInt = true;
+			parent.BroadcastCompSignal("Breakdown");
+			parent.Map.GetComponent<BreakdownManager>().Notify_BrokenDown(parent);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.BrokenDown)
+			if (BrokenDown)
 			{
 				return "BrokenDown".Translate();
 			}
 			return null;
 		}
-
-		
-		private bool brokenDownInt;
-
-		
-		private CompPowerTrader powerComp;
-
-		
-		private const int BreakdownMTBTicks = 13680000;
-
-		
-		public const string BreakdownSignal = "Breakdown";
 	}
 }

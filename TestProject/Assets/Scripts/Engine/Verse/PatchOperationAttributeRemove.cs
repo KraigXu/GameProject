@@ -1,21 +1,18 @@
-﻿using System;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperationAttributeRemove : PatchOperationAttribute
 	{
-		
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
 			bool result = false;
-			foreach (object obj in xml.SelectNodes(this.xpath))
+			foreach (object item in xml.SelectNodes(xpath))
 			{
-				XmlNode xmlNode = obj as XmlNode;
-				if (xmlNode.Attributes[this.attribute] != null)
+				XmlNode xmlNode = item as XmlNode;
+				if (xmlNode.Attributes[attribute] != null)
 				{
-					xmlNode.Attributes.Remove(xmlNode.Attributes[this.attribute]);
+					xmlNode.Attributes.Remove(xmlNode.Attributes[attribute]);
 					result = true;
 				}
 			}

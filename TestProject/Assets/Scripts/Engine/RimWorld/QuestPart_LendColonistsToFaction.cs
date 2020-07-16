@@ -1,157 +1,128 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_LendColonistsToFaction : QuestPartActivable
 	{
-		
-		
-		public List<Thing> LentColonistsListForReading
-		{
-			get
-			{
-				return this.lentColonists;
-			}
-		}
+		public Thing shuttle;
 
-		
-		protected override void Enable(SignalArgs receivedArgs)
-		{
-			base.Enable(receivedArgs);
-			CompTransporter compTransporter = this.shuttle.TryGetComp<CompTransporter>();
-			if (this.lendColonistsToFaction != null && compTransporter != null)
-			{
-				IEnumerator<Thing> enumerator = ((IEnumerable<Thing>)compTransporter.innerContainer).GetEnumerator();
-				{
-					while (enumerator.MoveNext())
-					{
-						Pawn pawn;
-						if ((pawn = (enumerator.Current as Pawn)) != null && pawn.IsFreeColonist)
-						{
-							this.lentColonists.Add(pawn);
-						}
-					}
-				}
-				this.returnColonistsOnTick = GenTicks.TicksGame + this.returnLentColonistsInTicks;
-			}
-		}
+		public Faction lendColonistsToFaction;
 
-		
-		
+		public int returnLentColonistsInTicks = -1;
+
+		public MapParent returnMap;
+
+		private int returnColonistsOnTick;
+
+		private List<Thing> lentColonists = new List<Thing>();
+
+		public List<Thing> LentColonistsListForReading => lentColonists;
+
 		public override string DescriptionPart
 		{
 			get
 			{
-				if (base.State == QuestPartState.Disabled || this.lentColonists.Count == 0)
+				if (base.State == QuestPartState.Disabled || lentColonists.Count == 0)
 				{
 					return null;
 				}
-				return "PawnsLent".Translate((from t in this.lentColonists
-				select t.LabelShort).ToCommaList(true), Mathf.Max(this.returnColonistsOnTick - GenTicks.TicksGame, 0).ToStringTicksToDays("0.0"));
+				return "PawnsLent".Translate(lentColonists.Select((Thing t) => t.LabelShort).ToCommaList(useAnd: true), Mathf.Max(returnColonistsOnTick - GenTicks.TicksGame, 0).ToStringTicksToDays("0.0"));
 			}
 		}
 
-		
+		protected override void Enable(SignalArgs receivedArgs)
+		{
+			base.Enable(receivedArgs);
+			CompTransporter compTransporter = shuttle.TryGetComp<CompTransporter>();
+			if (lendColonistsToFaction != null && compTransporter != null)
+			{
+				foreach (Thing item in (IEnumerable<Thing>)compTransporter.innerContainer)
+				{
+					Pawn pawn;
+					if ((pawn = (item as Pawn)) != null && pawn.IsFreeColonist)
+					{
+						lentColonists.Add(pawn);
+					}
+				}
+				returnColonistsOnTick = GenTicks.TicksGame + returnLentColonistsInTicks;
+			}
+		}
+
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
-			if (Find.TickManager.TicksGame >= this.enableTick + this.returnLentColonistsInTicks)
+			if (Find.TickManager.TicksGame >= enableTick + returnLentColonistsInTicks)
 			{
-				base.Complete();
+				Complete();
 			}
 		}
 
-		
 		protected override void Complete(SignalArgs signalArgs)
 		{
-			Map map = (this.returnMap == null) ? Find.AnyPlayerHomeMap : this.returnMap.Map;
-			if (map == null)
+			Map map = (returnMap == null) ? Find.AnyPlayerHomeMap : returnMap.Map;
+			if (map != null)
 			{
-				return;
+				base.Complete(new SignalArgs(new LookTargets(lentColonists).Named("SUBJECT"), lentColonists.Select((Thing c) => c.LabelShort).ToCommaList(useAnd: true).Named("PAWNS")));
+				if (lendColonistsToFaction == Faction.Empire)
+				{
+					SkyfallerUtility.MakeDropoffShuttle(map, lentColonists, Faction.Empire);
+				}
+				else
+				{
+					DropPodUtility.DropThingsNear(DropCellFinder.TradeDropSpot(map), map, lentColonists, 110, canInstaDropDuringInit: false, leaveSlag: false, canRoofPunch: true, forbid: false);
+				}
 			}
-			base.Complete(new SignalArgs(new LookTargets(this.lentColonists).Named("SUBJECT"), (from c in this.lentColonists
-			select c.LabelShort).ToCommaList(true).Named("PAWNS")));
-			if (this.lendColonistsToFaction == Faction.Empire)
-			{
-				SkyfallerUtility.MakeDropoffShuttle(map, this.lentColonists, Faction.Empire);
-				return;
-			}
-			DropPodUtility.DropThingsNear(DropCellFinder.TradeDropSpot(map), map, this.lentColonists, 110, false, false, true, false);
 		}
 
-		
 		public override void Notify_PawnKilled(Pawn pawn, DamageInfo? dinfo)
 		{
-			if (this.lentColonists.Contains(pawn))
+			if (lentColonists.Contains(pawn))
 			{
 				Building_Grave assignedGrave = null;
 				if (pawn.ownership != null)
 				{
 					assignedGrave = pawn.ownership.AssignedGrave;
 				}
-				Corpse val = pawn.MakeCorpse(assignedGrave, false, 0f);
-				this.lentColonists.Remove(pawn);
+				Corpse val = pawn.MakeCorpse(assignedGrave, inBed: false, 0f);
+				lentColonists.Remove(pawn);
 				Map anyPlayerHomeMap = Find.AnyPlayerHomeMap;
 				if (anyPlayerHomeMap != null)
 				{
-					DropPodUtility.DropThingsNear(DropCellFinder.TradeDropSpot(anyPlayerHomeMap), anyPlayerHomeMap, Gen.YieldSingle<Corpse>(val), 110, false, false, true, false);
+					DropPodUtility.DropThingsNear(DropCellFinder.TradeDropSpot(anyPlayerHomeMap), anyPlayerHomeMap, Gen.YieldSingle(val), 110, canInstaDropDuringInit: false, leaveSlag: false, canRoofPunch: true, forbid: false);
 				}
 			}
 		}
 
-		
 		public override void DoDebugWindowContents(Rect innerRect, ref float curY)
 		{
-			if (base.State != QuestPartState.Enabled)
+			if (base.State == QuestPartState.Enabled)
 			{
-				return;
+				Rect rect = new Rect(innerRect.x, curY, 500f, 25f);
+				if (Widgets.ButtonText(rect, "End " + ToString()))
+				{
+					Complete();
+				}
+				curY += rect.height + 4f;
 			}
-			Rect rect = new Rect(innerRect.x, curY, 500f, 25f);
-			if (Widgets.ButtonText(rect, "End " + this.ToString(), true, true, true))
-			{
-				base.Complete();
-			}
-			curY += rect.height + 4f;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Thing>(ref this.shuttle, "shuttle", false);
-			Scribe_References.Look<Faction>(ref this.lendColonistsToFaction, "lendColonistsToFaction", false);
-			Scribe_Values.Look<int>(ref this.returnLentColonistsInTicks, "returnLentColonistsInTicks", 0, false);
-			Scribe_Values.Look<int>(ref this.returnColonistsOnTick, "colonistsReturnOnTick", 0, false);
-			Scribe_Collections.Look<Thing>(ref this.lentColonists, "lentPawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_References.Look<MapParent>(ref this.returnMap, "returnMap", false);
+			Scribe_References.Look(ref shuttle, "shuttle");
+			Scribe_References.Look(ref lendColonistsToFaction, "lendColonistsToFaction");
+			Scribe_Values.Look(ref returnLentColonistsInTicks, "returnLentColonistsInTicks", 0);
+			Scribe_Values.Look(ref returnColonistsOnTick, "colonistsReturnOnTick", 0);
+			Scribe_Collections.Look(ref lentColonists, "lentPawns", LookMode.Reference);
+			Scribe_References.Look(ref returnMap, "returnMap");
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.lentColonists.RemoveAll((Thing x) => x == null);
+				lentColonists.RemoveAll((Thing x) => x == null);
 			}
 		}
-
-		
-		public Thing shuttle;
-
-		
-		public Faction lendColonistsToFaction;
-
-		
-		public int returnLentColonistsInTicks = -1;
-
-		
-		public MapParent returnMap;
-
-		
-		private int returnColonistsOnTick;
-
-		
-		private List<Thing> lentColonists = new List<Thing>();
 	}
 }

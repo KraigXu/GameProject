@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,16 +6,41 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Bill_Production : Bill, IExposable
 	{
-		
-		
+		public BillRepeatModeDef repeatMode = BillRepeatModeDefOf.RepeatCount;
+
+		public int repeatCount = 1;
+
+		private BillStoreModeDef storeMode = BillStoreModeDefOf.BestStockpile;
+
+		private Zone_Stockpile storeZone;
+
+		public int targetCount = 10;
+
+		public bool pauseWhenSatisfied;
+
+		public int unpauseWhenYouHave = 5;
+
+		public bool includeEquipped;
+
+		public bool includeTainted;
+
+		public Zone_Stockpile includeFromZone;
+
+		public FloatRange hpRange = FloatRange.ZeroToOne;
+
+		public QualityRange qualityRange = QualityRange.All;
+
+		public bool limitToAllowedStuff;
+
+		public bool paused;
+
 		protected override string StatusString
 		{
 			get
 			{
-				if (this.paused)
+				if (paused)
 				{
 					return " " + "Paused".Translate();
 				}
@@ -23,13 +48,11 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		protected override float StatusLineMinHeight
 		{
 			get
 			{
-				if (!this.CanUnpause())
+				if (!CanUnpause())
 				{
 					return 0f;
 				}
@@ -37,331 +60,283 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public string RepeatInfoText
 		{
 			get
 			{
-				if (this.repeatMode == BillRepeatModeDefOf.Forever)
+				if (repeatMode == BillRepeatModeDefOf.Forever)
 				{
 					return "Forever".Translate();
 				}
-				if (this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+				if (repeatMode == BillRepeatModeDefOf.RepeatCount)
 				{
-					return this.repeatCount.ToString() + "x";
+					return repeatCount.ToString() + "x";
 				}
-				if (this.repeatMode == BillRepeatModeDefOf.TargetCount)
+				if (repeatMode == BillRepeatModeDefOf.TargetCount)
 				{
-					return this.recipe.WorkerCounter.CountProducts(this).ToString() + "/" + this.targetCount.ToString();
+					return recipe.WorkerCounter.CountProducts(this).ToString() + "/" + targetCount.ToString();
 				}
 				throw new InvalidOperationException();
 			}
 		}
 
-		
 		public Bill_Production()
 		{
 		}
 
-		
-		public Bill_Production(RecipeDef recipe) : base(recipe)
+		public Bill_Production(RecipeDef recipe)
+			: base(recipe)
 		{
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<BillRepeatModeDef>(ref this.repeatMode, "repeatMode");
-			Scribe_Values.Look<int>(ref this.repeatCount, "repeatCount", 0, false);
-			Scribe_Defs.Look<BillStoreModeDef>(ref this.storeMode, "storeMode");
-			Scribe_References.Look<Zone_Stockpile>(ref this.storeZone, "storeZone", false);
-			Scribe_Values.Look<int>(ref this.targetCount, "targetCount", 0, false);
-			Scribe_Values.Look<bool>(ref this.pauseWhenSatisfied, "pauseWhenSatisfied", false, false);
-			Scribe_Values.Look<int>(ref this.unpauseWhenYouHave, "unpauseWhenYouHave", 0, false);
-			Scribe_Values.Look<bool>(ref this.includeEquipped, "includeEquipped", false, false);
-			Scribe_Values.Look<bool>(ref this.includeTainted, "includeTainted", false, false);
-			Scribe_References.Look<Zone_Stockpile>(ref this.includeFromZone, "includeFromZone", false);
-			Scribe_Values.Look<FloatRange>(ref this.hpRange, "hpRange", FloatRange.ZeroToOne, false);
-			Scribe_Values.Look<QualityRange>(ref this.qualityRange, "qualityRange", QualityRange.All, false);
-			Scribe_Values.Look<bool>(ref this.limitToAllowedStuff, "limitToAllowedStuff", false, false);
-			Scribe_Values.Look<bool>(ref this.paused, "paused", false, false);
-			if (this.repeatMode == null)
+			Scribe_Defs.Look(ref repeatMode, "repeatMode");
+			Scribe_Values.Look(ref repeatCount, "repeatCount", 0);
+			Scribe_Defs.Look(ref storeMode, "storeMode");
+			Scribe_References.Look(ref storeZone, "storeZone");
+			Scribe_Values.Look(ref targetCount, "targetCount", 0);
+			Scribe_Values.Look(ref pauseWhenSatisfied, "pauseWhenSatisfied", defaultValue: false);
+			Scribe_Values.Look(ref unpauseWhenYouHave, "unpauseWhenYouHave", 0);
+			Scribe_Values.Look(ref includeEquipped, "includeEquipped", defaultValue: false);
+			Scribe_Values.Look(ref includeTainted, "includeTainted", defaultValue: false);
+			Scribe_References.Look(ref includeFromZone, "includeFromZone");
+			Scribe_Values.Look(ref hpRange, "hpRange", FloatRange.ZeroToOne);
+			Scribe_Values.Look(ref qualityRange, "qualityRange", QualityRange.All);
+			Scribe_Values.Look(ref limitToAllowedStuff, "limitToAllowedStuff", defaultValue: false);
+			Scribe_Values.Look(ref paused, "paused", defaultValue: false);
+			if (repeatMode == null)
 			{
-				this.repeatMode = BillRepeatModeDefOf.RepeatCount;
+				repeatMode = BillRepeatModeDefOf.RepeatCount;
 			}
-			if (this.storeMode == null)
+			if (storeMode == null)
 			{
-				this.storeMode = BillStoreModeDefOf.BestStockpile;
+				storeMode = BillStoreModeDefOf.BestStockpile;
 			}
 		}
 
-		
 		public override BillStoreModeDef GetStoreMode()
 		{
-			return this.storeMode;
+			return storeMode;
 		}
 
-		
 		public override Zone_Stockpile GetStoreZone()
 		{
-			return this.storeZone;
+			return storeZone;
 		}
 
-		
 		public override void SetStoreMode(BillStoreModeDef mode, Zone_Stockpile zone = null)
 		{
-			this.storeMode = mode;
-			this.storeZone = zone;
-			if (this.storeMode == BillStoreModeDefOf.SpecificStockpile != (this.storeZone != null))
+			storeMode = mode;
+			storeZone = zone;
+			if (storeMode == BillStoreModeDefOf.SpecificStockpile != (storeZone != null))
 			{
-				Log.ErrorOnce("Inconsistent bill StoreMode data set", 75645354, false);
+				Log.ErrorOnce("Inconsistent bill StoreMode data set", 75645354);
 			}
 		}
 
-		
 		public override bool ShouldDoNow()
 		{
-			if (this.repeatMode != BillRepeatModeDefOf.TargetCount)
+			if (repeatMode != BillRepeatModeDefOf.TargetCount)
 			{
-				this.paused = false;
+				paused = false;
 			}
-			if (this.suspended)
+			if (suspended)
 			{
 				return false;
 			}
-			if (this.repeatMode == BillRepeatModeDefOf.Forever)
+			if (repeatMode == BillRepeatModeDefOf.Forever)
 			{
 				return true;
 			}
-			if (this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+			if (repeatMode == BillRepeatModeDefOf.RepeatCount)
 			{
-				return this.repeatCount > 0;
+				return repeatCount > 0;
 			}
-			if (this.repeatMode == BillRepeatModeDefOf.TargetCount)
+			if (repeatMode == BillRepeatModeDefOf.TargetCount)
 			{
-				int num = this.recipe.WorkerCounter.CountProducts(this);
-				if (this.pauseWhenSatisfied && num >= this.targetCount)
+				int num = recipe.WorkerCounter.CountProducts(this);
+				if (pauseWhenSatisfied && num >= targetCount)
 				{
-					this.paused = true;
+					paused = true;
 				}
-				if (num <= this.unpauseWhenYouHave || !this.pauseWhenSatisfied)
+				if (num <= unpauseWhenYouHave || !pauseWhenSatisfied)
 				{
-					this.paused = false;
+					paused = false;
 				}
-				return !this.paused && num < this.targetCount;
+				if (paused)
+				{
+					return false;
+				}
+				return num < targetCount;
 			}
 			throw new InvalidOperationException();
 		}
 
-		
 		public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
 		{
-			if (this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+			if (repeatMode == BillRepeatModeDefOf.RepeatCount)
 			{
-				if (this.repeatCount > 0)
+				if (repeatCount > 0)
 				{
-					this.repeatCount--;
+					repeatCount--;
 				}
-				if (this.repeatCount == 0)
+				if (repeatCount == 0)
 				{
-					Messages.Message("MessageBillComplete".Translate(this.LabelCap), (Thing)this.billStack.billGiver, MessageTypeDefOf.TaskCompletion, true);
+					Messages.Message("MessageBillComplete".Translate(LabelCap), (Thing)billStack.billGiver, MessageTypeDefOf.TaskCompletion);
 				}
 			}
-			this.recipe.Worker.Notify_IterationCompleted(billDoer, ingredients);
+			recipe.Worker.Notify_IterationCompleted(billDoer, ingredients);
 		}
 
-		
 		protected override void DoConfigInterface(Rect baseRect, Color baseColor)
 		{
 			Rect rect = new Rect(28f, 32f, 100f, 30f);
 			GUI.color = new Color(1f, 1f, 1f, 0.65f);
-			Widgets.Label(rect, this.RepeatInfoText);
+			Widgets.Label(rect, RepeatInfoText);
 			GUI.color = baseColor;
-			WidgetRow widgetRow = new WidgetRow(baseRect.xMax, baseRect.y + 29f, UIDirection.LeftThenUp, 99999f, 4f);
-			if (widgetRow.ButtonText("Details".Translate() + "...", null, true, true))
+			WidgetRow widgetRow = new WidgetRow(baseRect.xMax, baseRect.y + 29f, UIDirection.LeftThenUp);
+			if (widgetRow.ButtonText("Details".Translate() + "..."))
 			{
-				Find.WindowStack.Add(new Dialog_BillConfig(this, ((Thing)this.billStack.billGiver).Position));
+				Find.WindowStack.Add(new Dialog_BillConfig(this, ((Thing)billStack.billGiver).Position));
 			}
-			if (widgetRow.ButtonText(this.repeatMode.LabelCap.Resolve().PadRight(20), null, true, true))
+			if (widgetRow.ButtonText(repeatMode.LabelCap.Resolve().PadRight(20)))
 			{
 				BillRepeatModeUtility.MakeConfigFloatMenu(this);
 			}
-			if (widgetRow.ButtonIcon(TexButton.Plus, null, null, true))
+			if (widgetRow.ButtonIcon(TexButton.Plus))
 			{
-				if (this.repeatMode == BillRepeatModeDefOf.Forever)
+				if (repeatMode == BillRepeatModeDefOf.Forever)
 				{
-					this.repeatMode = BillRepeatModeDefOf.RepeatCount;
-					this.repeatCount = 1;
+					repeatMode = BillRepeatModeDefOf.RepeatCount;
+					repeatCount = 1;
 				}
-				else if (this.repeatMode == BillRepeatModeDefOf.TargetCount)
+				else if (repeatMode == BillRepeatModeDefOf.TargetCount)
 				{
-					int num = this.recipe.targetCountAdjustment * GenUI.CurrentAdjustmentMultiplier();
-					this.targetCount += num;
-					this.unpauseWhenYouHave += num;
+					int num = recipe.targetCountAdjustment * GenUI.CurrentAdjustmentMultiplier();
+					targetCount += num;
+					unpauseWhenYouHave += num;
 				}
-				else if (this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+				else if (repeatMode == BillRepeatModeDefOf.RepeatCount)
 				{
-					this.repeatCount += GenUI.CurrentAdjustmentMultiplier();
+					repeatCount += GenUI.CurrentAdjustmentMultiplier();
 				}
-				SoundDefOf.DragSlider.PlayOneShotOnCamera(null);
-				if (TutorSystem.TutorialMode && this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+				SoundDefOf.DragSlider.PlayOneShotOnCamera();
+				if (TutorSystem.TutorialMode && repeatMode == BillRepeatModeDefOf.RepeatCount)
 				{
-					TutorSystem.Notify_Event(this.recipe.defName + "-RepeatCountSetTo-" + this.repeatCount);
+					TutorSystem.Notify_Event(recipe.defName + "-RepeatCountSetTo-" + repeatCount);
 				}
 			}
-			if (widgetRow.ButtonIcon(TexButton.Minus, null, null, true))
+			if (widgetRow.ButtonIcon(TexButton.Minus))
 			{
-				if (this.repeatMode == BillRepeatModeDefOf.Forever)
+				if (repeatMode == BillRepeatModeDefOf.Forever)
 				{
-					this.repeatMode = BillRepeatModeDefOf.RepeatCount;
-					this.repeatCount = 1;
+					repeatMode = BillRepeatModeDefOf.RepeatCount;
+					repeatCount = 1;
 				}
-				else if (this.repeatMode == BillRepeatModeDefOf.TargetCount)
+				else if (repeatMode == BillRepeatModeDefOf.TargetCount)
 				{
-					int num2 = this.recipe.targetCountAdjustment * GenUI.CurrentAdjustmentMultiplier();
-					this.targetCount = Mathf.Max(0, this.targetCount - num2);
-					this.unpauseWhenYouHave = Mathf.Max(0, this.unpauseWhenYouHave - num2);
+					int num2 = recipe.targetCountAdjustment * GenUI.CurrentAdjustmentMultiplier();
+					targetCount = Mathf.Max(0, targetCount - num2);
+					unpauseWhenYouHave = Mathf.Max(0, unpauseWhenYouHave - num2);
 				}
-				else if (this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+				else if (repeatMode == BillRepeatModeDefOf.RepeatCount)
 				{
-					this.repeatCount = Mathf.Max(0, this.repeatCount - GenUI.CurrentAdjustmentMultiplier());
+					repeatCount = Mathf.Max(0, repeatCount - GenUI.CurrentAdjustmentMultiplier());
 				}
-				SoundDefOf.DragSlider.PlayOneShotOnCamera(null);
-				if (TutorSystem.TutorialMode && this.repeatMode == BillRepeatModeDefOf.RepeatCount)
+				SoundDefOf.DragSlider.PlayOneShotOnCamera();
+				if (TutorSystem.TutorialMode && repeatMode == BillRepeatModeDefOf.RepeatCount)
 				{
-					TutorSystem.Notify_Event(this.recipe.defName + "-RepeatCountSetTo-" + this.repeatCount);
+					TutorSystem.Notify_Event(recipe.defName + "-RepeatCountSetTo-" + repeatCount);
 				}
 			}
 		}
 
-		
 		private bool CanUnpause()
 		{
-			return this.repeatMode == BillRepeatModeDefOf.TargetCount && this.paused && this.pauseWhenSatisfied && this.recipe.WorkerCounter.CountProducts(this) < this.targetCount;
+			if (repeatMode == BillRepeatModeDefOf.TargetCount && paused && pauseWhenSatisfied)
+			{
+				return recipe.WorkerCounter.CountProducts(this) < targetCount;
+			}
+			return false;
 		}
 
-		
 		public override void DoStatusLineInterface(Rect rect)
 		{
-			if (this.paused && new WidgetRow(rect.xMax, rect.y, UIDirection.LeftThenUp, 99999f, 4f).ButtonText("Unpause".Translate(), null, true, true))
+			if (paused && new WidgetRow(rect.xMax, rect.y, UIDirection.LeftThenUp).ButtonText("Unpause".Translate()))
 			{
-				this.paused = false;
+				paused = false;
 			}
 		}
 
-		
 		public override void ValidateSettings()
 		{
 			base.ValidateSettings();
-			if (this.storeZone != null)
+			if (storeZone != null)
 			{
-				if (!this.storeZone.zoneManager.AllZones.Contains(this.storeZone))
+				if (!storeZone.zoneManager.AllZones.Contains(storeZone))
 				{
 					if (this != BillUtility.Clipboard)
 					{
-						Messages.Message("MessageBillValidationStoreZoneDeleted".Translate(this.LabelCap, this.billStack.billGiver.LabelShort.CapitalizeFirst(), this.storeZone.label), this.billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent, true);
+						Messages.Message("MessageBillValidationStoreZoneDeleted".Translate(LabelCap, billStack.billGiver.LabelShort.CapitalizeFirst(), storeZone.label), billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent);
 					}
-					this.SetStoreMode(BillStoreModeDefOf.DropOnFloor, null);
+					SetStoreMode(BillStoreModeDefOf.DropOnFloor);
 				}
-				else if (base.Map != null && !base.Map.zoneManager.AllZones.Contains(this.storeZone))
+				else if (base.Map != null && !base.Map.zoneManager.AllZones.Contains(storeZone))
 				{
 					if (this != BillUtility.Clipboard)
 					{
-						Messages.Message("MessageBillValidationStoreZoneUnavailable".Translate(this.LabelCap, this.billStack.billGiver.LabelShort.CapitalizeFirst(), this.storeZone.label), this.billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent, true);
+						Messages.Message("MessageBillValidationStoreZoneUnavailable".Translate(LabelCap, billStack.billGiver.LabelShort.CapitalizeFirst(), storeZone.label), billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent);
 					}
-					this.SetStoreMode(BillStoreModeDefOf.DropOnFloor, null);
+					SetStoreMode(BillStoreModeDefOf.DropOnFloor);
 				}
 			}
-			else if (this.storeMode == BillStoreModeDefOf.SpecificStockpile)
+			else if (storeMode == BillStoreModeDefOf.SpecificStockpile)
 			{
-				this.SetStoreMode(BillStoreModeDefOf.DropOnFloor, null);
-				Log.ErrorOnce("Found SpecificStockpile bill store mode without associated stockpile, recovering", 46304128, false);
+				SetStoreMode(BillStoreModeDefOf.DropOnFloor);
+				Log.ErrorOnce("Found SpecificStockpile bill store mode without associated stockpile, recovering", 46304128);
 			}
-			if (this.includeFromZone != null)
+			if (includeFromZone == null)
 			{
-				if (!this.includeFromZone.zoneManager.AllZones.Contains(this.includeFromZone))
+				return;
+			}
+			if (!includeFromZone.zoneManager.AllZones.Contains(includeFromZone))
+			{
+				if (this != BillUtility.Clipboard)
 				{
-					if (this != BillUtility.Clipboard)
-					{
-						Messages.Message("MessageBillValidationIncludeZoneDeleted".Translate(this.LabelCap, this.billStack.billGiver.LabelShort.CapitalizeFirst(), this.includeFromZone.label), this.billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent, true);
-					}
-					this.includeFromZone = null;
-					return;
+					Messages.Message("MessageBillValidationIncludeZoneDeleted".Translate(LabelCap, billStack.billGiver.LabelShort.CapitalizeFirst(), includeFromZone.label), billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent);
 				}
-				if (base.Map != null && !base.Map.zoneManager.AllZones.Contains(this.includeFromZone))
+				includeFromZone = null;
+			}
+			else if (base.Map != null && !base.Map.zoneManager.AllZones.Contains(includeFromZone))
+			{
+				if (this != BillUtility.Clipboard)
 				{
-					if (this != BillUtility.Clipboard)
-					{
-						Messages.Message("MessageBillValidationIncludeZoneUnavailable".Translate(this.LabelCap, this.billStack.billGiver.LabelShort.CapitalizeFirst(), this.includeFromZone.label), this.billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent, true);
-					}
-					this.includeFromZone = null;
+					Messages.Message("MessageBillValidationIncludeZoneUnavailable".Translate(LabelCap, billStack.billGiver.LabelShort.CapitalizeFirst(), includeFromZone.label), billStack.billGiver as Thing, MessageTypeDefOf.NegativeEvent);
 				}
+				includeFromZone = null;
 			}
 		}
 
-		
 		public override Bill Clone()
 		{
-			Bill_Production bill_Production = (Bill_Production)base.Clone();
-			bill_Production.repeatMode = this.repeatMode;
-			bill_Production.repeatCount = this.repeatCount;
-			bill_Production.storeMode = this.storeMode;
-			bill_Production.storeZone = this.storeZone;
-			bill_Production.targetCount = this.targetCount;
-			bill_Production.pauseWhenSatisfied = this.pauseWhenSatisfied;
-			bill_Production.unpauseWhenYouHave = this.unpauseWhenYouHave;
-			bill_Production.includeEquipped = this.includeEquipped;
-			bill_Production.includeTainted = this.includeTainted;
-			bill_Production.includeFromZone = this.includeFromZone;
-			bill_Production.hpRange = this.hpRange;
-			bill_Production.qualityRange = this.qualityRange;
-			bill_Production.limitToAllowedStuff = this.limitToAllowedStuff;
-			bill_Production.paused = this.paused;
-			return bill_Production;
+			Bill_Production obj = (Bill_Production)base.Clone();
+			obj.repeatMode = repeatMode;
+			obj.repeatCount = repeatCount;
+			obj.storeMode = storeMode;
+			obj.storeZone = storeZone;
+			obj.targetCount = targetCount;
+			obj.pauseWhenSatisfied = pauseWhenSatisfied;
+			obj.unpauseWhenYouHave = unpauseWhenYouHave;
+			obj.includeEquipped = includeEquipped;
+			obj.includeTainted = includeTainted;
+			obj.includeFromZone = includeFromZone;
+			obj.hpRange = hpRange;
+			obj.qualityRange = qualityRange;
+			obj.limitToAllowedStuff = limitToAllowedStuff;
+			obj.paused = paused;
+			return obj;
 		}
-
-		
-		public BillRepeatModeDef repeatMode = BillRepeatModeDefOf.RepeatCount;
-
-		
-		public int repeatCount = 1;
-
-		
-		private BillStoreModeDef storeMode = BillStoreModeDefOf.BestStockpile;
-
-		
-		private Zone_Stockpile storeZone;
-
-		
-		public int targetCount = 10;
-
-		
-		public bool pauseWhenSatisfied;
-
-		
-		public int unpauseWhenYouHave = 5;
-
-		
-		public bool includeEquipped;
-
-		
-		public bool includeTainted;
-
-		
-		public Zone_Stockpile includeFromZone;
-
-		
-		public FloatRange hpRange = FloatRange.ZeroToOne;
-
-		
-		public QualityRange qualityRange = QualityRange.All;
-
-		
-		public bool limitToAllowedStuff;
-
-		
-		public bool paused;
 	}
 }

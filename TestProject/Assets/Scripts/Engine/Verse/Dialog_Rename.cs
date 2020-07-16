@@ -1,59 +1,36 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class Dialog_Rename : Window
 	{
-		
-		
-		private bool AcceptsInput
-		{
-			get
-			{
-				return this.startAcceptingInputAtFrame <= Time.frameCount;
-			}
-		}
+		protected string curName;
 
-		
-		
-		protected virtual int MaxNameLength
-		{
-			get
-			{
-				return 28;
-			}
-		}
+		private bool focusedRenameField;
 
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(280f, 175f);
-			}
-		}
+		private int startAcceptingInputAtFrame;
 
-		
+		private bool AcceptsInput => startAcceptingInputAtFrame <= Time.frameCount;
+
+		protected virtual int MaxNameLength => 28;
+
+		public override Vector2 InitialSize => new Vector2(280f, 175f);
+
 		public Dialog_Rename()
 		{
-			this.forcePause = true;
-			this.doCloseX = true;
-			this.absorbInputAroundWindow = true;
-			this.closeOnAccept = false;
-			this.closeOnClickedOutside = true;
+			forcePause = true;
+			doCloseX = true;
+			absorbInputAroundWindow = true;
+			closeOnAccept = false;
+			closeOnClickedOutside = true;
 		}
 
-		
 		public void WasOpenedByHotkey()
 		{
-			this.startAcceptingInputAtFrame = Time.frameCount + 1;
+			startAcceptingInputAtFrame = Time.frameCount + 1;
 		}
 
-		
 		protected virtual AcceptanceReport NameIsValid(string name)
 		{
 			if (name.Length == 0)
@@ -63,7 +40,6 @@ namespace Verse
 			return true;
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			Text.Font = GameFont.Small;
@@ -74,51 +50,43 @@ namespace Verse
 				Event.current.Use();
 			}
 			GUI.SetNextControlName("RenameField");
-			string text = Widgets.TextField(new Rect(0f, 15f, inRect.width, 35f), this.curName);
-			if (this.AcceptsInput && text.Length < this.MaxNameLength)
+			string text = Widgets.TextField(new Rect(0f, 15f, inRect.width, 35f), curName);
+			if (AcceptsInput && text.Length < MaxNameLength)
 			{
-				this.curName = text;
+				curName = text;
 			}
-			else if (!this.AcceptsInput)
+			else if (!AcceptsInput)
 			{
 				((TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl)).SelectAll();
 			}
-			if (!this.focusedRenameField)
+			if (!focusedRenameField)
 			{
 				UI.FocusControl("RenameField", this);
-				this.focusedRenameField = true;
+				focusedRenameField = true;
 			}
-			if (Widgets.ButtonText(new Rect(15f, inRect.height - 35f - 15f, inRect.width - 15f - 15f, 35f), "OK", true, true, true) || flag)
+			if (!(Widgets.ButtonText(new Rect(15f, inRect.height - 35f - 15f, inRect.width - 15f - 15f, 35f), "OK") | flag))
 			{
-				AcceptanceReport acceptanceReport = this.NameIsValid(this.curName);
-				if (!acceptanceReport.Accepted)
+				return;
+			}
+			AcceptanceReport acceptanceReport = NameIsValid(curName);
+			if (!acceptanceReport.Accepted)
+			{
+				if (acceptanceReport.Reason.NullOrEmpty())
 				{
-					if (acceptanceReport.Reason.NullOrEmpty())
-					{
-						Messages.Message("NameIsInvalid".Translate(), MessageTypeDefOf.RejectInput, false);
-						return;
-					}
-					Messages.Message(acceptanceReport.Reason, MessageTypeDefOf.RejectInput, false);
-					return;
+					Messages.Message("NameIsInvalid".Translate(), MessageTypeDefOf.RejectInput, historical: false);
 				}
 				else
 				{
-					this.SetName(this.curName);
-					Find.WindowStack.TryRemove(this, true);
+					Messages.Message(acceptanceReport.Reason, MessageTypeDefOf.RejectInput, historical: false);
 				}
+			}
+			else
+			{
+				SetName(curName);
+				Find.WindowStack.TryRemove(this);
 			}
 		}
 
-		
 		protected abstract void SetName(string name);
-
-		
-		protected string curName;
-
-		
-		private bool focusedRenameField;
-
-		
-		private int startAcceptingInputAtFrame;
 	}
 }

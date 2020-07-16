@@ -1,12 +1,11 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_WornByCorpse : StatPart
 	{
-		
+		private const float Factor = 0.1f;
+
 		public override void TransformValue(StatRequest req, ref float val)
 		{
 			if (req.HasThing)
@@ -19,7 +18,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
 			if (req.HasThing)
@@ -32,8 +30,5 @@ namespace RimWorld
 			}
 			return null;
 		}
-
-		
-		private const float Factor = 0.1f;
 	}
 }

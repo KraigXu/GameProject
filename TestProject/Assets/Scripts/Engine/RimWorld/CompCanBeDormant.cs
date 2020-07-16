@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,179 +5,156 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class CompCanBeDormant : ThingComp
 	{
-		
-		
-		private CompProperties_CanBeDormant Props
-		{
-			get
-			{
-				return (CompProperties_CanBeDormant)this.props;
-			}
-		}
+		public int makeTick;
 
-		
-		
-		private bool WaitingToWakeUp
-		{
-			get
-			{
-				return this.wakeUpOnTick != int.MinValue;
-			}
-		}
+		public int wokeUpTick = int.MinValue;
 
-		
-		
+		public int wakeUpOnTick = int.MinValue;
+
+		public string wakeUpSignalTag;
+
+		public List<string> wakeUpSignalTags;
+
+		public const string DefaultWakeUpSignal = "CompCanBeDormant.WakeUp";
+
+		private CompProperties_CanBeDormant Props => (CompProperties_CanBeDormant)props;
+
+		private bool WaitingToWakeUp => wakeUpOnTick != int.MinValue;
+
 		public bool Awake
 		{
 			get
 			{
-				return this.wokeUpTick != int.MinValue && this.wokeUpTick <= Find.TickManager.TicksGame;
+				if (wokeUpTick != int.MinValue)
+				{
+					return wokeUpTick <= Find.TickManager.TicksGame;
+				}
+				return false;
 			}
 		}
 
-		
 		public override void PostPostMake()
 		{
 			base.PostPostMake();
-			this.makeTick = GenTicks.TicksGame;
-			if (!this.Props.startsDormant)
+			makeTick = GenTicks.TicksGame;
+			if (!Props.startsDormant)
 			{
-				this.WakeUp();
+				WakeUp();
 			}
 		}
 
-		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.wakeUpSignalTag = this.Props.wakeUpSignalTag;
+			wakeUpSignalTag = Props.wakeUpSignalTag;
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (!Prefs.DevMode)
+			if (Prefs.DevMode)
 			{
-				yield break;
-			}
-			yield return new Command_Action
-			{
-				defaultLabel = "DEV: Wake Up",
-				action = delegate
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEV: Wake Up";
+				command_Action.action = delegate
 				{
-					this.WakeUp();
-				}
-			};
-			yield break;
+					WakeUp();
+				};
+				yield return command_Action;
+			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Awake)
+			if (Awake)
 			{
-				return this.Props.dormantStateLabelKey.Translate();
+				if (makeTick != wokeUpTick)
+				{
+					return Props.awakeStateLabelKey.Translate((GenTicks.TicksGame - wokeUpTick).TicksToDays().ToString("0.#"));
+				}
+				return null;
 			}
-			if (this.makeTick != this.wokeUpTick)
-			{
-				return this.Props.awakeStateLabelKey.Translate((GenTicks.TicksGame - this.wokeUpTick).TicksToDays().ToString("0.#"));
-			}
-			return null;
+			return Props.dormantStateLabelKey.Translate();
 		}
 
-		
 		public void WakeUpWithDelay()
 		{
-			if (!this.Awake)
+			if (!Awake)
 			{
-				this.wakeUpOnTick = Find.TickManager.TicksGame + Rand.Range(60, 300);
+				wakeUpOnTick = Find.TickManager.TicksGame + Rand.Range(60, 300);
 			}
 		}
 
-		
 		public void WakeUp()
 		{
-			if (this.Awake)
+			if (Awake)
 			{
 				return;
 			}
-			this.wokeUpTick = GenTicks.TicksGame;
-			this.wakeUpOnTick = int.MinValue;
-			Pawn pawn = this.parent as Pawn;
-			Building building = this.parent as Building;
-			Lord lord = ((pawn != null) ? pawn.GetLord() : null) ?? ((building != null) ? building.GetLord() : null);
-			if (lord != null)
+			wokeUpTick = GenTicks.TicksGame;
+			wakeUpOnTick = int.MinValue;
+			Pawn obj = parent as Pawn;
+			Building building = parent as Building;
+			(obj?.GetLord() ?? building?.GetLord())?.Notify_DormancyWakeup();
+			if (parent.Spawned)
 			{
-				lord.Notify_DormancyWakeup();
-			}
-			if (this.parent.Spawned)
-			{
-				IAttackTarget attackTarget = this.parent as IAttackTarget;
+				IAttackTarget attackTarget = parent as IAttackTarget;
 				if (attackTarget != null)
 				{
-					this.parent.Map.attackTargetsCache.UpdateTarget(attackTarget);
+					parent.Map.attackTargetsCache.UpdateTarget(attackTarget);
 				}
 			}
 		}
 
-		
 		public void ToSleep()
 		{
-			if (!this.Awake)
+			if (!Awake)
 			{
 				return;
 			}
-			this.wokeUpTick = int.MinValue;
-			if (this.parent.Spawned)
+			wokeUpTick = int.MinValue;
+			if (parent.Spawned)
 			{
-				IAttackTarget attackTarget = this.parent as IAttackTarget;
+				IAttackTarget attackTarget = parent as IAttackTarget;
 				if (attackTarget != null)
 				{
-					this.parent.Map.attackTargetsCache.UpdateTarget(attackTarget);
+					parent.Map.attackTargetsCache.UpdateTarget(attackTarget);
 				}
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
-			if (this.wakeUpOnTick != -2147483648 && Find.TickManager.TicksGame >= this.wakeUpOnTick)
+			if (wakeUpOnTick != int.MinValue && Find.TickManager.TicksGame >= wakeUpOnTick)
 			{
-				this.WakeUp();
+				WakeUp();
 			}
-			this.TickRareWorker();
+			TickRareWorker();
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (this.wakeUpOnTick != -2147483648 && Find.TickManager.TicksGame >= this.wakeUpOnTick)
+			if (wakeUpOnTick != int.MinValue && Find.TickManager.TicksGame >= wakeUpOnTick)
 			{
-				this.WakeUp();
+				WakeUp();
 			}
-			if (this.parent.IsHashIntervalTick(250))
+			if (parent.IsHashIntervalTick(250))
 			{
-				this.TickRareWorker();
+				TickRareWorker();
 			}
 		}
 
-		
 		public void TickRareWorker()
 		{
-			if (!this.parent.Spawned || this.Awake)
+			if (parent.Spawned && !Awake && !(parent is Pawn) && !parent.Position.Fogged(parent.Map))
 			{
-				return;
-			}
-			if (!(this.parent is Pawn) && !this.parent.Position.Fogged(this.parent.Map))
-			{
-				MoteMaker.ThrowMetaIcon(this.parent.Position, this.parent.Map, ThingDefOf.Mote_SleepZ);
+				MoteMaker.ThrowMetaIcon(parent.Position, parent.Map, ThingDefOf.Mote_SleepZ);
 			}
 		}
+
 		public override void Notify_SignalReceived(Signal signal)
 		{
 			if (!string.IsNullOrEmpty(wakeUpSignalTag) && !Awake && (signal.tag == wakeUpSignalTag || (wakeUpSignalTags != null && wakeUpSignalTags.Contains(signal.tag))) && signal.args.TryGetArg("SUBJECT", out Thing arg) && arg != parent && arg != null && arg.Map == parent.Map && parent.Position.DistanceTo(arg.Position) <= Props.maxDistAwakenByOther && (!signal.args.TryGetArg("FACTION", out Faction arg2) || arg2 == null || arg2 == parent.Faction) && (Props.canWakeUpFogged || !parent.Fogged()) && !WaitingToWakeUp)
@@ -187,33 +163,14 @@ namespace RimWorld
 			}
 		}
 
-
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.wokeUpTick, "wokeUpTick", int.MinValue, false);
-			Scribe_Values.Look<int>(ref this.wakeUpOnTick, "wakeUpOnTick", int.MinValue, false);
-			Scribe_Values.Look<string>(ref this.wakeUpSignalTag, "wakeUpSignalTag", null, false);
-			Scribe_Collections.Look<string>(ref this.wakeUpSignalTags, "wakeUpSignalTags", LookMode.Value, Array.Empty<object>());
-			Scribe_Values.Look<int>(ref this.makeTick, "makeTick", 0, false);
+			Scribe_Values.Look(ref wokeUpTick, "wokeUpTick", int.MinValue);
+			Scribe_Values.Look(ref wakeUpOnTick, "wakeUpOnTick", int.MinValue);
+			Scribe_Values.Look(ref wakeUpSignalTag, "wakeUpSignalTag");
+			Scribe_Collections.Look(ref wakeUpSignalTags, "wakeUpSignalTags", LookMode.Value);
+			Scribe_Values.Look(ref makeTick, "makeTick", 0);
 		}
-
-		
-		public int makeTick;
-
-		
-		public int wokeUpTick = int.MinValue;
-
-		
-		public int wakeUpOnTick = int.MinValue;
-
-		
-		public string wakeUpSignalTag;
-
-		
-		public List<string> wakeUpSignalTags;
-
-		
-		public const string DefaultWakeUpSignal = "CompCanBeDormant.WakeUp";
 	}
 }

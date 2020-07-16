@@ -1,88 +1,79 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class UIRoot_Play : UIRoot
 	{
-		
+		public MapInterface mapUI = new MapInterface();
+
+		public MainButtonsRoot mainButtonsRoot = new MainButtonsRoot();
+
+		public AlertsReadout alerts = new AlertsReadout();
+
 		public override void Init()
 		{
 			base.Init();
 			Messages.Clear();
 		}
 
-		
 		public override void UIRootOnGUI()
 		{
-			Debug.Log(">>>" );
 			base.UIRootOnGUI();
 			Find.GameInfo.GameInfoOnGUI();
 			Find.World.UI.WorldInterfaceOnGUI();
-			this.mapUI.MapInterfaceOnGUI_BeforeMainTabs();
-			if (!this.screenshotMode.FiltersCurrentEvent)
+			mapUI.MapInterfaceOnGUI_BeforeMainTabs();
+			if (!screenshotMode.FiltersCurrentEvent)
 			{
-				this.mainButtonsRoot.MainButtonsOnGUI();
-				this.alerts.AlertsReadoutOnGUI();
+				mainButtonsRoot.MainButtonsOnGUI();
+				alerts.AlertsReadoutOnGUI();
 			}
-			this.mapUI.MapInterfaceOnGUI_AfterMainTabs();
-			if (!this.screenshotMode.FiltersCurrentEvent)
+			mapUI.MapInterfaceOnGUI_AfterMainTabs();
+			if (!screenshotMode.FiltersCurrentEvent)
 			{
 				Find.Tutor.TutorOnGUI();
 			}
 			ReorderableWidget.ReorderableWidgetOnGUI_BeforeWindowStack();
-			this.windows.WindowStackOnGUI();
+			windows.WindowStackOnGUI();
 			ReorderableWidget.ReorderableWidgetOnGUI_AfterWindowStack();
 			Widgets.WidgetsOnGUI();
-			this.mapUI.HandleMapClicks();
+			mapUI.HandleMapClicks();
 			if (Find.DesignatorManager.SelectedDesignator != null)
 			{
 				Find.DesignatorManager.SelectedDesignator.SelectedProcessInput(Event.current);
 			}
 			DebugTools.DebugToolsOnGUI();
-			this.mainButtonsRoot.HandleLowPriorityShortcuts();
+			mainButtonsRoot.HandleLowPriorityShortcuts();
 			Find.World.UI.HandleLowPriorityInput();
-			this.mapUI.HandleLowPriorityInput();
-			this.OpenMainMenuShortcut();
+			mapUI.HandleLowPriorityInput();
+			OpenMainMenuShortcut();
 		}
 
-		
 		public override void UIRootUpdate()
 		{
 			base.UIRootUpdate();
 			try
 			{
 				Find.World.UI.WorldInterfaceUpdate();
-				this.mapUI.MapInterfaceUpdate();
-				this.alerts.AlertsReadoutUpdate();
+				mapUI.MapInterfaceUpdate();
+				alerts.AlertsReadoutUpdate();
 				LessonAutoActivator.LessonAutoActivatorUpdate();
 				Find.Tutor.TutorUpdate();
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Exception in UIRootUpdate: " + ex.ToString(), false);
+				Log.Error("Exception in UIRootUpdate: " + ex.ToString());
 			}
 		}
 
-		
 		private void OpenMainMenuShortcut()
 		{
 			if ((Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape) || KeyBindingDefOf.Cancel.KeyDownEvent)
 			{
 				Event.current.Use();
-				Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Menu, true);
+				Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Menu);
 			}
 		}
-
-		
-		public MapInterface mapUI = new MapInterface();
-
-		
-		public MainButtonsRoot mainButtonsRoot = new MainButtonsRoot();
-
-		
-		public AlertsReadout alerts = new AlertsReadout();
 	}
 }

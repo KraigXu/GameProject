@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,52 +5,45 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class MassUtility
 	{
-		
+		public const float MassCapacityPerBodySize = 35f;
+
 		public static float EncumbrancePercent(Pawn pawn)
 		{
-			return Mathf.Clamp01(MassUtility.UnboundedEncumbrancePercent(pawn));
+			return Mathf.Clamp01(UnboundedEncumbrancePercent(pawn));
 		}
 
-		
 		public static float UnboundedEncumbrancePercent(Pawn pawn)
 		{
-			return MassUtility.GearAndInventoryMass(pawn) / MassUtility.Capacity(pawn, null);
+			return GearAndInventoryMass(pawn) / Capacity(pawn);
 		}
 
-		
 		public static bool IsOverEncumbered(Pawn pawn)
 		{
-			return MassUtility.UnboundedEncumbrancePercent(pawn) > 1f;
+			return UnboundedEncumbrancePercent(pawn) > 1f;
 		}
 
-		
 		public static bool WillBeOverEncumberedAfterPickingUp(Pawn pawn, Thing thing, int count)
 		{
-			return MassUtility.FreeSpace(pawn) < (float)count * thing.GetStatValue(StatDefOf.Mass, true);
+			return FreeSpace(pawn) < (float)count * thing.GetStatValue(StatDefOf.Mass);
 		}
 
-		
 		public static int CountToPickUpUntilOverEncumbered(Pawn pawn, Thing thing)
 		{
-			return Mathf.FloorToInt(MassUtility.FreeSpace(pawn) / thing.GetStatValue(StatDefOf.Mass, true));
+			return Mathf.FloorToInt(FreeSpace(pawn) / thing.GetStatValue(StatDefOf.Mass));
 		}
 
-		
 		public static float FreeSpace(Pawn pawn)
 		{
-			return Mathf.Max(MassUtility.Capacity(pawn, null) - MassUtility.GearAndInventoryMass(pawn), 0f);
+			return Mathf.Max(Capacity(pawn) - GearAndInventoryMass(pawn), 0f);
 		}
 
-		
 		public static float GearAndInventoryMass(Pawn pawn)
 		{
-			return MassUtility.GearMass(pawn) + MassUtility.InventoryMass(pawn);
+			return GearMass(pawn) + InventoryMass(pawn);
 		}
 
-		
 		public static float GearMass(Pawn p)
 		{
 			float num = 0f;
@@ -60,35 +52,34 @@ namespace RimWorld
 				List<Apparel> wornApparel = p.apparel.WornApparel;
 				for (int i = 0; i < wornApparel.Count; i++)
 				{
-					num += wornApparel[i].GetStatValue(StatDefOf.Mass, true);
+					num += wornApparel[i].GetStatValue(StatDefOf.Mass);
 				}
 			}
 			if (p.equipment != null)
 			{
-				foreach (ThingWithComps thing in p.equipment.AllEquipmentListForReading)
+				foreach (ThingWithComps item in p.equipment.AllEquipmentListForReading)
 				{
-					num += thing.GetStatValue(StatDefOf.Mass, true);
+					num += item.GetStatValue(StatDefOf.Mass);
 				}
+				return num;
 			}
 			return num;
 		}
 
-		
 		public static float InventoryMass(Pawn p)
 		{
 			float num = 0f;
 			for (int i = 0; i < p.inventory.innerContainer.Count; i++)
 			{
 				Thing thing = p.inventory.innerContainer[i];
-				num += (float)thing.stackCount * thing.GetStatValue(StatDefOf.Mass, true);
+				num += (float)thing.stackCount * thing.GetStatValue(StatDefOf.Mass);
 			}
 			return num;
 		}
 
-		
 		public static float Capacity(Pawn p, StringBuilder explanation = null)
 		{
-			if (!MassUtility.CanEverCarryAnything(p))
+			if (!CanEverCarryAnything(p))
 			{
 				return 0f;
 			}
@@ -104,13 +95,13 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public static bool CanEverCarryAnything(Pawn p)
 		{
-			return p.RaceProps.ToolUser || p.RaceProps.packAnimal;
+			if (!p.RaceProps.ToolUser)
+			{
+				return p.RaceProps.packAnimal;
+			}
+			return true;
 		}
-
-		
-		public const float MassCapacityPerBodySize = 35f;
 	}
 }

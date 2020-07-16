@@ -1,13 +1,12 @@
-﻿using System;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public static class TaleTextGenerator
 	{
-		
+		private const float TalelessChanceWithTales = 0.2f;
+
 		public static TaggedString GenerateTextFromTale(TextGenerationPurpose purpose, Tale tale, int seed, RulePackDef extraInclude)
 		{
 			Rand.PushState();
@@ -15,8 +14,9 @@ namespace RimWorld
 			string rootKeyword = null;
 			GrammarRequest request = default(GrammarRequest);
 			request.Includes.Add(extraInclude);
-			if (purpose == TextGenerationPurpose.ArtDescription)
+			switch (purpose)
 			{
+			case TextGenerationPurpose.ArtDescription:
 				rootKeyword = "r_art_description";
 				if (tale != null && !Rand.Chance(0.2f))
 				{
@@ -30,22 +30,19 @@ namespace RimWorld
 					request.Includes.Add(RulePackDefOf.TalelessImages);
 				}
 				request.Includes.Add(RulePackDefOf.ArtDescriptionUtility_Global);
-			}
-			else if (purpose == TextGenerationPurpose.ArtName)
-			{
+				break;
+			case TextGenerationPurpose.ArtName:
 				rootKeyword = "r_art_name";
 				if (tale != null)
 				{
 					request.IncludesBare.AddRange(tale.GetTextGenerationIncludes());
 					request.Rules.AddRange(tale.GetTextGenerationRules());
 				}
+				break;
 			}
-			string str = GrammarResolver.Resolve(rootKeyword, request, (tale != null) ? tale.def.defName : "null_tale", false, null, null, null, true);
+			string str = GrammarResolver.Resolve(rootKeyword, request, (tale != null) ? tale.def.defName : "null_tale");
 			Rand.PopState();
 			return str;
 		}
-
-		
-		private const float TalelessChanceWithTales = 0.2f;
 	}
 }

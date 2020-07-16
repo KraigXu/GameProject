@@ -1,62 +1,61 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class TaleData_Surroundings : TaleData
 	{
-		
-		
-		public bool Outdoors
-		{
-			get
-			{
-				return this.weather != null;
-			}
-		}
+		public int tile;
 
-		
+		public float temperature;
+
+		public float snowDepth;
+
+		public WeatherDef weather;
+
+		public RoomRoleDef roomRole;
+
+		public float roomImpressiveness;
+
+		public float roomBeauty;
+
+		public float roomCleanliness;
+
+		public bool Outdoors => weather != null;
+
 		public override void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.tile, "tile", 0, false);
-			Scribe_Values.Look<float>(ref this.temperature, "temperature", 0f, false);
-			Scribe_Values.Look<float>(ref this.snowDepth, "snowDepth", 0f, false);
-			Scribe_Defs.Look<WeatherDef>(ref this.weather, "weather");
-			Scribe_Defs.Look<RoomRoleDef>(ref this.roomRole, "roomRole");
-			Scribe_Values.Look<float>(ref this.roomImpressiveness, "roomImpressiveness", 0f, false);
-			Scribe_Values.Look<float>(ref this.roomBeauty, "roomBeauty", 0f, false);
-			Scribe_Values.Look<float>(ref this.roomCleanliness, "roomCleanliness", 0f, false);
+			Scribe_Values.Look(ref tile, "tile", 0);
+			Scribe_Values.Look(ref temperature, "temperature", 0f);
+			Scribe_Values.Look(ref snowDepth, "snowDepth", 0f);
+			Scribe_Defs.Look(ref weather, "weather");
+			Scribe_Defs.Look(ref roomRole, "roomRole");
+			Scribe_Values.Look(ref roomImpressiveness, "roomImpressiveness", 0f);
+			Scribe_Values.Look(ref roomBeauty, "roomBeauty", 0f);
+			Scribe_Values.Look(ref roomCleanliness, "roomCleanliness", 0f);
 		}
 
-		
 		public override IEnumerable<Rule> GetRules()
 		{
-			yield return new Rule_String("BIOME", Find.WorldGrid[this.tile].biome.label);
-			if (this.roomRole != null && this.roomRole != RoomRoleDefOf.None)
+			yield return new Rule_String("BIOME", Find.WorldGrid[tile].biome.label);
+			if (roomRole != null && roomRole != RoomRoleDefOf.None)
 			{
-				yield return new Rule_String("ROOM_role", this.roomRole.label);
-				yield return new Rule_String("ROOM_roleDefinite", Find.ActiveLanguageWorker.WithDefiniteArticle(this.roomRole.label, false, false));
-				yield return new Rule_String("ROOM_roleIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(this.roomRole.label, false, false));
-				RoomStatScoreStage impressiveness = RoomStatDefOf.Impressiveness.GetScoreStage(this.roomImpressiveness);
-				RoomStatScoreStage beauty = RoomStatDefOf.Beauty.GetScoreStage(this.roomBeauty);
-				RoomStatScoreStage cleanliness = RoomStatDefOf.Cleanliness.GetScoreStage(this.roomCleanliness);
+				yield return new Rule_String("ROOM_role", roomRole.label);
+				yield return new Rule_String("ROOM_roleDefinite", Find.ActiveLanguageWorker.WithDefiniteArticle(roomRole.label));
+				yield return new Rule_String("ROOM_roleIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(roomRole.label));
+				RoomStatScoreStage impressiveness = RoomStatDefOf.Impressiveness.GetScoreStage(roomImpressiveness);
+				RoomStatScoreStage beauty = RoomStatDefOf.Beauty.GetScoreStage(roomBeauty);
+				RoomStatScoreStage cleanliness = RoomStatDefOf.Cleanliness.GetScoreStage(roomCleanliness);
 				yield return new Rule_String("ROOM_impressiveness", impressiveness.label);
-				yield return new Rule_String("ROOM_impressivenessIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(impressiveness.label, false, false));
+				yield return new Rule_String("ROOM_impressivenessIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(impressiveness.label));
 				yield return new Rule_String("ROOM_beauty", beauty.label);
-				yield return new Rule_String("ROOM_beautyIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(beauty.label, false, false));
+				yield return new Rule_String("ROOM_beautyIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(beauty.label));
 				yield return new Rule_String("ROOM_cleanliness", cleanliness.label);
-				yield return new Rule_String("ROOM_cleanlinessIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(cleanliness.label, false, false));
-				impressiveness = null;
-				beauty = null;
-				cleanliness = null;
+				yield return new Rule_String("ROOM_cleanlinessIndefinite", Find.ActiveLanguageWorker.WithIndefiniteArticle(cleanliness.label));
 			}
-			yield break;
 		}
 
-		
 		public static TaleData_Surroundings GenerateFrom(IntVec3 c, Map map)
 		{
 			TaleData_Surroundings taleData_Surroundings = new TaleData_Surroundings();
@@ -81,34 +80,9 @@ namespace RimWorld
 			return taleData_Surroundings;
 		}
 
-		
 		public static TaleData_Surroundings GenerateRandom(Map map)
 		{
-			return TaleData_Surroundings.GenerateFrom(CellFinder.RandomCell(map), map);
+			return GenerateFrom(CellFinder.RandomCell(map), map);
 		}
-
-		
-		public int tile;
-
-		
-		public float temperature;
-
-		
-		public float snowDepth;
-
-		
-		public WeatherDef weather;
-
-		
-		public RoomRoleDef roomRole;
-
-		
-		public float roomImpressiveness;
-
-		
-		public float roomBeauty;
-
-		
-		public float roomCleanliness;
 	}
 }

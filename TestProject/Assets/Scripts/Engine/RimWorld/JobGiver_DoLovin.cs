@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_DoLovin : ThinkNode_JobGiver
 	{
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (Find.TickManager.TicksGame < pawn.mindState.canLovinTick)
@@ -23,7 +20,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			if (!pawn.CanReserve(partnerInMyBed, 1, -1, null, false) || !partnerInMyBed.CanReserve(pawn, 1, -1, null, false))
+			if (!pawn.CanReserve(partnerInMyBed) || !partnerInMyBed.CanReserve(pawn))
 			{
 				return null;
 			}

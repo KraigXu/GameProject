@@ -1,22 +1,20 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Designator_AreaHomeClear : Designator_AreaHome
 	{
-		
-		public Designator_AreaHomeClear() : base(DesignateMode.Remove)
+		public Designator_AreaHomeClear()
+			: base(DesignateMode.Remove)
 		{
-			this.defaultLabel = "DesignatorAreaHomeClear".Translate();
-			this.defaultDesc = "DesignatorAreaHomeClearDesc".Translate();
-			this.icon = ContentFinder<Texture2D>.Get("UI/Designators/HomeAreaOff", true);
-			this.soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
-			this.soundDragChanged = null;
-			this.soundSucceeded = SoundDefOf.Designate_ZoneDelete;
-			this.hotKey = KeyBindingDefOf.Misc7;
+			defaultLabel = "DesignatorAreaHomeClear".Translate();
+			defaultDesc = "DesignatorAreaHomeClearDesc".Translate();
+			icon = ContentFinder<Texture2D>.Get("UI/Designators/HomeAreaOff");
+			soundDragSustain = SoundDefOf.Designate_DragAreaDelete;
+			soundDragChanged = null;
+			soundSucceeded = SoundDefOf.Designate_ZoneDelete;
+			hotKey = KeyBindingDefOf.Misc7;
 		}
 	}
 }

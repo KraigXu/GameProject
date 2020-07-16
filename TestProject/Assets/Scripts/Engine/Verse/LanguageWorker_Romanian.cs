@@ -1,29 +1,24 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class LanguageWorker_Romanian : LanguageWorker
 	{
-		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
 			{
 				return str;
 			}
-			if (!plural)
+			if (plural)
 			{
-				return ((gender == Gender.Female) ? "a " : "un ") + str;
+				if (gender != Gender.Male)
+				{
+					return str + "e";
+				}
+				return str + "i";
 			}
-			if (gender != Gender.Male)
-			{
-				return str + "e";
-			}
-			return str + "i";
+			return ((gender == Gender.Female) ? "a " : "un ") + str;
 		}
 
-		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -43,21 +38,17 @@ namespace Verse
 				}
 				return str + "i";
 			}
-			else
+			if (!IsVowel(ch))
 			{
-				if (!this.IsVowel(ch))
-				{
-					return str + "ul";
-				}
-				if (gender == Gender.Male)
-				{
-					return str + "le";
-				}
-				return str + "a";
+				return str + "ul";
 			}
+			if (gender == Gender.Male)
+			{
+				return str + "le";
+			}
+			return str + "a";
 		}
 
-		
 		public bool IsVowel(char ch)
 		{
 			return "aeiouâîAEIOUÂÎ".IndexOf(ch) >= 0;

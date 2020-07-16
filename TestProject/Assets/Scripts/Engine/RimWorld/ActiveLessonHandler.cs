@@ -1,105 +1,84 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ActiveLessonHandler : IExposable
 	{
-		
-		
-		public Lesson Current
-		{
-			get
-			{
-				return this.activeLesson;
-			}
-		}
+		private Lesson activeLesson;
 
-		
-		
+		public Lesson Current => activeLesson;
+
 		public bool ActiveLessonVisible
 		{
 			get
 			{
-				return this.activeLesson != null && !Find.WindowStack.WindowsPreventDrawTutor;
+				if (activeLesson != null)
+				{
+					return !Find.WindowStack.WindowsPreventDrawTutor;
+				}
+				return false;
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<Lesson>(ref this.activeLesson, "activeLesson", Array.Empty<object>());
+			Scribe_Deep.Look(ref activeLesson, "activeLesson");
 		}
 
-		
 		public void Activate(InstructionDef id)
 		{
-			Lesson_Instruction lesson_Instruction = this.activeLesson as Lesson_Instruction;
-			if (lesson_Instruction != null && id == lesson_Instruction.def)
+			Lesson_Instruction lesson_Instruction = activeLesson as Lesson_Instruction;
+			if (lesson_Instruction == null || id != lesson_Instruction.def)
 			{
-				return;
+				Lesson_Instruction lesson_Instruction2 = (Lesson_Instruction)Activator.CreateInstance(id.instructionClass);
+				lesson_Instruction2.def = id;
+				activeLesson = lesson_Instruction2;
+				activeLesson.OnActivated();
 			}
-			Lesson_Instruction lesson_Instruction2 = (Lesson_Instruction)Activator.CreateInstance(id.instructionClass);
-			lesson_Instruction2.def = id;
-			this.activeLesson = lesson_Instruction2;
-			this.activeLesson.OnActivated();
 		}
 
-		
 		public void Activate(Lesson lesson)
 		{
 			Lesson_Note lesson_Note = lesson as Lesson_Note;
-			if (lesson_Note != null && this.activeLesson != null)
+			if (lesson_Note != null && activeLesson != null)
 			{
 				lesson_Note.doFadeIn = false;
 			}
-			this.activeLesson = lesson;
-			this.activeLesson.OnActivated();
+			activeLesson = lesson;
+			activeLesson.OnActivated();
 		}
 
-		
 		public void Deactivate()
 		{
-			Lesson lesson = this.activeLesson;
-			this.activeLesson = null;
-			if (lesson != null)
-			{
-				lesson.PostDeactivated();
-			}
+			Lesson lesson = activeLesson;
+			activeLesson = null;
+			lesson?.PostDeactivated();
 		}
 
-		
 		public void ActiveLessonOnGUI()
 		{
-			if (Time.timeSinceLevelLoad < 0.01f || !this.ActiveLessonVisible)
+			if (!(Time.timeSinceLevelLoad < 0.01f) && ActiveLessonVisible)
 			{
-				return;
+				activeLesson.LessonOnGUI();
 			}
-			this.activeLesson.LessonOnGUI();
 		}
 
-		
 		public void ActiveLessonUpdate()
 		{
-			if (Time.timeSinceLevelLoad < 0.01f || !this.ActiveLessonVisible)
+			if (!(Time.timeSinceLevelLoad < 0.01f) && ActiveLessonVisible)
 			{
-				return;
+				activeLesson.LessonUpdate();
 			}
-			this.activeLesson.LessonUpdate();
 		}
 
-		
 		public void Notify_KnowledgeDemonstrated(ConceptDef conc)
 		{
-			if (this.Current != null)
+			if (Current != null)
 			{
-				this.Current.Notify_KnowledgeDemonstrated(conc);
+				Current.Notify_KnowledgeDemonstrated(conc);
 			}
 		}
-
-		
-		private Lesson activeLesson;
 	}
 }

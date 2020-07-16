@@ -1,13 +1,16 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_AmbrosiaSprout : IncidentWorker
 	{
-		
+		private static readonly IntRange CountRange = new IntRange(10, 20);
+
+		private const int MinRoomCells = 64;
+
+		private const int SpawnRadius = 6;
+
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -15,40 +18,31 @@ namespace RimWorld
 				return false;
 			}
 			Map map = (Map)parms.target;
-			IntVec3 intVec;
-			return map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNow && this.TryFindRootCell(map, out intVec);
+			if (!map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNow)
+			{
+				return false;
+			}
+			IntVec3 cell;
+			return TryFindRootCell(map, out cell);
 		}
 
-		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
-			IntVec3 intVec;
-			if (!this.TryFindRootCell(map, out intVec))
+			if (!TryFindRootCell(map, out IntVec3 cell))
 			{
 				return false;
 			}
 			Thing thing = null;
-			int randomInRange = IncidentWorker_AmbrosiaSprout.CountRange.RandomInRange;
-
+			int randomInRange = CountRange.RandomInRange;
 			for (int i = 0; i < randomInRange; i++)
 			{
-				IntVec3 root = intVec;
-				Map map2 = map;
-				int radius = 6;
-				Predicate<IntVec3> extraValidator = (((IntVec3 x) => this.CanSpawnAt(x, map)));
-
-				IntVec3 intVec2;
-				if (!CellFinder.TryRandomClosewalkCellNear(root, map2, radius, out intVec2, extraValidator))
+				if (!CellFinder.TryRandomClosewalkCellNear(cell, map, 6, out IntVec3 result, (IntVec3 x) => CanSpawnAt(x, map)))
 				{
 					break;
 				}
-				Plant plant = intVec2.GetPlant(map);
-				if (plant != null)
-				{
-					plant.Destroy(DestroyMode.Vanish);
-				}
-				Thing thing2 = GenSpawn.Spawn(ThingDefOf.Plant_Ambrosia, intVec2, map, WipeMode.Vanish);
+				result.GetPlant(map)?.Destroy();
+				Thing thing2 = GenSpawn.Spawn(ThingDefOf.Plant_Ambrosia, result, map);
 				if (thing == null)
 				{
 					thing = thing2;
@@ -58,20 +52,18 @@ namespace RimWorld
 			{
 				return false;
 			}
-			base.SendStandardLetter(parms, thing, Array.Empty<NamedArgument>());
+			SendStandardLetter(parms, thing);
 			return true;
 		}
 
-		
 		private bool TryFindRootCell(Map map, out IntVec3 cell)
 		{
-			return CellFinderLoose.TryFindRandomNotEdgeCellWith(10, (IntVec3 x) => this.CanSpawnAt(x, map) && x.GetRoom(map, RegionType.Set_Passable).CellCount >= 64, map, out cell);
+			return CellFinderLoose.TryFindRandomNotEdgeCellWith(10, (IntVec3 x) => CanSpawnAt(x, map) && x.GetRoom(map).CellCount >= 64, map, out cell);
 		}
 
-		
 		private bool CanSpawnAt(IntVec3 c, Map map)
 		{
-			if (!c.Standable(map) || c.Fogged(map) || map.fertilityGrid.FertilityAt(c) < ThingDefOf.Plant_Ambrosia.plant.fertilityMin || !c.GetRoom(map, RegionType.Set_Passable).PsychologicallyOutdoors || c.GetEdifice(map) != null || !PlantUtility.GrowthSeasonNow(c, map, false))
+			if (!c.Standable(map) || c.Fogged(map) || map.fertilityGrid.FertilityAt(c) < ThingDefOf.Plant_Ambrosia.plant.fertilityMin || !c.GetRoom(map).PsychologicallyOutdoors || c.GetEdifice(map) != null || !PlantUtility.GrowthSeasonNow(c, map))
 			{
 				return false;
 			}
@@ -90,14 +82,5 @@ namespace RimWorld
 			}
 			return true;
 		}
-
-		
-		private static readonly IntRange CountRange = new IntRange(10, 20);
-
-		
-		private const int MinRoomCells = 64;
-
-		
-		private const int SpawnRadius = 6;
 	}
 }

@@ -1,82 +1,62 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class CompColorable : ThingComp
 	{
-		
-		
-		
+		private Color color = Color.white;
+
+		private bool active;
+
 		public Color Color
 		{
 			get
 			{
-				if (!this.active)
+				if (!active)
 				{
-					return this.parent.def.graphicData.color;
+					return parent.def.graphicData.color;
 				}
-				return this.color;
+				return color;
 			}
 			set
 			{
-				if (value == this.color)
+				if (!(value == color))
 				{
-					return;
+					active = true;
+					color = value;
+					parent.Notify_ColorChanged();
 				}
-				this.active = true;
-				this.color = value;
-				this.parent.Notify_ColorChanged();
 			}
 		}
 
-		
-		
-		public bool Active
-		{
-			get
-			{
-				return this.active;
-			}
-		}
+		public bool Active => active;
 
-		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			if (this.parent.def.colorGenerator != null && (this.parent.Stuff == null || this.parent.Stuff.stuffProps.allowColorGenerators))
+			if (parent.def.colorGenerator != null && (parent.Stuff == null || parent.Stuff.stuffProps.allowColorGenerators))
 			{
-				this.Color = this.parent.def.colorGenerator.NewRandomizedColor();
+				Color = parent.def.colorGenerator.NewRandomizedColor();
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			if (Scribe.mode == LoadSaveMode.Saving && !this.active)
+			if (Scribe.mode != LoadSaveMode.Saving || active)
 			{
-				return;
+				Scribe_Values.Look(ref color, "color");
+				Scribe_Values.Look(ref active, "colorActive", defaultValue: false);
 			}
-			Scribe_Values.Look<Color>(ref this.color, "color", default(Color), false);
-			Scribe_Values.Look<bool>(ref this.active, "colorActive", false, false);
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
 			base.PostSplitOff(piece);
-			if (this.active)
+			if (active)
 			{
-				piece.SetColor(this.color, true);
+				piece.SetColor(color);
 			}
 		}
-
-		
-		private Color color = Color.white;
-
-		
-		private bool active;
 	}
 }

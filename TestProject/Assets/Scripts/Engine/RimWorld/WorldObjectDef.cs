@@ -1,185 +1,144 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class WorldObjectDef : Def
 	{
-		
-		
+		public Type worldObjectClass = typeof(WorldObject);
+
+		public bool canHaveFaction = true;
+
+		public bool saved = true;
+
+		public bool canBePlayerHome;
+
+		public List<WorldObjectCompProperties> comps = new List<WorldObjectCompProperties>();
+
+		public bool allowCaravanIncidentsWhichGenerateMap;
+
+		public bool isTempIncidentMapOwner;
+
+		public List<IncidentTargetTagDef> IncidentTargetTags;
+
+		public bool selectable = true;
+
+		public bool neverMultiSelect;
+
+		public MapGeneratorDef mapGenerator;
+
+		public List<Type> inspectorTabs;
+
+		[Unsaved(false)]
+		public List<InspectTabBase> inspectorTabsResolved;
+
+		public bool useDynamicDrawer;
+
+		public bool expandingIcon;
+
+		[NoTranslate]
+		public string expandingIconTexture;
+
+		public float expandingIconPriority;
+
+		[NoTranslate]
+		public string texture;
+
+		[Unsaved(false)]
+		private Material material;
+
+		[Unsaved(false)]
+		private Texture2D expandingIconTextureInt;
+
+		public bool expandMore;
+
+		public bool blockExitGridUntilBattleIsWon;
+
 		public Material Material
 		{
 			get
 			{
-				if (this.texture.NullOrEmpty())
+				if (texture.NullOrEmpty())
 				{
 					return null;
 				}
-				if (this.material == null)
+				if (material == null)
 				{
-					this.material = MaterialPool.MatFrom(this.texture, ShaderDatabase.WorldOverlayTransparentLit, WorldMaterials.WorldObjectRenderQueue);
+					material = MaterialPool.MatFrom(texture, ShaderDatabase.WorldOverlayTransparentLit, WorldMaterials.WorldObjectRenderQueue);
 				}
-				return this.material;
+				return material;
 			}
 		}
 
-		
-		
 		public Texture2D ExpandingIconTexture
 		{
 			get
 			{
-				if (this.expandingIconTextureInt == null)
+				if (expandingIconTextureInt == null)
 				{
-					if (this.expandingIconTexture.NullOrEmpty())
+					if (expandingIconTexture.NullOrEmpty())
 					{
 						return null;
 					}
-					this.expandingIconTextureInt = ContentFinder<Texture2D>.Get(this.expandingIconTexture, true);
+					expandingIconTextureInt = ContentFinder<Texture2D>.Get(expandingIconTexture);
 				}
-				return this.expandingIconTextureInt;
+				return expandingIconTextureInt;
 			}
 		}
 
-		
 		public override void PostLoad()
 		{
 			base.PostLoad();
-			if (this.inspectorTabs != null)
+			if (inspectorTabs == null)
 			{
-				for (int i = 0; i < this.inspectorTabs.Count; i++)
+				return;
+			}
+			for (int i = 0; i < inspectorTabs.Count; i++)
+			{
+				if (inspectorTabsResolved == null)
 				{
-					if (this.inspectorTabsResolved == null)
-					{
-						this.inspectorTabsResolved = new List<InspectTabBase>();
-					}
-					try
-					{
-						this.inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(this.inspectorTabs[i]));
-					}
-					catch (Exception ex)
-					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Could not instantiate inspector tab of type ",
-							this.inspectorTabs[i],
-							": ",
-							ex
-						}), false);
-					}
+					inspectorTabsResolved = new List<InspectTabBase>();
+				}
+				try
+				{
+					inspectorTabsResolved.Add(InspectTabManager.GetSharedInstance(inspectorTabs[i]));
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Could not instantiate inspector tab of type " + inspectorTabs[i] + ": " + ex);
 				}
 			}
 		}
 
-		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
-			for (int i = 0; i < this.comps.Count; i++)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				this.comps[i].ResolveReferences(this);
+				comps[i].ResolveReferences(this);
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
+			foreach (string item in base.ConfigErrors())
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
-			int num;
-			for (int i = 0; i < this.comps.Count; i = num + 1)
+			for (int i = 0; i < comps.Count; i++)
 			{
-				foreach (string text2 in this.comps[i].ConfigErrors(this))
+				foreach (string item2 in comps[i].ConfigErrors(this))
 				{
-					yield return text2;
+					yield return item2;
 				}
-				enumerator = null;
-				num = i;
 			}
-			if (this.expandMore && !this.expandingIcon)
+			if (expandMore && !expandingIcon)
 			{
 				yield return "has expandMore but doesn't have any expanding icon";
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public Type worldObjectClass = typeof(WorldObject);
-
-		
-		public bool canHaveFaction = true;
-
-		
-		public bool saved = true;
-
-		
-		public bool canBePlayerHome;
-
-		
-		public List<WorldObjectCompProperties> comps = new List<WorldObjectCompProperties>();
-
-		
-		public bool allowCaravanIncidentsWhichGenerateMap;
-
-		
-		public bool isTempIncidentMapOwner;
-
-		
-		public List<IncidentTargetTagDef> IncidentTargetTags;
-
-		
-		public bool selectable = true;
-
-		
-		public bool neverMultiSelect;
-
-		
-		public MapGeneratorDef mapGenerator;
-
-		
-		public List<Type> inspectorTabs;
-
-		
-		[Unsaved(false)]
-		public List<InspectTabBase> inspectorTabsResolved;
-
-		
-		public bool useDynamicDrawer;
-
-		
-		public bool expandingIcon;
-
-		
-		[NoTranslate]
-		public string expandingIconTexture;
-
-		
-		public float expandingIconPriority;
-
-		
-		[NoTranslate]
-		public string texture;
-
-		
-		[Unsaved(false)]
-		private Material material;
-
-		
-		[Unsaved(false)]
-		private Texture2D expandingIconTextureInt;
-
-		
-		public bool expandMore;
-
-		
-		public bool blockExitGridUntilBattleIsWon;
 	}
 }

@@ -1,117 +1,90 @@
-﻿using System;
+using System;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class CompSendSignalOnPawnProximity : ThingComp
 	{
-		
-		
-		public CompProperties_SendSignalOnPawnProximity Props
-		{
-			get
-			{
-				return (CompProperties_SendSignalOnPawnProximity)this.props;
-			}
-		}
+		public string signalTag;
 
-		
-		
-		public bool Sent
-		{
-			get
-			{
-				return this.sent;
-			}
-		}
+		private bool sent;
 
-		
-		
-		public bool Enabled
-		{
-			get
-			{
-				return this.ticksUntilEnabled <= 0;
-			}
-		}
+		private int ticksUntilEnabled;
 
-		
+		private const float MaxDistActivationByOther = 40f;
+
+		public CompProperties_SendSignalOnPawnProximity Props => (CompProperties_SendSignalOnPawnProximity)props;
+
+		public bool Sent => sent;
+
+		public bool Enabled => ticksUntilEnabled <= 0;
+
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.signalTag = this.Props.signalTag;
-			this.ticksUntilEnabled = this.Props.enableAfterTicks;
+			signalTag = Props.signalTag;
+			ticksUntilEnabled = Props.enableAfterTicks;
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			if (this.sent || !this.parent.Spawned)
+			if (!sent && parent.Spawned)
 			{
-				return;
-			}
-			if (this.Enabled && Find.TickManager.TicksGame % 250 == 0)
-			{
-				this.CompTickRare();
-			}
-			if (this.ticksUntilEnabled > 0)
-			{
-				this.ticksUntilEnabled--;
+				if (Enabled && Find.TickManager.TicksGame % 250 == 0)
+				{
+					CompTickRare();
+				}
+				if (ticksUntilEnabled > 0)
+				{
+					ticksUntilEnabled--;
+				}
 			}
 		}
 
-		
 		public override void CompTickRare()
 		{
 			base.CompTickRare();
 			Predicate<Thing> predicate = null;
-			if (this.Props.onlyHumanlike)
+			if (Props.onlyHumanlike)
 			{
-				predicate = delegate(Thing t)
-				{
-					Pawn pawn = t as Pawn;
-					return pawn != null && pawn.RaceProps.Humanlike;
-				};
+				predicate = ((Thing t) => (t as Pawn)?.RaceProps.Humanlike ?? false);
 			}
 			Thing thing = null;
-			if (this.Props.triggerOnPawnInRoom)
+			if (Props.triggerOnPawnInRoom)
 			{
-				foreach (Thing thing2 in this.parent.GetRoom(RegionType.Set_Passable).ContainedAndAdjacentThings)
+				foreach (Thing containedAndAdjacentThing in parent.GetRoom().ContainedAndAdjacentThings)
 				{
-					if (predicate(thing2))
+					if (predicate(containedAndAdjacentThing))
 					{
-						thing = thing2;
+						thing = containedAndAdjacentThing;
 						break;
 					}
 				}
 			}
-			if (thing == null && this.Props.radius > 0f)
+			if (thing == null && Props.radius > 0f)
 			{
-				thing = GenClosest.ClosestThingReachable(this.parent.Position, this.parent.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(TraverseMode.NoPassClosedDoors, Danger.Deadly, false), this.Props.radius, predicate, null, 0, -1, false, RegionType.Set_Passable, false);
+				thing = GenClosest.ClosestThingReachable(parent.Position, parent.Map, ThingRequest.ForGroup(ThingRequestGroup.Pawn), PathEndMode.OnCell, TraverseParms.For(TraverseMode.NoPassClosedDoors), Props.radius, predicate);
 			}
 			if (thing != null)
 			{
 				Effecter effecter = new Effecter(EffecterDefOf.ActivatorProximityTriggered);
-				effecter.Trigger(this.parent, TargetInfo.Invalid);
+				effecter.Trigger(parent, TargetInfo.Invalid);
 				effecter.Cleanup();
-				Messages.Message("MessageActivatorProximityTriggered".Translate(thing), this.parent, MessageTypeDefOf.ThreatBig, true);
-				Find.SignalManager.SendSignal(new Signal(this.signalTag, this.parent.Named("SUBJECT")));
-				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
-				this.sent = true;
+				Messages.Message("MessageActivatorProximityTriggered".Translate(thing), parent, MessageTypeDefOf.ThreatBig);
+				Find.SignalManager.SendSignal(new Signal(signalTag, parent.Named("SUBJECT")));
+				SoundDefOf.MechanoidsWakeUp.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
+				sent = true;
 			}
 		}
 
-		
 		public void Expire()
 		{
-			this.sent = true;
+			sent = true;
 		}
-
 
 		public override void Notify_SignalReceived(Signal signal)
 		{
@@ -121,38 +94,24 @@ namespace RimWorld
 			}
 		}
 
-
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Enabled)
+			if (!Enabled)
 			{
-				return "SendSignalOnCountdownCompTime".Translate(this.ticksUntilEnabled.TicksToSeconds().ToString("0.0"));
+				return "SendSignalOnCountdownCompTime".Translate(ticksUntilEnabled.TicksToSeconds().ToString("0.0"));
 			}
-			if (!this.sent)
+			if (!sent)
 			{
-				return "radius".Translate().CapitalizeFirst() + ": " + this.Props.radius.ToString("F0");
+				return "radius".Translate().CapitalizeFirst() + ": " + Props.radius.ToString("F0");
 			}
 			return "expired".Translate().CapitalizeFirst();
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<string>(ref this.signalTag, "signalTag", null, false);
-			Scribe_Values.Look<bool>(ref this.sent, "sent", false, false);
-			Scribe_Values.Look<int>(ref this.ticksUntilEnabled, "ticksUntilEnabled", 0, false);
+			Scribe_Values.Look(ref signalTag, "signalTag");
+			Scribe_Values.Look(ref sent, "sent", defaultValue: false);
+			Scribe_Values.Look(ref ticksUntilEnabled, "ticksUntilEnabled", 0);
 		}
-
-		
-		public string signalTag;
-
-		
-		private bool sent;
-
-		
-		private int ticksUntilEnabled;
-
-		
-		private const float MaxDistActivationByOther = 40f;
 	}
 }

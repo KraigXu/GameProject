@@ -1,73 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_SendShuttleAway : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Thing shuttle;
+
+		public bool dropEverything;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				yield return this.shuttle;
-				yield break;
+				yield return shuttle;
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.shuttle != null)
+			if (signal.tag == inSignal && shuttle != null)
 			{
-				SendShuttleAwayQuestPartUtility.SendAway(this.shuttle, this.dropEverything);
+				SendShuttleAwayQuestPartUtility.SendAway(shuttle, dropEverything);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<Thing>(ref this.shuttle, "shuttle", false);
-			Scribe_Values.Look<bool>(ref this.dropEverything, "dropEverything", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref shuttle, "shuttle");
+			Scribe_Values.Look(ref dropEverything, "dropEverything", defaultValue: false);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
 				Map randomPlayerHomeMap = Find.RandomPlayerHomeMap;
 				IntVec3 center = DropCellFinder.RandomDropSpot(randomPlayerHomeMap);
-				this.shuttle = ThingMaker.MakeThing(ThingDefOf.Shuttle, null);
-				GenPlace.TryPlaceThing(SkyfallerMaker.MakeSkyfaller(ThingDefOf.ShuttleIncoming, this.shuttle), center, randomPlayerHomeMap, ThingPlaceMode.Near, null, null, default(Rot4));
+				shuttle = ThingMaker.MakeThing(ThingDefOf.Shuttle);
+				GenPlace.TryPlaceThing(SkyfallerMaker.MakeSkyfaller(ThingDefOf.ShuttleIncoming, shuttle), center, randomPlayerHomeMap, ThingPlaceMode.Near);
 			}
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.shuttle != null)
+			if (shuttle != null)
 			{
-				this.shuttle.TryGetComp<CompShuttle>().requiredPawns.Replace(replace, with);
+				shuttle.TryGetComp<CompShuttle>().requiredPawns.Replace(replace, with);
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public Thing shuttle;
-
-		
-		public bool dropEverything;
 	}
 }

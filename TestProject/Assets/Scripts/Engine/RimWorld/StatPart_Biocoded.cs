@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class StatPart_Biocoded : StatPart
 	{
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
 			if (req.HasThing && EquipmentUtility.IsBiocoded(req.Thing))
@@ -14,7 +10,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
 			return null;

@@ -1,115 +1,118 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_NeedsTracker : IExposable
 	{
-		
-		
-		public List<Need> AllNeeds
-		{
-			get
-			{
-				return this.needs;
-			}
-		}
+		private Pawn pawn;
 
-		
+		private List<Need> needs = new List<Need>();
+
+		public Need_Mood mood;
+
+		public Need_Food food;
+
+		public Need_Rest rest;
+
+		public Need_Joy joy;
+
+		public Need_Beauty beauty;
+
+		public Need_RoomSize roomsize;
+
+		public Need_Outdoors outdoors;
+
+		public Need_Chemical_Any drugsDesire;
+
+		public Need_Comfort comfort;
+
+		public Need_Authority authority;
+
+		public List<Need> AllNeeds => needs;
+
 		public Pawn_NeedsTracker()
 		{
 		}
 
-		
 		public Pawn_NeedsTracker(Pawn newPawn)
 		{
-			this.pawn = newPawn;
-			this.AddOrRemoveNeedsAsAppropriate();
+			pawn = newPawn;
+			AddOrRemoveNeedsAsAppropriate();
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Need>(ref this.needs, "needs", LookMode.Deep, new object[]
-			{
-				this.pawn
-			});
+			Scribe_Collections.Look(ref needs, "needs", LookMode.Deep, pawn);
 			if (Scribe.mode == LoadSaveMode.LoadingVars || Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.needs.RemoveAll((Need x) => x == null || x.def == null) != 0)
+				if (needs.RemoveAll((Need x) => x == null || x.def == null) != 0)
 				{
-					Log.Error("Pawn " + this.pawn.ToStringSafe<Pawn>() + " had some null needs after loading.", false);
+					Log.Error("Pawn " + pawn.ToStringSafe() + " had some null needs after loading.");
 				}
-				this.BindDirectNeedFields();
+				BindDirectNeedFields();
 			}
 			BackCompatibility.PostExposeData(this);
 		}
 
-		
 		private void BindDirectNeedFields()
 		{
-			this.mood = this.TryGetNeed<Need_Mood>();
-			this.food = this.TryGetNeed<Need_Food>();
-			this.rest = this.TryGetNeed<Need_Rest>();
-			this.joy = this.TryGetNeed<Need_Joy>();
-			this.beauty = this.TryGetNeed<Need_Beauty>();
-			this.comfort = this.TryGetNeed<Need_Comfort>();
-			this.roomsize = this.TryGetNeed<Need_RoomSize>();
-			this.outdoors = this.TryGetNeed<Need_Outdoors>();
-			this.drugsDesire = this.TryGetNeed<Need_Chemical_Any>();
-			this.authority = null;
+			mood = TryGetNeed<Need_Mood>();
+			food = TryGetNeed<Need_Food>();
+			rest = TryGetNeed<Need_Rest>();
+			joy = TryGetNeed<Need_Joy>();
+			beauty = TryGetNeed<Need_Beauty>();
+			comfort = TryGetNeed<Need_Comfort>();
+			roomsize = TryGetNeed<Need_RoomSize>();
+			outdoors = TryGetNeed<Need_Outdoors>();
+			drugsDesire = TryGetNeed<Need_Chemical_Any>();
+			authority = null;
 		}
 
-		
 		public void NeedsTrackerTick()
 		{
-			if (this.pawn.IsHashIntervalTick(150))
+			if (pawn.IsHashIntervalTick(150))
 			{
-				for (int i = 0; i < this.needs.Count; i++)
+				for (int i = 0; i < needs.Count; i++)
 				{
-					this.needs[i].NeedInterval();
+					needs[i].NeedInterval();
 				}
 			}
 		}
 
-		
 		public T TryGetNeed<T>() where T : Need
 		{
-			for (int i = 0; i < this.needs.Count; i++)
+			for (int i = 0; i < needs.Count; i++)
 			{
-				if (this.needs[i].GetType() == typeof(T))
+				if (needs[i].GetType() == typeof(T))
 				{
-					return (T)((object)this.needs[i]);
-				}
-			}
-			return default(T);
-		}
-
-		
-		public Need TryGetNeed(NeedDef def)
-		{
-			for (int i = 0; i < this.needs.Count; i++)
-			{
-				if (this.needs[i].def == def)
-				{
-					return this.needs[i];
+					return (T)needs[i];
 				}
 			}
 			return null;
 		}
 
-		
+		public Need TryGetNeed(NeedDef def)
+		{
+			for (int i = 0; i < needs.Count; i++)
+			{
+				if (needs[i].def == def)
+				{
+					return needs[i];
+				}
+			}
+			return null;
+		}
+
 		public void SetInitialLevels()
 		{
-			for (int i = 0; i < this.needs.Count; i++)
+			for (int i = 0; i < needs.Count; i++)
 			{
-				this.needs[i].SetInitialLevel();
+				needs[i].SetInitialLevel();
 			}
 		}
 
-		
 		public void AddOrRemoveNeedsAsAppropriate()
 		{
 			List<NeedDef> allDefsListForReading = DefDatabase<NeedDef>.AllDefsListForReading;
@@ -118,70 +121,61 @@ namespace RimWorld
 				try
 				{
 					NeedDef needDef = allDefsListForReading[i];
-					if (this.ShouldHaveNeed(needDef))
+					if (ShouldHaveNeed(needDef))
 					{
-						if (this.TryGetNeed(needDef) == null)
+						if (TryGetNeed(needDef) == null)
 						{
-							this.AddNeed(needDef);
+							AddNeed(needDef);
 						}
 					}
-					else if (this.TryGetNeed(needDef) != null)
+					else if (TryGetNeed(needDef) != null)
 					{
-						this.RemoveNeed(needDef);
+						RemoveNeed(needDef);
 					}
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Error while determining if ",
-						this.pawn.ToStringSafe<Pawn>(),
-						" should have Need ",
-						allDefsListForReading[i].ToStringSafe<NeedDef>(),
-						": ",
-						ex
-					}), false);
+					Log.Error("Error while determining if " + pawn.ToStringSafe() + " should have Need " + allDefsListForReading[i].ToStringSafe() + ": " + ex);
 				}
 			}
 		}
 
-		
 		private bool ShouldHaveNeed(NeedDef nd)
 		{
-			if (this.pawn.RaceProps.intelligence < nd.minIntelligence)
+			if ((int)pawn.RaceProps.intelligence < (int)nd.minIntelligence)
 			{
 				return false;
 			}
-			if (nd.colonistsOnly && (this.pawn.Faction == null || !this.pawn.Faction.IsPlayer))
+			if (nd.colonistsOnly && (pawn.Faction == null || !pawn.Faction.IsPlayer))
 			{
 				return false;
 			}
-			if (nd.colonistAndPrisonersOnly && (this.pawn.Faction == null || !this.pawn.Faction.IsPlayer) && (this.pawn.HostFaction == null || this.pawn.HostFaction != Faction.OfPlayer))
+			if (nd.colonistAndPrisonersOnly && (pawn.Faction == null || !pawn.Faction.IsPlayer) && (pawn.HostFaction == null || pawn.HostFaction != Faction.OfPlayer))
 			{
 				return false;
 			}
-			if (this.pawn.health.hediffSet.hediffs.Any((Hediff x) => x.def.disablesNeed == nd))
+			if (pawn.health.hediffSet.hediffs.Any((Hediff x) => x.def.disablesNeed == nd))
 			{
 				return false;
 			}
-			if (nd.onlyIfCausedByHediff && !this.pawn.health.hediffSet.hediffs.Any((Hediff x) => x.def.causesNeed == nd))
+			if (nd.onlyIfCausedByHediff && !pawn.health.hediffSet.hediffs.Any((Hediff x) => x.def.causesNeed == nd))
 			{
 				return false;
 			}
-			if (nd.neverOnPrisoner && this.pawn.IsPrisoner)
+			if (nd.neverOnPrisoner && pawn.IsPrisoner)
 			{
 				return false;
 			}
 			if (nd.titleRequiredAny != null)
 			{
-				if (this.pawn.royalty == null)
+				if (pawn.royalty == null)
 				{
 					return false;
 				}
 				bool flag = false;
-				foreach (RoyalTitle royalTitle in this.pawn.royalty.AllTitlesInEffectForReading)
+				foreach (RoyalTitle item in pawn.royalty.AllTitlesInEffectForReading)
 				{
-					if (nd.titleRequiredAny.Contains(royalTitle.def))
+					if (nd.titleRequiredAny.Contains(item.def))
 					{
 						flag = true;
 						break;
@@ -195,9 +189,9 @@ namespace RimWorld
 			if (nd.hediffRequiredAny != null)
 			{
 				bool flag2 = false;
-				foreach (HediffDef def in nd.hediffRequiredAny)
+				foreach (HediffDef item2 in nd.hediffRequiredAny)
 				{
-					if (this.pawn.health.hediffSet.HasHediff(def, false))
+					if (pawn.health.hediffSet.HasHediff(item2))
 					{
 						flag2 = true;
 					}
@@ -213,66 +207,29 @@ namespace RimWorld
 			}
 			if (nd == NeedDefOf.Food)
 			{
-				return this.pawn.RaceProps.EatsFood;
+				return pawn.RaceProps.EatsFood;
 			}
-			return nd != NeedDefOf.Rest || this.pawn.RaceProps.needsRest;
+			if (nd == NeedDefOf.Rest)
+			{
+				return pawn.RaceProps.needsRest;
+			}
+			return true;
 		}
 
-		
 		private void AddNeed(NeedDef nd)
 		{
-			Need need = (Need)Activator.CreateInstance(nd.needClass, new object[]
-			{
-				this.pawn
-			});
+			Need need = (Need)Activator.CreateInstance(nd.needClass, pawn);
 			need.def = nd;
-			this.needs.Add(need);
+			needs.Add(need);
 			need.SetInitialLevel();
-			this.BindDirectNeedFields();
+			BindDirectNeedFields();
 		}
 
-		
 		private void RemoveNeed(NeedDef nd)
 		{
-			Need item = this.TryGetNeed(nd);
-			this.needs.Remove(item);
-			this.BindDirectNeedFields();
+			Need item = TryGetNeed(nd);
+			needs.Remove(item);
+			BindDirectNeedFields();
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private List<Need> needs = new List<Need>();
-
-		
-		public Need_Mood mood;
-
-		
-		public Need_Food food;
-
-		
-		public Need_Rest rest;
-
-		
-		public Need_Joy joy;
-
-		
-		public Need_Beauty beauty;
-
-		
-		public Need_RoomSize roomsize;
-
-		
-		public Need_Outdoors outdoors;
-
-		
-		public Need_Chemical_Any drugsDesire;
-
-		
-		public Need_Comfort comfort;
-
-		
-		public Need_Authority authority;
 	}
 }

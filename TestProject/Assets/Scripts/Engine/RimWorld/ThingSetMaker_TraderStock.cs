@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,126 +5,80 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_TraderStock : ThingSetMaker
 	{
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			TraderKindDef traderKindDef = parms.traderDef ?? DefDatabase<TraderKindDef>.AllDefsListForReading.RandomElement<TraderKindDef>();
+			TraderKindDef traderKindDef = parms.traderDef ?? DefDatabase<TraderKindDef>.AllDefsListForReading.RandomElement();
 			Faction makingFaction = parms.makingFaction;
-			int forTile;
-			if (parms.tile != null)
-			{
-				forTile = parms.tile.Value;
-			}
-			else if (Find.AnyPlayerHomeMap != null)
-			{
-				forTile = Find.AnyPlayerHomeMap.Tile;
-			}
-			else if (Find.CurrentMap != null)
-			{
-				forTile = Find.CurrentMap.Tile;
-			}
-			else
-			{
-				forTile = -1;
-			}
+			int forTile = parms.tile.HasValue ? parms.tile.Value : ((Find.AnyPlayerHomeMap != null) ? Find.AnyPlayerHomeMap.Tile : ((Find.CurrentMap == null) ? (-1) : Find.CurrentMap.Tile));
 			for (int i = 0; i < traderKindDef.stockGenerators.Count; i++)
 			{
-				foreach (Thing thing in traderKindDef.stockGenerators[i].GenerateThings(forTile, parms.makingFaction))
+				foreach (Thing item in traderKindDef.stockGenerators[i].GenerateThings(forTile, parms.makingFaction))
 				{
-					if (!thing.def.tradeability.TraderCanSell())
+					if (!item.def.tradeability.TraderCanSell())
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							traderKindDef,
-							" generated carrying ",
-							thing,
-							" which can't be sold by traders. Ignoring..."
-						}), false);
+						Log.Error(traderKindDef + " generated carrying " + item + " which can't be sold by traders. Ignoring...");
 					}
 					else
 					{
-						thing.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
-						outThings.Add(thing);
+						item.PostGeneratedForTrader(traderKindDef, forTile, makingFaction);
+						outThings.Add(item);
 					}
 				}
 			}
 		}
 
-		
 		public float DebugAverageTotalStockValue(TraderKindDef td)
 		{
 			ThingSetMakerParams parms = default(ThingSetMakerParams);
 			parms.traderDef = td;
-			parms.tile = new int?(-1);
+			parms.tile = -1;
 			float num = 0f;
 			for (int i = 0; i < 50; i++)
 			{
-				foreach (Thing thing in base.Generate(parms))
+				foreach (Thing item in Generate(parms))
 				{
-					num += thing.MarketValue * (float)thing.stackCount;
+					num += item.MarketValue * (float)item.stackCount;
 				}
 			}
 			return num / 50f;
 		}
 
-		
 		public string DebugGenerationDataFor(TraderKindDef td)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine(td.defName);
-			stringBuilder.AppendLine("Average total market value:" + this.DebugAverageTotalStockValue(td).ToString("F0"));
+			stringBuilder.AppendLine("Average total market value:" + DebugAverageTotalStockValue(td).ToString("F0"));
 			ThingSetMakerParams parms = default(ThingSetMakerParams);
 			parms.traderDef = td;
-			parms.tile = new int?(-1);
-			(from x in Find.FactionManager.AllFactionsListForReading
-			where x.def.baseTraderKinds.Contains(td) || x.def.visitorTraderKinds.Contains(td) || x.def.caravanTraderKinds.Contains(td)
-			select x).TryRandomElement(out parms.makingFaction);
+			parms.tile = -1;
+			Find.FactionManager.AllFactionsListForReading.Where((Faction x) => x.def.baseTraderKinds.Contains(td) || x.def.visitorTraderKinds.Contains(td) || x.def.caravanTraderKinds.Contains(td)).TryRandomElement(out parms.makingFaction);
 			stringBuilder.AppendLine("Example generated stock:\n\n");
-			foreach (Thing thing in base.Generate(parms))
+			foreach (Thing item in Generate(parms))
 			{
-				MinifiedThing minifiedThing = thing as MinifiedThing;
-				Thing thing2;
-				if (minifiedThing != null)
-				{
-					thing2 = minifiedThing.InnerThing;
-				}
-				else
-				{
-					thing2 = thing;
-				}
-				string text = thing2.LabelCap;
-				text = text + " [" + (thing2.MarketValue * (float)thing2.stackCount).ToString("F0") + "]";
-				stringBuilder.AppendLine(text);
+				MinifiedThing minifiedThing = item as MinifiedThing;
+				Thing thing = (minifiedThing == null) ? item : minifiedThing.InnerThing;
+				string labelCap = thing.LabelCap;
+				labelCap = labelCap + " [" + (thing.MarketValue * (float)thing.stackCount).ToString("F0") + "]";
+				stringBuilder.AppendLine(labelCap);
 			}
 			return stringBuilder.ToString();
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
-			if (parms.traderDef == null)
+			if (parms.traderDef != null)
 			{
-				yield break;
-			}
-			int num;
-			for (int i = 0; i < parms.traderDef.stockGenerators.Count; i = num + 1)
-			{
-				StockGenerator stock = parms.traderDef.stockGenerators[i];
-				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-				Func<ThingDef, bool> predicate= x => x.tradeability.TraderCanSell() && stock.HandlesThingDef(x);
-
-				foreach (ThingDef thingDef in allDefs.Where(predicate))
+				for (int i = 0; i < parms.traderDef.stockGenerators.Count; i++)
 				{
-					yield return thingDef;
+					StockGenerator stock = parms.traderDef.stockGenerators[i];
+					foreach (ThingDef item in DefDatabase<ThingDef>.AllDefs.Where((ThingDef x) => x.tradeability.TraderCanSell() && stock.HandlesThingDef(x)))
+					{
+						yield return item;
+					}
 				}
-				IEnumerator<ThingDef> enumerator = null;
-				num = i;
 			}
-			yield break;
-			yield break;
 		}
 	}
 }

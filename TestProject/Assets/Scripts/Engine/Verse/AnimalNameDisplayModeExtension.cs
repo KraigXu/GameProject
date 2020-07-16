@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public static class AnimalNameDisplayModeExtension
 	{
-		
 		public static string ToStringHuman(this AnimalNameDisplayMode mode)
 		{
 			switch (mode)

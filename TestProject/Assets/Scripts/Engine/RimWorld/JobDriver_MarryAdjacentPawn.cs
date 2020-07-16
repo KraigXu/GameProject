@@ -1,89 +1,63 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_MarryAdjacentPawn : JobDriver
 	{
-		
-		
-		private Pawn OtherFiance
-		{
-			get
-			{
-				return (Pawn)this.job.GetTarget(TargetIndex.A).Thing;
-			}
-		}
+		private int ticksLeftToMarry = 2500;
 
-		
-		
-		public int TicksLeftToMarry
-		{
-			get
-			{
-				return this.ticksLeftToMarry;
-			}
-		}
+		private const TargetIndex OtherFianceInd = TargetIndex.A;
 
-		
+		private const int Duration = 2500;
+
+		private Pawn OtherFiance => (Pawn)job.GetTarget(TargetIndex.A).Thing;
+
+		public int TicksLeftToMarry => ticksLeftToMarry;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
-			this.FailOn(() => this.OtherFiance.Drafted || !this.pawn.Position.AdjacentTo8WayOrInside(this.OtherFiance));
+			this.FailOn(() => OtherFiance.Drafted || !pawn.Position.AdjacentTo8WayOrInside(OtherFiance));
 			Toil toil = new Toil();
 			toil.initAction = delegate
 			{
-				this.ticksLeftToMarry = 2500;
+				ticksLeftToMarry = 2500;
 			};
 			toil.tickAction = delegate
 			{
-				this.ticksLeftToMarry--;
-				if (this.ticksLeftToMarry <= 0)
+				ticksLeftToMarry--;
+				if (ticksLeftToMarry <= 0)
 				{
-					this.ticksLeftToMarry = 0;
-					base.ReadyForNextToil();
+					ticksLeftToMarry = 0;
+					ReadyForNextToil();
 				}
 			};
 			toil.defaultCompleteMode = ToilCompleteMode.Never;
-			toil.FailOn(() => !this.pawn.relations.DirectRelationExists(PawnRelationDefOf.Fiance, this.OtherFiance));
+			toil.FailOn(() => !pawn.relations.DirectRelationExists(PawnRelationDefOf.Fiance, OtherFiance));
 			yield return toil;
-			yield return new Toil
+			Toil toil2 = new Toil();
+			toil2.defaultCompleteMode = ToilCompleteMode.Instant;
+			toil2.initAction = delegate
 			{
-				defaultCompleteMode = ToilCompleteMode.Instant,
-				initAction = delegate
+				if (pawn.thingIDNumber < OtherFiance.thingIDNumber)
 				{
-					if (this.pawn.thingIDNumber < this.OtherFiance.thingIDNumber)
-					{
-						MarriageCeremonyUtility.Married(this.pawn, this.OtherFiance);
-					}
+					MarriageCeremonyUtility.Married(pawn, OtherFiance);
 				}
 			};
-			yield break;
+			yield return toil2;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.ticksLeftToMarry, "ticksLeftToMarry", 0, false);
+			Scribe_Values.Look(ref ticksLeftToMarry, "ticksLeftToMarry", 0);
 		}
-
-		
-		private int ticksLeftToMarry = 2500;
-
-		
-		private const TargetIndex OtherFianceInd = TargetIndex.A;
-
-		
-		private const int Duration = 2500;
 	}
 }

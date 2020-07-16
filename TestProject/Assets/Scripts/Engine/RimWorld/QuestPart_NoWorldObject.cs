@@ -1,67 +1,58 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_NoWorldObject : QuestPartActivable
 	{
-		
-		
+		public WorldObject worldObject;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-		
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.worldObject != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.worldObject;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (worldObject != null)
+				{
+					yield return worldObject;
+				}
 			}
 		}
 
-		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
-			if (this.worldObject == null || !this.worldObject.Spawned)
+			if (worldObject == null || !worldObject.Spawned)
 			{
-				base.Complete();
+				Complete();
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<WorldObject>(ref this.worldObject, "worldObject", false);
+			Scribe_References.Look(ref worldObject, "worldObject");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			Site site = Find.WorldObjects.Sites.FirstOrDefault<Site>();
+			Site site = Find.WorldObjects.Sites.FirstOrDefault();
 			if (site != null)
 			{
-				this.worldObject = site;
+				worldObject = site;
 				return;
 			}
 			Map randomPlayerHomeMap = Find.RandomPlayerHomeMap;
 			if (randomPlayerHomeMap != null)
 			{
-				this.worldObject = randomPlayerHomeMap.Parent;
+				worldObject = randomPlayerHomeMap.Parent;
 			}
 		}
-
-		
-		public WorldObject worldObject;
 	}
 }

@@ -1,84 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class MeshUtility
 	{
-		
+		private static List<int> offsets = new List<int>();
+
+		private static List<bool> vertIsUsed = new List<bool>();
+
 		public static void RemoveVertices(List<Vector3> verts, List<TriangleIndices> tris, Predicate<Vector3> predicate)
 		{
 			int i = 0;
-			int count = tris.Count;
-			while (i < count)
+			for (int count = tris.Count; i < count; i++)
 			{
 				TriangleIndices triangleIndices = tris[i];
 				if (predicate(verts[triangleIndices.v1]) || predicate(verts[triangleIndices.v2]) || predicate(verts[triangleIndices.v3]))
 				{
 					tris[i] = new TriangleIndices(-1, -1, -1);
 				}
-				i++;
 			}
 			tris.RemoveAll((TriangleIndices x) => x.v1 == -1);
-			MeshUtility.RemoveUnusedVertices(verts, tris);
+			RemoveUnusedVertices(verts, tris);
 		}
 
-		
 		public static void RemoveUnusedVertices(List<Vector3> verts, List<TriangleIndices> tris)
 		{
-			MeshUtility.vertIsUsed.Clear();
+			vertIsUsed.Clear();
 			int i = 0;
-			int count = verts.Count;
-			while (i < count)
+			for (int count = verts.Count; i < count; i++)
 			{
-				MeshUtility.vertIsUsed.Add(false);
-				i++;
+				vertIsUsed.Add(item: false);
 			}
 			int j = 0;
-			int count2 = tris.Count;
-			while (j < count2)
+			for (int count2 = tris.Count; j < count2; j++)
 			{
 				TriangleIndices triangleIndices = tris[j];
-				MeshUtility.vertIsUsed[triangleIndices.v1] = true;
-				MeshUtility.vertIsUsed[triangleIndices.v2] = true;
-				MeshUtility.vertIsUsed[triangleIndices.v3] = true;
-				j++;
+				vertIsUsed[triangleIndices.v1] = true;
+				vertIsUsed[triangleIndices.v2] = true;
+				vertIsUsed[triangleIndices.v3] = true;
 			}
 			int num = 0;
-			MeshUtility.offsets.Clear();
+			offsets.Clear();
 			int k = 0;
-			int count3 = verts.Count;
-			while (k < count3)
+			for (int count3 = verts.Count; k < count3; k++)
 			{
-				if (!MeshUtility.vertIsUsed[k])
+				if (!vertIsUsed[k])
 				{
 					num++;
 				}
-				MeshUtility.offsets.Add(num);
-				k++;
+				offsets.Add(num);
 			}
 			int l = 0;
-			int count4 = tris.Count;
-			while (l < count4)
+			for (int count4 = tris.Count; l < count4; l++)
 			{
 				TriangleIndices triangleIndices2 = tris[l];
-				tris[l] = new TriangleIndices(triangleIndices2.v1 - MeshUtility.offsets[triangleIndices2.v1], triangleIndices2.v2 - MeshUtility.offsets[triangleIndices2.v2], triangleIndices2.v3 - MeshUtility.offsets[triangleIndices2.v3]);
-				l++;
+				tris[l] = new TriangleIndices(triangleIndices2.v1 - offsets[triangleIndices2.v1], triangleIndices2.v2 - offsets[triangleIndices2.v2], triangleIndices2.v3 - offsets[triangleIndices2.v3]);
 			}
-			verts.RemoveAll((Vector3 elem, int index) => !MeshUtility.vertIsUsed[index]);
+			verts.RemoveAll((Vector3 elem, int index) => !vertIsUsed[index]);
 		}
 
-		
 		public static bool Visible(Vector3 point, float radius, Vector3 viewCenter, float viewAngle)
 		{
-			return viewAngle >= 180f || Vector3.Angle(viewCenter * radius, point) <= viewAngle;
+			if (viewAngle >= 180f)
+			{
+				return true;
+			}
+			return Vector3.Angle(viewCenter * radius, point) <= viewAngle;
 		}
 
-		
 		public static bool VisibleForWorldgen(Vector3 point, float radius, Vector3 viewCenter, float viewAngle)
 		{
 			if (viewAngle >= 180f)
@@ -88,22 +81,15 @@ namespace RimWorld
 			float num = Vector3.Angle(viewCenter * radius, point) + -1E-05f;
 			if (Mathf.Abs(num - viewAngle) < 1E-06f)
 			{
-				Log.Warning(string.Format("Angle difference {0} is within epsilon; recommend adjusting visibility tweak", num - viewAngle), false);
+				Log.Warning($"Angle difference {num - viewAngle} is within epsilon; recommend adjusting visibility tweak");
 			}
 			return num <= viewAngle;
 		}
 
-		
 		public static Color32 MutateAlpha(this Color32 input, byte newAlpha)
 		{
 			input.a = newAlpha;
 			return input;
 		}
-
-		
-		private static List<int> offsets = new List<int>();
-
-		
-		private static List<bool> vertIsUsed = new List<bool>();
 	}
 }

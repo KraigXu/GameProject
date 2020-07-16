@@ -1,28 +1,17 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	internal class SectionLayer_IndoorMask : SectionLayer
 	{
-		
-		
-		public override bool Visible
+		public override bool Visible => DebugViewSettings.drawShadows;
+
+		public SectionLayer_IndoorMask(Section section)
+			: base(section)
 		{
-			get
-			{
-				return DebugViewSettings.drawShadows;
-			}
+			relevantChangeTypes = (MapMeshFlag.FogOfWar | MapMeshFlag.Roofs);
 		}
 
-		
-		public SectionLayer_IndoorMask(Section section) : base(section)
-		{
-			this.relevantChangeTypes = (MapMeshFlag.FogOfWar | MapMeshFlag.Roofs);
-		}
-
-		
 		private bool HideRainPrimary(IntVec3 c)
 		{
 			if (base.Map.fogGrid.IsFogged(c))
@@ -48,17 +37,16 @@ namespace Verse
 			return false;
 		}
 
-		
 		public override void Regenerate()
 		{
 			if (!MatBases.SunShadow.shader.isSupported)
 			{
 				return;
 			}
-			LayerSubMesh subMesh = base.GetSubMesh(MatBases.IndoorMask);
+			LayerSubMesh subMesh = GetSubMesh(MatBases.IndoorMask);
 			subMesh.Clear(MeshParts.All);
 			Building[] innerArray = base.Map.edificeGrid.InnerArray;
-			CellRect cellRect = new CellRect(this.section.botLeft.x, this.section.botLeft.z, 17, 17);
+			CellRect cellRect = new CellRect(section.botLeft.x, section.botLeft.z, 17, 17);
 			cellRect.ClipInsideMap(base.Map);
 			subMesh.verts.Capacity = cellRect.Area * 2;
 			subMesh.tris.Capacity = cellRect.Area * 4;
@@ -66,46 +54,32 @@ namespace Verse
 			CellIndices cellIndices = base.Map.cellIndices;
 			for (int i = cellRect.minX; i <= cellRect.maxX; i++)
 			{
-				int j = cellRect.minZ;
-				while (j <= cellRect.maxZ)
+				for (int j = cellRect.minZ; j <= cellRect.maxZ; j++)
 				{
 					IntVec3 intVec = new IntVec3(i, 0, j);
-					if (this.HideRainPrimary(intVec))
+					if (!HideRainPrimary(intVec))
 					{
-						goto IL_145;
-					}
-					bool flag = intVec.Roofed(base.Map);
-					bool flag2 = false;
-					if (flag)
-					{
-						for (int k = 0; k < 8; k++)
+						bool flag = intVec.Roofed(base.Map);
+						bool flag2 = false;
+						if (flag)
 						{
-							IntVec3 c = intVec + GenAdj.AdjacentCells[k];
-							if (c.InBounds(base.Map) && this.HideRainPrimary(c))
+							for (int k = 0; k < 8; k++)
 							{
-								flag2 = true;
-								break;
+								IntVec3 c = intVec + GenAdj.AdjacentCells[k];
+								if (c.InBounds(base.Map) && HideRainPrimary(c))
+								{
+									flag2 = true;
+									break;
+								}
 							}
 						}
+						if (!flag || !flag2)
+						{
+							continue;
+						}
 					}
-					if (flag && flag2)
-					{
-						goto IL_145;
-					}
-					IL_268:
-					j++;
-					continue;
-					IL_145:
 					Thing thing = innerArray[cellIndices.CellToIndex(i, j)];
-					float num;
-					if (thing != null && (thing.def.passability == Traversability.Impassable || thing.def.IsDoor))
-					{
-						num = 0f;
-					}
-					else
-					{
-						num = 0.16f;
-					}
+					float num = (thing == null || (thing.def.passability != Traversability.Impassable && !thing.def.IsDoor)) ? 0.16f : 0f;
 					subMesh.verts.Add(new Vector3((float)i - num, y, (float)j - num));
 					subMesh.verts.Add(new Vector3((float)i - num, y, (float)(j + 1) + num));
 					subMesh.verts.Add(new Vector3((float)(i + 1) + num, y, (float)(j + 1) + num));
@@ -117,7 +91,6 @@ namespace Verse
 					subMesh.tris.Add(count - 4);
 					subMesh.tris.Add(count - 2);
 					subMesh.tris.Add(count - 1);
-					goto IL_268;
 				}
 			}
 			if (subMesh.verts.Count > 0)

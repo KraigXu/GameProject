@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class PawnComponentsUtility
 	{
-		
 		public static void CreateInitialComponents(Pawn pawn)
 		{
 			if (pawn.ageTracker == null)
@@ -103,10 +100,9 @@ namespace RimWorld
 					pawn.psychicEntropy = new Pawn_PsychicEntropyTracker(pawn);
 				}
 			}
-			PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, false);
+			AddAndRemoveDynamicComponents(pawn);
 		}
 
-		
 		public static void AddComponentsForSpawn(Pawn pawn)
 		{
 			if (pawn.rotationTracker == null)
@@ -137,7 +133,7 @@ namespace RimWorld
 			{
 				pawn.filth = new Pawn_FilthTracker(pawn);
 			}
-			if (pawn.RaceProps.intelligence <= Intelligence.ToolUser && pawn.caller == null)
+			if ((int)pawn.RaceProps.intelligence <= 1 && pawn.caller == null)
 			{
 				pawn.caller = new Pawn_CallTracker(pawn);
 			}
@@ -156,10 +152,9 @@ namespace RimWorld
 					pawn.abilities = new Pawn_AbilityTracker(pawn);
 				}
 			}
-			PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, true);
+			AddAndRemoveDynamicComponents(pawn, actAsIfSpawned: true);
 		}
 
-		
 		public static void RemoveComponentsOnKilled(Pawn pawn)
 		{
 			pawn.carryTracker = null;
@@ -169,7 +164,6 @@ namespace RimWorld
 			pawn.trader = null;
 		}
 
-		
 		public static void RemoveComponentsOnDespawned(Pawn pawn)
 		{
 			pawn.rotationTracker = null;
@@ -184,7 +178,6 @@ namespace RimWorld
 			pawn.drafter = null;
 		}
 
-		
 		public static void AddAndRemoveDynamicComponents(Pawn pawn, bool actAsIfSpawned = false)
 		{
 			bool flag = pawn.Faction != null && pawn.Faction.IsPlayer;
@@ -205,7 +198,7 @@ namespace RimWorld
 			}
 			if (pawn.RaceProps.Humanlike)
 			{
-				if ((flag || flag2) && pawn.foodRestriction == null)
+				if ((flag | flag2) && pawn.foodRestriction == null)
 				{
 					pawn.foodRestriction = new Pawn_FoodRestrictionTracker(pawn);
 				}
@@ -223,7 +216,7 @@ namespace RimWorld
 					{
 						pawn.timetable = new Pawn_TimetableTracker(pawn);
 					}
-					if ((pawn.Spawned || actAsIfSpawned) && pawn.drafter == null)
+					if ((pawn.Spawned | actAsIfSpawned) && pawn.drafter == null)
 					{
 						pawn.drafter = new Pawn_DraftController(pawn);
 					}
@@ -233,11 +226,11 @@ namespace RimWorld
 					pawn.drafter = null;
 				}
 			}
-			if ((flag || flag2) && pawn.playerSettings == null)
+			if ((flag | flag2) && pawn.playerSettings == null)
 			{
 				pawn.playerSettings = new Pawn_PlayerSettings(pawn);
 			}
-			if (pawn.RaceProps.intelligence <= Intelligence.ToolUser && pawn.Faction != null && !pawn.RaceProps.IsMechanoid && pawn.training == null)
+			if ((int)pawn.RaceProps.intelligence <= 1 && pawn.Faction != null && !pawn.RaceProps.IsMechanoid && pawn.training == null)
 			{
 				pawn.training = new Pawn_TrainingTracker(pawn);
 			}
@@ -247,7 +240,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static bool HasSpawnedComponents(Pawn p)
 		{
 			return p.pather != null;

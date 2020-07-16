@@ -1,59 +1,40 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_FixBrokenDownBuilding : WorkGiver_Scanner
 	{
-		
+		public static string NotInHomeAreaTrans;
+
+		private static string NoComponentsToRepairTrans;
+
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial);
+
+		public override PathEndMode PathEndMode => PathEndMode.Touch;
+
 		public static void ResetStaticData()
 		{
-			WorkGiver_FixBrokenDownBuilding.NotInHomeAreaTrans = "NotInHomeArea".Translate();
-			WorkGiver_FixBrokenDownBuilding.NoComponentsToRepairTrans = "NoComponentsToRepair".Translate();
+			NotInHomeAreaTrans = "NotInHomeArea".Translate();
+			NoComponentsToRepairTrans = "NoComponentsToRepair".Translate();
 		}
 
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForGroup(ThingRequestGroup.BuildingArtificial);
-			}
-		}
-
-		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
 			return pawn.Map.GetComponent<BreakdownManager>().brokenDownThings;
 		}
 
-		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			return pawn.Map.GetComponent<BreakdownManager>().brokenDownThings.Count == 0;
 		}
 
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.Touch;
-			}
-		}
-
-		
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Building building = t as Building;
@@ -79,7 +60,7 @@ namespace RimWorld
 			}
 			if (pawn.Faction == Faction.OfPlayer && !pawn.Map.areaManager.Home[t.Position])
 			{
-				JobFailReason.Is(WorkGiver_FixBrokenDownBuilding.NotInHomeAreaTrans, null);
+				JobFailReason.Is(NotInHomeAreaTrans);
 				return false;
 			}
 			if (!pawn.CanReserve(building, 1, -1, null, forced))
@@ -94,33 +75,25 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (this.FindClosestComponent(pawn) == null)
+			if (FindClosestComponent(pawn) == null)
 			{
-				JobFailReason.Is(WorkGiver_FixBrokenDownBuilding.NoComponentsToRepairTrans, null);
+				JobFailReason.Is(NoComponentsToRepairTrans);
 				return false;
 			}
 			return true;
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
-			Thing t2 = this.FindClosestComponent(pawn);
+			Thing t2 = FindClosestComponent(pawn);
 			Job job = JobMaker.MakeJob(JobDefOf.FixBrokenDownBuilding, t, t2);
 			job.count = 1;
 			return job;
 		}
 
-		
 		private Thing FindClosestComponent(Pawn pawn)
 		{
-			return GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(ThingDefOf.ComponentIndustrial), PathEndMode.InteractionCell, TraverseParms.For(pawn, pawn.NormalMaxDanger(), TraverseMode.ByPawn, false), 9999f, (Thing x) => !x.IsForbidden(pawn) && pawn.CanReserve(x, 1, -1, null, false), null, 0, -1, false, RegionType.Set_Passable, false);
+			return GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(ThingDefOf.ComponentIndustrial), PathEndMode.InteractionCell, TraverseParms.For(pawn, pawn.NormalMaxDanger()), 9999f, (Thing x) => !x.IsForbidden(pawn) && pawn.CanReserve(x));
 		}
-
-		
-		public static string NotInHomeAreaTrans;
-
-		
-		private static string NoComponentsToRepairTrans;
 	}
 }

@@ -1,167 +1,103 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public struct ThingDefCountRange : IEquatable<ThingDefCountRange>, IExposable
 	{
-		
-		
-		public ThingDef ThingDef
-		{
-			get
-			{
-				return this.thingDef;
-			}
-		}
+		private ThingDef thingDef;
 
-		
-		
-		public IntRange CountRange
-		{
-			get
-			{
-				return this.countRange;
-			}
-		}
+		private IntRange countRange;
 
-		
-		
-		public int Min
-		{
-			get
-			{
-				return this.countRange.min;
-			}
-		}
+		public ThingDef ThingDef => thingDef;
 
-		
-		
-		public int Max
-		{
-			get
-			{
-				return this.countRange.max;
-			}
-		}
+		public IntRange CountRange => countRange;
 
-		
-		
-		public int TrueMin
-		{
-			get
-			{
-				return this.countRange.TrueMin;
-			}
-		}
+		public int Min => countRange.min;
 
-		
-		
-		public int TrueMax
-		{
-			get
-			{
-				return this.countRange.TrueMax;
-			}
-		}
+		public int Max => countRange.max;
 
-		
+		public int TrueMin => countRange.TrueMin;
+
+		public int TrueMax => countRange.TrueMax;
+
 		public ThingDefCountRange(ThingDef thingDef, int min, int max)
 		{
 			this = new ThingDefCountRange(thingDef, new IntRange(min, max));
 		}
 
-		
 		public ThingDefCountRange(ThingDef thingDef, IntRange countRange)
 		{
 			this.thingDef = thingDef;
 			this.countRange = countRange;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<ThingDef>(ref this.thingDef, "thingDef");
-			Scribe_Values.Look<IntRange>(ref this.countRange, "countRange", default(IntRange), false);
+			Scribe_Defs.Look(ref thingDef, "thingDef");
+			Scribe_Values.Look(ref countRange, "countRange");
 		}
 
-		
 		public ThingDefCountRange WithCountRange(IntRange newCountRange)
 		{
-			return new ThingDefCountRange(this.thingDef, newCountRange);
+			return new ThingDefCountRange(thingDef, newCountRange);
 		}
 
-		
 		public ThingDefCountRange WithCountRange(int newMin, int newMax)
 		{
-			return new ThingDefCountRange(this.thingDef, newMin, newMax);
+			return new ThingDefCountRange(thingDef, newMin, newMax);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is ThingDefCountRange && this.Equals((ThingDefCountRange)obj);
+			if (!(obj is ThingDefCountRange))
+			{
+				return false;
+			}
+			return Equals((ThingDefCountRange)obj);
 		}
 
-		
 		public bool Equals(ThingDefCountRange other)
 		{
 			return this == other;
 		}
 
-		
 		public static bool operator ==(ThingDefCountRange a, ThingDefCountRange b)
 		{
-			return a.thingDef == b.thingDef && a.countRange == b.countRange;
+			if (a.thingDef == b.thingDef)
+			{
+				return a.countRange == b.countRange;
+			}
+			return false;
 		}
 
-		
 		public static bool operator !=(ThingDefCountRange a, ThingDefCountRange b)
 		{
 			return !(a == b);
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombine<ThingDef>(this.countRange.GetHashCode(), this.thingDef);
+			return Gen.HashCombine(countRange.GetHashCode(), thingDef);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"(",
-				this.countRange,
-				"x ",
-				(this.thingDef != null) ? this.thingDef.defName : "null",
-				")"
-			});
+			return "(" + countRange + "x " + ((thingDef != null) ? thingDef.defName : "null") + ")";
 		}
 
-		
 		public static implicit operator ThingDefCountRange(ThingDefCountRangeClass t)
 		{
 			return new ThingDefCountRange(t.thingDef, t.countRange);
 		}
 
-		
 		public static explicit operator ThingDefCountRange(ThingDefCount t)
 		{
 			return new ThingDefCountRange(t.ThingDef, t.Count, t.Count);
 		}
 
-		
 		public static explicit operator ThingDefCountRange(ThingDefCountClass t)
 		{
 			return new ThingDefCountRange(t.thingDef, t.count, t.count);
 		}
-
-		
-		private ThingDef thingDef;
-
-		
-		private IntRange countRange;
 	}
 }

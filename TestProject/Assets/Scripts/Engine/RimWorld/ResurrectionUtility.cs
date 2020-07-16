@@ -1,26 +1,41 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class ResurrectionUtility
 	{
-		
+		private static SimpleCurve DementiaChancePerRotDaysCurve = new SimpleCurve
+		{
+			new CurvePoint(0.1f, 0.02f),
+			new CurvePoint(5f, 0.8f)
+		};
+
+		private static SimpleCurve BlindnessChancePerRotDaysCurve = new SimpleCurve
+		{
+			new CurvePoint(0.1f, 0.02f),
+			new CurvePoint(5f, 0.8f)
+		};
+
+		private static SimpleCurve ResurrectionPsychosisChancePerRotDaysCurve = new SimpleCurve
+		{
+			new CurvePoint(0.1f, 0.02f),
+			new CurvePoint(5f, 0.8f)
+		};
+
 		public static void Resurrect(Pawn pawn)
 		{
 			if (!pawn.Dead)
 			{
-				Log.Error("Tried to resurrect a pawn who is not dead: " + pawn.ToStringSafe<Pawn>(), false);
+				Log.Error("Tried to resurrect a pawn who is not dead: " + pawn.ToStringSafe());
 				return;
 			}
 			if (pawn.Discarded)
 			{
-				Log.Error("Tried to resurrect a discarded pawn: " + pawn.ToStringSafe<Pawn>(), false);
+				Log.Error("Tried to resurrect a discarded pawn: " + pawn.ToStringSafe());
 				return;
 			}
 			Corpse corpse = pawn.Corpse;
@@ -33,7 +48,7 @@ namespace RimWorld
 				loc = corpse.Position;
 				map = corpse.Map;
 				corpse.InnerPawn = null;
-				corpse.Destroy(DestroyMode.Vanish);
+				corpse.Destroy();
 			}
 			if (flag && pawn.IsWorldPawn())
 			{
@@ -52,14 +67,14 @@ namespace RimWorld
 			}
 			if (flag)
 			{
-				GenSpawn.Spawn(pawn, loc, map, WipeMode.Vanish);
+				GenSpawn.Spawn(pawn, loc, map);
 				for (int i = 0; i < 10; i++)
 				{
 					MoteMaker.ThrowAirPuffUp(pawn.DrawPos, map);
 				}
 				if (pawn.Faction != null && pawn.Faction != Faction.OfPlayer && pawn.HostileTo(Faction.OfPlayer))
 				{
-					LordMaker.MakeNewLord(pawn.Faction, new LordJob_AssaultColony(pawn.Faction, true, true, false, false, true), pawn.Map, Gen.YieldSingle<Pawn>(pawn));
+					LordMaker.MakeNewLord(pawn.Faction, new LordJob_AssaultColony(pawn.Faction), pawn.Map, Gen.YieldSingle(pawn));
 				}
 				if (pawn.apparel != null)
 				{
@@ -77,99 +92,51 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void ResurrectWithSideEffects(Pawn pawn)
 		{
 			Corpse corpse = pawn.Corpse;
-			float x2;
-			if (corpse != null)
-			{
-				x2 = corpse.GetComp<CompRottable>().RotProgress / 60000f;
-			}
-			else
-			{
-				x2 = 0f;
-			}
-			ResurrectionUtility.Resurrect(pawn);
+			float x2 = (corpse == null) ? 0f : (corpse.GetComp<CompRottable>().RotProgress / 60000f);
+			Resurrect(pawn);
 			BodyPartRecord brain = pawn.health.hediffSet.GetBrain();
-			Hediff hediff = HediffMaker.MakeHediff(HediffDefOf.ResurrectionSickness, pawn, null);
+			Hediff hediff = HediffMaker.MakeHediff(HediffDefOf.ResurrectionSickness, pawn);
 			if (!pawn.health.WouldDieAfterAddingHediff(hediff))
 			{
-				pawn.health.AddHediff(hediff, null, null, null);
+				pawn.health.AddHediff(hediff);
 			}
-			if (Rand.Chance(ResurrectionUtility.DementiaChancePerRotDaysCurve.Evaluate(x2)) && brain != null)
+			if (Rand.Chance(DementiaChancePerRotDaysCurve.Evaluate(x2)) && brain != null)
 			{
 				Hediff hediff2 = HediffMaker.MakeHediff(HediffDefOf.Dementia, pawn, brain);
 				if (!pawn.health.WouldDieAfterAddingHediff(hediff2))
 				{
-					pawn.health.AddHediff(hediff2, null, null, null);
+					pawn.health.AddHediff(hediff2);
 				}
 			}
-			if (Rand.Chance(ResurrectionUtility.BlindnessChancePerRotDaysCurve.Evaluate(x2)))
+			if (Rand.Chance(BlindnessChancePerRotDaysCurve.Evaluate(x2)))
 			{
-				foreach (BodyPartRecord bodyPartRecord in from x in pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null)
-				where x.def == BodyPartDefOf.Eye
-				select x)
+				foreach (BodyPartRecord item in from x in pawn.health.hediffSet.GetNotMissingParts()
+					where x.def == BodyPartDefOf.Eye
+					select x)
 				{
-					if (!pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(bodyPartRecord))
+					if (!pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(item))
 					{
-						Hediff hediff3 = HediffMaker.MakeHediff(HediffDefOf.Blindness, pawn, bodyPartRecord);
-						pawn.health.AddHediff(hediff3, null, null, null);
+						Hediff hediff3 = HediffMaker.MakeHediff(HediffDefOf.Blindness, pawn, item);
+						pawn.health.AddHediff(hediff3);
 					}
 				}
 			}
-			if (brain != null && Rand.Chance(ResurrectionUtility.ResurrectionPsychosisChancePerRotDaysCurve.Evaluate(x2)))
+			if (brain != null && Rand.Chance(ResurrectionPsychosisChancePerRotDaysCurve.Evaluate(x2)))
 			{
 				Hediff hediff4 = HediffMaker.MakeHediff(HediffDefOf.ResurrectionPsychosis, pawn, brain);
 				if (!pawn.health.WouldDieAfterAddingHediff(hediff4))
 				{
-					pawn.health.AddHediff(hediff4, null, null, null);
+					pawn.health.AddHediff(hediff4);
 				}
 			}
 			if (pawn.Dead)
 			{
-				Log.Error("The pawn has died while being resurrected.", false);
-				ResurrectionUtility.Resurrect(pawn);
+				Log.Error("The pawn has died while being resurrected.");
+				Resurrect(pawn);
 			}
 		}
-
-		
-		private static SimpleCurve DementiaChancePerRotDaysCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(0.1f, 0.02f),
-				true
-			},
-			{
-				new CurvePoint(5f, 0.8f),
-				true
-			}
-		};
-
-		
-		private static SimpleCurve BlindnessChancePerRotDaysCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(0.1f, 0.02f),
-				true
-			},
-			{
-				new CurvePoint(5f, 0.8f),
-				true
-			}
-		};
-
-		
-		private static SimpleCurve ResurrectionPsychosisChancePerRotDaysCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(0.1f, 0.02f),
-				true
-			},
-			{
-				new CurvePoint(5f, 0.8f),
-				true
-			}
-		};
 	}
 }

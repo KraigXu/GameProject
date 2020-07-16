@@ -1,50 +1,43 @@
-﻿using System;
 using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Dialog_NamePlayerSettlement : Dialog_GiveName
 	{
-		
+		private Settlement settlement;
+
 		public Dialog_NamePlayerSettlement(Settlement settlement)
 		{
 			this.settlement = settlement;
 			if (settlement.HasMap && settlement.Map.mapPawns.FreeColonistsSpawnedCount != 0)
 			{
-				this.suggestingPawn = settlement.Map.mapPawns.FreeColonistsSpawned.RandomElement<Pawn>();
+				suggestingPawn = settlement.Map.mapPawns.FreeColonistsSpawned.RandomElement();
 			}
-			this.nameGenerator = (() => NameGenerator.GenerateName(Faction.OfPlayer.def.settlementNameMaker, new Predicate<string>(this.IsValidName), false, null, null));
-			this.curName = this.nameGenerator();
-			this.nameMessageKey = "NamePlayerFactionBaseMessage";
-			this.gainedNameMessageKey = "PlayerFactionBaseGainsName";
-			this.invalidNameMessageKey = "PlayerFactionBaseNameIsInvalid";
+			nameGenerator = (() => NameGenerator.GenerateName(Faction.OfPlayer.def.settlementNameMaker, IsValidName));
+			curName = nameGenerator();
+			nameMessageKey = "NamePlayerFactionBaseMessage";
+			gainedNameMessageKey = "PlayerFactionBaseGainsName";
+			invalidNameMessageKey = "PlayerFactionBaseNameIsInvalid";
 		}
 
-		
 		public override void PostOpen()
 		{
 			base.PostOpen();
-			if (this.settlement.Map != null)
+			if (settlement.Map != null)
 			{
-				Current.Game.CurrentMap = this.settlement.Map;
+				Current.Game.CurrentMap = settlement.Map;
 			}
 		}
 
-		
 		protected override bool IsValidName(string s)
 		{
 			return NamePlayerSettlementDialogUtility.IsValidName(s);
 		}
 
-		
 		protected override void Named(string s)
 		{
-			NamePlayerSettlementDialogUtility.Named(this.settlement, s);
+			NamePlayerSettlementDialogUtility.Named(settlement, s);
 		}
-
-		
-		private Settlement settlement;
 	}
 }

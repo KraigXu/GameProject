@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_AIGotoNearestHostile : ThinkNode_JobGiver
 	{
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			float num = float.MaxValue;
@@ -21,9 +18,9 @@ namespace RimWorld
 				{
 					Thing thing2 = (Thing)attackTarget;
 					int num2 = thing2.Position.DistanceToSquared(pawn.Position);
-					if ((float)num2 < num && pawn.CanReach(thing2, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
+					if ((float)num2 < num && pawn.CanReach(thing2, PathEndMode.OnCell, Danger.Deadly))
 					{
-						num = (float)num2;
+						num = num2;
 						thing = thing2;
 					}
 				}

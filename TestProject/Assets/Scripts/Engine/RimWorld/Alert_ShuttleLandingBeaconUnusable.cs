@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_ShuttleLandingBeaconUnusable : Alert
 	{
-		
-		
+		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
+
 		private List<GlobalTargetInfo> Targets
 		{
 			get
 			{
-				this.targets.Clear();
+				targets.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
@@ -22,34 +20,29 @@ namespace RimWorld
 					for (int j = 0; j < list.Count; j++)
 					{
 						CompShipLandingBeacon compShipLandingBeacon = list[j].TryGetComp<CompShipLandingBeacon>();
-						if (compShipLandingBeacon != null && compShipLandingBeacon.Active && !compShipLandingBeacon.LandingAreas.Any<ShipLandingArea>())
+						if (compShipLandingBeacon != null && compShipLandingBeacon.Active && !compShipLandingBeacon.LandingAreas.Any())
 						{
-							this.targets.Add(list[j]);
+							targets.Add(list[j]);
 						}
 					}
 				}
-				return this.targets;
+				return targets;
 			}
 		}
 
-		
 		public Alert_ShuttleLandingBeaconUnusable()
 		{
-			this.defaultLabel = "ShipLandingBeaconUnusable".Translate();
-			this.defaultExplanation = "ShipLandingBeaconUnusableDesc".Translate();
+			defaultLabel = "ShipLandingBeaconUnusable".Translate();
+			defaultExplanation = "ShipLandingBeaconUnusableDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
 			{
 				return false;
 			}
-			return AlertReport.CulpritsAre(this.Targets);
+			return AlertReport.CulpritsAre(Targets);
 		}
-
-		
-		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
 	}
 }

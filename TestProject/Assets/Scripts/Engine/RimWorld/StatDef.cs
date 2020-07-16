@@ -1,219 +1,221 @@
-﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-public class StatDef : Def
+namespace RimWorld
 {
-	public StatCategoryDef category;
-
-	public Type workerClass = typeof(StatWorker);
-
-	public string labelForFullStatList;
-
-	public bool forInformationOnly;
-
-	public float hideAtValue = -2.14748365E+09f;
-
-	public bool alwaysHide;
-
-	public bool showNonAbstract = true;
-
-	public bool showIfUndefined = true;
-
-	public bool showOnPawns = true;
-
-	public bool showOnHumanlikes = true;
-
-	public bool showOnNonWildManHumanlikes = true;
-
-	public bool showOnAnimals = true;
-
-	public bool showOnMechanoids = true;
-
-	public bool showOnNonWorkTables = true;
-
-	public bool showOnDefaultValue = true;
-
-	public bool showOnUnhaulables = true;
-
-	public bool showOnUntradeables = true;
-
-	public List<string> showIfModsLoaded;
-
-	public List<HediffDef> showIfHediffsPresent;
-
-	public bool neverDisabled;
-
-	public int displayPriorityInCategory;
-
-	public ToStringNumberSense toStringNumberSense = ToStringNumberSense.Absolute;
-
-	public ToStringStyle toStringStyle;
-
-	private ToStringStyle? toStringStyleUnfinalized;
-
-	[MustTranslate]
-	public string formatString;
-
-	[MustTranslate]
-	public string formatStringUnfinalized;
-
-	public float defaultBaseValue = 1f;
-
-	public List<SkillNeed> skillNeedOffsets;
-
-	public float noSkillOffset;
-
-	public List<PawnCapacityOffset> capacityOffsets;
-
-	public List<StatDef> statFactors;
-
-	public bool applyFactorsIfNegative = true;
-
-	public List<SkillNeed> skillNeedFactors;
-
-	public float noSkillFactor = 1f;
-
-	public List<PawnCapacityFactor> capacityFactors;
-
-	public SimpleCurve postProcessCurve;
-
-	public List<StatDef> postProcessStatFactors;
-
-	public float minValue = -9999999f;
-
-	public float maxValue = 9999999f;
-
-	public float valueIfMissing;
-
-	public bool roundValue;
-
-	public float roundToFiveOver = float.MaxValue;
-
-	public bool minifiedThingInherits;
-
-	public bool supressDisabledError;
-
-	public bool scenarioRandomizable;
-
-	public List<StatPart> parts;
-
-	[Unsaved(false)]
-	private StatWorker workerInt;
-
-	public StatWorker Worker
+	public class StatDef : Def
 	{
-		get
+		public StatCategoryDef category;
+
+		public Type workerClass = typeof(StatWorker);
+
+		public string labelForFullStatList;
+
+		public bool forInformationOnly;
+
+		public float hideAtValue = -2.14748365E+09f;
+
+		public bool alwaysHide;
+
+		public bool showNonAbstract = true;
+
+		public bool showIfUndefined = true;
+
+		public bool showOnPawns = true;
+
+		public bool showOnHumanlikes = true;
+
+		public bool showOnNonWildManHumanlikes = true;
+
+		public bool showOnAnimals = true;
+
+		public bool showOnMechanoids = true;
+
+		public bool showOnNonWorkTables = true;
+
+		public bool showOnDefaultValue = true;
+
+		public bool showOnUnhaulables = true;
+
+		public bool showOnUntradeables = true;
+
+		public List<string> showIfModsLoaded;
+
+		public List<HediffDef> showIfHediffsPresent;
+
+		public bool neverDisabled;
+
+		public int displayPriorityInCategory;
+
+		public ToStringNumberSense toStringNumberSense = ToStringNumberSense.Absolute;
+
+		public ToStringStyle toStringStyle;
+
+		private ToStringStyle? toStringStyleUnfinalized;
+
+		[MustTranslate]
+		public string formatString;
+
+		[MustTranslate]
+		public string formatStringUnfinalized;
+
+		public float defaultBaseValue = 1f;
+
+		public List<SkillNeed> skillNeedOffsets;
+
+		public float noSkillOffset;
+
+		public List<PawnCapacityOffset> capacityOffsets;
+
+		public List<StatDef> statFactors;
+
+		public bool applyFactorsIfNegative = true;
+
+		public List<SkillNeed> skillNeedFactors;
+
+		public float noSkillFactor = 1f;
+
+		public List<PawnCapacityFactor> capacityFactors;
+
+		public SimpleCurve postProcessCurve;
+
+		public List<StatDef> postProcessStatFactors;
+
+		public float minValue = -9999999f;
+
+		public float maxValue = 9999999f;
+
+		public float valueIfMissing;
+
+		public bool roundValue;
+
+		public float roundToFiveOver = float.MaxValue;
+
+		public bool minifiedThingInherits;
+
+		public bool supressDisabledError;
+
+		public bool scenarioRandomizable;
+
+		public List<StatPart> parts;
+
+		[Unsaved(false)]
+		private StatWorker workerInt;
+
+		public StatWorker Worker
 		{
-			if (workerInt == null)
+			get
 			{
-				if (parts != null)
+				if (workerInt == null)
 				{
-					for (int i = 0; i < parts.Count; i++)
+					if (parts != null)
 					{
-						parts[i].parentStat = this;
+						for (int i = 0; i < parts.Count; i++)
+						{
+							parts[i].parentStat = this;
+						}
+					}
+					workerInt = (StatWorker)Activator.CreateInstance(workerClass);
+					workerInt.InitSetStat(this);
+				}
+				return workerInt;
+			}
+		}
+
+		public ToStringStyle ToStringStyleUnfinalized
+		{
+			get
+			{
+				if (!toStringStyleUnfinalized.HasValue)
+				{
+					return toStringStyle;
+				}
+				return toStringStyleUnfinalized.Value;
+			}
+		}
+
+		public string LabelForFullStatList
+		{
+			get
+			{
+				if (!labelForFullStatList.NullOrEmpty())
+				{
+					return labelForFullStatList;
+				}
+				return label;
+			}
+		}
+
+		public string LabelForFullStatListCap => LabelForFullStatList.CapitalizeFirst(this);
+
+		public override IEnumerable<string> ConfigErrors()
+		{
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (capacityFactors != null)
+			{
+				foreach (PawnCapacityFactor capacityFactor in capacityFactors)
+				{
+					if (capacityFactor.weight > 1f)
+					{
+						yield return defName + " has activity factor with weight > 1";
 					}
 				}
-				workerInt = (StatWorker)Activator.CreateInstance(workerClass);
-				workerInt.InitSetStat(this);
 			}
-			return workerInt;
-		}
-	}
-
-	public ToStringStyle ToStringStyleUnfinalized
-	{
-		get
-		{
-			if (!toStringStyleUnfinalized.HasValue)
+			if (parts != null)
 			{
-				return toStringStyle;
-			}
-			return toStringStyleUnfinalized.Value;
-		}
-	}
-
-	public string LabelForFullStatList
-	{
-		get
-		{
-			if (!labelForFullStatList.NullOrEmpty())
-			{
-				return labelForFullStatList;
-			}
-			return label;
-		}
-	}
-
-	public string LabelForFullStatListCap => LabelForFullStatList.CapitalizeFirst(this);
-
-	public override IEnumerable<string> ConfigErrors()
-	{
-		foreach (string item in base.ConfigErrors())
-		{
-			yield return item;
-		}
-		if (capacityFactors != null)
-		{
-			foreach (PawnCapacityFactor capacityFactor in capacityFactors)
-			{
-				if (capacityFactor.weight > 1f)
+				for (int i = 0; i < parts.Count; i++)
 				{
-					yield return defName + " has activity factor with weight > 1";
+					foreach (string item2 in parts[i].ConfigErrors())
+					{
+						yield return defName + " has error in StatPart " + parts[i].ToString() + ": " + item2;
+					}
 				}
 			}
 		}
-		if (parts != null)
+
+		public string ValueToString(float val, ToStringNumberSense numberSense = ToStringNumberSense.Absolute, bool finalized = true)
 		{
-			for (int i = 0; i < parts.Count; i++)
+			return Worker.ValueToString(val, finalized, numberSense);
+		}
+
+		public static StatDef Named(string defName)
+		{
+			return DefDatabase<StatDef>.GetNamed(defName);
+		}
+
+		public override void PostLoad()
+		{
+			base.PostLoad();
+			if (parts != null)
 			{
-				foreach (string item2 in parts[i].ConfigErrors())
-				{
-					yield return defName + " has error in StatPart " + parts[i].ToString() + ": " + item2;
-				}
+				List<StatPart> partsCopy = parts.ToList();
+				parts.SortBy((StatPart x) => 0f - x.priority, (StatPart x) => partsCopy.IndexOf(x));
 			}
 		}
-	}
 
-	public string ValueToString(float val, ToStringNumberSense numberSense = ToStringNumberSense.Absolute, bool finalized = true)
-	{
-		return Worker.ValueToString(val, finalized, numberSense);
-	}
-
-	public static StatDef Named(string defName)
-	{
-		return DefDatabase<StatDef>.GetNamed(defName);
-	}
-
-	public override void PostLoad()
-	{
-		base.PostLoad();
-		if (parts != null)
+		public T GetStatPart<T>() where T : StatPart
 		{
-			List<StatPart> partsCopy = parts.ToList();
-			parts.SortBy((StatPart x) => 0f - x.priority, (StatPart x) => partsCopy.IndexOf(x));
+			return parts.OfType<T>().FirstOrDefault();
 		}
-	}
 
-	public T GetStatPart<T>() where T : StatPart
-	{
-		return parts.OfType<T>().FirstOrDefault();
-	}
-
-	public bool CanShowWithLoadedMods()
-	{
-		if (!showIfModsLoaded.NullOrEmpty())
+		public bool CanShowWithLoadedMods()
 		{
-			for (int i = 0; i < showIfModsLoaded.Count; i++)
+			if (!showIfModsLoaded.NullOrEmpty())
 			{
-				if (!ModsConfig.IsActive(showIfModsLoaded[i]))
+				for (int i = 0; i < showIfModsLoaded.Count; i++)
 				{
-					return false;
+					if (!ModsConfig.IsActive(showIfModsLoaded[i]))
+					{
+						return false;
+					}
 				}
 			}
+			return true;
 		}
-		return true;
 	}
 }

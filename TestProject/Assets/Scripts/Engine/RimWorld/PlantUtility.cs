@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +6,8 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PlantUtility
 	{
-		
 		public static bool GrowthSeasonNow(IntVec3 c, Map map, bool forSowing = false)
 		{
 			Room roomOrAdjacent = c.GetRoomOrAdjacent(map, RegionType.Set_All);
@@ -18,36 +15,37 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (!roomOrAdjacent.UsesOutdoorTemperature)
+			if (roomOrAdjacent.UsesOutdoorTemperature)
 			{
-				float temperature = c.GetTemperature(map);
-				return temperature > 0f && temperature < 58f;
+				if (forSowing)
+				{
+					return map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNowForSowing;
+				}
+				return map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNow;
 			}
-			if (forSowing)
+			float temperature = c.GetTemperature(map);
+			if (temperature > 0f)
 			{
-				return map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNowForSowing;
+				return temperature < 58f;
 			}
-			return map.weatherManager.growthSeasonMemory.GrowthSeasonOutdoorsNow;
+			return false;
 		}
 
-		
 		public static bool SnowAllowsPlanting(IntVec3 c, Map map)
 		{
 			return c.GetSnowDepth(map) < 0.2f;
 		}
 
-		
 		public static bool CanEverPlantAt(this ThingDef plantDef, IntVec3 c, Map map)
 		{
-			return plantDef.CanEverPlantAt_NewTemp(c, map, false);
+			return plantDef.CanEverPlantAt_NewTemp(c, map);
 		}
 
-		
 		public static bool CanEverPlantAt_NewTemp(this ThingDef plantDef, IntVec3 c, Map map, bool canWipePlantsExceptTree = false)
 		{
 			if (plantDef.category != ThingCategory.Plant)
 			{
-				Log.Error("Checking CanGrowAt with " + plantDef + " which is not a plant.", false);
+				Log.Error("Checking CanGrowAt with " + plantDef + " which is not a plant.");
 			}
 			if (!c.InBounds(map))
 			{
@@ -95,88 +93,70 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static void LogPlantProportions()
 		{
 			Dictionary<ThingDef, float> dictionary = new Dictionary<ThingDef, float>();
-			foreach (ThingDef key in Find.CurrentMap.Biome.AllWildPlants)
+			foreach (ThingDef allWildPlant in Find.CurrentMap.Biome.AllWildPlants)
 			{
-				dictionary.Add(key, 0f);
+				dictionary.Add(allWildPlant, 0f);
 			}
 			float num = 0f;
-			foreach (IntVec3 c in Find.CurrentMap.AllCells)
+			foreach (IntVec3 allCell in Find.CurrentMap.AllCells)
 			{
-				Plant plant = c.GetPlant(Find.CurrentMap);
+				Plant plant = allCell.GetPlant(Find.CurrentMap);
 				if (plant != null && dictionary.ContainsKey(plant.def))
 				{
-					Dictionary<ThingDef, float> dictionary2 = dictionary;
-					ThingDef key2 = plant.def;
-					float num2 = dictionary2[key2];
-					dictionary2[key2] = num2 + 1f;
+					ThingDef def = plant.def;
+					float num2 = dictionary[def];
+					dictionary[def] = num2 + 1f;
 					num += 1f;
 				}
 			}
-			foreach (ThingDef thingDef in Find.CurrentMap.Biome.AllWildPlants)
+			foreach (ThingDef allWildPlant2 in Find.CurrentMap.Biome.AllWildPlants)
 			{
-				Dictionary<ThingDef, float> dictionary3 = dictionary;
-				ThingDef key2 = thingDef;
-				dictionary3[key2] /= num;
+				dictionary[allWildPlant2] /= num;
 			}
-			Dictionary<ThingDef, float> dictionary4 = PlantUtility.CalculateDesiredPlantProportions(Find.CurrentMap.Biome);
+			Dictionary<ThingDef, float> dictionary2 = CalculateDesiredPlantProportions(Find.CurrentMap.Biome);
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("PLANT           EXPECTED             FOUND");
-			foreach (ThingDef thingDef2 in Find.CurrentMap.Biome.AllWildPlants)
+			foreach (ThingDef allWildPlant3 in Find.CurrentMap.Biome.AllWildPlants)
 			{
-				stringBuilder.AppendLine(thingDef2.LabelCap + "       " + dictionary4[thingDef2].ToStringPercent() + "        " + dictionary[thingDef2].ToStringPercent());
+				stringBuilder.AppendLine(allWildPlant3.LabelCap + "       " + dictionary2[allWildPlant3].ToStringPercent() + "        " + dictionary[allWildPlant3].ToStringPercent());
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
 
-		
 		private static Dictionary<ThingDef, float> CalculateDesiredPlantProportions(BiomeDef biome)
 		{
 			Dictionary<ThingDef, float> dictionary = new Dictionary<ThingDef, float>();
 			float num = 0f;
-			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs)
+			foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
 			{
-				if (thingDef.plant != null)
+				if (allDef.plant != null)
 				{
-					float num2 = biome.CommonalityOfPlant(thingDef);
-					dictionary.Add(thingDef, num2);
+					float num2 = biome.CommonalityOfPlant(allDef);
+					dictionary.Add(allDef, num2);
 					num += num2;
 				}
 			}
-			foreach (ThingDef thingDef2 in biome.AllWildPlants)
+			foreach (ThingDef allWildPlant in biome.AllWildPlants)
 			{
-				Dictionary<ThingDef, float> dictionary2 = dictionary;
-				ThingDef key = thingDef2;
-				dictionary2[key] /= num;
+				dictionary[allWildPlant] /= num;
 			}
 			return dictionary;
 		}
 
-		
 		public static IEnumerable<ThingDef> ValidPlantTypesForGrowers(List<IPlantToGrowSettable> sel)
 		{
-			IEnumerator<ThingDef> enumerator = (from def in DefDatabase<ThingDef>.AllDefs
-			where def.category == ThingCategory.Plant
-			select def).GetEnumerator();
+			foreach (ThingDef plantDef in DefDatabase<ThingDef>.AllDefs.Where((ThingDef def) => def.category == ThingCategory.Plant))
 			{
-				while (enumerator.MoveNext())
+				if (sel.TrueForAll((IPlantToGrowSettable x) => CanSowOnGrower(plantDef, x)))
 				{
-					ThingDef plantDef = enumerator.Current;
-					if (sel.TrueForAll((IPlantToGrowSettable x) => PlantUtility.CanSowOnGrower(plantDef, x)))
-					{
-						yield return plantDef;
-					}
+					yield return plantDef;
 				}
 			}
-			
-			yield break;
-			yield break;
 		}
 
-		
 		public static bool CanSowOnGrower(ThingDef plantDef, object obj)
 		{
 			if (obj is Zone)
@@ -184,10 +164,13 @@ namespace RimWorld
 				return plantDef.plant.sowTags.Contains("Ground");
 			}
 			Thing thing = obj as Thing;
-			return thing != null && thing.def.building != null && plantDef.plant.sowTags.Contains(thing.def.building.sowTag);
+			if (thing != null && thing.def.building != null)
+			{
+				return plantDef.plant.sowTags.Contains(thing.def.building.sowTag);
+			}
+			return false;
 		}
 
-		
 		public static Thing AdjacentSowBlocker(ThingDef plantDef, IntVec3 c, Map map)
 		{
 			for (int i = 0; i < 8; i++)
@@ -205,20 +188,17 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static byte GetWindExposure(Plant plant)
 		{
 			return (byte)Mathf.Min(255f * plant.def.plant.topWindExposure, 255f);
 		}
 
-		
 		public static void SetWindExposureColors(Color32[] colors, Plant plant)
 		{
-			colors[1].a = (colors[2].a = PlantUtility.GetWindExposure(plant));
+			colors[1].a = (colors[2].a = GetWindExposure(plant));
 			colors[0].a = (colors[3].a = 0);
 		}
 
-		
 		public static void LogFallColorForYear()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -235,11 +215,11 @@ namespace RimWorld
 				stringBuilder.Append(j.ToString().PadRight(6));
 				for (int k = -90; k <= 90; k += 10)
 				{
-					stringBuilder.Append(PlantFallColors.GetFallColorFactor((float)k, j).ToString("F3").PadRight(6));
+					stringBuilder.Append(PlantFallColors.GetFallColorFactor(k, j).ToString("F3").PadRight(6));
 				}
 				stringBuilder.AppendLine();
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
 	}
 }

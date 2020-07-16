@@ -1,43 +1,25 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Designator_AreaSnowClear : Designator_Area
 	{
-		
-		
-		public override int DraggableDimensions
-		{
-			get
-			{
-				return 2;
-			}
-		}
+		private DesignateMode mode;
 
-		
-		
-		public override bool DragDrawMeasurements
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override int DraggableDimensions => 2;
 
-		
+		public override bool DragDrawMeasurements => true;
+
 		public Designator_AreaSnowClear(DesignateMode mode)
 		{
 			this.mode = mode;
-			this.soundDragSustain = SoundDefOf.Designate_DragStandard;
-			this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-			this.useMouseIcon = true;
-			this.hotKey = KeyBindingDefOf.Misc7;
-			this.tutorTag = "AreaSnowClear";
+			soundDragSustain = SoundDefOf.Designate_DragStandard;
+			soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+			useMouseIcon = true;
+			hotKey = KeyBindingDefOf.Misc7;
+			tutorTag = "AreaSnowClear";
 		}
 
-		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -45,32 +27,29 @@ namespace RimWorld
 				return false;
 			}
 			bool flag = base.Map.areaManager.SnowClear[c];
-			if (this.mode == DesignateMode.Add)
+			if (mode == DesignateMode.Add)
 			{
 				return !flag;
 			}
 			return flag;
 		}
 
-		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
-			if (this.mode == DesignateMode.Add)
+			if (mode == DesignateMode.Add)
 			{
 				base.Map.areaManager.SnowClear[c] = true;
-				return;
 			}
-			base.Map.areaManager.SnowClear[c] = false;
+			else
+			{
+				base.Map.areaManager.SnowClear[c] = false;
+			}
 		}
 
-		
 		public override void SelectedUpdate()
 		{
 			GenUI.RenderMouseoverBracket();
 			base.Map.areaManager.SnowClear.MarkForDraw();
 		}
-
-		
-		private DesignateMode mode;
 	}
 }

@@ -1,43 +1,39 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Bill_ProductionWithUft : Bill_Production
 	{
-		
-		
+		private UnfinishedThing boundUftInt;
+
 		protected override string StatusString
 		{
 			get
 			{
-				if (this.BoundWorker == null)
+				if (BoundWorker == null)
 				{
 					return (base.StatusString ?? "").Trim();
 				}
-				return ("BoundWorkerIs".Translate(this.BoundWorker.LabelShort, this.BoundWorker) + base.StatusString).Trim();
+				return ("BoundWorkerIs".Translate(BoundWorker.LabelShort, BoundWorker) + base.StatusString).Trim();
 			}
 		}
 
-		
-		
 		public Pawn BoundWorker
 		{
 			get
 			{
-				if (this.boundUftInt == null)
+				if (boundUftInt == null)
 				{
 					return null;
 				}
-				Pawn creator = this.boundUftInt.Creator;
+				Pawn creator = boundUftInt.Creator;
 				if (creator == null || creator.Downed || creator.HostFaction != null || creator.Destroyed || !creator.Spawned)
 				{
-					this.boundUftInt = null;
+					boundUftInt = null;
 					return null;
 				}
-				Thing thing = this.billStack.billGiver as Thing;
+				Thing thing = billStack.billGiver as Thing;
 				if (thing != null)
 				{
 					WorkTypeDef workTypeDef = null;
@@ -52,7 +48,7 @@ namespace RimWorld
 					}
 					if (workTypeDef != null && !creator.workSettings.WorkIsActive(workTypeDef))
 					{
-						this.boundUftInt = null;
+						boundUftInt = null;
 						return null;
 					}
 				}
@@ -60,25 +56,16 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		public UnfinishedThing BoundUft
-		{
-			get
-			{
-				return this.boundUftInt;
-			}
-		}
+		public UnfinishedThing BoundUft => boundUftInt;
 
-		
 		public void SetBoundUft(UnfinishedThing value, bool setOtherLink = true)
 		{
-			if (value == this.boundUftInt)
+			if (value == boundUftInt)
 			{
 				return;
 			}
-			UnfinishedThing unfinishedThing = this.boundUftInt;
-			this.boundUftInt = value;
+			UnfinishedThing unfinishedThing = boundUftInt;
+			boundUftInt = value;
 			if (setOtherLink)
 			{
 				if (unfinishedThing != null && unfinishedThing.BoundBill == this)
@@ -87,48 +74,40 @@ namespace RimWorld
 				}
 				if (value != null && value.BoundBill != this)
 				{
-					this.boundUftInt.BoundBill = this;
+					boundUftInt.BoundBill = this;
 				}
 			}
 		}
 
-		
 		public Bill_ProductionWithUft()
 		{
 		}
 
-		
-		public Bill_ProductionWithUft(RecipeDef recipe) : base(recipe)
+		public Bill_ProductionWithUft(RecipeDef recipe)
+			: base(recipe)
 		{
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<UnfinishedThing>(ref this.boundUftInt, "boundUft", false);
+			Scribe_References.Look(ref boundUftInt, "boundUft");
 		}
 
-		
 		public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients)
 		{
-			this.ClearBoundUft();
+			ClearBoundUft();
 			base.Notify_IterationCompleted(billDoer, ingredients);
 		}
 
-		
 		public void ClearBoundUft()
 		{
-			this.boundUftInt = null;
+			boundUftInt = null;
 		}
 
-		
 		public override Bill Clone()
 		{
 			return (Bill_Production)base.Clone();
 		}
-
-		
-		private UnfinishedThing boundUftInt;
 	}
 }

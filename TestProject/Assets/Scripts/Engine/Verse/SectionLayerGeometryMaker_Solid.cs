@@ -1,12 +1,9 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class SectionLayerGeometryMaker_Solid
 	{
-		
 		public static void MakeBaseGeometry(Section section, LayerSubMesh sm, AltitudeLayer altitudeLayer)
 		{
 			sm.Clear(MeshParts.Verts | MeshParts.Tris);
@@ -18,14 +15,14 @@ namespace Verse
 			{
 				for (int j = cellRect.minZ; j <= cellRect.maxZ; j++)
 				{
-					sm.verts.Add(new Vector3((float)i, y, (float)j));
-					sm.verts.Add(new Vector3((float)i, y, (float)j + 0.5f));
-					sm.verts.Add(new Vector3((float)i, y, (float)(j + 1)));
-					sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)(j + 1)));
-					sm.verts.Add(new Vector3((float)(i + 1), y, (float)(j + 1)));
-					sm.verts.Add(new Vector3((float)(i + 1), y, (float)j + 0.5f));
-					sm.verts.Add(new Vector3((float)(i + 1), y, (float)j));
-					sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)j));
+					sm.verts.Add(new Vector3(i, y, j));
+					sm.verts.Add(new Vector3(i, y, (float)j + 0.5f));
+					sm.verts.Add(new Vector3(i, y, j + 1));
+					sm.verts.Add(new Vector3((float)i + 0.5f, y, j + 1));
+					sm.verts.Add(new Vector3(i + 1, y, j + 1));
+					sm.verts.Add(new Vector3(i + 1, y, (float)j + 0.5f));
+					sm.verts.Add(new Vector3(i + 1, y, j));
+					sm.verts.Add(new Vector3((float)i + 0.5f, y, j));
 					sm.verts.Add(new Vector3((float)i + 0.5f, y, (float)j + 0.5f));
 				}
 			}

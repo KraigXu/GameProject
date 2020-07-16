@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Verse
 {
-	
 	public class DeathLetter : ChoiceLetter
 	{
-		
-		
 		protected DiaOption Option_ReadMore
 		{
 			get
 			{
-				GlobalTargetInfo target = this.lookTargets.TryGetPrimaryTarget();
+				GlobalTargetInfo target = lookTargets.TryGetPrimaryTarget();
 				DiaOption diaOption = new DiaOption("ReadMore".Translate());
 				diaOption.action = delegate
 				{
@@ -32,53 +28,37 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public override IEnumerable<DiaOption> Choices
 		{
 			get
 			{
 				yield return base.Option_Close;
-				if (this.lookTargets.IsValid())
+				if (lookTargets.IsValid())
 				{
-					yield return this.Option_ReadMore;
+					yield return Option_ReadMore;
 				}
-				if (this.quest != null)
+				if (quest != null)
 				{
-					yield return base.Option_ViewInQuestsTab("ViewRelatedQuest", false);
+					yield return Option_ViewInQuestsTab();
 				}
-				yield break;
 			}
 		}
 
-		
 		public override void OpenLetter()
 		{
-			Pawn targetPawn = this.lookTargets.TryGetPrimaryTarget().Thing as Pawn;
-			TaggedString taggedString = this.text;
-			
-			string text = (from entry in (from entry in (from battle in Find.BattleLog.Battles
-			where battle.Concerns(targetPawn)
-			select battle).SelectMany(delegate(Battle battle)
-			{
-				IEnumerable<LogEntry> entries = battle.Entries;
-				Func<LogEntry, bool> predicate;
-				if ((predicate=default ) == null)
-				{
-					predicate = ( ((LogEntry entry) => entry.Concerns(targetPawn) && entry.ShowInCompactView()));
-				}
-				return entries.Where(predicate);
-			})
-			orderby entry.Age
-			select entry).Take(5).Reverse<LogEntry>()
-			select "  " + entry.ToGameStringFromPOV(null, false)).ToLineList(null, false);
+			Pawn targetPawn = lookTargets.TryGetPrimaryTarget().Thing as Pawn;
+			TaggedString taggedString = base.text;
+			string text = (from entry in (from entry in Find.BattleLog.Battles.Where((Battle battle) => battle.Concerns(targetPawn)).SelectMany((Battle battle) => battle.Entries.Where((LogEntry entry) => entry.Concerns(targetPawn) && entry.ShowInCompactView()))
+					orderby entry.Age
+					select entry).Take(5).Reverse()
+				select "  " + entry.ToGameStringFromPOV(null)).ToLineList();
 			if (text.Length > 0)
 			{
 				taggedString = string.Format("{0}\n\n{1}\n{2}", taggedString, "LastEventsInLife".Translate(targetPawn.LabelDefinite(), targetPawn.Named("PAWN")).Resolve() + ":", text);
 			}
 			DiaNode diaNode = new DiaNode(taggedString);
-			diaNode.options.AddRange(this.Choices);
-			Find.WindowStack.Add(new Dialog_NodeTreeWithFactionInfo(diaNode, this.relatedFaction, false, this.radioMode, this.title));
+			diaNode.options.AddRange(Choices);
+			Find.WindowStack.Add(new Dialog_NodeTreeWithFactionInfo(diaNode, relatedFaction, delayInteractivity: false, radioMode, title));
 		}
 	}
 }

@@ -1,238 +1,151 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TradeShip : PassingShip, ITrader, IThingHolder
 	{
-		
-		
-		public override string FullTitle
-		{
-			get
-			{
-				return this.name + " (" + this.def.label + ")";
-			}
-		}
+		public TraderKindDef def;
 
-		
-		
-		public int Silver
-		{
-			get
-			{
-				return this.CountHeldOf(ThingDefOf.Silver, null);
-			}
-		}
+		private ThingOwner things;
 
-		
-		
-		public TradeCurrency TradeCurrency
-		{
-			get
-			{
-				return this.def.tradeCurrency;
-			}
-		}
+		private List<Pawn> soldPrisoners = new List<Pawn>();
 
-		
-		
-		public IThingHolder ParentHolder
-		{
-			get
-			{
-				return base.Map;
-			}
-		}
+		private int randomPriceFactorSeed = -1;
 
-		
-		
-		public TraderKindDef TraderKind
-		{
-			get
-			{
-				return this.def;
-			}
-		}
+		private static List<string> tmpExtantNames = new List<string>();
 
-		
-		
-		public int RandomPriceFactorSeed
-		{
-			get
-			{
-				return this.randomPriceFactorSeed;
-			}
-		}
+		public override string FullTitle => name + " (" + def.label + ")";
 
-		
-		
-		public string TraderName
-		{
-			get
-			{
-				return this.name;
-			}
-		}
+		public int Silver => CountHeldOf(ThingDefOf.Silver);
 
-		
-		
-		public bool CanTradeNow
-		{
-			get
-			{
-				return !base.Departed;
-			}
-		}
+		public TradeCurrency TradeCurrency => def.tradeCurrency;
 
-		
-		
-		public float TradePriceImprovementOffsetForPlayer
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public IThingHolder ParentHolder => base.Map;
 
-		
-		
+		public TraderKindDef TraderKind => def;
+
+		public int RandomPriceFactorSeed => randomPriceFactorSeed;
+
+		public string TraderName => name;
+
+		public bool CanTradeNow => !base.Departed;
+
+		public float TradePriceImprovementOffsetForPlayer => 0f;
+
 		public IEnumerable<Thing> Goods
 		{
 			get
 			{
-				int num;
-				for (int i = 0; i < this.things.Count; i = num + 1)
+				for (int i = 0; i < things.Count; i++)
 				{
-					Pawn pawn = this.things[i] as Pawn;
-					if (pawn == null || !this.soldPrisoners.Contains(pawn))
+					Pawn pawn = things[i] as Pawn;
+					if (pawn == null || !soldPrisoners.Contains(pawn))
 					{
-						yield return this.things[i];
+						yield return things[i];
 					}
-					num = i;
 				}
-				yield break;
 			}
 		}
 
-		
 		public TradeShip()
 		{
 		}
 
-		
-		public TradeShip(TraderKindDef def, Faction faction = null) : base(faction)
+		public TradeShip(TraderKindDef def, Faction faction = null)
+			: base(faction)
 		{
 			this.def = def;
-			this.things = new ThingOwner<Thing>(this);
-			TradeShip.tmpExtantNames.Clear();
+			things = new ThingOwner<Thing>(this);
+			tmpExtantNames.Clear();
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				TradeShip.tmpExtantNames.AddRange(from x in maps[i].passingShipManager.passingShips
-				select x.name);
+				tmpExtantNames.AddRange(maps[i].passingShipManager.passingShips.Select((PassingShip x) => x.name));
 			}
-			this.name = NameGenerator.GenerateName(RulePackDefOf.NamerTraderGeneral, TradeShip.tmpExtantNames, false, null);
+			name = NameGenerator.GenerateName(RulePackDefOf.NamerTraderGeneral, tmpExtantNames);
 			if (faction != null)
 			{
-				this.name = string.Format("{0} {1} {2}", this.name, "OfLower".Translate(), faction.Name);
+				name = string.Format("{0} {1} {2}", name, "OfLower".Translate(), faction.Name);
 			}
-			this.randomPriceFactorSeed = Rand.RangeInclusive(1, 10000000);
-			this.loadID = Find.UniqueIDsManager.GetNextPassingShipID();
+			randomPriceFactorSeed = Rand.RangeInclusive(1, 10000000);
+			loadID = Find.UniqueIDsManager.GetNextPassingShipID();
 		}
 
-		
 		public IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
 		{
-			foreach (Thing thing in TradeUtility.AllLaunchableThingsForTrade(base.Map, this))
+			foreach (Thing item in TradeUtility.AllLaunchableThingsForTrade(base.Map, this))
 			{
-				yield return thing;
+				yield return item;
 			}
-			IEnumerator<Thing> enumerator = null;
-			foreach (Pawn pawn in TradeUtility.AllSellableColonyPawns(base.Map))
+			foreach (Pawn item2 in TradeUtility.AllSellableColonyPawns(base.Map))
 			{
-				yield return pawn;
+				yield return item2;
 			}
-			IEnumerator<Pawn> enumerator2 = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public void GenerateThings()
 		{
 			ThingSetMakerParams parms = default(ThingSetMakerParams);
-			parms.traderDef = this.def;
-			parms.tile = new int?(base.Map.Tile);
-			this.things.TryAddRangeOrTransfer(ThingSetMakerDefOf.TraderStock.root.Generate(parms), true, false);
+			parms.traderDef = def;
+			parms.tile = base.Map.Tile;
+			things.TryAddRangeOrTransfer(ThingSetMakerDefOf.TraderStock.root.Generate(parms));
 		}
 
-		
 		public override void PassingShipTick()
 		{
 			base.PassingShipTick();
-			for (int i = this.things.Count - 1; i >= 0; i--)
+			for (int num = things.Count - 1; num >= 0; num--)
 			{
-				Pawn pawn = this.things[i] as Pawn;
+				Pawn pawn = things[num] as Pawn;
 				if (pawn != null)
 				{
 					pawn.Tick();
 					if (pawn.Dead)
 					{
-						this.things.Remove(pawn);
+						things.Remove(pawn);
 					}
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<TraderKindDef>(ref this.def, "def");
-			Scribe_Deep.Look<ThingOwner>(ref this.things, "things", new object[]
-			{
-				this
-			});
-			Scribe_Collections.Look<Pawn>(ref this.soldPrisoners, "soldPrisoners", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<int>(ref this.randomPriceFactorSeed, "randomPriceFactorSeed", 0, false);
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Deep.Look(ref things, "things", this);
+			Scribe_Collections.Look(ref soldPrisoners, "soldPrisoners", LookMode.Reference);
+			Scribe_Values.Look(ref randomPriceFactorSeed, "randomPriceFactorSeed", 0);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.soldPrisoners.RemoveAll((Pawn x) => x == null);
+				soldPrisoners.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void TryOpenComms(Pawn negotiator)
 		{
-			if (!this.CanTradeNow)
+			if (CanTradeNow)
 			{
-				return;
+				Find.WindowStack.Add(new Dialog_Trade(negotiator, this));
+				LessonAutoActivator.TeachOpportunity(ConceptDefOf.BuildOrbitalTradeBeacon, OpportunityType.Critical);
+				PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter_Send(Goods.OfType<Pawn>(), "LetterRelatedPawnsTradeShip".Translate(Faction.OfPlayer.def.pawnsPlural), LetterDefOf.NeutralEvent);
+				TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.TradeGoodsMustBeNearBeacon);
 			}
-			Find.WindowStack.Add(new Dialog_Trade(negotiator, this, false));
-			LessonAutoActivator.TeachOpportunity(ConceptDefOf.BuildOrbitalTradeBeacon, OpportunityType.Critical);
-			PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter_Send(this.Goods.OfType<Pawn>(), "LetterRelatedPawnsTradeShip".Translate(Faction.OfPlayer.def.pawnsPlural), LetterDefOf.NeutralEvent, false, true);
-			TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.TradeGoodsMustBeNearBeacon, Array.Empty<string>());
 		}
 
-		
 		public override void Depart()
 		{
 			base.Depart();
-			this.things.ClearAndDestroyContentsOrPassToWorld(DestroyMode.Vanish);
-			this.soldPrisoners.Clear();
+			things.ClearAndDestroyContentsOrPassToWorld();
+			soldPrisoners.Clear();
 		}
 
-		
 		public override string GetCallLabel()
 		{
-			return this.name + " (" + this.def.label + ")";
+			return name + " (" + def.label + ")";
 		}
 
-		
 		protected override AcceptanceReport CanCommunicateWith_NewTemp(Pawn negotiator)
 		{
 			AcceptanceReport result = base.CanCommunicateWith_NewTemp(negotiator);
@@ -240,27 +153,23 @@ namespace RimWorld
 			{
 				return result;
 			}
-			return negotiator.CanTradeWith_NewTemp(base.Faction, this.TraderKind);
+			return negotiator.CanTradeWith_NewTemp(base.Faction, TraderKind);
 		}
 
-		
 		protected override bool CanCommunicateWith(Pawn negotiator)
 		{
-			return base.CanCommunicateWith(negotiator) && negotiator.CanTradeWith(base.Faction, this.TraderKind);
+			if (base.CanCommunicateWith(negotiator))
+			{
+				return negotiator.CanTradeWith(base.Faction, TraderKind);
+			}
+			return false;
 		}
 
-		
 		public int CountHeldOf(ThingDef thingDef, ThingDef stuffDef = null)
 		{
-			Thing thing = this.HeldThingMatching(thingDef, stuffDef);
-			if (thing != null)
-			{
-				return thing.stackCount;
-			}
-			return 0;
+			return HeldThingMatching(thingDef, stuffDef)?.stackCount ?? 0;
 		}
 
-		
 		public void GiveSoldThingToTrader(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			Thing thing = toGive.SplitOff(countToGive);
@@ -268,24 +177,20 @@ namespace RimWorld
 			Thing thing2 = TradeUtility.ThingFromStockToMergeWith(this, thing);
 			if (thing2 != null)
 			{
-				if (!thing2.TryAbsorbStack(thing, false))
+				if (!thing2.TryAbsorbStack(thing, respectStackLimit: false))
 				{
-					thing.Destroy(DestroyMode.Vanish);
-					return;
+					thing.Destroy();
 				}
+				return;
 			}
-			else
+			Pawn pawn = thing as Pawn;
+			if (pawn != null && pawn.RaceProps.Humanlike)
 			{
-				Pawn pawn = thing as Pawn;
-				if (pawn != null && pawn.RaceProps.Humanlike)
-				{
-					this.soldPrisoners.Add(pawn);
-				}
-				this.things.TryAdd(thing, false);
+				soldPrisoners.Add(pawn);
 			}
+			things.TryAdd(thing, canMergeWithExistingStacks: false);
 		}
 
-		
 		public void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			Thing thing = toGive.SplitOff(countToGive);
@@ -293,66 +198,46 @@ namespace RimWorld
 			Pawn pawn = thing as Pawn;
 			if (pawn != null)
 			{
-				this.soldPrisoners.Remove(pawn);
+				soldPrisoners.Remove(pawn);
 			}
 			TradeUtility.SpawnDropPod(DropCellFinder.TradeDropSpot(base.Map), base.Map, thing);
 		}
 
-		
 		private Thing HeldThingMatching(ThingDef thingDef, ThingDef stuffDef)
 		{
-			for (int i = 0; i < this.things.Count; i++)
+			for (int i = 0; i < things.Count; i++)
 			{
-				if (this.things[i].def == thingDef && this.things[i].Stuff == stuffDef)
+				if (things[i].def == thingDef && things[i].Stuff == stuffDef)
 				{
-					return this.things[i];
+					return things[i];
 				}
 			}
 			return null;
 		}
 
-		
 		public void ChangeCountHeldOf(ThingDef thingDef, ThingDef stuffDef, int count)
 		{
-			Thing thing = this.HeldThingMatching(thingDef, stuffDef);
+			Thing thing = HeldThingMatching(thingDef, stuffDef);
 			if (thing == null)
 			{
-				Log.Error("Changing count of thing trader doesn't have: " + thingDef, false);
+				Log.Error("Changing count of thing trader doesn't have: " + thingDef);
 			}
 			thing.stackCount += count;
 		}
 
-		
 		public override string ToString()
 		{
-			return this.FullTitle;
+			return FullTitle;
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.things;
+			return things;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
-
-		
-		public TraderKindDef def;
-
-		
-		private ThingOwner things;
-
-		
-		private List<Pawn> soldPrisoners = new List<Pawn>();
-
-		
-		private int randomPriceFactorSeed = -1;
-
-		
-		private static List<string> tmpExtantNames = new List<string>();
 	}
 }

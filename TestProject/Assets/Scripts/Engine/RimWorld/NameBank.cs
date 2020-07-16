@@ -1,134 +1,107 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class NameBank
 	{
-		
-		
+		public PawnNameCategory nameType;
+
+		private List<string>[,] names;
+
+		private static readonly int numGenders = Enum.GetValues(typeof(Gender)).Length;
+
+		private static readonly int numSlots = Enum.GetValues(typeof(PawnNameSlot)).Length;
+
 		private IEnumerable<List<string>> AllNameLists
 		{
 			get
 			{
-				int num;
-				for (int i = 0; i < NameBank.numGenders; i = num + 1)
+				for (int j = 0; j < numGenders; j++)
 				{
-					for (int j = 0; j < NameBank.numSlots; j = num + 1)
+					for (int i = 0; i < numSlots; i++)
 					{
-						yield return this.names[i, j];
-						num = j;
+						yield return names[j, i];
 					}
-					num = i;
 				}
-				yield break;
 			}
 		}
 
-		
 		public NameBank(PawnNameCategory ID)
 		{
-			this.nameType = ID;
-			this.names = new List<string>[NameBank.numGenders, NameBank.numSlots];
-			for (int i = 0; i < NameBank.numGenders; i++)
+			nameType = ID;
+			names = new List<string>[numGenders, numSlots];
+			for (int i = 0; i < numGenders; i++)
 			{
-				for (int j = 0; j < NameBank.numSlots; j++)
+				for (int j = 0; j < numSlots; j++)
 				{
-					this.names[i, j] = new List<string>();
+					names[i, j] = new List<string>();
 				}
 			}
 		}
 
-		
 		public void ErrorCheck()
 		{
-			foreach (List<string> list in this.AllNameLists)
+			foreach (List<string> allNameList in AllNameLists)
 			{
-				foreach (string str in (from x in list
-				group x by x into g
-				where g.Count<string>() > 1
-				select g.Key).ToList<string>())
+				foreach (string item in (from x in allNameList
+					group x by x into g
+					where g.Count() > 1
+					select g.Key).ToList())
 				{
-					Log.Error("Duplicated name: " + str, false);
+					Log.Error("Duplicated name: " + item);
 				}
-				foreach (string text in list)
+				foreach (string item2 in allNameList)
 				{
-					if (text.Trim() != text)
+					if (item2.Trim() != item2)
 					{
-						Log.Error("Trimmable whitespace on name: [" + text + "]", false);
+						Log.Error("Trimmable whitespace on name: [" + item2 + "]");
 					}
 				}
 			}
 		}
 
-		
 		private List<string> NamesFor(PawnNameSlot slot, Gender gender)
 		{
-			return this.names[(int)gender, (int)slot];
+			return names[(uint)gender, (uint)slot];
 		}
 
-		
 		public void AddNames(PawnNameSlot slot, Gender gender, IEnumerable<string> namesToAdd)
 		{
 			foreach (string item in namesToAdd)
 			{
-				this.NamesFor(slot, gender).Add(item);
+				NamesFor(slot, gender).Add(item);
 			}
 		}
 
-		
 		public void AddNamesFromFile(PawnNameSlot slot, Gender gender, string fileName)
 		{
-			this.AddNames(slot, gender, GenFile.LinesFromFile("Names/" + fileName));
+			AddNames(slot, gender, GenFile.LinesFromFile("Names/" + fileName));
 		}
 
-		
 		public string GetName(PawnNameSlot slot, Gender gender = Gender.None, bool checkIfAlreadyUsed = true)
 		{
-			List<string> list = this.NamesFor(slot, gender);
+			List<string> list = NamesFor(slot, gender);
 			int num = 0;
 			if (list.Count == 0)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Name list for gender=",
-					gender,
-					" slot=",
-					slot,
-					" is empty."
-				}), false);
+				Log.Error("Name list for gender=" + gender + " slot=" + slot + " is empty.");
 				return "Errorname";
 			}
 			string text;
-			for (;;)
+			do
 			{
-				text = list.RandomElement<string>();
+				text = list.RandomElement();
 				if (checkIfAlreadyUsed && !NameUseChecker.NameWordIsUsed(text))
-				{
-					break;
-				}
-				num++;
-				if (num > 50)
 				{
 					return text;
 				}
+				num++;
 			}
+			while (num <= 50);
 			return text;
 		}
-
-		
-		public PawnNameCategory nameType;
-
-		
-		private List<string>[,] names;
-
-		
-		private static readonly int numGenders = Enum.GetValues(typeof(Gender)).Length;
-
-		
-		private static readonly int numSlots = Enum.GetValues(typeof(PawnNameSlot)).Length;
 	}
 }

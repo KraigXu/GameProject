@@ -1,46 +1,34 @@
-﻿using System;
 using RimWorld;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public class HediffComp_ReactOnDamage : HediffComp
 	{
-		
-		
-		public HediffCompProperties_ReactOnDamage Props
-		{
-			get
-			{
-				return (HediffCompProperties_ReactOnDamage)this.props;
-			}
-		}
+		public HediffCompProperties_ReactOnDamage Props => (HediffCompProperties_ReactOnDamage)props;
 
-		
 		public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
-			if (this.Props.damageDefIncoming == dinfo.Def)
+			if (Props.damageDefIncoming == dinfo.Def)
 			{
-				this.React();
+				React();
 			}
 		}
 
-		
 		private void React()
 		{
-			if (this.Props.createHediff != null)
+			if (Props.createHediff != null)
 			{
-				BodyPartRecord part = this.parent.Part;
-				if (this.Props.createHediffOn != null)
+				BodyPartRecord part = parent.Part;
+				if (Props.createHediffOn != null)
 				{
-					part = this.parent.pawn.RaceProps.body.AllParts.FirstOrFallback((BodyPartRecord p) => p.def == this.Props.createHediffOn, null);
+					part = parent.pawn.RaceProps.body.AllParts.FirstOrFallback((BodyPartRecord p) => p.def == Props.createHediffOn);
 				}
-				this.parent.pawn.health.AddHediff(this.Props.createHediff, part, null, null);
+				parent.pawn.health.AddHediff(Props.createHediff, part);
 			}
-			if (this.Props.vomit)
+			if (Props.vomit)
 			{
-				this.parent.pawn.jobs.StartJob(JobMaker.MakeJob(JobDefOf.Vomit), JobCondition.InterruptForced, null, true, true, null, null, false, false);
+				parent.pawn.jobs.StartJob(JobMaker.MakeJob(JobDefOf.Vomit), JobCondition.InterruptForced, null, resumeCurJobAfterwards: true);
 			}
 		}
 	}

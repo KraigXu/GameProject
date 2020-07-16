@@ -1,44 +1,39 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_RemoveEquipmentFromPawns : QuestPart
 	{
-		
+		public List<Pawn> pawns = new List<Pawn>();
+
+		public string inSignal;
+
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				for (int i = 0; i < this.pawns.Count; i++)
+				return;
+			}
+			for (int i = 0; i < pawns.Count; i++)
+			{
+				if (pawns[i] != null && pawns[i].equipment != null)
 				{
-					if (this.pawns[i] != null && this.pawns[i].equipment != null)
-					{
-						this.pawns[i].equipment.DestroyAllEquipment(DestroyMode.Vanish);
-					}
+					pawns[i].equipment.DestroyAllEquipment();
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Values.Look(ref inSignal, "inSignal");
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
-
-		
-		public List<Pawn> pawns = new List<Pawn>();
-
-		
-		public string inSignal;
 	}
 }

@@ -1,15 +1,12 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Hot : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
-			float statValue = p.GetStatValue(StatDefOf.ComfyTemperatureMax, true);
+			float statValue = p.GetStatValue(StatDefOf.ComfyTemperatureMax);
 			float num = p.AmbientTemperature - statValue;
 			if (num <= 0f)
 			{

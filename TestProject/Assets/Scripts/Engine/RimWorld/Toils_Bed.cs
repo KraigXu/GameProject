@@ -1,27 +1,26 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class Toils_Bed
 	{
-		
 		public static Toil GotoBed(TargetIndex bedIndex)
 		{
 			Toil gotoBed = new Toil();
 			gotoBed.initAction = delegate
 			{
-				Pawn actor = gotoBed.actor;
-				Building_Bed bed = (Building_Bed)actor.CurJob.GetTarget(bedIndex).Thing;
-				IntVec3 bedSleepingSlotPosFor = RestUtility.GetBedSleepingSlotPosFor(actor, bed);
-				if (actor.Position == bedSleepingSlotPosFor)
+				Pawn actor2 = gotoBed.actor;
+				Building_Bed bed = (Building_Bed)actor2.CurJob.GetTarget(bedIndex).Thing;
+				IntVec3 bedSleepingSlotPosFor = RestUtility.GetBedSleepingSlotPosFor(actor2, bed);
+				if (actor2.Position == bedSleepingSlotPosFor)
 				{
-					actor.jobs.curDriver.ReadyForNextToil();
-					return;
+					actor2.jobs.curDriver.ReadyForNextToil();
 				}
-				actor.pather.StartPath(bedSleepingSlotPosFor, PathEndMode.OnCell);
+				else
+				{
+					actor2.pather.StartPath(bedSleepingSlotPosFor, PathEndMode.OnCell);
+				}
 			};
 			gotoBed.tickAction = delegate
 			{
@@ -38,7 +37,6 @@ namespace RimWorld
 			return gotoBed;
 		}
 
-		
 		public static Toil ClaimBedIfNonMedical(TargetIndex ind, TargetIndex claimantIndex = TargetIndex.None)
 		{
 			Toil claim = new Toil();
@@ -55,7 +53,6 @@ namespace RimWorld
 			return claim;
 		}
 
-		
 		public static T FailOnNonMedicalBedNotOwned<T>(this T f, TargetIndex bedIndex, TargetIndex claimantIndex = TargetIndex.None) where T : IJobEndable
 		{
 			f.AddEndCondition(delegate
@@ -93,13 +90,12 @@ namespace RimWorld
 			return f;
 		}
 
-		
 		public static void FailOnBedNoLongerUsable(this Toil toil, TargetIndex bedIndex)
 		{
 			toil.FailOnDespawnedOrNull(bedIndex);
 			toil.FailOn(() => ((Building_Bed)toil.actor.CurJob.GetTarget(bedIndex).Thing).IsBurning());
 			toil.FailOn(() => ((Building_Bed)toil.actor.CurJob.GetTarget(bedIndex).Thing).ForPrisoners != toil.actor.IsPrisoner);
-			toil.FailOnNonMedicalBedNotOwned(bedIndex, TargetIndex.None);
+			toil.FailOnNonMedicalBedNotOwned(bedIndex);
 			toil.FailOn(() => !HealthAIUtility.ShouldSeekMedicalRest(toil.actor) && !HealthAIUtility.ShouldSeekMedicalRestUrgent(toil.actor) && ((Building_Bed)toil.actor.CurJob.GetTarget(bedIndex).Thing).Medical);
 			toil.FailOn(() => toil.actor.IsColonist && !toil.actor.CurJob.ignoreForbidden && !toil.actor.Downed && toil.actor.CurJob.GetTarget(bedIndex).Thing.IsForbidden(toil.actor));
 		}

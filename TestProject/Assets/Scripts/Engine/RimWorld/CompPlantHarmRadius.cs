@@ -1,126 +1,93 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompPlantHarmRadius : ThingComp
 	{
-		
-		
-		protected CompProperties_PlantHarmRadius PropsPlantHarmRadius
-		{
-			get
-			{
-				return (CompProperties_PlantHarmRadius)this.props;
-			}
-		}
+		private int plantHarmAge;
 
-		
-		
-		public float AgeDays
-		{
-			get
-			{
-				return (float)this.plantHarmAge / 60000f;
-			}
-		}
+		private int ticksToPlantHarm;
 
-		
-		
-		public float CurrentRadius
-		{
-			get
-			{
-				return this.PropsPlantHarmRadius.radiusPerDayCurve.Evaluate(this.AgeDays);
-			}
-		}
+		protected CompInitiatable initiatableComp;
 
-		
+		protected CompProperties_PlantHarmRadius PropsPlantHarmRadius => (CompProperties_PlantHarmRadius)props;
+
+		public float AgeDays => (float)plantHarmAge / 60000f;
+
+		public float CurrentRadius => PropsPlantHarmRadius.radiusPerDayCurve.Evaluate(AgeDays);
+
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.plantHarmAge, "plantHarmAge", 0, false);
-			Scribe_Values.Look<int>(ref this.ticksToPlantHarm, "ticksToPlantHarm", 0, false);
+			Scribe_Values.Look(ref plantHarmAge, "plantHarmAge", 0);
+			Scribe_Values.Look(ref ticksToPlantHarm, "ticksToPlantHarm", 0);
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostPostMake();
-			this.initiatableComp = this.parent.GetComp<CompInitiatable>();
+			initiatableComp = parent.GetComp<CompInitiatable>();
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			return "FoliageKillRadius".Translate() + ": " + this.CurrentRadius.ToString("0.0") + "\n" + "RadiusExpandRate".Translate() + ": " + Math.Round((double)(this.PropsPlantHarmRadius.radiusPerDayCurve.Evaluate(this.AgeDays + 1f) - this.PropsPlantHarmRadius.radiusPerDayCurve.Evaluate(this.AgeDays))) + "/" + "day".Translate();
+			return (string)("FoliageKillRadius".Translate() + ": " + CurrentRadius.ToString("0.0") + "\n" + "RadiusExpandRate".Translate() + ": ") + Math.Round(PropsPlantHarmRadius.radiusPerDayCurve.Evaluate(AgeDays + 1f) - PropsPlantHarmRadius.radiusPerDayCurve.Evaluate(AgeDays)) + "/" + "day".Translate();
 		}
 
-		
 		public override void CompTick()
 		{
-			if (!this.parent.Spawned || (this.initiatableComp != null && !this.initiatableComp.Initiated))
+			if (!parent.Spawned || (initiatableComp != null && !initiatableComp.Initiated))
 			{
 				return;
 			}
-			this.plantHarmAge++;
-			this.ticksToPlantHarm--;
-			if (this.ticksToPlantHarm <= 0)
+			plantHarmAge++;
+			ticksToPlantHarm--;
+			if (ticksToPlantHarm <= 0)
 			{
-				float currentRadius = this.CurrentRadius;
-				float num = 3.14159274f * currentRadius * currentRadius * this.PropsPlantHarmRadius.harmFrequencyPerArea;
+				float currentRadius = CurrentRadius;
+				float num = (float)Math.PI * currentRadius * currentRadius * PropsPlantHarmRadius.harmFrequencyPerArea;
 				float num2 = 60f / num;
 				int num3;
 				if (num2 >= 1f)
 				{
-					this.ticksToPlantHarm = GenMath.RoundRandom(num2);
+					ticksToPlantHarm = GenMath.RoundRandom(num2);
 					num3 = 1;
 				}
 				else
 				{
-					this.ticksToPlantHarm = 1;
+					ticksToPlantHarm = 1;
 					num3 = GenMath.RoundRandom(1f / num2);
 				}
 				for (int i = 0; i < num3; i++)
 				{
-					this.HarmRandomPlantInRadius(currentRadius);
+					HarmRandomPlantInRadius(currentRadius);
 				}
 			}
 		}
 
-		
 		private void HarmRandomPlantInRadius(float radius)
 		{
-			IntVec3 c = this.parent.Position + (Rand.InsideUnitCircleVec3 * radius).ToIntVec3();
-			if (!c.InBounds(this.parent.Map))
+			IntVec3 c = parent.Position + (Rand.InsideUnitCircleVec3 * radius).ToIntVec3();
+			if (!c.InBounds(parent.Map))
 			{
 				return;
 			}
-			Plant plant = c.GetPlant(this.parent.Map);
-			if (plant != null)
+			Plant plant = c.GetPlant(parent.Map);
+			if (plant == null)
 			{
-				if (plant.LeaflessNow)
+				return;
+			}
+			if (plant.LeaflessNow)
+			{
+				if (Rand.Value < PropsPlantHarmRadius.leaflessPlantKillChance)
 				{
-					if (Rand.Value < this.PropsPlantHarmRadius.leaflessPlantKillChance)
-					{
-						plant.Kill(null, null);
-						return;
-					}
-				}
-				else
-				{
-					plant.MakeLeafless(Plant.LeaflessCause.Poison);
+					plant.Kill();
 				}
 			}
+			else
+			{
+				plant.MakeLeafless(Plant.LeaflessCause.Poison);
+			}
 		}
-
-		
-		private int plantHarmAge;
-
-		
-		private int ticksToPlantHarm;
-
-		
-		protected CompInitiatable initiatableComp;
 	}
 }

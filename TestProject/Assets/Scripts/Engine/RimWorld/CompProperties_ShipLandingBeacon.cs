@@ -1,18 +1,14 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompProperties_ShipLandingBeacon : CompProperties
 	{
-		
+		public FloatRange edgeLengthRange;
+
 		public CompProperties_ShipLandingBeacon()
 		{
-			this.compClass = typeof(CompShipLandingBeacon);
+			compClass = typeof(CompShipLandingBeacon);
 		}
-
-		
-		public FloatRange edgeLengthRange;
 	}
 }

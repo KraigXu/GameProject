@@ -1,49 +1,27 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct GizmoResult
 	{
-		
-		
-		public GizmoState State
-		{
-			get
-			{
-				return this.stateInt;
-			}
-		}
-
-		
-		
-		public Event InteractEvent
-		{
-			get
-			{
-				return this.interactEventInt;
-			}
-		}
-
-		
-		public GizmoResult(GizmoState state)
-		{
-			this.stateInt = state;
-			this.interactEventInt = null;
-		}
-
-		
-		public GizmoResult(GizmoState state, Event interactEvent)
-		{
-			this.stateInt = state;
-			this.interactEventInt = interactEvent;
-		}
-
-		
 		private GizmoState stateInt;
 
-		
 		private Event interactEventInt;
+
+		public GizmoState State => stateInt;
+
+		public Event InteractEvent => interactEventInt;
+
+		public GizmoResult(GizmoState state)
+		{
+			stateInt = state;
+			interactEventInt = null;
+		}
+
+		public GizmoResult(GizmoState state, Event interactEvent)
+		{
+			stateInt = state;
+			interactEventInt = interactEvent;
+		}
 	}
 }

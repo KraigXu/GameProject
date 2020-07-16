@@ -1,141 +1,75 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ArchivedDialog : IArchivable, IExposable, ILoadReferenceable
 	{
-		
-		
-		Texture IArchivable.ArchivedIcon
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public int ID;
 
-		
-		
-		Color IArchivable.ArchivedIconColor
-		{
-			get
-			{
-				return Color.white;
-			}
-		}
+		public string text;
 
-		
-		
-		string IArchivable.ArchivedLabel
-		{
-			get
-			{
-				return this.text.Flatten();
-			}
-		}
+		public string title;
 
-		
-		
-		string IArchivable.ArchivedTooltip
-		{
-			get
-			{
-				return this.text;
-			}
-		}
+		public Faction relatedFaction;
 
-		
-		
-		int IArchivable.CreatedTicksGame
-		{
-			get
-			{
-				return this.createdTick;
-			}
-		}
+		public int createdTick;
 
-		
-		
-		bool IArchivable.CanCullArchivedNow
-		{
-			get
-			{
-				return true;
-			}
-		}
+		Texture IArchivable.ArchivedIcon => null;
 
-		
-		
-		LookTargets IArchivable.LookTargets
-		{
-			get
-			{
-				return null;
-			}
-		}
+		Color IArchivable.ArchivedIconColor => Color.white;
 
-		
+		string IArchivable.ArchivedLabel => text.Flatten();
+
+		string IArchivable.ArchivedTooltip => text;
+
+		int IArchivable.CreatedTicksGame => createdTick;
+
+		bool IArchivable.CanCullArchivedNow => true;
+
+		LookTargets IArchivable.LookTargets => null;
+
 		public ArchivedDialog()
 		{
 		}
 
-		
 		public ArchivedDialog(string text, string title = null, Faction relatedFaction = null)
 		{
 			this.text = text;
 			this.title = title;
 			this.relatedFaction = relatedFaction;
-			this.createdTick = GenTicks.TicksGame;
+			createdTick = GenTicks.TicksGame;
 			if (Find.UniqueIDsManager != null)
 			{
-				this.ID = Find.UniqueIDsManager.GetNextArchivedDialogID();
-				return;
+				ID = Find.UniqueIDsManager.GetNextArchivedDialogID();
 			}
-			this.ID = Rand.Int;
+			else
+			{
+				ID = Rand.Int;
+			}
 		}
 
-		
 		void IArchivable.OpenArchived()
 		{
-			DiaNode diaNode = new DiaNode(this.text);
+			DiaNode diaNode = new DiaNode(text);
 			DiaOption diaOption = new DiaOption("OK".Translate());
 			diaOption.resolveTree = true;
 			diaNode.options.Add(diaOption);
-			Find.WindowStack.Add(new Dialog_NodeTreeWithFactionInfo(diaNode, this.relatedFaction, false, false, this.title));
+			Find.WindowStack.Add(new Dialog_NodeTreeWithFactionInfo(diaNode, relatedFaction, delayInteractivity: false, radioMode: false, title));
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ID, "ID", 0, false);
-			Scribe_Values.Look<string>(ref this.text, "text", null, false);
-			Scribe_Values.Look<string>(ref this.title, "title", null, false);
-			Scribe_References.Look<Faction>(ref this.relatedFaction, "relatedFaction", false);
-			Scribe_Values.Look<int>(ref this.createdTick, "createdTick", 0, false);
+			Scribe_Values.Look(ref ID, "ID", 0);
+			Scribe_Values.Look(ref text, "text");
+			Scribe_Values.Look(ref title, "title");
+			Scribe_References.Look(ref relatedFaction, "relatedFaction");
+			Scribe_Values.Look(ref createdTick, "createdTick", 0);
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return "ArchivedDialog_" + this.ID;
+			return "ArchivedDialog_" + ID;
 		}
-
-		
-		public int ID;
-
-		
-		public string text;
-
-		
-		public string title;
-
-		
-		public Faction relatedFaction;
-
-		
-		public int createdTick;
 	}
 }

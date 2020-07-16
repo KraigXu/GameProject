@@ -1,64 +1,43 @@
-﻿using System;
 using System.Text;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompRottable : ThingComp
 	{
-		
-		
-		public CompProperties_Rottable PropsRot
-		{
-			get
-			{
-				return (CompProperties_Rottable)this.props;
-			}
-		}
+		private float rotProgressInt;
 
-		
-		
-		public float RotProgressPct
-		{
-			get
-			{
-				return this.RotProgress / (float)this.PropsRot.TicksToRotStart;
-			}
-		}
+		public CompProperties_Rottable PropsRot => (CompProperties_Rottable)props;
 
-		
-		
-		
+		public float RotProgressPct => RotProgress / (float)PropsRot.TicksToRotStart;
+
 		public float RotProgress
 		{
 			get
 			{
-				return this.rotProgressInt;
+				return rotProgressInt;
 			}
 			set
 			{
-				RotStage stage = this.Stage;
-				this.rotProgressInt = value;
-				if (stage != this.Stage)
+				RotStage stage = Stage;
+				rotProgressInt = value;
+				if (stage != Stage)
 				{
-					this.StageChanged();
+					StageChanged();
 				}
 			}
 		}
 
-		
-		
 		public RotStage Stage
 		{
 			get
 			{
-				if (this.RotProgress < (float)this.PropsRot.TicksToRotStart)
+				if (RotProgress < (float)PropsRot.TicksToRotStart)
 				{
 					return RotStage.Fresh;
 				}
-				if (this.RotProgress < (float)this.PropsRot.TicksToDessicated)
+				if (RotProgress < (float)PropsRot.TicksToDessicated)
 				{
 					return RotStage.Rotting;
 				}
@@ -66,27 +45,23 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public int TicksUntilRotAtCurrentTemp
 		{
 			get
 			{
-				float num = this.parent.AmbientTemperature;
-				num = (float)Mathf.RoundToInt(num);
-				return this.TicksUntilRotAtTemp(num);
+				float ambientTemperature = parent.AmbientTemperature;
+				ambientTemperature = Mathf.RoundToInt(ambientTemperature);
+				return TicksUntilRotAtTemp(ambientTemperature);
 			}
 		}
 
-		
-		
 		public bool Active
 		{
 			get
 			{
-				if (this.PropsRot.disableIfHatcher)
+				if (PropsRot.disableIfHatcher)
 				{
-					CompHatcher compHatcher = this.parent.TryGetComp<CompHatcher>();
+					CompHatcher compHatcher = parent.TryGetComp<CompHatcher>();
 					if (compHatcher != null && !compHatcher.TemperatureDamaged)
 					{
 						return false;
@@ -96,104 +71,96 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.rotProgressInt, "rotProg", 0f, false);
+			Scribe_Values.Look(ref rotProgressInt, "rotProg", 0f);
 		}
 
-		
 		public override void CompTick()
 		{
-			this.Tick(1);
+			Tick(1);
 		}
 
-		
 		public override void CompTickRare()
 		{
-			this.Tick(250);
+			Tick(250);
 		}
 
-		
 		private void Tick(int interval)
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return;
 			}
-			float rotProgress = this.RotProgress;
-			float num = GenTemperature.RotRateAtTemperature(this.parent.AmbientTemperature);
-			this.RotProgress += num * (float)interval;
-			if (this.Stage == RotStage.Rotting && this.PropsRot.rotDestroys)
+			float rotProgress = RotProgress;
+			float num = GenTemperature.RotRateAtTemperature(parent.AmbientTemperature);
+			RotProgress += num * (float)interval;
+			if (Stage == RotStage.Rotting && PropsRot.rotDestroys)
 			{
-				if (this.parent.IsInAnyStorage() && this.parent.SpawnedOrAnyParentSpawned)
+				if (parent.IsInAnyStorage() && parent.SpawnedOrAnyParentSpawned)
 				{
-					Messages.Message("MessageRottedAwayInStorage".Translate(this.parent.Label, this.parent).CapitalizeFirst(), new TargetInfo(this.parent.PositionHeld, this.parent.MapHeld, false), MessageTypeDefOf.NegativeEvent, true);
+					Messages.Message("MessageRottedAwayInStorage".Translate(parent.Label, parent).CapitalizeFirst(), new TargetInfo(parent.PositionHeld, parent.MapHeld), MessageTypeDefOf.NegativeEvent);
 					LessonAutoActivator.TeachOpportunity(ConceptDefOf.SpoilageAndFreezers, OpportunityType.GoodToKnow);
 				}
-				this.parent.Destroy(DestroyMode.Vanish);
-				return;
+				parent.Destroy();
 			}
-			if (Mathf.FloorToInt(rotProgress / 60000f) != Mathf.FloorToInt(this.RotProgress / 60000f) && this.ShouldTakeRotDamage())
+			else if (Mathf.FloorToInt(rotProgress / 60000f) != Mathf.FloorToInt(RotProgress / 60000f) && ShouldTakeRotDamage())
 			{
-				if (this.Stage == RotStage.Rotting && this.PropsRot.rotDamagePerDay > 0f)
+				if (Stage == RotStage.Rotting && PropsRot.rotDamagePerDay > 0f)
 				{
-					this.parent.TakeDamage(new DamageInfo(DamageDefOf.Rotting, (float)GenMath.RoundRandom(this.PropsRot.rotDamagePerDay), 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
-					return;
+					parent.TakeDamage(new DamageInfo(DamageDefOf.Rotting, GenMath.RoundRandom(PropsRot.rotDamagePerDay)));
 				}
-				if (this.Stage == RotStage.Dessicated && this.PropsRot.dessicatedDamagePerDay > 0f)
+				else if (Stage == RotStage.Dessicated && PropsRot.dessicatedDamagePerDay > 0f)
 				{
-					this.parent.TakeDamage(new DamageInfo(DamageDefOf.Rotting, (float)GenMath.RoundRandom(this.PropsRot.dessicatedDamagePerDay), 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+					parent.TakeDamage(new DamageInfo(DamageDefOf.Rotting, GenMath.RoundRandom(PropsRot.dessicatedDamagePerDay)));
 				}
 			}
 		}
 
-		
 		private bool ShouldTakeRotDamage()
 		{
-			Thing thing = this.parent.ParentHolder as Thing;
-			return thing == null || thing.def.category != ThingCategory.Building || !thing.def.building.preventDeteriorationInside;
+			Thing thing = parent.ParentHolder as Thing;
+			if (thing != null && thing.def.category == ThingCategory.Building && thing.def.building.preventDeteriorationInside)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public override void PreAbsorbStack(Thing otherStack, int count)
 		{
-			float t = (float)count / (float)(this.parent.stackCount + count);
+			float t = (float)count / (float)(parent.stackCount + count);
 			float rotProgress = ((ThingWithComps)otherStack).GetComp<CompRottable>().RotProgress;
-			this.RotProgress = Mathf.Lerp(this.RotProgress, rotProgress, t);
+			RotProgress = Mathf.Lerp(RotProgress, rotProgress, t);
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
-			((ThingWithComps)piece).GetComp<CompRottable>().RotProgress = this.RotProgress;
+			((ThingWithComps)piece).GetComp<CompRottable>().RotProgress = RotProgress;
 		}
 
-		
 		public override void PostIngested(Pawn ingester)
 		{
-			if (this.Stage != RotStage.Fresh && FoodUtility.GetFoodPoisonChanceFactor(ingester) > 1.401298E-45f)
+			if (Stage != 0 && FoodUtility.GetFoodPoisonChanceFactor(ingester) > float.Epsilon)
 			{
-				FoodUtility.AddFoodPoisoningHediff(ingester, this.parent, FoodPoisonCause.Rotten);
+				FoodUtility.AddFoodPoisoningHediff(ingester, parent, FoodPoisonCause.Rotten);
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return null;
 			}
 			StringBuilder stringBuilder = new StringBuilder();
-			switch (this.Stage)
+			switch (Stage)
 			{
 			case RotStage.Fresh:
 				stringBuilder.Append("RotStateFresh".Translate() + ".");
@@ -205,10 +172,10 @@ namespace RimWorld
 				stringBuilder.Append("RotStateDessicated".Translate() + ".");
 				break;
 			}
-			if ((float)this.PropsRot.TicksToRotStart - this.RotProgress > 0f)
+			if ((float)PropsRot.TicksToRotStart - RotProgress > 0f)
 			{
-				float num = GenTemperature.RotRateAtTemperature((float)Mathf.RoundToInt(this.parent.AmbientTemperature));
-				int ticksUntilRotAtCurrentTemp = this.TicksUntilRotAtCurrentTemp;
+				float num = GenTemperature.RotRateAtTemperature(Mathf.RoundToInt(parent.AmbientTemperature));
+				int ticksUntilRotAtCurrentTemp = TicksUntilRotAtCurrentTemp;
 				stringBuilder.AppendLine();
 				if (num < 0.001f)
 				{
@@ -216,27 +183,25 @@ namespace RimWorld
 				}
 				else if (num < 0.999f)
 				{
-					stringBuilder.Append("CurrentlyRefrigerated".Translate(ticksUntilRotAtCurrentTemp.ToStringTicksToPeriod(true, false, true, true)) + ".");
+					stringBuilder.Append("CurrentlyRefrigerated".Translate(ticksUntilRotAtCurrentTemp.ToStringTicksToPeriod()) + ".");
 				}
 				else
 				{
-					stringBuilder.Append("NotRefrigerated".Translate(ticksUntilRotAtCurrentTemp.ToStringTicksToPeriod(true, false, true, true)) + ".");
+					stringBuilder.Append("NotRefrigerated".Translate(ticksUntilRotAtCurrentTemp.ToStringTicksToPeriod()) + ".");
 				}
 			}
 			return stringBuilder.ToString();
 		}
 
-		
 		public int ApproxTicksUntilRotWhenAtTempOfTile(int tile, int ticksAbs)
 		{
 			float temperatureFromSeasonAtTile = GenTemperature.GetTemperatureFromSeasonAtTile(ticksAbs, tile);
-			return this.TicksUntilRotAtTemp(temperatureFromSeasonAtTile);
+			return TicksUntilRotAtTemp(temperatureFromSeasonAtTile);
 		}
 
-		
 		public int TicksUntilRotAtTemp(float temp)
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return 72000000;
 			}
@@ -245,7 +210,7 @@ namespace RimWorld
 			{
 				return 72000000;
 			}
-			float num2 = (float)this.PropsRot.TicksToRotStart - this.RotProgress;
+			float num2 = (float)PropsRot.TicksToRotStart - RotProgress;
 			if (num2 <= 0f)
 			{
 				return 0;
@@ -253,26 +218,17 @@ namespace RimWorld
 			return Mathf.RoundToInt(num2 / num);
 		}
 
-		
 		private void StageChanged()
 		{
-			Corpse corpse = this.parent as Corpse;
-			if (corpse != null)
-			{
-				corpse.RotStageChanged();
-			}
+			(parent as Corpse)?.RotStageChanged();
 		}
 
-		
 		public void RotImmediately()
 		{
-			if (this.RotProgress < (float)this.PropsRot.TicksToRotStart)
+			if (RotProgress < (float)PropsRot.TicksToRotStart)
 			{
-				this.RotProgress = (float)this.PropsRot.TicksToRotStart;
+				RotProgress = PropsRot.TicksToRotStart;
 			}
 		}
-
-		
-		private float rotProgressInt;
 	}
 }

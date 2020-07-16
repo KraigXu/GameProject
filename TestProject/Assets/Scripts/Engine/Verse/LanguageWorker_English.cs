@@ -1,11 +1,9 @@
-﻿using System;
+using System;
 
 namespace Verse
 {
-	
 	public class LanguageWorker_English : LanguageWorker
 	{
-		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -23,7 +21,6 @@ namespace Verse
 			return "a " + str;
 		}
 
-		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -37,7 +34,6 @@ namespace Verse
 			return "the " + str;
 		}
 
-		
 		public override string PostProcessed(string str)
 		{
 			str = base.PostProcessed(str);
@@ -72,17 +68,13 @@ namespace Verse
 			return str;
 		}
 
-		
 		public override string ToTitleCase(string str)
 		{
 			if (str.NullOrEmpty())
 			{
 				return str;
 			}
-			string[] array = str.MergeMultipleSpaces(false).Trim().Split(new char[]
-			{
-				' '
-			});
+			string[] array = str.MergeMultipleSpaces(leaveMultipleSpacesAtLineBeginning: false).Trim().Split(' ');
 			for (int i = 0; i < array.Length; i++)
 			{
 				string text = array[i];
@@ -97,40 +89,35 @@ namespace Verse
 			return string.Join(" ", array);
 		}
 
-		
 		public override string OrdinalNumber(int number, Gender gender = Gender.None)
 		{
 			int num = number % 10;
 			if (number / 10 % 10 != 1)
 			{
-				if (num == 1)
+				switch (num)
 				{
+				case 1:
 					return number + "st";
-				}
-				if (num == 2)
-				{
+				case 2:
 					return number + "nd";
-				}
-				if (num == 3)
-				{
+				case 3:
 					return number + "rd";
 				}
 			}
 			return number + "th";
 		}
 
-		
 		public override string Pluralize(string str, Gender gender, int count = -1)
 		{
 			if (str.NullOrEmpty() || str[str.Length - 1] == 's')
 			{
 				return str;
 			}
-			int num = (int)str[str.Length - 1];
-			char c = (str.Length == 1) ? '\0' : str[str.Length - 2];
+			char num = str[str.Length - 1];
+			char c = (str.Length != 1) ? str[str.Length - 2] : '\0';
 			bool flag = char.IsLetter(c) && "oaieuyOAIEUY".IndexOf(c) >= 0;
 			bool flag2 = char.IsLetter(c) && !flag;
-			if (num == 121 && flag2)
+			if (num == 'y' && flag2)
 			{
 				return str.Substring(0, str.Length - 1) + "ies";
 			}

@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class GenGuest
 	{
-		
 		public static void PrisonerRelease(Pawn p)
 		{
 			if (p.ownership != null)
@@ -18,63 +15,58 @@ namespace RimWorld
 			{
 				if (p.needs.mood != null)
 				{
-					p.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.WasImprisoned, null);
+					p.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.WasImprisoned);
 				}
-				p.guest.SetGuestStatus(null, false);
+				p.guest.SetGuestStatus(null);
 				if (p.IsWildMan())
 				{
 					p.mindState.WildManEverReachedOutside = false;
-					return;
 				}
 			}
 			else
 			{
 				p.guest.Released = true;
-				IntVec3 c;
-				if (RCellFinder.TryFindBestExitSpot(p, out c, TraverseMode.ByPawn))
+				if (RCellFinder.TryFindBestExitSpot(p, out IntVec3 spot))
 				{
-					Job job = JobMaker.MakeJob(JobDefOf.Goto, c);
+					Job job = JobMaker.MakeJob(JobDefOf.Goto, spot);
 					job.exitMapOnArrival = true;
-					p.jobs.StartJob(job, JobCondition.None, null, false, true, null, null, false, false);
+					p.jobs.StartJob(job);
 				}
 			}
 		}
 
-		
 		public static void AddPrisonerSoldThoughts(Pawn prisoner)
 		{
-			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
+			foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
 			{
-				if (pawn.needs.mood != null)
+				if (allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood != null)
 				{
-					pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.KnowPrisonerSold, null);
+					allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.KnowPrisonerSold);
 				}
 			}
 		}
 
-		
 		public static void AddHealthyPrisonerReleasedThoughts(Pawn prisoner)
 		{
 			if (!prisoner.IsColonist)
 			{
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
+				foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoners)
 				{
-					if (pawn.needs.mood != null && pawn != prisoner)
+					if (allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood != null && allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner != prisoner)
 					{
-						pawn.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.ReleasedHealthyPrisoner, prisoner);
+						allMapsCaravansAndTravelingTransportPods_Alive_FreeColonistsAndPrisoner.needs.mood.thoughts.memories.TryGainMemory(ThoughtDefOf.ReleasedHealthyPrisoner, prisoner);
 					}
 				}
 			}
 		}
 
-		
 		public static void RemoveHealthyPrisonerReleasedThoughts(Pawn prisoner)
 		{
-			foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists)
+			foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_FreeColonist in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists)
 			{
-				if (pawn.needs.mood != null && pawn != prisoner)
+				if (allMapsCaravansAndTravelingTransportPods_Alive_FreeColonist.needs.mood != null && allMapsCaravansAndTravelingTransportPods_Alive_FreeColonist != prisoner)
 				{
-					pawn.needs.mood.thoughts.memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.ReleasedHealthyPrisoner, prisoner);
+					allMapsCaravansAndTravelingTransportPods_Alive_FreeColonist.needs.mood.thoughts.memories.RemoveMemoriesOfDefWhereOtherPawnIs(ThoughtDefOf.ReleasedHealthyPrisoner, prisoner);
 				}
 			}
 		}

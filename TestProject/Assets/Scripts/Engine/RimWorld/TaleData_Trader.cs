@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,69 +5,36 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class TaleData_Trader : TaleData
 	{
-		
-		
-		private bool IsPawn
-		{
-			get
-			{
-				return this.pawnID >= 0;
-			}
-		}
+		public string name;
 
-		
+		public int pawnID = -1;
+
+		public Gender gender = Gender.Male;
+
+		private bool IsPawn => pawnID >= 0;
+
 		public override void ExposeData()
 		{
-			Scribe_Values.Look<string>(ref this.name, "name", null, false);
-			Scribe_Values.Look<int>(ref this.pawnID, "pawnID", -1, false);
-			Scribe_Values.Look<Gender>(ref this.gender, "gender", Gender.Male, false);
+			Scribe_Values.Look(ref name, "name");
+			Scribe_Values.Look(ref pawnID, "pawnID", -1);
+			Scribe_Values.Look(ref gender, "gender", Gender.Male);
 		}
 
-		
 		public override IEnumerable<Rule> GetRules(string prefix)
 		{
-			string output;
-			if (this.IsPawn)
-			{
-				output = this.name;
-			}
-			else
-			{
-				output = Find.ActiveLanguageWorker.WithIndefiniteArticle(this.name, false, false);
-			}
-			yield return new Rule_String(prefix + "_nameFull", output);
-			string nameShortIndefinite;
-			if (this.IsPawn)
-			{
-				nameShortIndefinite = this.name;
-			}
-			else
-			{
-				nameShortIndefinite = Find.ActiveLanguageWorker.WithIndefiniteArticle(this.name, false, false);
-			}
-			yield return new Rule_String(prefix + "_indefinite", nameShortIndefinite);
-			yield return new Rule_String(prefix + "_nameIndef", nameShortIndefinite);
-			nameShortIndefinite = null;
-			if (this.IsPawn)
-			{
-				nameShortIndefinite = this.name;
-			}
-			else
-			{
-				nameShortIndefinite = Find.ActiveLanguageWorker.WithDefiniteArticle(this.name, false, false);
-			}
-			yield return new Rule_String(prefix + "_definite", nameShortIndefinite);
-			yield return new Rule_String(prefix + "_nameDef", nameShortIndefinite);
-			nameShortIndefinite = null;
-			yield return new Rule_String(prefix + "_pronoun", this.gender.GetPronoun());
-			yield return new Rule_String(prefix + "_possessive", this.gender.GetPossessive());
-			yield break;
+			yield return new Rule_String(output: (!IsPawn) ? Find.ActiveLanguageWorker.WithIndefiniteArticle(name) : name, keyword: prefix + "_nameFull");
+			string nameShortIndefinite2 = (!IsPawn) ? Find.ActiveLanguageWorker.WithIndefiniteArticle(name) : name;
+			yield return new Rule_String(prefix + "_indefinite", nameShortIndefinite2);
+			yield return new Rule_String(prefix + "_nameIndef", nameShortIndefinite2);
+			nameShortIndefinite2 = ((!IsPawn) ? Find.ActiveLanguageWorker.WithDefiniteArticle(name) : name);
+			yield return new Rule_String(prefix + "_definite", nameShortIndefinite2);
+			yield return new Rule_String(prefix + "_nameDef", nameShortIndefinite2);
+			yield return new Rule_String(prefix + "_pronoun", gender.GetPronoun());
+			yield return new Rule_String(prefix + "_possessive", gender.GetPossessive());
 		}
 
-		
 		public static TaleData_Trader GenerateFrom(ITrader trader)
 		{
 			TaleData_Trader taleData_Trader = new TaleData_Trader();
@@ -82,25 +48,13 @@ namespace RimWorld
 			return taleData_Trader;
 		}
 
-		
 		public static TaleData_Trader GenerateRandom()
 		{
-			PawnKindDef pawnKindDef = (from d in DefDatabase<PawnKindDef>.AllDefs
-			where d.trader
-			select d).RandomElement<PawnKindDef>();
+			PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.AllDefs.Where((PawnKindDef d) => d.trader).RandomElement();
 			Pawn pawn = PawnGenerator.GeneratePawn(pawnKindDef, FactionUtility.DefaultFactionFrom(pawnKindDef.defaultFactionType));
 			pawn.mindState.wantsToTradeWithColony = true;
-			PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, true);
-			return TaleData_Trader.GenerateFrom(pawn);
+			PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, actAsIfSpawned: true);
+			return GenerateFrom(pawn);
 		}
-
-		
-		public string name;
-
-		
-		public int pawnID = -1;
-
-		
-		public Gender gender = Gender.Male;
 	}
 }

@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class GameComponentUtility
 	{
-		
 		public static void GameComponentUpdate()
 		{
 			List<GameComponent> components = Current.Game.components;
@@ -18,12 +16,11 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex.ToString(), false);
+					Log.Error(ex.ToString());
 				}
 			}
 		}
 
-		
 		public static void GameComponentTick()
 		{
 			List<GameComponent> components = Current.Game.components;
@@ -35,12 +32,11 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex.ToString(), false);
+					Log.Error(ex.ToString());
 				}
 			}
 		}
 
-		
 		public static void GameComponentOnGUI()
 		{
 			List<GameComponent> components = Current.Game.components;
@@ -52,12 +48,11 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex.ToString(), false);
+					Log.Error(ex.ToString());
 				}
 			}
 		}
 
-		
 		public static void FinalizeInit()
 		{
 			List<GameComponent> components = Current.Game.components;
@@ -69,12 +64,11 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex.ToString(), false);
+					Log.Error(ex.ToString());
 				}
 			}
 		}
 
-		
 		public static void StartedNewGame()
 		{
 			List<GameComponent> components = Current.Game.components;
@@ -86,12 +80,11 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex.ToString(), false);
+					Log.Error(ex.ToString());
 				}
 			}
 		}
 
-		
 		public static void LoadedGame()
 		{
 			List<GameComponent> components = Current.Game.components;
@@ -103,7 +96,7 @@ namespace Verse
 				}
 				catch (Exception ex)
 				{
-					Log.Error(ex.ToString(), false);
+					Log.Error(ex.ToString());
 				}
 			}
 		}

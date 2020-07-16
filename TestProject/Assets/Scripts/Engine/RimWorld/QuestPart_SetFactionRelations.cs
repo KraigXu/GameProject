@@ -1,62 +1,49 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_SetFactionRelations : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public Faction faction;
+
+		public FactionRelationKind relationKind;
+
+		public bool canSendLetter;
+
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
+				foreach (Faction involvedFaction in base.InvolvedFactions)
+				{
+					yield return involvedFaction;
+				}
+				if (faction != null)
 				{
 					yield return faction;
 				}
-				IEnumerator<Faction> enumerator = null;
-				if (this.faction != null)
-				{
-					yield return this.faction;
-				}
-				yield break;
-				yield break;
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.faction != null && this.faction != Faction.OfPlayer)
+			if (signal.tag == inSignal && faction != null && faction != Faction.OfPlayer)
 			{
-				this.faction.TrySetRelationKind(Faction.OfPlayer, this.relationKind, this.canSendLetter, null, null);
+				faction.TrySetRelationKind(Faction.OfPlayer, relationKind, canSendLetter);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-			Scribe_Values.Look<FactionRelationKind>(ref this.relationKind, "relationKind", FactionRelationKind.Hostile, false);
-			Scribe_Values.Look<bool>(ref this.canSendLetter, "canSendLetter", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_References.Look(ref faction, "faction");
+			Scribe_Values.Look(ref relationKind, "relationKind", FactionRelationKind.Hostile);
+			Scribe_Values.Look(ref canSendLetter, "canSendLetter", defaultValue: false);
 		}
-
-		
-		public string inSignal;
-
-		
-		public Faction faction;
-
-		
-		public FactionRelationKind relationKind;
-
-		
-		public bool canSendLetter;
 	}
 }

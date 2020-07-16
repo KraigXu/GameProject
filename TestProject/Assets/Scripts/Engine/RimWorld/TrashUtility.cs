@@ -1,30 +1,34 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class TrashUtility
 	{
-		
+		private const float ChanceHateInertBuilding = 0.008f;
+
+		private static readonly IntRange TrashJobCheckOverrideInterval = new IntRange(450, 500);
+
 		public static bool ShouldTrashPlant(Pawn pawn, Plant p)
 		{
-			if (!p.sown || p.def.plant.IsTree || !p.FlammableNow || !TrashUtility.CanTrash(pawn, p))
+			if (!p.sown || p.def.plant.IsTree || !p.FlammableNow || !CanTrash(pawn, p))
 			{
 				return false;
 			}
-			foreach (IntVec3 c in CellRect.CenteredOn(p.Position, 2).ClipInsideMap(p.Map))
+			foreach (IntVec3 item in CellRect.CenteredOn(p.Position, 2).ClipInsideMap(p.Map))
 			{
-				if (c.InBounds(p.Map) && c.ContainsStaticFire(p.Map))
+				if (item.InBounds(p.Map) && item.ContainsStaticFire(p.Map))
 				{
 					return false;
 				}
 			}
-			return p.Position.Roofed(p.Map) || p.Map.weatherManager.RainRate <= 0.25f;
+			if (!p.Position.Roofed(p.Map) && p.Map.weatherManager.RainRate > 0.25f)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool ShouldTrashBuilding(Pawn pawn, Building b, bool attackAllInert = false)
 		{
 			if (!b.def.useHitPoints || (b.def.building != null && b.def.building.ai_neverTrashThis))
@@ -38,7 +42,7 @@ namespace RimWorld
 			if (((b.def.building.isInert || b.def.IsFrame) && !attackAllInert) || b.def.building.isTrap)
 			{
 				int num = GenLocalDate.HourOfDay(pawn) / 3;
-				int specialSeed = b.GetHashCode() * 612361 ^ pawn.GetHashCode() * 391 ^ num * 73427324;
+				int specialSeed = (b.GetHashCode() * 612361) ^ (pawn.GetHashCode() * 391) ^ (num * 73427324);
 				if (!Rand.ChanceSeeded(0.008f, specialSeed))
 				{
 					return false;
@@ -49,67 +53,73 @@ namespace RimWorld
 				return false;
 			}
 			CompCanBeDormant comp = b.GetComp<CompCanBeDormant>();
-			return (comp == null || comp.Awake) && b.Faction != Faction.OfMechanoids && TrashUtility.CanTrash(pawn, b) && pawn.HostileTo(b);
+			if (comp != null && !comp.Awake)
+			{
+				return false;
+			}
+			if (b.Faction == Faction.OfMechanoids)
+			{
+				return false;
+			}
+			if (!CanTrash(pawn, b) || !pawn.HostileTo(b))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		private static bool CanTrash(Pawn pawn, Thing t)
 		{
-			return pawn.CanReach(t, PathEndMode.Touch, Danger.Some, false, TraverseMode.ByPawn) && !t.IsBurning();
+			if (!pawn.CanReach(t, PathEndMode.Touch, Danger.Some) || t.IsBurning())
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static Job TrashJob(Pawn pawn, Thing t, bool allowPunchingInert = false)
 		{
 			if (t is Plant)
 			{
 				Job job = JobMaker.MakeJob(JobDefOf.Ignite, t);
-				TrashUtility.FinalizeTrashJob(job);
+				FinalizeTrashJob(job);
 				return job;
 			}
 			if (pawn.equipment != null && Rand.Value < 0.7f)
 			{
-				foreach (Verb verb in pawn.equipment.AllEquipmentVerbs)
+				foreach (Verb allEquipmentVerb in pawn.equipment.AllEquipmentVerbs)
 				{
-					if (verb.verbProps.ai_IsBuildingDestroyer)
+					if (allEquipmentVerb.verbProps.ai_IsBuildingDestroyer)
 					{
 						Job job2 = JobMaker.MakeJob(JobDefOf.UseVerbOnThing, t);
-						job2.verbToUse = verb;
-						TrashUtility.FinalizeTrashJob(job2);
+						job2.verbToUse = allEquipmentVerb;
+						FinalizeTrashJob(job2);
 						return job2;
 					}
 				}
 			}
-			Job job3;
+			Job job3 = null;
 			if (Rand.Value < 0.35f && pawn.natives.IgniteVerb != null && pawn.natives.IgniteVerb.IsStillUsableBy(pawn) && t.FlammableNow && !t.IsBurning() && !(t is Building_Door))
 			{
 				job3 = JobMaker.MakeJob(JobDefOf.Ignite, t);
 			}
 			else
 			{
-				Building building = t as Building;
-				if (building != null && building.def.building.isInert && !allowPunchingInert)
+				if (!(!((t as Building)?.def.building.isInert ?? false) | allowPunchingInert))
 				{
 					return null;
 				}
 				job3 = JobMaker.MakeJob(JobDefOf.AttackMelee, t);
 			}
-			TrashUtility.FinalizeTrashJob(job3);
+			FinalizeTrashJob(job3);
 			return job3;
 		}
 
-		
 		private static void FinalizeTrashJob(Job job)
 		{
-			job.expiryInterval = TrashUtility.TrashJobCheckOverrideInterval.RandomInRange;
+			job.expiryInterval = TrashJobCheckOverrideInterval.RandomInRange;
 			job.checkOverrideOnExpire = true;
 			job.expireRequiresEnemiesNearby = true;
 		}
-
-		
-		private const float ChanceHateInertBuilding = 0.008f;
-
-		
-		private static readonly IntRange TrashJobCheckOverrideInterval = new IntRange(450, 500);
 	}
 }

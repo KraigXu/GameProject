@@ -1,31 +1,37 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class SappersUtility
 	{
-		
 		public static bool IsGoodSapper(Pawn p)
 		{
-			return p.kindDef.canBeSapper && SappersUtility.HasBuildingDestroyerWeapon(p) && SappersUtility.CanMineReasonablyFast(p);
+			if (p.kindDef.canBeSapper && HasBuildingDestroyerWeapon(p))
+			{
+				return CanMineReasonablyFast(p);
+			}
+			return false;
 		}
 
-		
 		public static bool IsGoodBackupSapper(Pawn p)
 		{
-			return p.kindDef.canBeSapper && SappersUtility.CanMineReasonablyFast(p);
+			if (p.kindDef.canBeSapper)
+			{
+				return CanMineReasonablyFast(p);
+			}
+			return false;
 		}
 
-		
 		private static bool CanMineReasonablyFast(Pawn p)
 		{
-			return p.RaceProps.Humanlike && !p.skills.GetSkill(SkillDefOf.Mining).TotallyDisabled && !StatDefOf.MiningSpeed.Worker.IsDisabledFor(p) && p.skills.GetSkill(SkillDefOf.Mining).Level >= 4;
+			if (p.RaceProps.Humanlike && !p.skills.GetSkill(SkillDefOf.Mining).TotallyDisabled && !StatDefOf.MiningSpeed.Worker.IsDisabledFor(p))
+			{
+				return p.skills.GetSkill(SkillDefOf.Mining).Level >= 4;
+			}
+			return false;
 		}
 
-		
 		public static bool HasBuildingDestroyerWeapon(Pawn p)
 		{
 			if (p.equipment == null || p.equipment.Primary == null)

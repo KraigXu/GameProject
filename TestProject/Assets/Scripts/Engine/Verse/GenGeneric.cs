@@ -1,81 +1,58 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace Verse
 {
-	
 	public static class GenGeneric
 	{
-		
+		public const BindingFlags BindingFlagsAll = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
 		private static MethodInfo MethodOnGenericType(Type genericBase, Type genericParam, string methodName)
 		{
-			return genericBase.MakeGenericType(new Type[]
-			{
-				genericParam
-			}).GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+			return genericBase.MakeGenericType(genericParam).GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 		}
 
-		
 		public static void InvokeGenericMethod(object objectToInvoke, Type genericParam, string methodName, params object[] args)
 		{
-			objectToInvoke.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MakeGenericMethod(new Type[]
-			{
-				genericParam
-			}).Invoke(objectToInvoke, args);
+			objectToInvoke.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MakeGenericMethod(genericParam)
+				.Invoke(objectToInvoke, args);
 		}
 
-		
 		public static object InvokeStaticMethodOnGenericType(Type genericBase, Type genericParam, string methodName, params object[] args)
 		{
-			return GenGeneric.MethodOnGenericType(genericBase, genericParam, methodName).Invoke(null, args);
+			return MethodOnGenericType(genericBase, genericParam, methodName).Invoke(null, args);
 		}
 
-		
 		public static object InvokeStaticMethodOnGenericType(Type genericBase, Type genericParam, string methodName)
 		{
-			return GenGeneric.MethodOnGenericType(genericBase, genericParam, methodName).Invoke(null, null);
+			return MethodOnGenericType(genericBase, genericParam, methodName).Invoke(null, null);
 		}
 
-		
 		public static object InvokeStaticGenericMethod(Type baseClass, Type genericParam, string methodName)
 		{
-			return baseClass.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MakeGenericMethod(new Type[]
-			{
-				genericParam
-			}).Invoke(null, null);
+			return baseClass.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MakeGenericMethod(genericParam).Invoke(null, null);
 		}
 
-		
 		public static object InvokeStaticGenericMethod(Type baseClass, Type genericParam, string methodName, params object[] args)
 		{
-			return baseClass.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MakeGenericMethod(new Type[]
-			{
-				genericParam
-			}).Invoke(null, args);
+			return baseClass.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).MakeGenericMethod(genericParam).Invoke(null, args);
 		}
 
-		
 		private static PropertyInfo PropertyOnGenericType(Type genericBase, Type genericParam, string propertyName)
 		{
-			return genericBase.MakeGenericType(new Type[]
-			{
-				genericParam
-			}).GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+			return genericBase.MakeGenericType(genericParam).GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 		}
 
-		
 		public static object GetStaticPropertyOnGenericType(Type genericBase, Type genericParam, string propertyName)
 		{
-			return GenGeneric.PropertyOnGenericType(genericBase, genericParam, propertyName).GetGetMethod().Invoke(null, null);
+			return PropertyOnGenericType(genericBase, genericParam, propertyName).GetGetMethod().Invoke(null, null);
 		}
 
-		
 		public static bool HasGenericDefinition(this Type type, Type Def)
 		{
 			return type.GetTypeWithGenericDefinition(Def) != null;
 		}
 
-		
 		public static Type GetTypeWithGenericDefinition(this Type type, Type Def)
 		{
 			if (type == null)
@@ -92,7 +69,8 @@ namespace Verse
 			}
 			if (Def.IsInterface)
 			{
-				foreach (Type type2 in type.GetInterfaces())
+				Type[] interfaces = type.GetInterfaces();
+				foreach (Type type2 in interfaces)
 				{
 					if (type2.IsGenericType && type2.GetGenericTypeDefinition() == Def)
 					{
@@ -111,8 +89,5 @@ namespace Verse
 			}
 			return null;
 		}
-
-		
-		public const BindingFlags BindingFlagsAll = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 	}
 }

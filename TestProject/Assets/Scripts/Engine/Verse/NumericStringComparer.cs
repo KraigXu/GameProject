@@ -1,20 +1,14 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class NumericStringComparer : IComparer<string>
 	{
-		
 		public int Compare(string x, string y)
 		{
 			if (x.Contains("~"))
 			{
-				string[] array = x.Split(new char[]
-				{
-					'~'
-				});
+				string[] array = x.Split('~');
 				if (array.Length == 2)
 				{
 					x = array[0];
@@ -22,10 +16,7 @@ namespace Verse
 			}
 			if (y.Contains("~"))
 			{
-				string[] array2 = y.Split(new char[]
-				{
-					'~'
-				});
+				string[] array2 = y.Split('~');
 				if (array2.Length == 2)
 				{
 					y = array2[0];
@@ -36,11 +27,9 @@ namespace Verse
 				x = x.Substring(0, x.Length - 1);
 				y = y.Substring(0, y.Length - 1);
 			}
-			float num;
-			float value;
-			if (float.TryParse(x, out num) && float.TryParse(y, out value))
+			if (float.TryParse(x, out float result) && float.TryParse(y, out float result2))
 			{
-				return num.CompareTo(value);
+				return result.CompareTo(result2);
 			}
 			return x.CompareTo(y);
 		}

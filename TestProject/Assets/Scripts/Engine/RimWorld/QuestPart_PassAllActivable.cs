@@ -1,25 +1,25 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_PassAllActivable : QuestPartActivable
 	{
-		
-		
+		public List<string> inSignals = new List<string>();
+
+		private List<bool> signalsReceived = new List<bool>();
+
 		private bool AllSignalsReceived
 		{
 			get
 			{
-				if (this.inSignals.Count != this.signalsReceived.Count)
+				if (inSignals.Count != signalsReceived.Count)
 				{
 					return false;
 				}
-				for (int i = 0; i < this.signalsReceived.Count; i++)
+				for (int i = 0; i < signalsReceived.Count; i++)
 				{
-					if (!this.signalsReceived[i])
+					if (!signalsReceived[i])
 					{
 						return false;
 					}
@@ -28,55 +28,45 @@ namespace RimWorld
 			}
 		}
 
-		
 		protected override void Enable(SignalArgs receivedArgs)
 		{
-			this.signalsReceived.Clear();
+			signalsReceived.Clear();
 			base.Enable(receivedArgs);
 		}
 
-		
 		protected override void ProcessQuestSignal(Signal signal)
 		{
 			base.ProcessQuestSignal(signal);
-			int num = this.inSignals.IndexOf(signal.tag);
+			int num = inSignals.IndexOf(signal.tag);
 			if (num >= 0)
 			{
-				while (this.signalsReceived.Count <= num)
+				while (signalsReceived.Count <= num)
 				{
-					this.signalsReceived.Add(false);
+					signalsReceived.Add(item: false);
 				}
-				this.signalsReceived[num] = true;
-				if (this.AllSignalsReceived)
+				signalsReceived[num] = true;
+				if (AllSignalsReceived)
 				{
-					base.Complete();
+					Complete();
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<string>(ref this.inSignals, "inSignals", LookMode.Value, Array.Empty<object>());
-			Scribe_Collections.Look<bool>(ref this.signalsReceived, "signalsReceived", LookMode.Value, Array.Empty<object>());
+			Scribe_Collections.Look(ref inSignals, "inSignals", LookMode.Value);
+			Scribe_Collections.Look(ref signalsReceived, "signalsReceived", LookMode.Value);
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignals.Clear();
+			inSignals.Clear();
 			for (int i = 0; i < 3; i++)
 			{
-				this.inSignals.Add("DebugSignal" + Rand.Int);
+				inSignals.Add("DebugSignal" + Rand.Int);
 			}
 		}
-
-		
-		public List<string> inSignals = new List<string>();
-
-		
-		private List<bool> signalsReceived = new List<bool>();
 	}
 }

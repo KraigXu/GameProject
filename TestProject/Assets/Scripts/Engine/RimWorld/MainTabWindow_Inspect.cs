@@ -1,289 +1,191 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class MainTabWindow_Inspect : MainTabWindow, IInspectPane
 	{
-		
-		
-		
+		private Type openTabType;
+
+		private float recentHeight;
+
+		private static IntVec3 lastSelectCell;
+
+		private Gizmo mouseoverGizmo;
+
 		public Type OpenTabType
 		{
 			get
 			{
-				return this.openTabType;
+				return openTabType;
 			}
 			set
 			{
-				this.openTabType = value;
+				openTabType = value;
 			}
 		}
 
-		
-		
-		
 		public float RecentHeight
 		{
 			get
 			{
-				return this.recentHeight;
+				return recentHeight;
 			}
 			set
 			{
-				this.recentHeight = value;
+				recentHeight = value;
 			}
 		}
 
-		
-		
-		protected override float Margin
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		protected override float Margin => 0f;
 
-		
-		
-		public override Vector2 RequestedTabSize
-		{
-			get
-			{
-				return InspectPaneUtility.PaneSizeFor(this);
-			}
-		}
+		public override Vector2 RequestedTabSize => InspectPaneUtility.PaneSizeFor(this);
 
-		
-		
-		private List<object> Selected
-		{
-			get
-			{
-				return Find.Selector.SelectedObjects;
-			}
-		}
+		private List<object> Selected => Find.Selector.SelectedObjects;
 
-		
-		
-		private Thing SelThing
-		{
-			get
-			{
-				return Find.Selector.SingleSelectedThing;
-			}
-		}
+		private Thing SelThing => Find.Selector.SingleSelectedThing;
 
-		
-		
-		private Zone SelZone
-		{
-			get
-			{
-				return Find.Selector.SelectedZone;
-			}
-		}
+		private Zone SelZone => Find.Selector.SelectedZone;
 
-		
-		
-		private int NumSelected
-		{
-			get
-			{
-				return Find.Selector.NumSelected;
-			}
-		}
+		private int NumSelected => Find.Selector.NumSelected;
 
-		
-		
-		public float PaneTopY
-		{
-			get
-			{
-				return (float)UI.screenHeight - 165f - 35f;
-			}
-		}
+		public float PaneTopY => (float)UI.screenHeight - 165f - 35f;
 
-		
-		
-		public bool AnythingSelected
-		{
-			get
-			{
-				return this.NumSelected > 0;
-			}
-		}
+		public bool AnythingSelected => NumSelected > 0;
 
-		
-		
 		public bool ShouldShowSelectNextInCellButton
 		{
 			get
 			{
-				return this.NumSelected == 1 && (Find.Selector.SelectedZone == null || Find.Selector.SelectedZone.ContainsCell(MainTabWindow_Inspect.lastSelectCell));
+				if (NumSelected == 1)
+				{
+					if (Find.Selector.SelectedZone != null)
+					{
+						return Find.Selector.SelectedZone.ContainsCell(lastSelectCell);
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public bool ShouldShowPaneContents
-		{
-			get
-			{
-				return this.NumSelected == 1;
-			}
-		}
+		public bool ShouldShowPaneContents => NumSelected == 1;
 
-		
-		
 		public IEnumerable<InspectTabBase> CurTabs
 		{
 			get
 			{
-				if (this.NumSelected == 1)
+				if (NumSelected == 1)
 				{
-					if (this.SelThing != null && this.SelThing.def.inspectorTabsResolved != null)
+					if (SelThing != null && SelThing.def.inspectorTabsResolved != null)
 					{
-						return this.SelThing.GetInspectTabs();
+						return SelThing.GetInspectTabs();
 					}
-					if (this.SelZone != null)
+					if (SelZone != null)
 					{
-						return this.SelZone.GetInspectTabs();
+						return SelZone.GetInspectTabs();
 					}
 				}
 				return null;
 			}
 		}
 
-		
 		public MainTabWindow_Inspect()
 		{
-			this.closeOnAccept = false;
-			this.closeOnCancel = false;
-			this.soundClose = SoundDefOf.TabClose;
+			closeOnAccept = false;
+			closeOnCancel = false;
+			soundClose = SoundDefOf.TabClose;
 		}
 
-		
 		public override void ExtraOnGUI()
 		{
 			base.ExtraOnGUI();
 			InspectPaneUtility.ExtraOnGUI(this);
-			if (this.AnythingSelected && Find.DesignatorManager.SelectedDesignator != null)
+			if (AnythingSelected && Find.DesignatorManager.SelectedDesignator != null)
 			{
-				Find.DesignatorManager.SelectedDesignator.DoExtraGuiControls(0f, this.PaneTopY);
+				Find.DesignatorManager.SelectedDesignator.DoExtraGuiControls(0f, PaneTopY);
 			}
 		}
 
-		
 		public override void DoWindowContents(Rect inRect)
 		{
 			base.DoWindowContents(inRect);
 			InspectPaneUtility.InspectPaneOnGUI(inRect, this);
 		}
 
-		
 		public string GetLabel(Rect rect)
 		{
-			return InspectPaneUtility.AdjustedLabelFor(this.Selected, rect);
+			return InspectPaneUtility.AdjustedLabelFor(Selected, rect);
 		}
 
-		
 		public void DrawInspectGizmos()
 		{
-			InspectGizmoGrid.DrawInspectGizmoGridFor(this.Selected, out this.mouseoverGizmo);
+			InspectGizmoGrid.DrawInspectGizmoGridFor(Selected, out mouseoverGizmo);
 		}
 
-		
 		public void DoPaneContents(Rect rect)
 		{
 			InspectPaneFiller.DoPaneContentsFor((ISelectable)Find.Selector.FirstSelectedObject, rect);
 		}
 
-		
 		public void DoInspectPaneButtons(Rect rect, ref float lineEndWidth)
 		{
-			if (this.NumSelected == 1)
+			if (NumSelected != 1)
 			{
-				Thing singleSelectedThing = Find.Selector.SingleSelectedThing;
-				if (singleSelectedThing != null)
+				return;
+			}
+			Thing singleSelectedThing = Find.Selector.SingleSelectedThing;
+			if (singleSelectedThing != null)
+			{
+				Widgets.InfoCardButton(rect.width - 48f, 0f, Find.Selector.SingleSelectedThing);
+				lineEndWidth += 24f;
+				Pawn pawn = singleSelectedThing as Pawn;
+				if (pawn != null && pawn.playerSettings != null && pawn.playerSettings.UsesConfigurableHostilityResponse)
 				{
-					Widgets.InfoCardButton(rect.width - 48f, 0f, Find.Selector.SingleSelectedThing);
+					HostilityResponseModeUtility.DrawResponseButton(new Rect(rect.width - 72f, 0f, 24f, 24f), pawn, paintable: false);
 					lineEndWidth += 24f;
-					Pawn pawn = singleSelectedThing as Pawn;
-					if (pawn != null && pawn.playerSettings != null && pawn.playerSettings.UsesConfigurableHostilityResponse)
-					{
-						HostilityResponseModeUtility.DrawResponseButton(new Rect(rect.width - 72f, 0f, 24f, 24f), pawn, false);
-						lineEndWidth += 24f;
-					}
 				}
 			}
 		}
 
-		
 		public void SelectNextInCell()
 		{
-			if (this.NumSelected != 1)
+			if (NumSelected != 1)
 			{
 				return;
 			}
 			Selector selector = Find.Selector;
-			if (selector.SelectedZone == null || selector.SelectedZone.ContainsCell(MainTabWindow_Inspect.lastSelectCell))
+			if (selector.SelectedZone == null || selector.SelectedZone.ContainsCell(lastSelectCell))
 			{
 				if (selector.SelectedZone == null)
 				{
-					MainTabWindow_Inspect.lastSelectCell = selector.SingleSelectedThing.Position;
+					lastSelectCell = selector.SingleSelectedThing.Position;
 				}
-				Map map;
-				if (selector.SingleSelectedThing != null)
-				{
-					map = selector.SingleSelectedThing.Map;
-				}
-				else
-				{
-					map = selector.SelectedZone.Map;
-				}
-				selector.SelectNextAt(MainTabWindow_Inspect.lastSelectCell, map);
+				selector.SelectNextAt(map: (selector.SingleSelectedThing == null) ? selector.SelectedZone.Map : selector.SingleSelectedThing.Map, c: lastSelectCell);
 			}
 		}
 
-		
 		public override void WindowUpdate()
 		{
 			base.WindowUpdate();
 			InspectPaneUtility.UpdateTabs(this);
-			if (this.mouseoverGizmo != null)
+			if (mouseoverGizmo != null)
 			{
-				this.mouseoverGizmo.GizmoUpdateOnMouseover();
+				mouseoverGizmo.GizmoUpdateOnMouseover();
 			}
 		}
 
-		
 		public void CloseOpenTab()
 		{
-			this.openTabType = null;
+			openTabType = null;
 		}
 
-		
 		public void Reset()
 		{
-			this.openTabType = null;
+			openTabType = null;
 		}
-
-		
-		private Type openTabType;
-
-		
-		private float recentHeight;
-
-		
-		private static IntVec3 lastSelectCell;
-
-		
-		private Gizmo mouseoverGizmo;
 	}
 }

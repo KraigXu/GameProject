@@ -1,137 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class QuestPart_FactionGoodwillChange : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public int change;
+
+		public Faction faction;
+
+		public bool canSendMessage = true;
+
+		public bool canSendHostilityLetter = true;
+
+		public string reason;
+
+		public bool getLookTargetFromSignal = true;
+
+		public GlobalTargetInfo lookTarget;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				yield return this.lookTarget;
-				yield break;
-				yield break;
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
+				{
+					yield return questLookTarget;
+				}
+				yield return lookTarget;
 			}
 		}
 
-		
-		
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
+				foreach (Faction involvedFaction in base.InvolvedFactions)
+				{
+					yield return involvedFaction;
+				}
+				if (faction != null)
 				{
 					yield return faction;
 				}
-				IEnumerator<Faction> enumerator = null;
-				if (this.faction != null)
-				{
-					yield return this.faction;
-				}
-				yield break;
-				yield break;
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.faction != null && this.faction != Faction.OfPlayer)
+			if (signal.tag == inSignal && faction != null && faction != Faction.OfPlayer)
 			{
-				GlobalTargetInfo value;
-				if (this.lookTarget.IsValid)
+				LookTargets lookTargets;
+				GlobalTargetInfo value = lookTarget.IsValid ? lookTarget : ((!getLookTargetFromSignal) ? GlobalTargetInfo.Invalid : ((!SignalArgsUtility.TryGetLookTargets(signal.args, "SUBJECT", out lookTargets)) ? GlobalTargetInfo.Invalid : lookTargets.TryGetPrimaryTarget()));
+				FactionRelationKind playerRelationKind = faction.PlayerRelationKind;
+				int arg = 0;
+				if (!signal.args.TryGetArg("GOODWILL", out arg))
 				{
-					value = this.lookTarget;
+					arg = change;
 				}
-				else if (this.getLookTargetFromSignal)
+				faction.TryAffectGoodwillWith(Faction.OfPlayer, arg, canSendMessage, canSendHostilityLetter, signal.args.GetFormattedText(reason), value);
+				TaggedString text = "";
+				faction.TryAppendRelationKindChangedInfo(ref text, playerRelationKind, faction.PlayerRelationKind);
+				if (!text.NullOrEmpty())
 				{
-					LookTargets lookTargets;
-					if (SignalArgsUtility.TryGetLookTargets(signal.args, "SUBJECT", out lookTargets))
-					{
-						value = lookTargets.TryGetPrimaryTarget();
-					}
-					else
-					{
-						value = GlobalTargetInfo.Invalid;
-					}
-				}
-				else
-				{
-					value = GlobalTargetInfo.Invalid;
-				}
-				FactionRelationKind playerRelationKind = this.faction.PlayerRelationKind;
-				int goodwillChange = 0;
-				if (!signal.args.TryGetArg<int>("GOODWILL", out goodwillChange))
-				{
-					goodwillChange = this.change;
-				}
-				this.faction.TryAffectGoodwillWith(Faction.OfPlayer, goodwillChange, this.canSendMessage, this.canSendHostilityLetter, signal.args.GetFormattedText(this.reason), new GlobalTargetInfo?(value));
-				TaggedString t = "";
-				this.faction.TryAppendRelationKindChangedInfo(ref t, playerRelationKind, this.faction.PlayerRelationKind, null);
-				if (!t.NullOrEmpty())
-				{
-					t = "\n\n" + t;
+					text = "\n\n" + text;
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<int>(ref this.change, "change", 0, false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-			Scribe_Values.Look<bool>(ref this.canSendMessage, "canSendMessage", true, false);
-			Scribe_Values.Look<bool>(ref this.canSendHostilityLetter, "canSendHostilityLetter", true, false);
-			Scribe_Values.Look<string>(ref this.reason, "reason", null, false);
-			Scribe_Values.Look<bool>(ref this.getLookTargetFromSignal, "getLookTargetFromSignal", true, false);
-			Scribe_TargetInfo.Look(ref this.lookTarget, "lookTarget");
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref change, "change", 0);
+			Scribe_References.Look(ref faction, "faction");
+			Scribe_Values.Look(ref canSendMessage, "canSendMessage", defaultValue: true);
+			Scribe_Values.Look(ref canSendHostilityLetter, "canSendHostilityLetter", defaultValue: true);
+			Scribe_Values.Look(ref reason, "reason");
+			Scribe_Values.Look(ref getLookTargetFromSignal, "getLookTargetFromSignal", defaultValue: true);
+			Scribe_TargetInfo.Look(ref lookTarget, "lookTarget");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.change = -15;
-			this.faction = Find.FactionManager.RandomNonHostileFaction(false, false, false, TechLevel.Undefined);
+			inSignal = "DebugSignal" + Rand.Int;
+			change = -15;
+			faction = Find.FactionManager.RandomNonHostileFaction(allowHidden: false, allowDefeated: false, allowNonHumanlike: false);
 		}
-
-		
-		public string inSignal;
-
-		
-		public int change;
-
-		
-		public Faction faction;
-
-		
-		public bool canSendMessage = true;
-
-		
-		public bool canSendHostilityLetter = true;
-
-		
-		public string reason;
-
-		
-		public bool getLookTargetFromSignal = true;
-
-		
-		public GlobalTargetInfo lookTarget;
 	}
 }

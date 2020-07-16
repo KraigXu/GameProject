@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class CellFinderLoose
 	{
-		
 		public static IntVec3 RandomCellWith(Predicate<IntVec3> validator, Map map, int maxTries = 1000)
 		{
-			IntVec3 result;
-			CellFinderLoose.TryGetRandomCellWith(validator, map, maxTries, out result);
+			TryGetRandomCellWith(validator, map, maxTries, out IntVec3 result);
 			return result;
 		}
 
-		
 		public static bool TryGetRandomCellWith(Predicate<IntVec3> validator, Map map, int maxTries, out IntVec3 result)
 		{
 			for (int i = 0; i < maxTries; i++)
@@ -32,7 +28,6 @@ namespace Verse
 			return false;
 		}
 
-		
 		public static bool TryFindRandomNotEdgeCellWith(int minEdgeDistance, Predicate<IntVec3> validator, Map map, out IntVec3 result)
 		{
 			for (int i = 0; i < 1000; i++)
@@ -47,25 +42,23 @@ namespace Verse
 			return false;
 		}
 
-		
 		public static IntVec3 GetFleeDest(Pawn pawn, List<Thing> threats, float distance = 23f)
 		{
 			if (pawn.RaceProps.Animal)
 			{
-				return CellFinderLoose.GetFleeDestAnimal(pawn, threats, distance);
+				return GetFleeDestAnimal(pawn, threats, distance);
 			}
-			return CellFinderLoose.GetFleeDestToolUser(pawn, threats, distance);
+			return GetFleeDestToolUser(pawn, threats, distance);
 		}
 
-		
 		public static IntVec3 GetFleeDestAnimal(Pawn pawn, List<Thing> threats, float distance = 23f)
 		{
 			Vector3 normalized = (pawn.Position - threats[0].Position).ToVector3().normalized;
 			float num = distance - pawn.Position.DistanceTo(threats[0].Position);
 			for (float num2 = 200f; num2 <= 360f; num2 += 10f)
 			{
-				IntVec3 intVec = pawn.Position + (normalized.RotatedBy(Rand.Range(-num2 / 2f, num2 / 2f)) * num).ToIntVec3();
-				if (CellFinderLoose.CanFleeToLocation(pawn, intVec))
+				IntVec3 intVec = pawn.Position + (normalized.RotatedBy(Rand.Range((0f - num2) / 2f, num2 / 2f)) * num).ToIntVec3();
+				if (CanFleeToLocation(pawn, intVec))
 				{
 					return intVec;
 				}
@@ -74,7 +67,7 @@ namespace Verse
 			while (num3 * 3f > num)
 			{
 				IntVec3 intVec2 = pawn.Position + IntVec3Utility.RandomHorizontalOffset(num3);
-				if (CellFinderLoose.CanFleeToLocation(pawn, intVec2))
+				if (CanFleeToLocation(pawn, intVec2))
 				{
 					return intVec2;
 				}
@@ -83,31 +76,45 @@ namespace Verse
 			return pawn.Position;
 		}
 
-		
 		public static bool CanFleeToLocation(Pawn pawn, IntVec3 location)
 		{
-			return location.Standable(pawn.Map) && pawn.Map.pawnDestinationReservationManager.CanReserve(location, pawn, false) && location.GetRegion(pawn.Map, RegionType.Set_Passable).type != RegionType.Portal && pawn.CanReach(location, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn);
+			if (!location.Standable(pawn.Map))
+			{
+				return false;
+			}
+			if (!pawn.Map.pawnDestinationReservationManager.CanReserve(location, pawn))
+			{
+				return false;
+			}
+			if (location.GetRegion(pawn.Map).type == RegionType.Portal)
+			{
+				return false;
+			}
+			if (!pawn.CanReach(location, PathEndMode.OnCell, Danger.Deadly))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static IntVec3 GetFleeDestToolUser(Pawn pawn, List<Thing> threats, float distance = 23f)
 		{
 			IntVec3 bestPos = pawn.Position;
 			float bestScore = -1f;
-			TraverseParms traverseParms = TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false);
-			RegionTraverser.BreadthFirstTraverse(pawn.GetRegion(RegionType.Set_Passable), (Region from, Region reg) => reg.Allows(traverseParms, false), delegate(Region reg)
+			TraverseParms traverseParms = TraverseParms.For(pawn);
+			RegionTraverser.BreadthFirstTraverse(pawn.GetRegion(), (Region from, Region reg) => reg.Allows(traverseParms, isDestination: false), delegate(Region reg)
 			{
 				Danger danger = reg.DangerFor(pawn);
 				Map map = pawn.Map;
-				foreach (IntVec3 intVec in reg.Cells)
+				foreach (IntVec3 cell in reg.Cells)
 				{
-					if (intVec.Standable(map) && !reg.IsDoorway)
+					if (cell.Standable(map) && !reg.IsDoorway)
 					{
 						Thing thing = null;
 						float num = 0f;
 						for (int i = 0; i < threats.Count; i++)
 						{
-							float num2 = (float)intVec.DistanceToSquared(threats[i].Position);
+							float num2 = cell.DistanceToSquared(threats[i].Position);
 							if (thing == null || num2 < num)
 							{
 								thing = threats[i];
@@ -116,8 +123,8 @@ namespace Verse
 						}
 						float num3 = Mathf.Sqrt(num);
 						float num4 = Mathf.Pow(Mathf.Min(num3, distance), 1.2f);
-						num4 *= Mathf.InverseLerp(50f, 0f, (intVec - pawn.Position).LengthHorizontal);
-						if (intVec.GetRoom(map, RegionType.Set_Passable) != thing.GetRoom(RegionType.Set_Passable))
+						num4 *= Mathf.InverseLerp(50f, 0f, (cell - pawn.Position).LengthHorizontal);
+						if (cell.GetRoom(map) != thing.GetRoom())
 						{
 							num4 *= 4.2f;
 						}
@@ -125,7 +132,7 @@ namespace Verse
 						{
 							num4 *= 0.05f;
 						}
-						if (!map.pawnDestinationReservationManager.CanReserve(intVec, pawn, false))
+						if (!map.pawnDestinationReservationManager.CanReserve(cell, pawn))
 						{
 							num4 *= 0.5f;
 						}
@@ -135,17 +142,16 @@ namespace Verse
 						}
 						if (num4 > bestScore)
 						{
-							bestPos = intVec;
+							bestPos = cell;
 							bestScore = num4;
 						}
 					}
 				}
 				return false;
-			}, 20, RegionType.Set_Passable);
+			}, 20);
 			return bestPos;
 		}
 
-		
 		public static IntVec3 TryFindCentralCell(Map map, int tightness, int minCellCount, Predicate<IntVec3> extraValidator = null)
 		{
 			int debug_numStand = 0;
@@ -157,98 +163,91 @@ namespace Verse
 			{
 				if (!c.Standable(map))
 				{
-					int num2 = debug_numStand;
-					debug_numStand = num2 + 1;
+					debug_numStand++;
 					return false;
 				}
-				Room room = c.GetRoom(map, RegionType.Set_Passable);
+				Room room = c.GetRoom(map);
 				if (room == null)
 				{
-					int num2 = debug_numRoom;
-					debug_numRoom = num2 + 1;
+					debug_numRoom++;
 					return false;
 				}
 				if (!room.TouchesMapEdge)
 				{
-					int num2 = debug_numTouch;
-					debug_numTouch = num2 + 1;
+					debug_numTouch++;
 					return false;
 				}
 				if (room.CellCount < minCellCount)
 				{
-					int num2 = debug_numRoomCellCount;
-					debug_numRoomCellCount = num2 + 1;
+					debug_numRoomCellCount++;
 					return false;
 				}
 				if (extraValidator != null && !extraValidator(c))
 				{
-					int num2 = debug_numExtraValidator;
-					debug_numExtraValidator = num2 + 1;
+					debug_numExtraValidator++;
 					return false;
 				}
 				return true;
 			};
-			for (int i = tightness; i >= 1; i--)
+			for (int num = tightness; num >= 1; num--)
 			{
-				int num = map.Size.x / i;
-				IntVec3 result;
-				if (CellFinderLoose.TryFindRandomNotEdgeCellWith((map.Size.x - num) / 2, validator, map, out result))
+				int num2 = map.Size.x / num;
+				if (TryFindRandomNotEdgeCellWith((map.Size.x - num2) / 2, validator, map, out IntVec3 result))
 				{
 					return result;
 				}
 			}
-			Log.Error(string.Concat(new object[]
-			{
-				"Found no good central spot. Choosing randomly. numStand=",
-				debug_numStand,
-				", numRoom=",
-				debug_numRoom,
-				", numTouch=",
-				debug_numTouch,
-				", numRoomCellCount=",
-				debug_numRoomCellCount,
-				", numExtraValidator=",
-				debug_numExtraValidator
-			}), false);
-			return CellFinderLoose.RandomCellWith((IntVec3 x) => x.Standable(map), map, 1000);
+			Log.Error("Found no good central spot. Choosing randomly. numStand=" + debug_numStand + ", numRoom=" + debug_numRoom + ", numTouch=" + debug_numTouch + ", numRoomCellCount=" + debug_numRoomCellCount + ", numExtraValidator=" + debug_numExtraValidator);
+			return RandomCellWith((IntVec3 x) => x.Standable(map), map);
 		}
 
-		
 		public static bool TryFindSkyfallerCell(ThingDef skyfaller, Map map, out IntVec3 cell, int minDistToEdge = 10, IntVec3 nearLoc = default(IntVec3), int nearLocMaxDist = -1, bool allowRoofedCells = true, bool allowCellsWithItems = false, bool allowCellsWithBuildings = false, bool colonyReachable = false, bool avoidColonistsIfExplosive = true, bool alwaysAvoidColonists = false, Predicate<IntVec3> extraValidator = null)
 		{
-			bool avoidColonists = (avoidColonistsIfExplosive && skyfaller.skyfaller.CausesExplosion) || alwaysAvoidColonists;
+			bool avoidColonists = (avoidColonistsIfExplosive && skyfaller.skyfaller.CausesExplosion) | alwaysAvoidColonists;
 			Predicate<IntVec3> validator = delegate(IntVec3 x)
 			{
-				foreach (IntVec3 c in GenAdj.OccupiedRect(x, Rot4.North, skyfaller.size))
+				foreach (IntVec3 item in GenAdj.OccupiedRect(x, Rot4.North, skyfaller.size))
 				{
-					if (!c.InBounds(map) || c.Fogged(map) || !c.Standable(map) || (c.Roofed(map) && c.GetRoof(map).isThickRoof))
+					if (!item.InBounds(map) || item.Fogged(map) || !item.Standable(map) || (item.Roofed(map) && item.GetRoof(map).isThickRoof))
 					{
 						return false;
 					}
-					if (!allowRoofedCells && c.Roofed(map))
+					if (!allowRoofedCells && item.Roofed(map))
 					{
 						return false;
 					}
-					if (!allowCellsWithItems && c.GetFirstItem(map) != null)
+					if (!allowCellsWithItems && item.GetFirstItem(map) != null)
 					{
 						return false;
 					}
-					if (!allowCellsWithBuildings && c.GetFirstBuilding(map) != null)
+					if (!allowCellsWithBuildings && item.GetFirstBuilding(map) != null)
 					{
 						return false;
 					}
-					if (c.GetFirstSkyfaller(map) != null)
+					if (item.GetFirstSkyfaller(map) != null)
 					{
 						return false;
 					}
 				}
-				return (!avoidColonists || !SkyfallerUtility.CanPossiblyFallOnColonist(skyfaller, x, map)) && (minDistToEdge <= 0 || x.DistanceToEdge(map) >= minDistToEdge) && (!colonyReachable || map.reachability.CanReachColony(x)) && (extraValidator == null || extraValidator(x));
+				if (avoidColonists && SkyfallerUtility.CanPossiblyFallOnColonist(skyfaller, x, map))
+				{
+					return false;
+				}
+				if (minDistToEdge > 0 && x.DistanceToEdge(map) < minDistToEdge)
+				{
+					return false;
+				}
+				if (colonyReachable && !map.reachability.CanReachColony(x))
+				{
+					return false;
+				}
+				return (extraValidator == null || extraValidator(x)) ? true : false;
 			};
 			if (nearLocMaxDist > 0)
 			{
-				return CellFinder.TryFindRandomCellNear(nearLoc, map, nearLocMaxDist, validator, out cell, -1);
+				return CellFinder.TryFindRandomCellNear(nearLoc, map, nearLocMaxDist, validator, out cell);
 			}
-			return CellFinderLoose.TryFindRandomNotEdgeCellWith(minDistToEdge, validator, map, out cell);
+			return TryFindRandomNotEdgeCellWith(minDistToEdge, validator, map, out cell);
 		}
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,34 +6,50 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class CompAffectedByFacilities : ThingComp
 	{
-		
-		
-		public List<Thing> LinkedFacilitiesListForReading
+		private List<Thing> linkedFacilities = new List<Thing>();
+
+		public static Material InactiveFacilityLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
+
+		private static Dictionary<ThingDef, int> alreadyReturnedCount = new Dictionary<ThingDef, int>();
+
+		private List<ThingDef> alreadyUsed = new List<ThingDef>();
+
+		public List<Thing> LinkedFacilitiesListForReading => linkedFacilities;
+
+		private IEnumerable<Thing> ThingsICanLinkTo
 		{
 			get
 			{
-				return this.linkedFacilities;
+				if (parent.Spawned)
+				{
+					IEnumerable<Thing> enumerable = PotentialThingsToLinkTo(parent.def, parent.Position, parent.Rotation, parent.Map);
+					foreach (Thing item in enumerable)
+					{
+						if (CanLinkTo(item))
+						{
+							yield return item;
+						}
+					}
+				}
 			}
 		}
 
-		
 		public bool CanLinkTo(Thing facility)
 		{
-			if (!this.CanPotentiallyLinkTo(facility.def, facility.Position, facility.Rotation))
+			if (!CanPotentiallyLinkTo(facility.def, facility.Position, facility.Rotation))
 			{
 				return false;
 			}
-			if (!this.IsValidFacilityForMe(facility))
+			if (!IsValidFacilityForMe(facility))
 			{
 				return false;
 			}
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.linkedFacilities[i] == facility)
+				if (linkedFacilities[i] == facility)
 				{
 					return false;
 				}
@@ -42,31 +57,37 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static bool CanPotentiallyLinkTo_Static(Thing facility, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
 		{
-			return CompAffectedByFacilities.CanPotentiallyLinkTo_Static(facility.def, facility.Position, facility.Rotation, myDef, myPos, myRot) && CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facility, myDef, myPos, myRot);
-		}
-
-		
-		public bool CanPotentiallyLinkTo(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
-		{
-			if (!CompAffectedByFacilities.CanPotentiallyLinkTo_Static(facilityDef, facilityPos, facilityRot, this.parent.def, this.parent.Position, this.parent.Rotation))
+			if (!CanPotentiallyLinkTo_Static(facility.def, facility.Position, facility.Rotation, myDef, myPos, myRot))
 			{
 				return false;
 			}
-			if (!this.IsPotentiallyValidFacilityForMe(facilityDef, facilityPos, facilityRot))
+			if (!IsPotentiallyValidFacilityForMe_Static(facility, myDef, myPos, myRot))
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public bool CanPotentiallyLinkTo(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
+		{
+			if (!CanPotentiallyLinkTo_Static(facilityDef, facilityPos, facilityRot, parent.def, parent.Position, parent.Rotation))
+			{
+				return false;
+			}
+			if (!IsPotentiallyValidFacilityForMe(facilityDef, facilityPos, facilityRot))
 			{
 				return false;
 			}
 			int num = 0;
 			bool flag = false;
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.linkedFacilities[i].def == facilityDef)
+				if (linkedFacilities[i].def == facilityDef)
 				{
 					num++;
-					if (this.IsBetter(facilityDef, facilityPos, facilityRot, this.linkedFacilities[i]))
+					if (IsBetter(facilityDef, facilityPos, facilityRot, linkedFacilities[i]))
 					{
 						flag = true;
 						break;
@@ -78,10 +99,13 @@ namespace RimWorld
 				return true;
 			}
 			CompProperties_Facility compProperties = facilityDef.GetCompProperties<CompProperties_Facility>();
-			return num + 1 <= compProperties.maxSimultaneous;
+			if (num + 1 > compProperties.maxSimultaneous)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static bool CanPotentiallyLinkTo_Static(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
 		{
 			CompProperties_Facility compProperties = facilityDef.GetCompProperties<CompProperties_Facility>();
@@ -127,22 +151,24 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public bool IsValidFacilityForMe(Thing facility)
 		{
-			return CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facility, this.parent.def, this.parent.Position, this.parent.Rotation);
+			if (!IsPotentiallyValidFacilityForMe_Static(facility, parent.def, parent.Position, parent.Rotation))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		private bool IsPotentiallyValidFacilityForMe(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
-			if (!CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facilityDef, facilityPos, facilityRot, this.parent.def, this.parent.Position, this.parent.Rotation, this.parent.Map))
+			if (!IsPotentiallyValidFacilityForMe_Static(facilityDef, facilityPos, facilityRot, parent.def, parent.Position, parent.Rotation, parent.Map))
 			{
 				return false;
 			}
 			if (facilityDef.GetCompProperties<CompProperties_Facility>().canLinkToMedBedsOnly)
 			{
-				Building_Bed building_Bed = this.parent as Building_Bed;
+				Building_Bed building_Bed = parent as Building_Bed;
 				if (building_Bed == null || !building_Bed.Medical)
 				{
 					return false;
@@ -151,129 +177,129 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		private static bool IsPotentiallyValidFacilityForMe_Static(Thing facility, ThingDef myDef, IntVec3 myPos, Rot4 myRot)
 		{
-			return CompAffectedByFacilities.IsPotentiallyValidFacilityForMe_Static(facility.def, facility.Position, facility.Rotation, myDef, myPos, myRot, facility.Map);
+			return IsPotentiallyValidFacilityForMe_Static(facility.def, facility.Position, facility.Rotation, myDef, myPos, myRot, facility.Map);
 		}
 
-		
 		private static bool IsPotentiallyValidFacilityForMe_Static(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
-			CellRect cellRect = GenAdj.OccupiedRect(myPos, myRot, myDef.size);
-			CellRect cellRect2 = GenAdj.OccupiedRect(facilityPos, facilityRot, facilityDef.size);
-			bool result = false;
-			for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
+			CellRect startRect = GenAdj.OccupiedRect(myPos, myRot, myDef.size);
+			CellRect endRect = GenAdj.OccupiedRect(facilityPos, facilityRot, facilityDef.size);
+			bool flag = false;
+			for (int i = startRect.minZ; i <= startRect.maxZ; i++)
 			{
-				for (int j = cellRect.minX; j <= cellRect.maxX; j++)
+				for (int j = startRect.minX; j <= startRect.maxX; j++)
 				{
-					for (int k = cellRect2.minZ; k <= cellRect2.maxZ; k++)
+					for (int k = endRect.minZ; k <= endRect.maxZ; k++)
 					{
-						for (int l = cellRect2.minX; l <= cellRect2.maxX; l++)
+						int num = endRect.minX;
+						while (num <= endRect.maxX)
 						{
 							IntVec3 start = new IntVec3(j, 0, i);
-							IntVec3 end = new IntVec3(l, 0, k);
-							if (GenSight.LineOfSight(start, end, map, cellRect, cellRect2, null))
+							IntVec3 end = new IntVec3(num, 0, k);
+							if (!GenSight.LineOfSight(start, end, map, startRect, endRect))
 							{
-								return true;
+								num++;
+								continue;
 							}
+							goto IL_006a;
 						}
 					}
 				}
+				continue;
+				IL_006a:
+				flag = true;
+				break;
 			}
-			return result;
+			if (!flag)
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public void Notify_NewLink(Thing facility)
 		{
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.linkedFacilities[i] == facility)
+				if (linkedFacilities[i] == facility)
 				{
-					Log.Error("Notify_NewLink was called but the link is already here.", false);
+					Log.Error("Notify_NewLink was called but the link is already here.");
 					return;
 				}
 			}
-			Thing potentiallySupplantedFacility = this.GetPotentiallySupplantedFacility(facility.def, facility.Position, facility.Rotation);
+			Thing potentiallySupplantedFacility = GetPotentiallySupplantedFacility(facility.def, facility.Position, facility.Rotation);
 			if (potentiallySupplantedFacility != null)
 			{
-				potentiallySupplantedFacility.TryGetComp<CompFacility>().Notify_LinkRemoved(this.parent);
-				this.linkedFacilities.Remove(potentiallySupplantedFacility);
+				potentiallySupplantedFacility.TryGetComp<CompFacility>().Notify_LinkRemoved(parent);
+				linkedFacilities.Remove(potentiallySupplantedFacility);
 			}
-			this.linkedFacilities.Add(facility);
+			linkedFacilities.Add(facility);
 		}
 
-		
 		public void Notify_LinkRemoved(Thing thing)
 		{
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.linkedFacilities[i] == thing)
+				if (linkedFacilities[i] == thing)
 				{
-					this.linkedFacilities.RemoveAt(i);
+					linkedFacilities.RemoveAt(i);
 					return;
 				}
 			}
-			Log.Error("Notify_LinkRemoved was called but there is no such link here.", false);
+			Log.Error("Notify_LinkRemoved was called but there is no such link here.");
 		}
 
-		
 		public void Notify_FacilityDespawned()
 		{
-			this.RelinkAll();
+			RelinkAll();
 		}
 
-		
 		public void Notify_LOSBlockerSpawnedOrDespawned()
 		{
-			this.RelinkAll();
+			RelinkAll();
 		}
 
-		
 		public void Notify_ThingChanged()
 		{
-			this.RelinkAll();
+			RelinkAll();
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			this.LinkToNearbyFacilities();
+			LinkToNearbyFacilities();
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
-			this.UnlinkAll();
+			UnlinkAll();
 		}
 
-		
 		public override void PostDrawExtraSelectionOverlays()
 		{
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.IsFacilityActive(this.linkedFacilities[i]))
+				if (IsFacilityActive(linkedFacilities[i]))
 				{
-					GenDraw.DrawLineBetween(this.parent.TrueCenter(), this.linkedFacilities[i].TrueCenter());
+					GenDraw.DrawLineBetween(parent.TrueCenter(), linkedFacilities[i].TrueCenter());
 				}
 				else
 				{
-					GenDraw.DrawLineBetween(this.parent.TrueCenter(), this.linkedFacilities[i].TrueCenter(), CompAffectedByFacilities.InactiveFacilityLineMat);
+					GenDraw.DrawLineBetween(parent.TrueCenter(), linkedFacilities[i].TrueCenter(), InactiveFacilityLineMat);
 				}
 			}
 		}
 
-		
 		private bool IsBetter(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot, Thing thanThisFacility)
 		{
 			if (facilityDef != thanThisFacility.def)
 			{
-				Log.Error("Comparing two different facility defs.", false);
+				Log.Error("Comparing two different facility defs.");
 				return false;
 			}
 			Vector3 b = GenThing.TrueCenter(facilityPos, facilityRot, facilityDef.size, facilityDef.Altitude);
-			Vector3 a = this.parent.TrueCenter();
+			Vector3 a = parent.TrueCenter();
 			float num = Vector3.Distance(a, b);
 			float num2 = Vector3.Distance(a, thanThisFacility.TrueCenter());
 			if (num != num2)
@@ -287,108 +313,73 @@ namespace RimWorld
 			return facilityPos.z < thanThisFacility.Position.z;
 		}
 
-		
-		
-		private IEnumerable<Thing> ThingsICanLinkTo
-		{
-			get
-			{
-				if (!this.parent.Spawned)
-				{
-					yield break;
-				}
-				IEnumerable<Thing> enumerable = CompAffectedByFacilities.PotentialThingsToLinkTo(this.parent.def, this.parent.Position, this.parent.Rotation, this.parent.Map);
-				foreach (Thing thing in enumerable)
-				{
-					if (this.CanLinkTo(thing))
-					{
-						yield return thing;
-					}
-				}
-				IEnumerator<Thing> enumerator = null;
-				yield break;
-				yield break;
-			}
-		}
-
-		
 		public static IEnumerable<Thing> PotentialThingsToLinkTo(ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
-			CompAffectedByFacilities.alreadyReturnedCount.Clear();
+			alreadyReturnedCount.Clear();
 			CompProperties_AffectedByFacilities compProperties = myDef.GetCompProperties<CompProperties_AffectedByFacilities>();
-			if (compProperties.linkableFacilities == null)
+			if (compProperties.linkableFacilities != null)
 			{
-				yield break;
-			}
-			IEnumerable<Thing> enumerable = Enumerable.Empty<Thing>();
-			for (int i = 0; i < compProperties.linkableFacilities.Count; i++)
-			{
-				enumerable = enumerable.Concat(map.listerThings.ThingsOfDef(compProperties.linkableFacilities[i]));
-			}
-			Vector3 myTrueCenter = GenThing.TrueCenter(myPos, myRot, myDef.size, myDef.Altitude);
-			IOrderedEnumerable<Thing> orderedEnumerable = from x in enumerable
-			orderby Vector3.Distance(myTrueCenter, x.TrueCenter()), x.Position.x, x.Position.z
-			select x;
-			foreach (Thing thing in orderedEnumerable)
-			{
-				if (CompAffectedByFacilities.CanPotentiallyLinkTo_Static(thing, myDef, myPos, myRot))
+				IEnumerable<Thing> enumerable = Enumerable.Empty<Thing>();
+				for (int i = 0; i < compProperties.linkableFacilities.Count; i++)
 				{
-					CompProperties_Facility compProperties2 = thing.def.GetCompProperties<CompProperties_Facility>();
-					if (CompAffectedByFacilities.alreadyReturnedCount.ContainsKey(thing.def))
+					enumerable = enumerable.Concat(map.listerThings.ThingsOfDef(compProperties.linkableFacilities[i]));
+				}
+				Vector3 myTrueCenter = GenThing.TrueCenter(myPos, myRot, myDef.size, myDef.Altitude);
+				IOrderedEnumerable<Thing> orderedEnumerable = from x in enumerable
+					orderby Vector3.Distance(myTrueCenter, x.TrueCenter()), x.Position.x, x.Position.z
+					select x;
+				foreach (Thing item in orderedEnumerable)
+				{
+					if (CanPotentiallyLinkTo_Static(item, myDef, myPos, myRot))
 					{
-						if (CompAffectedByFacilities.alreadyReturnedCount[thing.def] >= compProperties2.maxSimultaneous)
+						CompProperties_Facility compProperties2 = item.def.GetCompProperties<CompProperties_Facility>();
+						if (alreadyReturnedCount.ContainsKey(item.def))
 						{
-							continue;
+							if (alreadyReturnedCount[item.def] >= compProperties2.maxSimultaneous)
+							{
+								continue;
+							}
 						}
+						else
+						{
+							alreadyReturnedCount.Add(item.def, 0);
+						}
+						alreadyReturnedCount[item.def]++;
+						yield return item;
 					}
-					else
-					{
-						CompAffectedByFacilities.alreadyReturnedCount.Add(thing.def, 0);
-					}
-					Dictionary<ThingDef, int> dictionary = CompAffectedByFacilities.alreadyReturnedCount;
-					ThingDef def = thing.def;
-					int num = dictionary[def];
-					dictionary[def] = num + 1;
-					yield return thing;
 				}
 			}
-			IEnumerator<Thing> enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public static void DrawLinesToPotentialThingsToLinkTo(ThingDef myDef, IntVec3 myPos, Rot4 myRot, Map map)
 		{
 			Vector3 a = GenThing.TrueCenter(myPos, myRot, myDef.size, myDef.Altitude);
-			foreach (Thing t in CompAffectedByFacilities.PotentialThingsToLinkTo(myDef, myPos, myRot, map))
+			foreach (Thing item in PotentialThingsToLinkTo(myDef, myPos, myRot, map))
 			{
-				GenDraw.DrawLineBetween(a, t.TrueCenter());
+				GenDraw.DrawLineBetween(a, item.TrueCenter());
 			}
 		}
 
-		
 		public void DrawRedLineToPotentiallySupplantedFacility(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
-			Thing potentiallySupplantedFacility = this.GetPotentiallySupplantedFacility(facilityDef, facilityPos, facilityRot);
+			Thing potentiallySupplantedFacility = GetPotentiallySupplantedFacility(facilityDef, facilityPos, facilityRot);
 			if (potentiallySupplantedFacility != null)
 			{
-				GenDraw.DrawLineBetween(this.parent.TrueCenter(), potentiallySupplantedFacility.TrueCenter(), CompAffectedByFacilities.InactiveFacilityLineMat);
+				GenDraw.DrawLineBetween(parent.TrueCenter(), potentiallySupplantedFacility.TrueCenter(), InactiveFacilityLineMat);
 			}
 		}
 
-		
 		private Thing GetPotentiallySupplantedFacility(ThingDef facilityDef, IntVec3 facilityPos, Rot4 facilityRot)
 		{
 			Thing thing = null;
 			int num = 0;
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.linkedFacilities[i].def == facilityDef)
+				if (linkedFacilities[i].def == facilityDef)
 				{
 					if (thing == null)
 					{
-						thing = this.linkedFacilities[i];
+						thing = linkedFacilities[i];
 					}
 					num++;
 				}
@@ -403,25 +394,24 @@ namespace RimWorld
 				return null;
 			}
 			Thing thing2 = thing;
-			for (int j = 0; j < this.linkedFacilities.Count; j++)
+			for (int j = 0; j < linkedFacilities.Count; j++)
 			{
-				if (facilityDef == this.linkedFacilities[j].def && this.IsBetter(thing2.def, thing2.Position, thing2.Rotation, this.linkedFacilities[j]))
+				if (facilityDef == linkedFacilities[j].def && IsBetter(thing2.def, thing2.Position, thing2.Rotation, linkedFacilities[j]))
 				{
-					thing2 = this.linkedFacilities[j];
+					thing2 = linkedFacilities[j];
 				}
 			}
 			return thing2;
 		}
 
-		
 		public float GetStatOffset(StatDef stat)
 		{
 			float num = 0f;
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				if (this.IsFacilityActive(this.linkedFacilities[i]))
+				if (IsFacilityActive(linkedFacilities[i]))
 				{
-					CompProperties_Facility compProperties = this.linkedFacilities[i].def.GetCompProperties<CompProperties_Facility>();
+					CompProperties_Facility compProperties = linkedFacilities[i].def.GetCompProperties<CompProperties_Facility>();
 					if (compProperties.statOffsets != null)
 					{
 						num += compProperties.statOffsets.GetStatOffsetFromList(stat);
@@ -431,104 +421,90 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public void GetStatsExplanation(StatDef stat, StringBuilder sb)
 		{
-			this.alreadyUsed.Clear();
+			alreadyUsed.Clear();
 			bool flag = false;
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
 				bool flag2 = false;
-				for (int j = 0; j < this.alreadyUsed.Count; j++)
+				for (int j = 0; j < alreadyUsed.Count; j++)
 				{
-					if (this.alreadyUsed[j] == this.linkedFacilities[i].def)
+					if (alreadyUsed[j] == linkedFacilities[i].def)
 					{
 						flag2 = true;
 						break;
 					}
 				}
-				if (!flag2 && this.IsFacilityActive(this.linkedFacilities[i]))
+				if (flag2 || !IsFacilityActive(linkedFacilities[i]))
 				{
-					CompProperties_Facility compProperties = this.linkedFacilities[i].def.GetCompProperties<CompProperties_Facility>();
-					if (compProperties.statOffsets != null)
+					continue;
+				}
+				CompProperties_Facility compProperties = linkedFacilities[i].def.GetCompProperties<CompProperties_Facility>();
+				if (compProperties.statOffsets == null)
+				{
+					continue;
+				}
+				float statOffsetFromList = compProperties.statOffsets.GetStatOffsetFromList(stat);
+				if (statOffsetFromList == 0f)
+				{
+					continue;
+				}
+				if (!flag)
+				{
+					flag = true;
+					sb.AppendLine();
+					sb.AppendLine("StatsReport_Facilities".Translate() + ":");
+				}
+				int num = 0;
+				for (int k = 0; k < linkedFacilities.Count; k++)
+				{
+					if (IsFacilityActive(linkedFacilities[k]) && linkedFacilities[k].def == linkedFacilities[i].def)
 					{
-						float num = compProperties.statOffsets.GetStatOffsetFromList(stat);
-						if (num != 0f)
-						{
-							if (!flag)
-							{
-								flag = true;
-								sb.AppendLine();
-								sb.AppendLine("StatsReport_Facilities".Translate() + ":");
-							}
-							int num2 = 0;
-							for (int k = 0; k < this.linkedFacilities.Count; k++)
-							{
-								if (this.IsFacilityActive(this.linkedFacilities[k]) && this.linkedFacilities[k].def == this.linkedFacilities[i].def)
-								{
-									num2++;
-								}
-							}
-							num *= (float)num2;
-							sb.Append("    ");
-							if (num2 != 1)
-							{
-								sb.Append(num2.ToString() + "x ");
-							}
-							sb.AppendLine(this.linkedFacilities[i].LabelCap + ": " + num.ToStringByStyle(stat.toStringStyle, ToStringNumberSense.Offset));
-							this.alreadyUsed.Add(this.linkedFacilities[i].def);
-						}
+						num++;
 					}
 				}
+				statOffsetFromList *= (float)num;
+				sb.Append("    ");
+				if (num != 1)
+				{
+					sb.Append(num.ToString() + "x ");
+				}
+				sb.AppendLine(linkedFacilities[i].LabelCap + ": " + statOffsetFromList.ToStringByStyle(stat.toStringStyle, ToStringNumberSense.Offset));
+				alreadyUsed.Add(linkedFacilities[i].def);
 			}
 		}
 
-		
 		private void RelinkAll()
 		{
-			this.LinkToNearbyFacilities();
+			LinkToNearbyFacilities();
 		}
 
-		
 		public bool IsFacilityActive(Thing facility)
 		{
 			return facility.TryGetComp<CompFacility>().CanBeActive;
 		}
 
-		
 		private void LinkToNearbyFacilities()
 		{
-			this.UnlinkAll();
-			if (this.parent.Spawned)
+			UnlinkAll();
+			if (parent.Spawned)
 			{
-				foreach (Thing thing in this.ThingsICanLinkTo)
+				foreach (Thing item in ThingsICanLinkTo)
 				{
-					this.linkedFacilities.Add(thing);
-					thing.TryGetComp<CompFacility>().Notify_NewLink(this.parent);
+					linkedFacilities.Add(item);
+					item.TryGetComp<CompFacility>().Notify_NewLink(parent);
 				}
 			}
 		}
 
-		
 		private void UnlinkAll()
 		{
-			for (int i = 0; i < this.linkedFacilities.Count; i++)
+			for (int i = 0; i < linkedFacilities.Count; i++)
 			{
-				this.linkedFacilities[i].TryGetComp<CompFacility>().Notify_LinkRemoved(this.parent);
+				linkedFacilities[i].TryGetComp<CompFacility>().Notify_LinkRemoved(parent);
 			}
-			this.linkedFacilities.Clear();
+			linkedFacilities.Clear();
 		}
-
-		
-		private List<Thing> linkedFacilities = new List<Thing>();
-
-		
-		public static Material InactiveFacilityLineMat = MaterialPool.MatFrom(GenDraw.LineTexPath, ShaderDatabase.Transparent, new Color(1f, 0.5f, 0.5f));
-
-		
-		private static Dictionary<ThingDef, int> alreadyReturnedCount = new Dictionary<ThingDef, int>();
-
-		
-		private List<ThingDef> alreadyUsed = new List<ThingDef>();
 	}
 }

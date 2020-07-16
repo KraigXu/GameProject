@@ -1,41 +1,37 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class ThingSetMaker_Conditional : ThingSetMaker
 	{
-		
+		public ThingSetMaker thingSetMaker;
+
 		protected override bool CanGenerateSub(ThingSetMakerParams parms)
 		{
-			return this.Condition(parms) && this.thingSetMaker.CanGenerate(parms);
+			if (Condition(parms))
+			{
+				return thingSetMaker.CanGenerate(parms);
+			}
+			return false;
 		}
 
-		
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
-			outThings.AddRange(this.thingSetMaker.Generate(parms));
+			outThings.AddRange(thingSetMaker.Generate(parms));
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
-			return this.thingSetMaker.AllGeneratableThingsDebug(parms);
+			return thingSetMaker.AllGeneratableThingsDebug(parms);
 		}
 
-		
 		public override void ResolveReferences()
 		{
 			base.ResolveReferences();
-			this.thingSetMaker.ResolveReferences();
+			thingSetMaker.ResolveReferences();
 		}
 
-		
 		protected abstract bool Condition(ThingSetMakerParams parms);
-
-		
-		public ThingSetMaker thingSetMaker;
 	}
 }

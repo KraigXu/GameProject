@@ -1,24 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PlaceWorker_MonumentMarker : PlaceWorker
 	{
-		
+		private static List<Thing> tmpMonumentThings = new List<Thing>();
+
 		public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
 		{
-			MonumentMarker monumentMarker = thing as MonumentMarker;
-			if (monumentMarker != null)
-			{
-				monumentMarker.DrawGhost_NewTmp(center, true, rot);
-			}
+			(thing as MonumentMarker)?.DrawGhost_NewTmp(center, placingMode: true, rot);
 		}
 
-		
 		public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
 		{
 			MonumentMarker monumentMarker = thing as MonumentMarker;
@@ -26,9 +20,9 @@ namespace RimWorld
 			{
 				CellRect rect = monumentMarker.sketch.OccupiedRect.MovedBy(loc);
 				Blueprint_Install thingToIgnore2 = monumentMarker.FindMyBlueprint(rect, map);
-				foreach (SketchEntity sketchEntity in monumentMarker.sketch.Entities)
+				foreach (SketchEntity entity in monumentMarker.sketch.Entities)
 				{
-					CellRect cellRect = sketchEntity.OccupiedRect.MovedBy(loc);
+					CellRect cellRect = entity.OccupiedRect.MovedBy(loc);
 					if (!cellRect.InBounds(map))
 					{
 						return false;
@@ -37,78 +31,75 @@ namespace RimWorld
 					{
 						return "TooCloseToMapEdge".Translate();
 					}
-					foreach (IntVec3 at in cellRect)
+					foreach (IntVec3 item in cellRect)
 					{
-						if (!sketchEntity.CanBuildOnTerrain(at, map))
+						if (!entity.CanBuildOnTerrain(item, map))
 						{
 							return "MonumentBadTerrain".Translate();
 						}
 					}
-					if (sketchEntity.IsSpawningBlockedPermanently(loc + sketchEntity.pos, map, thingToIgnore2, false))
+					if (entity.IsSpawningBlockedPermanently(loc + entity.pos, map, thingToIgnore2))
 					{
 						return "MonumentBlockedPermanently".Translate();
 					}
 				}
-				PlaceWorker_MonumentMarker.tmpMonumentThings.Clear();
-				foreach (SketchBuildable sketchBuildable in monumentMarker.sketch.Buildables)
+				tmpMonumentThings.Clear();
+				foreach (SketchBuildable buildable in monumentMarker.sketch.Buildables)
 				{
-					Thing spawnedBlueprintOrFrame = sketchBuildable.GetSpawnedBlueprintOrFrame(loc + sketchBuildable.pos, map);
+					Thing spawnedBlueprintOrFrame = buildable.GetSpawnedBlueprintOrFrame(loc + buildable.pos, map);
 					SketchThing sketchThing;
 					if (spawnedBlueprintOrFrame != null)
 					{
-						PlaceWorker_MonumentMarker.tmpMonumentThings.Add(spawnedBlueprintOrFrame);
+						tmpMonumentThings.Add(spawnedBlueprintOrFrame);
 					}
-					else if ((sketchThing = (sketchBuildable as SketchThing)) != null)
+					else if ((sketchThing = (buildable as SketchThing)) != null)
 					{
 						Thing sameSpawned = sketchThing.GetSameSpawned(loc + sketchThing.pos, map);
 						if (sameSpawned != null)
 						{
-							PlaceWorker_MonumentMarker.tmpMonumentThings.Add(sameSpawned);
+							tmpMonumentThings.Add(sameSpawned);
 						}
 					}
 				}
-				foreach (SketchEntity sketchEntity2 in monumentMarker.sketch.Entities)
+				foreach (SketchEntity entity2 in monumentMarker.sketch.Entities)
 				{
-					if (!sketchEntity2.IsSameSpawnedOrBlueprintOrFrame(loc + sketchEntity2.pos, map))
+					if (!entity2.IsSameSpawnedOrBlueprintOrFrame(loc + entity2.pos, map))
 					{
-						foreach (IntVec3 c in sketchEntity2.OccupiedRect.MovedBy(loc))
+						foreach (IntVec3 item2 in entity2.OccupiedRect.MovedBy(loc))
 						{
-							if (c.InBounds(map))
+							if (item2.InBounds(map))
 							{
-								Building firstBuilding = c.GetFirstBuilding(map);
-								if (firstBuilding != null && !PlaceWorker_MonumentMarker.tmpMonumentThings.Contains(firstBuilding))
+								Building firstBuilding = item2.GetFirstBuilding(map);
+								if (firstBuilding != null && !tmpMonumentThings.Contains(firstBuilding))
 								{
-									PlaceWorker_MonumentMarker.tmpMonumentThings.Clear();
+									tmpMonumentThings.Clear();
 									return "MonumentOverlapsBuilding".Translate();
 								}
 							}
 						}
 					}
 				}
-				foreach (SketchEntity sketchEntity3 in monumentMarker.sketch.Entities)
+				foreach (SketchEntity entity3 in monumentMarker.sketch.Entities)
 				{
-					if (!sketchEntity3.IsSameSpawnedOrBlueprintOrFrame(loc + sketchEntity3.pos, map))
+					if (!entity3.IsSameSpawnedOrBlueprintOrFrame(loc + entity3.pos, map))
 					{
-						foreach (IntVec3 c2 in sketchEntity3.OccupiedRect.MovedBy(loc).ExpandedBy(1).EdgeCells)
+						foreach (IntVec3 edgeCell in entity3.OccupiedRect.MovedBy(loc).ExpandedBy(1).EdgeCells)
 						{
-							if (c2.InBounds(map))
+							if (edgeCell.InBounds(map))
 							{
-								Building firstBuilding2 = c2.GetFirstBuilding(map);
-								if (firstBuilding2 != null && !PlaceWorker_MonumentMarker.tmpMonumentThings.Contains(firstBuilding2) && (firstBuilding2.Faction == null || firstBuilding2.Faction == Faction.OfPlayer))
+								Building firstBuilding2 = edgeCell.GetFirstBuilding(map);
+								if (firstBuilding2 != null && !tmpMonumentThings.Contains(firstBuilding2) && (firstBuilding2.Faction == null || firstBuilding2.Faction == Faction.OfPlayer))
 								{
-									PlaceWorker_MonumentMarker.tmpMonumentThings.Clear();
+									tmpMonumentThings.Clear();
 									return "MonumentAdjacentToBuilding".Translate();
 								}
 							}
 						}
 					}
 				}
-				PlaceWorker_MonumentMarker.tmpMonumentThings.Clear();
+				tmpMonumentThings.Clear();
 			}
 			return true;
 		}
-
-		
-		private static List<Thing> tmpMonumentThings = new List<Thing>();
 	}
 }

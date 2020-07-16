@@ -1,36 +1,30 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class DiaNodeList
 	{
-		
+		public string Name = "NeedsName";
+
+		public List<DiaNodeMold> Nodes = new List<DiaNodeMold>();
+
+		public List<string> NodeNames = new List<string>();
+
 		public DiaNodeMold RandomNodeFromList()
 		{
-			List<DiaNodeMold> list = this.Nodes.ListFullCopy<DiaNodeMold>();
-			foreach (string nodeName in this.NodeNames)
+			List<DiaNodeMold> list = Nodes.ListFullCopy();
+			foreach (string nodeName in NodeNames)
 			{
 				list.Add(DialogDatabase.GetNodeNamed(nodeName));
 			}
-			foreach (DiaNodeMold diaNodeMold in list)
+			foreach (DiaNodeMold item in list)
 			{
-				if (diaNodeMold.unique && diaNodeMold.used)
+				if (item.unique && item.used)
 				{
-					list.Remove(diaNodeMold);
+					list.Remove(item);
 				}
 			}
-			return list.RandomElement<DiaNodeMold>();
+			return list.RandomElement();
 		}
-
-		
-		public string Name = "NeedsName";
-
-		
-		public List<DiaNodeMold> Nodes = new List<DiaNodeMold>();
-
-		
-		public List<string> NodeNames = new List<string>();
 	}
 }

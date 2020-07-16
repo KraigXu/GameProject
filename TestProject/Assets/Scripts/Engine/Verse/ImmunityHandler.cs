@@ -1,46 +1,55 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ImmunityHandler : IExposable
 	{
-		
+		public struct ImmunityInfo
+		{
+			public HediffDef immunity;
+
+			public HediffDef source;
+		}
+
+		public Pawn pawn;
+
+		private List<ImmunityRecord> immunityList = new List<ImmunityRecord>();
+
+		private const float ForcedImmunityLevel = 0.650000036f;
+
+		private static List<ImmunityInfo> tmpNeededImmunitiesNow = new List<ImmunityInfo>();
+
 		public ImmunityHandler(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<ImmunityRecord>(ref this.immunityList, "imList", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref immunityList, "imList", LookMode.Deep);
 		}
 
-		
 		public float DiseaseContractChanceFactor(HediffDef diseaseDef, BodyPartRecord part = null)
 		{
-			HediffDef hediffDef = null;
-			return this.DiseaseContractChanceFactor(diseaseDef, out hediffDef, part);
+			HediffDef immunityCause = null;
+			return DiseaseContractChanceFactor(diseaseDef, out immunityCause, part);
 		}
 
-		
 		public float DiseaseContractChanceFactor(HediffDef diseaseDef, out HediffDef immunityCause, BodyPartRecord part = null)
 		{
 			immunityCause = null;
-			if (!this.pawn.RaceProps.IsFlesh)
+			if (!pawn.RaceProps.IsFlesh)
 			{
 				return 0f;
 			}
-			Hediff hediff;
-			if (this.AnyHediffMakesFullyImmuneTo_NewTemp(diseaseDef, out hediff))
+			if (AnyHediffMakesFullyImmuneTo_NewTemp(diseaseDef, out Hediff sourceHediff))
 			{
-				immunityCause = hediff.def;
+				immunityCause = sourceHediff.def;
 				return 0f;
 			}
-			List<Hediff> hediffs = this.pawn.health.hediffSet.hediffs;
+			List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
 			for (int i = 0; i < hediffs.Count; i++)
 			{
 				if (hediffs[i].def == diseaseDef && hediffs[i].Part == part)
@@ -48,60 +57,57 @@ namespace Verse
 					return 0f;
 				}
 			}
-			for (int j = 0; j < this.immunityList.Count; j++)
+			for (int j = 0; j < immunityList.Count; j++)
 			{
-				if (this.immunityList[j].hediffDef == diseaseDef)
+				if (immunityList[j].hediffDef == diseaseDef)
 				{
-					immunityCause = this.immunityList[j].source;
-					return Mathf.Lerp(1f, 0f, this.immunityList[j].immunity / 0.6f);
+					immunityCause = immunityList[j].source;
+					return Mathf.Lerp(1f, 0f, immunityList[j].immunity / 0.6f);
 				}
 			}
 			return 1f;
 		}
 
-		
 		public float GetImmunity(HediffDef def)
 		{
 			float num = 0f;
-			for (int i = 0; i < this.immunityList.Count; i++)
+			for (int i = 0; i < immunityList.Count; i++)
 			{
-				ImmunityRecord immunityRecord = this.immunityList[i];
+				ImmunityRecord immunityRecord = immunityList[i];
 				if (immunityRecord.hediffDef == def)
 				{
 					num = immunityRecord.immunity;
 					break;
 				}
 			}
-			Hediff hediff;
-			if (this.AnyHediffMakesFullyImmuneTo_NewTemp(def, out hediff) && num < 0.650000036f)
+			if (AnyHediffMakesFullyImmuneTo_NewTemp(def, out Hediff _) && num < 0.650000036f)
 			{
 				num = 0.650000036f;
 			}
 			return num;
 		}
 
-		
 		internal void ImmunityHandlerTick()
 		{
-			List<ImmunityHandler.ImmunityInfo> list = this.NeededImmunitiesNow();
+			List<ImmunityInfo> list = NeededImmunitiesNow();
 			for (int i = 0; i < list.Count; i++)
 			{
-				this.TryAddImmunityRecord(list[i].immunity, list[i].source);
+				TryAddImmunityRecord(list[i].immunity, list[i].source);
 			}
-			for (int j = 0; j < this.immunityList.Count; j++)
+			for (int j = 0; j < immunityList.Count; j++)
 			{
-				ImmunityRecord immunityRecord = this.immunityList[j];
-				Hediff firstHediffOfDef = this.pawn.health.hediffSet.GetFirstHediffOfDef(immunityRecord.hediffDef, false);
-				immunityRecord.ImmunityTick(this.pawn, firstHediffOfDef != null, firstHediffOfDef);
+				ImmunityRecord immunityRecord = immunityList[j];
+				Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(immunityRecord.hediffDef);
+				immunityRecord.ImmunityTick(pawn, firstHediffOfDef != null, firstHediffOfDef);
 			}
-			for (int k = this.immunityList.Count - 1; k >= 0; k--)
+			for (int num = immunityList.Count - 1; num >= 0; num--)
 			{
-				if (this.immunityList[k].immunity <= 0f)
+				if (immunityList[num].immunity <= 0f)
 				{
 					bool flag = false;
-					for (int l = 0; l < list.Count; l++)
+					for (int k = 0; k < list.Count; k++)
 					{
-						if (list[l].immunity == this.immunityList[k].hediffDef)
+						if (list[k].immunity == immunityList[num].hediffDef)
 						{
 							flag = true;
 							break;
@@ -109,56 +115,54 @@ namespace Verse
 					}
 					if (!flag)
 					{
-						this.immunityList.RemoveAt(k);
+						immunityList.RemoveAt(num);
 					}
 				}
 			}
 		}
 
-		
-		private List<ImmunityHandler.ImmunityInfo> NeededImmunitiesNow()
+		private List<ImmunityInfo> NeededImmunitiesNow()
 		{
-			ImmunityHandler.tmpNeededImmunitiesNow.Clear();
-			List<Hediff> hediffs = this.pawn.health.hediffSet.hediffs;
+			tmpNeededImmunitiesNow.Clear();
+			List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
 			for (int i = 0; i < hediffs.Count; i++)
 			{
 				Hediff hediff = hediffs[i];
 				if (hediff.def.PossibleToDevelopImmunityNaturally())
 				{
-					ImmunityHandler.tmpNeededImmunitiesNow.Add(new ImmunityHandler.ImmunityInfo
+					tmpNeededImmunitiesNow.Add(new ImmunityInfo
 					{
 						immunity = hediff.def,
 						source = hediff.def
 					});
 				}
 			}
-			return ImmunityHandler.tmpNeededImmunitiesNow;
+			return tmpNeededImmunitiesNow;
 		}
 
-		
 		[Obsolete("Will be removed in a future update, use AnyHediffMakesFullyImmuneTo_NewTemp")]
 		private bool AnyHediffMakesFullyImmuneTo(HediffDef def)
 		{
-			Hediff hediff;
-			return this.AnyHediffMakesFullyImmuneTo_NewTemp(def, out hediff);
+			Hediff sourceHediff;
+			return AnyHediffMakesFullyImmuneTo_NewTemp(def, out sourceHediff);
 		}
 
-		
 		private bool AnyHediffMakesFullyImmuneTo_NewTemp(HediffDef def, out Hediff sourceHediff)
 		{
-			List<Hediff> hediffs = this.pawn.health.hediffSet.hediffs;
+			List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
 			for (int i = 0; i < hediffs.Count; i++)
 			{
 				HediffStage curStage = hediffs[i].CurStage;
-				if (curStage != null && curStage.makeImmuneTo != null)
+				if (curStage == null || curStage.makeImmuneTo == null)
 				{
-					for (int j = 0; j < curStage.makeImmuneTo.Count; j++)
+					continue;
+				}
+				for (int j = 0; j < curStage.makeImmuneTo.Count; j++)
+				{
+					if (curStage.makeImmuneTo[j] == def)
 					{
-						if (curStage.makeImmuneTo[j] == def)
-						{
-							sourceHediff = hediffs[i];
-							return true;
-						}
+						sourceHediff = hediffs[i];
+						return true;
 					}
 				}
 			}
@@ -166,74 +170,43 @@ namespace Verse
 			return false;
 		}
 
-		
 		private void TryAddImmunityRecord(HediffDef def, HediffDef source)
 		{
-			if (def.CompProps<HediffCompProperties_Immunizable>() == null)
+			if (def.CompProps<HediffCompProperties_Immunizable>() != null && !ImmunityRecordExists(def))
 			{
-				return;
+				ImmunityRecord immunityRecord = new ImmunityRecord();
+				immunityRecord.hediffDef = def;
+				immunityRecord.source = source;
+				immunityList.Add(immunityRecord);
 			}
-			if (this.ImmunityRecordExists(def))
-			{
-				return;
-			}
-			ImmunityRecord immunityRecord = new ImmunityRecord();
-			immunityRecord.hediffDef = def;
-			immunityRecord.source = source;
-			this.immunityList.Add(immunityRecord);
 		}
 
-		
 		public ImmunityRecord GetImmunityRecord(HediffDef def)
 		{
 			ImmunityRecord immunityRecord = null;
-			for (int i = 0; i < this.immunityList.Count; i++)
+			for (int i = 0; i < immunityList.Count; i++)
 			{
-				if (this.immunityList[i].hediffDef == def)
+				if (immunityList[i].hediffDef == def)
 				{
-					immunityRecord = this.immunityList[i];
+					immunityRecord = immunityList[i];
 					break;
 				}
 			}
-			Hediff hediff;
-			if (this.AnyHediffMakesFullyImmuneTo_NewTemp(def, out hediff) && (immunityRecord == null || immunityRecord.immunity < 0.650000036f))
+			if (AnyHediffMakesFullyImmuneTo_NewTemp(def, out Hediff sourceHediff) && (immunityRecord == null || immunityRecord.immunity < 0.650000036f))
 			{
 				immunityRecord = new ImmunityRecord
 				{
 					immunity = 0.650000036f,
 					hediffDef = def,
-					source = hediff.def
+					source = sourceHediff.def
 				};
 			}
 			return immunityRecord;
 		}
 
-		
 		public bool ImmunityRecordExists(HediffDef def)
 		{
-			return this.GetImmunityRecord(def) != null;
-		}
-
-		
-		public Pawn pawn;
-
-		
-		private List<ImmunityRecord> immunityList = new List<ImmunityRecord>();
-
-		
-		private const float ForcedImmunityLevel = 0.650000036f;
-
-		
-		private static List<ImmunityHandler.ImmunityInfo> tmpNeededImmunitiesNow = new List<ImmunityHandler.ImmunityInfo>();
-
-		
-		public struct ImmunityInfo
-		{
-			
-			public HediffDef immunity;
-
-			
-			public HediffDef source;
+			return GetImmunityRecord(def) != null;
 		}
 	}
 }

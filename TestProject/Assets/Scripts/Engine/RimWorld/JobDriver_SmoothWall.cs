@@ -1,92 +1,67 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_SmoothWall : JobDriver
 	{
-		
-		
-		protected int BaseWorkAmount
-		{
-			get
-			{
-				return 6500;
-			}
-		}
+		private float workLeft = -1000f;
 
-		
-		
-		protected DesignationDef DesDef
-		{
-			get
-			{
-				return DesignationDefOf.SmoothWall;
-			}
-		}
+		protected int BaseWorkAmount => 6500;
 
-		
+		protected DesignationDef DesDef => DesignationDefOf.SmoothWall;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed) && this.pawn.Reserve(this.job.targetA.Cell, this.job, 1, -1, null, errorOnFailed);
+			if (pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed))
+			{
+				return pawn.Reserve(job.targetA.Cell, job, 1, -1, null, errorOnFailed);
+			}
+			return false;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			this.FailOn(() => !this.job.ignoreDesignations && this.Map.designationManager.DesignationAt(this.TargetLocA, this.DesDef) == null);
+			this.FailOn(() => (!job.ignoreDesignations && base.Map.designationManager.DesignationAt(base.TargetLocA, DesDef) == null) ? true : false);
 			this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
 			yield return Toils_Goto.GotoCell(TargetIndex.A, PathEndMode.Touch);
 			Toil doWork = new Toil();
 			doWork.initAction = delegate
 			{
-				this.workLeft = (float)this.BaseWorkAmount;
+				workLeft = BaseWorkAmount;
 			};
 			doWork.tickAction = delegate
 			{
-				float num = doWork.actor.GetStatValue(StatDefOf.SmoothingSpeed, true) * 1.7f;
-				this.workLeft -= num;
+				float num = doWork.actor.GetStatValue(StatDefOf.SmoothingSpeed) * 1.7f;
+				workLeft -= num;
 				if (doWork.actor.skills != null)
 				{
-					doWork.actor.skills.Learn(SkillDefOf.Construction, 0.1f, false);
+					doWork.actor.skills.Learn(SkillDefOf.Construction, 0.1f);
 				}
-				if (this.workLeft <= 0f)
+				if (workLeft <= 0f)
 				{
-					this.DoEffect();
-					Designation designation = this.Map.designationManager.DesignationAt(this.TargetLocA, this.DesDef);
-					if (designation != null)
-					{
-						designation.Delete();
-					}
-					this.ReadyForNextToil();
-					return;
+					DoEffect();
+					base.Map.designationManager.DesignationAt(base.TargetLocA, DesDef)?.Delete();
+					ReadyForNextToil();
 				}
 			};
 			doWork.FailOnCannotTouch(TargetIndex.A, PathEndMode.Touch);
-			doWork.WithProgressBar(TargetIndex.A, () => 1f - this.workLeft / (float)this.BaseWorkAmount, false, -0.5f);
+			doWork.WithProgressBar(TargetIndex.A, () => 1f - workLeft / (float)BaseWorkAmount);
 			doWork.defaultCompleteMode = ToilCompleteMode.Never;
 			doWork.activeSkill = (() => SkillDefOf.Construction);
 			yield return doWork;
-			yield break;
 		}
 
-		
 		protected void DoEffect()
 		{
-			SmoothableWallUtility.Notify_SmoothedByPawn(SmoothableWallUtility.SmoothWall(base.TargetA.Thing, this.pawn), this.pawn);
+			SmoothableWallUtility.Notify_SmoothedByPawn(SmoothableWallUtility.SmoothWall(base.TargetA.Thing, pawn), pawn);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<float>(ref this.workLeft, "workLeft", 0f, false);
+			Scribe_Values.Look(ref workLeft, "workLeft", 0f);
 		}
-
-		
-		private float workLeft = -1000f;
 	}
 }

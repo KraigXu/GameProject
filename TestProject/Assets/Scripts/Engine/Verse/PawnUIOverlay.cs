@@ -1,66 +1,57 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class PawnUIOverlay
 	{
-		
+		private Pawn pawn;
+
+		private const float PawnLabelOffsetY = -0.6f;
+
+		private const int PawnStatBarWidth = 32;
+
+		private const float ActivityIconSize = 13f;
+
+		private const float ActivityIconOffsetY = 12f;
+
 		public PawnUIOverlay(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void DrawPawnGUIOverlay()
 		{
-			if (!this.pawn.Spawned || this.pawn.Map.fogGrid.IsFogged(this.pawn.Position))
+			if (!pawn.Spawned || pawn.Map.fogGrid.IsFogged(pawn.Position))
 			{
 				return;
 			}
-			if (!this.pawn.RaceProps.Humanlike)
+			if (!pawn.RaceProps.Humanlike)
 			{
 				switch (Prefs.AnimalNameMode)
 				{
 				case AnimalNameDisplayMode.None:
 					return;
-				case AnimalNameDisplayMode.TameNamed:
-					if (this.pawn.Name == null || this.pawn.Name.Numerical)
+				case AnimalNameDisplayMode.TameAll:
+					if (pawn.Name == null)
 					{
 						return;
 					}
 					break;
-				case AnimalNameDisplayMode.TameAll:
-					if (this.pawn.Name == null)
+				case AnimalNameDisplayMode.TameNamed:
+					if (pawn.Name == null || pawn.Name.Numerical)
 					{
 						return;
 					}
 					break;
 				}
 			}
-			Vector2 pos = GenMapUI.LabelDrawPosFor(this.pawn, -0.6f);
-			GenMapUI.DrawPawnLabel(this.pawn, pos, 1f, 9999f, null, GameFont.Tiny, true, true);
-			if (this.pawn.CanTradeNow)
+			Vector2 pos = GenMapUI.LabelDrawPosFor(pawn, -0.6f);
+			GenMapUI.DrawPawnLabel(pawn, pos);
+			if (pawn.CanTradeNow)
 			{
-				this.pawn.Map.overlayDrawer.DrawOverlay(this.pawn, OverlayTypes.QuestionMark);
+				pawn.Map.overlayDrawer.DrawOverlay(pawn, OverlayTypes.QuestionMark);
 			}
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private const float PawnLabelOffsetY = -0.6f;
-
-		
-		private const int PawnStatBarWidth = 32;
-
-		
-		private const float ActivityIconSize = 13f;
-
-		
-		private const float ActivityIconOffsetY = 12f;
 	}
 }

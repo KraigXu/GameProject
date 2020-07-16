@@ -1,53 +1,27 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Designator_Plan : Designator
 	{
-		
-		
-		public override int DraggableDimensions
-		{
-			get
-			{
-				return 2;
-			}
-		}
+		private DesignateMode mode;
 
-		
-		
-		public override bool DragDrawMeasurements
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public override int DraggableDimensions => 2;
 
-		
-		
-		protected override DesignationDef Designation
-		{
-			get
-			{
-				return DesignationDefOf.Plan;
-			}
-		}
+		public override bool DragDrawMeasurements => true;
 
-		
+		protected override DesignationDef Designation => DesignationDefOf.Plan;
+
 		public Designator_Plan(DesignateMode mode)
 		{
 			this.mode = mode;
-			this.soundDragSustain = SoundDefOf.Designate_DragStandard;
-			this.soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
-			this.useMouseIcon = true;
-			this.hotKey = KeyBindingDefOf.Misc9;
+			soundDragSustain = SoundDefOf.Designate_DragStandard;
+			soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
+			useMouseIcon = true;
+			hotKey = KeyBindingDefOf.Misc9;
 		}
 
-		
 		public override AcceptanceReport CanDesignateCell(IntVec3 c)
 		{
 			if (!c.InBounds(base.Map))
@@ -58,48 +32,41 @@ namespace RimWorld
 			{
 				return "TooCloseToMapEdge".Translate();
 			}
-			if (this.mode == DesignateMode.Add)
+			if (mode == DesignateMode.Add)
 			{
-				if (base.Map.designationManager.DesignationAt(c, this.Designation) != null)
+				if (base.Map.designationManager.DesignationAt(c, Designation) != null)
 				{
 					return false;
 				}
 			}
-			else if (this.mode == DesignateMode.Remove && base.Map.designationManager.DesignationAt(c, this.Designation) == null)
+			else if (mode == DesignateMode.Remove && base.Map.designationManager.DesignationAt(c, Designation) == null)
 			{
 				return false;
 			}
 			return true;
 		}
 
-		
 		public override void DesignateSingleCell(IntVec3 c)
 		{
-			if (this.mode == DesignateMode.Add)
+			if (mode == DesignateMode.Add)
 			{
-				base.Map.designationManager.AddDesignation(new Designation(c, this.Designation));
-				return;
+				base.Map.designationManager.AddDesignation(new Designation(c, Designation));
 			}
-			if (this.mode == DesignateMode.Remove)
+			else if (mode == DesignateMode.Remove)
 			{
-				base.Map.designationManager.DesignationAt(c, this.Designation).Delete();
+				base.Map.designationManager.DesignationAt(c, Designation).Delete();
 			}
 		}
 
-		
 		public override void SelectedUpdate()
 		{
 			GenUI.RenderMouseoverBracket();
 			GenDraw.DrawNoBuildEdgeLines();
 		}
 
-		
 		public override void RenderHighlight(List<IntVec3> dragCells)
 		{
 			DesignatorUtility.RenderHighlightOverSelectableCells(this, dragCells);
 		}
-
-		
-		private DesignateMode mode;
 	}
 }

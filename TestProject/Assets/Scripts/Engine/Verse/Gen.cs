@@ -1,92 +1,79 @@
-﻿using System;
+using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using RimWorld;
-using RimWorld.Planet;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class Gen
 	{
-		
+		private static MethodInfo s_memberwiseClone;
+
 		public static Vector3 AveragePosition(List<IntVec3> cells)
 		{
 			return new Vector3((float)cells.Average((IntVec3 c) => c.x) + 0.5f, 0f, (float)cells.Average((IntVec3 c) => c.z) + 0.5f);
 		}
 
-		
 		public static T RandomEnumValue<T>(bool disallowFirstValue)
 		{
-			return (T)((object)Rand.Range(disallowFirstValue ? 1 : 0, Enum.GetValues(typeof(T)).Length));
+			return (T)(object)Rand.Range(disallowFirstValue ? 1 : 0, Enum.GetValues(typeof(T)).Length);
 		}
 
-		
 		public static Vector3 RandomHorizontalVector(float max)
 		{
-			return new Vector3(Rand.Range(-max, max), 0f, Rand.Range(-max, max));
+			return new Vector3(Rand.Range(0f - max, max), 0f, Rand.Range(0f - max, max));
 		}
 
-		
 		public static int GetBitCountOf(long lValue)
 		{
 			int num = 0;
 			while (lValue != 0L)
 			{
-				lValue &= lValue - 1L;
+				lValue &= lValue - 1;
 				num++;
 			}
 			return num;
 		}
 
-		
 		public static IEnumerable<T> GetAllSelectedItems<T>(this Enum value)
 		{
 			CultureInfo cult = CultureInfo.InvariantCulture;
 			int valueAsInt = Convert.ToInt32(value, cult);
-			foreach (object obj in Enum.GetValues(typeof(T)))
+			foreach (object value2 in Enum.GetValues(typeof(T)))
 			{
-				int num = Convert.ToInt32(obj, cult);
+				int num = Convert.ToInt32(value2, cult);
 				if (num == (valueAsInt & num))
 				{
-					yield return (T)((object)obj);
+					yield return (T)value2;
 				}
 			}
-			IEnumerator enumerator = null;
-			yield break;
-			yield break;
 		}
 
-		
 		public static IEnumerable<T> YieldSingle<T>(T val)
 		{
 			yield return val;
-			yield break;
 		}
 
-		
 		public static IEnumerable YieldSingleNonGeneric<T>(T val)
 		{
 			yield return val;
-			yield break;
 		}
 
-		
 		public static string ToStringSafe<T>(this T obj)
 		{
 			if (obj == null)
 			{
 				return "null";
 			}
-			string result;
 			try
 			{
-				result = obj.ToString();
+				return obj.ToString();
 			}
 			catch (Exception arg)
 			{
@@ -102,37 +89,34 @@ namespace Verse
 				}
 				if (flag)
 				{
-					Log.ErrorOnce("Exception in ToString(): " + arg, num ^ 1857461521, false);
+					Log.ErrorOnce("Exception in ToString(): " + arg, num ^ 0x6EB69D11);
 				}
 				else
 				{
-					Log.Error("Exception in ToString(): " + arg, false);
+					Log.Error("Exception in ToString(): " + arg);
 				}
-				result = "error";
+				return "error";
 			}
-			return result;
 		}
 
-		
 		public static string ToStringSafeEnumerable(this IEnumerable enumerable)
 		{
 			if (enumerable == null)
 			{
 				return "null";
 			}
-			string result;
 			try
 			{
 				string text = "";
-				foreach (object obj in enumerable)
+				foreach (object item in enumerable)
 				{
 					if (text.Length > 0)
 					{
 						text += ", ";
 					}
-					text += obj.ToStringSafe<object>();
+					text += item.ToStringSafe();
 				}
-				result = text;
+				return text;
 			}
 			catch (Exception arg)
 			{
@@ -148,36 +132,32 @@ namespace Verse
 				}
 				if (flag)
 				{
-					Log.ErrorOnce("Exception while enumerating: " + arg, num ^ 581736153, false);
+					Log.ErrorOnce("Exception while enumerating: " + arg, num ^ 0x22AC96D9);
 				}
 				else
 				{
-					Log.Error("Exception while enumerating: " + arg, false);
+					Log.Error("Exception while enumerating: " + arg);
 				}
-				result = "error";
+				return "error";
 			}
-			return result;
 		}
 
-		
 		public static void Swap<T>(ref T x, ref T y)
 		{
-			T t = y;
+			T val = y;
 			y = x;
-			x = t;
+			x = val;
 		}
 
-		
 		public static T MemberwiseClone<T>(T obj)
 		{
-			if (Gen.s_memberwiseClone == null)
+			if (s_memberwiseClone == null)
 			{
-				Gen.s_memberwiseClone = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
+				s_memberwiseClone = typeof(object).GetMethod("MemberwiseClone", BindingFlags.Instance | BindingFlags.NonPublic);
 			}
-			return (T)((object)Gen.s_memberwiseClone.Invoke(obj, null));
+			return (T)s_memberwiseClone.Invoke(obj, null);
 		}
 
-		
 		public static int FixedTimeStepUpdate(ref float timeBuffer, float fps)
 		{
 			timeBuffer += Mathf.Min(Time.deltaTime, 1f);
@@ -187,106 +167,92 @@ namespace Verse
 			return num2;
 		}
 
-		
 		public static int HashCombine<T>(int seed, T obj)
 		{
-			int num = (obj == null) ? 0 : obj.GetHashCode();
-			return (int)((long)seed ^ (long)num + (long)(-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
+			int num = obj?.GetHashCode() ?? 0;
+			return (int)(seed ^ (num + 2654435769u + (seed << 6) + (seed >> 2)));
 		}
 
-		
 		public static int HashCombineStruct<T>(int seed, T obj) where T : struct
 		{
-			return (int)((long)seed ^ (long)obj.GetHashCode() + (long)(-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
+			return (int)(seed ^ (obj.GetHashCode() + 2654435769u + (seed << 6) + (seed >> 2)));
 		}
 
-		
 		public static int HashCombineInt(int seed, int value)
 		{
-			return (int)((long)seed ^ (long)value + (long)(-1640531527) + (long)((long)seed << 6) + (long)(seed >> 2));
+			return (int)(seed ^ (value + 2654435769u + (seed << 6) + (seed >> 2)));
 		}
 
-		
 		public static int HashCombineInt(int v1, int v2, int v3, int v4)
 		{
 			int num = 352654597;
 			int num2 = num;
-			num = ((num << 5) + num + (num >> 27) ^ v1);
-			num2 = ((num2 << 5) + num2 + (num2 >> 27) ^ v2);
-			num = ((num << 5) + num + (num >> 27) ^ v3);
-			num2 = ((num2 << 5) + num2 + (num2 >> 27) ^ v4);
+			num = (((num << 5) + num + (num >> 27)) ^ v1);
+			num2 = (((num2 << 5) + num2 + (num2 >> 27)) ^ v2);
+			num = (((num << 5) + num + (num >> 27)) ^ v3);
+			num2 = (((num2 << 5) + num2 + (num2 >> 27)) ^ v4);
 			return num + num2 * 1566083941;
 		}
 
-		
 		public static int HashOffset(this int baseInt)
 		{
-			return Gen.HashCombineInt(baseInt, 169495093);
+			return HashCombineInt(baseInt, 169495093);
 		}
 
-		
 		public static int HashOffset(this Thing t)
 		{
 			return t.thingIDNumber.HashOffset();
 		}
 
-		
 		public static int HashOffset(this WorldObject o)
 		{
 			return o.ID.HashOffset();
 		}
 
-		
 		public static bool IsHashIntervalTick(this Thing t, int interval)
 		{
 			return t.HashOffsetTicks() % interval == 0;
 		}
 
-		
 		public static int HashOffsetTicks(this Thing t)
 		{
 			return Find.TickManager.TicksGame + t.thingIDNumber.HashOffset();
 		}
 
-		
 		public static bool IsHashIntervalTick(this WorldObject o, int interval)
 		{
 			return o.HashOffsetTicks() % interval == 0;
 		}
 
-		
 		public static int HashOffsetTicks(this WorldObject o)
 		{
 			return Find.TickManager.TicksGame + o.ID.HashOffset();
 		}
 
-		
 		public static bool IsHashIntervalTick(this Faction f, int interval)
 		{
 			return f.HashOffsetTicks() % interval == 0;
 		}
 
-		
 		public static int HashOffsetTicks(this Faction f)
 		{
 			return Find.TickManager.TicksGame + f.randomKey.HashOffset();
 		}
 
-		
 		public static bool IsNestedHashIntervalTick(this Thing t, int outerInterval, int approxInnerInterval)
 		{
 			int num = Mathf.Max(Mathf.RoundToInt((float)approxInnerInterval / (float)outerInterval), 1);
 			return t.HashOffsetTicks() / outerInterval % num == 0;
 		}
 
-		
 		public static void ReplaceNullFields<T>(ref T replaceIn, T replaceWith)
 		{
 			if (replaceIn == null || replaceWith == null)
 			{
 				return;
 			}
-			foreach (FieldInfo fieldInfo in typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			FieldInfo[] fields = typeof(T).GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			foreach (FieldInfo fieldInfo in fields)
 			{
 				if (fieldInfo.GetValue(replaceIn) == null)
 				{
@@ -295,33 +261,25 @@ namespace Verse
 					{
 						object obj = replaceIn;
 						fieldInfo.SetValue(obj, value);
-						replaceIn = (T)((object)obj);
+						replaceIn = (T)obj;
 					}
 				}
 			}
 		}
 
-		
 		public static void EnsureAllFieldsNullable(Type type)
 		{
-			foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			foreach (FieldInfo fieldInfo in fields)
 			{
 				Type fieldType = fieldInfo.FieldType;
 				if (fieldType.IsValueType && !(Nullable.GetUnderlyingType(fieldType) != null))
 				{
-					Log.Warning(string.Concat(new string[]
-					{
-						"Field ",
-						type.Name,
-						".",
-						fieldInfo.Name,
-						" is not nullable."
-					}), false);
+					Log.Warning("Field " + type.Name + "." + fieldInfo.Name + " is not nullable.");
 				}
 			}
 		}
 
-		
 		public static string GetNonNullFieldsDebugInfo(object obj)
 		{
 			if (obj == null)
@@ -329,7 +287,8 @@ namespace Verse
 				return "";
 			}
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (FieldInfo fieldInfo in obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			FieldInfo[] fields = obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			foreach (FieldInfo fieldInfo in fields)
 			{
 				object value = fieldInfo.GetValue(obj);
 				if (value != null)
@@ -338,13 +297,10 @@ namespace Verse
 					{
 						stringBuilder.Append(", ");
 					}
-					stringBuilder.Append(fieldInfo.Name + "=" + value.ToStringSafe<object>());
+					stringBuilder.Append(fieldInfo.Name + "=" + value.ToStringSafe());
 				}
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		private static MethodInfo s_memberwiseClone;
 	}
 }

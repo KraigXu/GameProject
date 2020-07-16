@@ -1,66 +1,80 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TraitSet : IExposable
 	{
-		
-		
+		protected Pawn pawn;
+
+		public List<Trait> allTraits = new List<Trait>();
+
 		public float HungerRateFactor
 		{
 			get
 			{
 				float num = 1f;
-				foreach (Trait trait in this.allTraits)
+				foreach (Trait allTrait in allTraits)
 				{
-					num *= trait.CurrentData.hungerRateFactor;
+					num *= allTrait.CurrentData.hungerRateFactor;
 				}
 				return num;
 			}
 		}
 
-		
+		public IEnumerable<MentalBreakDef> TheOnlyAllowedMentalBreaks
+		{
+			get
+			{
+				for (int j = 0; j < allTraits.Count; j++)
+				{
+					Trait trait = allTraits[j];
+					if (trait.CurrentData.theOnlyAllowedMentalBreaks != null)
+					{
+						for (int i = 0; i < trait.CurrentData.theOnlyAllowedMentalBreaks.Count; i++)
+						{
+							yield return trait.CurrentData.theOnlyAllowedMentalBreaks[i];
+						}
+					}
+				}
+			}
+		}
+
 		public TraitSet(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Trait>(ref this.allTraits, "allTraits", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref allTraits, "allTraits", LookMode.Deep);
 		}
 
-		
 		public void GainTrait(Trait trait)
 		{
-			if (this.HasTrait(trait.def))
+			if (HasTrait(trait.def))
 			{
-				Log.Warning(this.pawn + " already has trait " + trait.def, false);
+				Log.Warning(pawn + " already has trait " + trait.def);
 				return;
 			}
-			this.allTraits.Add(trait);
-			this.pawn.Notify_DisabledWorkTypesChanged();
-			if (this.pawn.skills != null)
+			allTraits.Add(trait);
+			pawn.Notify_DisabledWorkTypesChanged();
+			if (pawn.skills != null)
 			{
-				this.pawn.skills.Notify_SkillDisablesChanged();
+				pawn.skills.Notify_SkillDisablesChanged();
 			}
-			if (!this.pawn.Dead && this.pawn.RaceProps.Humanlike && this.pawn.needs.mood != null)
+			if (!pawn.Dead && pawn.RaceProps.Humanlike && pawn.needs.mood != null)
 			{
-				this.pawn.needs.mood.thoughts.situational.Notify_SituationalThoughtsDirty();
+				pawn.needs.mood.thoughts.situational.Notify_SituationalThoughtsDirty();
 			}
-			MeditationFocusTypeAvailabilityCache.ClearFor(this.pawn);
+			MeditationFocusTypeAvailabilityCache.ClearFor(pawn);
 		}
 
-		
 		public bool HasTrait(TraitDef tDef)
 		{
-			for (int i = 0; i < this.allTraits.Count; i++)
+			for (int i = 0; i < allTraits.Count; i++)
 			{
-				if (this.allTraits[i].def == tDef)
+				if (allTraits[i].def == tDef)
 				{
 					return true;
 				}
@@ -68,61 +82,28 @@ namespace RimWorld
 			return false;
 		}
 
-		
-		
-		public IEnumerable<MentalBreakDef> TheOnlyAllowedMentalBreaks
-		{
-			get
-			{
-				int num;
-				for (int i = 0; i < this.allTraits.Count; i = num + 1)
-				{
-					Trait trait = this.allTraits[i];
-					if (trait.CurrentData.theOnlyAllowedMentalBreaks != null)
-					{
-						for (int j = 0; j < trait.CurrentData.theOnlyAllowedMentalBreaks.Count; j = num + 1)
-						{
-							yield return trait.CurrentData.theOnlyAllowedMentalBreaks[j];
-							num = j;
-						}
-					}
-					trait = null;
-					num = i;
-				}
-				yield break;
-			}
-		}
-
-		
 		public Trait GetTrait(TraitDef tDef)
 		{
-			for (int i = 0; i < this.allTraits.Count; i++)
+			for (int i = 0; i < allTraits.Count; i++)
 			{
-				if (this.allTraits[i].def == tDef)
+				if (allTraits[i].def == tDef)
 				{
-					return this.allTraits[i];
+					return allTraits[i];
 				}
 			}
 			return null;
 		}
 
-		
 		public int DegreeOfTrait(TraitDef tDef)
 		{
-			for (int i = 0; i < this.allTraits.Count; i++)
+			for (int i = 0; i < allTraits.Count; i++)
 			{
-				if (this.allTraits[i].def == tDef)
+				if (allTraits[i].def == tDef)
 				{
-					return this.allTraits[i].Degree;
+					return allTraits[i].Degree;
 				}
 			}
 			return 0;
 		}
-
-		
-		protected Pawn pawn;
-
-		
-		public List<Trait> allTraits = new List<Trait>();
 	}
 }

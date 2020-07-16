@@ -1,38 +1,41 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordJob_AssaultColony : LordJob
 	{
-		
-		
-		public override bool GuiltyOnDowned
-		{
-			get
-			{
-				return true;
-			}
-		}
+		private Faction assaulterFaction;
 
-		
+		private bool canKidnap = true;
+
+		private bool canTimeoutOrFlee = true;
+
+		private bool sappers;
+
+		private bool useAvoidGridSmart;
+
+		private bool canSteal = true;
+
+		private static readonly IntRange AssaultTimeBeforeGiveUp = new IntRange(26000, 38000);
+
+		private static readonly IntRange SapTimeBeforeGiveUp = new IntRange(33000, 38000);
+
+		public override bool GuiltyOnDowned => true;
+
 		public LordJob_AssaultColony()
 		{
 		}
 
-		
 		public LordJob_AssaultColony(SpawnedPawnParams parms)
 		{
-			this.assaulterFaction = parms.spawnerThing.Faction;
-			this.canKidnap = false;
-			this.canTimeoutOrFlee = false;
-			this.canSteal = false;
+			assaulterFaction = parms.spawnerThing.Faction;
+			canKidnap = false;
+			canTimeoutOrFlee = false;
+			canSteal = false;
 		}
 
-		
 		public LordJob_AssaultColony(Faction assaulterFaction, bool canKidnap = true, bool canTimeoutOrFlee = true, bool sappers = false, bool useAvoidGridSmart = false, bool canSteal = true)
 		{
 			this.assaulterFaction = assaulterFaction;
@@ -43,130 +46,103 @@ namespace RimWorld
 			this.canSteal = canSteal;
 		}
 
-		
 		public override StateGraph CreateGraph()
 		{
 			StateGraph stateGraph = new StateGraph();
 			LordToil lordToil = null;
-			if (this.sappers)
+			if (sappers)
 			{
 				lordToil = new LordToil_AssaultColonySappers();
-				if (this.useAvoidGridSmart)
+				if (useAvoidGridSmart)
 				{
 					lordToil.useAvoidGrid = true;
 				}
 				stateGraph.AddToil(lordToil);
-				Transition transition = new Transition(lordToil, lordToil, true, true);
-				transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.Undefined, null));
-				stateGraph.AddTransition(transition, false);
+				Transition transition = new Transition(lordToil, lordToil, canMoveToSameState: true);
+				transition.AddTrigger(new Trigger_PawnLost());
+				stateGraph.AddTransition(transition);
 			}
-			LordToil lordToil2 = new LordToil_AssaultColony(false);
-			if (this.useAvoidGridSmart)
+			LordToil lordToil2 = new LordToil_AssaultColony();
+			if (useAvoidGridSmart)
 			{
 				lordToil2.useAvoidGrid = true;
 			}
 			stateGraph.AddToil(lordToil2);
-			LordToil_ExitMap lordToil_ExitMap = new LordToil_ExitMap(LocomotionUrgency.Jog, false, true);
+			LordToil_ExitMap lordToil_ExitMap = new LordToil_ExitMap(LocomotionUrgency.Jog, canDig: false, interruptCurrentJob: true);
 			lordToil_ExitMap.useAvoidGrid = true;
 			stateGraph.AddToil(lordToil_ExitMap);
-			if (this.sappers)
+			if (sappers)
 			{
-				Transition transition2 = new Transition(lordToil, lordToil2, false, true);
+				Transition transition2 = new Transition(lordToil, lordToil2);
 				transition2.AddTrigger(new Trigger_NoFightingSappers());
-				stateGraph.AddTransition(transition2, false);
+				stateGraph.AddTransition(transition2);
 			}
-			if (this.assaulterFaction.def.humanlikeFaction)
+			if (assaulterFaction.def.humanlikeFaction)
 			{
-				if (this.canTimeoutOrFlee)
+				if (canTimeoutOrFlee)
 				{
-					Transition transition3 = new Transition(lordToil2, lordToil_ExitMap, false, true);
+					Transition transition3 = new Transition(lordToil2, lordToil_ExitMap);
 					if (lordToil != null)
 					{
 						transition3.AddSource(lordToil);
 					}
-					transition3.AddTrigger(new Trigger_TicksPassed(this.sappers ? LordJob_AssaultColony.SapTimeBeforeGiveUp.RandomInRange : LordJob_AssaultColony.AssaultTimeBeforeGiveUp.RandomInRange));
-					transition3.AddPreAction(new TransitionAction_Message("MessageRaidersGivenUpLeaving".Translate(this.assaulterFaction.def.pawnsPlural.CapitalizeFirst(), this.assaulterFaction.Name), null, 1f));
-					stateGraph.AddTransition(transition3, false);
-					Transition transition4 = new Transition(lordToil2, lordToil_ExitMap, false, true);
+					transition3.AddTrigger(new Trigger_TicksPassed(sappers ? SapTimeBeforeGiveUp.RandomInRange : AssaultTimeBeforeGiveUp.RandomInRange));
+					transition3.AddPreAction(new TransitionAction_Message("MessageRaidersGivenUpLeaving".Translate(assaulterFaction.def.pawnsPlural.CapitalizeFirst(), assaulterFaction.Name)));
+					stateGraph.AddTransition(transition3);
+					Transition transition4 = new Transition(lordToil2, lordToil_ExitMap);
 					if (lordToil != null)
 					{
 						transition4.AddSource(lordToil);
 					}
-					FloatRange floatRange = new FloatRange(0.25f, 0.35f);
-					float randomInRange = floatRange.RandomInRange;
+					float randomInRange = new FloatRange(0.25f, 0.35f).RandomInRange;
 					transition4.AddTrigger(new Trigger_FractionColonyDamageTaken(randomInRange, 900f));
-					transition4.AddPreAction(new TransitionAction_Message("MessageRaidersSatisfiedLeaving".Translate(this.assaulterFaction.def.pawnsPlural.CapitalizeFirst(), this.assaulterFaction.Name), null, 1f));
-					stateGraph.AddTransition(transition4, false);
+					transition4.AddPreAction(new TransitionAction_Message("MessageRaidersSatisfiedLeaving".Translate(assaulterFaction.def.pawnsPlural.CapitalizeFirst(), assaulterFaction.Name)));
+					stateGraph.AddTransition(transition4);
 				}
-				if (this.canKidnap)
+				if (canKidnap)
 				{
 					LordToil startingToil = stateGraph.AttachSubgraph(new LordJob_Kidnap().CreateGraph()).StartingToil;
-					Transition transition5 = new Transition(lordToil2, startingToil, false, true);
+					Transition transition5 = new Transition(lordToil2, startingToil);
 					if (lordToil != null)
 					{
 						transition5.AddSource(lordToil);
 					}
-					transition5.AddPreAction(new TransitionAction_Message("MessageRaidersKidnapping".Translate(this.assaulterFaction.def.pawnsPlural.CapitalizeFirst(), this.assaulterFaction.Name), null, 1f));
+					transition5.AddPreAction(new TransitionAction_Message("MessageRaidersKidnapping".Translate(assaulterFaction.def.pawnsPlural.CapitalizeFirst(), assaulterFaction.Name)));
 					transition5.AddTrigger(new Trigger_KidnapVictimPresent());
-					stateGraph.AddTransition(transition5, false);
+					stateGraph.AddTransition(transition5);
 				}
-				if (this.canSteal)
+				if (canSteal)
 				{
 					LordToil startingToil2 = stateGraph.AttachSubgraph(new LordJob_Steal().CreateGraph()).StartingToil;
-					Transition transition6 = new Transition(lordToil2, startingToil2, false, true);
+					Transition transition6 = new Transition(lordToil2, startingToil2);
 					if (lordToil != null)
 					{
 						transition6.AddSource(lordToil);
 					}
-					transition6.AddPreAction(new TransitionAction_Message("MessageRaidersStealing".Translate(this.assaulterFaction.def.pawnsPlural.CapitalizeFirst(), this.assaulterFaction.Name), null, 1f));
+					transition6.AddPreAction(new TransitionAction_Message("MessageRaidersStealing".Translate(assaulterFaction.def.pawnsPlural.CapitalizeFirst(), assaulterFaction.Name)));
 					transition6.AddTrigger(new Trigger_HighValueThingsAround());
-					stateGraph.AddTransition(transition6, false);
+					stateGraph.AddTransition(transition6);
 				}
 			}
-			Transition transition7 = new Transition(lordToil2, lordToil_ExitMap, false, true);
+			Transition transition7 = new Transition(lordToil2, lordToil_ExitMap);
 			if (lordToil != null)
 			{
 				transition7.AddSource(lordToil);
 			}
 			transition7.AddTrigger(new Trigger_BecameNonHostileToPlayer());
-			transition7.AddPreAction(new TransitionAction_Message("MessageRaidersLeaving".Translate(this.assaulterFaction.def.pawnsPlural.CapitalizeFirst(), this.assaulterFaction.Name), null, 1f));
-			stateGraph.AddTransition(transition7, false);
+			transition7.AddPreAction(new TransitionAction_Message("MessageRaidersLeaving".Translate(assaulterFaction.def.pawnsPlural.CapitalizeFirst(), assaulterFaction.Name)));
+			stateGraph.AddTransition(transition7);
 			return stateGraph;
 		}
 
-		
 		public override void ExposeData()
 		{
-			Scribe_References.Look<Faction>(ref this.assaulterFaction, "assaulterFaction", false);
-			Scribe_Values.Look<bool>(ref this.canKidnap, "canKidnap", true, false);
-			Scribe_Values.Look<bool>(ref this.canTimeoutOrFlee, "canTimeoutOrFlee", true, false);
-			Scribe_Values.Look<bool>(ref this.sappers, "sappers", false, false);
-			Scribe_Values.Look<bool>(ref this.useAvoidGridSmart, "useAvoidGridSmart", false, false);
-			Scribe_Values.Look<bool>(ref this.canSteal, "canSteal", true, false);
+			Scribe_References.Look(ref assaulterFaction, "assaulterFaction");
+			Scribe_Values.Look(ref canKidnap, "canKidnap", defaultValue: true);
+			Scribe_Values.Look(ref canTimeoutOrFlee, "canTimeoutOrFlee", defaultValue: true);
+			Scribe_Values.Look(ref sappers, "sappers", defaultValue: false);
+			Scribe_Values.Look(ref useAvoidGridSmart, "useAvoidGridSmart", defaultValue: false);
+			Scribe_Values.Look(ref canSteal, "canSteal", defaultValue: true);
 		}
-
-		
-		private Faction assaulterFaction;
-
-		
-		private bool canKidnap = true;
-
-		
-		private bool canTimeoutOrFlee = true;
-
-		
-		private bool sappers;
-
-		
-		private bool useAvoidGridSmart;
-
-		
-		private bool canSteal = true;
-
-		
-		private static readonly IntRange AssaultTimeBeforeGiveUp = new IntRange(26000, 38000);
-
-		
-		private static readonly IntRange SapTimeBeforeGiveUp = new IntRange(33000, 38000);
 	}
 }

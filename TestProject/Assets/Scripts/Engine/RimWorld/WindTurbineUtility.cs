@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class WindTurbineUtility
 	{
-		
 		public static IEnumerable<IntVec3> CalculateWindCells(IntVec3 center, Rot4 rot, IntVec2 size)
 		{
 			CellRect rectA = default(CellRect);
@@ -44,26 +41,20 @@ namespace RimWorld
 				rectB.minX = (rectA.minX = center.x - 3);
 				rectB.maxX = (rectA.maxX = center.x + 3);
 			}
-			int num4;
-			for (int z = rectA.minZ; z <= rectA.maxZ; z = num4 + 1)
+			for (int z2 = rectA.minZ; z2 <= rectA.maxZ; z2++)
 			{
-				for (int x = rectA.minX; x <= rectA.maxX; x = num4 + 1)
+				for (int x = rectA.minX; x <= rectA.maxX; x++)
 				{
-					yield return new IntVec3(x, 0, z);
-					num4 = x;
+					yield return new IntVec3(x, 0, z2);
 				}
-				num4 = z;
 			}
-			for (int z = rectB.minZ; z <= rectB.maxZ; z = num4 + 1)
+			for (int z2 = rectB.minZ; z2 <= rectB.maxZ; z2++)
 			{
-				for (int x = rectB.minX; x <= rectB.maxX; x = num4 + 1)
+				for (int x = rectB.minX; x <= rectB.maxX; x++)
 				{
-					yield return new IntVec3(x, 0, z);
-					num4 = x;
+					yield return new IntVec3(x, 0, z2);
 				}
-				num4 = z;
 			}
-			yield break;
 		}
 	}
 }

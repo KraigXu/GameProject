@@ -1,55 +1,19 @@
-﻿using System;
 using System.Linq;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public abstract class ITab : InspectTabBase
 	{
-		
-		
-		protected object SelObject
-		{
-			get
-			{
-				return Find.Selector.SingleSelectedObject;
-			}
-		}
+		protected object SelObject => Find.Selector.SingleSelectedObject;
 
-		
-		
-		protected Thing SelThing
-		{
-			get
-			{
-				return Find.Selector.SingleSelectedThing;
-			}
-		}
+		protected Thing SelThing => Find.Selector.SingleSelectedThing;
 
-		
-		
-		protected Pawn SelPawn
-		{
-			get
-			{
-				return this.SelThing as Pawn;
-			}
-		}
+		protected Pawn SelPawn => SelThing as Pawn;
 
-		
-		
-		private MainTabWindow_Inspect InspectPane
-		{
-			get
-			{
-				return (MainTabWindow_Inspect)MainButtonDefOf.Inspect.TabWindow;
-			}
-		}
+		private MainTabWindow_Inspect InspectPane => (MainTabWindow_Inspect)MainButtonDefOf.Inspect.TabWindow;
 
-		
-		
 		protected override bool StillValid
 		{
 			get
@@ -59,25 +23,20 @@ namespace RimWorld
 					return false;
 				}
 				MainTabWindow_Inspect mainTabWindow_Inspect = (MainTabWindow_Inspect)Find.MainTabsRoot.OpenTab.TabWindow;
-				return mainTabWindow_Inspect.CurTabs != null && mainTabWindow_Inspect.CurTabs.Contains(this);
+				if (mainTabWindow_Inspect.CurTabs != null)
+				{
+					return mainTabWindow_Inspect.CurTabs.Contains(this);
+				}
+				return false;
 			}
 		}
 
-		
-		
-		protected override float PaneTopY
-		{
-			get
-			{
-				return this.InspectPane.PaneTopY;
-			}
-		}
+		protected override float PaneTopY => InspectPane.PaneTopY;
 
-		
 		protected override void CloseTab()
 		{
-			this.InspectPane.CloseOpenTab();
-			SoundDefOf.TabClose.PlayOneShotOnCamera(null);
+			InspectPane.CloseOpenTab();
+			SoundDefOf.TabClose.PlayOneShotOnCamera();
 		}
 	}
 }

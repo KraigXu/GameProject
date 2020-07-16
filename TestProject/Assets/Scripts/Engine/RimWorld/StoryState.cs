@@ -1,221 +1,161 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StoryState : IExposable
 	{
-		
-		
-		public IIncidentTarget Target
-		{
-			get
-			{
-				return this.target;
-			}
-		}
+		private IIncidentTarget target;
 
-		
-		
-		public List<QuestScriptDef> RecentRandomQuests
-		{
-			get
-			{
-				return this.recentRandomQuests;
-			}
-		}
+		private int lastThreatBigTick = -1;
 
-		
-		
-		public List<QuestScriptDef> RecentRandomDecrees
-		{
-			get
-			{
-				return this.recentRandomDecrees;
-			}
-		}
+		private Dictionary<int, int> colonistCountTicks = new Dictionary<int, int>();
 
-		
-		
-		public int LastRoyalFavorQuestTick
-		{
-			get
-			{
-				return this.lastRoyalFavorQuestTick;
-			}
-		}
+		public Dictionary<IncidentDef, int> lastFireTicks = new Dictionary<IncidentDef, int>();
 
-		
-		
+		private List<QuestScriptDef> recentRandomQuests = new List<QuestScriptDef>();
+
+		private List<QuestScriptDef> recentRandomDecrees = new List<QuestScriptDef>();
+
+		private int lastRoyalFavorQuestTick = -1;
+
+		private const int RecentRandomQuestsMaxStorage = 5;
+
+		public IIncidentTarget Target => target;
+
+		public List<QuestScriptDef> RecentRandomQuests => recentRandomQuests;
+
+		public List<QuestScriptDef> RecentRandomDecrees => recentRandomDecrees;
+
+		public int LastRoyalFavorQuestTick => lastRoyalFavorQuestTick;
+
 		public int LastThreatBigTick
 		{
 			get
 			{
-				if (this.lastThreatBigTick > Find.TickManager.TicksGame + 1000)
+				if (lastThreatBigTick > Find.TickManager.TicksGame + 1000)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Latest big threat queue time was ",
-						this.lastThreatBigTick,
-						" at tick ",
-						Find.TickManager.TicksGame,
-						". This is too far in the future. Resetting."
-					}), false);
-					this.lastThreatBigTick = Find.TickManager.TicksGame - 1;
+					Log.Error("Latest big threat queue time was " + lastThreatBigTick + " at tick " + Find.TickManager.TicksGame + ". This is too far in the future. Resetting.");
+					lastThreatBigTick = Find.TickManager.TicksGame - 1;
 				}
-				return this.lastThreatBigTick;
+				return lastThreatBigTick;
 			}
 		}
 
-		
 		public StoryState(IIncidentTarget target)
 		{
 			this.target = target;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.lastThreatBigTick, "lastThreatBigTick", 0, true);
-			Scribe_Collections.Look<IncidentDef, int>(ref this.lastFireTicks, "lastFireTicks", LookMode.Def, LookMode.Value);
-			Scribe_Collections.Look<QuestScriptDef>(ref this.recentRandomQuests, "recentRandomQuests", LookMode.Def, Array.Empty<object>());
-			Scribe_Collections.Look<QuestScriptDef>(ref this.recentRandomDecrees, "recentRandomDecrees", LookMode.Def, Array.Empty<object>());
-			Scribe_Collections.Look<int, int>(ref this.colonistCountTicks, "colonistCountTicks", LookMode.Value, LookMode.Value);
-			Scribe_Values.Look<int>(ref this.lastRoyalFavorQuestTick, "lastRoyalFavorQuestTick", 0, false);
+			Scribe_Values.Look(ref lastThreatBigTick, "lastThreatBigTick", 0, forceSave: true);
+			Scribe_Collections.Look(ref lastFireTicks, "lastFireTicks", LookMode.Def, LookMode.Value);
+			Scribe_Collections.Look(ref recentRandomQuests, "recentRandomQuests", LookMode.Def);
+			Scribe_Collections.Look(ref recentRandomDecrees, "recentRandomDecrees", LookMode.Def);
+			Scribe_Collections.Look(ref colonistCountTicks, "colonistCountTicks", LookMode.Value, LookMode.Value);
+			Scribe_Values.Look(ref lastRoyalFavorQuestTick, "lastRoyalFavorQuestTick", 0);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.recentRandomQuests == null)
+				if (recentRandomQuests == null)
 				{
-					this.recentRandomQuests = new List<QuestScriptDef>();
+					recentRandomQuests = new List<QuestScriptDef>();
 				}
-				if (this.recentRandomDecrees == null)
+				if (recentRandomDecrees == null)
 				{
-					this.recentRandomDecrees = new List<QuestScriptDef>();
+					recentRandomDecrees = new List<QuestScriptDef>();
 				}
-				if (this.colonistCountTicks == null)
+				if (colonistCountTicks == null)
 				{
-					this.colonistCountTicks = new Dictionary<int, int>();
+					colonistCountTicks = new Dictionary<int, int>();
 				}
-				this.RecordPopulationIncrease();
+				RecordPopulationIncrease();
 			}
 		}
 
-		
 		public void Notify_IncidentFired(FiringIncident fi)
 		{
-			if (fi.parms.forced || fi.parms.target != this.target)
+			if (!fi.parms.forced && fi.parms.target == target)
 			{
-				return;
-			}
-			int ticksGame = Find.TickManager.TicksGame;
-			if (fi.def.category == IncidentCategoryDefOf.ThreatBig)
-			{
-				this.lastThreatBigTick = ticksGame;
-				Find.StoryWatcher.statsRecord.numThreatBigs++;
-			}
-			if (this.lastFireTicks.ContainsKey(fi.def))
-			{
-				this.lastFireTicks[fi.def] = ticksGame;
-			}
-			else
-			{
-				this.lastFireTicks.Add(fi.def, ticksGame);
-			}
-			if (fi.def == IncidentDefOf.GiveQuest_Random)
-			{
-				this.RecordRandomQuestFired(fi.parms.questScriptDef);
+				int ticksGame = Find.TickManager.TicksGame;
+				if (fi.def.category == IncidentCategoryDefOf.ThreatBig)
+				{
+					lastThreatBigTick = ticksGame;
+					Find.StoryWatcher.statsRecord.numThreatBigs++;
+				}
+				if (lastFireTicks.ContainsKey(fi.def))
+				{
+					lastFireTicks[fi.def] = ticksGame;
+				}
+				else
+				{
+					lastFireTicks.Add(fi.def, ticksGame);
+				}
+				if (fi.def == IncidentDefOf.GiveQuest_Random)
+				{
+					RecordRandomQuestFired(fi.parms.questScriptDef);
+				}
 			}
 		}
 
-		
 		public void RecordRandomQuestFired(QuestScriptDef questScript)
 		{
-			this.recentRandomQuests.Insert(0, questScript);
-			while (this.recentRandomQuests.Count > 5)
+			recentRandomQuests.Insert(0, questScript);
+			while (recentRandomQuests.Count > 5)
 			{
-				this.recentRandomQuests.RemoveAt(this.recentRandomQuests.Count - 1);
+				recentRandomQuests.RemoveAt(recentRandomQuests.Count - 1);
 			}
 			if (questScript.canGiveRoyalFavor)
 			{
-				this.lastRoyalFavorQuestTick = Find.TickManager.TicksGame;
+				lastRoyalFavorQuestTick = Find.TickManager.TicksGame;
 			}
 		}
 
-		
 		public void RecordDecreeFired(QuestScriptDef questScript)
 		{
-			this.recentRandomDecrees.Insert(0, questScript);
-			while (this.recentRandomDecrees.Count > 5)
+			recentRandomDecrees.Insert(0, questScript);
+			while (recentRandomDecrees.Count > 5)
 			{
-				this.recentRandomDecrees.RemoveAt(this.recentRandomDecrees.Count - 1);
+				recentRandomDecrees.RemoveAt(recentRandomDecrees.Count - 1);
 			}
 		}
 
-		
 		public void RecordPopulationIncrease()
 		{
 			int count = PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists.Count;
-			if (!this.colonistCountTicks.ContainsKey(count))
+			if (!colonistCountTicks.ContainsKey(count))
 			{
-				this.colonistCountTicks.Add(count, Find.TickManager.TicksGame);
+				colonistCountTicks.Add(count, Find.TickManager.TicksGame);
 			}
 		}
 
-		
 		public int GetTicksFromColonistCount(int count)
 		{
-			if (!this.colonistCountTicks.ContainsKey(count))
+			if (!colonistCountTicks.ContainsKey(count))
 			{
-				this.colonistCountTicks.Add(count, Find.TickManager.TicksGame);
+				colonistCountTicks.Add(count, Find.TickManager.TicksGame);
 			}
-			return this.colonistCountTicks[count];
+			return colonistCountTicks[count];
 		}
 
-		
 		public void CopyTo(StoryState other)
 		{
-			other.lastThreatBigTick = this.lastThreatBigTick;
+			other.lastThreatBigTick = lastThreatBigTick;
 			other.lastFireTicks.Clear();
-			foreach (KeyValuePair<IncidentDef, int> keyValuePair in this.lastFireTicks)
+			foreach (KeyValuePair<IncidentDef, int> lastFireTick in lastFireTicks)
 			{
-				other.lastFireTicks.Add(keyValuePair.Key, keyValuePair.Value);
+				other.lastFireTicks.Add(lastFireTick.Key, lastFireTick.Value);
 			}
 			other.RecentRandomQuests.Clear();
-			other.recentRandomQuests.AddRange(this.RecentRandomQuests);
+			other.recentRandomQuests.AddRange(RecentRandomQuests);
 			other.RecentRandomDecrees.Clear();
-			other.RecentRandomDecrees.AddRange(this.RecentRandomDecrees);
-			other.lastRoyalFavorQuestTick = this.lastRoyalFavorQuestTick;
+			other.RecentRandomDecrees.AddRange(RecentRandomDecrees);
+			other.lastRoyalFavorQuestTick = lastRoyalFavorQuestTick;
 			other.colonistCountTicks.Clear();
-			foreach (KeyValuePair<int, int> keyValuePair2 in this.colonistCountTicks)
+			foreach (KeyValuePair<int, int> colonistCountTick in colonistCountTicks)
 			{
-				other.colonistCountTicks.Add(keyValuePair2.Key, keyValuePair2.Value);
+				other.colonistCountTicks.Add(colonistCountTick.Key, colonistCountTick.Value);
 			}
 		}
-
-		
-		private IIncidentTarget target;
-
-		
-		private int lastThreatBigTick = -1;
-
-		
-		private Dictionary<int, int> colonistCountTicks = new Dictionary<int, int>();
-
-		
-		public Dictionary<IncidentDef, int> lastFireTicks = new Dictionary<IncidentDef, int>();
-
-		
-		private List<QuestScriptDef> recentRandomQuests = new List<QuestScriptDef>();
-
-		
-		private List<QuestScriptDef> recentRandomDecrees = new List<QuestScriptDef>();
-
-		
-		private int lastRoyalFavorQuestTick = -1;
-
-		
-		private const int RecentRandomQuestsMaxStorage = 5;
 	}
 }

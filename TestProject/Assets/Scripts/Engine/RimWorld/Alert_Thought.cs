@@ -1,90 +1,81 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Alert_Thought : Alert
 	{
-		
-		
-		protected abstract ThoughtDef Thought { get; }
+		protected string explanationKey;
 
-		
-		public override string GetLabel()
+		private static List<Thought> tmpThoughts = new List<Thought>();
+
+		private List<Pawn> affectedPawnsResult = new List<Pawn>();
+
+		protected abstract ThoughtDef Thought
 		{
-			int count = this.AffectedPawns.Count;
-			string label = base.GetLabel();
-			if (count > 1)
-			{
-				return string.Format("{0} x{1}", label, count.ToString());
-			}
-			return label;
+			get;
 		}
 
-		
-		
 		private List<Pawn> AffectedPawns
 		{
 			get
 			{
-				this.affectedPawnsResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
+				affectedPawnsResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
 				{
-					if (pawn.Dead)
+					if (item.Dead)
 					{
-						Log.Error("Dead pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists:" + pawn, false);
+						Log.Error("Dead pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists:" + item);
 					}
-					else if (pawn.needs.mood != null)
+					else if (item.needs.mood != null)
 					{
-						pawn.needs.mood.thoughts.GetAllMoodThoughts(Alert_Thought.tmpThoughts);
+						item.needs.mood.thoughts.GetAllMoodThoughts(tmpThoughts);
 						try
 						{
-							ThoughtDef thought = this.Thought;
-							for (int i = 0; i < Alert_Thought.tmpThoughts.Count; i++)
+							ThoughtDef thought = Thought;
+							for (int i = 0; i < tmpThoughts.Count; i++)
 							{
-								if (Alert_Thought.tmpThoughts[i].def == thought && !ThoughtUtility.ThoughtNullified(pawn, Alert_Thought.tmpThoughts[i].def))
+								if (tmpThoughts[i].def == thought && !ThoughtUtility.ThoughtNullified(item, tmpThoughts[i].def))
 								{
-									this.affectedPawnsResult.Add(pawn);
+									affectedPawnsResult.Add(item);
 								}
 							}
 						}
 						finally
 						{
-							Alert_Thought.tmpThoughts.Clear();
+							tmpThoughts.Clear();
 						}
 					}
 				}
-				return this.affectedPawnsResult;
+				return affectedPawnsResult;
 			}
 		}
 
-		
-		public override AlertReport GetReport()
+		public override string GetLabel()
 		{
-			return AlertReport.CulpritsAre(this.AffectedPawns);
+			int count = AffectedPawns.Count;
+			string label = base.GetLabel();
+			if (count > 1)
+			{
+				return $"{label} x{count.ToString()}";
+			}
+			return label;
 		}
 
-		
+		public override AlertReport GetReport()
+		{
+			return AlertReport.CulpritsAre(AffectedPawns);
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.AffectedPawns)
+			foreach (Pawn affectedPawn in AffectedPawns)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + affectedPawn.NameShortColored.Resolve());
 			}
-			return this.explanationKey.Translate(stringBuilder.ToString());
+			return explanationKey.Translate(stringBuilder.ToString());
 		}
-
-		
-		protected string explanationKey;
-
-		
-		private static List<Thought> tmpThoughts = new List<Thought>();
-
-		
-		private List<Pawn> affectedPawnsResult = new List<Pawn>();
 	}
 }

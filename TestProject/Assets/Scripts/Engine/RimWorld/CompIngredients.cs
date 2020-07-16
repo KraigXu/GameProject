@@ -1,80 +1,77 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompIngredients : ThingComp
 	{
-		
+		public List<ThingDef> ingredients = new List<ThingDef>();
+
+		private const int MaxNumIngredients = 3;
+
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Collections.Look<ThingDef>(ref this.ingredients, "ingredients", LookMode.Def, Array.Empty<object>());
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.ingredients == null)
+			Scribe_Collections.Look(ref ingredients, "ingredients", LookMode.Def);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && ingredients == null)
 			{
-				this.ingredients = new List<ThingDef>();
+				ingredients = new List<ThingDef>();
 			}
 		}
 
-		
 		public void RegisterIngredient(ThingDef def)
 		{
-			if (!this.ingredients.Contains(def))
+			if (!ingredients.Contains(def))
 			{
-				this.ingredients.Add(def);
+				ingredients.Add(def);
 			}
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
 			base.PostSplitOff(piece);
-			if (piece != this.parent)
+			if (piece != parent)
 			{
 				CompIngredients compIngredients = piece.TryGetComp<CompIngredients>();
-				for (int i = 0; i < this.ingredients.Count; i++)
+				for (int i = 0; i < ingredients.Count; i++)
 				{
-					compIngredients.ingredients.Add(this.ingredients[i]);
+					compIngredients.ingredients.Add(ingredients[i]);
 				}
 			}
 		}
 
-		
 		public override void PreAbsorbStack(Thing otherStack, int count)
 		{
 			base.PreAbsorbStack(otherStack, count);
 			List<ThingDef> list = otherStack.TryGetComp<CompIngredients>().ingredients;
 			for (int i = 0; i < list.Count; i++)
 			{
-				if (!this.ingredients.Contains(list[i]))
+				if (!ingredients.Contains(list[i]))
 				{
-					this.ingredients.Add(list[i]);
+					ingredients.Add(list[i]);
 				}
 			}
-			if (this.ingredients.Count > 3)
+			if (ingredients.Count > 3)
 			{
-				this.ingredients.Shuffle<ThingDef>();
-				while (this.ingredients.Count > 3)
+				ingredients.Shuffle();
+				while (ingredients.Count > 3)
 				{
-					this.ingredients.Remove(this.ingredients[this.ingredients.Count - 1]);
+					ingredients.Remove(ingredients[ingredients.Count - 1]);
 				}
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			if (this.ingredients.Count > 0)
+			if (ingredients.Count > 0)
 			{
 				stringBuilder.Append("Ingredients".Translate() + ": ");
-				for (int i = 0; i < this.ingredients.Count; i++)
+				for (int i = 0; i < ingredients.Count; i++)
 				{
-					stringBuilder.Append((i == 0) ? this.ingredients[i].LabelCap.Resolve() : this.ingredients[i].label);
-					if (i < this.ingredients.Count - 1)
+					stringBuilder.Append((i == 0) ? ingredients[i].LabelCap.Resolve() : ingredients[i].label);
+					if (i < ingredients.Count - 1)
 					{
 						stringBuilder.Append(", ");
 					}
@@ -82,11 +79,5 @@ namespace RimWorld
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		public List<ThingDef> ingredients = new List<ThingDef>();
-
-		
-		private const int MaxNumIngredients = 3;
 	}
 }

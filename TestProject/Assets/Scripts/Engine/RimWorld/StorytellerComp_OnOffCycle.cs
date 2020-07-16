@@ -1,87 +1,71 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_OnOffCycle : StorytellerComp
 	{
-		
-		
-		protected StorytellerCompProperties_OnOffCycle Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_OnOffCycle)this.props;
-			}
-		}
+		protected StorytellerCompProperties_OnOffCycle Props => (StorytellerCompProperties_OnOffCycle)props;
 
-		
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
 			float num = 1f;
-			if (this.Props.acceptFractionByDaysPassedCurve != null)
+			if (Props.acceptFractionByDaysPassedCurve != null)
 			{
-				num *= this.Props.acceptFractionByDaysPassedCurve.Evaluate(GenDate.DaysPassedFloat);
+				num *= Props.acceptFractionByDaysPassedCurve.Evaluate(GenDate.DaysPassedFloat);
 			}
-			if (this.Props.acceptPercentFactorPerThreatPointsCurve != null)
+			if (Props.acceptPercentFactorPerThreatPointsCurve != null)
 			{
-				num *= this.Props.acceptPercentFactorPerThreatPointsCurve.Evaluate(StorytellerUtility.DefaultThreatPointsNow(target));
+				num *= Props.acceptPercentFactorPerThreatPointsCurve.Evaluate(StorytellerUtility.DefaultThreatPointsNow(target));
 			}
-			if (this.Props.acceptPercentFactorPerProgressScoreCurve != null)
+			if (Props.acceptPercentFactorPerProgressScoreCurve != null)
 			{
-				num *= this.Props.acceptPercentFactorPerProgressScoreCurve.Evaluate(StorytellerUtility.GetProgressScore(target));
+				num *= Props.acceptPercentFactorPerProgressScoreCurve.Evaluate(StorytellerUtility.GetProgressScore(target));
 			}
-			int incCount = IncidentCycleUtility.IncidentCountThisInterval(target, Find.Storyteller.storytellerComps.IndexOf(this), this.Props.minDaysPassed, this.Props.onDays, this.Props.offDays, this.Props.minSpacingDays, this.Props.numIncidentsRange.min, this.Props.numIncidentsRange.max, num);
-			int num2;
-			for (int i = 0; i < incCount; i = num2 + 1)
+			int incCount = IncidentCycleUtility.IncidentCountThisInterval(target, Find.Storyteller.storytellerComps.IndexOf(this), Props.minDaysPassed, Props.onDays, Props.offDays, Props.minSpacingDays, Props.numIncidentsRange.min, Props.numIncidentsRange.max, num);
+			for (int i = 0; i < incCount; i++)
 			{
-				FiringIncident firingIncident = this.GenerateIncident(target);
+				FiringIncident firingIncident = GenerateIncident(target);
 				if (firingIncident != null)
 				{
 					yield return firingIncident;
 				}
-				num2 = i;
 			}
-			yield break;
 		}
 
-		
 		private FiringIncident GenerateIncident(IIncidentTarget target)
 		{
-			IncidentParms parms = this.GenerateParms(this.Props.IncidentCategory, target);
-			IncidentDef def;
-			if ((float)GenDate.DaysPassed < this.Props.forceRaidEnemyBeforeDaysPassed)
+			IncidentParms parms = GenerateParms(Props.IncidentCategory, target);
+			IncidentDef result;
+			if ((float)GenDate.DaysPassed < Props.forceRaidEnemyBeforeDaysPassed)
 			{
-				if (!IncidentDefOf.RaidEnemy.Worker.CanFireNow(parms, false))
+				if (!IncidentDefOf.RaidEnemy.Worker.CanFireNow(parms))
 				{
 					return null;
 				}
-				def = IncidentDefOf.RaidEnemy;
+				result = IncidentDefOf.RaidEnemy;
 			}
-			else if (this.Props.incident != null)
+			else if (Props.incident != null)
 			{
-				if (!this.Props.incident.Worker.CanFireNow(parms, false))
+				if (!Props.incident.Worker.CanFireNow(parms))
 				{
 					return null;
 				}
-				def = this.Props.incident;
+				result = Props.incident;
 			}
-			else if (!base.UsableIncidentsInCategory(this.Props.IncidentCategory, parms).TryRandomElementByWeight(new Func<IncidentDef, float>(base.IncidentChanceFinal), out def))
+			else if (!UsableIncidentsInCategory(Props.IncidentCategory, parms).TryRandomElementByWeight(base.IncidentChanceFinal, out result))
 			{
 				return null;
 			}
-			return new FiringIncident(def, this, null)
+			return new FiringIncident(result, this)
 			{
 				parms = parms
 			};
 		}
 
-		
 		public override string ToString()
 		{
-			return base.ToString() + " (" + ((this.Props.incident != null) ? this.Props.incident.defName : this.Props.IncidentCategory.defName) + ")";
+			return base.ToString() + " (" + ((Props.incident != null) ? Props.incident.defName : Props.IncidentCategory.defName) + ")";
 		}
 	}
 }

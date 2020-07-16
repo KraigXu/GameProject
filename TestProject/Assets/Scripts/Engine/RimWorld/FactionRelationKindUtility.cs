@@ -1,13 +1,10 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FactionRelationKindUtility
 	{
-		
 		public static string GetLabel(this FactionRelationKind kind)
 		{
 			switch (kind)
@@ -23,7 +20,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static Color GetColor(this FactionRelationKind kind)
 		{
 			switch (kind)

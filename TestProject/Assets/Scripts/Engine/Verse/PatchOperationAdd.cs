@@ -1,58 +1,43 @@
-﻿using System;
-using System.Collections;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperationAdd : PatchOperationPathed
 	{
-		
+		private enum Order
+		{
+			Append,
+			Prepend
+		}
+
+		private XmlContainer value;
+
+		private Order order;
+
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
-			XmlNode node = this.value.node;
+			XmlNode node = value.node;
 			bool result = false;
-			foreach (object obj in xml.SelectNodes(this.xpath))
+			foreach (object item in xml.SelectNodes(xpath))
 			{
 				result = true;
-				XmlNode xmlNode = obj as XmlNode;
-				if (this.order == PatchOperationAdd.Order.Append)
+				XmlNode xmlNode = item as XmlNode;
+				if (order == Order.Append)
 				{
-					IEnumerator enumerator2 = node.ChildNodes.GetEnumerator();
+					foreach (XmlNode childNode in node.ChildNodes)
 					{
-						while (enumerator2.MoveNext())
-						{
-							object obj2 = enumerator2.Current;
-							XmlNode node2 = (XmlNode)obj2;
-							xmlNode.AppendChild(xmlNode.OwnerDocument.ImportNode(node2, true));
-						}
-						continue;
+						xmlNode.AppendChild(xmlNode.OwnerDocument.ImportNode(childNode, deep: true));
 					}
 				}
-				if (this.order == PatchOperationAdd.Order.Prepend)
+				else if (order == Order.Prepend)
 				{
-					for (int i = node.ChildNodes.Count - 1; i >= 0; i--)
+					for (int num = node.ChildNodes.Count - 1; num >= 0; num--)
 					{
-						xmlNode.PrependChild(xmlNode.OwnerDocument.ImportNode(node.ChildNodes[i], true));
+						xmlNode.PrependChild(xmlNode.OwnerDocument.ImportNode(node.ChildNodes[num], deep: true));
 					}
 				}
 			}
 			return result;
-		}
-
-		
-		private XmlContainer value;
-
-		
-		private PatchOperationAdd.Order order;
-
-		
-		private enum Order
-		{
-			
-			Append,
-			
-			Prepend
 		}
 	}
 }

@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class StoragePriorityHelper
 	{
-		
 		public static string Label(this StoragePriority p)
 		{
 			switch (p)

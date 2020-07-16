@@ -1,93 +1,119 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class GenAdj
 	{
-		
+		public static IntVec3[] CardinalDirections;
+
+		public static IntVec3[] CardinalDirectionsAndInside;
+
+		public static IntVec3[] CardinalDirectionsAround;
+
+		public static IntVec3[] DiagonalDirections;
+
+		public static IntVec3[] DiagonalDirectionsAround;
+
+		public static IntVec3[] AdjacentCells;
+
+		public static IntVec3[] AdjacentCellsAndInside;
+
+		public static IntVec3[] AdjacentCellsAround;
+
+		public static IntVec3[] AdjacentCellsAroundBottom;
+
+		private static List<IntVec3> adjRandomOrderList;
+
+		private static List<IntVec3> validCells;
+
 		static GenAdj()
 		{
-			GenAdj.SetupAdjacencyTables();
+			CardinalDirections = new IntVec3[4];
+			CardinalDirectionsAndInside = new IntVec3[5];
+			CardinalDirectionsAround = new IntVec3[4];
+			DiagonalDirections = new IntVec3[4];
+			DiagonalDirectionsAround = new IntVec3[4];
+			AdjacentCells = new IntVec3[8];
+			AdjacentCellsAndInside = new IntVec3[9];
+			AdjacentCellsAround = new IntVec3[8];
+			AdjacentCellsAroundBottom = new IntVec3[9];
+			validCells = new List<IntVec3>();
+			SetupAdjacencyTables();
 		}
 
-		
 		private static void SetupAdjacencyTables()
 		{
-			GenAdj.CardinalDirections[0] = new IntVec3(0, 0, 1);
-			GenAdj.CardinalDirections[1] = new IntVec3(1, 0, 0);
-			GenAdj.CardinalDirections[2] = new IntVec3(0, 0, -1);
-			GenAdj.CardinalDirections[3] = new IntVec3(-1, 0, 0);
-			GenAdj.CardinalDirectionsAndInside[0] = new IntVec3(0, 0, 1);
-			GenAdj.CardinalDirectionsAndInside[1] = new IntVec3(1, 0, 0);
-			GenAdj.CardinalDirectionsAndInside[2] = new IntVec3(0, 0, -1);
-			GenAdj.CardinalDirectionsAndInside[3] = new IntVec3(-1, 0, 0);
-			GenAdj.CardinalDirectionsAndInside[4] = new IntVec3(0, 0, 0);
-			GenAdj.CardinalDirectionsAround[0] = new IntVec3(0, 0, -1);
-			GenAdj.CardinalDirectionsAround[1] = new IntVec3(-1, 0, 0);
-			GenAdj.CardinalDirectionsAround[2] = new IntVec3(0, 0, 1);
-			GenAdj.CardinalDirectionsAround[3] = new IntVec3(1, 0, 0);
-			GenAdj.DiagonalDirections[0] = new IntVec3(-1, 0, -1);
-			GenAdj.DiagonalDirections[1] = new IntVec3(-1, 0, 1);
-			GenAdj.DiagonalDirections[2] = new IntVec3(1, 0, 1);
-			GenAdj.DiagonalDirections[3] = new IntVec3(1, 0, -1);
-			GenAdj.DiagonalDirectionsAround[0] = new IntVec3(-1, 0, -1);
-			GenAdj.DiagonalDirectionsAround[1] = new IntVec3(-1, 0, 1);
-			GenAdj.DiagonalDirectionsAround[2] = new IntVec3(1, 0, 1);
-			GenAdj.DiagonalDirectionsAround[3] = new IntVec3(1, 0, -1);
-			GenAdj.AdjacentCells[0] = new IntVec3(0, 0, 1);
-			GenAdj.AdjacentCells[1] = new IntVec3(1, 0, 0);
-			GenAdj.AdjacentCells[2] = new IntVec3(0, 0, -1);
-			GenAdj.AdjacentCells[3] = new IntVec3(-1, 0, 0);
-			GenAdj.AdjacentCells[4] = new IntVec3(1, 0, -1);
-			GenAdj.AdjacentCells[5] = new IntVec3(1, 0, 1);
-			GenAdj.AdjacentCells[6] = new IntVec3(-1, 0, 1);
-			GenAdj.AdjacentCells[7] = new IntVec3(-1, 0, -1);
-			GenAdj.AdjacentCellsAndInside[0] = new IntVec3(0, 0, 1);
-			GenAdj.AdjacentCellsAndInside[1] = new IntVec3(1, 0, 0);
-			GenAdj.AdjacentCellsAndInside[2] = new IntVec3(0, 0, -1);
-			GenAdj.AdjacentCellsAndInside[3] = new IntVec3(-1, 0, 0);
-			GenAdj.AdjacentCellsAndInside[4] = new IntVec3(1, 0, -1);
-			GenAdj.AdjacentCellsAndInside[5] = new IntVec3(1, 0, 1);
-			GenAdj.AdjacentCellsAndInside[6] = new IntVec3(-1, 0, 1);
-			GenAdj.AdjacentCellsAndInside[7] = new IntVec3(-1, 0, -1);
-			GenAdj.AdjacentCellsAndInside[8] = new IntVec3(0, 0, 0);
-			GenAdj.AdjacentCellsAround[0] = new IntVec3(0, 0, 1);
-			GenAdj.AdjacentCellsAround[1] = new IntVec3(1, 0, 1);
-			GenAdj.AdjacentCellsAround[2] = new IntVec3(1, 0, 0);
-			GenAdj.AdjacentCellsAround[3] = new IntVec3(1, 0, -1);
-			GenAdj.AdjacentCellsAround[4] = new IntVec3(0, 0, -1);
-			GenAdj.AdjacentCellsAround[5] = new IntVec3(-1, 0, -1);
-			GenAdj.AdjacentCellsAround[6] = new IntVec3(-1, 0, 0);
-			GenAdj.AdjacentCellsAround[7] = new IntVec3(-1, 0, 1);
-			GenAdj.AdjacentCellsAroundBottom[0] = new IntVec3(0, 0, -1);
-			GenAdj.AdjacentCellsAroundBottom[1] = new IntVec3(-1, 0, -1);
-			GenAdj.AdjacentCellsAroundBottom[2] = new IntVec3(-1, 0, 0);
-			GenAdj.AdjacentCellsAroundBottom[3] = new IntVec3(-1, 0, 1);
-			GenAdj.AdjacentCellsAroundBottom[4] = new IntVec3(0, 0, 1);
-			GenAdj.AdjacentCellsAroundBottom[5] = new IntVec3(1, 0, 1);
-			GenAdj.AdjacentCellsAroundBottom[6] = new IntVec3(1, 0, 0);
-			GenAdj.AdjacentCellsAroundBottom[7] = new IntVec3(1, 0, -1);
-			GenAdj.AdjacentCellsAroundBottom[8] = new IntVec3(0, 0, 0);
+			CardinalDirections[0] = new IntVec3(0, 0, 1);
+			CardinalDirections[1] = new IntVec3(1, 0, 0);
+			CardinalDirections[2] = new IntVec3(0, 0, -1);
+			CardinalDirections[3] = new IntVec3(-1, 0, 0);
+			CardinalDirectionsAndInside[0] = new IntVec3(0, 0, 1);
+			CardinalDirectionsAndInside[1] = new IntVec3(1, 0, 0);
+			CardinalDirectionsAndInside[2] = new IntVec3(0, 0, -1);
+			CardinalDirectionsAndInside[3] = new IntVec3(-1, 0, 0);
+			CardinalDirectionsAndInside[4] = new IntVec3(0, 0, 0);
+			CardinalDirectionsAround[0] = new IntVec3(0, 0, -1);
+			CardinalDirectionsAround[1] = new IntVec3(-1, 0, 0);
+			CardinalDirectionsAround[2] = new IntVec3(0, 0, 1);
+			CardinalDirectionsAround[3] = new IntVec3(1, 0, 0);
+			DiagonalDirections[0] = new IntVec3(-1, 0, -1);
+			DiagonalDirections[1] = new IntVec3(-1, 0, 1);
+			DiagonalDirections[2] = new IntVec3(1, 0, 1);
+			DiagonalDirections[3] = new IntVec3(1, 0, -1);
+			DiagonalDirectionsAround[0] = new IntVec3(-1, 0, -1);
+			DiagonalDirectionsAround[1] = new IntVec3(-1, 0, 1);
+			DiagonalDirectionsAround[2] = new IntVec3(1, 0, 1);
+			DiagonalDirectionsAround[3] = new IntVec3(1, 0, -1);
+			AdjacentCells[0] = new IntVec3(0, 0, 1);
+			AdjacentCells[1] = new IntVec3(1, 0, 0);
+			AdjacentCells[2] = new IntVec3(0, 0, -1);
+			AdjacentCells[3] = new IntVec3(-1, 0, 0);
+			AdjacentCells[4] = new IntVec3(1, 0, -1);
+			AdjacentCells[5] = new IntVec3(1, 0, 1);
+			AdjacentCells[6] = new IntVec3(-1, 0, 1);
+			AdjacentCells[7] = new IntVec3(-1, 0, -1);
+			AdjacentCellsAndInside[0] = new IntVec3(0, 0, 1);
+			AdjacentCellsAndInside[1] = new IntVec3(1, 0, 0);
+			AdjacentCellsAndInside[2] = new IntVec3(0, 0, -1);
+			AdjacentCellsAndInside[3] = new IntVec3(-1, 0, 0);
+			AdjacentCellsAndInside[4] = new IntVec3(1, 0, -1);
+			AdjacentCellsAndInside[5] = new IntVec3(1, 0, 1);
+			AdjacentCellsAndInside[6] = new IntVec3(-1, 0, 1);
+			AdjacentCellsAndInside[7] = new IntVec3(-1, 0, -1);
+			AdjacentCellsAndInside[8] = new IntVec3(0, 0, 0);
+			AdjacentCellsAround[0] = new IntVec3(0, 0, 1);
+			AdjacentCellsAround[1] = new IntVec3(1, 0, 1);
+			AdjacentCellsAround[2] = new IntVec3(1, 0, 0);
+			AdjacentCellsAround[3] = new IntVec3(1, 0, -1);
+			AdjacentCellsAround[4] = new IntVec3(0, 0, -1);
+			AdjacentCellsAround[5] = new IntVec3(-1, 0, -1);
+			AdjacentCellsAround[6] = new IntVec3(-1, 0, 0);
+			AdjacentCellsAround[7] = new IntVec3(-1, 0, 1);
+			AdjacentCellsAroundBottom[0] = new IntVec3(0, 0, -1);
+			AdjacentCellsAroundBottom[1] = new IntVec3(-1, 0, -1);
+			AdjacentCellsAroundBottom[2] = new IntVec3(-1, 0, 0);
+			AdjacentCellsAroundBottom[3] = new IntVec3(-1, 0, 1);
+			AdjacentCellsAroundBottom[4] = new IntVec3(0, 0, 1);
+			AdjacentCellsAroundBottom[5] = new IntVec3(1, 0, 1);
+			AdjacentCellsAroundBottom[6] = new IntVec3(1, 0, 0);
+			AdjacentCellsAroundBottom[7] = new IntVec3(1, 0, -1);
+			AdjacentCellsAroundBottom[8] = new IntVec3(0, 0, 0);
 		}
 
-		
 		public static List<IntVec3> AdjacentCells8WayRandomized()
 		{
-			if (GenAdj.adjRandomOrderList == null)
+			if (adjRandomOrderList == null)
 			{
-				GenAdj.adjRandomOrderList = new List<IntVec3>();
+				adjRandomOrderList = new List<IntVec3>();
 				for (int i = 0; i < 8; i++)
 				{
-					GenAdj.adjRandomOrderList.Add(GenAdj.AdjacentCells[i]);
+					adjRandomOrderList.Add(AdjacentCells[i]);
 				}
 			}
-			GenAdj.adjRandomOrderList.Shuffle<IntVec3>();
-			return GenAdj.adjRandomOrderList;
+			adjRandomOrderList.Shuffle();
+			return adjRandomOrderList;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsOccupiedBy(Thing t)
 		{
 			if (t.def.size.x == 1 && t.def.size.z == 1)
@@ -96,71 +122,53 @@ namespace Verse
 			}
 			else
 			{
-				foreach (IntVec3 intVec in GenAdj.CellsOccupiedBy(t.Position, t.Rotation, t.def.size))
+				foreach (IntVec3 item in CellsOccupiedBy(t.Position, t.Rotation, t.def.size))
 				{
-					yield return intVec;
+					yield return item;
 				}
-				IEnumerator<IntVec3> enumerator = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsOccupiedBy(IntVec3 center, Rot4 rotation, IntVec2 size)
 		{
-			GenAdj.AdjustForRotation(ref center, ref size, rotation);
+			AdjustForRotation(ref center, ref size, rotation);
 			int num = center.x - (size.x - 1) / 2;
 			int minZ = center.z - (size.z - 1) / 2;
 			int maxX = num + size.x - 1;
 			int maxZ = minZ + size.z - 1;
-			int num2;
-			for (int i = num; i <= maxX; i = num2 + 1)
+			for (int j = num; j <= maxX; j++)
 			{
-				for (int j = minZ; j <= maxZ; j = num2 + 1)
+				for (int i = minZ; i <= maxZ; i++)
 				{
-					yield return new IntVec3(i, 0, j);
-					num2 = j;
+					yield return new IntVec3(j, 0, i);
 				}
-				num2 = i;
 			}
-			yield break;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacent8Way(TargetInfo pack)
 		{
 			if (pack.HasThing)
 			{
-				foreach (IntVec3 intVec in GenAdj.CellsAdjacent8Way(pack.Thing))
+				foreach (IntVec3 item in CellsAdjacent8Way(pack.Thing))
 				{
-					yield return intVec;
+					yield return item;
 				}
-				IEnumerator<IntVec3> enumerator = null;
+				yield break;
 			}
-			else
+			for (int i = 0; i < 8; i++)
 			{
-				int num;
-				for (int i = 0; i < 8; i = num + 1)
-				{
-					yield return pack.Cell + GenAdj.AdjacentCells[i];
-					num = i;
-				}
+				yield return pack.Cell + AdjacentCells[i];
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacent8Way(Thing t)
 		{
-			return GenAdj.CellsAdjacent8Way(t.Position, t.Rotation, t.def.size);
+			return CellsAdjacent8Way(t.Position, t.Rotation, t.def.size);
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacent8Way(IntVec3 thingCenter, Rot4 thingRot, IntVec2 thingSize)
 		{
-			GenAdj.AdjustForRotation(ref thingCenter, ref thingSize, thingRot);
+			AdjustForRotation(ref thingCenter, ref thingSize, thingRot);
 			int minX = thingCenter.x - (thingSize.x - 1) / 2 - 1;
 			int maxX = minX + thingSize.x + 1;
 			int minZ = thingCenter.z - (thingSize.z - 1) / 2 - 1;
@@ -190,19 +198,16 @@ namespace Verse
 				yield return cur;
 			}
 			while (cur.z > minZ + 1);
-			yield break;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacentCardinal(Thing t)
 		{
-			return GenAdj.CellsAdjacentCardinal(t.Position, t.Rotation, t.def.size);
+			return CellsAdjacentCardinal(t.Position, t.Rotation, t.def.size);
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacentCardinal(IntVec3 center, Rot4 rot, IntVec2 size)
 		{
-			GenAdj.AdjustForRotation(ref center, ref size, rot);
+			AdjustForRotation(ref center, ref size, rot);
 			int minX = center.x - (size.x - 1) / 2 - 1;
 			int maxX = minX + size.x + 1;
 			int minZ = center.z - (size.z - 1) / 2 - 1;
@@ -235,92 +240,76 @@ namespace Verse
 				yield return cur;
 			}
 			while (cur.z > minZ + 1);
-			yield break;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacentAlongEdge(IntVec3 thingCent, Rot4 thingRot, IntVec2 thingSize, LinkDirections dir)
 		{
-			GenAdj.AdjustForRotation(ref thingCent, ref thingSize, thingRot);
+			AdjustForRotation(ref thingCent, ref thingSize, thingRot);
 			int minX = thingCent.x - (thingSize.x - 1) / 2 - 1;
 			int minZ = thingCent.z - (thingSize.z - 1) / 2 - 1;
 			int maxX = minX + thingSize.x + 1;
 			int maxZ = minZ + thingSize.z + 1;
 			if (dir == LinkDirections.Down)
 			{
-				int num;
-				for (int x = minX; x <= maxX; x = num + 1)
+				for (int x4 = minX; x4 <= maxX; x4++)
 				{
-					yield return new IntVec3(x, thingCent.y, minZ - 1);
-					num = x;
+					yield return new IntVec3(x4, thingCent.y, minZ - 1);
 				}
 			}
 			if (dir == LinkDirections.Up)
 			{
-				int num;
-				for (int x = minX; x <= maxX; x = num + 1)
+				for (int x4 = minX; x4 <= maxX; x4++)
 				{
-					yield return new IntVec3(x, thingCent.y, maxZ + 1);
-					num = x;
+					yield return new IntVec3(x4, thingCent.y, maxZ + 1);
 				}
 			}
 			if (dir == LinkDirections.Left)
 			{
-				int num;
-				for (int x = minZ; x <= maxZ; x = num + 1)
+				for (int x4 = minZ; x4 <= maxZ; x4++)
 				{
-					yield return new IntVec3(minX - 1, thingCent.y, x);
-					num = x;
+					yield return new IntVec3(minX - 1, thingCent.y, x4);
 				}
 			}
 			if (dir == LinkDirections.Right)
 			{
-				int num;
-				for (int x = minZ; x <= maxZ; x = num + 1)
+				for (int x4 = minZ; x4 <= maxZ; x4++)
 				{
-					yield return new IntVec3(maxX + 1, thingCent.y, x);
-					num = x;
+					yield return new IntVec3(maxX + 1, thingCent.y, x4);
 				}
 			}
-			yield break;
 		}
 
-		
 		public static IEnumerable<IntVec3> CellsAdjacent8WayAndInside(this Thing thing)
 		{
-			IntVec3 position = thing.Position;
+			IntVec3 center = thing.Position;
 			IntVec2 size = thing.def.size;
 			Rot4 rotation = thing.Rotation;
-			GenAdj.AdjustForRotation(ref position, ref size, rotation);
-			int num = position.x - (size.x - 1) / 2 - 1;
-			int minZ = position.z - (size.z - 1) / 2 - 1;
+			AdjustForRotation(ref center, ref size, rotation);
+			int num = center.x - (size.x - 1) / 2 - 1;
+			int minZ = center.z - (size.z - 1) / 2 - 1;
 			int maxX = num + size.x + 1;
 			int maxZ = minZ + size.z + 1;
-			int num2;
-			for (int i = num; i <= maxX; i = num2 + 1)
+			for (int j = num; j <= maxX; j++)
 			{
-				for (int j = minZ; j <= maxZ; j = num2 + 1)
+				for (int i = minZ; i <= maxZ; i++)
 				{
-					yield return new IntVec3(i, 0, j);
-					num2 = j;
+					yield return new IntVec3(j, 0, i);
 				}
-				num2 = i;
 			}
-			yield break;
 		}
 
-		
 		public static void GetAdjacentCorners(LocalTargetInfo target, out IntVec3 BL, out IntVec3 TL, out IntVec3 TR, out IntVec3 BR)
 		{
 			if (target.HasThing)
 			{
-				GenAdj.GetAdjacentCorners(target.Thing.OccupiedRect(), out BL, out TL, out TR, out BR);
-				return;
+				GetAdjacentCorners(target.Thing.OccupiedRect(), out BL, out TL, out TR, out BR);
 			}
-			GenAdj.GetAdjacentCorners(CellRect.SingleCell(target.Cell), out BL, out TL, out TR, out BR);
+			else
+			{
+				GetAdjacentCorners(CellRect.SingleCell(target.Cell), out BL, out TL, out TR, out BR);
+			}
 		}
 
-		
 		private static void GetAdjacentCorners(CellRect rect, out IntVec3 BL, out IntVec3 TL, out IntVec3 TR, out IntVec3 BR)
 		{
 			BL = new IntVec3(rect.minX - 1, 0, rect.minZ - 1);
@@ -329,19 +318,16 @@ namespace Verse
 			BR = new IntVec3(rect.maxX + 1, 0, rect.minZ - 1);
 		}
 
-		
 		public static IntVec3 RandomAdjacentCell8Way(this IntVec3 root)
 		{
-			return root + GenAdj.AdjacentCells[Rand.RangeInclusive(0, 7)];
+			return root + AdjacentCells[Rand.RangeInclusive(0, 7)];
 		}
 
-		
 		public static IntVec3 RandomAdjacentCellCardinal(this IntVec3 root)
 		{
-			return root + GenAdj.CardinalDirections[Rand.RangeInclusive(0, 3)];
+			return root + CardinalDirections[Rand.RangeInclusive(0, 3)];
 		}
 
-		
 		public static IntVec3 RandomAdjacentCell8Way(this Thing t)
 		{
 			CellRect cellRect = t.OccupiedRect();
@@ -355,7 +341,6 @@ namespace Verse
 			return randomCell;
 		}
 
-		
 		public static IntVec3 RandomAdjacentCellCardinal(this Thing t)
 		{
 			CellRect cellRect = t.OccupiedRect();
@@ -382,28 +367,25 @@ namespace Verse
 			return randomCell;
 		}
 
-		
 		public static bool TryFindRandomAdjacentCell8WayWithRoomGroup(Thing t, out IntVec3 result)
 		{
-			return GenAdj.TryFindRandomAdjacentCell8WayWithRoomGroup(t.Position, t.Rotation, t.def.size, t.Map, out result);
+			return TryFindRandomAdjacentCell8WayWithRoomGroup(t.Position, t.Rotation, t.def.size, t.Map, out result);
 		}
 
-		
 		public static bool TryFindRandomAdjacentCell8WayWithRoomGroup(IntVec3 center, Rot4 rot, IntVec2 size, Map map, out IntVec3 result)
 		{
-			GenAdj.AdjustForRotation(ref center, ref size, rot);
-			GenAdj.validCells.Clear();
-			foreach (IntVec3 intVec in GenAdj.CellsAdjacent8Way(center, rot, size))
+			AdjustForRotation(ref center, ref size, rot);
+			validCells.Clear();
+			foreach (IntVec3 item in CellsAdjacent8Way(center, rot, size))
 			{
-				if (intVec.InBounds(map) && intVec.GetRoomGroup(map) != null)
+				if (item.InBounds(map) && item.GetRoomGroup(map) != null)
 				{
-					GenAdj.validCells.Add(intVec);
+					validCells.Add(item);
 				}
 			}
-			return GenAdj.validCells.TryRandomElement(out result);
+			return validCells.TryRandomElement(out result);
 		}
 
-		
 		public static bool AdjacentTo8WayOrInside(this IntVec3 me, LocalTargetInfo other)
 		{
 			if (other.HasThing)
@@ -413,7 +395,6 @@ namespace Verse
 			return me.AdjacentTo8WayOrInside(other.Cell);
 		}
 
-		
 		public static bool AdjacentTo8Way(this IntVec3 me, IntVec3 other)
 		{
 			int num = me.x - other.x;
@@ -430,10 +411,13 @@ namespace Verse
 			{
 				num2 *= -1;
 			}
-			return num <= 1 && num2 <= 1;
+			if (num <= 1)
+			{
+				return num2 <= 1;
+			}
+			return false;
 		}
 
-		
 		public static bool AdjacentTo8WayOrInside(this IntVec3 me, IntVec3 other)
 		{
 			int num = me.x - other.x;
@@ -446,10 +430,13 @@ namespace Verse
 			{
 				num2 *= -1;
 			}
-			return num <= 1 && num2 <= 1;
+			if (num <= 1)
+			{
+				return num2 <= 1;
+			}
+			return false;
 		}
 
-		
 		public static bool IsAdjacentToCardinalOrInside(this IntVec3 me, CellRect other)
 		{
 			if (other.IsEmpty)
@@ -457,16 +444,18 @@ namespace Verse
 				return false;
 			}
 			CellRect cellRect = other.ExpandedBy(1);
-			return cellRect.Contains(me) && !cellRect.IsCorner(me);
+			if (cellRect.Contains(me))
+			{
+				return !cellRect.IsCorner(me);
+			}
+			return false;
 		}
 
-		
 		public static bool IsAdjacentToCardinalOrInside(this Thing t1, Thing t2)
 		{
-			return GenAdj.IsAdjacentToCardinalOrInside(t1.OccupiedRect(), t2.OccupiedRect());
+			return IsAdjacentToCardinalOrInside(t1.OccupiedRect(), t2.OccupiedRect());
 		}
 
-		
 		public static bool IsAdjacentToCardinalOrInside(CellRect rect1, CellRect rect2)
 		{
 			if (rect1.IsEmpty || rect2.IsEmpty)
@@ -479,35 +468,34 @@ namespace Verse
 			int minZ = cellRect.minZ;
 			int maxZ = cellRect.maxZ;
 			int i = minX;
-			int j = minZ;
-			while (i <= maxX)
+			int num = minZ;
+			for (; i <= maxX; i++)
 			{
-				if (rect2.Contains(new IntVec3(i, 0, j)) && (i != minX || j != minZ) && (i != minX || j != maxZ) && (i != maxX || j != minZ) && (i != maxX || j != maxZ))
+				if (rect2.Contains(new IntVec3(i, 0, num)) && (i != minX || num != minZ) && (i != minX || num != maxZ) && (i != maxX || num != minZ) && (i != maxX || num != maxZ))
 				{
 					return true;
 				}
-				i++;
 			}
 			i--;
-			for (j++; j <= maxZ; j++)
+			for (num++; num <= maxZ; num++)
 			{
-				if (rect2.Contains(new IntVec3(i, 0, j)) && (i != minX || j != minZ) && (i != minX || j != maxZ) && (i != maxX || j != minZ) && (i != maxX || j != maxZ))
+				if (rect2.Contains(new IntVec3(i, 0, num)) && (i != minX || num != minZ) && (i != minX || num != maxZ) && (i != maxX || num != minZ) && (i != maxX || num != maxZ))
 				{
 					return true;
 				}
 			}
-			j--;
+			num--;
 			for (i--; i >= minX; i--)
 			{
-				if (rect2.Contains(new IntVec3(i, 0, j)) && (i != minX || j != minZ) && (i != minX || j != maxZ) && (i != maxX || j != minZ) && (i != maxX || j != maxZ))
+				if (rect2.Contains(new IntVec3(i, 0, num)) && (i != minX || num != minZ) && (i != minX || num != maxZ) && (i != maxX || num != minZ) && (i != maxX || num != maxZ))
 				{
 					return true;
 				}
 			}
 			i++;
-			for (j--; j > minZ; j--)
+			for (num--; num > minZ; num--)
 			{
-				if (rect2.Contains(new IntVec3(i, 0, j)) && (i != minX || j != minZ) && (i != minX || j != maxZ) && (i != maxX || j != minZ) && (i != maxX || j != maxZ))
+				if (rect2.Contains(new IntVec3(i, 0, num)) && (i != minX || num != minZ) && (i != minX || num != maxZ) && (i != maxX || num != minZ) && (i != maxX || num != maxZ))
 				{
 					return true;
 				}
@@ -515,66 +503,69 @@ namespace Verse
 			return false;
 		}
 
-		
 		public static bool AdjacentTo8WayOrInside(this IntVec3 root, Thing t)
 		{
 			return root.AdjacentTo8WayOrInside(t.Position, t.Rotation, t.def.size);
 		}
 
-		
 		public static bool AdjacentTo8WayOrInside(this IntVec3 root, IntVec3 center, Rot4 rot, IntVec2 size)
 		{
-			GenAdj.AdjustForRotation(ref center, ref size, rot);
+			AdjustForRotation(ref center, ref size, rot);
 			int num = center.x - (size.x - 1) / 2 - 1;
 			int num2 = center.z - (size.z - 1) / 2 - 1;
 			int num3 = num + size.x + 1;
 			int num4 = num2 + size.z + 1;
-			return root.x >= num && root.x <= num3 && root.z >= num2 && root.z <= num4;
+			if (root.x >= num && root.x <= num3 && root.z >= num2 && root.z <= num4)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static bool AdjacentTo8WayOrInside(this Thing a, Thing b)
 		{
-			return GenAdj.AdjacentTo8WayOrInside(a.OccupiedRect(), b.OccupiedRect());
+			return AdjacentTo8WayOrInside(a.OccupiedRect(), b.OccupiedRect());
 		}
 
-		
 		public static bool AdjacentTo8WayOrInside(CellRect rect1, CellRect rect2)
 		{
-			return !rect1.IsEmpty && !rect2.IsEmpty && rect1.ExpandedBy(1).Overlaps(rect2);
+			if (rect1.IsEmpty || rect2.IsEmpty)
+			{
+				return false;
+			}
+			return rect1.ExpandedBy(1).Overlaps(rect2);
 		}
 
-		
 		public static bool IsInside(this IntVec3 root, Thing t)
 		{
-			return GenAdj.IsInside(root, t.Position, t.Rotation, t.def.size);
+			return IsInside(root, t.Position, t.Rotation, t.def.size);
 		}
 
-		
 		public static bool IsInside(IntVec3 root, IntVec3 center, Rot4 rot, IntVec2 size)
 		{
-			GenAdj.AdjustForRotation(ref center, ref size, rot);
+			AdjustForRotation(ref center, ref size, rot);
 			int num = center.x - (size.x - 1) / 2;
 			int num2 = center.z - (size.z - 1) / 2;
 			int num3 = num + size.x - 1;
 			int num4 = num2 + size.z - 1;
-			return root.x >= num && root.x <= num3 && root.z >= num2 && root.z <= num4;
+			if (root.x >= num && root.x <= num3 && root.z >= num2 && root.z <= num4)
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static CellRect OccupiedRect(this Thing t)
 		{
-			return GenAdj.OccupiedRect(t.Position, t.Rotation, t.def.size);
+			return OccupiedRect(t.Position, t.Rotation, t.def.size);
 		}
 
-		
 		public static CellRect OccupiedRect(IntVec3 center, Rot4 rot, IntVec2 size)
 		{
-			GenAdj.AdjustForRotation(ref center, ref size, rot);
+			AdjustForRotation(ref center, ref size, rot);
 			return new CellRect(center.x - (size.x - 1) / 2, center.z - (size.z - 1) / 2, size.x, size.z);
 		}
 
-		
 		public static void AdjustForRotation(ref IntVec3 center, ref IntVec2 size, Rot4 rot)
 		{
 			if (size.x == 1 && size.z == 1)
@@ -595,7 +586,6 @@ namespace Verse
 				if (size.z % 2 == 0)
 				{
 					center.z--;
-					return;
 				}
 				break;
 			case 2:
@@ -606,7 +596,6 @@ namespace Verse
 				if (size.z % 2 == 0)
 				{
 					center.z--;
-					return;
 				}
 				break;
 			case 3:
@@ -615,42 +604,7 @@ namespace Verse
 					center.x--;
 				}
 				break;
-			default:
-				return;
 			}
 		}
-
-		
-		public static IntVec3[] CardinalDirections = new IntVec3[4];
-
-		
-		public static IntVec3[] CardinalDirectionsAndInside = new IntVec3[5];
-
-		
-		public static IntVec3[] CardinalDirectionsAround = new IntVec3[4];
-
-		
-		public static IntVec3[] DiagonalDirections = new IntVec3[4];
-
-		
-		public static IntVec3[] DiagonalDirectionsAround = new IntVec3[4];
-
-		
-		public static IntVec3[] AdjacentCells = new IntVec3[8];
-
-		
-		public static IntVec3[] AdjacentCellsAndInside = new IntVec3[9];
-
-		
-		public static IntVec3[] AdjacentCellsAround = new IntVec3[8];
-
-		
-		public static IntVec3[] AdjacentCellsAroundBottom = new IntVec3[9];
-
-		
-		private static List<IntVec3> adjRandomOrderList;
-
-		
-		private static List<IntVec3> validCells = new List<IntVec3>();
 	}
 }

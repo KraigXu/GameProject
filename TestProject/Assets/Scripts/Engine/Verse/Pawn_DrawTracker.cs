@@ -1,146 +1,116 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Pawn_DrawTracker
 	{
-		
-		
+		private Pawn pawn;
+
+		public PawnTweener tweener;
+
+		private JitterHandler jitterer;
+
+		public PawnLeaner leaner;
+
+		public PawnRenderer renderer;
+
+		public PawnUIOverlay ui;
+
+		private PawnFootprintMaker footprintMaker;
+
+		private PawnBreathMoteMaker breathMoteMaker;
+
+		private const float MeleeJitterDistance = 0.5f;
+
 		public Vector3 DrawPos
 		{
 			get
 			{
-				this.tweener.PreDrawPosCalculation();
-				Vector3 vector = this.tweener.TweenedPos;
-				vector += this.jitterer.CurrentOffset;
-				vector += this.leaner.LeanOffset;
-				vector.y = this.pawn.def.Altitude;
-				return vector;
+				tweener.PreDrawPosCalculation();
+				Vector3 tweenedPos = tweener.TweenedPos;
+				tweenedPos += jitterer.CurrentOffset;
+				tweenedPos += leaner.LeanOffset;
+				tweenedPos.y = pawn.def.Altitude;
+				return tweenedPos;
 			}
 		}
 
-		
 		public Pawn_DrawTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.tweener = new PawnTweener(pawn);
-			this.jitterer = new JitterHandler();
-			this.leaner = new PawnLeaner(pawn);
-			this.renderer = new PawnRenderer(pawn);
-			this.ui = new PawnUIOverlay(pawn);
-			this.footprintMaker = new PawnFootprintMaker(pawn);
-			this.breathMoteMaker = new PawnBreathMoteMaker(pawn);
+			tweener = new PawnTweener(pawn);
+			jitterer = new JitterHandler();
+			leaner = new PawnLeaner(pawn);
+			renderer = new PawnRenderer(pawn);
+			ui = new PawnUIOverlay(pawn);
+			footprintMaker = new PawnFootprintMaker(pawn);
+			breathMoteMaker = new PawnBreathMoteMaker(pawn);
 		}
 
-		
 		public void DrawTrackerTick()
 		{
-			if (!this.pawn.Spawned)
+			if (pawn.Spawned && (Current.ProgramState != ProgramState.Playing || Find.CameraDriver.CurrentViewRect.ExpandedBy(3).Contains(pawn.Position)))
 			{
-				return;
+				jitterer.JitterHandlerTick();
+				footprintMaker.FootprintMakerTick();
+				breathMoteMaker.BreathMoteMakerTick();
+				leaner.LeanerTick();
+				renderer.RendererTick();
 			}
-			if (Current.ProgramState == ProgramState.Playing && !Find.CameraDriver.CurrentViewRect.ExpandedBy(3).Contains(this.pawn.Position))
-			{
-				return;
-			}
-			this.jitterer.JitterHandlerTick();
-			this.footprintMaker.FootprintMakerTick();
-			this.breathMoteMaker.BreathMoteMakerTick();
-			this.leaner.LeanerTick();
-			this.renderer.RendererTick();
 		}
 
-		
 		public void DrawAt(Vector3 loc)
 		{
-			this.renderer.RenderPawnAt(loc);
+			renderer.RenderPawnAt(loc);
 		}
 
-		
 		public void Notify_Spawned()
 		{
-			this.tweener.ResetTweenedPosToRoot();
+			tweener.ResetTweenedPosToRoot();
 		}
 
-		
 		public void Notify_WarmingCastAlongLine(ShootLine newShootLine, IntVec3 ShootPosition)
 		{
-			this.leaner.Notify_WarmingCastAlongLine(newShootLine, ShootPosition);
+			leaner.Notify_WarmingCastAlongLine(newShootLine, ShootPosition);
 		}
 
-		
 		public void Notify_DamageApplied(DamageInfo dinfo)
 		{
-			if (this.pawn.Destroyed)
+			if (!pawn.Destroyed)
 			{
-				return;
+				jitterer.Notify_DamageApplied(dinfo);
+				renderer.Notify_DamageApplied(dinfo);
 			}
-			this.jitterer.Notify_DamageApplied(dinfo);
-			this.renderer.Notify_DamageApplied(dinfo);
 		}
 
-		
 		public void Notify_DamageDeflected(DamageInfo dinfo)
 		{
-			if (this.pawn.Destroyed)
+			if (!pawn.Destroyed)
 			{
-				return;
+				jitterer.Notify_DamageDeflected(dinfo);
 			}
-			this.jitterer.Notify_DamageDeflected(dinfo);
 		}
 
-		
 		public void Notify_MeleeAttackOn(Thing Target)
 		{
-			if (Target.Position != this.pawn.Position)
+			if (Target.Position != pawn.Position)
 			{
-				this.jitterer.AddOffset(0.5f, (Target.Position - this.pawn.Position).AngleFlat);
-				return;
+				jitterer.AddOffset(0.5f, (Target.Position - pawn.Position).AngleFlat);
 			}
-			if (Target.DrawPos != this.pawn.DrawPos)
+			else if (Target.DrawPos != pawn.DrawPos)
 			{
-				this.jitterer.AddOffset(0.25f, (Target.DrawPos - this.pawn.DrawPos).AngleFlat());
+				jitterer.AddOffset(0.25f, (Target.DrawPos - pawn.DrawPos).AngleFlat());
 			}
 		}
 
-		
 		public void Notify_DebugAffected()
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				MoteMaker.ThrowAirPuffUp(this.pawn.DrawPos, this.pawn.Map);
+				MoteMaker.ThrowAirPuffUp(pawn.DrawPos, pawn.Map);
 			}
-			this.jitterer.AddOffset(0.05f, (float)Rand.Range(0, 360));
+			jitterer.AddOffset(0.05f, Rand.Range(0, 360));
 		}
-
-		
-		private Pawn pawn;
-
-		
-		public PawnTweener tweener;
-
-		
-		private JitterHandler jitterer;
-
-		
-		public PawnLeaner leaner;
-
-		
-		public PawnRenderer renderer;
-
-		
-		public PawnUIOverlay ui;
-
-		
-		private PawnFootprintMaker footprintMaker;
-
-		
-		private PawnBreathMoteMaker breathMoteMaker;
-
-		
-		private const float MeleeJitterDistance = 0.5f;
 	}
 }

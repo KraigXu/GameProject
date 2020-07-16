@@ -1,60 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_Disease : StorytellerComp
 	{
-		
-		
-		protected StorytellerCompProperties_Disease Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_Disease)this.props;
-			}
-		}
+		private float CaravanDiseaseMTBFactor = 4f;
 
-		
+		protected StorytellerCompProperties_Disease Props => (StorytellerCompProperties_Disease)props;
+
 		public override IEnumerable<FiringIncident> MakeIntervalIncidents(IIncidentTarget target)
 		{
-			if (!DebugSettings.enableRandomDiseases)
-			{
-				yield break;
-			}
-			if (target is World)
+			if (!DebugSettings.enableRandomDiseases || target is World)
 			{
 				yield break;
 			}
 			BiomeDef biome = Find.WorldGrid[target.Tile].biome;
-			float num = biome.diseaseMtbDays;
-			num *= Find.Storyteller.difficulty.diseaseIntervalFactor;
+			float diseaseMtbDays = biome.diseaseMtbDays;
+			diseaseMtbDays *= Find.Storyteller.difficulty.diseaseIntervalFactor;
 			if (target is Caravan)
 			{
-				num *= this.CaravanDiseaseMTBFactor;
+				diseaseMtbDays *= CaravanDiseaseMTBFactor;
 			}
-			if (Rand.MTBEventOccurs(num, 60000f, 1000f))
+			if (Rand.MTBEventOccurs(diseaseMtbDays, 60000f, 1000f))
 			{
-				IncidentParms parms = this.GenerateParms(this.Props.category, target);
-				IncidentDef def;
-				if (base.UsableIncidentsInCategory(this.Props.category, parms).TryRandomElementByWeight((IncidentDef d) => biome.CommonalityOfDisease(d), out def))
+				IncidentParms parms = GenerateParms(Props.category, target);
+				if (UsableIncidentsInCategory(Props.category, parms).TryRandomElementByWeight((IncidentDef d) => biome.CommonalityOfDisease(d), out IncidentDef result))
 				{
-					yield return new FiringIncident(def, this, parms);
+					yield return new FiringIncident(result, this, parms);
 				}
 			}
-			yield break;
 		}
 
-		
 		public override string ToString()
 		{
-			return base.ToString() + " " + this.Props.category;
+			return base.ToString() + " " + Props.category;
 		}
-
-		
-		private float CaravanDiseaseMTBFactor = 4f;
 	}
 }

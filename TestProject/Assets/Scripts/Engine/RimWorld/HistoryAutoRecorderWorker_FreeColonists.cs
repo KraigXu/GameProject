@@ -1,16 +1,12 @@
-﻿using System;
 using System.Linq;
-using Verse;
 
 namespace RimWorld
 {
-	
 	public class HistoryAutoRecorderWorker_FreeColonists : HistoryAutoRecorderWorker
 	{
-		
 		public override float PullRecord()
 		{
-			return (float)PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists.Count<Pawn>();
+			return PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists.Count();
 		}
 	}
 }

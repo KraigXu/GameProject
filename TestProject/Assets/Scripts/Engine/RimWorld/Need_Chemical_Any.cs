@@ -1,320 +1,234 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Need_Chemical_Any : Need
 	{
-		
-		
-		private Trait TraitDrugDesire
+		public enum MoodBuff
 		{
-			get
-			{
-				return this.pawn.story.traits.GetTrait(TraitDefOf.DrugDesire);
-			}
+			ExtremelyNegative,
+			VeryNegative,
+			Negative,
+			Neutral,
+			Positive,
+			VeryPositive
 		}
 
-		
-		
+		public struct LevelThresholds
+		{
+			public float extremelyNegative;
+
+			public float veryNegative;
+
+			public float negative;
+
+			public float positive;
+
+			public float veryPositive;
+		}
+
+		public const int InterestTraitDegree = 1;
+
+		public const int FascinationTraitDegree = 2;
+
+		private const float FallPerTickFactorForChemicalFascination = 1.25f;
+
+		public const float GainForHardDrugIngestion = 0.3f;
+
+		public const float GainForSocialDrugIngestion = 0.2f;
+
+		private static readonly SimpleCurve InterestDegreeFallCurve = new SimpleCurve
+		{
+			new CurvePoint(0f, 0.3f),
+			new CurvePoint(FascinationDegreeLevelThresholdsForMood.negative, 0.6f),
+			new CurvePoint(FascinationDegreeLevelThresholdsForMood.negative + 0.001f, 1f),
+			new CurvePoint(FascinationDegreeLevelThresholdsForMood.positive, 1f),
+			new CurvePoint(1f, 1f)
+		};
+
+		private static readonly SimpleCurve FascinationDegreeFallCurve = new SimpleCurve
+		{
+			new CurvePoint(0f, 0.4f),
+			new CurvePoint(FascinationDegreeLevelThresholdsForMood.negative, 0.7f),
+			new CurvePoint(FascinationDegreeLevelThresholdsForMood.negative + 0.001f, 1f),
+			new CurvePoint(FascinationDegreeLevelThresholdsForMood.positive, 1f),
+			new CurvePoint(1f, 1.15f)
+		};
+
+		private static readonly LevelThresholds FascinationDegreeLevelThresholdsForMood;
+
+		private static readonly LevelThresholds InterestDegreeLevelThresholdsForMood;
+
+		private Trait lastThresholdUpdateTraitRef;
+
+		private Trait TraitDrugDesire => pawn.story.traits.GetTrait(TraitDefOf.DrugDesire);
+
 		private SimpleCurve FallCurve
 		{
 			get
 			{
-				if (this.TraitDrugDesire.Degree == 2)
+				if (TraitDrugDesire.Degree == 2)
 				{
-					return Need_Chemical_Any.FascinationDegreeFallCurve;
+					return FascinationDegreeFallCurve;
 				}
-				return Need_Chemical_Any.InterestDegreeFallCurve;
+				return InterestDegreeFallCurve;
 			}
 		}
 
-		
-		
 		private float FallPerNeedIntervalTick
 		{
 			get
 			{
-				Trait traitDrugDesire = this.TraitDrugDesire;
+				Trait traitDrugDesire = TraitDrugDesire;
 				float num = 1f;
 				if (traitDrugDesire.Degree == 2)
 				{
 					num = 1.25f;
 				}
-				num *= this.FallCurve.Evaluate(this.CurLevel);
-				return this.def.fallPerDay * num / 60000f * 150f;
+				num *= FallCurve.Evaluate(CurLevel);
+				return def.fallPerDay * num / 60000f * 150f;
 			}
 		}
 
-		
-		
-		private Need_Chemical_Any.LevelThresholds CurrentLevelThresholds
+		private LevelThresholds CurrentLevelThresholds
 		{
 			get
 			{
-				if (this.TraitDrugDesire.Degree == 2)
+				if (TraitDrugDesire.Degree == 2)
 				{
-					return Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood;
+					return FascinationDegreeLevelThresholdsForMood;
 				}
-				return Need_Chemical_Any.InterestDegreeLevelThresholdsForMood;
+				return InterestDegreeLevelThresholdsForMood;
 			}
 		}
 
-		
-		
-		public Need_Chemical_Any.MoodBuff MoodBuffForCurrentLevel
+		public MoodBuff MoodBuffForCurrentLevel
 		{
 			get
 			{
-				if (this.Disabled)
+				if (Disabled)
 				{
-					return Need_Chemical_Any.MoodBuff.Neutral;
+					return MoodBuff.Neutral;
 				}
-				Need_Chemical_Any.LevelThresholds currentLevelThresholds = this.CurrentLevelThresholds;
-				float curLevel = this.CurLevel;
+				LevelThresholds currentLevelThresholds = CurrentLevelThresholds;
+				float curLevel = CurLevel;
 				if (curLevel <= currentLevelThresholds.extremelyNegative)
 				{
-					return Need_Chemical_Any.MoodBuff.ExtremelyNegative;
+					return MoodBuff.ExtremelyNegative;
 				}
 				if (curLevel <= currentLevelThresholds.veryNegative)
 				{
-					return Need_Chemical_Any.MoodBuff.VeryNegative;
+					return MoodBuff.VeryNegative;
 				}
 				if (curLevel <= currentLevelThresholds.negative)
 				{
-					return Need_Chemical_Any.MoodBuff.Negative;
+					return MoodBuff.Negative;
 				}
 				if (curLevel <= currentLevelThresholds.positive)
 				{
-					return Need_Chemical_Any.MoodBuff.Neutral;
+					return MoodBuff.Neutral;
 				}
 				if (curLevel <= currentLevelThresholds.veryPositive)
 				{
-					return Need_Chemical_Any.MoodBuff.Positive;
+					return MoodBuff.Positive;
 				}
-				return Need_Chemical_Any.MoodBuff.VeryPositive;
+				return MoodBuff.VeryPositive;
 			}
 		}
 
-		
-		
-		public override int GUIChangeArrow
-		{
-			get
-			{
-				return 0;
-			}
-		}
+		public override int GUIChangeArrow => 0;
 
-		
-		
-		public override bool ShowOnNeedList
-		{
-			get
-			{
-				return !this.Disabled;
-			}
-		}
+		public override bool ShowOnNeedList => !Disabled;
 
-		
-		
 		private bool Disabled
 		{
 			get
 			{
-				return this.TraitDrugDesire == null || this.TraitDrugDesire.Degree < 1;
+				if (TraitDrugDesire != null)
+				{
+					return TraitDrugDesire.Degree < 1;
+				}
+				return true;
 			}
 		}
 
-		
 		public void Notify_IngestedDrug(Thing drug)
 		{
-			if (this.Disabled)
+			if (!Disabled)
 			{
-				return;
+				switch (drug.def.ingestible.drugCategory)
+				{
+				case DrugCategory.Social:
+					CurLevel += 0.2f;
+					break;
+				case DrugCategory.Hard:
+					CurLevel += 0.3f;
+					break;
+				}
 			}
-			DrugCategory drugCategory = drug.def.ingestible.drugCategory;
-			if (drugCategory == DrugCategory.Social)
-			{
-				this.CurLevel += 0.2f;
-				return;
-			}
-			if (drugCategory != DrugCategory.Hard)
-			{
-				return;
-			}
-			this.CurLevel += 0.3f;
 		}
 
-		
-		public Need_Chemical_Any(Pawn pawn) : base(pawn)
+		public Need_Chemical_Any(Pawn pawn)
+			: base(pawn)
 		{
 		}
 
-		
 		public override void SetInitialLevel()
 		{
-			this.CurLevel = 0.5f;
+			CurLevel = 0.5f;
 		}
 
-		
-		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = 2147483647, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
+		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
 		{
-			Trait traitDrugDesire = this.TraitDrugDesire;
-			if (traitDrugDesire != null && this.lastThresholdUpdateTraitRef != traitDrugDesire)
+			Trait traitDrugDesire = TraitDrugDesire;
+			if (traitDrugDesire != null && lastThresholdUpdateTraitRef != traitDrugDesire)
 			{
-				this.lastThresholdUpdateTraitRef = traitDrugDesire;
-				this.threshPercents = new List<float>();
-				Need_Chemical_Any.LevelThresholds currentLevelThresholds = this.CurrentLevelThresholds;
-				this.threshPercents.Add(currentLevelThresholds.extremelyNegative);
-				this.threshPercents.Add(currentLevelThresholds.veryNegative);
-				this.threshPercents.Add(currentLevelThresholds.negative);
-				this.threshPercents.Add(currentLevelThresholds.positive);
-				this.threshPercents.Add(currentLevelThresholds.veryPositive);
+				lastThresholdUpdateTraitRef = traitDrugDesire;
+				threshPercents = new List<float>();
+				LevelThresholds currentLevelThresholds = CurrentLevelThresholds;
+				threshPercents.Add(currentLevelThresholds.extremelyNegative);
+				threshPercents.Add(currentLevelThresholds.veryNegative);
+				threshPercents.Add(currentLevelThresholds.negative);
+				threshPercents.Add(currentLevelThresholds.positive);
+				threshPercents.Add(currentLevelThresholds.veryPositive);
 			}
 			base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
 		}
 
-		
 		public override void NeedInterval()
 		{
-			if (this.Disabled)
+			if (Disabled)
 			{
-				this.SetInitialLevel();
-				return;
+				SetInitialLevel();
 			}
-			if (this.IsFrozen)
+			else if (!IsFrozen)
 			{
-				return;
+				CurLevel -= FallPerNeedIntervalTick;
 			}
-			this.CurLevel -= this.FallPerNeedIntervalTick;
 		}
 
-		
-		public const int InterestTraitDegree = 1;
-
-		
-		public const int FascinationTraitDegree = 2;
-
-		
-		private const float FallPerTickFactorForChemicalFascination = 1.25f;
-
-		
-		public const float GainForHardDrugIngestion = 0.3f;
-
-		
-		public const float GainForSocialDrugIngestion = 0.2f;
-
-		
-		private static readonly SimpleCurve InterestDegreeFallCurve = new SimpleCurve
+		static Need_Chemical_Any()
 		{
+			LevelThresholds levelThresholds = new LevelThresholds
 			{
-				new CurvePoint(0f, 0.3f),
-				true
-			},
+				extremelyNegative = 0.1f,
+				veryNegative = 0.25f,
+				negative = 0.4f,
+				positive = 0.7f,
+				veryPositive = 0.85f
+			};
+			FascinationDegreeLevelThresholdsForMood = levelThresholds;
+			levelThresholds = new LevelThresholds
 			{
-				new CurvePoint(Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood.negative, 0.6f),
-				true
-			},
-			{
-				new CurvePoint(Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood.negative + 0.001f, 1f),
-				true
-			},
-			{
-				new CurvePoint(Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood.positive, 1f),
-				true
-			},
-			{
-				new CurvePoint(1f, 1f),
-				true
-			}
-		};
-
-		
-		private static readonly SimpleCurve FascinationDegreeFallCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(0f, 0.4f),
-				true
-			},
-			{
-				new CurvePoint(Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood.negative, 0.7f),
-				true
-			},
-			{
-				new CurvePoint(Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood.negative + 0.001f, 1f),
-				true
-			},
-			{
-				new CurvePoint(Need_Chemical_Any.FascinationDegreeLevelThresholdsForMood.positive, 1f),
-				true
-			},
-			{
-				new CurvePoint(1f, 1.15f),
-				true
-			}
-		};
-
-		
-		private static readonly Need_Chemical_Any.LevelThresholds FascinationDegreeLevelThresholdsForMood = new Need_Chemical_Any.LevelThresholds
-		{
-			extremelyNegative = 0.1f,
-			veryNegative = 0.25f,
-			negative = 0.4f,
-			positive = 0.7f,
-			veryPositive = 0.85f
-		};
-
-		
-		private static readonly Need_Chemical_Any.LevelThresholds InterestDegreeLevelThresholdsForMood = new Need_Chemical_Any.LevelThresholds
-		{
-			extremelyNegative = 0.01f,
-			veryNegative = 0.15f,
-			negative = 0.3f,
-			positive = 0.6f,
-			veryPositive = 0.75f
-		};
-
-		
-		private Trait lastThresholdUpdateTraitRef;
-
-		
-		public enum MoodBuff
-		{
-			
-			ExtremelyNegative,
-			
-			VeryNegative,
-			
-			Negative,
-			
-			Neutral,
-			
-			Positive,
-			
-			VeryPositive
-		}
-
-		
-		public struct LevelThresholds
-		{
-			
-			public float extremelyNegative;
-
-			
-			public float veryNegative;
-
-			
-			public float negative;
-
-			
-			public float positive;
-
-			
-			public float veryPositive;
+				extremelyNegative = 0.01f,
+				veryNegative = 0.15f,
+				negative = 0.3f,
+				positive = 0.6f,
+				veryPositive = 0.75f
+			};
+			InterestDegreeLevelThresholdsForMood = levelThresholds;
 		}
 	}
 }

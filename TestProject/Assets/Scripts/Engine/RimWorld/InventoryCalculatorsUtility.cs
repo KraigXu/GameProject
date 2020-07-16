@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class InventoryCalculatorsUtility
 	{
-		
 		public static bool ShouldIgnoreInventoryOf(Pawn pawn, IgnorePawnsInventoryMode ignoreMode)
 		{
 			switch (ignoreMode)
@@ -14,9 +12,17 @@ namespace RimWorld
 			case IgnorePawnsInventoryMode.Ignore:
 				return true;
 			case IgnorePawnsInventoryMode.IgnoreIfAssignedToUnload:
-				return pawn.Spawned && pawn.inventory.UnloadEverything;
+				if (pawn.Spawned)
+				{
+					return pawn.inventory.UnloadEverything;
+				}
+				return false;
 			case IgnorePawnsInventoryMode.IgnoreIfAssignedToUnloadOrPlayerPawn:
-				return (pawn.Spawned && pawn.inventory.UnloadEverything) || Dialog_FormCaravan.CanListInventorySeparately(pawn);
+				if (!pawn.Spawned || !pawn.inventory.UnloadEverything)
+				{
+					return Dialog_FormCaravan.CanListInventorySeparately(pawn);
+				}
+				return true;
 			case IgnorePawnsInventoryMode.DontIgnore:
 				return false;
 			default:

@@ -1,16 +1,13 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JoyGiver_VisitSickPawn : JoyGiver
 	{
-		
 		public override Job TryGiveJob(Pawn pawn)
 		{
-			if (!InteractionUtility.CanInitiateInteraction(pawn, null))
+			if (!InteractionUtility.CanInitiateInteraction(pawn))
 			{
 				return null;
 			}
@@ -19,7 +16,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			return JobMaker.MakeJob(this.def.jobDef, pawn2, SickPawnVisitUtility.FindChair(pawn, pawn2));
+			return JobMaker.MakeJob(def.jobDef, pawn2, SickPawnVisitUtility.FindChair(pawn, pawn2));
 		}
 	}
 }

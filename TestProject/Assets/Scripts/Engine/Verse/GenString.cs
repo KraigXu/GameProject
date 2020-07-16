@@ -1,21 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class GenString
 	{
-		
+		private static string[] numberStrings;
+
 		static GenString()
 		{
+			numberStrings = new string[10000];
 			for (int i = 0; i < 10000; i++)
 			{
-				GenString.numberStrings[i] = (i - 5000).ToString();
+				numberStrings[i] = (i - 5000).ToString();
 			}
 		}
 
-		
 		public static string ToStringCached(this int num)
 		{
 			if (num < -4999)
@@ -26,10 +26,9 @@ namespace Verse
 			{
 				return num.ToString();
 			}
-			return GenString.numberStrings[num + 5000];
+			return numberStrings[num + 5000];
 		}
 
-		
 		public static IEnumerable<string> SplitBy(this string str, int chunkLength)
 		{
 			if (str.NullOrEmpty())
@@ -48,10 +47,6 @@ namespace Verse
 				}
 				yield return str.Substring(i, chunkLength);
 			}
-			yield break;
 		}
-
-		
-		private static string[] numberStrings = new string[10000];
 	}
 }

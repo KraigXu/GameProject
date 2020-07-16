@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public static class JobInBedUtility
 	{
-		
 		public static void KeepLyingDown(this JobDriver driver, TargetIndex bedIndex)
 		{
 			driver.AddFinishAction(delegate
@@ -15,12 +12,11 @@ namespace RimWorld
 				Pawn pawn = driver.pawn;
 				if (!pawn.Drafted)
 				{
-					pawn.jobs.jobQueue.EnqueueFirst(JobMaker.MakeJob(JobDefOf.LayDown, pawn.CurJob.GetTarget(bedIndex)), null);
+					pawn.jobs.jobQueue.EnqueueFirst(JobMaker.MakeJob(JobDefOf.LayDown, pawn.CurJob.GetTarget(bedIndex)));
 				}
 			});
 		}
 
-		
 		public static bool InBedOrRestSpotNow(Pawn pawn, LocalTargetInfo bedOrRestSpot)
 		{
 			if (!bedOrRestSpot.IsValid || !pawn.Spawned)
@@ -29,7 +25,11 @@ namespace RimWorld
 			}
 			if (bedOrRestSpot.HasThing)
 			{
-				return bedOrRestSpot.Thing.Map == pawn.Map && RestUtility.GetBedSleepingSlotPosFor(pawn, (Building_Bed)bedOrRestSpot.Thing) == pawn.Position;
+				if (bedOrRestSpot.Thing.Map != pawn.Map)
+				{
+					return false;
+				}
+				return RestUtility.GetBedSleepingSlotPosFor(pawn, (Building_Bed)bedOrRestSpot.Thing) == pawn.Position;
 			}
 			return bedOrRestSpot.Cell == pawn.Position;
 		}

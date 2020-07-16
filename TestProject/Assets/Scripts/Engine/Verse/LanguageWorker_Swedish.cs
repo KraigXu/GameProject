@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class LanguageWorker_Swedish : LanguageWorker
 	{
-		
 		public override string WithIndefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (name)
@@ -19,7 +15,6 @@ namespace Verse
 			return "ett " + str;
 		}
 
-		
 		public override string WithDefiniteArticle(string str, Gender gender, bool plural = false, bool name = false)
 		{
 			if (str.NullOrEmpty())
@@ -33,23 +28,19 @@ namespace Verse
 			char ch = str[str.Length - 1];
 			if (gender == Gender.Male || gender == Gender.Female)
 			{
-				if (this.IsVowel(ch))
+				if (IsVowel(ch))
 				{
 					return str + "n";
 				}
 				return str + "en";
 			}
-			else
+			if (IsVowel(ch))
 			{
-				if (this.IsVowel(ch))
-				{
-					return str + "t";
-				}
-				return str + "et";
+				return str + "t";
 			}
+			return str + "et";
 		}
 
-		
 		public bool IsVowel(char ch)
 		{
 			return "aeiouyåäöAEIOUYÅÄÖ".IndexOf(ch) >= 0;

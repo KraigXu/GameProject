@@ -1,45 +1,43 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public struct CellWithRadius : IEquatable<CellWithRadius>
 	{
-		
+		public readonly IntVec3 cell;
+
+		public readonly float radius;
+
 		public CellWithRadius(IntVec3 c, float r)
 		{
-			this.cell = c;
-			this.radius = r;
+			cell = c;
+			radius = r;
 		}
 
-		
 		public bool Equals(CellWithRadius other)
 		{
-			return this.cell.Equals(other.cell) && this.radius.Equals(other.radius);
-		}
-
-		
-		public override bool Equals(object obj)
-		{
-			if (obj is CellWithRadius)
+			if (cell.Equals(other.cell))
 			{
-				CellWithRadius other = (CellWithRadius)obj;
-				return this.Equals(other);
+				return radius.Equals(other.radius);
 			}
 			return false;
 		}
 
-		
-		public override int GetHashCode()
+		public override bool Equals(object obj)
 		{
-			return this.cell.GetHashCode() * 397 ^ this.radius.GetHashCode();
+			object obj2;
+			if ((obj2 = obj) is CellWithRadius)
+			{
+				CellWithRadius other = (CellWithRadius)obj2;
+				return Equals(other);
+			}
+			return false;
 		}
 
-		
-		public readonly IntVec3 cell;
-
-		
-		public readonly float radius;
+		public override int GetHashCode()
+		{
+			return (cell.GetHashCode() * 397) ^ radius.GetHashCode();
+		}
 	}
 }

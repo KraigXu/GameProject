@@ -1,48 +1,41 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_TitleRequiresBedroom : Alert
 	{
-		
-		public Alert_TitleRequiresBedroom()
-		{
-			this.defaultLabel = "NeedBedroomAssigned".Translate();
-			this.defaultExplanation = "NeedBedroomAssignedDesc".Translate();
-		}
+		private List<Pawn> targetsResult = new List<Pawn>();
 
-		
-		
 		public List<Pawn> Targets
 		{
 			get
 			{
-				this.targetsResult.Clear();
+				targetsResult.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
-					foreach (Pawn pawn in maps[i].mapPawns.FreeColonists)
+					foreach (Pawn freeColonist in maps[i].mapPawns.FreeColonists)
 					{
-						if (pawn.royalty != null && pawn.royalty.CanRequireBedroom() && pawn.royalty.HighestTitleWithBedroomRequirements() != null && !pawn.royalty.HasPersonalBedroom())
+						if (freeColonist.royalty != null && freeColonist.royalty.CanRequireBedroom() && freeColonist.royalty.HighestTitleWithBedroomRequirements() != null && !freeColonist.royalty.HasPersonalBedroom())
 						{
-							this.targetsResult.Add(pawn);
+							targetsResult.Add(freeColonist);
 						}
 					}
 				}
-				return this.targetsResult;
+				return targetsResult;
 			}
 		}
 
-		
-		public override AlertReport GetReport()
+		public Alert_TitleRequiresBedroom()
 		{
-			return AlertReport.CulpritsAre(this.Targets);
+			defaultLabel = "NeedBedroomAssigned".Translate();
+			defaultExplanation = "NeedBedroomAssignedDesc".Translate();
 		}
 
-		
-		private List<Pawn> targetsResult = new List<Pawn>();
+		public override AlertReport GetReport()
+		{
+			return AlertReport.CulpritsAre(Targets);
+		}
 	}
 }

@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_TransportPodCrash : IncidentWorker
 	{
-		
 		protected override bool TryExecuteWorker(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -15,25 +12,25 @@ namespace RimWorld
 			IntVec3 intVec = DropCellFinder.RandomDropSpot(map);
 			Pawn pawn = ThingUtility.FindPawn(things);
 			pawn.guest.getRescuedThoughtOnUndownedBecauseOfPlayer = true;
-			TaggedString baseLetterLabel = "LetterLabelRefugeePodCrash".Translate();
-			TaggedString taggedString = "RefugeePodCrash".Translate(pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true);
-			taggedString += "\n\n";
+			TaggedString title = "LetterLabelRefugeePodCrash".Translate();
+			TaggedString text = "RefugeePodCrash".Translate(pawn.Named("PAWN")).AdjustedFor(pawn);
+			text += "\n\n";
 			if (pawn.Faction == null)
 			{
-				taggedString += "RefugeePodCrash_Factionless".Translate(pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true);
+				text += "RefugeePodCrash_Factionless".Translate(pawn.Named("PAWN")).AdjustedFor(pawn);
 			}
 			else if (pawn.Faction.HostileTo(Faction.OfPlayer))
 			{
-				taggedString += "RefugeePodCrash_Hostile".Translate(pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true);
+				text += "RefugeePodCrash_Hostile".Translate(pawn.Named("PAWN")).AdjustedFor(pawn);
 			}
 			else
 			{
-				taggedString += "RefugeePodCrash_NonHostile".Translate(pawn.Named("PAWN")).AdjustedFor(pawn, "PAWN", true);
+				text += "RefugeePodCrash_NonHostile".Translate(pawn.Named("PAWN")).AdjustedFor(pawn);
 			}
-			PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref taggedString, ref baseLetterLabel, pawn);
-			base.SendStandardLetter(baseLetterLabel, taggedString, LetterDefOf.NeutralEvent, parms, new TargetInfo(intVec, map, false), Array.Empty<NamedArgument>());
+			PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref text, ref title, pawn);
+			SendStandardLetter(title, text, LetterDefOf.NeutralEvent, parms, new TargetInfo(intVec, map));
 			ActiveDropPodInfo activeDropPodInfo = new ActiveDropPodInfo();
-			activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(things, true, false);
+			activeDropPodInfo.innerContainer.TryAddRangeOrTransfer(things);
 			activeDropPodInfo.openDelay = 180;
 			activeDropPodInfo.leaveSlag = true;
 			DropPodUtility.MakeDropPodAt(intVec, map, activeDropPodInfo);

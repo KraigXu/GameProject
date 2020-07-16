@@ -1,148 +1,80 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public abstract class Letter : IArchivable, IExposable, ILoadReferenceable
 	{
-		
-		
-		public virtual bool CanShowInLetterStack
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public int ID;
 
-		
-		
-		public virtual bool CanDismissWithRightClick
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public LetterDef def;
 
-		
-		
-		public bool ArchivedOnly
-		{
-			get
-			{
-				return !Find.LetterStack.LettersListForReading.Contains(this);
-			}
-		}
+		public TaggedString label;
 
-		
-		
-		public IThingHolder ParentHolder
-		{
-			get
-			{
-				return Find.World;
-			}
-		}
+		public LookTargets lookTargets;
 
-		
-		
-		Texture IArchivable.ArchivedIcon
-		{
-			get
-			{
-				return this.def.Icon;
-			}
-		}
+		public Faction relatedFaction;
 
-		
-		
-		Color IArchivable.ArchivedIconColor
-		{
-			get
-			{
-				return this.def.color;
-			}
-		}
+		public int arrivalTick;
 
-		
-		
-		string IArchivable.ArchivedLabel
-		{
-			get
-			{
-				return this.label;
-			}
-		}
+		public float arrivalTime;
 
-		
-		
-		string IArchivable.ArchivedTooltip
-		{
-			get
-			{
-				return this.GetMouseoverText();
-			}
-		}
+		public string debugInfo;
 
-		
-		
-		int IArchivable.CreatedTicksGame
-		{
-			get
-			{
-				return this.arrivalTick;
-			}
-		}
+		public const float DrawWidth = 38f;
 
-		
-		
-		bool IArchivable.CanCullArchivedNow
-		{
-			get
-			{
-				return !Find.LetterStack.LettersListForReading.Contains(this);
-			}
-		}
+		public const float DrawHeight = 30f;
 
-		
-		
-		LookTargets IArchivable.LookTargets
-		{
-			get
-			{
-				return this.lookTargets;
-			}
-		}
+		private const float FallTime = 1f;
 
-		
+		private const float FallDistance = 200f;
+
+		public virtual bool CanShowInLetterStack => true;
+
+		public virtual bool CanDismissWithRightClick => true;
+
+		public bool ArchivedOnly => !Find.LetterStack.LettersListForReading.Contains(this);
+
+		public IThingHolder ParentHolder => Find.World;
+
+		Texture IArchivable.ArchivedIcon => def.Icon;
+
+		Color IArchivable.ArchivedIconColor => def.color;
+
+		string IArchivable.ArchivedLabel => label;
+
+		string IArchivable.ArchivedTooltip => GetMouseoverText();
+
+		int IArchivable.CreatedTicksGame => arrivalTick;
+
+		bool IArchivable.CanCullArchivedNow => !Find.LetterStack.LettersListForReading.Contains(this);
+
+		LookTargets IArchivable.LookTargets => lookTargets;
+
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.ID, "ID", 0, false);
-			Scribe_Defs.Look<LetterDef>(ref this.def, "def");
-			Scribe_Values.Look<TaggedString>(ref this.label, "label", default(TaggedString), false);
-			Scribe_Deep.Look<LookTargets>(ref this.lookTargets, "lookTargets", Array.Empty<object>());
-			Scribe_References.Look<Faction>(ref this.relatedFaction, "relatedFaction", false);
-			Scribe_Values.Look<int>(ref this.arrivalTick, "arrivalTick", 0, false);
+			Scribe_Values.Look(ref ID, "ID", 0);
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Values.Look(ref label, "label");
+			Scribe_Deep.Look(ref lookTargets, "lookTargets");
+			Scribe_References.Look(ref relatedFaction, "relatedFaction");
+			Scribe_Values.Look(ref arrivalTick, "arrivalTick", 0);
 		}
 
-		
 		public virtual void DrawButtonAt(float topY)
 		{
 			float num = (float)UI.screenWidth - 38f - 12f;
 			Rect rect = new Rect(num, topY, 38f, 30f);
 			Rect rect2 = new Rect(rect);
-			float num2 = Time.time - this.arrivalTime;
-			Color color = this.def.color;
+			float num2 = Time.time - arrivalTime;
+			Color color = def.color;
 			if (num2 < 1f)
 			{
 				rect2.y -= (1f - num2) * 200f;
 				color.a = num2 / 1f;
 			}
-			if (!Mouse.IsOver(rect) && this.def.bounce && num2 > 15f && num2 % 5f < 1f)
+			if (!Mouse.IsOver(rect) && def.bounce && num2 > 15f && num2 % 5f < 1f)
 			{
 				float num3 = (float)UI.screenWidth * 0.06f;
 				float num4 = 2f * (num2 % 1f) - 1f;
@@ -151,20 +83,20 @@ namespace Verse
 			}
 			if (Event.current.type == EventType.Repaint)
 			{
-				if (this.def.flashInterval > 0f)
+				if (def.flashInterval > 0f)
 				{
-					float num6 = Time.time - (this.arrivalTime + 1f);
-					if (num6 > 0f && num6 % this.def.flashInterval < 1f)
+					float num6 = Time.time - (arrivalTime + 1f);
+					if (num6 > 0f && num6 % def.flashInterval < 1f)
 					{
-						GenUI.DrawFlash(num, topY, (float)UI.screenWidth * 0.6f, Pulser.PulseBrightness(1f, 1f, num6) * 0.55f, this.def.flashColor);
+						GenUI.DrawFlash(num, topY, (float)UI.screenWidth * 0.6f, Pulser.PulseBrightness(1f, 1f, num6) * 0.55f, def.flashColor);
 					}
 				}
 				GUI.color = color;
 				Widgets.DrawShadowAround(rect2);
-				GUI.DrawTexture(rect2, this.def.Icon);
+				GUI.DrawTexture(rect2, def.Icon);
 				GUI.color = Color.white;
 				Text.Anchor = TextAnchor.UpperRight;
-				string text = this.PostProcessedLabel();
+				string text = PostProcessedLabel();
 				Vector2 vector = Text.CalcSize(text);
 				float x = vector.x;
 				float y = vector.y;
@@ -180,27 +112,26 @@ namespace Verse
 				GUI.color = Color.white;
 				Text.Anchor = TextAnchor.UpperLeft;
 			}
-			if (this.CanDismissWithRightClick && Event.current.type == EventType.MouseDown && Event.current.button == 1 && Mouse.IsOver(rect))
+			if (CanDismissWithRightClick && Event.current.type == EventType.MouseDown && Event.current.button == 1 && Mouse.IsOver(rect))
 			{
-				SoundDefOf.Click.PlayOneShotOnCamera(null);
+				SoundDefOf.Click.PlayOneShotOnCamera();
 				Find.LetterStack.RemoveLetter(this);
 				Event.current.Use();
 			}
-			if (Widgets.ButtonInvisible(rect2, true))
+			if (Widgets.ButtonInvisible(rect2))
 			{
-				this.OpenLetter();
+				OpenLetter();
 				Event.current.Use();
 			}
 		}
 
-		
 		public virtual void CheckForMouseOverTextAt(float topY)
 		{
 			float num = (float)UI.screenWidth - 38f - 12f;
 			if (Mouse.IsOver(new Rect(num, topY, 38f, 30f)))
 			{
 				Find.LetterStack.Notify_LetterMouseover(this);
-				TaggedString mouseoverText = this.GetMouseoverText();
+				TaggedString mouseoverText = GetMouseoverText();
 				if (!mouseoverText.RawText.NullOrEmpty())
 				{
 					Text.Font = GameFont.Small;
@@ -216,79 +147,36 @@ namespace Verse
 						GUI.BeginGroup(position);
 						Widgets.Label(new Rect(0f, 0f, position.width, position.height), mouseoverText.Resolve());
 						GUI.EndGroup();
-					}, true, false, 1f);
+					});
 				}
 			}
 		}
 
-		
 		protected abstract string GetMouseoverText();
 
-		
 		public abstract void OpenLetter();
 
-		
 		public virtual void Received()
 		{
 		}
 
-		
 		public virtual void Removed()
 		{
 		}
 
-		
 		protected virtual string PostProcessedLabel()
 		{
-			return this.label;
+			return label;
 		}
 
-		
 		void IArchivable.OpenArchived()
 		{
-			this.OpenLetter();
+			OpenLetter();
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return "Letter_" + this.ID;
+			return "Letter_" + ID;
 		}
-
-		
-		public int ID;
-
-		
-		public LetterDef def;
-
-		
-		public TaggedString label;
-
-		
-		public LookTargets lookTargets;
-
-		
-		public Faction relatedFaction;
-
-		
-		public int arrivalTick;
-
-		
-		public float arrivalTime;
-
-		
-		public string debugInfo;
-
-		
-		public const float DrawWidth = 38f;
-
-		
-		public const float DrawHeight = 30f;
-
-		
-		private const float FallTime = 1f;
-
-		
-		private const float FallDistance = 200f;
 	}
 }

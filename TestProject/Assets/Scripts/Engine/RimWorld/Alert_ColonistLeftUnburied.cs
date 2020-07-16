@@ -1,25 +1,17 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_ColonistLeftUnburied : Alert
 	{
-		
-		public static bool IsCorpseOfColonist(Corpse corpse)
-		{
-			return corpse.InnerPawn.Faction == Faction.OfPlayer && corpse.InnerPawn.def.race.Humanlike && !corpse.InnerPawn.IsQuestLodger() && !corpse.IsInAnyStorage();
-		}
+		private List<Thing> unburiedColonistCorpsesResult = new List<Thing>();
 
-		
-		
 		private List<Thing> UnburiedColonistCorpses
 		{
 			get
 			{
-				this.unburiedColonistCorpsesResult.Clear();
+				unburiedColonistCorpsesResult.Clear();
 				foreach (Map map in Find.Maps)
 				{
 					if (map.mapPawns.AnyFreeColonistSpawned)
@@ -28,32 +20,36 @@ namespace RimWorld
 						for (int i = 0; i < list.Count; i++)
 						{
 							Corpse corpse = (Corpse)list[i];
-							if (Alert_ColonistLeftUnburied.IsCorpseOfColonist(corpse))
+							if (IsCorpseOfColonist(corpse))
 							{
-								this.unburiedColonistCorpsesResult.Add(corpse);
+								unburiedColonistCorpsesResult.Add(corpse);
 							}
 						}
 					}
 				}
-				return this.unburiedColonistCorpsesResult;
+				return unburiedColonistCorpsesResult;
 			}
 		}
 
-		
+		public static bool IsCorpseOfColonist(Corpse corpse)
+		{
+			if (corpse.InnerPawn.Faction == Faction.OfPlayer && corpse.InnerPawn.def.race.Humanlike && !corpse.InnerPawn.IsQuestLodger())
+			{
+				return !corpse.IsInAnyStorage();
+			}
+			return false;
+		}
+
 		public Alert_ColonistLeftUnburied()
 		{
-			this.defaultLabel = "AlertColonistLeftUnburied".Translate();
-			this.defaultExplanation = "AlertColonistLeftUnburiedDesc".Translate();
-			this.defaultPriority = AlertPriority.High;
+			defaultLabel = "AlertColonistLeftUnburied".Translate();
+			defaultExplanation = "AlertColonistLeftUnburiedDesc".Translate();
+			defaultPriority = AlertPriority.High;
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.UnburiedColonistCorpses);
+			return AlertReport.CulpritsAre(UnburiedColonistCorpses);
 		}
-
-		
-		private List<Thing> unburiedColonistCorpsesResult = new List<Thing>();
 	}
 }

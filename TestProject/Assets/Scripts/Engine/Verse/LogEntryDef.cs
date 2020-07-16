@@ -1,54 +1,45 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class LogEntryDef : Def
 	{
-		
+		[NoTranslate]
+		public string iconMiss;
+
+		[NoTranslate]
+		public string iconDamaged;
+
+		[NoTranslate]
+		public string iconDamagedFromInstigator;
+
+		[Unsaved(false)]
+		public Texture2D iconMissTex;
+
+		[Unsaved(false)]
+		public Texture2D iconDamagedTex;
+
+		[Unsaved(false)]
+		public Texture2D iconDamagedFromInstigatorTex;
+
 		public override void PostLoad()
 		{
 			base.PostLoad();
 			LongEventHandler.ExecuteWhenFinished(delegate
 			{
-				if (!this.iconMiss.NullOrEmpty())
+				if (!iconMiss.NullOrEmpty())
 				{
-					this.iconMissTex = ContentFinder<Texture2D>.Get(this.iconMiss, true);
+					iconMissTex = ContentFinder<Texture2D>.Get(iconMiss);
 				}
-				if (!this.iconDamaged.NullOrEmpty())
+				if (!iconDamaged.NullOrEmpty())
 				{
-					this.iconDamagedTex = ContentFinder<Texture2D>.Get(this.iconDamaged, true);
+					iconDamagedTex = ContentFinder<Texture2D>.Get(iconDamaged);
 				}
-				if (!this.iconDamagedFromInstigator.NullOrEmpty())
+				if (!iconDamagedFromInstigator.NullOrEmpty())
 				{
-					this.iconDamagedFromInstigatorTex = ContentFinder<Texture2D>.Get(this.iconDamagedFromInstigator, true);
+					iconDamagedFromInstigatorTex = ContentFinder<Texture2D>.Get(iconDamagedFromInstigator);
 				}
 			});
 		}
-
-		
-		[NoTranslate]
-		public string iconMiss;
-
-		
-		[NoTranslate]
-		public string iconDamaged;
-
-		
-		[NoTranslate]
-		public string iconDamagedFromInstigator;
-
-		
-		[Unsaved(false)]
-		public Texture2D iconMissTex;
-
-		
-		[Unsaved(false)]
-		public Texture2D iconDamagedTex;
-
-		
-		[Unsaved(false)]
-		public Texture2D iconDamagedFromInstigatorTex;
 	}
 }

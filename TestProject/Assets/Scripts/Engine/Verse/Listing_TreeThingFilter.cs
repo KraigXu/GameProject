@@ -1,119 +1,121 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Listing_TreeThingFilter : Listing_Tree
 	{
-		
+		private ThingFilter filter;
+
+		private ThingFilter parentFilter;
+
+		private List<SpecialThingFilterDef> hiddenSpecialFilters;
+
+		private List<ThingDef> forceHiddenDefs;
+
+		private List<SpecialThingFilterDef> tempForceHiddenSpecialFilters;
+
+		private List<ThingDef> suppressSmallVolumeTags;
+
 		public Listing_TreeThingFilter(ThingFilter filter, ThingFilter parentFilter, IEnumerable<ThingDef> forceHiddenDefs, IEnumerable<SpecialThingFilterDef> forceHiddenFilters, List<ThingDef> suppressSmallVolumeTags)
 		{
 			this.filter = filter;
 			this.parentFilter = parentFilter;
 			if (forceHiddenDefs != null)
 			{
-				this.forceHiddenDefs = forceHiddenDefs.ToList<ThingDef>();
+				this.forceHiddenDefs = forceHiddenDefs.ToList();
 			}
 			if (forceHiddenFilters != null)
 			{
-				this.tempForceHiddenSpecialFilters = forceHiddenFilters.ToList<SpecialThingFilterDef>();
+				tempForceHiddenSpecialFilters = forceHiddenFilters.ToList();
 			}
 			this.suppressSmallVolumeTags = suppressSmallVolumeTags;
 		}
 
-		
 		public void DoCategoryChildren(TreeNode_ThingCategory node, int indentLevel, int openMask, Map map, bool isRoot = false)
 		{
 			if (isRoot)
 			{
-				foreach (SpecialThingFilterDef sfDef in node.catDef.ParentsSpecialThingFilterDefs)
+				foreach (SpecialThingFilterDef parentsSpecialThingFilterDef in node.catDef.ParentsSpecialThingFilterDefs)
 				{
-					if (this.Visible_NewTemp(sfDef, node))
+					if (Visible_NewTemp(parentsSpecialThingFilterDef, node))
 					{
-						this.DoSpecialFilter(sfDef, indentLevel);
+						DoSpecialFilter(parentsSpecialThingFilterDef, indentLevel);
 					}
 				}
 			}
 			List<SpecialThingFilterDef> childSpecialFilters = node.catDef.childSpecialFilters;
 			for (int i = 0; i < childSpecialFilters.Count; i++)
 			{
-				if (this.Visible_NewTemp(childSpecialFilters[i], node))
+				if (Visible_NewTemp(childSpecialFilters[i], node))
 				{
-					this.DoSpecialFilter(childSpecialFilters[i], indentLevel);
+					DoSpecialFilter(childSpecialFilters[i], indentLevel);
 				}
 			}
-			foreach (TreeNode_ThingCategory node2 in node.ChildCategoryNodes)
+			foreach (TreeNode_ThingCategory childCategoryNode in node.ChildCategoryNodes)
 			{
-				if (this.Visible(node2))
+				if (Visible(childCategoryNode))
 				{
-					this.DoCategory(node2, indentLevel, openMask, map);
+					DoCategory(childCategoryNode, indentLevel, openMask, map);
 				}
 			}
-			foreach (ThingDef thingDef in from n in node.catDef.childThingDefs
-			orderby n.label
-			select n)
+			foreach (ThingDef item in node.catDef.childThingDefs.OrderBy((ThingDef n) => n.label))
 			{
-				if (this.Visible(thingDef))
+				if (Visible(item))
 				{
-					this.DoThingDef(thingDef, indentLevel, map);
+					DoThingDef(item, indentLevel, map);
 				}
 			}
 		}
 
-		
 		private void DoSpecialFilter(SpecialThingFilterDef sfDef, int nestLevel)
 		{
-			if (!sfDef.configurable)
+			if (sfDef.configurable)
 			{
-				return;
+				LabelLeft("*" + sfDef.LabelCap, sfDef.description, nestLevel);
+				bool checkOn = filter.Allows(sfDef);
+				bool flag = checkOn;
+				Widgets.Checkbox(new Vector2(LabelWidth, curY), ref checkOn, lineHeight, disabled: false, paintable: true);
+				if (checkOn != flag)
+				{
+					filter.SetAllow(sfDef, checkOn);
+				}
+				EndLine();
 			}
-			base.LabelLeft("*" + sfDef.LabelCap, sfDef.description, nestLevel, 0f);
-			bool flag = this.filter.Allows(sfDef);
-			bool flag2 = flag;
-			Widgets.Checkbox(new Vector2(this.LabelWidth, this.curY), ref flag, this.lineHeight, false, true, null, null);
-			if (flag != flag2)
-			{
-				this.filter.SetAllow(sfDef, flag);
-			}
-			base.EndLine();
 		}
 
-		
 		public void DoCategory(TreeNode_ThingCategory node, int indentLevel, int openMask, Map map)
 		{
-			base.OpenCloseWidget(node, indentLevel, openMask);
-			base.LabelLeft(node.LabelCap, node.catDef.description, indentLevel, 0f);
-			MultiCheckboxState multiCheckboxState = this.AllowanceStateOf(node);
-			MultiCheckboxState multiCheckboxState2 = Widgets.CheckboxMulti(new Rect(this.LabelWidth, this.curY, this.lineHeight, this.lineHeight), multiCheckboxState, true);
+			OpenCloseWidget(node, indentLevel, openMask);
+			LabelLeft(node.LabelCap, node.catDef.description, indentLevel);
+			MultiCheckboxState multiCheckboxState = AllowanceStateOf(node);
+			MultiCheckboxState multiCheckboxState2 = Widgets.CheckboxMulti(new Rect(LabelWidth, curY, lineHeight, lineHeight), multiCheckboxState, paintable: true);
 			if (multiCheckboxState != multiCheckboxState2)
 			{
-				this.filter.SetAllow(node.catDef, multiCheckboxState2 == MultiCheckboxState.On, this.forceHiddenDefs, this.hiddenSpecialFilters);
+				filter.SetAllow(node.catDef, multiCheckboxState2 == MultiCheckboxState.On, forceHiddenDefs, hiddenSpecialFilters);
 			}
-			base.EndLine();
+			EndLine();
 			if (node.IsOpen(openMask))
 			{
-				this.DoCategoryChildren(node, indentLevel + 1, openMask, map, false);
+				DoCategoryChildren(node, indentLevel + 1, openMask, map);
 			}
 		}
 
-		
 		private void DoThingDef(ThingDef tDef, int nestLevel, Map map)
 		{
-			object obj = (this.suppressSmallVolumeTags == null || !this.suppressSmallVolumeTags.Contains(tDef)) && tDef.IsStuff && tDef.smallVolume;
+			bool num = (suppressSmallVolumeTags == null || !suppressSmallVolumeTags.Contains(tDef)) && tDef.IsStuff && tDef.smallVolume;
 			string text = tDef.DescriptionDetailed;
-			object obj2 = obj;
-			if (obj2 != null)
+			if (num)
 			{
 				text += "\n\n" + "ThisIsSmallVolume".Translate(10.ToStringCached());
 			}
-			float num = -4f;
-			if (obj2 != null)
+			float num2 = -4f;
+			if (num)
 			{
-				Rect rect = new Rect(this.LabelWidth - 19f, this.curY, 19f, 20f);
+				Rect rect = new Rect(LabelWidth - 19f, curY, 19f, 20f);
 				Text.Font = GameFont.Tiny;
 				Text.Anchor = TextAnchor.UpperRight;
 				GUI.color = Color.gray;
@@ -122,55 +124,54 @@ namespace Verse
 				GenUI.ResetLabelAlign();
 				GUI.color = Color.white;
 			}
-			num -= 19f;
+			num2 -= 19f;
 			if (map != null)
 			{
 				int count = map.resourceCounter.GetCount(tDef);
 				if (count > 0)
 				{
 					string text2 = count.ToStringCached();
-					Rect rect2 = new Rect(0f, this.curY, this.LabelWidth + num, 40f);
+					Rect rect2 = new Rect(0f, curY, LabelWidth + num2, 40f);
 					Text.Font = GameFont.Tiny;
 					Text.Anchor = TextAnchor.UpperRight;
 					GUI.color = new Color(0.5f, 0.5f, 0.1f);
 					Widgets.Label(rect2, text2);
-					num -= Text.CalcSize(text2).x;
+					num2 -= Text.CalcSize(text2).x;
 					GenUI.ResetLabelAlign();
 					Text.Font = GameFont.Small;
 					GUI.color = Color.white;
 				}
 			}
-			base.LabelLeft(tDef.LabelCap, text, nestLevel, num);
-			bool flag = this.filter.Allows(tDef);
-			bool flag2 = flag;
-			Widgets.Checkbox(new Vector2(this.LabelWidth, this.curY), ref flag, this.lineHeight, false, true, null, null);
-			if (flag != flag2)
+			LabelLeft(tDef.LabelCap, text, nestLevel, num2);
+			bool checkOn = filter.Allows(tDef);
+			bool flag = checkOn;
+			Widgets.Checkbox(new Vector2(LabelWidth, curY), ref checkOn, lineHeight, disabled: false, paintable: true);
+			if (checkOn != flag)
 			{
-				this.filter.SetAllow(tDef, flag);
+				filter.SetAllow(tDef, checkOn);
 			}
-			base.EndLine();
+			EndLine();
 		}
 
-		
 		public MultiCheckboxState AllowanceStateOf(TreeNode_ThingCategory cat)
 		{
 			int num = 0;
 			int num2 = 0;
-			foreach (ThingDef thingDef in cat.catDef.DescendantThingDefs)
+			foreach (ThingDef descendantThingDef in cat.catDef.DescendantThingDefs)
 			{
-				if (this.Visible(thingDef))
+				if (Visible(descendantThingDef))
 				{
 					num++;
-					if (this.filter.Allows(thingDef))
+					if (filter.Allows(descendantThingDef))
 					{
 						num2++;
 					}
 				}
 			}
 			bool flag = false;
-			foreach (SpecialThingFilterDef sf in cat.catDef.DescendantSpecialThingFilterDefs)
+			foreach (SpecialThingFilterDef descendantSpecialThingFilterDef in cat.catDef.DescendantSpecialThingFilterDefs)
 			{
-				if (this.Visible_NewTemp(sf, cat) && !this.filter.Allows(sf))
+				if (Visible_NewTemp(descendantSpecialThingFilterDef, cat) && !filter.Allows(descendantSpecialThingFilterDef))
 				{
 					flag = true;
 					break;
@@ -187,24 +188,23 @@ namespace Verse
 			return MultiCheckboxState.Partial;
 		}
 
-		
 		private bool Visible(ThingDef td)
 		{
 			if (td.menuHidden)
 			{
 				return false;
 			}
-			if (this.forceHiddenDefs != null && this.forceHiddenDefs.Contains(td))
+			if (forceHiddenDefs != null && forceHiddenDefs.Contains(td))
 			{
 				return false;
 			}
-			if (this.parentFilter != null)
+			if (parentFilter != null)
 			{
-				if (!this.parentFilter.Allows(td))
+				if (!parentFilter.Allows(td))
 				{
 					return false;
 				}
-				if (this.parentFilter.IsAlwaysDisallowedDueToSpecialFilters(td))
+				if (parentFilter.IsAlwaysDisallowedDueToSpecialFilters(td))
 				{
 					return false;
 				}
@@ -212,33 +212,30 @@ namespace Verse
 			return true;
 		}
 
-		
 		private bool Visible(TreeNode_ThingCategory node)
 		{
-			return node.catDef.DescendantThingDefs.Any(new Func<ThingDef, bool>(this.Visible));
+			return node.catDef.DescendantThingDefs.Any(Visible);
 		}
 
-		
 		[Obsolete("Obsolete, only used to avoid errors when patching")]
 		private bool Visible(SpecialThingFilterDef filter)
 		{
-			return this.Visible_NewTemp(filter, new TreeNode_ThingCategory(ThingCategoryDefOf.Root));
+			return Visible_NewTemp(filter, new TreeNode_ThingCategory(ThingCategoryDefOf.Root));
 		}
 
-		
 		private bool Visible_NewTemp(SpecialThingFilterDef filter, TreeNode_ThingCategory node)
 		{
-			if (this.parentFilter != null && !this.parentFilter.Allows(filter))
+			if (parentFilter != null && !parentFilter.Allows(filter))
 			{
 				return false;
 			}
-			if (this.hiddenSpecialFilters == null)
+			if (hiddenSpecialFilters == null)
 			{
-				this.CalculateHiddenSpecialFilters(node);
+				CalculateHiddenSpecialFilters(node);
 			}
-			for (int i = 0; i < this.hiddenSpecialFilters.Count; i++)
+			for (int i = 0; i < hiddenSpecialFilters.Count; i++)
 			{
-				if (this.hiddenSpecialFilters[i] == filter)
+				if (hiddenSpecialFilters[i] == filter)
 				{
 					return false;
 				}
@@ -246,28 +243,25 @@ namespace Verse
 			return true;
 		}
 
-		
 		private void CalculateHiddenSpecialFilters(TreeNode_ThingCategory node)
 		{
-			this.hiddenSpecialFilters = new List<SpecialThingFilterDef>();
-			if (this.tempForceHiddenSpecialFilters != null)
+			hiddenSpecialFilters = new List<SpecialThingFilterDef>();
+			if (tempForceHiddenSpecialFilters != null)
 			{
-				this.hiddenSpecialFilters.AddRange(this.tempForceHiddenSpecialFilters);
+				hiddenSpecialFilters.AddRange(tempForceHiddenSpecialFilters);
 			}
 			IEnumerable<SpecialThingFilterDef> enumerable = node.catDef.ParentsSpecialThingFilterDefs.Concat(node.catDef.DescendantSpecialThingFilterDefs);
 			IEnumerable<ThingDef> enumerable2 = node.catDef.DescendantThingDefs;
-			if (this.parentFilter != null)
+			if (parentFilter != null)
 			{
-				enumerable2 = from x in enumerable2
-				where this.parentFilter.Allows(x)
-				select x;
+				enumerable2 = enumerable2.Where((ThingDef x) => parentFilter.Allows(x));
 			}
-			foreach (SpecialThingFilterDef specialThingFilterDef in enumerable)
+			foreach (SpecialThingFilterDef item in enumerable)
 			{
 				bool flag = false;
-				foreach (ThingDef def in enumerable2)
+				foreach (ThingDef item2 in enumerable2)
 				{
-					if (specialThingFilterDef.Worker.CanEverMatch(def))
+					if (item.Worker.CanEverMatch(item2))
 					{
 						flag = true;
 						break;
@@ -275,27 +269,9 @@ namespace Verse
 				}
 				if (!flag)
 				{
-					this.hiddenSpecialFilters.Add(specialThingFilterDef);
+					hiddenSpecialFilters.Add(item);
 				}
 			}
 		}
-
-		
-		private ThingFilter filter;
-
-		
-		private ThingFilter parentFilter;
-
-		
-		private List<SpecialThingFilterDef> hiddenSpecialFilters;
-
-		
-		private List<ThingDef> forceHiddenDefs;
-
-		
-		private List<SpecialThingFilterDef> tempForceHiddenSpecialFilters;
-
-		
-		private List<ThingDef> suppressSmallVolumeTags;
 	}
 }

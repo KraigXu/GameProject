@@ -1,44 +1,29 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class DamagedMatPool
 	{
-		
-		
-		public static int MatCount
-		{
-			get
-			{
-				return DamagedMatPool.damagedMats.Count;
-			}
-		}
+		private static Dictionary<Material, Material> damagedMats = new Dictionary<Material, Material>();
 
-		
+		private static readonly Color DamagedMatStartingColor = Color.red;
+
+		public static int MatCount => damagedMats.Count;
+
 		public static Material GetDamageFlashMat(Material baseMat, float damPct)
 		{
 			if (damPct < 0.01f)
 			{
 				return baseMat;
 			}
-			Material material;
-			if (!DamagedMatPool.damagedMats.TryGetValue(baseMat, out material))
+			if (!damagedMats.TryGetValue(baseMat, out Material value))
 			{
-				material = MaterialAllocator.Create(baseMat);
-				DamagedMatPool.damagedMats.Add(baseMat, material);
+				value = MaterialAllocator.Create(baseMat);
+				damagedMats.Add(baseMat, value);
 			}
-			Color color = Color.Lerp(baseMat.color, DamagedMatPool.DamagedMatStartingColor, damPct);
-			material.color = color;
-			return material;
+			Color color2 = value.color = Color.Lerp(baseMat.color, DamagedMatStartingColor, damPct);
+			return value;
 		}
-
-		
-		private static Dictionary<Material, Material> damagedMats = new Dictionary<Material, Material>();
-
-		
-		private static readonly Color DamagedMatStartingColor = Color.red;
 	}
 }

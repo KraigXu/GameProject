@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,52 +8,47 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Building_NutrientPasteDispenser : Building
 	{
-		
-		
+		public CompPowerTrader powerComp;
+
+		private List<IntVec3> cachedAdjCellsCardinal;
+
+		public static int CollectDuration = 50;
+
 		public bool CanDispenseNow
 		{
 			get
 			{
-				return this.powerComp.PowerOn && this.HasEnoughFeedstockInHoppers();
+				if (powerComp.PowerOn)
+				{
+					return HasEnoughFeedstockInHoppers();
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public List<IntVec3> AdjCellsCardinalInBounds
 		{
 			get
 			{
-				if (this.cachedAdjCellsCardinal == null)
+				if (cachedAdjCellsCardinal == null)
 				{
-					this.cachedAdjCellsCardinal = (from c in GenAdj.CellsAdjacentCardinal(this)
-					where c.InBounds(base.Map)
-					select c).ToList<IntVec3>();
+					cachedAdjCellsCardinal = (from c in GenAdj.CellsAdjacentCardinal(this)
+						where c.InBounds(base.Map)
+						select c).ToList();
 				}
-				return this.cachedAdjCellsCardinal;
+				return cachedAdjCellsCardinal;
 			}
 		}
 
-		
-		
-		public virtual ThingDef DispensableDef
-		{
-			get
-			{
-				return ThingDefOf.MealNutrientPaste;
-			}
-		}
+		public virtual ThingDef DispensableDef => ThingDefOf.MealNutrientPaste;
 
-		
-		
 		public override Color DrawColor
 		{
 			get
 			{
-				if (!this.IsSociallyProper(null, false, false))
+				if (!this.IsSociallyProper(null, forPrisoner: false))
 				{
 					return Building_Bed.SheetColorForPrisoner;
 				}
@@ -62,20 +56,18 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.powerComp = base.GetComp<CompPowerTrader>();
+			powerComp = GetComp<CompPowerTrader>();
 		}
 
-		
 		public virtual Building AdjacentReachableHopper(Pawn reacher)
 		{
-			for (int i = 0; i < this.AdjCellsCardinalInBounds.Count; i++)
+			for (int i = 0; i < AdjCellsCardinalInBounds.Count; i++)
 			{
-				Building edifice = this.AdjCellsCardinalInBounds[i].GetEdifice(base.Map);
-				if (edifice != null && edifice.def == ThingDefOf.Hopper && reacher.CanReach(edifice, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+				Building edifice = AdjCellsCardinalInBounds[i].GetEdifice(base.Map);
+				if (edifice != null && edifice.def == ThingDefOf.Hopper && reacher.CanReach(edifice, PathEndMode.Touch, Danger.Deadly))
 				{
 					return edifice;
 				}
@@ -83,36 +75,30 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public virtual Thing TryDispenseFood()
 		{
-			if (!this.CanDispenseNow)
+			if (!CanDispenseNow)
 			{
 				return null;
 			}
-			float num = this.def.building.nutritionCostPerDispense - 0.0001f;
+			float num = def.building.nutritionCostPerDispense - 0.0001f;
 			List<ThingDef> list = new List<ThingDef>();
-			for (;;)
+			do
 			{
-				Thing thing = this.FindFeedInAnyHopper();
+				Thing thing = FindFeedInAnyHopper();
 				if (thing == null)
 				{
-					break;
+					Log.Error("Did not find enough food in hoppers while trying to dispense.");
+					return null;
 				}
-				int num2 = Mathf.Min(thing.stackCount, Mathf.CeilToInt(num / thing.GetStatValue(StatDefOf.Nutrition, true)));
-				num -= (float)num2 * thing.GetStatValue(StatDefOf.Nutrition, true);
+				int num2 = Mathf.Min(thing.stackCount, Mathf.CeilToInt(num / thing.GetStatValue(StatDefOf.Nutrition)));
+				num -= (float)num2 * thing.GetStatValue(StatDefOf.Nutrition);
 				list.Add(thing.def);
 				thing.SplitOff(num2);
-				if (num <= 0f)
-				{
-					goto Block_3;
-				}
 			}
-			Log.Error("Did not find enough food in hoppers while trying to dispense.", false);
-			return null;
-			Block_3:
-			this.def.building.soundDispense.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
-			Thing thing2 = ThingMaker.MakeThing(ThingDefOf.MealNutrientPaste, null);
+			while (!(num <= 0f));
+			def.building.soundDispense.PlayOneShot(new TargetInfo(base.Position, base.Map));
+			Thing thing2 = ThingMaker.MakeThing(ThingDefOf.MealNutrientPaste);
 			CompIngredients compIngredients = thing2.TryGetComp<CompIngredients>();
 			for (int i = 0; i < list.Count; i++)
 			{
@@ -121,18 +107,17 @@ namespace RimWorld
 			return thing2;
 		}
 
-		
 		public virtual Thing FindFeedInAnyHopper()
 		{
-			for (int i = 0; i < this.AdjCellsCardinalInBounds.Count; i++)
+			for (int i = 0; i < AdjCellsCardinalInBounds.Count; i++)
 			{
 				Thing thing = null;
 				Thing thing2 = null;
-				List<Thing> thingList = this.AdjCellsCardinalInBounds[i].GetThingList(base.Map);
+				List<Thing> thingList = AdjCellsCardinalInBounds[i].GetThingList(base.Map);
 				for (int j = 0; j < thingList.Count; j++)
 				{
 					Thing thing3 = thingList[j];
-					if (Building_NutrientPasteDispenser.IsAcceptableFeedstock(thing3.def))
+					if (IsAcceptableFeedstock(thing3.def))
 					{
 						thing = thing3;
 					}
@@ -149,20 +134,19 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public virtual bool HasEnoughFeedstockInHoppers()
 		{
 			float num = 0f;
-			for (int i = 0; i < this.AdjCellsCardinalInBounds.Count; i++)
+			for (int i = 0; i < AdjCellsCardinalInBounds.Count; i++)
 			{
-				IntVec3 c = this.AdjCellsCardinalInBounds[i];
+				IntVec3 c = AdjCellsCardinalInBounds[i];
 				Thing thing = null;
 				Thing thing2 = null;
 				List<Thing> thingList = c.GetThingList(base.Map);
 				for (int j = 0; j < thingList.Count; j++)
 				{
 					Thing thing3 = thingList[j];
-					if (Building_NutrientPasteDispenser.IsAcceptableFeedstock(thing3.def))
+					if (IsAcceptableFeedstock(thing3.def))
 					{
 						thing = thing3;
 					}
@@ -173,9 +157,9 @@ namespace RimWorld
 				}
 				if (thing != null && thing2 != null)
 				{
-					num += (float)thing.stackCount * thing.GetStatValue(StatDefOf.Nutrition, true);
+					num += (float)thing.stackCount * thing.GetStatValue(StatDefOf.Nutrition);
 				}
-				if (num >= this.def.building.nutritionCostPerDispense)
+				if (num >= def.building.nutritionCostPerDispense)
 				{
 					return true;
 				}
@@ -183,31 +167,24 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static bool IsAcceptableFeedstock(ThingDef def)
 		{
-			return def.IsNutritionGivingIngestible && def.ingestible.preferability != FoodPreferability.Undefined && (def.ingestible.foodType & FoodTypeFlags.Plant) != FoodTypeFlags.Plant && (def.ingestible.foodType & FoodTypeFlags.Tree) != FoodTypeFlags.Tree;
+			if (def.IsNutritionGivingIngestible && def.ingestible.preferability != 0 && (def.ingestible.foodType & FoodTypeFlags.Plant) != FoodTypeFlags.Plant)
+			{
+				return (def.ingestible.foodType & FoodTypeFlags.Tree) != FoodTypeFlags.Tree;
+			}
+			return false;
 		}
 
-		
 		public override string GetInspectString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine(base.GetInspectString());
-			if (!this.IsSociallyProper(null, false, false))
+			if (!this.IsSociallyProper(null, forPrisoner: false))
 			{
 				stringBuilder.AppendLine("InPrisonCell".Translate());
 			}
 			return stringBuilder.ToString().Trim();
 		}
-
-		
-		public CompPowerTrader powerComp;
-
-		
-		private List<IntVec3> cachedAdjCellsCardinal;
-
-		
-		public static int CollectDuration = 50;
 	}
 }

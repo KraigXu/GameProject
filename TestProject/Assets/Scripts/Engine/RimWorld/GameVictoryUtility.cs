@@ -1,17 +1,14 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class GameVictoryUtility
 	{
-		
 		public static string MakeEndCredits(string intro, string ending, string escapees)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -22,18 +19,17 @@ namespace RimWorld
 				stringBuilder.Append("GameOverColonistsEscaped".Translate(escapees));
 			}
 			stringBuilder.AppendLine();
-			string text = GameVictoryUtility.PawnsLeftBehind();
+			string text = PawnsLeftBehind();
 			if (!text.NullOrEmpty())
 			{
 				stringBuilder.AppendLine("GameOverColonistsLeft".Translate(text));
 			}
 			stringBuilder.AppendLine(ending);
 			stringBuilder.AppendLine();
-			stringBuilder.AppendLine(GameVictoryUtility.InMemoryOfSection());
+			stringBuilder.AppendLine(InMemoryOfSection());
 			return stringBuilder.ToString();
 		}
 
-		
 		public static void ShowCredits(string victoryText)
 		{
 			Screen_Credits screen_Credits = new Screen_Credits(victoryText);
@@ -43,28 +39,28 @@ namespace RimWorld
 			ScreenFader.StartFade(Color.clear, 3f);
 		}
 
-		
 		public static string PawnsLeftBehind()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in PawnsFinder.AllMaps_FreeColonistsSpawned)
+			foreach (Pawn item in PawnsFinder.AllMaps_FreeColonistsSpawned)
 			{
-				stringBuilder.AppendLine("   " + pawn.LabelCap);
+				stringBuilder.AppendLine("   " + item.LabelCap);
 			}
 			List<Caravan> caravans = Find.WorldObjects.Caravans;
 			for (int i = 0; i < caravans.Count; i++)
 			{
 				Caravan caravan = caravans[i];
-				if (caravan.IsPlayerControlled)
+				if (!caravan.IsPlayerControlled)
 				{
-					List<Pawn> pawnsListForReading = caravan.PawnsListForReading;
-					for (int j = 0; j < pawnsListForReading.Count; j++)
+					continue;
+				}
+				List<Pawn> pawnsListForReading = caravan.PawnsListForReading;
+				for (int j = 0; j < pawnsListForReading.Count; j++)
+				{
+					Pawn pawn = pawnsListForReading[j];
+					if (pawn.IsColonist && pawn.HostFaction == null)
 					{
-						Pawn pawn2 = pawnsListForReading[j];
-						if (pawn2.IsColonist && pawn2.HostFaction == null)
-						{
-							stringBuilder.AppendLine("   " + pawn2.LabelCap);
-						}
+						stringBuilder.AppendLine("   " + pawn.LabelCap);
 					}
 				}
 			}
@@ -75,19 +71,16 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		
 		public static string InMemoryOfSection()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			IEnumerable<Pawn> enumerable = from p in Find.WorldPawns.AllPawnsDead
-			where p.IsColonist
-			select p;
-			if (enumerable.Any<Pawn>())
+			IEnumerable<Pawn> enumerable = Find.WorldPawns.AllPawnsDead.Where((Pawn p) => p.IsColonist);
+			if (enumerable.Any())
 			{
 				stringBuilder.AppendLine("GameOverInMemoryOf".Translate());
-				foreach (Pawn pawn in enumerable)
+				foreach (Pawn item in enumerable)
 				{
-					stringBuilder.AppendLine("   " + pawn.LabelCap);
+					stringBuilder.AppendLine("   " + item.LabelCap);
 				}
 			}
 			return stringBuilder.ToString();

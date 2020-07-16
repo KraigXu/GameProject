@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Analytics;
 using Verse.AI;
@@ -11,32 +11,42 @@ using Verse.Steam;
 
 namespace Verse
 {
-	
 	public abstract class Root : MonoBehaviour
 	{
-		
+		private static bool globalInitDone;
+
+		private static bool prefsApplied;
+
+		protected static bool checkedAutostartSaveFile;
+
+		protected bool destroyed;
+
+		public SoundRoot soundRoot;
+
+		public UIRoot uiRoot;
+
 		public virtual void Start()
 		{
 			try
 			{
 				CultureInfoUtility.EnsureEnglish();
 				Current.Notify_LoadedSceneChanged();
-				Root.CheckGlobalInit();
+				CheckGlobalInit();
 				Action action = delegate
 				{
 					DeepProfiler.Start("Misc Init (InitializingInterface)");
 					try
 					{
-						this.soundRoot = new SoundRoot();
+						soundRoot = new SoundRoot();
 						if (GenScene.InPlayScene)
 						{
-							this.uiRoot = new UIRoot_Play();
+							uiRoot = new UIRoot_Play();
 						}
 						else if (GenScene.InEntryScene)
 						{
-							this.uiRoot = new UIRoot_Entry();
+							uiRoot = new UIRoot_Entry();
 						}
-						this.uiRoot.Init();
+						uiRoot.Init();
 						Messages.Notify_LoadedLevelChanged();
 						if (Current.SubcameraDriver != null)
 						{
@@ -53,9 +63,9 @@ namespace Verse
 					Application.runInBackground = true;
 					LongEventHandler.QueueLongEvent(delegate
 					{
-						PlayDataLoader.LoadAllPlayData(false);
-					}, null, true, null, true);
-					LongEventHandler.QueueLongEvent(action, "InitializingInterface", false, null, true);
+						PlayDataLoader.LoadAllPlayData();
+					}, null, doAsynchronously: true, null);
+					LongEventHandler.QueueLongEvent(action, "InitializingInterface", doAsynchronously: false, null);
 				}
 				else
 				{
@@ -64,48 +74,44 @@ namespace Verse
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Critical error in root Start(): " + arg, false);
+				Log.Error("Critical error in root Start(): " + arg);
 			}
 		}
 
-		
 		private static void CheckGlobalInit()
 		{
-			if (Root.globalInitDone)
+			if (!globalInitDone)
 			{
-				return;
+				string[] commandLineArgs = Environment.GetCommandLineArgs();
+				if (commandLineArgs != null && commandLineArgs.Length > 1)
+				{
+					Log.Message("Command line arguments: " + GenText.ToSpaceList(commandLineArgs.Skip(1)));
+				}
+				PerformanceReporting.enabled = false;
+				Application.targetFrameRate = 60;
+				UnityDataInitializer.CopyUnityData();
+				SteamManager.InitIfNeeded();
+				VersionControl.LogVersionNumber();
+				Prefs.Init();
+				if (Prefs.DevMode)
+				{
+					StaticConstructorOnStartupUtility.ReportProbablyMissingAttributes();
+				}
+				LongEventHandler.QueueLongEvent(StaticConstructorOnStartupUtility.CallAll, null, doAsynchronously: false, null);
+				globalInitDone = true;
 			}
-			string[] commandLineArgs = Environment.GetCommandLineArgs();
-			if (commandLineArgs != null && commandLineArgs.Length > 1)
-			{
-				Log.Message("Command line arguments: " + GenText.ToSpaceList(commandLineArgs.Skip(1)), false);
-			}
-			PerformanceReporting.enabled = false;
-			Application.targetFrameRate = 60;
-			UnityDataInitializer.CopyUnityData();
-			SteamManager.InitIfNeeded();
-			VersionControl.LogVersionNumber();
-			Prefs.Init();
-			if (Prefs.DevMode)
-			{
-				StaticConstructorOnStartupUtility.ReportProbablyMissingAttributes();
-			}
-			LongEventHandler.QueueLongEvent(new Action(StaticConstructorOnStartupUtility.CallAll), null, false, null, true);
-			Root.globalInitDone = true;
 		}
 
-		
 		public virtual void Update()
 		{
 			try
 			{
 				ResolutionUtility.Update();
 				RealTime.Update();
-				bool flag;
-				LongEventHandler.LongEventsUpdate(out flag);
-				if (flag)
+				LongEventHandler.LongEventsUpdate(out bool sceneChanged);
+				if (sceneChanged)
 				{
-					this.destroyed = true;
+					destroyed = true;
 				}
 				else if (!LongEventHandler.ShouldWaitForEvent)
 				{
@@ -117,39 +123,38 @@ namespace Verse
 					Pawn_MeleeVerbs.PawnMeleeVerbsStaticUpdate();
 					Storyteller.StorytellerStaticUpdate();
 					CaravanInventoryUtility.CaravanInventoryUtilityStaticUpdate();
-					this.uiRoot.UIRootUpdate();
-					if (Time.frameCount > 3 && !Root.prefsApplied)
+					uiRoot.UIRootUpdate();
+					if (Time.frameCount > 3 && !prefsApplied)
 					{
-						Root.prefsApplied = true;
+						prefsApplied = true;
 						Prefs.Apply();
 					}
-					this.soundRoot.Update();
+					soundRoot.Update();
 				}
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Root level exception in Update(): " + arg, false);
+				Log.Error("Root level exception in Update(): " + arg);
 			}
 		}
 
-		
 		public void OnGUI()
 		{
 			try
 			{
-				if (!this.destroyed)
+				if (!destroyed)
 				{
 					GUI.depth = 50;
 					UI.ApplyUIScale();
 					LongEventHandler.LongEventsOnGUI();
 					if (LongEventHandler.ShouldWaitForEvent)
 					{
-						ScreenFader.OverlayOnGUI(new Vector2((float)UI.screenWidth, (float)UI.screenHeight));
+						ScreenFader.OverlayOnGUI(new Vector2(UI.screenWidth, UI.screenHeight));
 					}
 					else
 					{
-						this.uiRoot.UIRootOnGUI();
-						ScreenFader.OverlayOnGUI(new Vector2((float)UI.screenWidth, (float)UI.screenHeight));
+						uiRoot.UIRootOnGUI();
+						ScreenFader.OverlayOnGUI(new Vector2(UI.screenWidth, UI.screenHeight));
 						if (Find.CameraDriver != null && Find.CameraDriver.isActiveAndEnabled)
 						{
 							Find.CameraDriver.CameraDriverOnGUI();
@@ -163,12 +168,10 @@ namespace Verse
 			}
 			catch (Exception arg)
 			{
-				
-				Log.Error("Root level exception in OnGUI(): " + arg, false);
+				Log.Error("Root level exception in OnGUI(): " + arg);
 			}
 		}
 
-		
 		public static void Shutdown()
 		{
 			SteamManager.ShutdownSteam();
@@ -181,27 +184,9 @@ namespace Verse
 			DirectoryInfo[] directories = directoryInfo.GetDirectories();
 			for (int i = 0; i < directories.Length; i++)
 			{
-				directories[i].Delete(true);
+				directories[i].Delete(recursive: true);
 			}
 			Application.Quit();
 		}
-
-		
-		private static bool globalInitDone;
-
-		
-		private static bool prefsApplied;
-
-		
-		protected static bool checkedAutostartSaveFile;
-
-		
-		protected bool destroyed;
-
-		
-		public SoundRoot soundRoot;
-
-		
-		public UIRoot uiRoot;
 	}
 }

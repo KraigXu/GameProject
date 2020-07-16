@@ -1,40 +1,33 @@
-﻿using System;
-using System.Xml;
 using RimWorld;
+using System.Xml;
 
 namespace Verse
 {
-	
 	public class SkillGain
 	{
-		
+		public SkillDef skill;
+
+		public int xp;
+
 		public SkillGain()
 		{
 		}
 
-		
 		public SkillGain(SkillDef skill, int xp)
 		{
 			this.skill = skill;
 			this.xp = xp;
 		}
 
-		
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
 			if (xmlRoot.ChildNodes.Count != 1)
 			{
-				Log.Error("Misconfigured SkillGain: " + xmlRoot.OuterXml, false);
+				Log.Error("Misconfigured SkillGain: " + xmlRoot.OuterXml);
 				return;
 			}
-			DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "skill", xmlRoot.Name, null, null);
-			this.xp = ParseHelper.FromString<int>(xmlRoot.FirstChild.Value);
+			DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "skill", xmlRoot.Name);
+			xp = ParseHelper.FromString<int>(xmlRoot.FirstChild.Value);
 		}
-
-		
-		public SkillDef skill;
-
-		
-		public int xp;
 	}
 }

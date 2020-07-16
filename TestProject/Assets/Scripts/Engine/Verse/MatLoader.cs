@@ -1,92 +1,78 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class MatLoader
 	{
-		
+		private struct Request
+		{
+			public string path;
+
+			public int renderQueue;
+
+			public override int GetHashCode()
+			{
+				return Gen.HashCombineInt(Gen.HashCombine(0, path), renderQueue);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (!(obj is Request))
+				{
+					return false;
+				}
+				return Equals((Request)obj);
+			}
+
+			public bool Equals(Request other)
+			{
+				if (other.path == path)
+				{
+					return other.renderQueue == renderQueue;
+				}
+				return false;
+			}
+
+			public static bool operator ==(Request lhs, Request rhs)
+			{
+				return lhs.Equals(rhs);
+			}
+
+			public static bool operator !=(Request lhs, Request rhs)
+			{
+				return !(lhs == rhs);
+			}
+
+			public override string ToString()
+			{
+				return "MatLoader.Request(" + path + ", " + renderQueue + ")";
+			}
+		}
+
+		private static Dictionary<Request, Material> dict = new Dictionary<Request, Material>();
+
 		public static Material LoadMat(string matPath, int renderQueue = -1)
 		{
 			Material material = (Material)Resources.Load("Materials/" + matPath, typeof(Material));
 			if (material == null)
 			{
-				Log.Warning("Could not load material " + matPath, false);
+				Log.Warning("Could not load material " + matPath);
 			}
-			MatLoader.Request key = new MatLoader.Request
+			Request request = default(Request);
+			request.path = matPath;
+			request.renderQueue = renderQueue;
+			Request key = request;
+			if (!dict.TryGetValue(key, out Material value))
 			{
-				path = matPath,
-				renderQueue = renderQueue
-			};
-			Material material2;
-			if (!MatLoader.dict.TryGetValue(key, out material2))
-			{
-				material2 = MaterialAllocator.Create(material);
+				value = MaterialAllocator.Create(material);
 				if (renderQueue != -1)
 				{
-					material2.renderQueue = renderQueue;
+					value.renderQueue = renderQueue;
 				}
-				MatLoader.dict.Add(key, material2);
+				dict.Add(key, value);
 			}
-			return material2;
-		}
-
-		
-		private static Dictionary<MatLoader.Request, Material> dict = new Dictionary<MatLoader.Request, Material>();
-
-		
-		private struct Request
-		{
-			
-			public override int GetHashCode()
-			{
-				return Gen.HashCombineInt(Gen.HashCombine<string>(0, this.path), this.renderQueue);
-			}
-
-			
-			public override bool Equals(object obj)
-			{
-				return obj is MatLoader.Request && this.Equals((MatLoader.Request)obj);
-			}
-
-			
-			public bool Equals(MatLoader.Request other)
-			{
-				return other.path == this.path && other.renderQueue == this.renderQueue;
-			}
-
-			
-			public static bool operator ==(MatLoader.Request lhs, MatLoader.Request rhs)
-			{
-				return lhs.Equals(rhs);
-			}
-
-			
-			public static bool operator !=(MatLoader.Request lhs, MatLoader.Request rhs)
-			{
-				return !(lhs == rhs);
-			}
-
-			
-			public override string ToString()
-			{
-				return string.Concat(new object[]
-				{
-					"MatLoader.Request(",
-					this.path,
-					", ",
-					this.renderQueue,
-					")"
-				});
-			}
-
-			
-			public string path;
-
-			
-			public int renderQueue;
+			return value;
 		}
 	}
 }

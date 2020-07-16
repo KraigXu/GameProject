@@ -1,16 +1,33 @@
-﻿using System;
+using RimWorld.BaseGen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.BaseGen;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThingSetMaker_RandomGeneralGoods : ThingSetMaker
 	{
-		
+		private enum GoodsType
+		{
+			None,
+			Meals,
+			RawFood,
+			Medicine,
+			Drugs,
+			Resources
+		}
+
+		private static Pair<GoodsType, float>[] GoodsWeights = new Pair<GoodsType, float>[5]
+		{
+			new Pair<GoodsType, float>(GoodsType.Meals, 1f),
+			new Pair<GoodsType, float>(GoodsType.RawFood, 0.75f),
+			new Pair<GoodsType, float>(GoodsType.Medicine, 0.234f),
+			new Pair<GoodsType, float>(GoodsType.Drugs, 0.234f),
+			new Pair<GoodsType, float>(GoodsType.Resources, 0.234f)
+		};
+
 		protected override void Generate(ThingSetMakerParams parms, List<Thing> outThings)
 		{
 			IntRange intRange = parms.countRange ?? new IntRange(10, 20);
@@ -18,35 +35,32 @@ namespace RimWorld
 			int num = Mathf.Max(intRange.RandomInRange, 1);
 			for (int i = 0; i < num; i++)
 			{
-				outThings.Add(this.GenerateSingle(techLevel));
+				outThings.Add(GenerateSingle(techLevel));
 			}
 		}
 
-		
 		private Thing GenerateSingle(TechLevel techLevel)
 		{
 			Thing thing = null;
 			int num = 0;
 			while (thing == null && num < 50)
 			{
-				IEnumerable<Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>> goodsWeights = ThingSetMaker_RandomGeneralGoods.GoodsWeights;
-				Func<Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>, float> weightSelector = (Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float> x) => x.Second;
-				switch (goodsWeights.RandomElementByWeight(weightSelector).First)
+				switch (GoodsWeights.RandomElementByWeight((Pair<GoodsType, float> x) => x.Second).First)
 				{
-				case ThingSetMaker_RandomGeneralGoods.GoodsType.Meals:
-					thing = this.RandomMeals(techLevel);
+				case GoodsType.Meals:
+					thing = RandomMeals(techLevel);
 					break;
-				case ThingSetMaker_RandomGeneralGoods.GoodsType.RawFood:
-					thing = this.RandomRawFood(techLevel);
+				case GoodsType.RawFood:
+					thing = RandomRawFood(techLevel);
 					break;
-				case ThingSetMaker_RandomGeneralGoods.GoodsType.Medicine:
-					thing = this.RandomMedicine(techLevel);
+				case GoodsType.Medicine:
+					thing = RandomMedicine(techLevel);
 					break;
-				case ThingSetMaker_RandomGeneralGoods.GoodsType.Drugs:
-					thing = this.RandomDrugs(techLevel);
+				case GoodsType.Drugs:
+					thing = RandomDrugs(techLevel);
 					break;
-				case ThingSetMaker_RandomGeneralGoods.GoodsType.Resources:
-					thing = this.RandomResources(techLevel);
+				case GoodsType.Resources:
+					thing = RandomResources(techLevel);
 					break;
 				default:
 					throw new Exception();
@@ -56,7 +70,6 @@ namespace RimWorld
 			return thing;
 		}
 
-		
 		private Thing RandomMeals(TechLevel techLevel)
 		{
 			ThingDef thingDef;
@@ -67,100 +80,73 @@ namespace RimWorld
 			else
 			{
 				float value = Rand.Value;
-				if (value < 0.5f)
-				{
-					thingDef = ThingDefOf.MealSimple;
-				}
-				else if ((double)value < 0.75)
-				{
-					thingDef = ThingDefOf.MealFine;
-				}
-				else
-				{
-					thingDef = ThingDefOf.MealSurvivalPack;
-				}
+				thingDef = ((value < 0.5f) ? ThingDefOf.MealSimple : ((!((double)value < 0.75)) ? ThingDefOf.MealSurvivalPack : ThingDefOf.MealFine));
 			}
-			Thing thing = ThingMaker.MakeThing(thingDef, null);
+			Thing thing = ThingMaker.MakeThing(thingDef);
 			int num = Mathf.Min(thingDef.stackLimit, 10);
 			thing.stackCount = Rand.RangeInclusive(num / 2, num);
 			return thing;
 		}
 
-		
 		private Thing RandomRawFood(TechLevel techLevel)
 		{
-			ThingDef thingDef;
-			if (!this.PossibleRawFood(techLevel).TryRandomElement(out thingDef))
+			if (!PossibleRawFood(techLevel).TryRandomElement(out ThingDef result))
 			{
 				return null;
 			}
-			Thing thing = ThingMaker.MakeThing(thingDef, null);
-			int max = Mathf.Min(thingDef.stackLimit, 75);
+			Thing thing = ThingMaker.MakeThing(result);
+			int max = Mathf.Min(result.stackLimit, 75);
 			thing.stackCount = Rand.RangeInclusive(1, max);
 			return thing;
 		}
 
-		
 		private IEnumerable<ThingDef> PossibleRawFood(TechLevel techLevel)
 		{
-			return from x in ThingSetMakerUtility.allGeneratableItems
-			where x.IsNutritionGivingIngestible && !x.IsCorpse && x.ingestible.HumanEdible && !x.HasComp(typeof(CompHatcher)) && x.techLevel <= techLevel && x.ingestible.preferability < FoodPreferability.MealAwful
-			select x;
+			return ThingSetMakerUtility.allGeneratableItems.Where((ThingDef x) => x.IsNutritionGivingIngestible && !x.IsCorpse && x.ingestible.HumanEdible && !x.HasComp(typeof(CompHatcher)) && (int)x.techLevel <= (int)techLevel && (int)x.ingestible.preferability < 6);
 		}
 
-		
 		private Thing RandomMedicine(TechLevel techLevel)
 		{
-			ThingDef thingDef;
-			if (Rand.Value < 0.75f && techLevel >= ThingDefOf.MedicineHerbal.techLevel)
+			ThingDef result;
+			if (Rand.Value < 0.75f && (int)techLevel >= (int)ThingDefOf.MedicineHerbal.techLevel)
 			{
-				thingDef = (from x in ThingSetMakerUtility.allGeneratableItems
-				where x.IsMedicine && x.techLevel <= techLevel
-				select x).MaxBy((ThingDef x) => x.GetStatValueAbstract(StatDefOf.MedicalPotency, null));
+				result = ThingSetMakerUtility.allGeneratableItems.Where((ThingDef x) => x.IsMedicine && (int)x.techLevel <= (int)techLevel).MaxBy((ThingDef x) => x.GetStatValueAbstract(StatDefOf.MedicalPotency));
 			}
-			else if (!(from x in ThingSetMakerUtility.allGeneratableItems
-			where x.IsMedicine
-			select x).TryRandomElement(out thingDef))
+			else if (!ThingSetMakerUtility.allGeneratableItems.Where((ThingDef x) => x.IsMedicine).TryRandomElement(out result))
 			{
 				return null;
 			}
 			if (techLevel.IsNeolithicOrWorse())
 			{
-				thingDef = ThingDefOf.MedicineHerbal;
+				result = ThingDefOf.MedicineHerbal;
 			}
-			Thing thing = ThingMaker.MakeThing(thingDef, null);
-			int max = Mathf.Min(thingDef.stackLimit, 20);
+			Thing thing = ThingMaker.MakeThing(result);
+			int max = Mathf.Min(result.stackLimit, 20);
 			thing.stackCount = Rand.RangeInclusive(1, max);
 			return thing;
 		}
 
-		
 		private Thing RandomDrugs(TechLevel techLevel)
 		{
-			ThingDef thingDef;
-			if (!(from x in ThingSetMakerUtility.allGeneratableItems
-			where x.IsDrug && x.techLevel <= techLevel
-			select x).TryRandomElement(out thingDef))
+			if (!ThingSetMakerUtility.allGeneratableItems.Where((ThingDef x) => x.IsDrug && (int)x.techLevel <= (int)techLevel).TryRandomElement(out ThingDef result))
 			{
 				return null;
 			}
-			Thing thing = ThingMaker.MakeThing(thingDef, null);
-			int max = Mathf.Min(thingDef.stackLimit, 25);
+			Thing thing = ThingMaker.MakeThing(result);
+			int max = Mathf.Min(result.stackLimit, 25);
 			thing.stackCount = Rand.RangeInclusive(1, max);
 			return thing;
 		}
 
-		
 		private Thing RandomResources(TechLevel techLevel)
 		{
-			ThingDef thingDef = BaseGenUtility.RandomCheapWallStuff(techLevel, false);
-			Thing thing = ThingMaker.MakeThing(thingDef, null);
+			ThingDef thingDef = BaseGenUtility.RandomCheapWallStuff(techLevel);
+			Thing thing = ThingMaker.MakeThing(thingDef);
 			int num = Mathf.Min(thingDef.stackLimit, 75);
 			thing.stackCount = Rand.RangeInclusive(num / 2, num);
 			return thing;
 		}
 
-		
 		protected override IEnumerable<ThingDef> AllGeneratableThingsDebugSub(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
@@ -174,72 +160,29 @@ namespace RimWorld
 				yield return ThingDefOf.MealFine;
 				yield return ThingDefOf.MealSurvivalPack;
 			}
-			foreach (ThingDef thingDef in this.PossibleRawFood(techLevel))
+			foreach (ThingDef item in PossibleRawFood(techLevel))
 			{
-				yield return thingDef;
+				yield return item;
 			}
-			IEnumerator<ThingDef> enumerator = null;
-			foreach (ThingDef thingDef2 in from x in ThingSetMakerUtility.allGeneratableItems
-			where x.IsMedicine
-			select x)
+			foreach (ThingDef item2 in ThingSetMakerUtility.allGeneratableItems.Where((ThingDef x) => x.IsMedicine))
 			{
-				yield return thingDef2;
+				yield return item2;
 			}
-			enumerator = null;
-			IEnumerable<ThingDef> allGeneratableItems = ThingSetMakerUtility.allGeneratableItems;
-			Func<ThingDef, bool> predicate=null;
-			if (predicate == null)
+			foreach (ThingDef item3 in ThingSetMakerUtility.allGeneratableItems.Where((ThingDef x) => x.IsDrug && (int)x.techLevel <= (int)techLevel))
 			{
-				predicate = x => x.IsDrug && x.techLevel <= techLevel;
+				yield return item3;
 			}
-			foreach (ThingDef thingDef3 in allGeneratableItems.Where(predicate))
-			{
-				yield return thingDef3;
-			}
-			enumerator = null;
 			if (techLevel.IsNeolithicOrWorse())
 			{
 				yield return ThingDefOf.WoodLog;
 			}
 			else
 			{
-				foreach (ThingDef thingDef4 in from d in DefDatabase<ThingDef>.AllDefsListForReading
-				where BaseGenUtility.IsCheapWallStuff(d)
-				select d)
+				foreach (ThingDef item4 in DefDatabase<ThingDef>.AllDefsListForReading.Where((ThingDef d) => BaseGenUtility.IsCheapWallStuff(d)))
 				{
-					yield return thingDef4;
+					yield return item4;
 				}
-				enumerator = null;
 			}
-			yield break;
-			yield break;
-		}
-
-		
-		private static Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>[] GoodsWeights = new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>[]
-		{
-			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.Meals, 1f),
-			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.RawFood, 0.75f),
-			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.Medicine, 0.234f),
-			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.Drugs, 0.234f),
-			new Pair<ThingSetMaker_RandomGeneralGoods.GoodsType, float>(ThingSetMaker_RandomGeneralGoods.GoodsType.Resources, 0.234f)
-		};
-
-		
-		private enum GoodsType
-		{
-			
-			None,
-			
-			Meals,
-			
-			RawFood,
-			
-			Medicine,
-			
-			Drugs,
-			
-			Resources
 		}
 	}
 }

@@ -1,41 +1,39 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Recipe_InstallArtificialBodyPart : Recipe_Surgery
 	{
-		
 		public override IEnumerable<BodyPartRecord> GetPartsToApplyOn(Pawn pawn, RecipeDef recipe)
 		{
 			return MedicalRecipesUtility.GetFixedPartsToApplyOn(recipe, pawn, delegate(BodyPartRecord record)
 			{
-				IEnumerable<Hediff> source = from x in pawn.health.hediffSet.hediffs
-				where x.Part == record
-				select x;
-				return (source.Count<Hediff>() != 1 || source.First<Hediff>().def != recipe.addsHediff) && (record.parent == null || pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null).Contains(record.parent)) && (!pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(record) || pawn.health.hediffSet.HasDirectlyAddedPartFor(record));
+				IEnumerable<Hediff> source = pawn.health.hediffSet.hediffs.Where((Hediff x) => x.Part == record);
+				if (source.Count() == 1 && source.First().def == recipe.addsHediff)
+				{
+					return false;
+				}
+				if (record.parent != null && !pawn.health.hediffSet.GetNotMissingParts().Contains(record.parent))
+				{
+					return false;
+				}
+				return (!pawn.health.hediffSet.PartOrAnyAncestorHasDirectlyAddedParts(record) || pawn.health.hediffSet.HasDirectlyAddedPartFor(record)) ? true : false;
 			});
 		}
 
-		
 		public override void ApplyOnPawn(Pawn pawn, BodyPartRecord part, Pawn billDoer, List<Thing> ingredients, Bill bill)
 		{
 			bool flag = MedicalRecipesUtility.IsClean(pawn, part);
-			bool flag2 = !PawnGenerator.IsBeingGenerated(pawn) && this.IsViolationOnPawn(pawn, part, Faction.OfPlayer);
+			bool flag2 = !PawnGenerator.IsBeingGenerated(pawn) && IsViolationOnPawn(pawn, part, Faction.OfPlayer);
 			if (billDoer != null)
 			{
-				if (base.CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
+				if (CheckSurgeryFail(billDoer, pawn, ingredients, part, bill))
 				{
 					return;
 				}
-				TaleRecorder.RecordTale(TaleDefOf.DidSurgery, new object[]
-				{
-					billDoer,
-					pawn
-				});
+				TaleRecorder.RecordTale(TaleDefOf.DidSurgery, billDoer, pawn);
 				MedicalRecipesUtility.RestorePartAndSpawnAllPreviousParts(pawn, part, billDoer.Position, billDoer.Map);
 				if (flag && flag2 && part.def.spawnThingOnRemoved != null)
 				{
@@ -43,7 +41,7 @@ namespace RimWorld
 				}
 				if (flag2)
 				{
-					base.ReportViolation(pawn, billDoer, pawn.FactionOrExtraHomeFaction, -70, "GoodwillChangedReason_NeedlesslyInstalledWorseBodyPart".Translate(this.recipe.addsHediff.label));
+					ReportViolation(pawn, billDoer, pawn.FactionOrExtraHomeFaction, -70, "GoodwillChangedReason_NeedlesslyInstalledWorseBodyPart".Translate(recipe.addsHediff.label));
 				}
 			}
 			else if (pawn.Map != null)
@@ -52,15 +50,22 @@ namespace RimWorld
 			}
 			else
 			{
-				pawn.health.RestorePart(part, null, true);
+				pawn.health.RestorePart(part);
 			}
-			pawn.health.AddHediff(this.recipe.addsHediff, part, null, null);
+			pawn.health.AddHediff(recipe.addsHediff, part);
 		}
 
-		
 		public override bool IsViolationOnPawn(Pawn pawn, BodyPartRecord part, Faction billDoerFaction)
 		{
-			return ((pawn.Faction != billDoerFaction && pawn.Faction != null) || pawn.IsQuestLodger()) && (this.recipe.addsHediff.addedPartProps == null || !this.recipe.addsHediff.addedPartProps.betterThanNatural) && HealthUtility.PartRemovalIntent(pawn, part) == BodyPartRemovalIntent.Harvest;
+			if ((pawn.Faction == billDoerFaction || pawn.Faction == null) && !pawn.IsQuestLodger())
+			{
+				return false;
+			}
+			if (recipe.addsHediff.addedPartProps != null && recipe.addsHediff.addedPartProps.betterThanNatural)
+			{
+				return false;
+			}
+			return HealthUtility.PartRemovalIntent(pawn, part) == BodyPartRemovalIntent.Harvest;
 		}
 	}
 }

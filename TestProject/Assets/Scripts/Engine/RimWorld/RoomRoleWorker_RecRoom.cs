@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomRoleWorker_RecRoom : RoomRoleWorker
 	{
-		
 		public override float GetScore(Room room)
 		{
 			int num = 0;
@@ -15,16 +12,17 @@ namespace RimWorld
 			for (int i = 0; i < containedAndAdjacentThings.Count; i++)
 			{
 				Thing thing = containedAndAdjacentThings[i];
-				if (thing.def.category == ThingCategory.Building)
+				if (thing.def.category != ThingCategory.Building)
 				{
-					List<JoyGiverDef> allDefsListForReading = DefDatabase<JoyGiverDef>.AllDefsListForReading;
-					for (int j = 0; j < allDefsListForReading.Count; j++)
+					continue;
+				}
+				List<JoyGiverDef> allDefsListForReading = DefDatabase<JoyGiverDef>.AllDefsListForReading;
+				for (int j = 0; j < allDefsListForReading.Count; j++)
+				{
+					if (allDefsListForReading[j].thingDefs != null && allDefsListForReading[j].thingDefs.Contains(thing.def))
 					{
-						if (allDefsListForReading[j].thingDefs != null && allDefsListForReading[j].thingDefs.Contains(thing.def))
-						{
-							num++;
-							break;
-						}
+						num++;
+						break;
 					}
 				}
 			}

@@ -1,18 +1,16 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoadDefGenStep_DryWithFallback : RoadDefGenStep
 	{
-		
+		public TerrainDef fallback;
+
 		public override void Place(Map map, IntVec3 position, TerrainDef rockDef, IntVec3 origin, GenStep_Roads.DistanceElement[,] distance)
 		{
-			RoadDefGenStep_DryWithFallback.PlaceWorker(map, position, this.fallback);
+			PlaceWorker(map, position, fallback);
 		}
 
-		
 		public static void PlaceWorker(Map map, IntVec3 position, TerrainDef fallback)
 		{
 			while (map.terrainGrid.TerrainAt(position).driesTo != null)
@@ -25,8 +23,5 @@ namespace RimWorld
 				map.terrainGrid.SetTerrain(position, fallback);
 			}
 		}
-
-		
-		public TerrainDef fallback;
 	}
 }

@@ -1,13 +1,10 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ShortcutKeys
 	{
-		
 		public void ShortcutKeysOnGUI()
 		{
 			if (Current.ProgramState == ProgramState.Playing)

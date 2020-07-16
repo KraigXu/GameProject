@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Verse.Profile;
@@ -8,73 +7,86 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class Page_CreateWorldParams : Page
 	{
-		
-		
-		public override string PageTitle
-		{
-			get
-			{
-				return "CreateWorld".Translate();
-			}
-		}
+		private bool initialized;
 
-		
+		private string seedString;
+
+		private float planetCoverage;
+
+		private OverallRainfall rainfall;
+
+		private OverallTemperature temperature;
+
+		private OverallPopulation population;
+
+		private static readonly float[] PlanetCoverages = new float[3]
+		{
+			0.3f,
+			0.5f,
+			1f
+		};
+
+		private static readonly float[] PlanetCoveragesDev = new float[4]
+		{
+			0.3f,
+			0.5f,
+			1f,
+			0.05f
+		};
+
+		public override string PageTitle => "CreateWorld".Translate();
+
 		public override void PreOpen()
 		{
 			base.PreOpen();
-			if (!this.initialized)
+			if (!initialized)
 			{
-				this.Reset();
-				this.initialized = true;
+				Reset();
+				initialized = true;
 			}
 		}
 
-		
 		public override void PostOpen()
 		{
 			base.PostOpen();
 			TutorSystem.Notify_Event("PageStart-CreateWorldParams");
 		}
 
-		
 		public void Reset()
 		{
-			this.seedString = GenText.RandomSeedString();
-			this.planetCoverage = ((!Prefs.DevMode || !UnityData.isEditor) ? 0.3f : 0.05f);
-			this.rainfall = OverallRainfall.Normal;
-			this.temperature = OverallTemperature.Normal;
-			this.population = OverallPopulation.Normal;
+			seedString = GenText.RandomSeedString();
+			planetCoverage = ((!Prefs.DevMode || !UnityData.isEditor) ? 0.3f : 0.05f);
+			rainfall = OverallRainfall.Normal;
+			temperature = OverallTemperature.Normal;
+			population = OverallPopulation.Normal;
 		}
 
-		
 		public override void DoWindowContents(Rect rect)
 		{
-			base.DrawPageTitle(rect);
-			GUI.BeginGroup(base.GetMainRect(rect, 0f, false));
+			DrawPageTitle(rect);
+			GUI.BeginGroup(GetMainRect(rect));
 			Text.Font = GameFont.Small;
 			float num = 0f;
 			Widgets.Label(new Rect(0f, num, 200f, 30f), "WorldSeed".Translate());
 			Rect rect2 = new Rect(200f, num, 200f, 30f);
-			this.seedString = Widgets.TextField(rect2, this.seedString);
+			seedString = Widgets.TextField(rect2, seedString);
 			num += 40f;
-			if (Widgets.ButtonText(new Rect(200f, num, 200f, 30f), "RandomizeSeed".Translate(), true, true, true))
+			if (Widgets.ButtonText(new Rect(200f, num, 200f, 30f), "RandomizeSeed".Translate()))
 			{
-				SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
-				this.seedString = GenText.RandomSeedString();
+				SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
+				seedString = GenText.RandomSeedString();
 			}
 			num += 40f;
 			Widgets.Label(new Rect(0f, num, 200f, 30f), "PlanetCoverage".Translate());
 			Rect rect3 = new Rect(200f, num, 200f, 30f);
-			if (Widgets.ButtonText(rect3, this.planetCoverage.ToStringPercent(), true, true, true))
+			if (Widgets.ButtonText(rect3, planetCoverage.ToStringPercent()))
 			{
 				List<FloatMenuOption> list = new List<FloatMenuOption>();
-				float[] array = Prefs.DevMode ? Page_CreateWorldParams.PlanetCoveragesDev : Page_CreateWorldParams.PlanetCoverages;
-				for (int i = 0; i < array.Length; i++)
+				float[] array = Prefs.DevMode ? PlanetCoveragesDev : PlanetCoverages;
+				foreach (float coverage in array)
 				{
-					float coverage = array[i];
 					string text = coverage.ToStringPercent();
 					if (coverage <= 0.1f)
 					{
@@ -82,15 +94,15 @@ namespace RimWorld
 					}
 					FloatMenuOption item = new FloatMenuOption(text, delegate
 					{
-						if (this.planetCoverage != coverage)
+						if (planetCoverage != coverage)
 						{
-							this.planetCoverage = coverage;
-							if (this.planetCoverage == 1f)
+							planetCoverage = coverage;
+							if (planetCoverage == 1f)
 							{
-								Messages.Message("MessageMaxPlanetCoveragePerformanceWarning".Translate(), MessageTypeDefOf.CautionInput, false);
+								Messages.Message("MessageMaxPlanetCoveragePerformanceWarning".Translate(), MessageTypeDefOf.CautionInput, historical: false);
 							}
 						}
-					}, MenuOptionPriority.Default, null, null, 0f, null, null);
+					});
 					list.Add(item);
 				}
 				Find.WindowStack.Add(new FloatMenu(list));
@@ -99,20 +111,19 @@ namespace RimWorld
 			num += 40f;
 			Widgets.Label(new Rect(0f, num, 200f, 30f), "PlanetRainfall".Translate());
 			Rect rect4 = new Rect(200f, num, 200f, 30f);
-			this.rainfall = (OverallRainfall)Mathf.RoundToInt(Widgets.HorizontalSlider(rect4, (float)this.rainfall, 0f, (float)(OverallRainfallUtility.EnumValuesCount - 1), true, "PlanetRainfall_Normal".Translate(), "PlanetRainfall_Low".Translate(), "PlanetRainfall_High".Translate(), 1f));
+			rainfall = (OverallRainfall)Mathf.RoundToInt(Widgets.HorizontalSlider(rect4, (float)rainfall, 0f, OverallRainfallUtility.EnumValuesCount - 1, middleAlignment: true, "PlanetRainfall_Normal".Translate(), "PlanetRainfall_Low".Translate(), "PlanetRainfall_High".Translate(), 1f));
 			num += 40f;
 			Widgets.Label(new Rect(0f, num, 200f, 30f), "PlanetTemperature".Translate());
 			Rect rect5 = new Rect(200f, num, 200f, 30f);
-			this.temperature = (OverallTemperature)Mathf.RoundToInt(Widgets.HorizontalSlider(rect5, (float)this.temperature, 0f, (float)(OverallTemperatureUtility.EnumValuesCount - 1), true, "PlanetTemperature_Normal".Translate(), "PlanetTemperature_Low".Translate(), "PlanetTemperature_High".Translate(), 1f));
+			temperature = (OverallTemperature)Mathf.RoundToInt(Widgets.HorizontalSlider(rect5, (float)temperature, 0f, OverallTemperatureUtility.EnumValuesCount - 1, middleAlignment: true, "PlanetTemperature_Normal".Translate(), "PlanetTemperature_Low".Translate(), "PlanetTemperature_High".Translate(), 1f));
 			num += 40f;
 			Widgets.Label(new Rect(0f, num, 200f, 30f), "PlanetPopulation".Translate());
 			Rect rect6 = new Rect(200f, num, 200f, 30f);
-			this.population = (OverallPopulation)Mathf.RoundToInt(Widgets.HorizontalSlider(rect6, (float)this.population, 0f, (float)(OverallPopulationUtility.EnumValuesCount - 1), true, "PlanetPopulation_Normal".Translate(), "PlanetPopulation_Low".Translate(), "PlanetPopulation_High".Translate(), 1f));
+			population = (OverallPopulation)Mathf.RoundToInt(Widgets.HorizontalSlider(rect6, (float)population, 0f, OverallPopulationUtility.EnumValuesCount - 1, middleAlignment: true, "PlanetPopulation_Normal".Translate(), "PlanetPopulation_Low".Translate(), "PlanetPopulation_High".Translate(), 1f));
 			GUI.EndGroup();
-			base.DoBottomButtons(rect, "WorldGenerate".Translate(), "Reset".Translate(), new Action(this.Reset), true, true);
+			DoBottomButtons(rect, "WorldGenerate".Translate(), "Reset".Translate(), Reset);
 		}
 
-		
 		protected override bool CanDoNext()
 		{
 			if (!base.CanDoNext())
@@ -122,54 +133,19 @@ namespace RimWorld
 			LongEventHandler.QueueLongEvent(delegate
 			{
 				Find.GameInitData.ResetWorldRelatedMapInitData();
-				Current.Game.World = WorldGenerator.GenerateWorld(this.planetCoverage, this.seedString, this.rainfall, this.temperature, this.population);
+				Current.Game.World = WorldGenerator.GenerateWorld(planetCoverage, seedString, rainfall, temperature, population);
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{
-					if (this.next != null)
+					if (next != null)
 					{
-						Find.WindowStack.Add(this.next);
+						Find.WindowStack.Add(next);
 					}
 					MemoryUtility.UnloadUnusedUnityAssets();
 					Find.World.renderer.RegenerateAllLayersNow();
-					this.Close(true);
+					Close();
 				});
-			}, "GeneratingWorld", true, null, true);
+			}, "GeneratingWorld", doAsynchronously: true, null);
 			return false;
 		}
-
-		
-		private bool initialized;
-
-		
-		private string seedString;
-
-		
-		private float planetCoverage;
-
-		
-		private OverallRainfall rainfall;
-
-		
-		private OverallTemperature temperature;
-
-		
-		private OverallPopulation population;
-
-		
-		private static readonly float[] PlanetCoverages = new float[]
-		{
-			0.3f,
-			0.5f,
-			1f
-		};
-
-		
-		private static readonly float[] PlanetCoveragesDev = new float[]
-		{
-			0.3f,
-			0.5f,
-			1f,
-			0.05f
-		};
 	}
 }

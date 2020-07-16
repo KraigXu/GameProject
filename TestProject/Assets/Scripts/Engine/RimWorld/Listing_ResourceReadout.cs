@@ -1,124 +1,100 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class Listing_ResourceReadout : Listing_Tree
 	{
-		
-		
-		protected override float LabelWidth
-		{
-			get
-			{
-				return base.ColumnWidth;
-			}
-		}
+		private Map map;
 
-		
+		private static Texture2D SolidCategoryBG = SolidColorMaterials.NewSolidColorTexture(new Color(0.1f, 0.1f, 0.1f, 0.6f));
+
+		protected override float LabelWidth => base.ColumnWidth;
+
 		public Listing_ResourceReadout(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public void DoCategory(TreeNode_ThingCategory node, int nestLevel, int openMask)
 		{
-			int countIn = this.map.resourceCounter.GetCountIn(node.catDef);
-			if (countIn == 0)
+			int countIn = map.resourceCounter.GetCountIn(node.catDef);
+			if (countIn != 0)
 			{
-				return;
-			}
-			base.OpenCloseWidget(node, nestLevel, openMask);
-			Rect rect = new Rect(0f, this.curY, this.LabelWidth, this.lineHeight)
-			{
-				xMin = base.XAtIndentLevel(nestLevel) + 18f
-			};
-			Rect position = rect;
-			position.width = 80f;
-			position.yMax -= 3f;
-			position.yMin += 3f;
-			GUI.DrawTexture(position, Listing_ResourceReadout.SolidCategoryBG);
-			if (Mouse.IsOver(rect))
-			{
-				GUI.DrawTexture(rect, TexUI.HighlightTex);
-			}
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.TipRegion(rect, new TipSignal(node.catDef.LabelCap, node.catDef.GetHashCode()));
-			}
-			Rect position2 = new Rect(rect);
-			position2.width = (position2.height = 28f);
-			position2.y = rect.y + rect.height / 2f - position2.height / 2f;
-			GUI.DrawTexture(position2, node.catDef.icon);
-			Widgets.Label(new Rect(rect)
-			{
-				xMin = position2.xMax + 6f
-			}, countIn.ToStringCached());
-			base.EndLine();
-			if (node.IsOpen(openMask))
-			{
-				this.DoCategoryChildren(node, nestLevel + 1, openMask);
+				OpenCloseWidget(node, nestLevel, openMask);
+				Rect rect = new Rect(0f, curY, LabelWidth, lineHeight);
+				rect.xMin = XAtIndentLevel(nestLevel) + 18f;
+				Rect position = rect;
+				position.width = 80f;
+				position.yMax -= 3f;
+				position.yMin += 3f;
+				GUI.DrawTexture(position, SolidCategoryBG);
+				if (Mouse.IsOver(rect))
+				{
+					GUI.DrawTexture(rect, TexUI.HighlightTex);
+				}
+				if (Mouse.IsOver(rect))
+				{
+					TooltipHandler.TipRegion(rect, new TipSignal(node.catDef.LabelCap, node.catDef.GetHashCode()));
+				}
+				Rect position2 = new Rect(rect);
+				float num3 = position2.width = (position2.height = 28f);
+				position2.y = rect.y + rect.height / 2f - position2.height / 2f;
+				GUI.DrawTexture(position2, node.catDef.icon);
+				Rect rect2 = new Rect(rect);
+				rect2.xMin = position2.xMax + 6f;
+				Widgets.Label(rect2, countIn.ToStringCached());
+				EndLine();
+				if (node.IsOpen(openMask))
+				{
+					DoCategoryChildren(node, nestLevel + 1, openMask);
+				}
 			}
 		}
 
-		
 		public void DoCategoryChildren(TreeNode_ThingCategory node, int indentLevel, int openMask)
 		{
-			foreach (TreeNode_ThingCategory treeNode_ThingCategory in node.ChildCategoryNodes)
+			foreach (TreeNode_ThingCategory childCategoryNode in node.ChildCategoryNodes)
 			{
-				if (!treeNode_ThingCategory.catDef.resourceReadoutRoot)
+				if (!childCategoryNode.catDef.resourceReadoutRoot)
 				{
-					this.DoCategory(treeNode_ThingCategory, indentLevel, openMask);
+					DoCategory(childCategoryNode, indentLevel, openMask);
 				}
 			}
-			foreach (ThingDef thingDef in node.catDef.childThingDefs)
+			foreach (ThingDef childThingDef in node.catDef.childThingDefs)
 			{
-				if (!thingDef.menuHidden)
+				if (!childThingDef.menuHidden)
 				{
-					this.DoThingDef(thingDef, indentLevel + 1);
+					DoThingDef(childThingDef, indentLevel + 1);
 				}
 			}
 		}
 
-		
 		private void DoThingDef(ThingDef thingDef, int nestLevel)
 		{
-			int count = this.map.resourceCounter.GetCount(thingDef);
-			if (count == 0)
+			int count = map.resourceCounter.GetCount(thingDef);
+			if (count != 0)
 			{
-				return;
+				Rect rect = new Rect(0f, curY, LabelWidth, lineHeight);
+				rect.xMin = XAtIndentLevel(nestLevel) + 18f;
+				if (Mouse.IsOver(rect))
+				{
+					GUI.DrawTexture(rect, TexUI.HighlightTex);
+				}
+				if (Mouse.IsOver(rect))
+				{
+					TooltipHandler.TipRegion(rect, new TipSignal(() => thingDef.LabelCap + ": " + thingDef.description.CapitalizeFirst(), thingDef.shortHash));
+				}
+				Rect rect2 = new Rect(rect);
+				float num3 = rect2.width = (rect2.height = 28f);
+				rect2.y = rect.y + rect.height / 2f - rect2.height / 2f;
+				Widgets.ThingIcon(rect2, thingDef);
+				Rect rect3 = new Rect(rect);
+				rect3.xMin = rect2.xMax + 6f;
+				Widgets.Label(rect3, count.ToStringCached());
+				EndLine();
 			}
-			Rect rect = new Rect(0f, this.curY, this.LabelWidth, this.lineHeight)
-			{
-				xMin = base.XAtIndentLevel(nestLevel) + 18f
-			};
-			if (Mouse.IsOver(rect))
-			{
-				GUI.DrawTexture(rect, TexUI.HighlightTex);
-			}
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.TipRegion(rect, new TipSignal(() => thingDef.LabelCap + ": " + thingDef.description.CapitalizeFirst(), (int)thingDef.shortHash));
-			}
-			Rect rect2 = new Rect(rect);
-			rect2.width = (rect2.height = 28f);
-			rect2.y = rect.y + rect.height / 2f - rect2.height / 2f;
-			Widgets.ThingIcon(rect2, thingDef, null, 1f);
-			Widgets.Label(new Rect(rect)
-			{
-				xMin = rect2.xMax + 6f
-			}, count.ToStringCached());
-			base.EndLine();
 		}
-
-		
-		private Map map;
-
-		
-		private static Texture2D SolidCategoryBG = SolidColorMaterials.NewSolidColorTexture(new Color(0.1f, 0.1f, 0.1f, 0.6f));
 	}
 }

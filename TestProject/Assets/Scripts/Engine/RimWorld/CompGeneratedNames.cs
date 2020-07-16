@@ -1,52 +1,34 @@
-﻿using System;
 using Verse;
 using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class CompGeneratedNames : ThingComp
 	{
-		
-		
-		public CompProperties_GeneratedName Props
-		{
-			get
-			{
-				return (CompProperties_GeneratedName)this.props;
-			}
-		}
+		private string name;
 
-		
+		public CompProperties_GeneratedName Props => (CompProperties_GeneratedName)props;
+
 		public override string TransformLabel(string label)
 		{
-			if (this.parent.GetComp<CompBladelinkWeapon>() != null)
+			if (parent.GetComp<CompBladelinkWeapon>() != null)
 			{
-				return this.name + ", " + label;
+				return name + ", " + label;
 			}
-			return this.name + " (" + label + ")";
+			return name + " (" + label + ")";
 		}
 
-		
 		public override void Initialize(CompProperties props)
 		{
 			base.Initialize(props);
-			this.name = GenText.CapitalizeAsTitle(GrammarResolver.Resolve("r_weapon_name", new GrammarRequest
-			{
-				Includes = 
-				{
-					this.Props.nameMaker
-				}
-			}, null, false, null, null, null, true));
+			GrammarRequest request = default(GrammarRequest);
+			request.Includes.Add(Props.nameMaker);
+			name = GenText.CapitalizeAsTitle(GrammarResolver.Resolve("r_weapon_name", request));
 		}
 
-		
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<string>(ref this.name, "name", null, false);
+			Scribe_Values.Look(ref name, "name");
 		}
-
-		
-		private string name;
 	}
 }

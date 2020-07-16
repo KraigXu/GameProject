@@ -1,40 +1,34 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class FeedbackFloaters
 	{
-		
+		protected List<FeedbackItem> feeders = new List<FeedbackItem>();
+
 		public void AddFeedback(FeedbackItem newFeedback)
 		{
-			this.feeders.Add(newFeedback);
+			feeders.Add(newFeedback);
 		}
 
-		
 		public void FeedbackUpdate()
 		{
-			for (int i = this.feeders.Count - 1; i >= 0; i--)
+			for (int num = feeders.Count - 1; num >= 0; num--)
 			{
-				this.feeders[i].Update();
-				if (this.feeders[i].TimeLeft <= 0f)
+				feeders[num].Update();
+				if (feeders[num].TimeLeft <= 0f)
 				{
-					this.feeders.Remove(this.feeders[i]);
+					feeders.Remove(feeders[num]);
 				}
 			}
 		}
 
-		
 		public void FeedbackOnGUI()
 		{
-			foreach (FeedbackItem feedbackItem in this.feeders)
+			foreach (FeedbackItem feeder in feeders)
 			{
-				feedbackItem.FeedbackOnGUI();
+				feeder.FeedbackOnGUI();
 			}
 		}
-
-		
-		protected List<FeedbackItem> feeders = new List<FeedbackItem>();
 	}
 }

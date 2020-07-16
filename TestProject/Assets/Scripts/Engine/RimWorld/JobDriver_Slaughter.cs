@@ -1,49 +1,35 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Slaughter : JobDriver
 	{
-		
-		
-		protected Pawn Victim
-		{
-			get
-			{
-				return (Pawn)this.job.targetA.Thing;
-			}
-		}
+		public const int SlaughterDuration = 180;
 
-		
+		protected Pawn Victim => (Pawn)job.targetA.Thing;
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.Victim, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(Victim, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnAggroMentalState(TargetIndex.A);
 			this.FailOnThingMissingDesignation(TargetIndex.A, DesignationDefOf.Slaughter);
 			yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch);
-			yield return Toils_General.WaitWith(TargetIndex.A, 180, true, false);
+			yield return Toils_General.WaitWith(TargetIndex.A, 180, useProgressBar: true);
 			yield return Toils_General.Do(delegate
 			{
-				ExecutionUtility.DoExecutionByCut(this.pawn, this.Victim);
-				this.pawn.records.Increment(RecordDefOf.AnimalsSlaughtered);
-				if (this.pawn.InMentalState)
+				ExecutionUtility.DoExecutionByCut(pawn, Victim);
+				pawn.records.Increment(RecordDefOf.AnimalsSlaughtered);
+				if (pawn.InMentalState)
 				{
-					this.pawn.MentalState.Notify_SlaughteredAnimal();
+					pawn.MentalState.Notify_SlaughteredAnimal();
 				}
 			});
-			yield break;
 		}
-
-		
-		public const int SlaughterDuration = 180;
 	}
 }

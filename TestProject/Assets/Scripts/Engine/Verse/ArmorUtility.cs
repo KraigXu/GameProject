@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class ArmorUtility
 	{
-		
+		public const float MaxArmorRating = 2f;
+
+		public const float DeflectThresholdFactor = 0.5f;
+
 		public static float GetPostArmorDamage(Pawn pawn, float amount, float armorPenetration, BodyPartRecord part, ref DamageDef damageDef, out bool deflectedByMetalArmor, out bool diminishedByMetalArmor)
 		{
 			deflectedByMetalArmor = false;
@@ -21,42 +22,39 @@ namespace Verse
 			if (pawn.apparel != null)
 			{
 				List<Apparel> wornApparel = pawn.apparel.WornApparel;
-				for (int i = wornApparel.Count - 1; i >= 0; i--)
+				for (int num = wornApparel.Count - 1; num >= 0; num--)
 				{
-					Apparel apparel = wornApparel[i];
+					Apparel apparel = wornApparel[num];
 					if (apparel.def.apparel.CoversBodyPart(part))
 					{
-						float num = amount;
-						bool flag;
-						ArmorUtility.ApplyArmor(ref amount, armorPenetration, apparel.GetStatValue(armorRatingStat, true), apparel, ref damageDef, pawn, out flag);
+						float num2 = amount;
+						ApplyArmor(ref amount, armorPenetration, apparel.GetStatValue(armorRatingStat), apparel, ref damageDef, pawn, out bool metalArmor);
 						if (amount < 0.001f)
 						{
-							deflectedByMetalArmor = flag;
+							deflectedByMetalArmor = metalArmor;
 							return 0f;
 						}
-						if (amount < num && flag)
+						if (amount < num2 && metalArmor)
 						{
 							diminishedByMetalArmor = true;
 						}
 					}
 				}
 			}
-			float num2 = amount;
-			bool flag2;
-			ArmorUtility.ApplyArmor(ref amount, armorPenetration, pawn.GetStatValue(armorRatingStat, true), null, ref damageDef, pawn, out flag2);
+			float num3 = amount;
+			ApplyArmor(ref amount, armorPenetration, pawn.GetStatValue(armorRatingStat), null, ref damageDef, pawn, out bool metalArmor2);
 			if (amount < 0.001f)
 			{
-				deflectedByMetalArmor = flag2;
+				deflectedByMetalArmor = metalArmor2;
 				return 0f;
 			}
-			if (amount < num2 && flag2)
+			if (amount < num3 && metalArmor2)
 			{
 				diminishedByMetalArmor = true;
 			}
 			return amount;
 		}
 
-		
 		private static void ApplyArmor(ref float damAmount, float armorPenetration, float armorRating, Thing armorThing, ref DamageDef damageDef, Pawn pawn, out bool metalArmor)
 		{
 			if (armorThing != null)
@@ -70,7 +68,7 @@ namespace Verse
 			if (armorThing != null)
 			{
 				float f = damAmount * 0.25f;
-				armorThing.TakeDamage(new DamageInfo(damageDef, (float)GenMath.RoundRandom(f), 0f, -1f, null, null, null, DamageInfo.SourceCategory.ThingOrUnknown, null));
+				armorThing.TakeDamage(new DamageInfo(damageDef, GenMath.RoundRandom(f)));
 			}
 			float num = Mathf.Max(armorRating - armorPenetration, 0f);
 			float value = Rand.Value;
@@ -79,22 +77,15 @@ namespace Verse
 			if (value < num2)
 			{
 				damAmount = 0f;
-				return;
 			}
-			if (value < num3)
+			else if (value < num3)
 			{
-				damAmount = (float)GenMath.RoundRandom(damAmount / 2f);
+				damAmount = GenMath.RoundRandom(damAmount / 2f);
 				if (damageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
 				{
 					damageDef = DamageDefOf.Blunt;
 				}
 			}
 		}
-
-		
-		public const float MaxArmorRating = 2f;
-
-		
-		public const float DeflectThresholdFactor = 0.5f;
 	}
 }

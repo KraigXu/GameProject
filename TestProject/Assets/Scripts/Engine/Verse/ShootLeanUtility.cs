@@ -1,32 +1,29 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class ShootLeanUtility
 	{
-		
+		private static Queue<bool[]> blockedArrays = new Queue<bool[]>();
+
 		private static bool[] GetWorkingBlockedArray()
 		{
-			if (ShootLeanUtility.blockedArrays.Count > 0)
+			if (blockedArrays.Count > 0)
 			{
-				return ShootLeanUtility.blockedArrays.Dequeue();
+				return blockedArrays.Dequeue();
 			}
 			return new bool[8];
 		}
 
-		
 		private static void ReturnWorkingBlockedArray(bool[] ar)
 		{
-			ShootLeanUtility.blockedArrays.Enqueue(ar);
-			if (ShootLeanUtility.blockedArrays.Count > 128)
+			blockedArrays.Enqueue(ar);
+			if (blockedArrays.Count > 128)
 			{
-				Log.ErrorOnce("Too many blocked arrays to be feasible. >128", 388121, false);
+				Log.ErrorOnce("Too many blocked arrays to be feasible. >128", 388121);
 			}
 		}
 
-		
 		public static void LeanShootingSourcesFromTo(IntVec3 shooterLoc, IntVec3 targetPos, Map map, List<IntVec3> listToFill)
 		{
 			listToFill.Clear();
@@ -35,24 +32,24 @@ namespace Verse
 			bool flag2 = angleFlat > 90f && angleFlat < 270f;
 			bool flag3 = angleFlat > 180f;
 			bool flag4 = angleFlat < 180f;
-			bool[] workingBlockedArray = ShootLeanUtility.GetWorkingBlockedArray();
+			bool[] workingBlockedArray = GetWorkingBlockedArray();
 			for (int i = 0; i < 8; i++)
 			{
 				workingBlockedArray[i] = !(shooterLoc + GenAdj.AdjacentCells[i]).CanBeSeenOver(map);
 			}
-			if (!workingBlockedArray[1] && ((workingBlockedArray[0] && !workingBlockedArray[5] && flag) || (workingBlockedArray[2] && !workingBlockedArray[4] && flag2)))
+			if (!workingBlockedArray[1] && (((workingBlockedArray[0] && !workingBlockedArray[5]) & flag) || ((workingBlockedArray[2] && !workingBlockedArray[4]) & flag2)))
 			{
 				listToFill.Add(shooterLoc + new IntVec3(1, 0, 0));
 			}
-			if (!workingBlockedArray[3] && ((workingBlockedArray[0] && !workingBlockedArray[6] && flag) || (workingBlockedArray[2] && !workingBlockedArray[7] && flag2)))
+			if (!workingBlockedArray[3] && (((workingBlockedArray[0] && !workingBlockedArray[6]) & flag) || ((workingBlockedArray[2] && !workingBlockedArray[7]) & flag2)))
 			{
 				listToFill.Add(shooterLoc + new IntVec3(-1, 0, 0));
 			}
-			if (!workingBlockedArray[2] && ((workingBlockedArray[3] && !workingBlockedArray[7] && flag3) || (workingBlockedArray[1] && !workingBlockedArray[4] && flag4)))
+			if (!workingBlockedArray[2] && (((workingBlockedArray[3] && !workingBlockedArray[7]) & flag3) || ((workingBlockedArray[1] && !workingBlockedArray[4]) & flag4)))
 			{
 				listToFill.Add(shooterLoc + new IntVec3(0, 0, -1));
 			}
-			if (!workingBlockedArray[0] && ((workingBlockedArray[3] && !workingBlockedArray[6] && flag3) || (workingBlockedArray[1] && !workingBlockedArray[5] && flag4)))
+			if (!workingBlockedArray[0] && (((workingBlockedArray[3] && !workingBlockedArray[6]) & flag3) || ((workingBlockedArray[1] && !workingBlockedArray[5]) & flag4)))
 			{
 				listToFill.Add(shooterLoc + new IntVec3(0, 0, 1));
 			}
@@ -63,10 +60,9 @@ namespace Verse
 					listToFill.Add(shooterLoc + GenAdj.AdjacentCells[j]);
 				}
 			}
-			ShootLeanUtility.ReturnWorkingBlockedArray(workingBlockedArray);
+			ReturnWorkingBlockedArray(workingBlockedArray);
 		}
 
-		
 		public static void CalcShootableCellsOf(List<IntVec3> outCells, Thing t)
 		{
 			outCells.Clear();
@@ -81,22 +77,21 @@ namespace Verse
 						outCells.Add(intVec);
 					}
 				}
-				return;
 			}
-			outCells.Add(t.Position);
-			if (t.def.size.x != 1 || t.def.size.z != 1)
+			else
 			{
-				foreach (IntVec3 intVec2 in t.OccupiedRect())
+				outCells.Add(t.Position);
+				if (t.def.size.x != 1 || t.def.size.z != 1)
 				{
-					if (intVec2 != t.Position)
+					foreach (IntVec3 item in t.OccupiedRect())
 					{
-						outCells.Add(intVec2);
+						if (item != t.Position)
+						{
+							outCells.Add(item);
+						}
 					}
 				}
 			}
 		}
-
-		
-		private static Queue<bool[]> blockedArrays = new Queue<bool[]>();
 	}
 }

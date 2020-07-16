@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PawnRelationWorker_Stepparent : PawnRelationWorker
 	{
-		
 		public override bool InRelation(Pawn me, Pawn other)
 		{
 			if (me == other)
@@ -18,7 +15,15 @@ namespace RimWorld
 				return false;
 			}
 			PawnRelationWorker worker = PawnRelationDefOf.Spouse.Worker;
-			return (me.GetMother() != null && worker.InRelation(me.GetMother(), other)) || (me.GetFather() != null && worker.InRelation(me.GetFather(), other));
+			if (me.GetMother() != null && worker.InRelation(me.GetMother(), other))
+			{
+				return true;
+			}
+			if (me.GetFather() != null && worker.InRelation(me.GetFather(), other))
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

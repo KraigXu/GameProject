@@ -1,59 +1,29 @@
-﻿using System;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
 namespace Verse
 {
-	
 	public class MathEvaluatorCustomVariable : IXsltContextVariable
 	{
-		
-		
-		public bool IsLocal
-		{
-			get
-			{
-				return false;
-			}
-		}
+		private string prefix;
 
-		
-		
-		public bool IsParam
-		{
-			get
-			{
-				return false;
-			}
-		}
+		private string name;
 
-		
-		
-		public XPathResultType VariableType
-		{
-			get
-			{
-				return XPathResultType.Any;
-			}
-		}
+		public bool IsLocal => false;
 
-		
+		public bool IsParam => false;
+
+		public XPathResultType VariableType => XPathResultType.Any;
+
 		public MathEvaluatorCustomVariable(string prefix, string name)
 		{
 			this.prefix = prefix;
 			this.name = name;
 		}
 
-		
 		public object Evaluate(XsltContext xsltContext)
 		{
-			return ((MathEvaluatorCustomContext)xsltContext).ArgList.GetParam(this.name, this.prefix);
+			return ((MathEvaluatorCustomContext)xsltContext).ArgList.GetParam(name, prefix);
 		}
-
-		
-		private string prefix;
-
-		
-		private string name;
 	}
 }

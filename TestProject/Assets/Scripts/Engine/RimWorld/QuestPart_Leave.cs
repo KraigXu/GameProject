@@ -1,98 +1,83 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Leave : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public List<Pawn> pawns = new List<Pawn>();
+
+		public bool sendStandardLetter = true;
+
+		public bool leaveOnCleanup = true;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				foreach (Pawn t in PawnsArriveQuestPartUtility.GetQuestLookTargets(this.pawns))
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return t;
+					yield return questLookTarget;
 				}
-				IEnumerator<Pawn> enumerator2 = null;
-				yield break;
-				yield break;
+				foreach (Pawn questLookTarget2 in PawnsArriveQuestPartUtility.GetQuestLookTargets(pawns))
+				{
+					yield return questLookTarget2;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (signal.tag == inSignal)
 			{
-				LeaveQuestPartUtility.MakePawnsLeave(this.pawns, this.sendStandardLetter, this.quest);
+				LeaveQuestPartUtility.MakePawnsLeave(pawns, sendStandardLetter, quest);
 			}
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			if (this.leaveOnCleanup)
+			if (leaveOnCleanup)
 			{
-				LeaveQuestPartUtility.MakePawnsLeave(this.pawns, this.sendStandardLetter, this.quest);
+				LeaveQuestPartUtility.MakePawnsLeave(pawns, sendStandardLetter, quest);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.sendStandardLetter, "sendStandardLetter", true, false);
-			Scribe_Values.Look<bool>(ref this.leaveOnCleanup, "leaveOnCleanup", false, false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Values.Look(ref sendStandardLetter, "sendStandardLetter", defaultValue: true);
+			Scribe_Values.Look(ref leaveOnCleanup, "leaveOnCleanup", defaultValue: false);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
 				Map randomPlayerHomeMap = Find.RandomPlayerHomeMap;
 				if (randomPlayerHomeMap.mapPawns.FreeColonistsCount != 0)
 				{
-					this.pawns.Add(randomPlayerHomeMap.mapPawns.FreeColonists.First<Pawn>());
+					pawns.Add(randomPlayerHomeMap.mapPawns.FreeColonists.First());
 				}
 			}
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.pawns.Replace(replace, with);
+			pawns.Replace(replace, with);
 		}
-
-		
-		public string inSignal;
-
-		
-		public List<Pawn> pawns = new List<Pawn>();
-
-		
-		public bool sendStandardLetter = true;
-
-		
-		public bool leaveOnCleanup = true;
 	}
 }

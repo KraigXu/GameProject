@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,146 +6,141 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class LessonAutoActivator
 	{
-		
-		
-		private static float SecondsSinceLesson
-		{
-			get
-			{
-				return LessonAutoActivator.timeSinceLastLesson;
-			}
-		}
+		private static Dictionary<ConceptDef, float> opportunities = new Dictionary<ConceptDef, float>();
 
-		
-		
-		private static float RelaxDesire
-		{
-			get
-			{
-				return 100f - LessonAutoActivator.SecondsSinceLesson * 0.111111112f;
-			}
-		}
+		private static float timeSinceLastLesson = 10000f;
 
-		
+		private static List<ConceptDef> alertingConcepts = new List<ConceptDef>();
+
+		private const float MapStartGracePeriod = 8f;
+
+		private const float KnowledgeDecayRate = 0.00015f;
+
+		private const float OpportunityDecayRate = 0.4f;
+
+		private const float OpportunityMaxDesireAdd = 60f;
+
+		private const int CheckInterval = 15;
+
+		private const float MaxLessonInterval = 900f;
+
+		private static float SecondsSinceLesson => timeSinceLastLesson;
+
+		private static float RelaxDesire => 100f - SecondsSinceLesson * 0.111111112f;
+
 		public static void Reset()
 		{
-			LessonAutoActivator.alertingConcepts.Clear();
+			alertingConcepts.Clear();
 		}
 
-		
 		public static void TeachOpportunity(ConceptDef conc, OpportunityType opp)
 		{
-			LessonAutoActivator.TeachOpportunity(conc, null, opp);
+			TeachOpportunity(conc, null, opp);
 		}
 
-		
 		public static void TeachOpportunity(ConceptDef conc, Thing subject, OpportunityType opp)
 		{
-			if (!TutorSystem.AdaptiveTrainingEnabled || PlayerKnowledgeDatabase.IsComplete(conc))
+			if (TutorSystem.AdaptiveTrainingEnabled && !PlayerKnowledgeDatabase.IsComplete(conc))
 			{
-				return;
-			}
-			float value = 999f;
-			switch (opp)
-			{
-			case OpportunityType.GoodToKnow:
-				value = 60f;
-				break;
-			case OpportunityType.Important:
-				value = 80f;
-				break;
-			case OpportunityType.Critical:
-				value = 100f;
-				break;
-			default:
-				Log.Error("Unknown need", false);
-				break;
-			}
-			LessonAutoActivator.opportunities[conc] = value;
-			if (opp >= OpportunityType.Important || Find.Tutor.learningReadout.ActiveConceptsCount < 4)
-			{
-				LessonAutoActivator.TryInitiateLesson(conc);
+				float value = 999f;
+				switch (opp)
+				{
+				case OpportunityType.GoodToKnow:
+					value = 60f;
+					break;
+				case OpportunityType.Important:
+					value = 80f;
+					break;
+				case OpportunityType.Critical:
+					value = 100f;
+					break;
+				default:
+					Log.Error("Unknown need");
+					break;
+				}
+				opportunities[conc] = value;
+				if ((int)opp >= 1 || Find.Tutor.learningReadout.ActiveConceptsCount < 4)
+				{
+					TryInitiateLesson(conc);
+				}
 			}
 		}
 
-		
 		public static void Notify_KnowledgeDemonstrated(ConceptDef conc)
 		{
 			if (PlayerKnowledgeDatabase.IsComplete(conc))
 			{
-				LessonAutoActivator.opportunities[conc] = 0f;
+				opportunities[conc] = 0f;
 			}
 		}
 
-		
 		public static void LessonAutoActivatorUpdate()
 		{
 			if (!TutorSystem.AdaptiveTrainingEnabled || Current.Game == null || Find.Tutor.learningReadout.ShowAllMode)
 			{
 				return;
 			}
-			LessonAutoActivator.timeSinceLastLesson += RealTime.realDeltaTime;
+			timeSinceLastLesson += RealTime.realDeltaTime;
 			if (Current.ProgramState == ProgramState.Playing && (Time.timeSinceLevelLoad < 8f || Find.WindowStack.SecondsSinceClosedGameStartDialog < 8f || Find.TickManager.NotPlaying))
 			{
 				return;
 			}
-			for (int i = LessonAutoActivator.alertingConcepts.Count - 1; i >= 0; i--)
+			for (int num = alertingConcepts.Count - 1; num >= 0; num--)
 			{
-				if (PlayerKnowledgeDatabase.IsComplete(LessonAutoActivator.alertingConcepts[i]))
+				if (PlayerKnowledgeDatabase.IsComplete(alertingConcepts[num]))
 				{
-					LessonAutoActivator.alertingConcepts.RemoveAt(i);
+					alertingConcepts.RemoveAt(num);
 				}
 			}
-			if (Time.frameCount % 15 == 0 && Find.ActiveLesson.Current == null)
+			if (Time.frameCount % 15 != 0 || Find.ActiveLesson.Current != null)
 			{
-				for (int j = 0; j < DefDatabase<ConceptDef>.AllDefsListForReading.Count; j++)
+				return;
+			}
+			for (int i = 0; i < DefDatabase<ConceptDef>.AllDefsListForReading.Count; i++)
+			{
+				ConceptDef conceptDef = DefDatabase<ConceptDef>.AllDefsListForReading[i];
+				if (PlayerKnowledgeDatabase.IsComplete(conceptDef))
 				{
-					ConceptDef conceptDef = DefDatabase<ConceptDef>.AllDefsListForReading[j];
-					if (!PlayerKnowledgeDatabase.IsComplete(conceptDef))
+					continue;
+				}
+				float knowledge = PlayerKnowledgeDatabase.GetKnowledge(conceptDef);
+				knowledge -= 0.00015f * Time.deltaTime * 15f;
+				if (knowledge < 0f)
+				{
+					knowledge = 0f;
+				}
+				PlayerKnowledgeDatabase.SetKnowledge(conceptDef, knowledge);
+				if (conceptDef.opportunityDecays)
+				{
+					float opportunity = GetOpportunity(conceptDef);
+					opportunity -= 0.4f * Time.deltaTime * 15f;
+					if (opportunity < 0f)
 					{
-						float num = PlayerKnowledgeDatabase.GetKnowledge(conceptDef);
-						num -= 0.00015f * Time.deltaTime * 15f;
-						if (num < 0f)
-						{
-							num = 0f;
-						}
-						PlayerKnowledgeDatabase.SetKnowledge(conceptDef, num);
-						if (conceptDef.opportunityDecays)
-						{
-							float num2 = LessonAutoActivator.GetOpportunity(conceptDef);
-							num2 -= 0.4f * Time.deltaTime * 15f;
-							if (num2 < 0f)
-							{
-								num2 = 0f;
-							}
-							LessonAutoActivator.opportunities[conceptDef] = num2;
-						}
+						opportunity = 0f;
+					}
+					opportunities[conceptDef] = opportunity;
+				}
+			}
+			if (Find.Tutor.learningReadout.ActiveConceptsCount < 3)
+			{
+				ConceptDef conceptDef2 = MostDesiredConcept();
+				if (conceptDef2 != null)
+				{
+					float desire = GetDesire(conceptDef2);
+					if (desire > 0.1f && RelaxDesire < desire)
+					{
+						TryInitiateLesson(conceptDef2);
 					}
 				}
-				if (Find.Tutor.learningReadout.ActiveConceptsCount < 3)
-				{
-					ConceptDef conceptDef2 = LessonAutoActivator.MostDesiredConcept();
-					if (conceptDef2 != null)
-					{
-						float desire = LessonAutoActivator.GetDesire(conceptDef2);
-						if (desire > 0.1f && LessonAutoActivator.RelaxDesire < desire)
-						{
-							LessonAutoActivator.TryInitiateLesson(conceptDef2);
-							return;
-						}
-					}
-				}
-				else
-				{
-					LessonAutoActivator.SetLastLessonTimeToNow();
-				}
+			}
+			else
+			{
+				SetLastLessonTimeToNow();
 			}
 		}
 
-		
 		private static ConceptDef MostDesiredConcept()
 		{
 			float num = -9999f;
@@ -155,8 +149,8 @@ namespace RimWorld
 			for (int i = 0; i < allDefsListForReading.Count; i++)
 			{
 				ConceptDef conceptDef = allDefsListForReading[i];
-				float desire = LessonAutoActivator.GetDesire(conceptDef);
-				if (desire > num && (!conceptDef.needsOpportunity || LessonAutoActivator.GetOpportunity(conceptDef) >= 0.1f) && PlayerKnowledgeDatabase.GetKnowledge(conceptDef) <= 0.15f)
+				float desire = GetDesire(conceptDef);
+				if (desire > num && (!conceptDef.needsOpportunity || !(GetOpportunity(conceptDef) < 0.1f)) && !(PlayerKnowledgeDatabase.GetKnowledge(conceptDef) > 0.15f))
 				{
 					num = desire;
 					result = conceptDef;
@@ -165,7 +159,6 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		private static float GetDesire(ConceptDef conc)
 		{
 			if (PlayerKnowledgeDatabase.IsComplete(conc))
@@ -180,109 +173,62 @@ namespace RimWorld
 			{
 				return 0f;
 			}
-			if (conc.needsOpportunity && LessonAutoActivator.GetOpportunity(conc) < 0.1f)
+			if (conc.needsOpportunity && GetOpportunity(conc) < 0.1f)
 			{
 				return 0f;
 			}
-			return (0f + conc.priority + LessonAutoActivator.GetOpportunity(conc) / 100f * 60f) * (1f - PlayerKnowledgeDatabase.GetKnowledge(conc));
+			return (0f + conc.priority + GetOpportunity(conc) / 100f * 60f) * (1f - PlayerKnowledgeDatabase.GetKnowledge(conc));
 		}
 
-		
 		private static float GetOpportunity(ConceptDef conc)
 		{
-			float result;
-			if (LessonAutoActivator.opportunities.TryGetValue(conc, out result))
+			if (opportunities.TryGetValue(conc, out float value))
 			{
-				return result;
+				return value;
 			}
-			LessonAutoActivator.opportunities[conc] = 0f;
+			opportunities[conc] = 0f;
 			return 0f;
 		}
 
-		
 		private static void TryInitiateLesson(ConceptDef conc)
 		{
 			if (Find.Tutor.learningReadout.TryActivateConcept(conc))
 			{
-				LessonAutoActivator.SetLastLessonTimeToNow();
+				SetLastLessonTimeToNow();
 			}
 		}
 
-		
 		private static void SetLastLessonTimeToNow()
 		{
-			LessonAutoActivator.timeSinceLastLesson = 0f;
+			timeSinceLastLesson = 0f;
 		}
 
-		
 		public static void Notify_TutorialEnding()
 		{
-			LessonAutoActivator.SetLastLessonTimeToNow();
+			SetLastLessonTimeToNow();
 		}
 
-		
 		public static string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine("RelaxDesire: " + LessonAutoActivator.RelaxDesire);
-			foreach (ConceptDef conceptDef in from co in DefDatabase<ConceptDef>.AllDefs
-			orderby LessonAutoActivator.GetDesire(co) descending
-			select co)
+			stringBuilder.AppendLine("RelaxDesire: " + RelaxDesire);
+			foreach (ConceptDef item in DefDatabase<ConceptDef>.AllDefs.OrderByDescending((ConceptDef co) => GetDesire(co)))
 			{
-				if (PlayerKnowledgeDatabase.IsComplete(conceptDef))
+				if (PlayerKnowledgeDatabase.IsComplete(item))
 				{
-					stringBuilder.AppendLine(conceptDef.defName + " complete");
+					stringBuilder.AppendLine(item.defName + " complete");
 				}
 				else
 				{
-					stringBuilder.AppendLine(string.Concat(new string[]
-					{
-						conceptDef.defName,
-						"\n   know ",
-						PlayerKnowledgeDatabase.GetKnowledge(conceptDef).ToString("F3"),
-						"\n   need ",
-						LessonAutoActivator.opportunities[conceptDef].ToString("F3"),
-						"\n   des ",
-						LessonAutoActivator.GetDesire(conceptDef).ToString("F3")
-					}));
+					stringBuilder.AppendLine(item.defName + "\n   know " + PlayerKnowledgeDatabase.GetKnowledge(item).ToString("F3") + "\n   need " + opportunities[item].ToString("F3") + "\n   des " + GetDesire(item).ToString("F3"));
 				}
 			}
 			return stringBuilder.ToString();
 		}
 
-		
 		public static void DebugForceInitiateBestLessonNow()
 		{
-			LessonAutoActivator.TryInitiateLesson((from def in DefDatabase<ConceptDef>.AllDefs
-			orderby LessonAutoActivator.GetDesire(def) descending
-			select def).First<ConceptDef>());
+			TryInitiateLesson(DefDatabase<ConceptDef>.AllDefs.OrderByDescending((ConceptDef def) => GetDesire(def)).First());
 		}
-
-		
-		private static Dictionary<ConceptDef, float> opportunities = new Dictionary<ConceptDef, float>();
-
-		
-		private static float timeSinceLastLesson = 10000f;
-
-		
-		private static List<ConceptDef> alertingConcepts = new List<ConceptDef>();
-
-		
-		private const float MapStartGracePeriod = 8f;
-
-		
-		private const float KnowledgeDecayRate = 0.00015f;
-
-		
-		private const float OpportunityDecayRate = 0.4f;
-
-		
-		private const float OpportunityMaxDesireAdd = 60f;
-
-		
-		private const int CheckInterval = 15;
-
-		
-		private const float MaxLessonInterval = 900f;
 	}
 }

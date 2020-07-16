@@ -1,15 +1,35 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Xml;
-using RimWorld;
 using Verse.AI.Group;
 
 namespace Verse
 {
-	
 	public static class BackCompatibility
 	{
-		
+		public static readonly Pair<int, int>[] SaveCompatibleMinorVersions = new Pair<int, int>[1]
+		{
+			new Pair<int, int>(17, 18)
+		};
+
+		private static List<BackCompatibilityConverter> conversionChain = new List<BackCompatibilityConverter>
+		{
+			new BackCompatibilityConverter_0_17_AndLower(),
+			new BackCompatibilityConverter_0_18(),
+			new BackCompatibilityConverter_0_19(),
+			new BackCompatibilityConverter_1_0(),
+			new BackCompatibilityConverter_Universal()
+		};
+
+		private static readonly List<Tuple<string, Type>> RemovedDefs = new List<Tuple<string, Type>>
+		{
+			new Tuple<string, Type>("PsychicSilencer", typeof(ThingDef)),
+			new Tuple<string, Type>("PsychicSilencer", typeof(HediffDef))
+		};
+
+		private static List<Thing> tmpThingsToSpawnLater = new List<Thing>();
+
 		public static bool IsSaveCompatibleWith(string version)
 		{
 			if (VersionControl.MajorFromVersionString(version) == VersionControl.CurrentMajor && VersionControl.MinorFromVersionString(version) == VersionControl.CurrentMinor)
@@ -24,9 +44,9 @@ namespace Verse
 			{
 				int num = VersionControl.MinorFromVersionString(version);
 				int currentMinor = VersionControl.CurrentMinor;
-				for (int i = 0; i < BackCompatibility.SaveCompatibleMinorVersions.Length; i++)
+				for (int i = 0; i < SaveCompatibleMinorVersions.Length; i++)
 				{
-					if (BackCompatibility.SaveCompatibleMinorVersions[i].First == num && BackCompatibility.SaveCompatibleMinorVersions[i].Second == currentMinor)
+					if (SaveCompatibleMinorVersions[i].First == num && SaveCompatibleMinorVersions[i].Second == currentMinor)
 					{
 						return true;
 					}
@@ -35,71 +55,56 @@ namespace Verse
 			return false;
 		}
 
-		
 		public static void PreLoadSavegame(string loadingVersion)
 		{
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(true))
+				if (conversionChain[i].AppliesToLoadedGameVersion(allowInactiveScribe: true))
 				{
 					try
 					{
-						BackCompatibility.conversionChain[i].PreLoadSavegame(loadingVersion);
+						conversionChain[i].PreLoadSavegame(loadingVersion);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in PreLoadSavegame of ",
-							BackCompatibility.conversionChain[i].GetType(),
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in PreLoadSavegame of " + conversionChain[i].GetType() + "\n" + ex);
 					}
 				}
 			}
 		}
 
-		
 		public static void PostLoadSavegame(string loadingVersion)
 		{
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(true))
+				if (conversionChain[i].AppliesToLoadedGameVersion(allowInactiveScribe: true))
 				{
 					try
 					{
-						BackCompatibility.conversionChain[i].PostLoadSavegame(loadingVersion);
+						conversionChain[i].PostLoadSavegame(loadingVersion);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in PostLoadSavegame of ",
-							BackCompatibility.conversionChain[i].GetType(),
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in PostLoadSavegame of " + conversionChain[i].GetType() + "\n" + ex);
 					}
 				}
 			}
 		}
 
-		
 		public static string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
-			if (GenDefDatabase.GetDefSilentFail(defType, defName, false) != null)
+			if (GenDefDatabase.GetDefSilentFail(defType, defName, specialCaseForSoundDefs: false) != null)
 			{
 				return defName;
 			}
 			string text = defName;
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (Scribe.mode == LoadSaveMode.Inactive || BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(false))
+				if (Scribe.mode == LoadSaveMode.Inactive || conversionChain[i].AppliesToLoadedGameVersion())
 				{
 					try
 					{
-						string text2 = BackCompatibility.conversionChain[i].BackCompatibleDefName(defType, text, forDefInjections, node);
+						string text2 = conversionChain[i].BackCompatibleDefName(defType, text, forDefInjections, node);
 						if (text2 != null)
 						{
 							text = text2;
@@ -107,20 +112,13 @@ namespace Verse
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in BackCompatibleDefName of ",
-							BackCompatibility.conversionChain[i].GetType(),
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in BackCompatibleDefName of " + conversionChain[i].GetType() + "\n" + ex);
 					}
 				}
 			}
 			return text;
 		}
 
-		
 		public static object BackCompatibleEnum(Type enumType, string enumName)
 		{
 			if (enumType == typeof(QualityCategory))
@@ -137,16 +135,15 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(false))
+				if (conversionChain[i].AppliesToLoadedGameVersion())
 				{
 					try
 					{
-						Type backCompatibleType = BackCompatibility.conversionChain[i].GetBackCompatibleType(baseType, providedClassName, node);
+						Type backCompatibleType = conversionChain[i].GetBackCompatibleType(baseType, providedClassName, node);
 						if (backCompatibleType != null)
 						{
 							return backCompatibleType;
@@ -154,51 +151,37 @@ namespace Verse
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in GetBackCompatibleType of ",
-							BackCompatibility.conversionChain[i].GetType(),
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in GetBackCompatibleType of " + conversionChain[i].GetType() + "\n" + ex);
 					}
 				}
 			}
-			return GenTypes.GetTypeInAnyAssembly(providedClassName, null);
+			return GenTypes.GetTypeInAnyAssembly(providedClassName);
 		}
 
-		
 		public static int GetBackCompatibleBodyPartIndex(BodyDef body, int index)
 		{
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(false))
+				if (conversionChain[i].AppliesToLoadedGameVersion())
 				{
 					try
 					{
-						index = BackCompatibility.conversionChain[i].GetBackCompatibleBodyPartIndex(body, index);
+						index = conversionChain[i].GetBackCompatibleBodyPartIndex(body, index);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in GetBackCompatibleBodyPartIndex of ",
-							body,
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in GetBackCompatibleBodyPartIndex of " + body + "\n" + ex);
 					}
 				}
 			}
 			return index;
 		}
 
-		
 		public static bool WasDefRemoved(string defName, Type type)
 		{
-			foreach (Tuple<string, Type> tuple in BackCompatibility.RemovedDefs)
+			foreach (Tuple<string, Type> removedDef in RemovedDefs)
 			{
-				if (tuple.Item1 == defName && tuple.Item2 == type)
+				if (removedDef.Item1 == defName && removedDef.Item2 == type)
 				{
 					return true;
 				}
@@ -206,61 +189,46 @@ namespace Verse
 			return false;
 		}
 
-		
 		public static void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
 				return;
 			}
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(false))
+				if (conversionChain[i].AppliesToLoadedGameVersion())
 				{
 					try
 					{
-						BackCompatibility.conversionChain[i].PostExposeData(obj);
+						conversionChain[i].PostExposeData(obj);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in PostExposeData of ",
-							BackCompatibility.conversionChain[i].GetType(),
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in PostExposeData of " + conversionChain[i].GetType() + "\n" + ex);
 					}
 				}
 			}
 		}
 
-		
 		public static void PostCouldntLoadDef(string defName)
 		{
-			for (int i = 0; i < BackCompatibility.conversionChain.Count; i++)
+			for (int i = 0; i < conversionChain.Count; i++)
 			{
-				if (BackCompatibility.conversionChain[i].AppliesToLoadedGameVersion(false))
+				if (conversionChain[i].AppliesToLoadedGameVersion())
 				{
 					try
 					{
-						BackCompatibility.conversionChain[i].PostCouldntLoadDef(defName);
+						conversionChain[i].PostCouldntLoadDef(defName);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Error in PostCouldntLoadDef of ",
-							BackCompatibility.conversionChain[i].GetType(),
-							"\n",
-							ex
-						}), false);
+						Log.Error("Error in PostCouldntLoadDef of " + conversionChain[i].GetType() + "\n" + ex);
 					}
 				}
 			}
 		}
 
-		
 		public static void PawnTrainingTrackerPostLoadInit(Pawn_TrainingTracker tracker, ref DefMap<TrainableDef, bool> wantedTrainables, ref DefMap<TrainableDef, int> steps, ref DefMap<TrainableDef, bool> learned)
 		{
 			if (wantedTrainables == null)
@@ -277,37 +245,33 @@ namespace Verse
 			}
 			if (tracker.GetSteps(TrainableDefOf.Tameness) == 0 && DefDatabase<TrainableDef>.AllDefsListForReading.Any((TrainableDef td) => tracker.GetSteps(td) != 0))
 			{
-				tracker.Train(TrainableDefOf.Tameness, null, true);
+				tracker.Train(TrainableDefOf.Tameness, null, complete: true);
 			}
-			foreach (TrainableDef trainableDef in DefDatabase<TrainableDef>.AllDefsListForReading)
+			foreach (TrainableDef item in DefDatabase<TrainableDef>.AllDefsListForReading)
 			{
-				if (tracker.GetSteps(trainableDef) == trainableDef.steps)
+				if (tracker.GetSteps(item) == item.steps)
 				{
-					tracker.Train(trainableDef, null, true);
+					tracker.Train(item, null, complete: true);
 				}
 			}
 		}
 
-		
 		public static void TriggerDataFractionColonyDamageTakenNull(Trigger_FractionColonyDamageTaken trigger, Map map)
 		{
 			trigger.data = new TriggerData_FractionColonyDamageTaken();
 			((TriggerData_FractionColonyDamageTaken)trigger.data).startColonyDamage = map.damageWatcher.DamageTakenEver;
 		}
 
-		
 		public static void TriggerDataPawnCycleIndNull(Trigger_KidnapVictimPresent trigger)
 		{
 			trigger.data = new TriggerData_PawnCycleInd();
 		}
 
-		
 		public static void TriggerDataTicksPassedNull(Trigger_TicksPassed trigger)
 		{
 			trigger.data = new TriggerData_TicksPassed();
 		}
 
-		
 		public static TerrainDef BackCompatibleTerrainWithShortHash(ushort hash)
 		{
 			if (hash == 16442)
@@ -317,7 +281,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static ThingDef BackCompatibleThingDefWithShortHash(ushort hash)
 		{
 			if (hash == 62520)
@@ -327,7 +290,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static ThingDef BackCompatibleThingDefWithShortHash_Force(ushort hash, int major, int minor)
 		{
 			if (major == 0 && minor <= 18 && hash == 27292)
@@ -337,34 +299,30 @@ namespace Verse
 			return null;
 		}
 
-		
 		public static bool CheckSpawnBackCompatibleThingAfterLoading(Thing thing, Map map)
 		{
 			if (VersionControl.MajorFromVersionString(ScribeMetaHeaderUtility.loadedGameVersion) == 0 && VersionControl.MinorFromVersionString(ScribeMetaHeaderUtility.loadedGameVersion) <= 18 && thing.stackCount > thing.def.stackLimit && thing.stackCount != 1 && thing.def.stackLimit != 1)
 			{
-				BackCompatibility.tmpThingsToSpawnLater.Add(thing);
+				tmpThingsToSpawnLater.Add(thing);
 				return true;
 			}
 			return false;
 		}
 
-		
 		public static void PreCheckSpawnBackCompatibleThingAfterLoading(Map map)
 		{
-			BackCompatibility.tmpThingsToSpawnLater.Clear();
+			tmpThingsToSpawnLater.Clear();
 		}
 
-		
 		public static void PostCheckSpawnBackCompatibleThingAfterLoading(Map map)
 		{
-			for (int i = 0; i < BackCompatibility.tmpThingsToSpawnLater.Count; i++)
+			for (int i = 0; i < tmpThingsToSpawnLater.Count; i++)
 			{
-				GenPlace.TryPlaceThing(BackCompatibility.tmpThingsToSpawnLater[i], BackCompatibility.tmpThingsToSpawnLater[i].Position, map, ThingPlaceMode.Near, null, null, default(Rot4));
+				GenPlace.TryPlaceThing(tmpThingsToSpawnLater[i], tmpThingsToSpawnLater[i].Position, map, ThingPlaceMode.Near);
 			}
-			BackCompatibility.tmpThingsToSpawnLater.Clear();
+			tmpThingsToSpawnLater.Clear();
 		}
 
-		
 		public static void FactionManagerPostLoadInit()
 		{
 			if (ModsConfig.RoyaltyActive && Find.FactionManager.FirstFactionOfDef(FactionDefOf.Empire) == null)
@@ -374,7 +332,6 @@ namespace Verse
 			}
 		}
 
-		
 		public static void ResearchManagerPostLoadInit()
 		{
 			List<ResearchProjectDef> allDefsListForReading = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
@@ -387,44 +344,19 @@ namespace Verse
 			}
 		}
 
-		
 		public static void PrefsDataPostLoad(PrefsData prefsData)
 		{
-			if (prefsData.pauseOnUrgentLetter != null)
+			if (prefsData.pauseOnUrgentLetter.HasValue)
 			{
 				if (prefsData.pauseOnUrgentLetter.Value)
 				{
 					prefsData.automaticPauseMode = AutomaticPauseMode.MajorThreat;
-					return;
 				}
-				prefsData.automaticPauseMode = AutomaticPauseMode.Never;
+				else
+				{
+					prefsData.automaticPauseMode = AutomaticPauseMode.Never;
+				}
 			}
 		}
-
-		
-		public static readonly Pair<int, int>[] SaveCompatibleMinorVersions = new Pair<int, int>[]
-		{
-			new Pair<int, int>(17, 18)
-		};
-
-		
-		private static List<BackCompatibilityConverter> conversionChain = new List<BackCompatibilityConverter>
-		{
-			new BackCompatibilityConverter_0_17_AndLower(),
-			new BackCompatibilityConverter_0_18(),
-			new BackCompatibilityConverter_0_19(),
-			new BackCompatibilityConverter_1_0(),
-			new BackCompatibilityConverter_Universal()
-		};
-
-		
-		private static readonly List<Tuple<string, Type>> RemovedDefs = new List<Tuple<string, Type>>
-		{
-			new Tuple<string, Type>("PsychicSilencer", typeof(ThingDef)),
-			new Tuple<string, Type>("PsychicSilencer", typeof(HediffDef))
-		};
-
-		
-		private static List<Thing> tmpThingsToSpawnLater = new List<Thing>();
 	}
 }

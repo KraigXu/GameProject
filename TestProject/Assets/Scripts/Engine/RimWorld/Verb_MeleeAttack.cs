@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public abstract class Verb_MeleeAttack : Verb
 	{
-		
+		private const int TargetCooldown = 50;
+
 		protected override bool TryCastShot()
 		{
-			Pawn casterPawn = this.CasterPawn;
+			Pawn casterPawn = CasterPawn;
 			if (!casterPawn.Spawned)
 			{
 				return false;
@@ -20,21 +20,15 @@ namespace RimWorld
 			{
 				return false;
 			}
-			Thing thing = this.currentTarget.Thing;
-			if (!this.CanHitTarget(thing))
+			Thing thing = currentTarget.Thing;
+			if (!CanHitTarget(thing))
 			{
-				Log.Warning(string.Concat(new object[]
-				{
-					casterPawn,
-					" meleed ",
-					thing,
-					" from out of melee position."
-				}), false);
+				Log.Warning(casterPawn + " meleed " + thing + " from out of melee position.");
 			}
 			casterPawn.rotationTracker.Face(thing.DrawPos);
-			if (!this.IsTargetImmobile(this.currentTarget) && casterPawn.skills != null)
+			if (!IsTargetImmobile(currentTarget) && casterPawn.skills != null)
 			{
-				casterPawn.skills.Learn(SkillDefOf.Melee, 200f * this.verbProps.AdjustedFullCycleTime(this, casterPawn), false);
+				casterPawn.skills.Learn(SkillDefOf.Melee, 200f * verbProps.AdjustedFullCycleTime(this, casterPawn));
 			}
 			Pawn pawn = thing as Pawn;
 			if (pawn != null && !pawn.Dead && (casterPawn.MentalStateDef != MentalStateDefOf.SocialFighting || pawn.MentalStateDef != MentalStateDefOf.SocialFighting))
@@ -46,26 +40,19 @@ namespace RimWorld
 			Vector3 drawPos = thing.DrawPos;
 			SoundDef soundDef;
 			bool result;
-			if (Rand.Chance(this.GetNonMissChance(thing)))
+			if (Rand.Chance(GetNonMissChance(thing)))
 			{
-				if (!Rand.Chance(this.GetDodgeChance(thing)))
+				if (!Rand.Chance(GetDodgeChance(thing)))
 				{
-					if (thing.def.category == ThingCategory.Building)
+					soundDef = ((thing.def.category != ThingCategory.Building) ? SoundHitPawn() : SoundHitBuilding());
+					if (verbProps.impactMote != null)
 					{
-						soundDef = this.SoundHitBuilding();
+						MoteMaker.MakeStaticMote(drawPos, map, verbProps.impactMote);
 					}
-					else
-					{
-						soundDef = this.SoundHitPawn();
-					}
-					if (this.verbProps.impactMote != null)
-					{
-						MoteMaker.MakeStaticMote(drawPos, map, this.verbProps.impactMote, 1f);
-					}
-					BattleLogEntry_MeleeCombat battleLogEntry_MeleeCombat = this.CreateCombatLog((ManeuverDef maneuver) => maneuver.combatLogRulesHit, true);
+					BattleLogEntry_MeleeCombat battleLogEntry_MeleeCombat = CreateCombatLog((ManeuverDef maneuver) => maneuver.combatLogRulesHit, alwaysShow: true);
 					result = true;
-					DamageWorker.DamageResult damageResult = this.ApplyMeleeDamageToTarget(this.currentTarget);
-					if (damageResult.stunned && damageResult.parts.NullOrEmpty<BodyPartRecord>())
+					DamageWorker.DamageResult damageResult = ApplyMeleeDamageToTarget(currentTarget);
+					if (damageResult.stunned && damageResult.parts.NullOrEmpty())
 					{
 						Find.BattleLog.RemoveEntry(battleLogEntry_MeleeCombat);
 					}
@@ -74,7 +61,7 @@ namespace RimWorld
 						damageResult.AssociateWithLog(battleLogEntry_MeleeCombat);
 						if (damageResult.deflected)
 						{
-							battleLogEntry_MeleeCombat.RuleDef = this.maneuver.combatLogRulesDeflect;
+							battleLogEntry_MeleeCombat.RuleDef = maneuver.combatLogRulesDeflect;
 							battleLogEntry_MeleeCombat.alwaysShowInCompact = false;
 						}
 					}
@@ -82,18 +69,18 @@ namespace RimWorld
 				else
 				{
 					result = false;
-					soundDef = this.SoundDodge(thing);
+					soundDef = SoundDodge(thing);
 					MoteMaker.ThrowText(drawPos, map, "TextMote_Dodge".Translate(), 1.9f);
-					this.CreateCombatLog((ManeuverDef maneuver) => maneuver.combatLogRulesDodge, false);
+					CreateCombatLog((ManeuverDef maneuver) => maneuver.combatLogRulesDodge, alwaysShow: false);
 				}
 			}
 			else
 			{
 				result = false;
-				soundDef = this.SoundMiss();
-				this.CreateCombatLog((ManeuverDef maneuver) => maneuver.combatLogRulesMiss, false);
+				soundDef = SoundMiss();
+				CreateCombatLog((ManeuverDef maneuver) => maneuver.combatLogRulesMiss, alwaysShow: false);
 			}
-			soundDef.PlayOneShot(new TargetInfo(thing.Position, map, false));
+			soundDef.PlayOneShot(new TargetInfo(thing.Position, map));
 			if (casterPawn.Spawned)
 			{
 				casterPawn.Drawer.Notify_MeleeAttackOn(thing);
@@ -113,44 +100,41 @@ namespace RimWorld
 			return result;
 		}
 
-		
 		public BattleLogEntry_MeleeCombat CreateCombatLog(Func<ManeuverDef, RulePackDef> rulePackGetter, bool alwaysShow)
 		{
-			if (this.maneuver == null)
+			if (maneuver == null)
 			{
 				return null;
 			}
-			if (this.tool == null)
+			if (tool == null)
 			{
 				return null;
 			}
-			BattleLogEntry_MeleeCombat battleLogEntry_MeleeCombat = new BattleLogEntry_MeleeCombat(rulePackGetter(this.maneuver), alwaysShow, this.CasterPawn, this.currentTarget.Thing, base.ImplementOwnerType, this.tool.labelUsedInLogging ? this.tool.label : "", (base.EquipmentSource == null) ? null : base.EquipmentSource.def, (base.HediffCompSource == null) ? null : base.HediffCompSource.Def, this.maneuver.logEntryDef);
+			BattleLogEntry_MeleeCombat battleLogEntry_MeleeCombat = new BattleLogEntry_MeleeCombat(rulePackGetter(maneuver), alwaysShow, CasterPawn, currentTarget.Thing, base.ImplementOwnerType, tool.labelUsedInLogging ? tool.label : "", (base.EquipmentSource == null) ? null : base.EquipmentSource.def, (base.HediffCompSource == null) ? null : base.HediffCompSource.Def, maneuver.logEntryDef);
 			Find.BattleLog.Add(battleLogEntry_MeleeCombat);
 			return battleLogEntry_MeleeCombat;
 		}
 
-		
 		private float GetNonMissChance(LocalTargetInfo target)
 		{
-			if (this.surpriseAttack)
+			if (surpriseAttack)
 			{
 				return 1f;
 			}
-			if (this.IsTargetImmobile(target))
+			if (IsTargetImmobile(target))
 			{
 				return 1f;
 			}
-			return this.CasterPawn.GetStatValue(StatDefOf.MeleeHitChance, true);
+			return CasterPawn.GetStatValue(StatDefOf.MeleeHitChance);
 		}
 
-		
 		private float GetDodgeChance(LocalTargetInfo target)
 		{
-			if (this.surpriseAttack)
+			if (surpriseAttack)
 			{
 				return 0f;
 			}
-			if (this.IsTargetImmobile(target))
+			if (IsTargetImmobile(target))
 			{
 				return 0f;
 			}
@@ -164,34 +148,35 @@ namespace RimWorld
 			{
 				return 0f;
 			}
-			return pawn.GetStatValue(StatDefOf.MeleeDodgeChance, true);
+			return pawn.GetStatValue(StatDefOf.MeleeDodgeChance);
 		}
 
-		
 		private bool IsTargetImmobile(LocalTargetInfo target)
 		{
 			Thing thing = target.Thing;
 			Pawn pawn = thing as Pawn;
-			return thing.def.category != ThingCategory.Pawn || pawn.Downed || pawn.GetPosture() > PawnPosture.Standing;
+			if (thing.def.category == ThingCategory.Pawn && !pawn.Downed)
+			{
+				return pawn.GetPosture() != PawnPosture.Standing;
+			}
+			return true;
 		}
 
-		
 		protected abstract DamageWorker.DamageResult ApplyMeleeDamageToTarget(LocalTargetInfo target);
 
-		
 		private SoundDef SoundHitPawn()
 		{
 			if (base.EquipmentSource != null && !base.EquipmentSource.def.meleeHitSound.NullOrUndefined())
 			{
 				return base.EquipmentSource.def.meleeHitSound;
 			}
-			if (this.tool != null && !this.tool.soundMeleeHit.NullOrUndefined())
+			if (tool != null && !tool.soundMeleeHit.NullOrUndefined())
 			{
-				return this.tool.soundMeleeHit;
+				return tool.soundMeleeHit;
 			}
 			if (base.EquipmentSource != null && base.EquipmentSource.Stuff != null)
 			{
-				if (this.verbProps.meleeDamageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
+				if (verbProps.meleeDamageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
 				{
 					if (!base.EquipmentSource.Stuff.stuffProps.soundMeleeHitSharp.NullOrUndefined())
 					{
@@ -203,27 +188,26 @@ namespace RimWorld
 					return base.EquipmentSource.Stuff.stuffProps.soundMeleeHitBlunt;
 				}
 			}
-			if (this.CasterPawn != null && !this.CasterPawn.def.race.soundMeleeHitPawn.NullOrUndefined())
+			if (CasterPawn != null && !CasterPawn.def.race.soundMeleeHitPawn.NullOrUndefined())
 			{
-				return this.CasterPawn.def.race.soundMeleeHitPawn;
+				return CasterPawn.def.race.soundMeleeHitPawn;
 			}
 			return SoundDefOf.Pawn_Melee_Punch_HitPawn;
 		}
 
-		
 		private SoundDef SoundHitBuilding()
 		{
 			if (base.EquipmentSource != null && !base.EquipmentSource.def.meleeHitSound.NullOrUndefined())
 			{
 				return base.EquipmentSource.def.meleeHitSound;
 			}
-			if (this.tool != null && !this.tool.soundMeleeHit.NullOrUndefined())
+			if (tool != null && !tool.soundMeleeHit.NullOrUndefined())
 			{
-				return this.tool.soundMeleeHit;
+				return tool.soundMeleeHit;
 			}
 			if (base.EquipmentSource != null && base.EquipmentSource.Stuff != null)
 			{
-				if (this.verbProps.meleeDamageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
+				if (verbProps.meleeDamageDef.armorCategory == DamageArmorCategoryDefOf.Sharp)
 				{
 					if (!base.EquipmentSource.Stuff.stuffProps.soundMeleeHitSharp.NullOrUndefined())
 					{
@@ -235,41 +219,36 @@ namespace RimWorld
 					return base.EquipmentSource.Stuff.stuffProps.soundMeleeHitBlunt;
 				}
 			}
-			if (this.CasterPawn != null && !this.CasterPawn.def.race.soundMeleeHitBuilding.NullOrUndefined())
+			if (CasterPawn != null && !CasterPawn.def.race.soundMeleeHitBuilding.NullOrUndefined())
 			{
-				return this.CasterPawn.def.race.soundMeleeHitBuilding;
+				return CasterPawn.def.race.soundMeleeHitBuilding;
 			}
 			return SoundDefOf.Pawn_Melee_Punch_HitBuilding;
 		}
 
-		
 		private SoundDef SoundMiss()
 		{
-			if (this.CasterPawn != null)
+			if (CasterPawn != null)
 			{
-				if (this.tool != null && !this.tool.soundMeleeMiss.NullOrUndefined())
+				if (tool != null && !tool.soundMeleeMiss.NullOrUndefined())
 				{
-					return this.tool.soundMeleeMiss;
+					return tool.soundMeleeMiss;
 				}
-				if (!this.CasterPawn.def.race.soundMeleeMiss.NullOrUndefined())
+				if (!CasterPawn.def.race.soundMeleeMiss.NullOrUndefined())
 				{
-					return this.CasterPawn.def.race.soundMeleeMiss;
+					return CasterPawn.def.race.soundMeleeMiss;
 				}
 			}
 			return SoundDefOf.Pawn_Melee_Punch_Miss;
 		}
 
-		
 		private SoundDef SoundDodge(Thing target)
 		{
 			if (target.def.race != null && target.def.race.soundMeleeDodge != null)
 			{
 				return target.def.race.soundMeleeDodge;
 			}
-			return this.SoundMiss();
+			return SoundMiss();
 		}
-
-		
-		private const int TargetCooldown = 50;
 	}
 }

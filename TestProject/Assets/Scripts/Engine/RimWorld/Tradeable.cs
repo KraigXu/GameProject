@@ -1,175 +1,160 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Tradeable : Transferable
 	{
-		
-		
-		
+		public List<Thing> thingsColony = new List<Thing>();
+
+		public List<Thing> thingsTrader = new List<Thing>();
+
+		private int countToTransfer;
+
+		private float pricePlayerBuy = -1f;
+
+		private float pricePlayerSell = -1f;
+
+		private float priceFactorBuy_TraderPriceType;
+
+		private float priceFactorSell_TraderPriceType;
+
+		private float priceFactorSell_ItemSellPriceFactor;
+
+		private float priceGain_PlayerNegotiator;
+
+		private float priceGain_Settlement;
+
 		public override int CountToTransfer
 		{
 			get
 			{
-				return this.countToTransfer;
+				return countToTransfer;
 			}
 			protected set
 			{
-				this.countToTransfer = value;
+				countToTransfer = value;
 				base.EditBuffer = value.ToStringCached();
 			}
 		}
 
-		
-		
 		public Thing FirstThingColony
 		{
 			get
 			{
-				if (this.thingsColony.Count == 0)
+				if (thingsColony.Count == 0)
 				{
 					return null;
 				}
-				return this.thingsColony[0];
+				return thingsColony[0];
 			}
 		}
 
-		
-		
 		public Thing FirstThingTrader
 		{
 			get
 			{
-				if (this.thingsTrader.Count == 0)
+				if (thingsTrader.Count == 0)
 				{
 					return null;
 				}
-				return this.thingsTrader[0];
+				return thingsTrader[0];
 			}
 		}
 
-		
-		
-		public override string Label
-		{
-			get
-			{
-				return this.AnyThing.LabelNoCount;
-			}
-		}
+		public override string Label => AnyThing.LabelNoCount;
 
-		
-		
-		public virtual float BaseMarketValue
-		{
-			get
-			{
-				return this.AnyThing.MarketValue;
-			}
-		}
+		public virtual float BaseMarketValue => AnyThing.MarketValue;
 
-		
-		
 		public override bool Interactive
 		{
 			get
 			{
-				return !this.IsCurrency || (TradeSession.Active && TradeSession.giftMode);
+				if (IsCurrency)
+				{
+					if (TradeSession.Active)
+					{
+						return TradeSession.giftMode;
+					}
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public virtual bool TraderWillTrade
-		{
-			get
-			{
-				return TradeSession.trader.TraderKind.WillTrade(this.ThingDef);
-			}
-		}
+		public virtual bool TraderWillTrade => TradeSession.trader.TraderKind.WillTrade(ThingDef);
 
-		
-		
 		public override bool HasAnyThing
 		{
 			get
 			{
-				return this.FirstThingColony != null || this.FirstThingTrader != null;
+				if (FirstThingColony == null)
+				{
+					return FirstThingTrader != null;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public override Thing AnyThing
 		{
 			get
 			{
-				if (this.FirstThingColony != null)
+				if (FirstThingColony != null)
 				{
-					return this.FirstThingColony.GetInnerIfMinified();
+					return FirstThingColony.GetInnerIfMinified();
 				}
-				if (this.FirstThingTrader != null)
+				if (FirstThingTrader != null)
 				{
-					return this.FirstThingTrader.GetInnerIfMinified();
+					return FirstThingTrader.GetInnerIfMinified();
 				}
-				Log.Error(base.GetType() + " lacks AnyThing.", false);
+				Log.Error(GetType() + " lacks AnyThing.");
 				return null;
 			}
 		}
 
-		
-		
 		public override ThingDef ThingDef
 		{
 			get
 			{
-				if (!this.HasAnyThing)
+				if (!HasAnyThing)
 				{
 					return null;
 				}
-				return this.AnyThing.def;
+				return AnyThing.def;
 			}
 		}
 
-		
-		
 		public ThingDef StuffDef
 		{
 			get
 			{
-				if (!this.HasAnyThing)
+				if (!HasAnyThing)
 				{
 					return null;
 				}
-				return this.AnyThing.Stuff;
+				return AnyThing.Stuff;
 			}
 		}
 
-		
-		
 		public override string TipDescription
 		{
 			get
 			{
-				if (!this.HasAnyThing)
+				if (!HasAnyThing)
 				{
 					return "";
 				}
-				return this.AnyThing.DescriptionDetailed;
+				return AnyThing.DescriptionDetailed;
 			}
 		}
 
-		
-		
 		public TradeAction ActionToDo
 		{
 			get
 			{
-				if (this.CountToTransfer == 0)
+				if (CountToTransfer == 0)
 				{
 					return TradeAction.None;
 				}
@@ -181,34 +166,20 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public virtual bool IsCurrency
 		{
 			get
 			{
-				return !this.Bugged && this.ThingDef == ThingDefOf.Silver;
+				if (Bugged)
+				{
+					return false;
+				}
+				return ThingDef == ThingDefOf.Silver;
 			}
 		}
 
-		
-		
-		public virtual bool IsFavor
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public virtual bool IsFavor => false;
 
-		
-		public virtual int CostToInt(float cost)
-		{
-			return Mathf.RoundToInt(cost);
-		}
-
-		
-		
 		public override TransferablePositiveCountDirection PositiveCountDirection
 		{
 			get
@@ -221,174 +192,159 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public float CurTotalCurrencyCostForSource
 		{
 			get
 			{
-				if (this.ActionToDo == TradeAction.None)
+				if (ActionToDo == TradeAction.None)
 				{
 					return 0f;
 				}
-				return (float)base.CountToTransferToSource * this.GetPriceFor(this.ActionToDo);
+				return (float)base.CountToTransferToSource * GetPriceFor(ActionToDo);
 			}
 		}
 
-		
-		
 		public float CurTotalCurrencyCostForDestination
 		{
 			get
 			{
-				if (this.ActionToDo == TradeAction.None)
+				if (ActionToDo == TradeAction.None)
 				{
 					return 0f;
 				}
-				return (float)base.CountToTransferToDestination * this.GetPriceFor(this.ActionToDo);
+				return (float)base.CountToTransferToDestination * GetPriceFor(ActionToDo);
 			}
 		}
 
-		
-		
-		public virtual Window NewInfoDialog
-		{
-			get
-			{
-				return new Dialog_InfoCard(this.ThingDef);
-			}
-		}
+		public virtual Window NewInfoDialog => new Dialog_InfoCard(ThingDef);
 
-		
-		
 		private bool Bugged
 		{
 			get
 			{
-				if (!this.HasAnyThing)
+				if (!HasAnyThing)
 				{
-					Log.ErrorOnce(this.ToString() + " is bugged. There will be no more logs about this.", 162112, false);
+					Log.ErrorOnce(ToString() + " is bugged. There will be no more logs about this.", 162112);
 					return true;
 				}
 				return false;
 			}
 		}
 
-		
+		public virtual int CostToInt(float cost)
+		{
+			return Mathf.RoundToInt(cost);
+		}
+
 		public Tradeable()
 		{
 		}
 
-		
 		public Tradeable(Thing thingColony, Thing thingTrader)
 		{
-			this.thingsColony.Add(thingColony);
-			this.thingsTrader.Add(thingTrader);
+			thingsColony.Add(thingColony);
+			thingsTrader.Add(thingTrader);
 		}
 
-		
 		public void AddThing(Thing t, Transactor trans)
 		{
 			if (trans == Transactor.Colony)
 			{
-				this.thingsColony.Add(t);
+				thingsColony.Add(t);
 			}
 			if (trans == Transactor.Trader)
 			{
-				this.thingsTrader.Add(t);
+				thingsTrader.Add(t);
 			}
 		}
 
-		
 		public PriceType PriceTypeFor(TradeAction action)
 		{
-			return TradeSession.trader.TraderKind.PriceTypeFor(this.ThingDef, action);
+			return TradeSession.trader.TraderKind.PriceTypeFor(ThingDef, action);
 		}
 
-		
 		private void InitPriceDataIfNeeded()
 		{
-			if (this.pricePlayerBuy > 0f)
+			if (pricePlayerBuy > 0f)
 			{
 				return;
 			}
-			if (this.IsCurrency)
+			if (IsCurrency)
 			{
-				this.pricePlayerBuy = this.BaseMarketValue;
-				this.pricePlayerSell = this.BaseMarketValue;
+				pricePlayerBuy = BaseMarketValue;
+				pricePlayerSell = BaseMarketValue;
 				return;
 			}
-			this.priceFactorBuy_TraderPriceType = this.PriceTypeFor(TradeAction.PlayerBuys).PriceMultiplier();
-			this.priceFactorSell_TraderPriceType = this.PriceTypeFor(TradeAction.PlayerSells).PriceMultiplier();
-			this.priceGain_PlayerNegotiator = TradeSession.playerNegotiator.GetStatValue(StatDefOf.TradePriceImprovement, true);
-			this.priceGain_Settlement = TradeSession.trader.TradePriceImprovementOffsetForPlayer;
-			this.priceFactorSell_ItemSellPriceFactor = this.AnyThing.GetStatValue(StatDefOf.SellPriceFactor, true);
-			this.pricePlayerBuy = TradeUtility.GetPricePlayerBuy(this.AnyThing, this.priceFactorBuy_TraderPriceType, this.priceGain_PlayerNegotiator, this.priceGain_Settlement);
-			this.pricePlayerSell = TradeUtility.GetPricePlayerSell(this.AnyThing, this.priceFactorSell_TraderPriceType, this.priceGain_PlayerNegotiator, this.priceGain_Settlement, TradeSession.TradeCurrency);
-			if (this.pricePlayerSell >= this.pricePlayerBuy)
+			priceFactorBuy_TraderPriceType = PriceTypeFor(TradeAction.PlayerBuys).PriceMultiplier();
+			priceFactorSell_TraderPriceType = PriceTypeFor(TradeAction.PlayerSells).PriceMultiplier();
+			priceGain_PlayerNegotiator = TradeSession.playerNegotiator.GetStatValue(StatDefOf.TradePriceImprovement);
+			priceGain_Settlement = TradeSession.trader.TradePriceImprovementOffsetForPlayer;
+			priceFactorSell_ItemSellPriceFactor = AnyThing.GetStatValue(StatDefOf.SellPriceFactor);
+			pricePlayerBuy = TradeUtility.GetPricePlayerBuy(AnyThing, priceFactorBuy_TraderPriceType, priceGain_PlayerNegotiator, priceGain_Settlement);
+			pricePlayerSell = TradeUtility.GetPricePlayerSell(AnyThing, priceFactorSell_TraderPriceType, priceGain_PlayerNegotiator, priceGain_Settlement, TradeSession.TradeCurrency);
+			if (pricePlayerSell >= pricePlayerBuy)
 			{
-				this.pricePlayerSell = this.pricePlayerBuy;
+				pricePlayerSell = pricePlayerBuy;
 			}
 		}
 
-		
 		public string GetPriceTooltip(TradeAction action)
 		{
-			if (!this.HasAnyThing)
+			if (!HasAnyThing)
 			{
 				return "";
 			}
-			this.InitPriceDataIfNeeded();
+			InitPriceDataIfNeeded();
 			string text = (action == TradeAction.PlayerBuys) ? "BuyPriceDesc".Translate() : "SellPriceDesc".Translate();
-			if (TradeSession.TradeCurrency != TradeCurrency.Silver)
+			if (TradeSession.TradeCurrency != 0)
 			{
 				return text;
 			}
 			text += "\n\n";
-			text += StatDefOf.MarketValue.LabelCap + ": " + this.BaseMarketValue.ToStringMoney(null);
+			text += StatDefOf.MarketValue.LabelCap + ": " + BaseMarketValue.ToStringMoney();
 			if (action == TradeAction.PlayerBuys)
 			{
 				text += "\n  x " + 1.4f.ToString("F2") + " (" + "Buying".Translate() + ")";
-				if (this.priceFactorBuy_TraderPriceType != 1f)
+				if (priceFactorBuy_TraderPriceType != 1f)
 				{
-					text += "\n  x " + this.priceFactorBuy_TraderPriceType.ToString("F2") + " (" + "TraderTypePrice".Translate() + ")";
+					text += "\n  x " + priceFactorBuy_TraderPriceType.ToString("F2") + " (" + "TraderTypePrice".Translate() + ")";
 				}
 				if (Find.Storyteller.difficulty.tradePriceFactorLoss != 0f)
 				{
 					text += "\n  x " + (1f + Find.Storyteller.difficulty.tradePriceFactorLoss).ToString("F2") + " (" + "DifficultyLevel".Translate() + ")";
 				}
 				text += "\n";
-				text += "\n" + "YourNegotiatorBonus".Translate() + ": -" + this.priceGain_PlayerNegotiator.ToStringPercent();
-				if (this.priceGain_Settlement != 0f)
+				text += "\n" + "YourNegotiatorBonus".Translate() + ": -" + priceGain_PlayerNegotiator.ToStringPercent();
+				if (priceGain_Settlement != 0f)
 				{
-					text += "\n" + "TradeWithFactionBaseBonus".Translate() + ": -" + this.priceGain_Settlement.ToStringPercent();
+					text += "\n" + "TradeWithFactionBaseBonus".Translate() + ": -" + priceGain_Settlement.ToStringPercent();
 				}
 			}
 			else
 			{
 				text += "\n  x " + 0.6f.ToString("F2") + " (" + "Selling".Translate() + ")";
-				if (this.priceFactorSell_TraderPriceType != 1f)
+				if (priceFactorSell_TraderPriceType != 1f)
 				{
-					text += "\n  x " + this.priceFactorSell_TraderPriceType.ToString("F2") + " (" + "TraderTypePrice".Translate() + ")";
+					text += "\n  x " + priceFactorSell_TraderPriceType.ToString("F2") + " (" + "TraderTypePrice".Translate() + ")";
 				}
-				if (this.priceFactorSell_ItemSellPriceFactor != 1f)
+				if (priceFactorSell_ItemSellPriceFactor != 1f)
 				{
-					text += "\n  x " + this.priceFactorSell_ItemSellPriceFactor.ToString("F2") + " (" + "ItemSellPriceFactor".Translate() + ")";
+					text += "\n  x " + priceFactorSell_ItemSellPriceFactor.ToString("F2") + " (" + "ItemSellPriceFactor".Translate() + ")";
 				}
 				if (Find.Storyteller.difficulty.tradePriceFactorLoss != 0f)
 				{
 					text += "\n  x " + (1f - Find.Storyteller.difficulty.tradePriceFactorLoss).ToString("F2") + " (" + "DifficultyLevel".Translate() + ")";
 				}
 				text += "\n";
-				text += "\n" + "YourNegotiatorBonus".Translate() + ": " + this.priceGain_PlayerNegotiator.ToStringPercent();
-				if (this.priceGain_Settlement != 0f)
+				text += "\n" + "YourNegotiatorBonus".Translate() + ": " + priceGain_PlayerNegotiator.ToStringPercent();
+				if (priceGain_Settlement != 0f)
 				{
-					text += "\n" + "TradeWithFactionBaseBonus".Translate() + ": " + this.priceGain_Settlement.ToStringPercent();
+					text += "\n" + "TradeWithFactionBaseBonus".Translate() + ": " + priceGain_Settlement.ToStringPercent();
 				}
 			}
 			text += "\n\n";
-			float priceFor = this.GetPriceFor(action);
-			text += "FinalPrice".Translate() + ": " + priceFor.ToStringMoney(null);
+			float priceFor = GetPriceFor(action);
+			text += "FinalPrice".Translate() + ": " + priceFor.ToStringMoney();
 			if ((action == TradeAction.PlayerBuys && priceFor <= 0.5f) || (action == TradeAction.PlayerBuys && priceFor <= 0.01f))
 			{
 				text += " (" + "minimum".Translate() + ")";
@@ -396,71 +352,64 @@ namespace RimWorld
 			return text;
 		}
 
-		
 		public virtual float GetPriceFor(TradeAction action)
 		{
-			this.InitPriceDataIfNeeded();
+			InitPriceDataIfNeeded();
 			if (action == TradeAction.PlayerBuys)
 			{
-				return this.pricePlayerBuy;
+				return pricePlayerBuy;
 			}
-			return this.pricePlayerSell;
+			return pricePlayerSell;
 		}
 
-		
 		public override int GetMinimumToTransfer()
 		{
-			if (this.PositiveCountDirection == TransferablePositiveCountDirection.Destination)
+			if (PositiveCountDirection == TransferablePositiveCountDirection.Destination)
 			{
-				return -this.CountHeldBy(Transactor.Trader);
+				return -CountHeldBy(Transactor.Trader);
 			}
-			return -this.CountHeldBy(Transactor.Colony);
+			return -CountHeldBy(Transactor.Colony);
 		}
 
-		
 		public override int GetMaximumToTransfer()
 		{
-			if (this.PositiveCountDirection == TransferablePositiveCountDirection.Destination)
+			if (PositiveCountDirection == TransferablePositiveCountDirection.Destination)
 			{
-				return this.CountHeldBy(Transactor.Colony);
+				return CountHeldBy(Transactor.Colony);
 			}
-			return this.CountHeldBy(Transactor.Trader);
+			return CountHeldBy(Transactor.Trader);
 		}
 
-		
 		public override AcceptanceReport UnderflowReport()
 		{
-			if (this.PositiveCountDirection == TransferablePositiveCountDirection.Destination)
+			if (PositiveCountDirection == TransferablePositiveCountDirection.Destination)
 			{
 				return new AcceptanceReport("TraderHasNoMore".Translate());
 			}
 			return new AcceptanceReport("ColonyHasNoMore".Translate());
 		}
 
-		
 		public override AcceptanceReport OverflowReport()
 		{
-			if (this.PositiveCountDirection == TransferablePositiveCountDirection.Destination)
+			if (PositiveCountDirection == TransferablePositiveCountDirection.Destination)
 			{
 				return new AcceptanceReport("ColonyHasNoMore".Translate());
 			}
 			return new AcceptanceReport("TraderHasNoMore".Translate());
 		}
 
-		
 		private List<Thing> TransactorThings(Transactor trans)
 		{
 			if (trans == Transactor.Colony)
 			{
-				return this.thingsColony;
+				return thingsColony;
 			}
-			return this.thingsTrader;
+			return thingsTrader;
 		}
 
-		
 		public virtual int CountHeldBy(Transactor trans)
 		{
-			List<Thing> list = this.TransactorThings(trans);
+			List<Thing> list = TransactorThings(trans);
 			int num = 0;
 			for (int i = 0; i < list.Count; i++)
 			{
@@ -469,38 +418,34 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public int CountPostDealFor(Transactor trans)
 		{
 			if (trans == Transactor.Colony)
 			{
-				return this.CountHeldBy(trans) + base.CountToTransferToSource;
+				return CountHeldBy(trans) + base.CountToTransferToSource;
 			}
-			return this.CountHeldBy(trans) + base.CountToTransferToDestination;
+			return CountHeldBy(trans) + base.CountToTransferToDestination;
 		}
 
-		
 		public virtual void ResolveTrade()
 		{
-			if (this.ActionToDo == TradeAction.PlayerSells)
+			if (ActionToDo == TradeAction.PlayerSells)
 			{
-				TransferableUtility.TransferNoSplit(this.thingsColony, base.CountToTransferToDestination, delegate(Thing thing, int countToTransfer)
+				TransferableUtility.TransferNoSplit(thingsColony, base.CountToTransferToDestination, delegate(Thing thing, int countToTransfer)
 				{
 					TradeSession.trader.GiveSoldThingToTrader(thing, countToTransfer, TradeSession.playerNegotiator);
-				}, true, true);
-				return;
+				});
 			}
-			if (this.ActionToDo == TradeAction.PlayerBuys)
+			else if (ActionToDo == TradeAction.PlayerBuys)
 			{
-				TransferableUtility.TransferNoSplit(this.thingsTrader, base.CountToTransferToSource, delegate(Thing thing, int countToTransfer)
+				TransferableUtility.TransferNoSplit(thingsTrader, base.CountToTransferToSource, delegate(Thing thing, int countToTransfer)
 				{
-					this.CheckTeachOpportunity(thing, countToTransfer);
+					CheckTeachOpportunity(thing, countToTransfer);
 					TradeSession.trader.GiveSoldThingToPlayer(thing, countToTransfer, TradeSession.playerNegotiator);
-				}, true, true);
+				});
 			}
 		}
 
-		
 		private void CheckTeachOpportunity(Thing boughtThing, int boughtCount)
 		{
 			Building building = boughtThing as Building;
@@ -518,83 +463,35 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				base.GetType(),
-				"(",
-				this.ThingDef,
-				", countToTransfer=",
-				this.CountToTransfer,
-				")"
-			});
+			return GetType() + "(" + ThingDef + ", countToTransfer=" + CountToTransfer + ")";
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return this.AnyThing.GetHashCode();
+			return AnyThing.GetHashCode();
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
 			if (Scribe.mode == LoadSaveMode.Saving)
 			{
-				this.thingsColony.RemoveAll((Thing x) => x.Destroyed);
-				this.thingsTrader.RemoveAll((Thing x) => x.Destroyed);
+				thingsColony.RemoveAll((Thing x) => x.Destroyed);
+				thingsTrader.RemoveAll((Thing x) => x.Destroyed);
 			}
-			Scribe_Values.Look<int>(ref this.countToTransfer, "countToTransfer", 0, false);
-			Scribe_Collections.Look<Thing>(ref this.thingsColony, "thingsColony", LookMode.Reference, Array.Empty<object>());
-			Scribe_Collections.Look<Thing>(ref this.thingsTrader, "thingsTrader", LookMode.Reference, Array.Empty<object>());
+			Scribe_Values.Look(ref countToTransfer, "countToTransfer", 0);
+			Scribe_Collections.Look(ref thingsColony, "thingsColony", LookMode.Reference);
+			Scribe_Collections.Look(ref thingsTrader, "thingsTrader", LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				base.EditBuffer = this.countToTransfer.ToStringCached();
+				base.EditBuffer = countToTransfer.ToStringCached();
 			}
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && (thingsColony.RemoveAll((Thing x) => x == null) != 0 || thingsTrader.RemoveAll((Thing x) => x == null) != 0))
 			{
-				if (this.thingsColony.RemoveAll((Thing x) => x == null) == 0)
-				{
-					if (this.thingsTrader.RemoveAll((Thing x) => x == null) == 0)
-					{
-						return;
-					}
-				}
-				Log.Warning("Some of the things were null after loading.", false);
+				Log.Warning("Some of the things were null after loading.");
 			}
 		}
-
-		
-		public List<Thing> thingsColony = new List<Thing>();
-
-		
-		public List<Thing> thingsTrader = new List<Thing>();
-
-		
-		private int countToTransfer;
-
-		
-		private float pricePlayerBuy = -1f;
-
-		
-		private float pricePlayerSell = -1f;
-
-		
-		private float priceFactorBuy_TraderPriceType;
-
-		
-		private float priceFactorSell_TraderPriceType;
-
-		
-		private float priceFactorSell_ItemSellPriceFactor;
-
-		
-		private float priceGain_PlayerNegotiator;
-
-		
-		private float priceGain_Settlement;
 	}
 }

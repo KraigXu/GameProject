@@ -1,55 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_SendShuttleAwayOnCleanup : QuestPart
 	{
-		
-		
+		public Thing shuttle;
+
+		public bool dropEverything;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-				yield return this.shuttle;
-				yield break;
+				yield return shuttle;
 			}
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			if (this.shuttle != null)
+			if (shuttle != null)
 			{
-				SendShuttleAwayQuestPartUtility.SendAway(this.shuttle, this.dropEverything);
+				SendShuttleAwayQuestPartUtility.SendAway(shuttle, dropEverything);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Thing>(ref this.shuttle, "shuttle", false);
-			Scribe_Values.Look<bool>(ref this.dropEverything, "dropEverything", false, false);
+			Scribe_References.Look(ref shuttle, "shuttle");
+			Scribe_Values.Look(ref dropEverything, "dropEverything", defaultValue: false);
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.shuttle != null)
+			if (shuttle != null)
 			{
-				this.shuttle.TryGetComp<CompShuttle>().requiredPawns.Replace(replace, with);
+				shuttle.TryGetComp<CompShuttle>().requiredPawns.Replace(replace, with);
 			}
 		}
-
-		
-		public Thing shuttle;
-
-		
-		public bool dropEverything;
 	}
 }

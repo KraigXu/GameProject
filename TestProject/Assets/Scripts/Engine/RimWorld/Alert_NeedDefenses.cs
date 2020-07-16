@@ -1,21 +1,17 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedDefenses : Alert
 	{
-		
 		public Alert_NeedDefenses()
 		{
-			this.defaultLabel = "NeedDefenses".Translate();
-			this.defaultExplanation = "NeedDefensesDesc".Translate();
-			this.defaultPriority = AlertPriority.High;
+			defaultLabel = "NeedDefenses".Translate();
+			defaultExplanation = "NeedDefensesDesc".Translate();
+			defaultPriority = AlertPriority.High;
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (GenDate.DaysPassed < 2 || GenDate.DaysPassed > 5)
@@ -25,7 +21,7 @@ namespace RimWorld
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				if (this.NeedDefenses(maps[i]))
+				if (NeedDefenses(maps[i]))
 				{
 					return true;
 				}
@@ -33,14 +29,13 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private bool NeedDefenses(Map map)
 		{
 			if (!map.IsPlayerHome)
 			{
 				return false;
 			}
-			if (!map.mapPawns.AnyColonistSpawned && !map.listerBuildings.allBuildingsColonist.Any<Building>())
+			if (!map.mapPawns.AnyColonistSpawned && !map.listerBuildings.allBuildingsColonist.Any())
 			{
 				return false;
 			}

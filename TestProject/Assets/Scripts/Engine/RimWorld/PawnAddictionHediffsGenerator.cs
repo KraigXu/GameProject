@@ -1,98 +1,87 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnAddictionHediffsGenerator
 	{
-		
+		private static List<ThingDef> allDrugs = new List<ThingDef>();
+
+		private const int MaxAddictions = 3;
+
+		private static readonly FloatRange GeneratedAddictionSeverityRange = new FloatRange(0.6f, 1f);
+
+		private static readonly FloatRange GeneratedToleranceSeverityRange = new FloatRange(0.1f, 0.9f);
+
 		public static void GenerateAddictionsAndTolerancesFor(Pawn pawn)
 		{
-			if (!pawn.RaceProps.IsFlesh || !pawn.RaceProps.Humanlike)
+			if (!pawn.RaceProps.IsFlesh || !pawn.RaceProps.Humanlike || pawn.IsTeetotaler())
 			{
 				return;
 			}
-			if (pawn.IsTeetotaler())
+			allDrugs.Clear();
+			for (int i = 0; i < 3; i++)
 			{
-				return;
-			}
-			PawnAddictionHediffsGenerator.allDrugs.Clear();
-			int num = 0;
-			while (num < 3 && Rand.Value < pawn.kindDef.chemicalAddictionChance)
-			{
-				if (!PawnAddictionHediffsGenerator.allDrugs.Any<ThingDef>())
-				{
-					PawnAddictionHediffsGenerator.allDrugs.AddRange(from x in DefDatabase<ThingDef>.AllDefsListForReading
-					where x.category == ThingCategory.Item && x.GetCompProperties<CompProperties_Drug>() != null
-					select x);
-				}
-				IEnumerable<ChemicalDef> allDefsListForReading = DefDatabase<ChemicalDef>.AllDefsListForReading;
-				Func<ChemicalDef, bool> predicate = ((ChemicalDef x) => PawnAddictionHediffsGenerator.PossibleWithTechLevel(x, pawn.Faction) && !AddictionUtility.IsAddicted(pawn, x));
-
-				ChemicalDef chemicalDef;
-				if (!allDefsListForReading.Where(predicate).TryRandomElement(out chemicalDef))
+				if (Rand.Value >= pawn.kindDef.chemicalAddictionChance)
 				{
 					break;
 				}
-				Hediff hediff = HediffMaker.MakeHediff(chemicalDef.addictionHediff, pawn, null);
-				hediff.Severity = PawnAddictionHediffsGenerator.GeneratedAddictionSeverityRange.RandomInRange;
-				pawn.health.AddHediff(hediff, null, null, null);
-				if (chemicalDef.toleranceHediff != null && Rand.Value < chemicalDef.onGeneratedAddictedToleranceChance)
+				if (!allDrugs.Any())
 				{
-					Hediff hediff2 = HediffMaker.MakeHediff(chemicalDef.toleranceHediff, pawn, null);
-					hediff2.Severity = PawnAddictionHediffsGenerator.GeneratedToleranceSeverityRange.RandomInRange;
-					pawn.health.AddHediff(hediff2, null, null, null);
+					allDrugs.AddRange(DefDatabase<ThingDef>.AllDefsListForReading.Where((ThingDef x) => x.category == ThingCategory.Item && x.GetCompProperties<CompProperties_Drug>() != null));
 				}
-				if (chemicalDef.onGeneratedAddictedEvents != null)
+				if (DefDatabase<ChemicalDef>.AllDefsListForReading.Where((ChemicalDef x) => PossibleWithTechLevel(x, pawn.Faction) && !AddictionUtility.IsAddicted(pawn, x)).TryRandomElement(out ChemicalDef result))
 				{
-					foreach (HediffGiver_Event hediffGiver_Event in chemicalDef.onGeneratedAddictedEvents)
+					Hediff hediff = HediffMaker.MakeHediff(result.addictionHediff, pawn);
+					hediff.Severity = GeneratedAddictionSeverityRange.RandomInRange;
+					pawn.health.AddHediff(hediff);
+					if (result.toleranceHediff != null && Rand.Value < result.onGeneratedAddictedToleranceChance)
 					{
-						hediffGiver_Event.EventOccurred(pawn);
+						Hediff hediff2 = HediffMaker.MakeHediff(result.toleranceHediff, pawn);
+						hediff2.Severity = GeneratedToleranceSeverityRange.RandomInRange;
+						pawn.health.AddHediff(hediff2);
 					}
-				}
-				PawnAddictionHediffsGenerator.DoIngestionOutcomeDoers(pawn, chemicalDef);
-				num++;
-			}
-		}
-
-		
-		private static bool PossibleWithTechLevel(ChemicalDef chemical, Faction faction)
-		{
-			return faction == null || PawnAddictionHediffsGenerator.allDrugs.Any((ThingDef x) => x.GetCompProperties<CompProperties_Drug>().chemical == chemical && x.techLevel <= faction.def.techLevel);
-		}
-
-		
-		private static void DoIngestionOutcomeDoers(Pawn pawn, ChemicalDef chemical)
-		{
-			for (int i = 0; i < PawnAddictionHediffsGenerator.allDrugs.Count; i++)
-			{
-				if (PawnAddictionHediffsGenerator.allDrugs[i].GetCompProperties<CompProperties_Drug>().chemical == chemical)
-				{
-					List<IngestionOutcomeDoer> outcomeDoers = PawnAddictionHediffsGenerator.allDrugs[i].ingestible.outcomeDoers;
-					for (int j = 0; j < outcomeDoers.Count; j++)
+					if (result.onGeneratedAddictedEvents != null)
 					{
-						if (outcomeDoers[j].doToGeneratedPawnIfAddicted)
+						foreach (HediffGiver_Event onGeneratedAddictedEvent in result.onGeneratedAddictedEvents)
 						{
-							outcomeDoers[j].DoIngestionOutcome(pawn, null);
+							onGeneratedAddictedEvent.EventOccurred(pawn);
 						}
 					}
+					DoIngestionOutcomeDoers(pawn, result);
+					continue;
 				}
+				break;
 			}
 		}
 
-		
-		private static List<ThingDef> allDrugs = new List<ThingDef>();
+		private static bool PossibleWithTechLevel(ChemicalDef chemical, Faction faction)
+		{
+			if (faction == null)
+			{
+				return true;
+			}
+			return allDrugs.Any((ThingDef x) => x.GetCompProperties<CompProperties_Drug>().chemical == chemical && (int)x.techLevel <= (int)faction.def.techLevel);
+		}
 
-		
-		private const int MaxAddictions = 3;
-
-		
-		private static readonly FloatRange GeneratedAddictionSeverityRange = new FloatRange(0.6f, 1f);
-
-		
-		private static readonly FloatRange GeneratedToleranceSeverityRange = new FloatRange(0.1f, 0.9f);
+		private static void DoIngestionOutcomeDoers(Pawn pawn, ChemicalDef chemical)
+		{
+			for (int i = 0; i < allDrugs.Count; i++)
+			{
+				if (allDrugs[i].GetCompProperties<CompProperties_Drug>().chemical != chemical)
+				{
+					continue;
+				}
+				List<IngestionOutcomeDoer> outcomeDoers = allDrugs[i].ingestible.outcomeDoers;
+				for (int j = 0; j < outcomeDoers.Count; j++)
+				{
+					if (outcomeDoers[j].doToGeneratedPawnIfAddicted)
+					{
+						outcomeDoers[j].DoIngestionOutcome(pawn, null);
+					}
+				}
+			}
+		}
 	}
 }

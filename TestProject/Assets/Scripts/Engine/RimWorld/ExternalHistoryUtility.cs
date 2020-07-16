@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,50 +7,54 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ExternalHistoryUtility
 	{
-		
-		static ExternalHistoryUtility()
-		{
-			try
-			{
-				ExternalHistoryUtility.cachedFiles = GenFilePaths.AllExternalHistoryFiles.ToList<FileInfo>();
-			}
-			catch (Exception ex)
-			{
-				Log.Error("Could not get external history files: " + ex.Message, false);
-			}
-		}
+		private static List<FileInfo> cachedFiles;
 
-		
-		
+		private static int gameplayIDLength;
+
+		private static string gameplayIDAvailableChars;
+
 		public static IEnumerable<FileInfo> Files
 		{
 			get
 			{
-				int num;
-				for (int i = 0; i < ExternalHistoryUtility.cachedFiles.Count; i = num)
+				int i = 0;
+				while (i < cachedFiles.Count)
 				{
-					yield return ExternalHistoryUtility.cachedFiles[i];
-					num = i + 1;
+					yield return cachedFiles[i];
+					int num = i + 1;
+					i = num;
 				}
-				yield break;
 			}
 		}
 
-		
-		public static ExternalHistory Load(string path)
+		static ExternalHistoryUtility()
 		{
-			ExternalHistory result = null;
+			gameplayIDLength = 20;
+			gameplayIDAvailableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 			try
 			{
-				result = new ExternalHistory();
+				cachedFiles = GenFilePaths.AllExternalHistoryFiles.ToList();
+			}
+			catch (Exception ex)
+			{
+				Log.Error("Could not get external history files: " + ex.Message);
+			}
+		}
+
+		public static ExternalHistory Load(string path)
+		{
+			ExternalHistory externalHistory = null;
+			try
+			{
+				externalHistory = new ExternalHistory();
 				Scribe.loader.InitLoading(path);
 				try
 				{
-					Scribe_Deep.Look<ExternalHistory>(ref result, "externalHistory", Array.Empty<object>());
+					Scribe_Deep.Look(ref externalHistory, "externalHistory");
 					Scribe.loader.FinalizeLoading();
+					return externalHistory;
 				}
 				catch
 				{
@@ -60,37 +64,34 @@ namespace RimWorld
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Could not load external history (" + path + "): " + ex.Message, false);
+				Log.Error("Could not load external history (" + path + "): " + ex.Message);
 				return null;
 			}
-			return result;
 		}
 
-		
 		public static string GetRandomGameplayID()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			for (int i = 0; i < ExternalHistoryUtility.gameplayIDLength; i++)
+			for (int i = 0; i < gameplayIDLength; i++)
 			{
-				int index = Rand.Range(0, ExternalHistoryUtility.gameplayIDAvailableChars.Length);
-				stringBuilder.Append(ExternalHistoryUtility.gameplayIDAvailableChars[index]);
+				int index = Rand.Range(0, gameplayIDAvailableChars.Length);
+				stringBuilder.Append(gameplayIDAvailableChars[index]);
 			}
 			return stringBuilder.ToString();
 		}
 
-		
 		public static bool IsValidGameplayID(string ID)
 		{
-			if (ID.NullOrEmpty() || ID.Length != ExternalHistoryUtility.gameplayIDLength)
+			if (ID.NullOrEmpty() || ID.Length != gameplayIDLength)
 			{
 				return false;
 			}
 			for (int i = 0; i < ID.Length; i++)
 			{
 				bool flag = false;
-				for (int j = 0; j < ExternalHistoryUtility.gameplayIDAvailableChars.Length; j++)
+				for (int j = 0; j < gameplayIDAvailableChars.Length; j++)
 				{
-					if (ID[i] == ExternalHistoryUtility.gameplayIDAvailableChars[j])
+					if (ID[i] == gameplayIDAvailableChars[j])
 					{
 						flag = true;
 						break;
@@ -104,25 +105,14 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public static string GetCurrentUploadDate()
 		{
 			return DateTime.UtcNow.ToString("yyMMdd");
 		}
 
-		
 		public static int GetCurrentUploadTime()
 		{
 			return (int)(DateTime.UtcNow.TimeOfDay.TotalSeconds / 2.0);
 		}
-
-		
-		private static List<FileInfo> cachedFiles;
-
-		
-		private static int gameplayIDLength = 20;
-
-		
-		private static string gameplayIDAvailableChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	}
 }

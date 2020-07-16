@@ -1,23 +1,30 @@
-﻿using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Need_Authority : Need
 	{
-		
-		
+		public const float LevelGainPerDayOfReigning = 2f;
+
+		public const float LevelGainPerDayOfGivingSpeech = 3f;
+
+		private readonly SimpleCurve FallFactorCurve = new SimpleCurve
+		{
+			new CurvePoint(1f, 0f),
+			new CurvePoint(3f, 0.5f),
+			new CurvePoint(5f, 1f)
+		};
+
 		public override int GUIChangeArrow
 		{
 			get
 			{
-				if (this.IsFrozen)
+				if (IsFrozen)
 				{
 					return 0;
 				}
-				if (this.IsCurrentlyReigning || this.IsCurrentlyGivingSpeech)
+				if (IsCurrentlyReigning || IsCurrentlyGivingSpeech)
 				{
 					return 1;
 				}
@@ -25,13 +32,11 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public AuthorityCategory CurCategory
 		{
 			get
 			{
-				float curLevel = this.CurLevel;
+				float curLevel = CurLevel;
 				if (curLevel < 0.01f)
 				{
 					return AuthorityCategory.Gone;
@@ -56,133 +61,95 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool IsActive
 		{
 			get
 			{
-				return this.pawn.royalty != null && this.pawn.Spawned && this.pawn.Map != null && this.pawn.Map.IsPlayerHome && this.pawn.royalty.CanRequireThroneroom();
+				if (pawn.royalty == null || !pawn.Spawned)
+				{
+					return false;
+				}
+				if (pawn.Map == null || !pawn.Map.IsPlayerHome)
+				{
+					return false;
+				}
+				if (!pawn.royalty.CanRequireThroneroom())
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		protected override bool IsFrozen
 		{
 			get
 			{
-				return this.pawn.Map == null || !this.pawn.Map.IsPlayerHome || this.FallPerDay <= 0f;
+				if (pawn.Map != null && pawn.Map.IsPlayerHome)
+				{
+					return FallPerDay <= 0f;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public float FallPerDay
 		{
 			get
 			{
-				if (this.pawn.royalty == null || !this.pawn.Spawned)
+				if (pawn.royalty == null || !pawn.Spawned)
 				{
 					return 0f;
 				}
-				if (this.pawn.Map == null || !this.pawn.Map.IsPlayerHome)
+				if (pawn.Map == null || !pawn.Map.IsPlayerHome)
 				{
 					return 0f;
 				}
 				float num = 0f;
-				foreach (RoyalTitle royalTitle in this.pawn.royalty.AllTitlesInEffectForReading)
+				foreach (RoyalTitle item in pawn.royalty.AllTitlesInEffectForReading)
 				{
+					_ = item;
 				}
-				int num2 = this.pawn.Map.mapPawns.SpawnedPawnsInFaction(this.pawn.Faction).Count<Pawn>();
-				return num * this.FallFactorCurve.Evaluate((float)num2);
+				int num2 = pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction).Count();
+				return num * FallFactorCurve.Evaluate(num2);
 			}
 		}
 
-		
-		
-		public override bool ShowOnNeedList
-		{
-			get
-			{
-				return this.IsActive;
-			}
-		}
+		public override bool ShowOnNeedList => IsActive;
 
-		
-		
-		public bool IsCurrentlyReigning
-		{
-			get
-			{
-				return this.pawn.CurJobDef == JobDefOf.Reign;
-			}
-		}
+		public bool IsCurrentlyReigning => pawn.CurJobDef == JobDefOf.Reign;
 
-		
-		
-		public bool IsCurrentlyGivingSpeech
-		{
-			get
-			{
-				return this.pawn.CurJobDef == JobDefOf.GiveSpeech;
-			}
-		}
+		public bool IsCurrentlyGivingSpeech => pawn.CurJobDef == JobDefOf.GiveSpeech;
 
-		
-		public Need_Authority(Pawn pawn) : base(pawn)
+		public Need_Authority(Pawn pawn)
+			: base(pawn)
 		{
 		}
 
-		
 		public override void NeedInterval()
 		{
 			float num = 400f;
-			float num2 = this.FallPerDay / num;
-			if (this.IsFrozen)
+			float num2 = FallPerDay / num;
+			if (IsFrozen)
 			{
-				this.CurLevel = 1f;
-				return;
+				CurLevel = 1f;
 			}
-			if (this.pawn.Map.mapPawns.SpawnedPawnsInFaction(this.pawn.Faction).Count <= 1)
+			else if (pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction).Count <= 1)
 			{
-				this.SetInitialLevel();
-				return;
+				SetInitialLevel();
 			}
-			if (this.IsCurrentlyReigning)
+			else if (IsCurrentlyReigning)
 			{
-				this.CurLevel += 2f / num;
-				return;
+				CurLevel += 2f / num;
 			}
-			if (this.IsCurrentlyGivingSpeech)
+			else if (IsCurrentlyGivingSpeech)
 			{
-				this.CurLevel += 3f / num;
-				return;
+				CurLevel += 3f / num;
 			}
-			this.CurLevel -= num2;
+			else
+			{
+				CurLevel -= num2;
+			}
 		}
-
-		
-		public const float LevelGainPerDayOfReigning = 2f;
-
-		
-		public const float LevelGainPerDayOfGivingSpeech = 3f;
-
-		
-		private readonly SimpleCurve FallFactorCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(1f, 0f),
-				true
-			},
-			{
-				new CurvePoint(3f, 0.5f),
-				true
-			},
-			{
-				new CurvePoint(5f, 1f),
-				true
-			}
-		};
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -7,135 +6,121 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompTempControl : ThingComp
 	{
-		
-		
-		public CompProperties_TempControl Props
-		{
-			get
-			{
-				return (CompProperties_TempControl)this.props;
-			}
-		}
+		[Unsaved(false)]
+		public bool operatingAtHighPower;
 
-		
+		public float targetTemperature = -99999f;
+
+		private const float DefaultTargetTemperature = 21f;
+
+		public CompProperties_TempControl Props => (CompProperties_TempControl)props;
+
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			if (this.targetTemperature < -2000f)
+			if (targetTemperature < -2000f)
 			{
-				this.targetTemperature = this.Props.defaultTargetTemperature;
+				targetTemperature = Props.defaultTargetTemperature;
 			}
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.targetTemperature, "targetTemperature", 0f, false);
+			Scribe_Values.Look(ref targetTemperature, "targetTemperature", 0f);
 		}
 
-		
 		private float RoundedToCurrentTempModeOffset(float celsiusTemp)
 		{
-			return GenTemperature.ConvertTemperatureOffset((float)Mathf.RoundToInt(GenTemperature.CelsiusToOffset(celsiusTemp, Prefs.TemperatureMode)), Prefs.TemperatureMode, TemperatureDisplayMode.Celsius);
+			return GenTemperature.ConvertTemperatureOffset(Mathf.RoundToInt(GenTemperature.CelsiusToOffset(celsiusTemp, Prefs.TemperatureMode)), Prefs.TemperatureMode, TemperatureDisplayMode.Celsius);
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			float offset2 = this.RoundedToCurrentTempModeOffset(-10f);
-			yield return new Command_Action
+			foreach (Gizmo item in base.CompGetGizmosExtra())
 			{
-				action = delegate
-				{
-					this.InterfaceChangeTargetTemperature(offset2);
-				},
-				defaultLabel = offset2.ToStringTemperatureOffset("F0"),
-				defaultDesc = "CommandLowerTempDesc".Translate(),
-				hotKey = KeyBindingDefOf.Misc5,
-				icon = ContentFinder<Texture2D>.Get("UI/Commands/TempLower", true)
-			};
-			float offset3 = this.RoundedToCurrentTempModeOffset(-1f);
-			yield return new Command_Action
+				yield return item;
+			}
+			float offset = RoundedToCurrentTempModeOffset(-10f);
+			Command_Action command_Action = new Command_Action();
+			command_Action.action = delegate
 			{
-				action = delegate
-				{
-					this.InterfaceChangeTargetTemperature(offset3);
-				},
-				defaultLabel = offset3.ToStringTemperatureOffset("F0"),
-				defaultDesc = "CommandLowerTempDesc".Translate(),
-				hotKey = KeyBindingDefOf.Misc4,
-				icon = ContentFinder<Texture2D>.Get("UI/Commands/TempLower", true)
+				InterfaceChangeTargetTemperature(offset);
 			};
-			yield return new Command_Action
+			command_Action.defaultLabel = offset.ToStringTemperatureOffset("F0");
+			command_Action.defaultDesc = "CommandLowerTempDesc".Translate();
+			command_Action.hotKey = KeyBindingDefOf.Misc5;
+			command_Action.icon = ContentFinder<Texture2D>.Get("UI/Commands/TempLower");
+			yield return command_Action;
+			float offset2 = RoundedToCurrentTempModeOffset(-1f);
+			Command_Action command_Action2 = new Command_Action();
+			command_Action2.action = delegate
 			{
-				action = delegate
-				{
-					this.targetTemperature = 21f;
-					SoundDefOf.Tick_Tiny.PlayOneShotOnCamera(null);
-					this.ThrowCurrentTemperatureText();
-				},
-				defaultLabel = "CommandResetTemp".Translate(),
-				defaultDesc = "CommandResetTempDesc".Translate(),
-				hotKey = KeyBindingDefOf.Misc1,
-				icon = ContentFinder<Texture2D>.Get("UI/Commands/TempReset", true)
+				InterfaceChangeTargetTemperature(offset2);
 			};
-			float offset4 = this.RoundedToCurrentTempModeOffset(1f);
-			yield return new Command_Action
+			command_Action2.defaultLabel = offset2.ToStringTemperatureOffset("F0");
+			command_Action2.defaultDesc = "CommandLowerTempDesc".Translate();
+			command_Action2.hotKey = KeyBindingDefOf.Misc4;
+			command_Action2.icon = ContentFinder<Texture2D>.Get("UI/Commands/TempLower");
+			yield return command_Action2;
+			Command_Action command_Action3 = new Command_Action();
+			command_Action3.action = delegate
 			{
-				action = delegate
-				{
-					this.InterfaceChangeTargetTemperature(offset4);
-				},
-				defaultLabel = "+" + offset4.ToStringTemperatureOffset("F0"),
-				defaultDesc = "CommandRaiseTempDesc".Translate(),
-				hotKey = KeyBindingDefOf.Misc2,
-				icon = ContentFinder<Texture2D>.Get("UI/Commands/TempRaise", true)
+				targetTemperature = 21f;
+				SoundDefOf.Tick_Tiny.PlayOneShotOnCamera();
+				ThrowCurrentTemperatureText();
 			};
-			float offset = this.RoundedToCurrentTempModeOffset(10f);
-			yield return new Command_Action
+			command_Action3.defaultLabel = "CommandResetTemp".Translate();
+			command_Action3.defaultDesc = "CommandResetTempDesc".Translate();
+			command_Action3.hotKey = KeyBindingDefOf.Misc1;
+			command_Action3.icon = ContentFinder<Texture2D>.Get("UI/Commands/TempReset");
+			yield return command_Action3;
+			float offset3 = RoundedToCurrentTempModeOffset(1f);
+			Command_Action command_Action4 = new Command_Action();
+			command_Action4.action = delegate
 			{
-				action = delegate
-				{
-					this.InterfaceChangeTargetTemperature(offset);
-				},
-				defaultLabel = "+" + offset.ToStringTemperatureOffset("F0"),
-				defaultDesc = "CommandRaiseTempDesc".Translate(),
-				hotKey = KeyBindingDefOf.Misc3,
-				icon = ContentFinder<Texture2D>.Get("UI/Commands/TempRaise", true)
+				InterfaceChangeTargetTemperature(offset3);
 			};
-			yield break;
-			yield break;
+			command_Action4.defaultLabel = "+" + offset3.ToStringTemperatureOffset("F0");
+			command_Action4.defaultDesc = "CommandRaiseTempDesc".Translate();
+			command_Action4.hotKey = KeyBindingDefOf.Misc2;
+			command_Action4.icon = ContentFinder<Texture2D>.Get("UI/Commands/TempRaise");
+			yield return command_Action4;
+			float offset4 = RoundedToCurrentTempModeOffset(10f);
+			Command_Action command_Action5 = new Command_Action();
+			command_Action5.action = delegate
+			{
+				InterfaceChangeTargetTemperature(offset4);
+			};
+			command_Action5.defaultLabel = "+" + offset4.ToStringTemperatureOffset("F0");
+			command_Action5.defaultDesc = "CommandRaiseTempDesc".Translate();
+			command_Action5.hotKey = KeyBindingDefOf.Misc3;
+			command_Action5.icon = ContentFinder<Texture2D>.Get("UI/Commands/TempRaise");
+			yield return command_Action5;
 		}
 
-		
 		private void InterfaceChangeTargetTemperature(float offset)
 		{
-			SoundDefOf.DragSlider.PlayOneShotOnCamera(null);
-			this.targetTemperature += offset;
-			this.targetTemperature = Mathf.Clamp(this.targetTemperature, -273.15f, 1000f);
-			this.ThrowCurrentTemperatureText();
+			SoundDefOf.DragSlider.PlayOneShotOnCamera();
+			targetTemperature += offset;
+			targetTemperature = Mathf.Clamp(targetTemperature, -273.15f, 1000f);
+			ThrowCurrentTemperatureText();
 		}
 
-		
 		private void ThrowCurrentTemperatureText()
 		{
-			MoteMaker.ThrowText(this.parent.TrueCenter() + new Vector3(0.5f, 0f, 0.5f), this.parent.Map, this.targetTemperature.ToStringTemperature("F0"), Color.white, -1f);
+			MoteMaker.ThrowText(parent.TrueCenter() + new Vector3(0.5f, 0f, 0.5f), parent.Map, targetTemperature.ToStringTemperature("F0"), Color.white);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append("TargetTemperature".Translate() + ": ");
-			stringBuilder.AppendLine(this.targetTemperature.ToStringTemperature("F0"));
+			stringBuilder.AppendLine(targetTemperature.ToStringTemperature("F0"));
 			stringBuilder.Append("PowerConsumptionMode".Translate() + ": ");
-			if (this.operatingAtHighPower)
+			if (operatingAtHighPower)
 			{
 				stringBuilder.Append("PowerConsumptionHigh".Translate().CapitalizeFirst());
 			}
@@ -145,15 +130,5 @@ namespace RimWorld
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		[Unsaved(false)]
-		public bool operatingAtHighPower;
-
-		
-		public float targetTemperature = -99999f;
-
-		
-		private const float DefaultTargetTemperature = 21f;
 	}
 }

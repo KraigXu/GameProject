@@ -1,30 +1,26 @@
-﻿using System;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperationAttributeAdd : PatchOperationAttribute
 	{
-		
+		protected string value;
+
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
 			bool result = false;
-			foreach (object obj in xml.SelectNodes(this.xpath))
+			foreach (object item in xml.SelectNodes(xpath))
 			{
-				XmlNode xmlNode = obj as XmlNode;
-				if (xmlNode.Attributes[this.attribute] == null)
+				XmlNode xmlNode = item as XmlNode;
+				if (xmlNode.Attributes[attribute] == null)
 				{
-					XmlAttribute xmlAttribute = xmlNode.OwnerDocument.CreateAttribute(this.attribute);
-					xmlAttribute.Value = this.value;
+					XmlAttribute xmlAttribute = xmlNode.OwnerDocument.CreateAttribute(attribute);
+					xmlAttribute.Value = value;
 					xmlNode.Attributes.Append(xmlAttribute);
 					result = true;
 				}
 			}
 			return result;
 		}
-
-		
-		protected string value;
 	}
 }

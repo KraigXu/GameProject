@@ -1,17 +1,21 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class FiringIncident : IExposable
 	{
-		
+		public IncidentDef def;
+
+		public IncidentParms parms = new IncidentParms();
+
+		public StorytellerComp source;
+
+		public QuestPart sourceQuestPart;
+
 		public FiringIncident()
 		{
 		}
 
-		
 		public FiringIncident(IncidentDef def, StorytellerComp source, IncidentParms parms = null)
 		{
 			this.def = def;
@@ -22,42 +26,28 @@ namespace RimWorld
 			this.source = source;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<IncidentDef>(ref this.def, "def");
-			Scribe_Deep.Look<IncidentParms>(ref this.parms, "parms", Array.Empty<object>());
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Deep.Look(ref parms, "parms");
 		}
 
-		
 		public override string ToString()
 		{
-			string text = this.def.defName;
-			if (this.parms != null)
+			string text = def.defName;
+			if (parms != null)
 			{
-				text = text + ", parms=(" + this.parms.ToString() + ")";
+				text = text + ", parms=(" + parms.ToString() + ")";
 			}
-			if (this.source != null)
+			if (source != null)
 			{
-				text = text + ", source=" + this.source;
+				text = text + ", source=" + source;
 			}
-			if (this.sourceQuestPart != null)
+			if (sourceQuestPart != null)
 			{
-				text = text + ", sourceQuestPart=" + this.sourceQuestPart;
+				text = text + ", sourceQuestPart=" + sourceQuestPart;
 			}
 			return text;
 		}
-
-		
-		public IncidentDef def;
-
-		
-		public IncidentParms parms = new IncidentParms();
-
-		
-		public StorytellerComp source;
-
-		
-		public QuestPart sourceQuestPart;
 	}
 }

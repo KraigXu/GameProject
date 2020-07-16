@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,49 +5,37 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Building_ShipComputerCore : Building
 	{
-		
-		
-		private bool CanLaunchNow
-		{
-			get
-			{
-				return !ShipUtility.LaunchFailReasons(this).Any<string>();
-			}
-		}
+		private bool CanLaunchNow => !ShipUtility.LaunchFailReasons(this).Any();
 
-		
 		public override IEnumerable<Gizmo> GetGizmos()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			foreach (Gizmo gizmo2 in ShipUtility.ShipStartupGizmos(this))
+			foreach (Gizmo gizmo in base.GetGizmos())
 			{
-				yield return gizmo2;
+				yield return gizmo;
 			}
-			enumerator = null;
+			foreach (Gizmo item in ShipUtility.ShipStartupGizmos(this))
+			{
+				yield return item;
+			}
 			Command_Action command_Action = new Command_Action();
-			command_Action.action = new Action(this.TryLaunch);
+			command_Action.action = TryLaunch;
 			command_Action.defaultLabel = "CommandShipLaunch".Translate();
 			command_Action.defaultDesc = "CommandShipLaunchDesc".Translate();
-			if (!this.CanLaunchNow)
+			if (!CanLaunchNow)
 			{
-				command_Action.Disable(ShipUtility.LaunchFailReasons(this).First<string>());
+				command_Action.Disable(ShipUtility.LaunchFailReasons(this).First());
 			}
 			if (ShipCountdown.CountingDown)
 			{
-				command_Action.Disable(null);
+				command_Action.Disable();
 			}
 			command_Action.hotKey = KeyBindingDefOf.Misc1;
-			command_Action.icon = ContentFinder<Texture2D>.Get("UI/Commands/LaunchShip", true);
+			command_Action.icon = ContentFinder<Texture2D>.Get("UI/Commands/LaunchShip");
 			yield return command_Action;
-			yield break;
-			yield break;
 		}
 
-		
 		public void ForceLaunch()
 		{
 			ShipCountdown.InitiateCountdown(this);
@@ -58,12 +45,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		private void TryLaunch()
 		{
-			if (this.CanLaunchNow)
+			if (CanLaunchNow)
 			{
-				this.ForceLaunch();
+				ForceLaunch();
 			}
 		}
 	}

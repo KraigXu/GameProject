@@ -1,111 +1,104 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class Mote : Thing
 	{
-		
-		
+		public Vector3 exactPosition;
+
+		public float exactRotation;
+
+		public Vector3 exactScale = new Vector3(1f, 1f, 1f);
+
+		public float rotationRate;
+
+		public Color instanceColor = Color.white;
+
+		private int lastMaintainTick;
+
+		public float solidTimeOverride = -1f;
+
+		public int spawnTick;
+
+		public float spawnRealTime;
+
+		public MoteAttachLink link1 = MoteAttachLink.Invalid;
+
+		protected float skidSpeedMultiplierPerTick = Rand.Range(0.3f, 0.95f);
+
+		protected const float MinSpeed = 0.02f;
+
 		public float Scale
 		{
 			set
 			{
-				this.exactScale = new Vector3(value, 1f, value);
+				exactScale = new Vector3(value, 1f, value);
 			}
 		}
 
-		
-		
 		public float AgeSecs
 		{
 			get
 			{
-				if (this.def.mote.realTime)
+				if (def.mote.realTime)
 				{
-					return Time.realtimeSinceStartup - this.spawnRealTime;
+					return Time.realtimeSinceStartup - spawnRealTime;
 				}
-				return (float)(Find.TickManager.TicksGame - this.spawnTick) / 60f;
+				return (float)(Find.TickManager.TicksGame - spawnTick) / 60f;
 			}
 		}
 
-		
-		
 		protected float SolidTime
 		{
 			get
 			{
-				if (this.solidTimeOverride >= 0f)
+				if (!(solidTimeOverride < 0f))
 				{
-					return this.solidTimeOverride;
+					return solidTimeOverride;
 				}
-				return this.def.mote.solidTime;
+				return def.mote.solidTime;
 			}
 		}
 
-		
-		
-		public override Vector3 DrawPos
-		{
-			get
-			{
-				return this.exactPosition;
-			}
-		}
+		public override Vector3 DrawPos => exactPosition;
 
-		
-		
-		protected virtual bool EndOfLife
-		{
-			get
-			{
-				return this.AgeSecs >= this.def.mote.Lifespan;
-			}
-		}
+		protected virtual bool EndOfLife => AgeSecs >= def.mote.Lifespan;
 
-		
-		
 		public virtual float Alpha
 		{
 			get
 			{
-				float ageSecs = this.AgeSecs;
-				if (ageSecs <= this.def.mote.fadeInTime)
+				float ageSecs = AgeSecs;
+				if (ageSecs <= def.mote.fadeInTime)
 				{
-					if (this.def.mote.fadeInTime > 0f)
+					if (def.mote.fadeInTime > 0f)
 					{
-						return ageSecs / this.def.mote.fadeInTime;
+						return ageSecs / def.mote.fadeInTime;
 					}
 					return 1f;
 				}
-				else
+				if (ageSecs <= def.mote.fadeInTime + SolidTime)
 				{
-					if (ageSecs <= this.def.mote.fadeInTime + this.SolidTime)
-					{
-						return 1f;
-					}
-					if (this.def.mote.fadeOutTime > 0f)
-					{
-						return 1f - Mathf.InverseLerp(this.def.mote.fadeInTime + this.SolidTime, this.def.mote.fadeInTime + this.SolidTime + this.def.mote.fadeOutTime, ageSecs);
-					}
 					return 1f;
 				}
+				if (def.mote.fadeOutTime > 0f)
+				{
+					return 1f - Mathf.InverseLerp(def.mote.fadeInTime + SolidTime, def.mote.fadeInTime + SolidTime + def.mote.fadeOutTime, ageSecs);
+				}
+				return 1f;
 			}
 		}
 
-		
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.spawnTick = Find.TickManager.TicksGame;
-			this.spawnRealTime = Time.realtimeSinceStartup;
+			spawnTick = Find.TickManager.TicksGame;
+			spawnRealTime = Time.realtimeSinceStartup;
 			RealTime.moteList.MoteSpawned(this);
 			base.Map.moteCounter.Notify_MoteSpawned();
-			this.exactPosition.y = this.def.altitudeLayer.AltitudeFor();
+			exactPosition.y = def.altitudeLayer.AltitudeFor();
 		}
 
-		
 		public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
 		{
 			Map map = base.Map;
@@ -114,111 +107,65 @@ namespace Verse
 			map.moteCounter.Notify_MoteDespawned();
 		}
 
-		
 		public override void Tick()
 		{
-			if (!this.def.mote.realTime)
+			if (!def.mote.realTime)
 			{
-				this.TimeInterval(0.0166666675f);
+				TimeInterval(0.0166666675f);
 			}
 		}
 
-		
 		public void RealtimeUpdate()
 		{
-			if (this.def.mote.realTime)
+			if (def.mote.realTime)
 			{
-				this.TimeInterval(Time.deltaTime);
+				TimeInterval(Time.deltaTime);
 			}
 		}
 
-		
 		protected virtual void TimeInterval(float deltaTime)
 		{
-			if (this.EndOfLife && !base.Destroyed)
+			if (EndOfLife && !base.Destroyed)
 			{
-				this.Destroy(DestroyMode.Vanish);
-				return;
+				Destroy();
 			}
-			if (this.def.mote.needsMaintenance && Find.TickManager.TicksGame - 1 > this.lastMaintainTick)
+			else if (def.mote.needsMaintenance && Find.TickManager.TicksGame - 1 > lastMaintainTick)
 			{
-				this.Destroy(DestroyMode.Vanish);
-				return;
+				Destroy();
 			}
-			if (this.def.mote.growthRate != 0f)
+			else if (def.mote.growthRate != 0f)
 			{
-				this.exactScale = new Vector3(this.exactScale.x + this.def.mote.growthRate * deltaTime, this.exactScale.y, this.exactScale.z + this.def.mote.growthRate * deltaTime);
-				this.exactScale.x = Mathf.Max(this.exactScale.x, 0.0001f);
-				this.exactScale.z = Mathf.Max(this.exactScale.z, 0.0001f);
+				exactScale = new Vector3(exactScale.x + def.mote.growthRate * deltaTime, exactScale.y, exactScale.z + def.mote.growthRate * deltaTime);
+				exactScale.x = Mathf.Max(exactScale.x, 0.0001f);
+				exactScale.z = Mathf.Max(exactScale.z, 0.0001f);
 			}
 		}
 
-		
 		public override void Draw()
 		{
-			this.Draw(this.def.altitudeLayer.AltitudeFor());
+			Draw(def.altitudeLayer.AltitudeFor());
 		}
 
-		
 		public void Draw(float altitude)
 		{
-			this.exactPosition.y = altitude;
+			exactPosition.y = altitude;
 			base.Draw();
 		}
 
-		
 		public void Maintain()
 		{
-			this.lastMaintainTick = Find.TickManager.TicksGame;
+			lastMaintainTick = Find.TickManager.TicksGame;
 		}
 
-		
 		public void Attach(TargetInfo a)
 		{
-			this.link1 = new MoteAttachLink(a);
+			link1 = new MoteAttachLink(a);
 		}
 
-		
 		public override void Notify_MyMapRemoved()
 		{
 			base.Notify_MyMapRemoved();
 			RealTime.moteList.MoteDespawned(this);
 		}
-
-		
-		public Vector3 exactPosition;
-
-		
-		public float exactRotation;
-
-		
-		public Vector3 exactScale = new Vector3(1f, 1f, 1f);
-
-		
-		public float rotationRate;
-
-		
-		public Color instanceColor = Color.white;
-
-		
-		private int lastMaintainTick;
-
-		
-		public float solidTimeOverride = -1f;
-
-		
-		public int spawnTick;
-
-		
-		public float spawnRealTime;
-
-		
-		public MoteAttachLink link1 = MoteAttachLink.Invalid;
-
-		
-		protected float skidSpeedMultiplierPerTick = Rand.Range(0.3f, 0.95f);
-
-		
-		protected const float MinSpeed = 0.02f;
 	}
 }

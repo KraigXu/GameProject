@@ -1,194 +1,131 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public abstract class Thought : IExposable
 	{
-		
-		
-		public abstract int CurStageIndex { get; }
+		public Pawn pawn;
 
-		
-		
-		public ThoughtStage CurStage
+		public ThoughtDef def;
+
+		private static readonly Texture2D DefaultGoodIcon = ContentFinder<Texture2D>.Get("Things/Mote/ThoughtSymbol/GenericGood");
+
+		private static readonly Texture2D DefaultBadIcon = ContentFinder<Texture2D>.Get("Things/Mote/ThoughtSymbol/GenericBad");
+
+		public abstract int CurStageIndex
 		{
-			get
-			{
-				return this.def.stages[this.CurStageIndex];
-			}
+			get;
 		}
 
-		
-		
-		public virtual bool VisibleInNeedsTab
-		{
-			get
-			{
-				return this.CurStage.visible;
-			}
-		}
+		public ThoughtStage CurStage => def.stages[CurStageIndex];
 
-		
-		
+		public virtual bool VisibleInNeedsTab => CurStage.visible;
+
 		public virtual string LabelCap
 		{
 			get
 			{
-				if (this.def.Worker == null)
+				if (def.Worker == null)
 				{
-					return this.CurStage.LabelCap.Formatted(this.pawn.Named("PAWN"));
+					return CurStage.LabelCap.Formatted(pawn.Named("PAWN"));
 				}
-				return this.def.Worker.PostProcessLabel(this.pawn, this.CurStage.LabelCap);
+				return def.Worker.PostProcessLabel(pawn, CurStage.LabelCap);
 			}
 		}
 
-		
-		
-		protected virtual float BaseMoodOffset
-		{
-			get
-			{
-				return this.CurStage.baseMoodEffect;
-			}
-		}
+		protected virtual float BaseMoodOffset => CurStage.baseMoodEffect;
 
-		
-		
 		public virtual string LabelCapSocial
 		{
 			get
 			{
-				if (this.CurStage.labelSocial != null)
+				if (CurStage.labelSocial != null)
 				{
-					return this.CurStage.LabelSocialCap.Formatted(this.pawn.Named("PAWN"));
+					return CurStage.LabelSocialCap.Formatted(pawn.Named("PAWN"));
 				}
-				return this.LabelCap;
+				return LabelCap;
 			}
 		}
 
-		
-		
 		public virtual string Description
 		{
 			get
 			{
-				string text = this.CurStage.description;
-				if (text == null)
+				string description = CurStage.description;
+				if (description == null)
 				{
-					text = this.def.description;
+					description = def.description;
 				}
 				Thought_Memory thought_Memory;
 				ISocialThought socialThought;
-				if (this.def.Worker != null)
+				description = ((def.Worker != null) ? def.Worker.PostProcessDescription(pawn, description) : (((thought_Memory = (this as Thought_Memory)) != null && thought_Memory.otherPawn != null) ? ((string)description.Formatted(pawn.Named("PAWN"), thought_Memory.otherPawn.Named("OTHERPAWN"))) : (((socialThought = (this as ISocialThought)) == null || socialThought.OtherPawn() == null) ? ((string)description.Formatted(pawn.Named("PAWN"))) : ((string)description.Formatted(pawn.Named("PAWN"), socialThought.OtherPawn().Named("OTHERPAWN"))))));
+				string text = ThoughtUtility.ThoughtNullifiedMessage(pawn, def);
+				if (!string.IsNullOrEmpty(text))
 				{
-					text = this.def.Worker.PostProcessDescription(this.pawn, text);
+					description = description + "\n\n(" + text + ")";
 				}
-				else if ((thought_Memory = (this as Thought_Memory)) != null && thought_Memory.otherPawn != null)
-				{
-					text = text.Formatted(this.pawn.Named("PAWN"), thought_Memory.otherPawn.Named("OTHERPAWN"));
-				}
-				else if ((socialThought = (this as ISocialThought)) != null && socialThought.OtherPawn() != null)
-				{
-					text = text.Formatted(this.pawn.Named("PAWN"), socialThought.OtherPawn().Named("OTHERPAWN"));
-				}
-				else
-				{
-					text = text.Formatted(this.pawn.Named("PAWN"));
-				}
-				string text2 = ThoughtUtility.ThoughtNullifiedMessage(this.pawn, this.def);
-				if (!string.IsNullOrEmpty(text2))
-				{
-					text = text + "\n\n(" + text2 + ")";
-				}
-				return text;
+				return description;
 			}
 		}
 
-		
-		
 		public Texture2D Icon
 		{
 			get
 			{
-				if (this.def.Icon != null)
+				if (def.Icon != null)
 				{
-					return this.def.Icon;
+					return def.Icon;
 				}
-				if (this.MoodOffset() > 0f)
+				if (MoodOffset() > 0f)
 				{
-					return Thought.DefaultGoodIcon;
+					return DefaultGoodIcon;
 				}
-				return Thought.DefaultBadIcon;
+				return DefaultBadIcon;
 			}
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Defs.Look<ThoughtDef>(ref this.def, "def");
+			Scribe_Defs.Look(ref def, "def");
 		}
 
-		
 		public virtual float MoodOffset()
 		{
-			if (this.CurStage == null)
+			if (CurStage == null)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"CurStage is null while ShouldDiscard is false on ",
-					this.def.defName,
-					" for ",
-					this.pawn
-				}), false);
+				Log.Error("CurStage is null while ShouldDiscard is false on " + def.defName + " for " + pawn);
 				return 0f;
 			}
-			if (ThoughtUtility.ThoughtNullified(this.pawn, this.def))
+			if (ThoughtUtility.ThoughtNullified(pawn, def))
 			{
 				return 0f;
 			}
-			float num = this.BaseMoodOffset;
-			if (this.def.effectMultiplyingStat != null)
+			float num = BaseMoodOffset;
+			if (def.effectMultiplyingStat != null)
 			{
-				num *= this.pawn.GetStatValue(this.def.effectMultiplyingStat, true);
+				num *= pawn.GetStatValue(def.effectMultiplyingStat);
 			}
-			if (this.def.Worker != null)
+			if (def.Worker != null)
 			{
-				num *= this.def.Worker.MoodMultiplier(this.pawn);
+				num *= def.Worker.MoodMultiplier(pawn);
 			}
 			return num;
 		}
 
-		
 		public virtual bool GroupsWith(Thought other)
 		{
-			return this.def == other.def;
+			return def == other.def;
 		}
 
-		
 		public virtual void Init()
 		{
 		}
 
-		
 		public override string ToString()
 		{
-			return "(" + this.def.defName + ")";
+			return "(" + def.defName + ")";
 		}
-
-		
-		public Pawn pawn;
-
-		
-		public ThoughtDef def;
-
-		
-		private static readonly Texture2D DefaultGoodIcon = ContentFinder<Texture2D>.Get("Things/Mote/ThoughtSymbol/GenericGood", true);
-
-		
-		private static readonly Texture2D DefaultBadIcon = ContentFinder<Texture2D>.Get("Things/Mote/ThoughtSymbol/GenericBad", true);
 	}
 }

@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace Verse
 {
-	
 	public static class DeepProfiler
 	{
-
 		public static volatile bool enabled = true;
 
 		private static Dictionary<int, ThreadLocalDeepProfiler> deepProfilers = new Dictionary<int, ThreadLocalDeepProfiler>();
@@ -16,43 +13,33 @@ namespace Verse
 
 		public static ThreadLocalDeepProfiler Get()
 		{
-			object deepProfilersLock = DeepProfiler.DeepProfilersLock;
-			ThreadLocalDeepProfiler result;
-			lock (deepProfilersLock)
+			lock (DeepProfilersLock)
 			{
 				int managedThreadId = Thread.CurrentThread.ManagedThreadId;
-				ThreadLocalDeepProfiler threadLocalDeepProfiler;
-				if (!DeepProfiler.deepProfilers.TryGetValue(managedThreadId, out threadLocalDeepProfiler))
+				if (!deepProfilers.TryGetValue(managedThreadId, out ThreadLocalDeepProfiler value))
 				{
-					threadLocalDeepProfiler = new ThreadLocalDeepProfiler();
-					DeepProfiler.deepProfilers.Add(managedThreadId, threadLocalDeepProfiler);
-					result = threadLocalDeepProfiler;
+					value = new ThreadLocalDeepProfiler();
+					deepProfilers.Add(managedThreadId, value);
+					return value;
 				}
-				else
-				{
-					result = threadLocalDeepProfiler;
-				}
+				return value;
 			}
-			return result;
 		}
 
-		
 		public static void Start(string label = null)
 		{
-			if (!DeepProfiler.enabled || !Prefs.LogVerbose)
+			if (enabled && Prefs.LogVerbose)
 			{
-				return;
+				Get().Start(label);
 			}
-			DeepProfiler.Get().Start(label);
 		}
-		
+
 		public static void End()
 		{
-			if (!DeepProfiler.enabled || !Prefs.LogVerbose)
+			if (enabled && Prefs.LogVerbose)
 			{
-				return;
+				Get().End();
 			}
-			DeepProfiler.Get().End();
 		}
 	}
 }

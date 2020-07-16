@@ -1,114 +1,102 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class LeaveQuestPartUtility
 	{
-		
 		public static void MakePawnLeave(Pawn pawn, Quest quest)
 		{
 			Caravan caravan = pawn.GetCaravan();
 			if (caravan != null)
 			{
-				CaravanInventoryUtility.MoveAllInventoryToSomeoneElse(pawn, caravan.PawnsListForReading, null);
+				CaravanInventoryUtility.MoveAllInventoryToSomeoneElse(pawn, caravan.PawnsListForReading);
 				caravan.RemovePawn(pawn);
 			}
 			if (pawn.Faction == Faction.OfPlayer)
 			{
-				Rand.PushState(quest.id ^ 960512692);
-				Faction faction;
-				if (pawn.HasExtraHomeQuest(quest) && pawn.GetExtraHomeFaction(quest) != Faction.OfPlayer)
+				Rand.PushState(quest.id ^ 0x394042B4);
+				Faction result;
+				if (pawn.HasExtraHomeFaction(quest) && pawn.GetExtraHomeFaction(quest) != Faction.OfPlayer)
 				{
-					faction = pawn.GetExtraHomeFaction(quest);
+					result = pawn.GetExtraHomeFaction(quest);
 				}
-				else if (!(from x in Find.FactionManager.GetFactions(false, false, false, TechLevel.Undefined)
-				where !x.HostileTo(Faction.OfPlayer)
-				select x).TryRandomElement(out faction) && !Find.FactionManager.GetFactions(false, false, false, TechLevel.Undefined).TryRandomElement(out faction))
+				else if (!(from x in Find.FactionManager.GetFactions(allowHidden: false, allowDefeated: false, allowNonHumanlike: false)
+					where !x.HostileTo(Faction.OfPlayer)
+					select x).TryRandomElement(out result) && !Find.FactionManager.GetFactions(allowHidden: false, allowDefeated: false, allowNonHumanlike: false).TryRandomElement(out result))
 				{
-					faction = null;
+					result = null;
 				}
 				Rand.PopState();
-				if (pawn.Faction != faction)
+				if (pawn.Faction != result)
 				{
-					pawn.SetFaction(faction, null);
+					pawn.SetFaction(result);
 				}
 			}
-			foreach (Pawn pawn2 in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction)
+			foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction)
 			{
-				if (pawn2.playerSettings.Master == pawn)
+				if (item.playerSettings.Master == pawn)
 				{
-					pawn2.playerSettings.Master = null;
+					item.playerSettings.Master = null;
 				}
 			}
 			if (pawn.guest != null)
 			{
 				if (pawn.InBed() && pawn.CurrentBed().Faction == Faction.OfPlayer && (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer)))
 				{
-					pawn.guest.SetGuestStatus(Faction.OfPlayer, false);
+					pawn.guest.SetGuestStatus(Faction.OfPlayer);
 				}
 				else
 				{
-					pawn.guest.SetGuestStatus(null, false);
+					pawn.guest.SetGuestStatus(null);
 				}
 			}
-			Lord lord = pawn.GetLord();
-			if (lord != null)
-			{
-				lord.Notify_PawnLost(pawn, PawnLostCondition.ForcedByQuest, null);
-			}
+			pawn.GetLord()?.Notify_PawnLost(pawn, PawnLostCondition.ForcedByQuest);
 		}
 
-		
 		public static void MakePawnsLeave(IEnumerable<Pawn> pawns, bool sendLetter, Quest quest)
 		{
 			bool flag = pawns.Any((Pawn x) => x.Faction == Faction.OfPlayer || x.HostFaction == Faction.OfPlayer);
-			List<Pawn> list = (from x in pawns
-			where x.Spawned || x.IsCaravanMember()
-			select x).ToList<Pawn>();
-			if (sendLetter && list.Any<Pawn>())
+			List<Pawn> list = pawns.Where((Pawn x) => x.Spawned || x.IsCaravanMember()).ToList();
+			if (sendLetter && list.Any())
 			{
-				Pawn pawn;
-				string value = GenLabel.BestGroupLabel(list, false, out pawn);
-				string value2 = GenLabel.BestGroupLabel(list, true, out pawn);
+				Pawn singlePawn;
+				string value = GenLabel.BestGroupLabel(list, definite: false, out singlePawn);
+				string value2 = GenLabel.BestGroupLabel(list, definite: true, out singlePawn);
 				if (flag)
 				{
-					if (pawn != null)
+					if (singlePawn != null)
 					{
-						Find.LetterStack.ReceiveLetter("LetterLabelPawnLeaving".Translate(value), "LetterPawnLeaving".Translate(value2), LetterDefOf.NeutralEvent, pawn, null, quest, null, null);
+						Find.LetterStack.ReceiveLetter("LetterLabelPawnLeaving".Translate(value), "LetterPawnLeaving".Translate(value2), LetterDefOf.NeutralEvent, singlePawn, null, quest);
 					}
 					else
 					{
-						Find.LetterStack.ReceiveLetter("LetterLabelPawnsLeaving".Translate(value), "LetterPawnsLeaving".Translate(value2), LetterDefOf.NeutralEvent, list[0], null, quest, null, null);
+						Find.LetterStack.ReceiveLetter("LetterLabelPawnsLeaving".Translate(value), "LetterPawnsLeaving".Translate(value2), LetterDefOf.NeutralEvent, list[0], null, quest);
 					}
 				}
-				else if (pawn != null)
+				else if (singlePawn != null)
 				{
-					Messages.Message("MessagePawnLeaving".Translate(value2), pawn, MessageTypeDefOf.NeutralEvent, true);
+					Messages.Message("MessagePawnLeaving".Translate(value2), singlePawn, MessageTypeDefOf.NeutralEvent);
 				}
 				else
 				{
-					Messages.Message("MessagePawnsLeaving".Translate(value2), list[0], MessageTypeDefOf.NeutralEvent, true);
+					Messages.Message("MessagePawnsLeaving".Translate(value2), list[0], MessageTypeDefOf.NeutralEvent);
 				}
 			}
 			foreach (Pawn pawn2 in pawns)
 			{
-				LeaveQuestPartUtility.MakePawnLeave(pawn2, quest);
+				MakePawnLeave(pawn2, quest);
 			}
-			IEnumerable<Pawn> enumerable = from p in pawns
-			where p.Spawned && !p.Downed
-			select p;
-			if (enumerable.Any<Pawn>())
+			IEnumerable<Pawn> enumerable = pawns.Where((Pawn p) => p.Spawned && !p.Downed);
+			if (enumerable.Any())
 			{
-				Pawn pawn3 = enumerable.First<Pawn>();
-				LordJob_ExitMapBest lordJob = new LordJob_ExitMapBest(LocomotionUrgency.Walk, true, true);
-				LordMaker.MakeNewLord(pawn3.Faction, lordJob, pawn3.MapHeld, enumerable);
+				Pawn pawn = enumerable.First();
+				LordJob_ExitMapBest lordJob = new LordJob_ExitMapBest(LocomotionUrgency.Walk, canDig: true, canDefendSelf: true);
+				LordMaker.MakeNewLord(pawn.Faction, lordJob, pawn.MapHeld, enumerable);
 			}
 		}
 	}

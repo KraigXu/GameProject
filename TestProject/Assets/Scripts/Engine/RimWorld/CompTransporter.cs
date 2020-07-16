@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -8,116 +7,91 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class CompTransporter : ThingComp, IThingHolder
 	{
-		
-		
-		public CompProperties_Transporter Props
-		{
-			get
-			{
-				return (CompProperties_Transporter)this.props;
-			}
-		}
+		public int groupID = -1;
 
-		
-		
-		public Map Map
-		{
-			get
-			{
-				return this.parent.MapHeld;
-			}
-		}
+		public ThingOwner innerContainer;
 
-		
-		
-		public bool AnythingLeftToLoad
-		{
-			get
-			{
-				return this.FirstThingLeftToLoad != null;
-			}
-		}
+		public List<TransferableOneWay> leftToLoad;
 
-		
-		
-		public bool LoadingInProgressOrReadyToLaunch
-		{
-			get
-			{
-				return this.groupID >= 0;
-			}
-		}
+		private bool notifiedCantLoadMore;
 
-		
-		
-		public bool AnyInGroupHasAnythingLeftToLoad
-		{
-			get
-			{
-				return this.FirstThingLeftToLoadInGroup != null;
-			}
-		}
+		private CompLaunchable cachedCompLaunchable;
 
-		
-		
+		private CompShuttle cachedCompShuttle;
+
+		private static readonly Texture2D CancelLoadCommandTex = ContentFinder<Texture2D>.Get("UI/Designators/Cancel");
+
+		private static readonly Texture2D LoadCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/LoadTransporter");
+
+		private static readonly Texture2D SelectPreviousInGroupCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/SelectPreviousTransporter");
+
+		private static readonly Texture2D SelectAllInGroupCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/SelectAllTransporters");
+
+		private static readonly Texture2D SelectNextInGroupCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/SelectNextTransporter");
+
+		private static List<CompTransporter> tmpTransportersInGroup = new List<CompTransporter>();
+
+		public CompProperties_Transporter Props => (CompProperties_Transporter)props;
+
+		public Map Map => parent.MapHeld;
+
+		public bool AnythingLeftToLoad => FirstThingLeftToLoad != null;
+
+		public bool LoadingInProgressOrReadyToLaunch => groupID >= 0;
+
+		public bool AnyInGroupHasAnythingLeftToLoad => FirstThingLeftToLoadInGroup != null;
+
 		public CompLaunchable Launchable
 		{
 			get
 			{
-				if (this.cachedCompLaunchable == null)
+				if (cachedCompLaunchable == null)
 				{
-					this.cachedCompLaunchable = this.parent.GetComp<CompLaunchable>();
+					cachedCompLaunchable = parent.GetComp<CompLaunchable>();
 				}
-				return this.cachedCompLaunchable;
+				return cachedCompLaunchable;
 			}
 		}
 
-		
-		
 		public CompShuttle Shuttle
 		{
 			get
 			{
-				if (this.cachedCompShuttle == null)
+				if (cachedCompShuttle == null)
 				{
-					this.cachedCompShuttle = this.parent.GetComp<CompShuttle>();
+					cachedCompShuttle = parent.GetComp<CompShuttle>();
 				}
-				return this.cachedCompShuttle;
+				return cachedCompShuttle;
 			}
 		}
 
-		
-		
 		public Thing FirstThingLeftToLoad
 		{
 			get
 			{
-				if (this.leftToLoad == null)
+				if (leftToLoad == null)
 				{
 					return null;
 				}
-				for (int i = 0; i < this.leftToLoad.Count; i++)
+				for (int i = 0; i < leftToLoad.Count; i++)
 				{
-					if (this.leftToLoad[i].CountToTransfer != 0 && this.leftToLoad[i].HasAnyThing)
+					if (leftToLoad[i].CountToTransfer != 0 && leftToLoad[i].HasAnyThing)
 					{
-						return this.leftToLoad[i].AnyThing;
+						return leftToLoad[i].AnyThing;
 					}
 				}
 				return null;
 			}
 		}
 
-		
-		
 		public Thing FirstThingLeftToLoadInGroup
 		{
 			get
 			{
-				List<CompTransporter> list = this.TransportersInGroup(this.parent.Map);
+				List<CompTransporter> list = TransportersInGroup(parent.Map);
 				for (int i = 0; i < list.Count; i++)
 				{
 					Thing firstThingLeftToLoad = list[i].FirstThingLeftToLoad;
@@ -130,13 +104,11 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool AnyInGroupNotifiedCantLoadMore
 		{
 			get
 			{
-				List<CompTransporter> list = this.TransportersInGroup(this.parent.Map);
+				List<CompTransporter> list = TransportersInGroup(parent.Map);
 				for (int i = 0; i < list.Count; i++)
 				{
 					if (list[i].notifiedCantLoadMore)
@@ -148,27 +120,25 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool AnyPawnCanLoadAnythingNow
 		{
 			get
 			{
-				if (!this.AnythingLeftToLoad)
+				if (!AnythingLeftToLoad)
 				{
 					return false;
 				}
-				if (!this.parent.Spawned)
+				if (!parent.Spawned)
 				{
 					return false;
 				}
-				List<Pawn> allPawnsSpawned = this.parent.Map.mapPawns.AllPawnsSpawned;
+				List<Pawn> allPawnsSpawned = parent.Map.mapPawns.AllPawnsSpawned;
 				for (int i = 0; i < allPawnsSpawned.Count; i++)
 				{
 					if (allPawnsSpawned[i].CurJobDef == JobDefOf.HaulToTransporter)
 					{
 						CompTransporter transporter = ((JobDriver_HaulToTransporter)allPawnsSpawned[i].jobs.curDriver).Transporter;
-						if (transporter != null && transporter.groupID == this.groupID)
+						if (transporter != null && transporter.groupID == groupID)
 						{
 							return true;
 						}
@@ -176,19 +146,19 @@ namespace RimWorld
 					if (allPawnsSpawned[i].CurJobDef == JobDefOf.EnterTransporter)
 					{
 						CompTransporter transporter2 = ((JobDriver_EnterTransporter)allPawnsSpawned[i].jobs.curDriver).Transporter;
-						if (transporter2 != null && transporter2.groupID == this.groupID)
+						if (transporter2 != null && transporter2.groupID == groupID)
 						{
 							return true;
 						}
 					}
 				}
-				List<CompTransporter> list = this.TransportersInGroup(this.parent.Map);
+				List<CompTransporter> list = TransportersInGroup(parent.Map);
 				for (int j = 0; j < allPawnsSpawned.Count; j++)
 				{
-					if (allPawnsSpawned[j].mindState.duty != null && allPawnsSpawned[j].mindState.duty.transportersGroup == this.groupID)
+					if (allPawnsSpawned[j].mindState.duty != null && allPawnsSpawned[j].mindState.duty.transportersGroup == groupID)
 					{
 						CompTransporter compTransporter = JobGiver_EnterTransporter.FindMyTransporter(list, allPawnsSpawned[j]);
-						if (compTransporter != null && allPawnsSpawned[j].CanReach(compTransporter.parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+						if (compTransporter != null && allPawnsSpawned[j].CanReach(compTransporter.parent, PathEndMode.Touch, Danger.Deadly))
 						{
 							return true;
 						}
@@ -196,14 +166,15 @@ namespace RimWorld
 				}
 				for (int k = 0; k < allPawnsSpawned.Count; k++)
 				{
-					if (allPawnsSpawned[k].IsColonist)
+					if (!allPawnsSpawned[k].IsColonist)
 					{
-						for (int l = 0; l < list.Count; l++)
+						continue;
+					}
+					for (int l = 0; l < list.Count; l++)
+					{
+						if (LoadTransportersJobUtility.HasJobOnTransporter(allPawnsSpawned[k], list[l]))
 						{
-							if (LoadTransportersJobUtility.HasJobOnTransporter(allPawnsSpawned[k], list[l]))
-							{
-								return true;
-							}
+							return true;
 						}
 					}
 				}
@@ -211,230 +182,210 @@ namespace RimWorld
 			}
 		}
 
-		
 		public CompTransporter()
 		{
-			this.innerContainer = new ThingOwner<Thing>(this);
+			innerContainer = new ThingOwner<Thing>(this);
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<int>(ref this.groupID, "groupID", 0, false);
-			Scribe_Deep.Look<ThingOwner>(ref this.innerContainer, "innerContainer", new object[]
-			{
-				this
-			});
-			Scribe_Collections.Look<TransferableOneWay>(ref this.leftToLoad, "leftToLoad", LookMode.Deep, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.notifiedCantLoadMore, "notifiedCantLoadMore", false, false);
+			Scribe_Values.Look(ref groupID, "groupID", 0);
+			Scribe_Deep.Look(ref innerContainer, "innerContainer", this);
+			Scribe_Collections.Look(ref leftToLoad, "leftToLoad", LookMode.Deep);
+			Scribe_Values.Look(ref notifiedCantLoadMore, "notifiedCantLoadMore", defaultValue: false);
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.innerContainer;
+			return innerContainer;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
 
-		
 		public override void CompTick()
 		{
 			base.CompTick();
-			this.innerContainer.ThingOwnerTick(true);
-			if (this.Props.restEffectiveness != 0f)
+			innerContainer.ThingOwnerTick();
+			if (Props.restEffectiveness != 0f)
 			{
-				for (int i = 0; i < this.innerContainer.Count; i++)
+				for (int i = 0; i < innerContainer.Count; i++)
 				{
-					Pawn pawn = this.innerContainer[i] as Pawn;
+					Pawn pawn = innerContainer[i] as Pawn;
 					if (pawn != null && !pawn.Dead && pawn.needs.rest != null)
 					{
-						pawn.needs.rest.TickResting(this.Props.restEffectiveness);
+						pawn.needs.rest.TickResting(Props.restEffectiveness);
 					}
 				}
 			}
-			if (this.parent.IsHashIntervalTick(60) && this.parent.Spawned && this.LoadingInProgressOrReadyToLaunch && this.AnyInGroupHasAnythingLeftToLoad && !this.AnyInGroupNotifiedCantLoadMore && !this.AnyPawnCanLoadAnythingNow && (this.Shuttle == null || !this.Shuttle.Autoload))
+			if (parent.IsHashIntervalTick(60) && parent.Spawned && LoadingInProgressOrReadyToLaunch && AnyInGroupHasAnythingLeftToLoad && !AnyInGroupNotifiedCantLoadMore && !AnyPawnCanLoadAnythingNow && (Shuttle == null || !Shuttle.Autoload))
 			{
-				this.notifiedCantLoadMore = true;
-				Messages.Message("MessageCantLoadMoreIntoTransporters".Translate(this.FirstThingLeftToLoadInGroup.LabelNoCount, Faction.OfPlayer.def.pawnsPlural, this.FirstThingLeftToLoadInGroup), this.parent, MessageTypeDefOf.CautionInput, true);
+				notifiedCantLoadMore = true;
+				Messages.Message("MessageCantLoadMoreIntoTransporters".Translate(FirstThingLeftToLoadInGroup.LabelNoCount, Faction.OfPlayer.def.pawnsPlural, FirstThingLeftToLoadInGroup), parent, MessageTypeDefOf.CautionInput);
 			}
 		}
 
-		
 		public List<CompTransporter> TransportersInGroup(Map map)
 		{
-			if (!this.LoadingInProgressOrReadyToLaunch)
+			if (!LoadingInProgressOrReadyToLaunch)
 			{
 				return null;
 			}
-			TransporterUtility.GetTransportersInGroup(this.groupID, map, CompTransporter.tmpTransportersInGroup);
-			return CompTransporter.tmpTransportersInGroup;
+			TransporterUtility.GetTransportersInGroup(groupID, map, tmpTransportersInGroup);
+			return tmpTransportersInGroup;
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-
-			IEnumerator<Gizmo> enumerator = null;
-			if (this.Shuttle != null && !this.Shuttle.ShowLoadingGizmos)
+			foreach (Gizmo item in base.CompGetGizmosExtra())
+			{
+				yield return item;
+			}
+			if (Shuttle != null && !Shuttle.ShowLoadingGizmos)
 			{
 				yield break;
 			}
-			if (this.LoadingInProgressOrReadyToLaunch)
+			if (LoadingInProgressOrReadyToLaunch)
 			{
-				if (this.Shuttle == null || !this.Shuttle.Autoload)
+				if (Shuttle == null || !Shuttle.Autoload)
 				{
-					yield return new Command_Action
+					Command_Action command_Action = new Command_Action();
+					command_Action.defaultLabel = "CommandCancelLoad".Translate();
+					command_Action.defaultDesc = "CommandCancelLoadDesc".Translate();
+					command_Action.icon = CancelLoadCommandTex;
+					command_Action.action = delegate
 					{
-						defaultLabel = "CommandCancelLoad".Translate(),
-						defaultDesc = "CommandCancelLoadDesc".Translate(),
-						icon = CompTransporter.CancelLoadCommandTex,
-						action = delegate
-						{
-							SoundDefOf.Designate_Cancel.PlayOneShotOnCamera(null);
-							this.CancelLoad();
-						}
+						SoundDefOf.Designate_Cancel.PlayOneShotOnCamera();
+						CancelLoad();
 					};
+					yield return command_Action;
 				}
-				if (!this.Props.max1PerGroup)
+				if (!Props.max1PerGroup)
 				{
-					yield return new Command_Action
+					Command_Action command_Action2 = new Command_Action();
+					command_Action2.defaultLabel = "CommandSelectPreviousTransporter".Translate();
+					command_Action2.defaultDesc = "CommandSelectPreviousTransporterDesc".Translate();
+					command_Action2.icon = SelectPreviousInGroupCommandTex;
+					command_Action2.action = delegate
 					{
-						defaultLabel = "CommandSelectPreviousTransporter".Translate(),
-						defaultDesc = "CommandSelectPreviousTransporterDesc".Translate(),
-						icon = CompTransporter.SelectPreviousInGroupCommandTex,
-						action = delegate
-						{
-							this.SelectPreviousInGroup();
-						}
+						SelectPreviousInGroup();
 					};
-					yield return new Command_Action
+					yield return command_Action2;
+					Command_Action command_Action3 = new Command_Action();
+					command_Action3.defaultLabel = "CommandSelectAllTransporters".Translate();
+					command_Action3.defaultDesc = "CommandSelectAllTransportersDesc".Translate();
+					command_Action3.icon = SelectAllInGroupCommandTex;
+					command_Action3.action = delegate
 					{
-						defaultLabel = "CommandSelectAllTransporters".Translate(),
-						defaultDesc = "CommandSelectAllTransportersDesc".Translate(),
-						icon = CompTransporter.SelectAllInGroupCommandTex,
-						action = delegate
-						{
-							this.SelectAllInGroup();
-						}
+						SelectAllInGroup();
 					};
-					yield return new Command_Action
+					yield return command_Action3;
+					Command_Action command_Action4 = new Command_Action();
+					command_Action4.defaultLabel = "CommandSelectNextTransporter".Translate();
+					command_Action4.defaultDesc = "CommandSelectNextTransporterDesc".Translate();
+					command_Action4.icon = SelectNextInGroupCommandTex;
+					command_Action4.action = delegate
 					{
-						defaultLabel = "CommandSelectNextTransporter".Translate(),
-						defaultDesc = "CommandSelectNextTransporterDesc".Translate(),
-						icon = CompTransporter.SelectNextInGroupCommandTex,
-						action = delegate
-						{
-							this.SelectNextInGroup();
-						}
+						SelectNextInGroup();
 					};
+					yield return command_Action4;
 				}
-				if (this.Props.canChangeAssignedThingsAfterStarting && (this.Shuttle == null || !this.Shuttle.Autoload))
+				if (Props.canChangeAssignedThingsAfterStarting && (Shuttle == null || !Shuttle.Autoload))
 				{
-					yield return new Command_LoadToTransporter
-					{
-						defaultLabel = "CommandSetToLoadTransporter".Translate(),
-						defaultDesc = "CommandSetToLoadTransporterDesc".Translate(),
-						icon = CompTransporter.LoadCommandTex,
-						transComp = this
-					};
+					Command_LoadToTransporter command_LoadToTransporter = new Command_LoadToTransporter();
+					command_LoadToTransporter.defaultLabel = "CommandSetToLoadTransporter".Translate();
+					command_LoadToTransporter.defaultDesc = "CommandSetToLoadTransporterDesc".Translate();
+					command_LoadToTransporter.icon = LoadCommandTex;
+					command_LoadToTransporter.transComp = this;
+					yield return command_LoadToTransporter;
+				}
+				yield break;
+			}
+			Command_LoadToTransporter command_LoadToTransporter2 = new Command_LoadToTransporter();
+			if (Props.max1PerGroup)
+			{
+				if (Props.canChangeAssignedThingsAfterStarting)
+				{
+					command_LoadToTransporter2.defaultLabel = "CommandSetToLoadTransporter".Translate();
+					command_LoadToTransporter2.defaultDesc = "CommandSetToLoadTransporterDesc".Translate();
+				}
+				else
+				{
+					command_LoadToTransporter2.defaultLabel = "CommandLoadTransporterSingle".Translate();
+					command_LoadToTransporter2.defaultDesc = "CommandLoadTransporterSingleDesc".Translate();
 				}
 			}
 			else
 			{
-				Command_LoadToTransporter command_LoadToTransporter = new Command_LoadToTransporter();
-				if (this.Props.max1PerGroup)
+				int num = 0;
+				for (int i = 0; i < Find.Selector.NumSelected; i++)
 				{
-					if (this.Props.canChangeAssignedThingsAfterStarting)
+					Thing thing = Find.Selector.SelectedObjectsListForReading[i] as Thing;
+					if (thing != null && thing.def == parent.def)
 					{
-						command_LoadToTransporter.defaultLabel = "CommandSetToLoadTransporter".Translate();
-						command_LoadToTransporter.defaultDesc = "CommandSetToLoadTransporterDesc".Translate();
-					}
-					else
-					{
-						command_LoadToTransporter.defaultLabel = "CommandLoadTransporterSingle".Translate();
-						command_LoadToTransporter.defaultDesc = "CommandLoadTransporterSingleDesc".Translate();
-					}
-				}
-				else
-				{
-					int num = 0;
-					for (int i = 0; i < Find.Selector.NumSelected; i++)
-					{
-						Thing thing = Find.Selector.SelectedObjectsListForReading[i] as Thing;
-						if (thing != null && thing.def == this.parent.def)
+						CompLaunchable compLaunchable = thing.TryGetComp<CompLaunchable>();
+						if (compLaunchable == null || (compLaunchable.FuelingPortSource != null && compLaunchable.FuelingPortSourceHasAnyFuel))
 						{
-							CompLaunchable compLaunchable = thing.TryGetComp<CompLaunchable>();
-							if (compLaunchable == null || (compLaunchable.FuelingPortSource != null && compLaunchable.FuelingPortSourceHasAnyFuel))
-							{
-								num++;
-							}
+							num++;
 						}
 					}
-					command_LoadToTransporter.defaultLabel = "CommandLoadTransporter".Translate(num.ToString());
-					command_LoadToTransporter.defaultDesc = "CommandLoadTransporterDesc".Translate();
 				}
-				command_LoadToTransporter.icon = CompTransporter.LoadCommandTex;
-				command_LoadToTransporter.transComp = this;
-				CompLaunchable launchable = this.Launchable;
-				if (launchable != null)
-				{
-					if (!launchable.ConnectedToFuelingPort)
-					{
-						command_LoadToTransporter.Disable("CommandLoadTransporterFailNotConnectedToFuelingPort".Translate());
-					}
-					else if (!launchable.FuelingPortSourceHasAnyFuel)
-					{
-						command_LoadToTransporter.Disable("CommandLoadTransporterFailNoFuel".Translate());
-					}
-				}
-				yield return command_LoadToTransporter;
+				command_LoadToTransporter2.defaultLabel = "CommandLoadTransporter".Translate(num.ToString());
+				command_LoadToTransporter2.defaultDesc = "CommandLoadTransporterDesc".Translate();
 			}
-			yield break;
-			yield break;
+			command_LoadToTransporter2.icon = LoadCommandTex;
+			command_LoadToTransporter2.transComp = this;
+			CompLaunchable launchable = Launchable;
+			if (launchable != null)
+			{
+				if (!launchable.ConnectedToFuelingPort)
+				{
+					command_LoadToTransporter2.Disable("CommandLoadTransporterFailNotConnectedToFuelingPort".Translate());
+				}
+				else if (!launchable.FuelingPortSourceHasAnyFuel)
+				{
+					command_LoadToTransporter2.Disable("CommandLoadTransporterFailNoFuel".Translate());
+				}
+			}
+			yield return command_LoadToTransporter2;
 		}
 
-		
 		public override void PostDeSpawn(Map map)
 		{
 			base.PostDeSpawn(map);
-			if (this.CancelLoad(map))
+			if (CancelLoad(map))
 			{
-				if (this.Props.max1PerGroup)
+				if (Props.max1PerGroup)
 				{
-					Messages.Message("MessageTransporterSingleLoadCanceled_TransporterDestroyed".Translate(), MessageTypeDefOf.NegativeEvent, true);
+					Messages.Message("MessageTransporterSingleLoadCanceled_TransporterDestroyed".Translate(), MessageTypeDefOf.NegativeEvent);
 				}
 				else
 				{
-					Messages.Message("MessageTransportersLoadCanceled_TransporterDestroyed".Translate(), MessageTypeDefOf.NegativeEvent, true);
+					Messages.Message("MessageTransportersLoadCanceled_TransporterDestroyed".Translate(), MessageTypeDefOf.NegativeEvent);
 				}
 			}
-			this.innerContainer.TryDropAll(this.parent.Position, map, ThingPlaceMode.Near, null, null);
+			innerContainer.TryDropAll(parent.Position, map, ThingPlaceMode.Near);
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			return "Contents".Translate() + ": " + this.innerContainer.ContentsString.CapitalizeFirst();
+			return "Contents".Translate() + ": " + innerContainer.ContentsString.CapitalizeFirst();
 		}
 
-		
 		public void AddToTheToLoadList(TransferableOneWay t, int count)
 		{
 			if (!t.HasAnyThing || count <= 0)
 			{
 				return;
 			}
-			if (this.leftToLoad == null)
+			if (leftToLoad == null)
 			{
-				this.leftToLoad = new List<TransferableOneWay>();
+				leftToLoad = new List<TransferableOneWay>();
 			}
-			TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatching<TransferableOneWay>(t.AnyThing, this.leftToLoad, TransferAsOneMode.PodsOrCaravanPacking);
+			TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatching(t.AnyThing, leftToLoad, TransferAsOneMode.PodsOrCaravanPacking);
 			if (transferableOneWay != null)
 			{
 				for (int i = 0; i < t.things.Count; i++)
@@ -447,104 +398,90 @@ namespace RimWorld
 				if (transferableOneWay.CanAdjustBy(count).Accepted)
 				{
 					transferableOneWay.AdjustBy(count);
-					return;
 				}
 			}
 			else
 			{
 				TransferableOneWay transferableOneWay2 = new TransferableOneWay();
-				this.leftToLoad.Add(transferableOneWay2);
+				leftToLoad.Add(transferableOneWay2);
 				transferableOneWay2.things.AddRange(t.things);
 				transferableOneWay2.AdjustTo(count);
 			}
 		}
 
-		
 		public void Notify_ThingAdded(Thing t)
 		{
-			this.SubtractFromToLoadList(t, t.stackCount, true);
-			if (this.Props.pawnLoadedSound != null && t is Pawn)
+			SubtractFromToLoadList(t, t.stackCount);
+			if (Props.pawnLoadedSound != null && t is Pawn)
 			{
-				this.Props.pawnLoadedSound.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
+				Props.pawnLoadedSound.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
 			}
 		}
 
-		
 		public void Notify_ThingRemoved(Thing t)
 		{
-			if (this.Props.pawnExitSound != null && t is Pawn)
+			if (Props.pawnExitSound != null && t is Pawn)
 			{
-				this.Props.pawnExitSound.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
+				Props.pawnExitSound.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
 			}
 		}
 
-		
 		public void Notify_ThingAddedAndMergedWith(Thing t, int mergedCount)
 		{
-			this.SubtractFromToLoadList(t, mergedCount, true);
+			SubtractFromToLoadList(t, mergedCount);
 		}
 
-		
 		public bool CancelLoad()
 		{
-			return this.CancelLoad(this.Map);
+			return CancelLoad(Map);
 		}
 
-		
 		public bool CancelLoad(Map map)
 		{
-			if (!this.LoadingInProgressOrReadyToLaunch)
+			if (!LoadingInProgressOrReadyToLaunch)
 			{
 				return false;
 			}
-			this.TryRemoveLord(map);
-			List<CompTransporter> list = this.TransportersInGroup(map);
+			TryRemoveLord(map);
+			List<CompTransporter> list = TransportersInGroup(map);
 			for (int i = 0; i < list.Count; i++)
 			{
 				list[i].CleanUpLoadingVars(map);
 			}
-			this.CleanUpLoadingVars(map);
+			CleanUpLoadingVars(map);
 			return true;
 		}
 
-		
 		public void TryRemoveLord(Map map)
 		{
-			if (!this.LoadingInProgressOrReadyToLaunch)
+			if (LoadingInProgressOrReadyToLaunch)
 			{
-				return;
-			}
-			Lord lord = TransporterUtility.FindLord(this.groupID, map);
-			if (lord != null)
-			{
-				map.lordManager.RemoveLord(lord);
+				Lord lord = TransporterUtility.FindLord(groupID, map);
+				if (lord != null)
+				{
+					map.lordManager.RemoveLord(lord);
+				}
 			}
 		}
 
-		
 		public void CleanUpLoadingVars(Map map)
 		{
-			this.groupID = -1;
-			this.innerContainer.TryDropAll(this.parent.Position, map, ThingPlaceMode.Near, null, null);
-			if (this.leftToLoad != null)
+			groupID = -1;
+			innerContainer.TryDropAll(parent.Position, map, ThingPlaceMode.Near);
+			if (leftToLoad != null)
 			{
-				this.leftToLoad.Clear();
+				leftToLoad.Clear();
 			}
-			CompShuttle shuttle = this.Shuttle;
-			if (shuttle != null)
-			{
-				shuttle.CleanUpLoadingVars();
-			}
+			Shuttle?.CleanUpLoadingVars();
 		}
 
-		
 		public int SubtractFromToLoadList(Thing t, int count, bool sendMessageOnFinished = true)
 		{
-			if (this.leftToLoad == null)
+			if (leftToLoad == null)
 			{
 				return 0;
 			}
-			TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatchingDesperate(t, this.leftToLoad, TransferAsOneMode.PodsOrCaravanPacking);
+			TransferableOneWay transferableOneWay = TransferableUtility.TransferableMatchingDesperate(t, leftToLoad, TransferAsOneMode.PodsOrCaravanPacking);
 			if (transferableOneWay == null)
 			{
 				return 0;
@@ -557,88 +494,49 @@ namespace RimWorld
 			transferableOneWay.AdjustBy(-num);
 			if (transferableOneWay.CountToTransfer <= 0)
 			{
-				this.leftToLoad.Remove(transferableOneWay);
+				leftToLoad.Remove(transferableOneWay);
 			}
-			if (sendMessageOnFinished && !this.AnyInGroupHasAnythingLeftToLoad)
+			if (sendMessageOnFinished && !AnyInGroupHasAnythingLeftToLoad)
 			{
-				CompShuttle comp = this.parent.GetComp<CompShuttle>();
+				CompShuttle comp = parent.GetComp<CompShuttle>();
 				if (comp == null || comp.AllRequiredThingsLoaded)
 				{
-					if (this.Props.max1PerGroup)
+					if (Props.max1PerGroup)
 					{
-						Messages.Message("MessageFinishedLoadingTransporterSingle".Translate(), this.parent, MessageTypeDefOf.TaskCompletion, true);
+						Messages.Message("MessageFinishedLoadingTransporterSingle".Translate(), parent, MessageTypeDefOf.TaskCompletion);
 					}
 					else
 					{
-						Messages.Message("MessageFinishedLoadingTransporters".Translate(), this.parent, MessageTypeDefOf.TaskCompletion, true);
+						Messages.Message("MessageFinishedLoadingTransporters".Translate(), parent, MessageTypeDefOf.TaskCompletion);
 					}
 				}
 			}
 			return num;
 		}
 
-		
 		private void SelectPreviousInGroup()
 		{
-			List<CompTransporter> list = this.TransportersInGroup(this.Map);
+			List<CompTransporter> list = TransportersInGroup(Map);
 			int num = list.IndexOf(this);
 			CameraJumper.TryJumpAndSelect(list[GenMath.PositiveMod(num - 1, list.Count)].parent);
 		}
 
-		
 		private void SelectAllInGroup()
 		{
-			List<CompTransporter> list = this.TransportersInGroup(this.Map);
+			List<CompTransporter> list = TransportersInGroup(Map);
 			Selector selector = Find.Selector;
 			selector.ClearSelection();
 			for (int i = 0; i < list.Count; i++)
 			{
-				selector.Select(list[i].parent, true, true);
+				selector.Select(list[i].parent);
 			}
 		}
 
-		
 		private void SelectNextInGroup()
 		{
-			List<CompTransporter> list = this.TransportersInGroup(this.Map);
+			List<CompTransporter> list = TransportersInGroup(Map);
 			int num = list.IndexOf(this);
 			CameraJumper.TryJumpAndSelect(list[(num + 1) % list.Count].parent);
 		}
-
-		
-		public int groupID = -1;
-
-		
-		public ThingOwner innerContainer;
-
-		
-		public List<TransferableOneWay> leftToLoad;
-
-		
-		private bool notifiedCantLoadMore;
-
-		
-		private CompLaunchable cachedCompLaunchable;
-
-		
-		private CompShuttle cachedCompShuttle;
-
-		
-		private static readonly Texture2D CancelLoadCommandTex = ContentFinder<Texture2D>.Get("UI/Designators/Cancel", true);
-
-		
-		private static readonly Texture2D LoadCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/LoadTransporter", true);
-
-		
-		private static readonly Texture2D SelectPreviousInGroupCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/SelectPreviousTransporter", true);
-
-		
-		private static readonly Texture2D SelectAllInGroupCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/SelectAllTransporters", true);
-
-		
-		private static readonly Texture2D SelectNextInGroupCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/SelectNextTransporter", true);
-
-		
-		private static List<CompTransporter> tmpTransportersInGroup = new List<CompTransporter>();
 	}
 }

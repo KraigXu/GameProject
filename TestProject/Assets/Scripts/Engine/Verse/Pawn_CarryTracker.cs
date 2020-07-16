@@ -1,183 +1,141 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse.AI;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public class Pawn_CarryTracker : IThingHolder, IExposable
 	{
-		
-		
+		public Pawn pawn;
+
+		public ThingOwner<Thing> innerContainer;
+
 		public Thing CarriedThing
 		{
 			get
 			{
-				if (this.innerContainer.Count == 0)
+				if (innerContainer.Count == 0)
 				{
 					return null;
 				}
-				return this.innerContainer[0];
+				return innerContainer[0];
 			}
 		}
 
-		
-		
-		public bool Full
-		{
-			get
-			{
-				return this.AvailableStackSpace(this.CarriedThing.def) <= 0;
-			}
-		}
+		public bool Full => AvailableStackSpace(CarriedThing.def) <= 0;
 
-		
-		
-		public IThingHolder ParentHolder
-		{
-			get
-			{
-				return this.pawn;
-			}
-		}
+		public IThingHolder ParentHolder => pawn;
 
-		
 		public Pawn_CarryTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.innerContainer = new ThingOwner<Thing>(this, true, LookMode.Deep);
+			innerContainer = new ThingOwner<Thing>(this, oneStackOnly: true);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<ThingOwner<Thing>>(ref this.innerContainer, "innerContainer", new object[]
-			{
-				this
-			});
+			Scribe_Deep.Look(ref innerContainer, "innerContainer", this);
 		}
 
-		
 		public ThingOwner GetDirectlyHeldThings()
 		{
-			return this.innerContainer;
+			return innerContainer;
 		}
 
-		
 		public void GetChildHolders(List<IThingHolder> outChildren)
 		{
-			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, this.GetDirectlyHeldThings());
+			ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 		}
 
-		
 		public int AvailableStackSpace(ThingDef td)
 		{
-			int num = this.MaxStackSpaceEver(td);
-			if (this.CarriedThing != null)
+			int num = MaxStackSpaceEver(td);
+			if (CarriedThing != null)
 			{
-				num -= this.CarriedThing.stackCount;
+				num -= CarriedThing.stackCount;
 			}
 			return num;
 		}
 
-		
 		public int MaxStackSpaceEver(ThingDef td)
 		{
-			int b = Mathf.RoundToInt(this.pawn.GetStatValue(StatDefOf.CarryingCapacity, true) / td.VolumePerUnit);
+			int b = Mathf.RoundToInt(pawn.GetStatValue(StatDefOf.CarryingCapacity) / td.VolumePerUnit);
 			return Mathf.Min(td.stackLimit, b);
 		}
 
-		
 		public bool TryStartCarry(Thing item)
 		{
-			if (this.pawn.Dead || this.pawn.Downed)
+			if (pawn.Dead || pawn.Downed)
 			{
-				Log.Error("Dead/downed pawn " + this.pawn + " tried to start carry item.", false);
+				Log.Error("Dead/downed pawn " + pawn + " tried to start carry item.");
 				return false;
 			}
-			if (this.innerContainer.TryAdd(item, true))
+			if (innerContainer.TryAdd(item))
 			{
-				item.def.soundPickup.PlayOneShot(new TargetInfo(item.Position, this.pawn.Map, false));
+				item.def.soundPickup.PlayOneShot(new TargetInfo(item.Position, pawn.Map));
 				return true;
 			}
 			return false;
 		}
 
-		
 		public int TryStartCarry(Thing item, int count, bool reserve = true)
 		{
-			if (this.pawn.Dead || this.pawn.Downed)
+			if (pawn.Dead || pawn.Downed)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Dead/downed pawn ",
-					this.pawn,
-					" tried to start carry ",
-					item.ToStringSafe<Thing>()
-				}), false);
+				Log.Error("Dead/downed pawn " + pawn + " tried to start carry " + item.ToStringSafe());
 				return 0;
 			}
-			count = Mathf.Min(count, this.AvailableStackSpace(item.def));
+			count = Mathf.Min(count, AvailableStackSpace(item.def));
 			count = Mathf.Min(count, item.stackCount);
-			int num = this.innerContainer.TryAdd(item.SplitOff(count), count, true);
+			int num = innerContainer.TryAdd(item.SplitOff(count), count);
 			if (num > 0)
 			{
-				item.def.soundPickup.PlayOneShot(new TargetInfo(item.Position, this.pawn.Map, false));
+				item.def.soundPickup.PlayOneShot(new TargetInfo(item.Position, pawn.Map));
 				if (reserve)
 				{
-					this.pawn.Reserve(this.CarriedThing, this.pawn.CurJob, 1, -1, null, true);
+					pawn.Reserve(CarriedThing, pawn.CurJob);
 				}
 			}
 			return num;
 		}
 
-		
 		public bool TryDropCarriedThing(IntVec3 dropLoc, ThingPlaceMode mode, out Thing resultingThing, Action<Thing, int> placedAction = null)
 		{
-			if (this.innerContainer.TryDrop(this.CarriedThing, dropLoc, this.pawn.MapHeld, mode, out resultingThing, placedAction, null))
+			if (innerContainer.TryDrop(CarriedThing, dropLoc, pawn.MapHeld, mode, out resultingThing, placedAction))
 			{
-				if (resultingThing != null && this.pawn.Faction.HostileTo(Faction.OfPlayer))
+				if (resultingThing != null && pawn.Faction.HostileTo(Faction.OfPlayer))
 				{
-					resultingThing.SetForbidden(true, false);
+					resultingThing.SetForbidden(value: true, warnOnFail: false);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public bool TryDropCarriedThing(IntVec3 dropLoc, int count, ThingPlaceMode mode, out Thing resultingThing, Action<Thing, int> placedAction = null)
 		{
-			if (this.innerContainer.TryDrop(this.CarriedThing, dropLoc, this.pawn.MapHeld, mode, count, out resultingThing, placedAction, null))
+			if (innerContainer.TryDrop(CarriedThing, dropLoc, pawn.MapHeld, mode, count, out resultingThing, placedAction))
 			{
-				if (resultingThing != null && this.pawn.Faction.HostileTo(Faction.OfPlayer))
+				if (resultingThing != null && pawn.Faction.HostileTo(Faction.OfPlayer))
 				{
-					resultingThing.SetForbidden(true, false);
+					resultingThing.SetForbidden(value: true, warnOnFail: false);
 				}
 				return true;
 			}
 			return false;
 		}
 
-		
 		public void DestroyCarriedThing()
 		{
-			this.innerContainer.ClearAndDestroyContents(DestroyMode.Vanish);
+			innerContainer.ClearAndDestroyContents();
 		}
 
-		
 		public void CarryHandsTick()
 		{
-			this.innerContainer.ThingOwnerTick(true);
+			innerContainer.ThingOwnerTick();
 		}
-
-		
-		public Pawn pawn;
-
-		
-		public ThingOwner<Thing> innerContainer;
 	}
 }

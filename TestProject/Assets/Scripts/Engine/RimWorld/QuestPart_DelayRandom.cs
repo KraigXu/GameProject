@@ -1,33 +1,27 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DelayRandom : QuestPart_Delay
 	{
-		
+		public IntRange delayTicksRange;
+
 		protected override void Enable(SignalArgs receivedArgs)
 		{
-			this.delayTicks = this.delayTicksRange.RandomInRange;
+			delayTicks = delayTicksRange.RandomInRange;
 			base.Enable(receivedArgs);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<IntRange>(ref this.delayTicksRange, "delayTicksRange", default(IntRange), false);
+			Scribe_Values.Look(ref delayTicksRange, "delayTicksRange");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.delayTicksRange = new IntRange(833, 2500);
+			delayTicksRange = new IntRange(833, 2500);
 		}
-
-		
-		public IntRange delayTicksRange;
 	}
 }

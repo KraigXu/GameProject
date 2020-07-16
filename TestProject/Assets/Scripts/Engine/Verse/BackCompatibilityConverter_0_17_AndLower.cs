@@ -1,21 +1,22 @@
-﻿using System;
-using System.Xml;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.Xml;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public class BackCompatibilityConverter_0_17_AndLower : BackCompatibilityConverter
 	{
-		
 		public override bool AppliesToVersion(int majorVer, int minorVer)
 		{
-			return majorVer == 0 && minorVer <= 17;
+			if (majorVer == 0)
+			{
+				return minorVer <= 17;
+			}
+			return false;
 		}
 
-		
 		public override string BackCompatibleDefName(Type defType, string defName, bool forDefInjections = false, XmlNode node = null)
 		{
 			if (defType == typeof(ThingDef))
@@ -785,7 +786,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override Type GetBackCompatibleType(Type baseType, string providedClassName, XmlNode node)
 		{
 			if (baseType == typeof(WorldObject))
@@ -813,7 +813,6 @@ namespace Verse
 			return null;
 		}
 
-		
 		public override void PostExposeData(object obj)
 		{
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
@@ -828,17 +827,17 @@ namespace Verse
 				{
 					if (battleLogEntry_MeleeCombat.RuleDef == null)
 					{
-						RulePackDef rulePackDef = null;
-						RulePackDef rulePackDef2 = null;
-						Scribe_Defs.Look<RulePackDef>(ref rulePackDef, "outcomeRuleDef");
-						Scribe_Defs.Look<RulePackDef>(ref rulePackDef2, "maneuverRuleDef");
-						if (rulePackDef != null && rulePackDef2 != null)
+						RulePackDef value = null;
+						RulePackDef value2 = null;
+						Scribe_Defs.Look(ref value, "outcomeRuleDef");
+						Scribe_Defs.Look(ref value2, "maneuverRuleDef");
+						if (value != null && value2 != null)
 						{
-							foreach (RulePackDef rulePackDef3 in DefDatabase<RulePackDef>.AllDefsListForReading)
+							foreach (RulePackDef item in DefDatabase<RulePackDef>.AllDefsListForReading)
 							{
-								if (!rulePackDef3.include.NullOrEmpty<RulePackDef>() && rulePackDef3.include.Count == 2 && ((rulePackDef3.include[0] == rulePackDef && rulePackDef3.include[1] == rulePackDef2) || (rulePackDef3.include[1] == rulePackDef && rulePackDef3.include[0] == rulePackDef2)))
+								if (!item.include.NullOrEmpty() && item.include.Count == 2 && ((item.include[0] == value && item.include[1] == value2) || (item.include[1] == value && item.include[0] == value2)))
 								{
-									battleLogEntry_MeleeCombat.RuleDef = rulePackDef3;
+									battleLogEntry_MeleeCombat.RuleDef = item;
 									break;
 								}
 							}
@@ -870,7 +869,7 @@ namespace Verse
 				ImportantPawnComp importantPawnComp = obj as ImportantPawnComp;
 				if (importantPawnComp != null && importantPawnComp.pawn == null)
 				{
-					importantPawnComp.pawn = new ThingOwner<Pawn>(importantPawnComp, true, LookMode.Deep);
+					importantPawnComp.pawn = new ThingOwner<Pawn>(importantPawnComp, oneStackOnly: true);
 				}
 				Pawn_RecordsTracker pawn_RecordsTracker = obj as Pawn_RecordsTracker;
 				if (pawn_RecordsTracker != null && Find.TaleManager.AnyTaleConcerns(pawn_RecordsTracker.pawn))

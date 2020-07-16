@@ -1,45 +1,70 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_DropPods : QuestPart
 	{
-		
-		
-		
+		public string inSignal;
+
+		public string outSignalResult;
+
+		public IntVec3 dropSpot = IntVec3.Invalid;
+
+		public bool useTradeDropSpot;
+
+		public MapParent mapParent;
+
+		private List<Thing> items = new List<Thing>();
+
+		private List<Pawn> pawns = new List<Pawn>();
+
+		public List<ThingDef> thingsToExcludeFromHyperlinks = new List<ThingDef>();
+
+		public bool joinPlayer;
+
+		public bool makePrisoners;
+
+		public string customLetterText;
+
+		public string customLetterLabel;
+
+		public LetterDef customLetterDef;
+
+		public bool sendStandardLetter = true;
+
+		private Thing importantLookTarget;
+
 		public IEnumerable<Thing> Things
 		{
 			get
 			{
-				return this.items.Concat(this.pawns.Cast<Thing>());
+				return items.Concat(pawns.Cast<Thing>());
 			}
 			set
 			{
-				this.items.Clear();
-				this.pawns.Clear();
+				items.Clear();
+				pawns.Clear();
 				if (value != null)
 				{
-					foreach (Thing thing in value)
+					foreach (Thing item in value)
 					{
-						if (thing.Destroyed)
+						if (item.Destroyed)
 						{
-							Log.Error("Tried to add a destroyed thing to QuestPart_DropPods: " + thing.ToStringSafe<Thing>(), false);
+							Log.Error("Tried to add a destroyed thing to QuestPart_DropPods: " + item.ToStringSafe());
 						}
 						else
 						{
-							Pawn pawn = thing as Pawn;
+							Pawn pawn = item as Pawn;
 							if (pawn != null)
 							{
-								this.pawns.Add(pawn);
+								pawns.Add(pawn);
 							}
 							else
 							{
-								this.items.Add(thing);
+								items.Add(item);
 							}
 						}
 					}
@@ -47,282 +72,224 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.mapParent != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.mapParent;
+					yield return questLookTarget;
 				}
-				foreach (Pawn t in PawnsArriveQuestPartUtility.GetQuestLookTargets(this.pawns))
+				if (mapParent != null)
 				{
-					yield return t;
+					yield return mapParent;
 				}
-				IEnumerator<Pawn> enumerator2 = null;
-				if (this.importantLookTarget != null)
+				foreach (Pawn questLookTarget2 in PawnsArriveQuestPartUtility.GetQuestLookTargets(pawns))
 				{
-					yield return this.importantLookTarget;
+					yield return questLookTarget2;
 				}
-				yield break;
-				yield break;
+				if (importantLookTarget != null)
+				{
+					yield return importantLookTarget;
+				}
 			}
 		}
 
-		
-		
-		public override bool IncreasesPopulation
-		{
-			get
-			{
-				return PawnsArriveQuestPartUtility.IncreasesPopulation(this.pawns, this.joinPlayer, this.makePrisoners);
-			}
-		}
+		public override bool IncreasesPopulation => PawnsArriveQuestPartUtility.IncreasesPopulation(pawns, joinPlayer, makePrisoners);
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				this.pawns.RemoveAll((Pawn x) => x.Destroyed);
-				this.items.RemoveAll((Thing x) => x.Destroyed);
-				Thing thing = (from x in this.Things
-				where x is Pawn
-				select x).MaxByWithFallback((Thing x) => x.MarketValue, null);
-				Thing thing2 = this.Things.MaxByWithFallback((Thing x) => x.MarketValue * (float)x.stackCount, null);
-				if (this.mapParent != null && this.mapParent.HasMap && this.Things.Any<Thing>())
+				return;
+			}
+			pawns.RemoveAll((Pawn x) => x.Destroyed);
+			items.RemoveAll((Thing x) => x.Destroyed);
+			Thing thing = Things.Where((Thing x) => x is Pawn).MaxByWithFallback((Thing x) => x.MarketValue);
+			Thing thing2 = Things.MaxByWithFallback((Thing x) => x.MarketValue * (float)x.stackCount);
+			if (mapParent != null && mapParent.HasMap && Things.Any())
+			{
+				Map map = mapParent.Map;
+				IntVec3 intVec = dropSpot.IsValid ? dropSpot : GetRandomDropSpot();
+				if (sendStandardLetter)
 				{
-					Map map = this.mapParent.Map;
-					IntVec3 intVec = this.dropSpot.IsValid ? this.dropSpot : this.GetRandomDropSpot();
-					if (this.sendStandardLetter)
+					TaggedString title;
+					TaggedString text;
+					if (joinPlayer && pawns.Count == 1 && pawns[0].RaceProps.Humanlike)
 					{
-						TaggedString taggedString;
-						TaggedString taggedString2;
-						if (this.joinPlayer && this.pawns.Count == 1 && this.pawns[0].RaceProps.Humanlike)
-						{
-							taggedString = "LetterRefugeeJoins".Translate(this.pawns[0].Named("PAWN"));
-							taggedString2 = "LetterLabelRefugeeJoins".Translate(this.pawns[0].Named("PAWN"));
-							PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref taggedString, ref taggedString2, this.pawns[0]);
-						}
-						else
-						{
-							taggedString = "LetterQuestDropPodsArrived".Translate(GenLabel.ThingsLabel(this.Things, "  - "));
-							taggedString2 = "LetterLabelQuestDropPodsArrived".Translate();
-							PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(this.pawns, ref taggedString2, ref taggedString, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), true, true);
-						}
-						taggedString2 = (this.customLetterLabel.NullOrEmpty() ? taggedString2 : this.customLetterLabel.Formatted(taggedString2.Named("BASELABEL")));
-						taggedString = (this.customLetterText.NullOrEmpty() ? taggedString : this.customLetterText.Formatted(taggedString.Named("BASETEXT")));
-						Find.LetterStack.ReceiveLetter(taggedString2, taggedString, this.customLetterDef ?? LetterDefOf.PositiveEvent, new TargetInfo(intVec, map, false), null, this.quest, null, null);
+						text = "LetterRefugeeJoins".Translate(pawns[0].Named("PAWN"));
+						title = "LetterLabelRefugeeJoins".Translate(pawns[0].Named("PAWN"));
+						PawnRelationUtility.TryAppendRelationsWithColonistsInfo(ref text, ref title, pawns[0]);
 					}
-					if (this.joinPlayer)
+					else
 					{
-						for (int i = 0; i < this.pawns.Count; i++)
-						{
-							if (this.pawns[i].Faction != Faction.OfPlayer)
-							{
-								this.pawns[i].SetFaction(Faction.OfPlayer, null);
-							}
-						}
+						text = "LetterQuestDropPodsArrived".Translate(GenLabel.ThingsLabel(Things));
+						title = "LetterLabelQuestDropPodsArrived".Translate();
+						PawnRelationUtility.Notify_PawnsSeenByPlayer_Letter(pawns, ref title, ref text, "LetterRelatedPawnsNeutralGroup".Translate(Faction.OfPlayer.def.pawnsPlural), informEvenIfSeenBefore: true);
 					}
-					else if (this.makePrisoners)
-					{
-						for (int j = 0; j < this.pawns.Count; j++)
-						{
-							if (this.pawns[j].RaceProps.Humanlike)
-							{
-								if (!this.pawns[j].IsPrisonerOfColony)
-								{
-									this.pawns[j].guest.SetGuestStatus(Faction.OfPlayer, true);
-								}
-								HealthUtility.TryAnesthetize(this.pawns[j]);
-							}
-						}
-					}
-					for (int k = 0; k < this.pawns.Count; k++)
-					{
-						this.pawns[k].needs.SetInitialLevels();
-					}
-					DropPodUtility.DropThingsNear(intVec, map, this.Things, 110, false, false, !this.useTradeDropSpot, false);
-					this.importantLookTarget = this.items.Find((Thing x) => x.GetInnerIfMinified() is MonumentMarker).GetInnerIfMinified();
-					this.items.Clear();
+					title = (customLetterLabel.NullOrEmpty() ? title : customLetterLabel.Formatted(title.Named("BASELABEL")));
+					text = (customLetterText.NullOrEmpty() ? text : customLetterText.Formatted(text.Named("BASETEXT")));
+					Find.LetterStack.ReceiveLetter(title, text, customLetterDef ?? LetterDefOf.PositiveEvent, new TargetInfo(intVec, map), null, quest);
 				}
-				if (!this.outSignalResult.NullOrEmpty())
+				if (joinPlayer)
 				{
-					if (thing != null)
+					for (int i = 0; i < pawns.Count; i++)
 					{
-						Find.SignalManager.SendSignal(new Signal(this.outSignalResult, thing.Named("SUBJECT")));
-						return;
+						if (pawns[i].Faction != Faction.OfPlayer)
+						{
+							pawns[i].SetFaction(Faction.OfPlayer);
+						}
 					}
-					if (thing2 != null)
+				}
+				else if (makePrisoners)
+				{
+					for (int j = 0; j < pawns.Count; j++)
 					{
-						Find.SignalManager.SendSignal(new Signal(this.outSignalResult, thing2.Named("SUBJECT")));
-						return;
+						if (pawns[j].RaceProps.Humanlike)
+						{
+							if (!pawns[j].IsPrisonerOfColony)
+							{
+								pawns[j].guest.SetGuestStatus(Faction.OfPlayer, prisoner: true);
+							}
+							HealthUtility.TryAnesthetize(pawns[j]);
+						}
 					}
-					Find.SignalManager.SendSignal(new Signal(this.outSignalResult));
+				}
+				for (int k = 0; k < pawns.Count; k++)
+				{
+					pawns[k].needs.SetInitialLevels();
+				}
+				DropPodUtility.DropThingsNear(intVec, map, Things, 110, canInstaDropDuringInit: false, leaveSlag: false, !useTradeDropSpot, forbid: false);
+				importantLookTarget = items.Find((Thing x) => x.GetInnerIfMinified() is MonumentMarker).GetInnerIfMinified();
+				items.Clear();
+			}
+			if (!outSignalResult.NullOrEmpty())
+			{
+				if (thing != null)
+				{
+					Find.SignalManager.SendSignal(new Signal(outSignalResult, thing.Named("SUBJECT")));
+				}
+				else if (thing2 != null)
+				{
+					Find.SignalManager.SendSignal(new Signal(outSignalResult, thing2.Named("SUBJECT")));
+				}
+				else
+				{
+					Find.SignalManager.SendSignal(new Signal(outSignalResult));
 				}
 			}
 		}
 
-		
 		public override bool QuestPartReserves(Pawn p)
 		{
-			return this.pawns.Contains(p);
+			return pawns.Contains(p);
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.pawns.Replace(replace, with);
+			pawns.Replace(replace, with);
 		}
 
-		
 		public override void PostQuestAdded()
 		{
 			base.PostQuestAdded();
-			for (int i = 0; i < this.items.Count; i++)
+			int num = 0;
+			while (true)
 			{
-				if (this.items[i].def == ThingDefOf.PsychicAmplifier)
+				if (num < items.Count)
 				{
-					Find.History.Notify_PsylinkAvailable();
-					return;
+					if (items[num].def == ThingDefOf.PsychicAmplifier)
+					{
+						break;
+					}
+					num++;
+					continue;
 				}
+				return;
 			}
+			Find.History.Notify_PsylinkAvailable();
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			for (int i = 0; i < this.items.Count; i++)
+			for (int i = 0; i < items.Count; i++)
 			{
-				if (!this.items[i].Destroyed)
+				if (!items[i].Destroyed)
 				{
-					this.items[i].Destroy(DestroyMode.Vanish);
+					items[i].Destroy();
 				}
 			}
-			this.items.Clear();
+			items.Clear();
 		}
 
-		
 		private IntVec3 GetRandomDropSpot()
 		{
-			Map map = this.mapParent.Map;
-			if (this.useTradeDropSpot)
+			Map map = mapParent.Map;
+			if (useTradeDropSpot)
 			{
 				return DropCellFinder.TradeDropSpot(map);
 			}
-			IntVec3 result;
-			if (CellFinderLoose.TryGetRandomCellWith((IntVec3 x) => x.Standable(map) && !x.Roofed(map) && !x.Fogged(map) && map.reachability.CanReachColony(x), map, 1000, out result))
+			if (CellFinderLoose.TryGetRandomCellWith((IntVec3 x) => x.Standable(map) && !x.Roofed(map) && !x.Fogged(map) && map.reachability.CanReachColony(x), map, 1000, out IntVec3 result))
 			{
 				return result;
 			}
 			return DropCellFinder.RandomDropSpot(map);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Values.Look<string>(ref this.outSignalResult, "outSignalResult", null, false);
-			Scribe_Values.Look<IntVec3>(ref this.dropSpot, "dropSpot", default(IntVec3), false);
-			Scribe_Values.Look<bool>(ref this.useTradeDropSpot, "useTradeDropSpot", false, false);
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Collections.Look<Thing>(ref this.items, "items", LookMode.Deep, Array.Empty<object>());
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.joinPlayer, "joinPlayer", false, false);
-			Scribe_Values.Look<bool>(ref this.makePrisoners, "makePrisoners", false, false);
-			Scribe_Values.Look<string>(ref this.customLetterLabel, "customLetterLabel", null, false);
-			Scribe_Values.Look<string>(ref this.customLetterText, "customLetterText", null, false);
-			Scribe_Defs.Look<LetterDef>(ref this.customLetterDef, "customLetterDef");
-			Scribe_Values.Look<bool>(ref this.sendStandardLetter, "sendStandardLetter", true, false);
-			Scribe_References.Look<Thing>(ref this.importantLookTarget, "importantLookTarget", false);
-			Scribe_Collections.Look<ThingDef>(ref this.thingsToExcludeFromHyperlinks, "thingsToExcludeFromHyperlinks", LookMode.Def, Array.Empty<object>());
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Values.Look(ref outSignalResult, "outSignalResult");
+			Scribe_Values.Look(ref dropSpot, "dropSpot");
+			Scribe_Values.Look(ref useTradeDropSpot, "useTradeDropSpot", defaultValue: false);
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Collections.Look(ref items, "items", LookMode.Deep);
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Values.Look(ref joinPlayer, "joinPlayer", defaultValue: false);
+			Scribe_Values.Look(ref makePrisoners, "makePrisoners", defaultValue: false);
+			Scribe_Values.Look(ref customLetterLabel, "customLetterLabel");
+			Scribe_Values.Look(ref customLetterText, "customLetterText");
+			Scribe_Defs.Look(ref customLetterDef, "customLetterDef");
+			Scribe_Values.Look(ref sendStandardLetter, "sendStandardLetter", defaultValue: true);
+			Scribe_References.Look(ref importantLookTarget, "importantLookTarget");
+			Scribe_Collections.Look(ref thingsToExcludeFromHyperlinks, "thingsToExcludeFromHyperlinks", LookMode.Def);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.thingsToExcludeFromHyperlinks == null)
+				if (thingsToExcludeFromHyperlinks == null)
 				{
-					this.thingsToExcludeFromHyperlinks = new List<ThingDef>();
+					thingsToExcludeFromHyperlinks = new List<ThingDef>();
 				}
-				this.items.RemoveAll((Thing x) => x == null);
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				items.RemoveAll((Thing x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			if (Find.AnyPlayerHomeMap != null)
+			inSignal = "DebugSignal" + Rand.Int;
+			if (Find.AnyPlayerHomeMap == null)
 			{
-				this.mapParent = Find.RandomPlayerHomeMap.Parent;
-				List<Thing> list = ThingSetMakerDefOf.DebugQuestDropPodsContents.root.Generate();
-				for (int i = 0; i < list.Count; i++)
+				return;
+			}
+			mapParent = Find.RandomPlayerHomeMap.Parent;
+			List<Thing> list = ThingSetMakerDefOf.DebugQuestDropPodsContents.root.Generate();
+			for (int i = 0; i < list.Count; i++)
+			{
+				Pawn pawn = list[i] as Pawn;
+				if (pawn != null)
 				{
-					Pawn pawn = list[i] as Pawn;
-					if (pawn != null)
+					pawn.relations.everSeenByPlayer = true;
+					if (!pawn.IsWorldPawn())
 					{
-						pawn.relations.everSeenByPlayer = true;
-						if (!pawn.IsWorldPawn())
-						{
-							Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.Decide);
-						}
+						Find.WorldPawns.PassToWorld(pawn);
 					}
 				}
-				this.Things = list;
 			}
+			Things = list;
 		}
-
-		
-		public string inSignal;
-
-		
-		public string outSignalResult;
-
-		
-		public IntVec3 dropSpot = IntVec3.Invalid;
-
-		
-		public bool useTradeDropSpot;
-
-		
-		public MapParent mapParent;
-
-		
-		private List<Thing> items = new List<Thing>();
-
-		
-		private List<Pawn> pawns = new List<Pawn>();
-
-		
-		public List<ThingDef> thingsToExcludeFromHyperlinks = new List<ThingDef>();
-
-		
-		public bool joinPlayer;
-
-		
-		public bool makePrisoners;
-
-		
-		public string customLetterText;
-
-		
-		public string customLetterLabel;
-
-		
-		public LetterDef customLetterDef;
-
-		
-		public bool sendStandardLetter = true;
-
-		
-		private Thing importantLookTarget;
 	}
 }

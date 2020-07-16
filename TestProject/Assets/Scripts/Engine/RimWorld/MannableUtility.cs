@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class MannableUtility
 	{
-		
 		public static Thing MannedThing(this Pawn pawn)
 		{
 			if (pawn.Dead)

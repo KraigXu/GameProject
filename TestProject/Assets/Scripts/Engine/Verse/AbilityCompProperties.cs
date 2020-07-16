@@ -1,33 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class AbilityCompProperties
 	{
-		
+		[TranslationHandle]
+		public Type compClass;
+
 		public virtual IEnumerable<string> ConfigErrors(AbilityDef parentDef)
 		{
-			if (this.compClass == null)
+			if (compClass == null)
 			{
 				yield return "compClass is null";
 			}
-			int num;
-			for (int i = 0; i < parentDef.comps.Count; i = num + 1)
+			for (int i = 0; i < parentDef.comps.Count; i++)
 			{
-				if (parentDef.comps[i] != this && parentDef.comps[i].compClass == this.compClass)
+				if (parentDef.comps[i] != this && parentDef.comps[i].compClass == compClass)
 				{
-					yield return "two comps with same compClass: " + this.compClass;
+					yield return "two comps with same compClass: " + compClass;
 				}
-				num = i;
 			}
-			yield break;
 		}
-
-		
-		[TranslationHandle]
-		public Type compClass;
 	}
 }

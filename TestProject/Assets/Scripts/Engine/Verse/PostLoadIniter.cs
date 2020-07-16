@@ -1,74 +1,57 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class PostLoadIniter
 	{
-		
+		private HashSet<IExposable> saveablesToPostLoad = new HashSet<IExposable>();
+
 		public void RegisterForPostLoadInit(IExposable s)
 		{
 			if (Scribe.mode != LoadSaveMode.LoadingVars)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Registered ",
-					s,
-					" for post load init, but current mode is ",
-					Scribe.mode
-				}), false);
-				return;
+				Log.Error("Registered " + s + " for post load init, but current mode is " + Scribe.mode);
 			}
-			if (s == null)
+			else if (s == null)
 			{
-				Log.Warning("Trying to register null in RegisterforPostLoadInit.", false);
-				return;
+				Log.Warning("Trying to register null in RegisterforPostLoadInit.");
 			}
-			if (this.saveablesToPostLoad.Contains(s))
+			else if (saveablesToPostLoad.Contains(s))
 			{
-				Log.Warning("Tried to register in RegisterforPostLoadInit when already registered: " + s, false);
-				return;
+				Log.Warning("Tried to register in RegisterforPostLoadInit when already registered: " + s);
 			}
-			this.saveablesToPostLoad.Add(s);
+			else
+			{
+				saveablesToPostLoad.Add(s);
+			}
 		}
 
-		
 		public void DoAllPostLoadInits()
 		{
 			Scribe.mode = LoadSaveMode.PostLoadInit;
-			foreach (IExposable exposable in this.saveablesToPostLoad)
+			foreach (IExposable item in saveablesToPostLoad)
 			{
 				try
 				{
-					Scribe.loader.curParent = exposable;
+					Scribe.loader.curParent = item;
 					Scribe.loader.curPathRelToParent = null;
-					exposable.ExposeData();
+					item.ExposeData();
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Could not do PostLoadInit on ",
-						exposable.ToStringSafe<IExposable>(),
-						": ",
-						ex
-					}), false);
+					Log.Error("Could not do PostLoadInit on " + item.ToStringSafe() + ": " + ex);
 				}
 			}
-			this.Clear();
+			Clear();
 			Scribe.loader.curParent = null;
 			Scribe.loader.curPathRelToParent = null;
 			Scribe.mode = LoadSaveMode.Inactive;
 		}
 
-		
 		public void Clear()
 		{
-			this.saveablesToPostLoad.Clear();
+			saveablesToPostLoad.Clear();
 		}
-
-		
-		private HashSet<IExposable> saveablesToPostLoad = new HashSet<IExposable>();
 	}
 }

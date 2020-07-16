@@ -1,28 +1,28 @@
-﻿using System;
+using System;
 using System.IO;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class DevModePermanentlyDisabledUtility
 	{
-		
-		
+		private static bool initialized;
+
+		private static bool disabled;
+
 		public static bool Disabled
 		{
 			get
 			{
-				if (!DevModePermanentlyDisabledUtility.initialized)
+				if (!initialized)
 				{
-					DevModePermanentlyDisabledUtility.initialized = true;
-					DevModePermanentlyDisabledUtility.disabled = File.Exists(GenFilePaths.DevModePermanentlyDisabledFilePath);
+					initialized = true;
+					disabled = File.Exists(GenFilePaths.DevModePermanentlyDisabledFilePath);
 				}
-				return DevModePermanentlyDisabledUtility.disabled;
+				return disabled;
 			}
 		}
 
-		
 		public static void Disable()
 		{
 			try
@@ -31,17 +31,11 @@ namespace RimWorld
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Could not permanently disable dev mode: " + arg, false);
+				Log.Error("Could not permanently disable dev mode: " + arg);
 				return;
 			}
-			DevModePermanentlyDisabledUtility.disabled = true;
+			disabled = true;
 			Prefs.DevMode = false;
 		}
-
-		
-		private static bool initialized;
-
-		
-		private static bool disabled;
 	}
 }

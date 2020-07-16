@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class WorldObjectCompProperties
 	{
-		
+		[TranslationHandle]
+		public Type compClass = typeof(WorldObjectComp);
+
 		public virtual IEnumerable<string> ConfigErrors(WorldObjectDef parentDef)
 		{
-			if (this.compClass == null)
+			if (compClass == null)
 			{
 				yield return parentDef.defName + " has WorldObjectCompProperties with null compClass.";
 			}
-			yield break;
 		}
 
-		
 		public virtual void ResolveReferences(WorldObjectDef parentDef)
 		{
 		}
-
-		
-		[TranslationHandle]
-		public Type compClass = typeof(WorldObjectComp);
 	}
 }

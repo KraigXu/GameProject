@@ -1,67 +1,53 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_ChatWithPrisoner : JobDriver
 	{
-		
-		
-		protected Pawn Talkee
-		{
-			get
-			{
-				return (Pawn)this.job.targetA.Thing;
-			}
-		}
+		protected Pawn Talkee => (Pawn)job.targetA.Thing;
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override string ReportStringProcessed(string str)
 		{
-			if (this.Talkee.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance)
+			if (Talkee.guest.interactionMode == PrisonerInteractionModeDefOf.ReduceResistance)
 			{
-				return "JobReport_ReduceResistance".Translate(this.Talkee);
+				return "JobReport_ReduceResistance".Translate(Talkee);
 			}
 			return base.ReportStringProcessed(str);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
 			this.FailOnMentalState(TargetIndex.A);
 			this.FailOnNotAwake(TargetIndex.A);
-			this.FailOn(() => !this.Talkee.IsPrisonerOfColony || !this.Talkee.guest.PrisonerIsSecure);
-			yield return Toils_Interpersonal.GotoPrisoner(this.pawn, this.Talkee, this.Talkee.guest.interactionMode);
-			yield return Toils_Interpersonal.WaitToBeAbleToInteract(this.pawn);
+			this.FailOn(() => !Talkee.IsPrisonerOfColony || !Talkee.guest.PrisonerIsSecure);
+			yield return Toils_Interpersonal.GotoPrisoner(pawn, Talkee, Talkee.guest.interactionMode);
+			yield return Toils_Interpersonal.WaitToBeAbleToInteract(pawn);
 			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
-			yield return Toils_Interpersonal.ConvinceRecruitee(this.pawn, this.Talkee);
-			yield return Toils_Interpersonal.GotoPrisoner(this.pawn, this.Talkee, this.Talkee.guest.interactionMode);
+			yield return Toils_Interpersonal.ConvinceRecruitee(pawn, Talkee);
+			yield return Toils_Interpersonal.GotoPrisoner(pawn, Talkee, Talkee.guest.interactionMode);
 			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
-			yield return Toils_Interpersonal.ConvinceRecruitee(this.pawn, this.Talkee);
-			yield return Toils_Interpersonal.GotoPrisoner(this.pawn, this.Talkee, this.Talkee.guest.interactionMode);
+			yield return Toils_Interpersonal.ConvinceRecruitee(pawn, Talkee);
+			yield return Toils_Interpersonal.GotoPrisoner(pawn, Talkee, Talkee.guest.interactionMode);
 			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
-			yield return Toils_Interpersonal.ConvinceRecruitee(this.pawn, this.Talkee);
-			yield return Toils_Interpersonal.GotoPrisoner(this.pawn, this.Talkee, this.Talkee.guest.interactionMode);
+			yield return Toils_Interpersonal.ConvinceRecruitee(pawn, Talkee);
+			yield return Toils_Interpersonal.GotoPrisoner(pawn, Talkee, Talkee.guest.interactionMode);
 			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
-			yield return Toils_Interpersonal.ConvinceRecruitee(this.pawn, this.Talkee);
-			yield return Toils_Interpersonal.GotoPrisoner(this.pawn, this.Talkee, this.Talkee.guest.interactionMode);
+			yield return Toils_Interpersonal.ConvinceRecruitee(pawn, Talkee);
+			yield return Toils_Interpersonal.GotoPrisoner(pawn, Talkee, Talkee.guest.interactionMode);
 			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
-			yield return Toils_Interpersonal.ConvinceRecruitee(this.pawn, this.Talkee);
-			yield return Toils_Interpersonal.GotoPrisoner(this.pawn, this.Talkee, this.Talkee.guest.interactionMode);
-			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A).FailOn(() => !this.Talkee.guest.ScheduledForInteraction);
+			yield return Toils_Interpersonal.ConvinceRecruitee(pawn, Talkee);
+			yield return Toils_Interpersonal.GotoPrisoner(pawn, Talkee, Talkee.guest.interactionMode);
+			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A).FailOn(() => !Talkee.guest.ScheduledForInteraction);
 			yield return Toils_Interpersonal.SetLastInteractTime(TargetIndex.A);
 			yield return Toils_Interpersonal.TryRecruit(TargetIndex.A);
-			yield break;
 		}
 	}
 }

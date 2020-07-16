@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Affair : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn otherPawn)
 		{
 			if (!p.relations.DirectRelationExists(PawnRelationDefOf.Spouse, otherPawn))

@@ -1,85 +1,115 @@
-﻿using System;
 using RimWorld;
+using System;
 using UnityEngine;
 using Verse.Sound;
 
 namespace Verse
 {
-	
 	public abstract class Window
 	{
-		
-		
-		public virtual Vector2 InitialSize
-		{
-			get
-			{
-				return new Vector2(500f, 500f);
-			}
-		}
+		public WindowLayer layer = WindowLayer.Dialog;
 
-		
-		
-		protected virtual float Margin
-		{
-			get
-			{
-				return 18f;
-			}
-		}
+		public string optionalTitle;
 
-		
-		
-		public virtual bool IsDebug
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public bool doCloseX;
 
-		
-		
-		public bool IsOpen
-		{
-			get
-			{
-				return Find.WindowStack.IsOpen(this);
-			}
-		}
+		public bool doCloseButton;
 
-		
+		public bool closeOnAccept = true;
+
+		public bool closeOnCancel = true;
+
+		public bool forceCatchAcceptAndCancelEventEvenIfUnfocused;
+
+		public bool closeOnClickedOutside;
+
+		public bool forcePause;
+
+		public bool preventCameraMotion = true;
+
+		public bool preventDrawTutor;
+
+		public bool doWindowBackground = true;
+
+		public bool onlyOneOfTypeAllowed = true;
+
+		public bool absorbInputAroundWindow;
+
+		public bool resizeable;
+
+		public bool draggable;
+
+		public bool drawShadow = true;
+
+		public bool focusWhenOpened = true;
+
+		public float shadowAlpha = 1f;
+
+		public SoundDef soundAppear;
+
+		public SoundDef soundClose;
+
+		public SoundDef soundAmbient;
+
+		public bool silenceAmbientSound;
+
+		public const float StandardMargin = 18f;
+
+		protected readonly Vector2 CloseButSize = new Vector2(120f, 40f);
+
+		public int ID;
+
+		public Rect windowRect;
+
+		private Sustainer sustainerAmbient;
+
+		private WindowResizer resizer;
+
+		private bool resizeLater;
+
+		private Rect resizeLaterRect;
+
+		private string onGUIProfilerLabelCached;
+
+		public string extraOnGUIProfilerLabelCached;
+
+		private GUI.WindowFunction innerWindowOnGUICached;
+
+		public virtual Vector2 InitialSize => new Vector2(500f, 500f);
+
+		protected virtual float Margin => 18f;
+
+		public virtual bool IsDebug => false;
+
+		public bool IsOpen => Find.WindowStack.IsOpen(this);
+
 		public Window()
 		{
-			this.soundAppear = SoundDefOf.DialogBoxAppear;
-			this.soundClose = SoundDefOf.Click;
-			this.onGUIProfilerLabelCached = "WindowOnGUI: " + base.GetType().Name;
-			this.extraOnGUIProfilerLabelCached = "ExtraOnGUI: " + base.GetType().Name;
-			this.innerWindowOnGUICached = new GUI.WindowFunction(this.InnerWindowOnGUI);
+			soundAppear = SoundDefOf.DialogBoxAppear;
+			soundClose = SoundDefOf.Click;
+			onGUIProfilerLabelCached = "WindowOnGUI: " + GetType().Name;
+			extraOnGUIProfilerLabelCached = "ExtraOnGUI: " + GetType().Name;
+			innerWindowOnGUICached = InnerWindowOnGUI;
 		}
 
-		
 		public virtual void WindowUpdate()
 		{
-			if (this.sustainerAmbient != null)
+			if (sustainerAmbient != null)
 			{
-				this.sustainerAmbient.Maintain();
+				sustainerAmbient.Maintain();
 			}
 		}
 
-		
 		public abstract void DoWindowContents(Rect inRect);
 
-		
 		public virtual void ExtraOnGUI()
 		{
 		}
 
-		
 		public virtual void PreOpen()
 		{
-			this.SetInitialSizeAndPosition();
-			if (this.layer == WindowLayer.Dialog)
+			SetInitialSizeAndPosition();
+			if (layer == WindowLayer.Dialog)
 			{
 				if (Current.ProgramState == ProgramState.Playing)
 				{
@@ -94,55 +124,50 @@ namespace Verse
 			}
 		}
 
-		
 		public virtual void PostOpen()
 		{
-			if (this.soundAppear != null)
+			if (soundAppear != null)
 			{
-				this.soundAppear.PlayOneShotOnCamera(null);
+				soundAppear.PlayOneShotOnCamera();
 			}
-			if (this.soundAmbient != null)
+			if (soundAmbient != null)
 			{
-				this.sustainerAmbient = this.soundAmbient.TrySpawnSustainer(SoundInfo.OnCamera(MaintenanceType.PerFrame));
+				sustainerAmbient = soundAmbient.TrySpawnSustainer(SoundInfo.OnCamera(MaintenanceType.PerFrame));
 			}
 		}
 
-		
 		public virtual void PreClose()
 		{
 		}
 
-		
 		public virtual void PostClose()
 		{
 		}
 
-		
 		public virtual void WindowOnGUI()
 		{
-			if (this.resizeable)
+			if (resizeable)
 			{
-				if (this.resizer == null)
+				if (resizer == null)
 				{
-					this.resizer = new WindowResizer();
+					resizer = new WindowResizer();
 				}
-				if (this.resizeLater)
+				if (resizeLater)
 				{
-					this.resizeLater = false;
-					this.windowRect = this.resizeLaterRect;
+					resizeLater = false;
+					windowRect = resizeLaterRect;
 				}
 			}
-			this.windowRect = this.windowRect.Rounded();
-			this.windowRect = GUI.Window(this.ID, this.windowRect, this.innerWindowOnGUICached, "", Widgets.EmptyStyle);
+			windowRect = windowRect.Rounded();
+			windowRect = GUI.Window(ID, windowRect, innerWindowOnGUICached, "", Widgets.EmptyStyle);
 		}
 
-		
 		private void InnerWindowOnGUI(int x)
 		{
-			Rect rect = this.windowRect.AtZero();
+			Rect rect = windowRect.AtZero();
 			UnityGUIBugsFixer.OnGUI();
 			Find.WindowStack.currentlyDrawnWindow = this;
-			if (this.doWindowBackground)
+			if (doWindowBackground)
 			{
 				Widgets.DrawWindowBackground(rect);
 			}
@@ -162,61 +187,55 @@ namespace Verse
 			{
 				Event.current.Use();
 			}
-			if (!this.optionalTitle.NullOrEmpty())
+			if (!optionalTitle.NullOrEmpty())
 			{
-				GUI.Label(new Rect(this.Margin, this.Margin, this.windowRect.width, 25f), this.optionalTitle);
+				GUI.Label(new Rect(Margin, Margin, windowRect.width, 25f), optionalTitle);
 			}
-			if (this.doCloseX && Widgets.CloseButtonFor(rect))
+			if (doCloseX && Widgets.CloseButtonFor(rect))
 			{
-				this.Close(true);
+				Close();
 			}
-			if (this.resizeable && Event.current.type != EventType.Repaint)
+			if (resizeable && Event.current.type != EventType.Repaint)
 			{
-				Rect lhs = this.resizer.DoResizeControl(this.windowRect);
-				if (lhs != this.windowRect)
+				Rect lhs = resizer.DoResizeControl(windowRect);
+				if (lhs != windowRect)
 				{
-					this.resizeLater = true;
-					this.resizeLaterRect = lhs;
+					resizeLater = true;
+					resizeLaterRect = lhs;
 				}
 			}
-			Rect rect2 = rect.ContractedBy(this.Margin);
-			if (!this.optionalTitle.NullOrEmpty())
+			Rect rect2 = rect.ContractedBy(Margin);
+			if (!optionalTitle.NullOrEmpty())
 			{
-				rect2.yMin += this.Margin + 25f;
+				rect2.yMin += Margin + 25f;
 			}
 			GUI.BeginGroup(rect2);
 			try
 			{
-				this.DoWindowContents(rect2.AtZero());
+				DoWindowContents(rect2.AtZero());
 			}
 			catch (Exception ex)
 			{
-				Log.Error(string.Concat(new object[]
-				{
-					"Exception filling window for ",
-					base.GetType(),
-					": ",
-					ex
-				}), false);
+				Log.Error("Exception filling window for " + GetType() + ": " + ex);
 			}
 			GUI.EndGroup();
-			if (this.resizeable && Event.current.type == EventType.Repaint)
+			if (resizeable && Event.current.type == EventType.Repaint)
 			{
-				this.resizer.DoResizeControl(this.windowRect);
+				resizer.DoResizeControl(windowRect);
 			}
-			if (this.doCloseButton)
+			if (doCloseButton)
 			{
 				Text.Font = GameFont.Small;
-				if (Widgets.ButtonText(new Rect(rect.width / 2f - this.CloseButSize.x / 2f, rect.height - 55f, this.CloseButSize.x, this.CloseButSize.y), "CloseButton".Translate(), true, true, true))
+				if (Widgets.ButtonText(new Rect(rect.width / 2f - CloseButSize.x / 2f, rect.height - 55f, CloseButSize.x, CloseButSize.y), "CloseButton".Translate()))
 				{
-					this.Close(true);
+					Close();
 				}
 			}
-			if (KeyBindingDefOf.Cancel.KeyDownEvent && this.IsOpen)
+			if (KeyBindingDefOf.Cancel.KeyDownEvent && IsOpen)
 			{
-				this.OnCancelKeyPressed();
+				OnCancelKeyPressed();
 			}
-			if (this.draggable)
+			if (draggable)
 			{
 				GUI.DragWindow();
 			}
@@ -228,151 +247,43 @@ namespace Verse
 			Find.WindowStack.currentlyDrawnWindow = null;
 		}
 
-		
 		public virtual void Close(bool doCloseSound = true)
 		{
 			Find.WindowStack.TryRemove(this, doCloseSound);
 		}
 
-		
 		public virtual bool CausesMessageBackground()
 		{
 			return false;
 		}
 
-		
 		protected virtual void SetInitialSizeAndPosition()
 		{
-			this.windowRect = new Rect(((float)UI.screenWidth - this.InitialSize.x) / 2f, ((float)UI.screenHeight - this.InitialSize.y) / 2f, this.InitialSize.x, this.InitialSize.y);
-			this.windowRect = this.windowRect.Rounded();
+			windowRect = new Rect(((float)UI.screenWidth - InitialSize.x) / 2f, ((float)UI.screenHeight - InitialSize.y) / 2f, InitialSize.x, InitialSize.y);
+			windowRect = windowRect.Rounded();
 		}
 
-		
 		public virtual void OnCancelKeyPressed()
 		{
-			if (this.closeOnCancel)
+			if (closeOnCancel)
 			{
-				this.Close(true);
+				Close();
 				Event.current.Use();
 			}
 		}
 
-		
 		public virtual void OnAcceptKeyPressed()
 		{
-			if (this.closeOnAccept)
+			if (closeOnAccept)
 			{
-				this.Close(true);
+				Close();
 				Event.current.Use();
 			}
 		}
 
-		
 		public virtual void Notify_ResolutionChanged()
 		{
-			this.SetInitialSizeAndPosition();
+			SetInitialSizeAndPosition();
 		}
-
-		
-		public WindowLayer layer = WindowLayer.Dialog;
-
-		
-		public string optionalTitle;
-
-		
-		public bool doCloseX;
-
-		
-		public bool doCloseButton;
-
-		
-		public bool closeOnAccept = true;
-
-		
-		public bool closeOnCancel = true;
-
-		
-		public bool forceCatchAcceptAndCancelEventEvenIfUnfocused;
-
-		
-		public bool closeOnClickedOutside;
-
-		
-		public bool forcePause;
-
-		
-		public bool preventCameraMotion = true;
-
-		
-		public bool preventDrawTutor;
-
-		
-		public bool doWindowBackground = true;
-
-		
-		public bool onlyOneOfTypeAllowed = true;
-
-		
-		public bool absorbInputAroundWindow;
-
-		
-		public bool resizeable;
-
-		
-		public bool draggable;
-
-		
-		public bool drawShadow = true;
-
-		
-		public bool focusWhenOpened = true;
-
-		
-		public float shadowAlpha = 1f;
-
-		
-		public SoundDef soundAppear;
-
-		
-		public SoundDef soundClose;
-
-		
-		public SoundDef soundAmbient;
-
-		
-		public bool silenceAmbientSound;
-
-		
-		public const float StandardMargin = 18f;
-
-		
-		protected readonly Vector2 CloseButSize = new Vector2(120f, 40f);
-
-		
-		public int ID;
-
-		
-		public Rect windowRect;
-
-		
-		private Sustainer sustainerAmbient;
-
-		
-		private WindowResizer resizer;
-
-		
-		private bool resizeLater;
-
-		
-		private Rect resizeLaterRect;
-
-		
-		private string onGUIProfilerLabelCached;
-
-		
-		public string extraOnGUIProfilerLabelCached;
-
-		
-		private GUI.WindowFunction innerWindowOnGUICached;
 	}
 }

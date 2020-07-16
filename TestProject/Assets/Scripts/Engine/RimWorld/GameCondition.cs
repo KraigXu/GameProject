@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,396 +5,269 @@ using Verse.Grammar;
 
 namespace RimWorld
 {
-	
 	public class GameCondition : IExposable, ILoadReferenceable
 	{
-		
-		
-		protected Map SingleMap
-		{
-			get
-			{
-				return this.gameConditionManager.ownerMap;
-			}
-		}
+		public GameConditionManager gameConditionManager;
 
-		
-		
-		public virtual string Label
-		{
-			get
-			{
-				return this.def.label;
-			}
-		}
+		public Thing conditionCauser;
 
-		
-		
-		public virtual string LabelCap
-		{
-			get
-			{
-				return this.Label.CapitalizeFirst(this.def);
-			}
-		}
+		public GameConditionDef def;
 
-		
-		
-		public virtual string LetterText
-		{
-			get
-			{
-				return this.def.letterText;
-			}
-		}
+		public int uniqueID = -1;
 
-		
-		
+		public int startTick;
+
+		public bool suppressEndMessage;
+
+		private int duration = -1;
+
+		private bool permanent;
+
+		private List<Map> cachedAffectedMaps = new List<Map>();
+
+		private List<Map> cachedAffectedMapsForMaps = new List<Map>();
+
+		public Quest quest;
+
+		private static List<GameConditionManager> tmpGameConditionManagers = new List<GameConditionManager>();
+
+		protected Map SingleMap => gameConditionManager.ownerMap;
+
+		public virtual string Label => def.label;
+
+		public virtual string LabelCap => Label.CapitalizeFirst(def);
+
+		public virtual string LetterText => def.letterText;
+
 		public virtual bool Expired
 		{
 			get
 			{
-				return !this.Permanent && Find.TickManager.TicksGame > this.startTick + this.Duration;
-			}
-		}
-
-		
-		
-		public virtual bool ElectricityDisabled
-		{
-			get
-			{
+				if (!Permanent)
+				{
+					return Find.TickManager.TicksGame > startTick + Duration;
+				}
 				return false;
 			}
 		}
 
-		
-		
-		public int TicksPassed
-		{
-			get
-			{
-				return Find.TickManager.TicksGame - this.startTick;
-			}
-		}
+		public virtual bool ElectricityDisabled => false;
 
-		
-		
-		public virtual string Description
-		{
-			get
-			{
-				return this.def.description;
-			}
-		}
+		public int TicksPassed => Find.TickManager.TicksGame - startTick;
 
-		
-		
-		public virtual int TransitionTicks
-		{
-			get
-			{
-				return 300;
-			}
-		}
+		public virtual string Description => def.description;
 
-		
-		
-		
+		public virtual int TransitionTicks => 300;
+
 		public int TicksLeft
 		{
 			get
 			{
-				if (this.Permanent)
+				if (Permanent)
 				{
-					Log.ErrorOnce("Trying to get ticks left of a permanent condition.", 384767654, false);
+					Log.ErrorOnce("Trying to get ticks left of a permanent condition.", 384767654);
 					return 360000000;
 				}
-				return this.Duration - this.TicksPassed;
+				return Duration - TicksPassed;
 			}
 			set
 			{
-				this.Duration = this.TicksPassed + value;
+				Duration = TicksPassed + value;
 			}
 		}
 
-		
-		
-		
 		public bool Permanent
 		{
 			get
 			{
-				return this.permanent;
+				return permanent;
 			}
 			set
 			{
 				if (value)
 				{
-					this.duration = -1;
+					duration = -1;
 				}
-				this.permanent = value;
+				permanent = value;
 			}
 		}
 
-		
-		
-		
 		public int Duration
 		{
 			get
 			{
-				if (this.Permanent)
+				if (Permanent)
 				{
-					Log.ErrorOnce("Trying to get duration of a permanent condition.", 100394867, false);
+					Log.ErrorOnce("Trying to get duration of a permanent condition.", 100394867);
 					return 360000000;
 				}
-				return this.duration;
+				return duration;
 			}
 			set
 			{
-				this.permanent = false;
-				this.duration = value;
+				permanent = false;
+				duration = value;
 			}
 		}
 
-		
-		
 		public virtual string TooltipString
 		{
 			get
 			{
-				string text = this.def.LabelCap;
-				if (this.Permanent)
+				string t = def.LabelCap;
+				if (Permanent)
 				{
-					text += "\n" + "Permanent".Translate().CapitalizeFirst();
+					t += "\n" + "Permanent".Translate().CapitalizeFirst();
 				}
 				else
 				{
-					Vector2 location;
-					if (this.SingleMap != null)
-					{
-						location = Find.WorldGrid.LongLatOf(this.SingleMap.Tile);
-					}
-					else if (Find.CurrentMap != null)
-					{
-						location = Find.WorldGrid.LongLatOf(Find.CurrentMap.Tile);
-					}
-					else if (Find.AnyPlayerHomeMap != null)
-					{
-						location = Find.WorldGrid.LongLatOf(Find.AnyPlayerHomeMap.Tile);
-					}
-					else
-					{
-						location = Vector2.zero;
-					}
-					text += "\n" + "Started".Translate() + ": " + GenDate.DateFullStringAt((long)GenDate.TickGameToAbs(this.startTick), location);
-					text += "\n" + "Lasted".Translate() + ": " + this.TicksPassed.ToStringTicksToPeriod(true, false, true, true).Colorize(ColoredText.DateTimeColor);
+					Vector2 location = (SingleMap != null) ? Find.WorldGrid.LongLatOf(SingleMap.Tile) : ((Find.CurrentMap != null) ? Find.WorldGrid.LongLatOf(Find.CurrentMap.Tile) : ((Find.AnyPlayerHomeMap == null) ? Vector2.zero : Find.WorldGrid.LongLatOf(Find.AnyPlayerHomeMap.Tile)));
+					t += "\n" + "Started".Translate() + ": " + GenDate.DateFullStringAt(GenDate.TickGameToAbs(startTick), location);
+					t += "\n" + "Lasted".Translate() + ": " + TicksPassed.ToStringTicksToPeriod().Colorize(ColoredText.DateTimeColor);
 				}
-				text += "\n";
-				text = text + "\n" + this.Description;
-				text += "\n";
-				text += "\n";
-				if (this.conditionCauser != null && CameraJumper.CanJump(this.conditionCauser))
+				t += "\n";
+				t = t + "\n" + Description;
+				t += "\n";
+				t += "\n";
+				if (conditionCauser != null && CameraJumper.CanJump(conditionCauser))
 				{
-					text += this.def.jumpToSourceKey.Translate();
+					return t + def.jumpToSourceKey.Translate();
 				}
-				else if (this.quest != null)
+				if (quest != null)
 				{
-					text += "CausedByQuest".Translate(this.quest.name);
+					return t + "CausedByQuest".Translate(quest.name);
 				}
-				else
-				{
-					text += "SourceUnknown".Translate();
-				}
-				return text;
+				return t + "SourceUnknown".Translate();
 			}
 		}
 
-		
-		
 		public List<Map> AffectedMaps
 		{
 			get
 			{
-				if (!GenCollection.ListsEqual<Map>(this.cachedAffectedMapsForMaps, Find.Maps))
+				if (!GenCollection.ListsEqual(cachedAffectedMapsForMaps, Find.Maps))
 				{
-					this.cachedAffectedMapsForMaps.Clear();
-					this.cachedAffectedMapsForMaps.AddRange(Find.Maps);
-					this.cachedAffectedMaps.Clear();
-					if (this.gameConditionManager.ownerMap != null)
+					cachedAffectedMapsForMaps.Clear();
+					cachedAffectedMapsForMaps.AddRange(Find.Maps);
+					cachedAffectedMaps.Clear();
+					if (gameConditionManager.ownerMap != null)
 					{
-						this.cachedAffectedMaps.Add(this.gameConditionManager.ownerMap);
+						cachedAffectedMaps.Add(gameConditionManager.ownerMap);
 					}
-					GameCondition.tmpGameConditionManagers.Clear();
-					this.gameConditionManager.GetChildren(GameCondition.tmpGameConditionManagers);
-					for (int i = 0; i < GameCondition.tmpGameConditionManagers.Count; i++)
+					tmpGameConditionManagers.Clear();
+					gameConditionManager.GetChildren(tmpGameConditionManagers);
+					for (int i = 0; i < tmpGameConditionManagers.Count; i++)
 					{
-						if (GameCondition.tmpGameConditionManagers[i].ownerMap != null)
+						if (tmpGameConditionManagers[i].ownerMap != null)
 						{
-							this.cachedAffectedMaps.Add(GameCondition.tmpGameConditionManagers[i].ownerMap);
+							cachedAffectedMaps.Add(tmpGameConditionManagers[i].ownerMap);
 						}
 					}
-					GameCondition.tmpGameConditionManagers.Clear();
+					tmpGameConditionManagers.Clear();
 				}
-				return this.cachedAffectedMaps;
+				return cachedAffectedMaps;
 			}
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.uniqueID, "uniqueID", -1, false);
-			Scribe_Values.Look<bool>(ref this.suppressEndMessage, "suppressEndMessage", false, false);
-			Scribe_Defs.Look<GameConditionDef>(ref this.def, "def");
-			Scribe_Values.Look<int>(ref this.startTick, "startTick", 0, false);
-			Scribe_Values.Look<int>(ref this.duration, "duration", 0, false);
-			Scribe_Values.Look<bool>(ref this.permanent, "permanent", false, false);
-			Scribe_References.Look<Quest>(ref this.quest, "quest", false);
+			Scribe_Values.Look(ref uniqueID, "uniqueID", -1);
+			Scribe_Values.Look(ref suppressEndMessage, "suppressEndMessage", defaultValue: false);
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_Values.Look(ref startTick, "startTick", 0);
+			Scribe_Values.Look(ref duration, "duration", 0);
+			Scribe_Values.Look(ref permanent, "permanent", defaultValue: false);
+			Scribe_References.Look(ref quest, "quest");
 			BackCompatibility.PostExposeData(this);
 		}
 
-		
 		public virtual void GameConditionTick()
 		{
 		}
 
-		
 		public virtual void GameConditionDraw(Map map)
 		{
 		}
 
-		
 		public virtual void Init()
 		{
 		}
 
-		
 		public virtual void End()
 		{
-			if (!this.suppressEndMessage && this.def.endMessage != null)
+			if (!suppressEndMessage && def.endMessage != null)
 			{
-				Messages.Message(this.def.endMessage, MessageTypeDefOf.NeutralEvent, true);
+				Messages.Message(def.endMessage, MessageTypeDefOf.NeutralEvent);
 			}
-			this.gameConditionManager.ActiveConditions.Remove(this);
+			gameConditionManager.ActiveConditions.Remove(this);
 		}
 
-		
 		public virtual float SkyGazeChanceFactor(Map map)
 		{
 			return 1f;
 		}
 
-		
 		public virtual float SkyGazeJoyGainFactor(Map map)
 		{
 			return 1f;
 		}
 
-		
 		public virtual float TemperatureOffset()
 		{
 			return 0f;
 		}
 
-		
 		public virtual float SkyTargetLerpFactor(Map map)
 		{
 			return 0f;
 		}
 
-		
 		public virtual SkyTarget? SkyTarget(Map map)
 		{
 			return null;
 		}
 
-		
 		public virtual float AnimalDensityFactor(Map map)
 		{
 			return 1f;
 		}
 
-		
 		public virtual float PlantDensityFactor(Map map)
 		{
 			return 1f;
 		}
 
-		
 		public virtual bool AllowEnjoyableOutsideNow(Map map)
 		{
 			return true;
 		}
 
-		
 		public virtual List<SkyOverlay> SkyOverlays(Map map)
 		{
 			return null;
 		}
 
-		
 		public virtual void DoCellSteadyEffects(IntVec3 c, Map map)
 		{
 		}
 
-		
 		public virtual WeatherDef ForcedWeather()
 		{
 			return null;
 		}
 
-		
 		public virtual void PostMake()
 		{
-			this.uniqueID = Find.UniqueIDsManager.GetNextGameConditionID();
+			uniqueID = Find.UniqueIDsManager.GetNextGameConditionID();
 		}
 
-		
 		public virtual void RandomizeSettings(float points, Map map, List<Rule> outExtraDescriptionRules, Dictionary<string, string> outExtraDescriptionConstants)
 		{
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return string.Format("{0}_{1}", base.GetType().Name, this.uniqueID.ToString());
+			return $"{GetType().Name}_{uniqueID.ToString()}";
 		}
-
-		
-		public GameConditionManager gameConditionManager;
-
-		
-		public Thing conditionCauser;
-
-		
-		public GameConditionDef def;
-
-		
-		public int uniqueID = -1;
-
-		
-		public int startTick;
-
-		
-		public bool suppressEndMessage;
-
-		
-		private int duration = -1;
-
-		
-		private bool permanent;
-
-		
-		private List<Map> cachedAffectedMaps = new List<Map>();
-
-		
-		private List<Map> cachedAffectedMapsForMaps = new List<Map>();
-
-		
-		public Quest quest;
-
-		
-		private static List<GameConditionManager> tmpGameConditionManagers = new List<GameConditionManager>();
 	}
 }

@@ -1,81 +1,66 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_TrackWhenExitMentalState : QuestPart
 	{
-		
-		
+		public string tag;
+
+		public List<string> inSignals;
+
+		public string outSignal;
+
+		public MapParent mapParent;
+
+		public MentalStateDef mentalStateDef;
+
+		private bool signalSent;
+
+		[Unsaved(false)]
+		private List<Pawn> cachedPawns;
+
 		private List<Pawn> TrackedPawns
 		{
 			get
 			{
-				if (this.cachedPawns == null)
+				if (cachedPawns == null)
 				{
-					this.cachedPawns = (from p in this.mapParent.Map.mapPawns.AllPawnsSpawned
-					where p.InMentalState && p.MentalStateDef == this.mentalStateDef && p.questTags.Contains(this.tag)
-					select p).ToList<Pawn>();
+					cachedPawns = mapParent.Map.mapPawns.AllPawnsSpawned.Where((Pawn p) => p.InMentalState && p.MentalStateDef == mentalStateDef && p.questTags.Contains(tag)).ToList();
 				}
-				return this.cachedPawns;
+				return cachedPawns;
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (!this.signalSent && this.inSignals.Contains(signal.tag))
+			if (!signalSent && inSignals.Contains(signal.tag))
 			{
-				Pawn pawn = this.TrackedPawns.Find((Pawn p) => p == signal.args.GetArg<Pawn>("SUBJECT"));
+				Pawn pawn = TrackedPawns.Find((Pawn p) => p == signal.args.GetArg<Pawn>("SUBJECT"));
 				if (pawn != null)
 				{
-					this.cachedPawns.Remove(pawn);
+					cachedPawns.Remove(pawn);
 				}
-				if (!this.cachedPawns.Any<Pawn>())
+				if (!cachedPawns.Any())
 				{
-					Find.SignalManager.SendSignal(new Signal(this.outSignal));
-					this.signalSent = true;
+					Find.SignalManager.SendSignal(new Signal(outSignal));
+					signalSent = true;
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.tag, "tag", null, false);
-			Scribe_Collections.Look<string>(ref this.inSignals, "inSignals", LookMode.Value, Array.Empty<object>());
-			Scribe_Values.Look<string>(ref this.outSignal, "outSignal", null, false);
-			Scribe_Defs.Look<MentalStateDef>(ref this.mentalStateDef, "mentalStateDef");
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
-			Scribe_Values.Look<bool>(ref this.signalSent, "signalSent", false, false);
+			Scribe_Values.Look(ref tag, "tag");
+			Scribe_Collections.Look(ref inSignals, "inSignals", LookMode.Value);
+			Scribe_Values.Look(ref outSignal, "outSignal");
+			Scribe_Defs.Look(ref mentalStateDef, "mentalStateDef");
+			Scribe_References.Look(ref mapParent, "mapParent");
+			Scribe_Values.Look(ref signalSent, "signalSent", defaultValue: false);
 		}
-
-		
-		public string tag;
-
-		
-		public List<string> inSignals;
-
-		
-		public string outSignal;
-
-		
-		public MapParent mapParent;
-
-		
-		public MentalStateDef mentalStateDef;
-
-		
-		private bool signalSent;
-
-		
-		[Unsaved(false)]
-		private List<Pawn> cachedPawns;
 	}
 }

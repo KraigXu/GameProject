@@ -1,25 +1,24 @@
-﻿using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FactionUtility
 	{
-		
 		public static bool HostileTo(this Faction fac, Faction other)
 		{
-			return fac != null && other != null && other != fac && fac.RelationWith(other, false).kind == FactionRelationKind.Hostile;
+			if (fac == null || other == null || other == fac)
+			{
+				return false;
+			}
+			return fac.RelationWith(other).kind == FactionRelationKind.Hostile;
 		}
 
-		
 		public static bool AllyOrNeutralTo(this Faction fac, Faction other)
 		{
 			return !fac.HostileTo(other);
 		}
 
-		
 		public static AcceptanceReport CanTradeWith_NewTemp(this Pawn p, Faction faction, TraderKindDef traderKind = null)
 		{
 			if (p.skills.GetSkill(SkillDefOf.Social).TotallyDisabled)
@@ -44,13 +43,11 @@ namespace RimWorld
 			return AcceptanceReport.WasAccepted;
 		}
 
-		
 		public static bool CanTradeWith(this Pawn p, Faction faction, TraderKindDef traderKind = null)
 		{
 			return p.CanTradeWith_NewTemp(faction, traderKind).Accepted;
 		}
 
-		
 		public static Faction DefaultFactionFrom(FactionDef ft)
 		{
 			if (ft == null)
@@ -61,20 +58,32 @@ namespace RimWorld
 			{
 				return Faction.OfPlayer;
 			}
-			Faction result;
-			if ((from fac in Find.FactionManager.AllFactions
-			where fac.def == ft
-			select fac).TryRandomElement(out result))
+			if (Find.FactionManager.AllFactions.Where((Faction fac) => fac.def == ft).TryRandomElement(out Faction result))
 			{
 				return result;
 			}
 			return null;
 		}
 
-		
 		public static bool IsPoliticallyProper(this Thing thing, Pawn pawn)
 		{
-			return thing.Faction == null || pawn.Faction == null || thing.Faction == pawn.Faction || thing.Faction == pawn.HostFaction;
+			if (thing.Faction == null)
+			{
+				return true;
+			}
+			if (pawn.Faction == null)
+			{
+				return true;
+			}
+			if (thing.Faction == pawn.Faction)
+			{
+				return true;
+			}
+			if (thing.Faction == pawn.HostFaction)
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

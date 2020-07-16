@@ -1,42 +1,29 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Kidnap : JobDriver_TakeAndExitMap
 	{
-		
-		
-		protected Pawn Takee
-		{
-			get
-			{
-				return (Pawn)base.Item;
-			}
-		}
+		protected Pawn Takee => (Pawn)base.Item;
 
-		
 		public override string GetReport()
 		{
-			if (this.Takee == null || this.pawn.HostileTo(this.Takee))
+			if (Takee == null || pawn.HostileTo(Takee))
 			{
 				return base.GetReport();
 			}
-			return JobUtility.GetResolvedJobReport(JobDefOf.Rescue.reportString, this.Takee);
+			return JobUtility.GetResolvedJobReport(JobDefOf.Rescue.reportString, Takee);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			this.FailOn(() => this.Takee == null || (!this.Takee.Downed && this.Takee.Awake()));
-
-
-			IEnumerator<Toil> enumerator = null;
-			yield break;
-			yield break;
+			this.FailOn(() => Takee == null || (!Takee.Downed && Takee.Awake()));
+			foreach (Toil item in base.MakeNewToils())
+			{
+				yield return item;
+			}
 		}
 	}
 }

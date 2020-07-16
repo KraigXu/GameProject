@@ -1,93 +1,91 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Section
 	{
-		
-		
+		public IntVec3 botLeft;
+
+		public Map map;
+
+		public MapMeshFlag dirtyFlags;
+
+		private List<SectionLayer> layers = new List<SectionLayer>();
+
+		private bool foundRect;
+
+		private CellRect calculatedRect;
+
+		public const int Size = 17;
+
 		public CellRect CellRect
 		{
 			get
 			{
-				if (!this.foundRect)
+				if (!foundRect)
 				{
-					this.calculatedRect = new CellRect(this.botLeft.x, this.botLeft.z, 17, 17);
-					this.calculatedRect.ClipInsideMap(this.map);
-					this.foundRect = true;
+					calculatedRect = new CellRect(botLeft.x, botLeft.z, 17, 17);
+					calculatedRect.ClipInsideMap(map);
+					foundRect = true;
 				}
-				return this.calculatedRect;
+				return calculatedRect;
 			}
 		}
 
-		
 		public Section(IntVec3 sectCoords, Map map)
 		{
-			this.botLeft = sectCoords * 17;
+			botLeft = sectCoords * 17;
 			this.map = map;
-			foreach (Type type in typeof(SectionLayer).AllSubclassesNonAbstract())
+			foreach (Type item in typeof(SectionLayer).AllSubclassesNonAbstract())
 			{
-				this.layers.Add((SectionLayer)Activator.CreateInstance(type, new object[]
-				{
-					this
-				}));
+				layers.Add((SectionLayer)Activator.CreateInstance(item, this));
 			}
 		}
 
-		
 		public void DrawSection(bool drawSunShadowsOnly)
 		{
-			int count = this.layers.Count;
+			int count = layers.Count;
 			for (int i = 0; i < count; i++)
 			{
-				if (!drawSunShadowsOnly || this.layers[i] is SectionLayer_SunShadows)
+				if (!drawSunShadowsOnly || layers[i] is SectionLayer_SunShadows)
 				{
-					this.layers[i].DrawLayer();
+					layers[i].DrawLayer();
 				}
 			}
 			if (!drawSunShadowsOnly && DebugViewSettings.drawSectionEdges)
 			{
-				GenDraw.DrawLineBetween(this.botLeft.ToVector3(), this.botLeft.ToVector3() + new Vector3(0f, 0f, 17f));
-				GenDraw.DrawLineBetween(this.botLeft.ToVector3(), this.botLeft.ToVector3() + new Vector3(17f, 0f, 0f));
+				GenDraw.DrawLineBetween(botLeft.ToVector3(), botLeft.ToVector3() + new Vector3(0f, 0f, 17f));
+				GenDraw.DrawLineBetween(botLeft.ToVector3(), botLeft.ToVector3() + new Vector3(17f, 0f, 0f));
 			}
 		}
 
-		
 		public void RegenerateAllLayers()
 		{
-			for (int i = 0; i < this.layers.Count; i++)
+			for (int i = 0; i < layers.Count; i++)
 			{
-				if (this.layers[i].Visible)
+				if (layers[i].Visible)
 				{
 					try
 					{
-						this.layers[i].Regenerate();
+						layers[i].Regenerate();
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Could not regenerate layer ",
-							this.layers[i].ToStringSafe<SectionLayer>(),
-							": ",
-							ex
-						}), false);
+						Log.Error("Could not regenerate layer " + layers[i].ToStringSafe() + ": " + ex);
 					}
 				}
 			}
 		}
 
-		
 		public void RegenerateLayers(MapMeshFlag changeType)
 		{
-			for (int i = 0; i < this.layers.Count; i++)
+			for (int i = 0; i < layers.Count; i++)
 			{
-				SectionLayer sectionLayer = this.layers[i];
-				if ((sectionLayer.relevantChangeTypes & changeType) != MapMeshFlag.None)
+				SectionLayer sectionLayer = layers[i];
+				if ((sectionLayer.relevantChangeTypes & changeType) != 0)
 				{
 					try
 					{
@@ -95,45 +93,15 @@ namespace Verse
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Could not regenerate layer ",
-							sectionLayer.ToStringSafe<SectionLayer>(),
-							": ",
-							ex
-						}), false);
+						Log.Error("Could not regenerate layer " + sectionLayer.ToStringSafe() + ": " + ex);
 					}
 				}
 			}
 		}
 
-		
 		public SectionLayer GetLayer(Type type)
 		{
-			return (from sect in this.layers
-			where sect.GetType() == type
-			select sect).FirstOrDefault<SectionLayer>();
+			return layers.Where((SectionLayer sect) => sect.GetType() == type).FirstOrDefault();
 		}
-
-		
-		public IntVec3 botLeft;
-
-		
-		public Map map;
-
-		
-		public MapMeshFlag dirtyFlags;
-
-		
-		private List<SectionLayer> layers = new List<SectionLayer>();
-
-		
-		private bool foundRect;
-
-		
-		private CellRect calculatedRect;
-
-		
-		public const int Size = 17;
 	}
 }

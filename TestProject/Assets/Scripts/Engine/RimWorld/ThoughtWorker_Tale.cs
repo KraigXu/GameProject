@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_Tale : ThoughtWorker
 	{
-		
 		protected override ThoughtState CurrentSocialStateInternal(Pawn p, Pawn other)
 		{
 			if (!other.RaceProps.Humanlike)
@@ -17,7 +14,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (Find.TaleManager.GetLatestTale(this.def.taleDef, other) == null)
+			if (Find.TaleManager.GetLatestTale(def.taleDef, other) == null)
 			{
 				return false;
 			}

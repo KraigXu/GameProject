@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,168 +6,176 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatDrawEntry
 	{
-		
-		
+		public StatCategoryDef category;
+
+		private int displayOrderWithinCategory;
+
+		public StatDef stat;
+
+		private float value;
+
+		public StatRequest optionalReq;
+
+		public bool hasOptionalReq;
+
+		public bool forceUnfinalizedMode;
+
+		private IEnumerable<Dialog_InfoCard.Hyperlink> hyperlinks;
+
+		private string labelInt;
+
+		private string valueStringInt;
+
+		private string overrideReportText;
+
+		private string overrideReportTitle;
+
+		private string explanationText;
+
+		private ToStringNumberSense numberSense;
+
 		public bool ShouldDisplay
 		{
 			get
 			{
-				return this.stat == null || !Mathf.Approximately(this.value, this.stat.hideAtValue);
+				if (stat != null)
+				{
+					return !Mathf.Approximately(value, stat.hideAtValue);
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public string LabelCap
 		{
 			get
 			{
-				if (this.labelInt != null)
+				if (labelInt != null)
 				{
-					return this.labelInt.CapitalizeFirst();
+					return labelInt.CapitalizeFirst();
 				}
-				return this.stat.LabelCap;
+				return stat.LabelCap;
 			}
 		}
 
-		
-		
 		public string ValueString
 		{
 			get
 			{
-				if (this.numberSense == ToStringNumberSense.Factor)
+				if (numberSense == ToStringNumberSense.Factor)
 				{
-					return this.value.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Absolute);
+					return value.ToStringByStyle(ToStringStyle.PercentZero);
 				}
-				if (this.valueStringInt == null)
+				if (valueStringInt == null)
 				{
-					return this.stat.Worker.GetStatDrawEntryLabel(this.stat, this.value, this.numberSense, this.optionalReq, !this.forceUnfinalizedMode);
+					return stat.Worker.GetStatDrawEntryLabel(stat, value, numberSense, optionalReq, !forceUnfinalizedMode);
 				}
-				return this.valueStringInt;
+				return valueStringInt;
 			}
 		}
 
-		
-		
-		public int DisplayPriorityWithinCategory
-		{
-			get
-			{
-				return this.displayOrderWithinCategory;
-			}
-		}
+		public int DisplayPriorityWithinCategory => displayOrderWithinCategory;
 
-		
 		public StatDrawEntry(StatCategoryDef category, StatDef stat, float value, StatRequest optionalReq, ToStringNumberSense numberSense = ToStringNumberSense.Undefined, int? overrideDisplayPriorityWithinCategory = null, bool forceUnfinalizedMode = false)
 		{
 			this.category = category;
 			this.stat = stat;
-			this.labelInt = null;
+			labelInt = null;
 			this.value = value;
-			this.valueStringInt = null;
-			this.displayOrderWithinCategory = ((overrideDisplayPriorityWithinCategory != null) ? overrideDisplayPriorityWithinCategory.Value : stat.displayPriorityInCategory);
+			valueStringInt = null;
+			displayOrderWithinCategory = (overrideDisplayPriorityWithinCategory.HasValue ? overrideDisplayPriorityWithinCategory.Value : stat.displayPriorityInCategory);
 			this.optionalReq = optionalReq;
 			this.forceUnfinalizedMode = forceUnfinalizedMode;
-			this.hasOptionalReq = true;
+			hasOptionalReq = true;
 			if (numberSense == ToStringNumberSense.Undefined)
 			{
 				this.numberSense = stat.toStringNumberSense;
-				return;
 			}
-			this.numberSense = numberSense;
+			else
+			{
+				this.numberSense = numberSense;
+			}
 		}
 
-		
 		public StatDrawEntry(StatCategoryDef category, string label, string valueString, string reportText, int displayPriorityWithinCategory, string overrideReportTitle = null, IEnumerable<Dialog_InfoCard.Hyperlink> hyperlinks = null, bool forceUnfinalizedMode = false)
 		{
 			this.category = category;
-			this.stat = null;
-			this.labelInt = label;
-			this.value = 0f;
-			this.valueStringInt = valueString;
-			this.displayOrderWithinCategory = displayPriorityWithinCategory;
-			this.numberSense = ToStringNumberSense.Absolute;
-			this.overrideReportText = reportText;
+			stat = null;
+			labelInt = label;
+			value = 0f;
+			valueStringInt = valueString;
+			displayOrderWithinCategory = displayPriorityWithinCategory;
+			numberSense = ToStringNumberSense.Absolute;
+			overrideReportText = reportText;
 			this.overrideReportTitle = overrideReportTitle;
 			this.hyperlinks = hyperlinks;
 			this.forceUnfinalizedMode = forceUnfinalizedMode;
 		}
 
-		
 		public StatDrawEntry(StatCategoryDef category, StatDef stat)
 		{
 			this.category = category;
 			this.stat = stat;
-			this.labelInt = null;
-			this.value = 0f;
-			this.valueStringInt = "-";
-			this.displayOrderWithinCategory = stat.displayPriorityInCategory;
-			this.numberSense = ToStringNumberSense.Undefined;
+			labelInt = null;
+			value = 0f;
+			valueStringInt = "-";
+			displayOrderWithinCategory = stat.displayPriorityInCategory;
+			numberSense = ToStringNumberSense.Undefined;
 		}
 
-		
 		public IEnumerable<Dialog_InfoCard.Hyperlink> GetHyperlinks(StatRequest req)
 		{
-			if (this.hyperlinks != null)
+			if (hyperlinks != null)
 			{
-				return this.hyperlinks;
+				return hyperlinks;
 			}
-			if (this.stat != null)
+			if (stat != null)
 			{
-				return this.stat.Worker.GetInfoCardHyperlinks(req);
+				return stat.Worker.GetInfoCardHyperlinks(req);
 			}
 			return null;
 		}
 
-		
 		public string GetExplanationText(StatRequest optionalReq)
 		{
-			if (this.explanationText == null)
+			if (explanationText == null)
 			{
-				this.WriteExplanationTextInt();
+				WriteExplanationTextInt();
 			}
-			string result;
-			if (optionalReq.Empty || this.stat == null)
+			string text = null;
+			if (optionalReq.Empty || stat == null)
 			{
-				result = this.explanationText;
+				return explanationText;
 			}
-			else
-			{
-				result = string.Format("{0}\n\n{1}", this.explanationText, this.stat.Worker.GetExplanationFull(optionalReq, this.numberSense, this.value));
-			}
-			return result;
+			return $"{explanationText}\n\n{stat.Worker.GetExplanationFull(optionalReq, numberSense, value)}";
 		}
 
-		
 		private void WriteExplanationTextInt()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			if (!this.overrideReportTitle.NullOrEmpty())
+			if (!overrideReportTitle.NullOrEmpty())
 			{
-				stringBuilder.AppendLine(this.overrideReportTitle);
+				stringBuilder.AppendLine(overrideReportTitle);
 			}
-			if (!this.overrideReportText.NullOrEmpty())
+			if (!overrideReportText.NullOrEmpty())
 			{
-				stringBuilder.AppendLine(this.overrideReportText);
+				stringBuilder.AppendLine(overrideReportText);
 			}
-			else if (this.stat != null)
+			else if (stat != null)
 			{
-				stringBuilder.AppendLine(this.stat.description);
+				stringBuilder.AppendLine(stat.description);
 			}
 			stringBuilder.AppendLine();
-			this.explanationText = stringBuilder.ToString().TrimEndNewlines();
+			explanationText = stringBuilder.ToString().TrimEndNewlines();
 		}
 
-		
 		public float Draw(float x, float y, float width, bool selected, Action clickedCallback, Action mousedOverCallback, Vector2 scrollPosition, Rect scrollOutRect)
 		{
 			float num = width * 0.45f;
-			Rect rect = new Rect(8f, y, width, Text.CalcHeight(this.ValueString, num));
-			if (y - scrollPosition.y + rect.height >= 0f && y - scrollPosition.y <= scrollOutRect.height)
+			Rect rect = new Rect(8f, y, width, Text.CalcHeight(ValueString, num));
+			if (!(y - scrollPosition.y + rect.height < 0f) && !(y - scrollPosition.y > scrollOutRect.height))
 			{
 				if (selected)
 				{
@@ -179,17 +187,17 @@ namespace RimWorld
 				}
 				Rect rect2 = rect;
 				rect2.width -= num;
-				Widgets.Label(rect2, this.LabelCap);
+				Widgets.Label(rect2, LabelCap);
 				Rect rect3 = rect;
 				rect3.x = rect2.xMax;
 				rect3.width = num;
-				Widgets.Label(rect3, this.ValueString);
-				if (this.stat != null && Mouse.IsOver(rect))
+				Widgets.Label(rect3, ValueString);
+				if (stat != null && Mouse.IsOver(rect))
 				{
-					StatDef localStat = this.stat;
-					TooltipHandler.TipRegion(rect, new TipSignal(() => localStat.LabelCap + ": " + localStat.description, this.stat.GetHashCode()));
+					StatDef localStat = stat;
+					TooltipHandler.TipRegion(rect, new TipSignal(() => localStat.LabelCap + ": " + localStat.description, stat.GetHashCode()));
 				}
-				if (Widgets.ButtonInvisible(rect, true))
+				if (Widgets.ButtonInvisible(rect))
 				{
 					clickedCallback();
 				}
@@ -201,59 +209,9 @@ namespace RimWorld
 			return rect.height;
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new string[]
-			{
-				"(",
-				this.LabelCap,
-				": ",
-				this.ValueString,
-				")"
-			});
+			return "(" + LabelCap + ": " + ValueString + ")";
 		}
-
-		
-		public StatCategoryDef category;
-
-		
-		private int displayOrderWithinCategory;
-
-		
-		public StatDef stat;
-
-		
-		private float value;
-
-		
-		public StatRequest optionalReq;
-
-		
-		public bool hasOptionalReq;
-
-		
-		public bool forceUnfinalizedMode;
-
-		
-		private IEnumerable<Dialog_InfoCard.Hyperlink> hyperlinks;
-
-		
-		private string labelInt;
-
-		
-		private string valueStringInt;
-
-		
-		private string overrideReportText;
-
-		
-		private string overrideReportTitle;
-
-		
-		private string explanationText;
-
-		
-		private ToStringNumberSense numberSense;
 	}
 }

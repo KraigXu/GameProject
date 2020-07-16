@@ -1,15 +1,14 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class QuestPart_Filter_Fail : QuestPart_Filter
 	{
-		
 		protected override bool Pass(SignalArgs args)
 		{
-			QuestEndOutcome questEndOutcome;
-			return args.TryGetArg<QuestEndOutcome>("OUTCOME", out questEndOutcome) && questEndOutcome == QuestEndOutcome.Fail;
+			if (args.TryGetArg("OUTCOME", out QuestEndOutcome arg))
+			{
+				return arg == QuestEndOutcome.Fail;
+			}
+			return false;
 		}
 	}
 }

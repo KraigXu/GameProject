@@ -1,59 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_Hypothermia : Alert_Critical
 	{
-		
-		public Alert_Hypothermia()
-		{
-			this.defaultLabel = "AlertHypothermia".Translate();
-		}
+		private List<Pawn> hypothermiaDangerColonistsResult = new List<Pawn>();
 
-		
-		
 		private List<Pawn> HypothermiaDangerColonists
 		{
 			get
 			{
-				this.hypothermiaDangerColonistsResult.Clear();
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
+				hypothermiaDangerColonistsResult.Clear();
+				foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_FreeColonists_NoCryptosleep)
 				{
-					if (!pawn.SafeTemperatureRange().Includes(pawn.AmbientTemperature))
+					if (!item.SafeTemperatureRange().Includes(item.AmbientTemperature))
 					{
-						Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia, false);
+						Hediff firstHediffOfDef = item.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hypothermia);
 						if (firstHediffOfDef != null && firstHediffOfDef.CurStageIndex >= 3)
 						{
-							this.hypothermiaDangerColonistsResult.Add(pawn);
+							hypothermiaDangerColonistsResult.Add(item);
 						}
 					}
 				}
-				return this.hypothermiaDangerColonistsResult;
+				return hypothermiaDangerColonistsResult;
 			}
 		}
 
-		
+		public Alert_Hypothermia()
+		{
+			defaultLabel = "AlertHypothermia".Translate();
+		}
+
 		public override TaggedString GetExplanation()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Pawn pawn in this.HypothermiaDangerColonists)
+			foreach (Pawn hypothermiaDangerColonist in HypothermiaDangerColonists)
 			{
-				stringBuilder.AppendLine("  - " + pawn.NameShortColored.Resolve());
+				stringBuilder.AppendLine("  - " + hypothermiaDangerColonist.NameShortColored.Resolve());
 			}
 			return "AlertHypothermiaDesc".Translate(stringBuilder.ToString());
 		}
 
-		
 		public override AlertReport GetReport()
 		{
-			return AlertReport.CulpritsAre(this.HypothermiaDangerColonists);
+			return AlertReport.CulpritsAre(HypothermiaDangerColonists);
 		}
-
-		
-		private List<Pawn> hypothermiaDangerColonistsResult = new List<Pawn>();
 	}
 }

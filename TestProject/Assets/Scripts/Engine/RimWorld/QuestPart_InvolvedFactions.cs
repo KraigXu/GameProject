@@ -1,39 +1,31 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_InvolvedFactions : QuestPart
 	{
-		
-		
+		public List<Faction> factions = new List<Faction>();
+
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-		
-				IEnumerator<Faction> enumerator = null;
-				foreach (Faction faction2 in this.factions)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return faction2;
+					yield return involvedFaction;
 				}
-				List<Faction>.Enumerator enumerator2 = default(List<Faction>.Enumerator);
-				yield break;
-				yield break;
+				foreach (Faction faction in factions)
+				{
+					yield return faction;
+				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<Faction>(ref this.factions, "factions", LookMode.Reference, Array.Empty<object>());
+			Scribe_Collections.Look(ref factions, "factions", LookMode.Reference);
 		}
-
-		
-		public List<Faction> factions = new List<Faction>();
 	}
 }

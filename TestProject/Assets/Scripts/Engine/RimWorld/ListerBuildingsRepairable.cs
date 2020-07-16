@@ -1,75 +1,66 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ListerBuildingsRepairable
 	{
-		
+		private Dictionary<Faction, List<Thing>> repairables = new Dictionary<Faction, List<Thing>>();
+
+		private Dictionary<Faction, HashSet<Thing>> repairablesSet = new Dictionary<Faction, HashSet<Thing>>();
+
 		public List<Thing> RepairableBuildings(Faction fac)
 		{
-			return this.ListFor(fac);
+			return ListFor(fac);
 		}
 
-		
 		public bool Contains(Faction fac, Building b)
 		{
-			return this.HashSetFor(fac).Contains(b);
+			return HashSetFor(fac).Contains(b);
 		}
 
-		
 		public void Notify_BuildingSpawned(Building b)
 		{
-			if (b.Faction == null)
+			if (b.Faction != null)
 			{
-				return;
+				UpdateBuilding(b);
 			}
-			this.UpdateBuilding(b);
 		}
 
-		
 		public void Notify_BuildingDeSpawned(Building b)
 		{
-			if (b.Faction == null)
+			if (b.Faction != null)
 			{
-				return;
+				ListFor(b.Faction).Remove(b);
+				HashSetFor(b.Faction).Remove(b);
 			}
-			this.ListFor(b.Faction).Remove(b);
-			this.HashSetFor(b.Faction).Remove(b);
 		}
 
-		
 		public void Notify_BuildingTookDamage(Building b)
 		{
-			if (b.Faction == null)
+			if (b.Faction != null)
 			{
-				return;
+				UpdateBuilding(b);
 			}
-			this.UpdateBuilding(b);
 		}
 
-		
 		public void Notify_BuildingRepaired(Building b)
 		{
-			if (b.Faction == null)
+			if (b.Faction != null)
 			{
-				return;
+				UpdateBuilding(b);
 			}
-			this.UpdateBuilding(b);
 		}
 
-		
 		private void UpdateBuilding(Building b)
 		{
 			if (b.Faction == null || !b.def.building.repairable)
 			{
 				return;
 			}
-			List<Thing> list = this.ListFor(b.Faction);
-			HashSet<Thing> hashSet = this.HashSetFor(b.Faction);
+			List<Thing> list = ListFor(b.Faction);
+			HashSet<Thing> hashSet = HashSetFor(b.Faction);
 			if (b.HitPoints < b.MaxHitPoints)
 			{
 				if (!list.Contains(b))
@@ -77,66 +68,50 @@ namespace RimWorld
 					list.Add(b);
 				}
 				hashSet.Add(b);
-				return;
 			}
-			list.Remove(b);
-			hashSet.Remove(b);
+			else
+			{
+				list.Remove(b);
+				hashSet.Remove(b);
+			}
 		}
 
-		
 		private List<Thing> ListFor(Faction fac)
 		{
-			List<Thing> list;
-			if (!this.repairables.TryGetValue(fac, out list))
+			if (!repairables.TryGetValue(fac, out List<Thing> value))
 			{
-				list = new List<Thing>();
-				this.repairables.Add(fac, list);
+				value = new List<Thing>();
+				repairables.Add(fac, value);
 			}
-			return list;
+			return value;
 		}
 
-		
 		private HashSet<Thing> HashSetFor(Faction fac)
 		{
-			HashSet<Thing> hashSet;
-			if (!this.repairablesSet.TryGetValue(fac, out hashSet))
+			if (!repairablesSet.TryGetValue(fac, out HashSet<Thing> value))
 			{
-				hashSet = new HashSet<Thing>();
-				this.repairablesSet.Add(fac, hashSet);
+				value = new HashSet<Thing>();
+				repairablesSet.Add(fac, value);
 			}
-			return hashSet;
+			return value;
 		}
 
-		
 		internal string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (Faction faction in Find.FactionManager.AllFactions)
+			foreach (Faction allFaction in Find.FactionManager.AllFactions)
 			{
-				List<Thing> list = this.ListFor(faction);
-				if (!list.NullOrEmpty<Thing>())
+				List<Thing> list = ListFor(allFaction);
+				if (!list.NullOrEmpty())
 				{
-					stringBuilder.AppendLine(string.Concat(new object[]
+					stringBuilder.AppendLine("=======" + allFaction.Name + " (" + allFaction.def + ")");
+					foreach (Thing item in list)
 					{
-						"=======",
-						faction.Name,
-						" (",
-						faction.def,
-						")"
-					}));
-					foreach (Thing thing in list)
-					{
-						stringBuilder.AppendLine(thing.ThingID);
+						stringBuilder.AppendLine(item.ThingID);
 					}
 				}
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		private Dictionary<Faction, List<Thing>> repairables = new Dictionary<Faction, List<Thing>>();
-
-		
-		private Dictionary<Faction, HashSet<Thing>> repairablesSet = new Dictionary<Faction, HashSet<Thing>>();
 	}
 }

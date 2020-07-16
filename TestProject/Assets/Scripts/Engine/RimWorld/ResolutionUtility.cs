@@ -1,14 +1,18 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ResolutionUtility
 	{
-		
-		
+		public const int MinResolutionWidth = 1024;
+
+		public const int MinResolutionHeight = 768;
+
+		public const int MinRecommendedResolutionWidth = 1700;
+
+		public const int MinRecommendedResolutionHeight = 910;
+
 		public static Resolution NativeResolution
 		{
 			get
@@ -30,89 +34,75 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static void SafeSetResolution(Resolution res)
 		{
-			if (Screen.width == res.width && Screen.height == res.height)
+			if (Screen.width != res.width || Screen.height != res.height)
 			{
-				return;
+				IntVec2 oldRes = new IntVec2(Screen.width, Screen.height);
+				SetResolutionRaw(res.width, res.height, Screen.fullScreen);
+				Prefs.ScreenWidth = res.width;
+				Prefs.ScreenHeight = res.height;
+				Find.WindowStack.Add(new Dialog_ResolutionConfirm(oldRes));
 			}
-			IntVec2 oldRes = new IntVec2(Screen.width, Screen.height);
-			ResolutionUtility.SetResolutionRaw(res.width, res.height, Screen.fullScreen);
-			Prefs.ScreenWidth = res.width;
-			Prefs.ScreenHeight = res.height;
-			Find.WindowStack.Add(new Dialog_ResolutionConfirm(oldRes));
 		}
 
-		
 		public static void SafeSetFullscreen(bool fullScreen)
 		{
-			if (Screen.fullScreen == fullScreen)
+			if (Screen.fullScreen != fullScreen)
 			{
-				return;
+				bool fullScreen2 = Screen.fullScreen;
+				Screen.fullScreen = fullScreen;
+				Prefs.FullScreen = fullScreen;
+				Find.WindowStack.Add(new Dialog_ResolutionConfirm(fullScreen2));
 			}
-			bool fullScreen2 = Screen.fullScreen;
-			Screen.fullScreen = fullScreen;
-			Prefs.FullScreen = fullScreen;
-			Find.WindowStack.Add(new Dialog_ResolutionConfirm(fullScreen2));
 		}
 
-		
 		public static void SafeSetUIScale(float newScale)
 		{
-			if (Prefs.UIScale == newScale)
+			if (Prefs.UIScale != newScale)
 			{
-				return;
+				float uIScale = Prefs.UIScale;
+				Prefs.UIScale = newScale;
+				GenUI.ClearLabelWidthCache();
+				Find.WindowStack.Add(new Dialog_ResolutionConfirm(uIScale));
 			}
-			float uiscale = Prefs.UIScale;
-			Prefs.UIScale = newScale;
-			GenUI.ClearLabelWidthCache();
-			Find.WindowStack.Add(new Dialog_ResolutionConfirm(uiscale));
 		}
 
-		
 		public static bool UIScaleSafeWithResolution(float scale, int w, int h)
 		{
-			return (float)w / scale >= 1024f && (float)h / scale >= 768f;
+			if ((float)w / scale >= 1024f)
+			{
+				return (float)h / scale >= 768f;
+			}
+			return false;
 		}
 
-		
 		public static void SetResolutionRaw(int w, int h, bool fullScreen)
 		{
-			if (Application.isBatchMode)
+			if (!Application.isBatchMode)
 			{
-				return;
-			}
-			if (w <= 0 || h <= 0)
-			{
-				Log.Error(string.Concat(new object[]
+				if (w <= 0 || h <= 0)
 				{
-					"Tried to set resolution to ",
-					w,
-					"x",
-					h
-				}), false);
-				return;
-			}
-			if (Screen.width != w || Screen.height != h || Screen.fullScreen != fullScreen)
-			{
-				Screen.SetResolution(w, h, fullScreen);
+					Log.Error("Tried to set resolution to " + w + "x" + h);
+				}
+				else if (Screen.width != w || Screen.height != h || Screen.fullScreen != fullScreen)
+				{
+					Screen.SetResolution(w, h, fullScreen);
+				}
 			}
 		}
 
-		
 		public static void SetNativeResolutionRaw()
 		{
-			Resolution nativeResolution = ResolutionUtility.NativeResolution;
-			ResolutionUtility.SetResolutionRaw(nativeResolution.width, nativeResolution.height, true);
+			Resolution nativeResolution = NativeResolution;
+			SetResolutionRaw(nativeResolution.width, nativeResolution.height, fullScreen: true);
 		}
 
-		
 		public static float GetRecommendedUIScale(int screenWidth, int screenHeight)
 		{
 			if (screenWidth == 0 || screenHeight == 0)
 			{
-				Resolution nativeResolution = ResolutionUtility.NativeResolution;
+				Resolution nativeResolution = NativeResolution;
 				screenWidth = nativeResolution.width;
 				screenHeight = nativeResolution.height;
 			}
@@ -120,19 +110,18 @@ namespace RimWorld
 			{
 				return 1f;
 			}
-			for (int i = Dialog_Options.UIScales.Length - 1; i >= 0; i--)
+			for (int num = Dialog_Options.UIScales.Length - 1; num >= 0; num--)
 			{
-				int num = Mathf.FloorToInt((float)screenWidth / Dialog_Options.UIScales[i]);
-				int num2 = Mathf.FloorToInt((float)screenHeight / Dialog_Options.UIScales[i]);
-				if (num >= 1700 && num2 >= 910)
+				int num2 = Mathf.FloorToInt((float)screenWidth / Dialog_Options.UIScales[num]);
+				int num3 = Mathf.FloorToInt((float)screenHeight / Dialog_Options.UIScales[num]);
+				if (num2 >= 1700 && num3 >= 910)
 				{
-					return Dialog_Options.UIScales[i];
+					return Dialog_Options.UIScales[num];
 				}
 			}
 			return 1f;
 		}
 
-		
 		public static void Update()
 		{
 			if (RealTime.frameCount % 30 == 0 && !LongEventHandler.AnyEventNowOrWaiting && !Screen.fullScreen)
@@ -154,17 +143,5 @@ namespace RimWorld
 				}
 			}
 		}
-
-		
-		public const int MinResolutionWidth = 1024;
-
-		
-		public const int MinResolutionHeight = 768;
-
-		
-		public const int MinRecommendedResolutionWidth = 1700;
-
-		
-		public const int MinRecommendedResolutionHeight = 910;
 	}
 }

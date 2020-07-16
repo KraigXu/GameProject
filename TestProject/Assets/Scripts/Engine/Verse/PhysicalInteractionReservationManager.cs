@@ -1,53 +1,59 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public class PhysicalInteractionReservationManager : IExposable
 	{
-		
-		public void Reserve(Pawn claimant, Job job, LocalTargetInfo target)
+		public class PhysicalInteractionReservation : IExposable
 		{
-			if (this.IsReservedBy(claimant, target))
+			public LocalTargetInfo target;
+
+			public Pawn claimant;
+
+			public Job job;
+
+			public void ExposeData()
 			{
-				return;
+				Scribe_TargetInfo.Look(ref target, "target");
+				Scribe_References.Look(ref claimant, "claimant");
+				Scribe_References.Look(ref job, "job");
 			}
-			PhysicalInteractionReservationManager.PhysicalInteractionReservation physicalInteractionReservation = new PhysicalInteractionReservationManager.PhysicalInteractionReservation();
-			physicalInteractionReservation.target = target;
-			physicalInteractionReservation.claimant = claimant;
-			physicalInteractionReservation.job = job;
-			this.reservations.Add(physicalInteractionReservation);
 		}
 
-		
+		private List<PhysicalInteractionReservation> reservations = new List<PhysicalInteractionReservation>();
+
+		public void Reserve(Pawn claimant, Job job, LocalTargetInfo target)
+		{
+			if (!IsReservedBy(claimant, target))
+			{
+				PhysicalInteractionReservation physicalInteractionReservation = new PhysicalInteractionReservation();
+				physicalInteractionReservation.target = target;
+				physicalInteractionReservation.claimant = claimant;
+				physicalInteractionReservation.job = job;
+				reservations.Add(physicalInteractionReservation);
+			}
+		}
+
 		public void Release(Pawn claimant, Job job, LocalTargetInfo target)
 		{
-			for (int i = 0; i < this.reservations.Count; i++)
+			for (int i = 0; i < reservations.Count; i++)
 			{
-				PhysicalInteractionReservationManager.PhysicalInteractionReservation physicalInteractionReservation = this.reservations[i];
+				PhysicalInteractionReservation physicalInteractionReservation = reservations[i];
 				if (physicalInteractionReservation.target == target && physicalInteractionReservation.claimant == claimant && physicalInteractionReservation.job == job)
 				{
-					this.reservations.RemoveAt(i);
+					reservations.RemoveAt(i);
 					return;
 				}
 			}
-			Log.Warning(string.Concat(new object[]
-			{
-				claimant,
-				" tried to release reservation on target ",
-				target,
-				", but it's not reserved by him."
-			}), false);
+			Log.Warning(claimant + " tried to release reservation on target " + target + ", but it's not reserved by him.");
 		}
 
-		
 		public bool IsReservedBy(Pawn claimant, LocalTargetInfo target)
 		{
-			for (int i = 0; i < this.reservations.Count; i++)
+			for (int i = 0; i < reservations.Count; i++)
 			{
-				PhysicalInteractionReservationManager.PhysicalInteractionReservation physicalInteractionReservation = this.reservations[i];
+				PhysicalInteractionReservation physicalInteractionReservation = reservations[i];
 				if (physicalInteractionReservation.target == target && physicalInteractionReservation.claimant == claimant)
 				{
 					return true;
@@ -56,18 +62,16 @@ namespace Verse
 			return false;
 		}
 
-		
 		public bool IsReserved(LocalTargetInfo target)
 		{
-			return this.FirstReserverOf(target) != null;
+			return FirstReserverOf(target) != null;
 		}
 
-		
 		public Pawn FirstReserverOf(LocalTargetInfo target)
 		{
-			for (int i = 0; i < this.reservations.Count; i++)
+			for (int i = 0; i < reservations.Count; i++)
 			{
-				PhysicalInteractionReservationManager.PhysicalInteractionReservation physicalInteractionReservation = this.reservations[i];
+				PhysicalInteractionReservation physicalInteractionReservation = reservations[i];
 				if (physicalInteractionReservation.target == target)
 				{
 					return physicalInteractionReservation.claimant;
@@ -76,84 +80,52 @@ namespace Verse
 			return null;
 		}
 
-		
 		public LocalTargetInfo FirstReservationFor(Pawn claimant)
 		{
-			for (int i = this.reservations.Count - 1; i >= 0; i--)
+			for (int num = reservations.Count - 1; num >= 0; num--)
 			{
-				if (this.reservations[i].claimant == claimant)
+				if (reservations[num].claimant == claimant)
 				{
-					return this.reservations[i].target;
+					return reservations[num].target;
 				}
 			}
 			return LocalTargetInfo.Invalid;
 		}
 
-		
 		public void ReleaseAllForTarget(LocalTargetInfo target)
 		{
-			this.reservations.RemoveAll((PhysicalInteractionReservationManager.PhysicalInteractionReservation x) => x.target == target);
+			reservations.RemoveAll((PhysicalInteractionReservation x) => x.target == target);
 		}
 
-		
 		public void ReleaseClaimedBy(Pawn claimant, Job job)
 		{
-			for (int i = this.reservations.Count - 1; i >= 0; i--)
+			for (int num = reservations.Count - 1; num >= 0; num--)
 			{
-				if (this.reservations[i].claimant == claimant && this.reservations[i].job == job)
+				if (reservations[num].claimant == claimant && reservations[num].job == job)
 				{
-					this.reservations.RemoveAt(i);
+					reservations.RemoveAt(num);
 				}
 			}
 		}
 
-		
 		public void ReleaseAllClaimedBy(Pawn claimant)
 		{
-			for (int i = this.reservations.Count - 1; i >= 0; i--)
+			for (int num = reservations.Count - 1; num >= 0; num--)
 			{
-				if (this.reservations[i].claimant == claimant)
+				if (reservations[num].claimant == claimant)
 				{
-					this.reservations.RemoveAt(i);
+					reservations.RemoveAt(num);
 				}
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<PhysicalInteractionReservationManager.PhysicalInteractionReservation>(ref this.reservations, "reservations", LookMode.Deep, Array.Empty<object>());
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
+			Scribe_Collections.Look(ref reservations, "reservations", LookMode.Deep);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && reservations.RemoveAll((PhysicalInteractionReservation x) => x.claimant.DestroyedOrNull()) != 0)
 			{
-				if (this.reservations.RemoveAll((PhysicalInteractionReservationManager.PhysicalInteractionReservation x) => x.claimant.DestroyedOrNull()) != 0)
-				{
-					Log.Warning("Some physical interaction reservations had null or destroyed claimant.", false);
-				}
+				Log.Warning("Some physical interaction reservations had null or destroyed claimant.");
 			}
-		}
-
-		
-		private List<PhysicalInteractionReservationManager.PhysicalInteractionReservation> reservations = new List<PhysicalInteractionReservationManager.PhysicalInteractionReservation>();
-
-		
-		public class PhysicalInteractionReservation : IExposable
-		{
-			
-			public void ExposeData()
-			{
-				Scribe_TargetInfo.Look(ref this.target, "target");
-				Scribe_References.Look<Pawn>(ref this.claimant, "claimant", false);
-				Scribe_References.Look<Job>(ref this.job, "job", false);
-			}
-
-			
-			public LocalTargetInfo target;
-
-			
-			public Pawn claimant;
-
-			
-			public Job job;
 		}
 	}
 }

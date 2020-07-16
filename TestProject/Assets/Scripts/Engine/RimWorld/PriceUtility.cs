@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +6,23 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PriceUtility
 	{
-		
+		private const float MinFactor = 0.1f;
+
+		private const float SummaryHealthImpact = 0.8f;
+
+		private const float CapacityImpact = 0.5f;
+
+		private const float MissingCapacityFactor = 0.6f;
+
+		private static readonly SimpleCurve AverageSkillCurve = new SimpleCurve
+		{
+			new CurvePoint(0f, 0.2f),
+			new CurvePoint(5.5f, 1f),
+			new CurvePoint(20f, 3f)
+		};
+
 		public static float PawnQualityPriceFactor(Pawn pawn, StringBuilder explanation = null)
 		{
 			float num = 1f;
@@ -21,16 +33,14 @@ namespace RimWorld
 				if (!pawn.health.capacities.CapableOf(allDefsListForReading[i]))
 				{
 					num *= 0.6f;
+					continue;
 				}
-				else
-				{
-					float t = PawnCapacityUtility.CalculateCapacityLevel(pawn.health.hediffSet, allDefsListForReading[i], null, true);
-					num *= Mathf.Lerp(0.5f, 1f, t);
-				}
+				float t = PawnCapacityUtility.CalculateCapacityLevel(pawn.health.hediffSet, allDefsListForReading[i], null, forTradePrice: true);
+				num *= Mathf.Lerp(0.5f, 1f, t);
 			}
 			if (pawn.skills != null)
 			{
-				num *= PriceUtility.AverageSkillCurve.Evaluate(pawn.skills.skills.Average((SkillRecord sk) => (float)sk.Level));
+				num *= AverageSkillCurve.Evaluate((float)pawn.skills.skills.Average((SkillRecord sk) => sk.Level));
 			}
 			num *= pawn.ageTracker.CurLifeStage.marketValueFactor;
 			if (pawn.story != null && pawn.story.traits != null)
@@ -41,19 +51,15 @@ namespace RimWorld
 					num += trait.CurrentData.marketValueFactorOffset;
 				}
 			}
-			num += pawn.GetStatValue(StatDefOf.PawnBeauty, true) * 0.2f;
+			num += pawn.GetStatValue(StatDefOf.PawnBeauty) * 0.2f;
 			if (num < 0.1f)
 			{
 				num = 0.1f;
 			}
-			if (explanation != null)
-			{
-				explanation.AppendLine("StatsReport_CharacterQuality".Translate() + ": x" + num.ToStringPercent());
-			}
+			explanation?.AppendLine("StatsReport_CharacterQuality".Translate() + ": x" + num.ToStringPercent());
 			return num;
 		}
 
-		
 		public static float PawnQualityPriceOffset(Pawn pawn, StringBuilder explanation = null)
 		{
 			float num = 0f;
@@ -67,46 +73,14 @@ namespace RimWorld
 					{
 						num2 = hediffs[i].def.spawnThingOnRemoved.BaseMarketValue;
 					}
-					if (num2 >= 1f || num2 <= -1f)
+					if (!(num2 < 1f) || !(num2 > -1f))
 					{
 						num += num2;
-						if (explanation != null)
-						{
-							explanation.AppendLine(hediffs[i].LabelBaseCap + ": " + num2.ToStringMoneyOffset(null));
-						}
+						explanation?.AppendLine(hediffs[i].LabelBaseCap + ": " + num2.ToStringMoneyOffset());
 					}
 				}
 			}
 			return num;
 		}
-
-		
-		private const float MinFactor = 0.1f;
-
-		
-		private const float SummaryHealthImpact = 0.8f;
-
-		
-		private const float CapacityImpact = 0.5f;
-
-		
-		private const float MissingCapacityFactor = 0.6f;
-
-		
-		private static readonly SimpleCurve AverageSkillCurve = new SimpleCurve
-		{
-			{
-				new CurvePoint(0f, 0.2f),
-				true
-			},
-			{
-				new CurvePoint(5.5f, 1f),
-				true
-			},
-			{
-				new CurvePoint(20f, 3f),
-				true
-			}
-		};
 	}
 }

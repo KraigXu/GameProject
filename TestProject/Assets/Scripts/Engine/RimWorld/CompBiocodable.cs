@@ -1,85 +1,52 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompBiocodable : ThingComp
 	{
-		
-		
-		public bool Biocoded
-		{
-			get
-			{
-				return this.biocoded;
-			}
-		}
+		protected bool biocoded;
 
-		
-		
-		public Pawn CodedPawn
-		{
-			get
-			{
-				return this.codedPawn;
-			}
-		}
+		protected string codedPawnLabel;
 
-		
-		
-		public string CodedPawnLabel
-		{
-			get
-			{
-				return this.codedPawnLabel;
-			}
-		}
+		protected Pawn codedPawn;
 
-		
+		public bool Biocoded => biocoded;
+
+		public Pawn CodedPawn => codedPawn;
+
+		public string CodedPawnLabel => codedPawnLabel;
+
 		public void CodeFor(Pawn p)
 		{
-			this.biocoded = true;
-			this.codedPawn = p;
-			this.codedPawnLabel = p.Name.ToStringFull;
+			biocoded = true;
+			codedPawn = p;
+			codedPawnLabel = p.Name.ToStringFull;
 		}
 
-		
 		public override string TransformLabel(string label)
 		{
-			if (!this.biocoded)
+			if (!biocoded)
 			{
 				return label;
 			}
-			return "Biocoded".Translate(label, this.parent.def).Resolve();
+			return "Biocoded".Translate(label, parent.def).Resolve();
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.biocoded)
+			if (!biocoded)
 			{
 				return string.Empty;
 			}
-			return "CodedFor".Translate(this.codedPawnLabel.ApplyTag(TagType.Name, null)).Resolve();
+			return "CodedFor".Translate(codedPawnLabel.ApplyTag(TagType.Name)).Resolve();
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<bool>(ref this.biocoded, "biocoded", false, false);
-			Scribe_Values.Look<string>(ref this.codedPawnLabel, "biocodedPawnLabel", null, false);
-			Scribe_References.Look<Pawn>(ref this.codedPawn, "codedPawn", true);
+			Scribe_Values.Look(ref biocoded, "biocoded", defaultValue: false);
+			Scribe_Values.Look(ref codedPawnLabel, "biocodedPawnLabel");
+			Scribe_References.Look(ref codedPawn, "codedPawn", saveDestroyedThings: true);
 		}
-
-		
-		protected bool biocoded;
-
-		
-		protected string codedPawnLabel;
-
-		
-		protected Pawn codedPawn;
 	}
 }

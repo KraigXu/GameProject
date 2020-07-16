@@ -1,137 +1,106 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class InspectTabBase
 	{
-		
-		
-		protected abstract float PaneTopY { get; }
+		public string labelKey;
 
-		
-		
-		protected abstract bool StillValid { get; }
+		protected Vector2 size;
 
-		
-		
-		public virtual bool IsVisible
+		public string tutorTag;
+
+		private string cachedTutorHighlightTagClosed;
+
+		protected abstract float PaneTopY
 		{
-			get
-			{
-				return true;
-			}
+			get;
 		}
 
-		
-		
+		protected abstract bool StillValid
+		{
+			get;
+		}
+
+		public virtual bool IsVisible => true;
+
 		public string TutorHighlightTagClosed
 		{
 			get
 			{
-				if (this.tutorTag == null)
+				if (tutorTag == null)
 				{
 					return null;
 				}
-				if (this.cachedTutorHighlightTagClosed == null)
+				if (cachedTutorHighlightTagClosed == null)
 				{
-					this.cachedTutorHighlightTagClosed = "ITab-" + this.tutorTag + "-Closed";
+					cachedTutorHighlightTagClosed = "ITab-" + tutorTag + "-Closed";
 				}
-				return this.cachedTutorHighlightTagClosed;
+				return cachedTutorHighlightTagClosed;
 			}
 		}
 
-		
-		
 		protected Rect TabRect
 		{
 			get
 			{
-				this.UpdateSize();
-				float y = this.PaneTopY - 30f - this.size.y;
-				return new Rect(0f, y, this.size.x, this.size.y);
+				UpdateSize();
+				float y = PaneTopY - 30f - size.y;
+				return new Rect(0f, y, size.x, size.y);
 			}
 		}
 
-		
 		public void DoTabGUI()
 		{
-			Rect rect = this.TabRect;
+			Rect rect = TabRect;
 			Find.WindowStack.ImmediateWindow(235086, rect, WindowLayer.GameUI, delegate
 			{
-				if (!this.StillValid || !this.IsVisible)
+				if (StillValid && IsVisible)
 				{
-					return;
-				}
-				if (Widgets.CloseButtonFor(rect.AtZero()))
-				{
-					this.CloseTab();
-				}
-				try
-				{
-					this.FillTab();
-				}
-				catch (Exception ex)
-				{
-					Log.ErrorOnce(string.Concat(new object[]
+					if (Widgets.CloseButtonFor(rect.AtZero()))
 					{
-						"Exception filling tab ",
-						this.GetType(),
-						": ",
-						ex
-					}), 49827, false);
+						CloseTab();
+					}
+					try
+					{
+						FillTab();
+					}
+					catch (Exception ex)
+					{
+						Log.ErrorOnce("Exception filling tab " + GetType() + ": " + ex, 49827);
+					}
 				}
-			}, true, false, 1f);
-			this.ExtraOnGUI();
+			});
+			ExtraOnGUI();
 		}
 
-		
 		protected abstract void CloseTab();
 
-		
 		protected abstract void FillTab();
 
-		
 		protected virtual void ExtraOnGUI()
 		{
 		}
 
-		
 		protected virtual void UpdateSize()
 		{
 		}
 
-		
 		public virtual void OnOpen()
 		{
 		}
 
-		
 		public virtual void TabTick()
 		{
 		}
 
-		
 		public virtual void TabUpdate()
 		{
 		}
 
-		
 		public virtual void Notify_ClearingAllMapsMemory()
 		{
 		}
-
-		
-		public string labelKey;
-
-		
-		protected Vector2 size;
-
-		
-		public string tutorTag;
-
-		
-		private string cachedTutorHighlightTagClosed;
 	}
 }

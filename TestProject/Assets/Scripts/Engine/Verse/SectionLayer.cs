@@ -1,91 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public abstract class SectionLayer
 	{
-		
-		
-		protected Map Map
-		{
-			get
-			{
-				return this.section.map;
-			}
-		}
+		protected Section section;
 
-		
-		
-		public virtual bool Visible
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public MapMeshFlag relevantChangeTypes;
 
-		
+		public List<LayerSubMesh> subMeshes = new List<LayerSubMesh>();
+
+		protected Map Map => section.map;
+
+		public virtual bool Visible => true;
+
 		public SectionLayer(Section section)
 		{
 			this.section = section;
 		}
 
-		
 		public LayerSubMesh GetSubMesh(Material material)
 		{
 			if (material == null)
 			{
 				return null;
 			}
-			for (int i = 0; i < this.subMeshes.Count; i++)
+			for (int i = 0; i < subMeshes.Count; i++)
 			{
-				if (this.subMeshes[i].material == material)
+				if (subMeshes[i].material == material)
 				{
-					return this.subMeshes[i];
+					return subMeshes[i];
 				}
 			}
 			Mesh mesh = new Mesh();
 			if (UnityData.isEditor)
 			{
-				mesh.name = string.Concat(new object[]
-				{
-					"SectionLayerSubMesh_",
-					base.GetType().Name,
-					"_",
-					this.Map.Tile
-				});
+				mesh.name = "SectionLayerSubMesh_" + GetType().Name + "_" + Map.Tile;
 			}
 			LayerSubMesh layerSubMesh = new LayerSubMesh(mesh, material);
-			this.subMeshes.Add(layerSubMesh);
+			subMeshes.Add(layerSubMesh);
 			return layerSubMesh;
 		}
 
-		
 		protected void FinalizeMesh(MeshParts tags)
 		{
-			for (int i = 0; i < this.subMeshes.Count; i++)
+			for (int i = 0; i < subMeshes.Count; i++)
 			{
-				if (this.subMeshes[i].verts.Count > 0)
+				if (subMeshes[i].verts.Count > 0)
 				{
-					this.subMeshes[i].FinalizeMesh(tags);
+					subMeshes[i].FinalizeMesh(tags);
 				}
 			}
 		}
 
-		
 		public virtual void DrawLayer()
 		{
-			if (!this.Visible)
+			if (!Visible)
 			{
 				return;
 			}
-			int count = this.subMeshes.Count;
+			int count = subMeshes.Count;
 			for (int i = 0; i < count; i++)
 			{
-				LayerSubMesh layerSubMesh = this.subMeshes[i];
+				LayerSubMesh layerSubMesh = subMeshes[i];
 				if (layerSubMesh.finalized && !layerSubMesh.disabled)
 				{
 					Graphics.DrawMesh(layerSubMesh.mesh, Vector3.zero, Quaternion.identity, layerSubMesh.material, 0);
@@ -93,25 +71,14 @@ namespace Verse
 			}
 		}
 
-		
 		public abstract void Regenerate();
 
-		
 		protected void ClearSubMeshes(MeshParts parts)
 		{
-			foreach (LayerSubMesh layerSubMesh in this.subMeshes)
+			foreach (LayerSubMesh subMesh in subMeshes)
 			{
-				layerSubMesh.Clear(parts);
+				subMesh.Clear(parts);
 			}
 		}
-
-		
-		protected Section section;
-
-		
-		public MapMeshFlag relevantChangeTypes;
-
-		
-		public List<LayerSubMesh> subMeshes = new List<LayerSubMesh>();
 	}
 }

@@ -1,264 +1,198 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_StoryTracker : IExposable
 	{
-		
-		
-		
+		private Pawn pawn;
+
+		public Backstory childhood;
+
+		public Backstory adulthood;
+
+		public float melanin;
+
+		public Color hairColor = Color.white;
+
+		public CrownType crownType;
+
+		public BodyTypeDef bodyType;
+
+		private string headGraphicPath;
+
+		public HairDef hairDef;
+
+		public TraitSet traits;
+
+		public string title;
+
+		public string birthLastName;
+
 		public string Title
 		{
 			get
 			{
-				if (this.title != null)
+				if (title != null)
 				{
-					return this.title;
+					return title;
 				}
-				return this.TitleDefault;
+				return TitleDefault;
 			}
 			set
 			{
-				this.title = null;
-				if (value != this.Title && !value.NullOrEmpty())
+				title = null;
+				if (value != Title && !value.NullOrEmpty())
 				{
-					this.title = value;
+					title = value;
 				}
 			}
 		}
 
-		
-		
-		public string TitleCap
-		{
-			get
-			{
-				return this.Title.CapitalizeFirst();
-			}
-		}
+		public string TitleCap => Title.CapitalizeFirst();
 
-		
-		
 		public string TitleDefault
 		{
 			get
 			{
-				if (this.adulthood != null)
+				if (adulthood != null)
 				{
-					return this.adulthood.TitleFor(this.pawn.gender);
+					return adulthood.TitleFor(pawn.gender);
 				}
-				if (this.childhood != null)
+				if (childhood != null)
 				{
-					return this.childhood.TitleFor(this.pawn.gender);
+					return childhood.TitleFor(pawn.gender);
 				}
 				return "";
 			}
 		}
 
-		
-		
-		public string TitleDefaultCap
-		{
-			get
-			{
-				return this.TitleDefault.CapitalizeFirst();
-			}
-		}
+		public string TitleDefaultCap => TitleDefault.CapitalizeFirst();
 
-		
-		
 		public string TitleShort
 		{
 			get
 			{
-				if (this.title != null)
+				if (title != null)
 				{
-					return this.title;
+					return title;
 				}
-				if (this.adulthood != null)
+				if (adulthood != null)
 				{
-					return this.adulthood.TitleShortFor(this.pawn.gender);
+					return adulthood.TitleShortFor(pawn.gender);
 				}
-				if (this.childhood != null)
+				if (childhood != null)
 				{
-					return this.childhood.TitleShortFor(this.pawn.gender);
+					return childhood.TitleShortFor(pawn.gender);
 				}
 				return "";
 			}
 		}
 
-		
-		
-		public string TitleShortCap
-		{
-			get
-			{
-				return this.TitleShort.CapitalizeFirst();
-			}
-		}
+		public string TitleShortCap => TitleShort.CapitalizeFirst();
 
-		
-		
-		public Color SkinColor
-		{
-			get
-			{
-				return PawnSkinColors.GetSkinColor(this.melanin);
-			}
-		}
+		public Color SkinColor => PawnSkinColors.GetSkinColor(melanin);
 
-		
-		
 		public IEnumerable<Backstory> AllBackstories
 		{
 			get
 			{
-				if (this.childhood != null)
+				if (childhood != null)
 				{
-					yield return this.childhood;
+					yield return childhood;
 				}
-				if (this.adulthood != null)
+				if (adulthood != null)
 				{
-					yield return this.adulthood;
+					yield return adulthood;
 				}
-				yield break;
 			}
 		}
 
-		
-		
 		public string HeadGraphicPath
 		{
 			get
 			{
-				if (this.headGraphicPath == null)
+				if (headGraphicPath == null)
 				{
-					this.headGraphicPath = GraphicDatabaseHeadRecords.GetHeadRandom(this.pawn.gender, this.pawn.story.SkinColor, this.pawn.story.crownType).GraphicPath;
+					headGraphicPath = GraphicDatabaseHeadRecords.GetHeadRandom(pawn.gender, pawn.story.SkinColor, pawn.story.crownType).GraphicPath;
 				}
-				return this.headGraphicPath;
+				return headGraphicPath;
 			}
 		}
 
-		
-		
 		public WorkTags DisabledWorkTagsBackstoryAndTraits
 		{
 			get
 			{
 				WorkTags workTags = WorkTags.None;
-				if (this.childhood != null)
+				if (childhood != null)
 				{
-					workTags |= this.childhood.workDisables;
+					workTags |= childhood.workDisables;
 				}
-				if (this.adulthood != null)
+				if (adulthood != null)
 				{
-					workTags |= this.adulthood.workDisables;
+					workTags |= adulthood.workDisables;
 				}
-				for (int i = 0; i < this.traits.allTraits.Count; i++)
+				for (int i = 0; i < traits.allTraits.Count; i++)
 				{
-					workTags |= this.traits.allTraits[i].def.disabledWorkTags;
+					workTags |= traits.allTraits[i].def.disabledWorkTags;
 				}
 				return workTags;
 			}
 		}
 
-		
 		public Pawn_StoryTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.traits = new TraitSet(pawn);
+			traits = new TraitSet(pawn);
 		}
 
-		
 		public void ExposeData()
 		{
-			string text = (this.childhood != null) ? this.childhood.identifier : null;
-			Scribe_Values.Look<string>(ref text, "childhood", null, false);
-			if (Scribe.mode == LoadSaveMode.LoadingVars && !text.NullOrEmpty() && !BackstoryDatabase.TryGetWithIdentifier(text, out this.childhood, true))
+			string value = (childhood != null) ? childhood.identifier : null;
+			Scribe_Values.Look(ref value, "childhood");
+			if (Scribe.mode == LoadSaveMode.LoadingVars && !value.NullOrEmpty() && !BackstoryDatabase.TryGetWithIdentifier(value, out childhood))
 			{
-				Log.Error("Couldn't load child backstory with identifier " + text + ". Giving random.", false);
-				this.childhood = BackstoryDatabase.RandomBackstory(BackstorySlot.Childhood);
+				Log.Error("Couldn't load child backstory with identifier " + value + ". Giving random.");
+				childhood = BackstoryDatabase.RandomBackstory(BackstorySlot.Childhood);
 			}
-			string text2 = (this.adulthood != null) ? this.adulthood.identifier : null;
-			Scribe_Values.Look<string>(ref text2, "adulthood", null, false);
-			if (Scribe.mode == LoadSaveMode.LoadingVars && !text2.NullOrEmpty() && !BackstoryDatabase.TryGetWithIdentifier(text2, out this.adulthood, true))
+			string value2 = (adulthood != null) ? adulthood.identifier : null;
+			Scribe_Values.Look(ref value2, "adulthood");
+			if (Scribe.mode == LoadSaveMode.LoadingVars && !value2.NullOrEmpty() && !BackstoryDatabase.TryGetWithIdentifier(value2, out adulthood))
 			{
-				Log.Error("Couldn't load adult backstory with identifier " + text2 + ". Giving random.", false);
-				this.adulthood = BackstoryDatabase.RandomBackstory(BackstorySlot.Adulthood);
+				Log.Error("Couldn't load adult backstory with identifier " + value2 + ". Giving random.");
+				adulthood = BackstoryDatabase.RandomBackstory(BackstorySlot.Adulthood);
 			}
-			Scribe_Defs.Look<BodyTypeDef>(ref this.bodyType, "bodyType");
-			Scribe_Values.Look<CrownType>(ref this.crownType, "crownType", CrownType.Undefined, false);
-			Scribe_Values.Look<string>(ref this.headGraphicPath, "headGraphicPath", null, false);
-			Scribe_Defs.Look<HairDef>(ref this.hairDef, "hairDef");
-			Scribe_Values.Look<Color>(ref this.hairColor, "hairColor", default(Color), false);
-			Scribe_Values.Look<float>(ref this.melanin, "melanin", 0f, false);
-			Scribe_Deep.Look<TraitSet>(ref this.traits, "traits", new object[]
-			{
-				this.pawn
-			});
-			Scribe_Values.Look<string>(ref this.title, "title", null, false);
-			Scribe_Values.Look<string>(ref this.birthLastName, "birthLastName", null, false);
+			Scribe_Defs.Look(ref bodyType, "bodyType");
+			Scribe_Values.Look(ref crownType, "crownType", CrownType.Undefined);
+			Scribe_Values.Look(ref headGraphicPath, "headGraphicPath");
+			Scribe_Defs.Look(ref hairDef, "hairDef");
+			Scribe_Values.Look(ref hairColor, "hairColor");
+			Scribe_Values.Look(ref melanin, "melanin", 0f);
+			Scribe_Deep.Look(ref traits, "traits", pawn);
+			Scribe_Values.Look(ref title, "title");
+			Scribe_Values.Look(ref birthLastName, "birthLastName");
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				if (this.birthLastName == null && this.pawn.Name is NameTriple)
+				if (birthLastName == null && pawn.Name is NameTriple)
 				{
-					this.birthLastName = ((NameTriple)this.pawn.Name).Last;
+					birthLastName = ((NameTriple)pawn.Name).Last;
 				}
-				if (this.hairDef == null)
+				if (hairDef == null)
 				{
-					this.hairDef = DefDatabase<HairDef>.AllDefs.RandomElement<HairDef>();
+					hairDef = DefDatabase<HairDef>.AllDefs.RandomElement();
 				}
 			}
 		}
 
-		
 		public Backstory GetBackstory(BackstorySlot slot)
 		{
 			if (slot == BackstorySlot.Childhood)
 			{
-				return this.childhood;
+				return childhood;
 			}
-			return this.adulthood;
+			return adulthood;
 		}
-
-		
-		private Pawn pawn;
-
-		
-		public Backstory childhood;
-
-		
-		public Backstory adulthood;
-
-		
-		public float melanin;
-
-		
-		public Color hairColor = Color.white;
-
-		
-		public CrownType crownType;
-
-		
-		public BodyTypeDef bodyType;
-
-		
-		private string headGraphicPath;
-
-		
-		public HairDef hairDef;
-
-		
-		public TraitSet traits;
-
-		
-		public string title;
-
-		
-		public string birthLastName;
 	}
 }

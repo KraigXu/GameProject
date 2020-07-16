@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,16 +5,29 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public sealed class WeatherManager : IExposable
 	{
-		
-		
+		public Map map;
+
+		public WeatherEventHandler eventHandler = new WeatherEventHandler();
+
+		public WeatherDef curWeather = WeatherDefOf.Clear;
+
+		public WeatherDef lastWeather = WeatherDefOf.Clear;
+
+		public int curWeatherAge;
+
+		private List<Sustainer> ambienceSustainers = new List<Sustainer>();
+
+		public TemperatureMemory growthSeasonMemory;
+
+		public const float TransitionTicks = 4000f;
+
 		public float TransitionLerpFactor
 		{
 			get
 			{
-				float num = (float)this.curWeatherAge / 4000f;
+				float num = (float)curWeatherAge / 4000f;
 				if (num > 1f)
 				{
 					num = 1f;
@@ -24,158 +36,88 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		public float RainRate
-		{
-			get
-			{
-				return Mathf.Lerp(this.lastWeather.rainRate, this.curWeather.rainRate, this.TransitionLerpFactor);
-			}
-		}
+		public float RainRate => Mathf.Lerp(lastWeather.rainRate, curWeather.rainRate, TransitionLerpFactor);
 
-		
-		
-		public float SnowRate
-		{
-			get
-			{
-				return Mathf.Lerp(this.lastWeather.snowRate, this.curWeather.snowRate, this.TransitionLerpFactor);
-			}
-		}
+		public float SnowRate => Mathf.Lerp(lastWeather.snowRate, curWeather.snowRate, TransitionLerpFactor);
 
-		
-		
-		public float CurWindSpeedFactor
-		{
-			get
-			{
-				return Mathf.Lerp(this.lastWeather.windSpeedFactor, this.curWeather.windSpeedFactor, this.TransitionLerpFactor);
-			}
-		}
+		public float CurWindSpeedFactor => Mathf.Lerp(lastWeather.windSpeedFactor, curWeather.windSpeedFactor, TransitionLerpFactor);
 
-		
-		
-		public float CurWindSpeedOffset
-		{
-			get
-			{
-				return Mathf.Lerp(this.lastWeather.windSpeedOffset, this.curWeather.windSpeedOffset, this.TransitionLerpFactor);
-			}
-		}
+		public float CurWindSpeedOffset => Mathf.Lerp(lastWeather.windSpeedOffset, curWeather.windSpeedOffset, TransitionLerpFactor);
 
-		
-		
-		public float CurMoveSpeedMultiplier
-		{
-			get
-			{
-				return Mathf.Lerp(this.lastWeather.moveSpeedMultiplier, this.curWeather.moveSpeedMultiplier, this.TransitionLerpFactor);
-			}
-		}
+		public float CurMoveSpeedMultiplier => Mathf.Lerp(lastWeather.moveSpeedMultiplier, curWeather.moveSpeedMultiplier, TransitionLerpFactor);
 
-		
-		
-		public float CurWeatherAccuracyMultiplier
-		{
-			get
-			{
-				return Mathf.Lerp(this.lastWeather.accuracyMultiplier, this.curWeather.accuracyMultiplier, this.TransitionLerpFactor);
-			}
-		}
+		public float CurWeatherAccuracyMultiplier => Mathf.Lerp(lastWeather.accuracyMultiplier, curWeather.accuracyMultiplier, TransitionLerpFactor);
 
-		
-		
 		public WeatherDef CurWeatherPerceived
 		{
 			get
 			{
-				if (this.curWeather == null)
+				if (curWeather == null)
 				{
-					return this.lastWeather;
+					return lastWeather;
 				}
-				if (this.lastWeather == null)
+				if (lastWeather == null)
 				{
-					return this.curWeather;
+					return curWeather;
 				}
-				float num;
-				if (this.curWeather.perceivePriority > this.lastWeather.perceivePriority)
+				float num = 0f;
+				num = ((curWeather.perceivePriority > lastWeather.perceivePriority) ? 0.18f : ((!(lastWeather.perceivePriority > curWeather.perceivePriority)) ? 0.5f : 0.82f));
+				if (!(TransitionLerpFactor < num))
 				{
-					num = 0.18f;
+					return curWeather;
 				}
-				else if (this.lastWeather.perceivePriority > this.curWeather.perceivePriority)
-				{
-					num = 0.82f;
-				}
-				else
-				{
-					num = 0.5f;
-				}
-				if (this.TransitionLerpFactor >= num)
-				{
-					return this.curWeather;
-				}
-				return this.lastWeather;
+				return lastWeather;
 			}
 		}
 
-		
-		
 		public WeatherDef CurWeatherLerped
 		{
 			get
 			{
-				if (this.curWeather == null)
+				if (curWeather == null)
 				{
-					return this.lastWeather;
+					return lastWeather;
 				}
-				if (this.lastWeather == null)
+				if (lastWeather == null)
 				{
-					return this.curWeather;
+					return curWeather;
 				}
-				if (this.TransitionLerpFactor >= 0.5f)
+				if (!(TransitionLerpFactor < 0.5f))
 				{
-					return this.curWeather;
+					return curWeather;
 				}
-				return this.lastWeather;
+				return lastWeather;
 			}
 		}
 
-		
 		public WeatherManager(Map map)
 		{
 			this.map = map;
-			this.growthSeasonMemory = new TemperatureMemory(map);
+			growthSeasonMemory = new TemperatureMemory(map);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<WeatherDef>(ref this.curWeather, "curWeather");
-			Scribe_Defs.Look<WeatherDef>(ref this.lastWeather, "lastWeather");
-			Scribe_Values.Look<int>(ref this.curWeatherAge, "curWeatherAge", 0, true);
-			Scribe_Deep.Look<TemperatureMemory>(ref this.growthSeasonMemory, "growthSeasonMemory", new object[]
-			{
-				this.map
-			});
+			Scribe_Defs.Look(ref curWeather, "curWeather");
+			Scribe_Defs.Look(ref lastWeather, "lastWeather");
+			Scribe_Values.Look(ref curWeatherAge, "curWeatherAge", 0, forceSave: true);
+			Scribe_Deep.Look(ref growthSeasonMemory, "growthSeasonMemory", map);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.ambienceSustainers.Clear();
+				ambienceSustainers.Clear();
 			}
 		}
 
-		
 		public void TransitionTo(WeatherDef newWeather)
 		{
-			this.lastWeather = this.curWeather;
-			this.curWeather = newWeather;
-			this.curWeatherAge = 0;
+			lastWeather = curWeather;
+			curWeather = newWeather;
+			curWeatherAge = 0;
 		}
 
-		
 		public void DoWeatherGUI(Rect rect)
 		{
-			WeatherDef curWeatherPerceived = this.CurWeatherPerceived;
+			WeatherDef curWeatherPerceived = CurWeatherPerceived;
 			Text.Anchor = TextAnchor.MiddleRight;
 			Rect rect2 = new Rect(rect);
 			rect2.width -= 15f;
@@ -188,75 +130,70 @@ namespace RimWorld
 			Text.Anchor = TextAnchor.UpperLeft;
 		}
 
-		
 		public void WeatherManagerTick()
 		{
-			this.eventHandler.WeatherEventHandlerTick();
-			this.curWeatherAge++;
-			this.curWeather.Worker.WeatherTick(this.map, this.TransitionLerpFactor);
-			this.lastWeather.Worker.WeatherTick(this.map, 1f - this.TransitionLerpFactor);
-			this.growthSeasonMemory.GrowthSeasonMemoryTick();
-			for (int i = 0; i < this.curWeather.ambientSounds.Count; i++)
+			eventHandler.WeatherEventHandlerTick();
+			curWeatherAge++;
+			curWeather.Worker.WeatherTick(map, TransitionLerpFactor);
+			lastWeather.Worker.WeatherTick(map, 1f - TransitionLerpFactor);
+			growthSeasonMemory.GrowthSeasonMemoryTick();
+			for (int i = 0; i < curWeather.ambientSounds.Count; i++)
 			{
 				bool flag = false;
-				for (int j = this.ambienceSustainers.Count - 1; j >= 0; j--)
+				for (int num = ambienceSustainers.Count - 1; num >= 0; num--)
 				{
-					if (this.ambienceSustainers[j].def == this.curWeather.ambientSounds[i])
+					if (ambienceSustainers[num].def == curWeather.ambientSounds[i])
 					{
 						flag = true;
 						break;
 					}
 				}
-				if (!flag && this.VolumeOfAmbientSound(this.curWeather.ambientSounds[i]) > 0.0001f)
+				if (!flag && VolumeOfAmbientSound(curWeather.ambientSounds[i]) > 0.0001f)
 				{
-					SoundInfo info = SoundInfo.OnCamera(MaintenanceType.None);
-					Sustainer sustainer = this.curWeather.ambientSounds[i].TrySpawnSustainer(info);
+					SoundInfo info = SoundInfo.OnCamera();
+					Sustainer sustainer = curWeather.ambientSounds[i].TrySpawnSustainer(info);
 					if (sustainer != null)
 					{
-						this.ambienceSustainers.Add(sustainer);
+						ambienceSustainers.Add(sustainer);
 					}
 				}
 			}
 		}
 
-		
 		public void WeatherManagerUpdate()
 		{
-			this.SetAmbienceSustainersVolume();
+			SetAmbienceSustainersVolume();
 		}
 
-		
 		public void EndAllSustainers()
 		{
-			for (int i = 0; i < this.ambienceSustainers.Count; i++)
+			for (int i = 0; i < ambienceSustainers.Count; i++)
 			{
-				this.ambienceSustainers[i].End();
+				ambienceSustainers[i].End();
 			}
-			this.ambienceSustainers.Clear();
+			ambienceSustainers.Clear();
 		}
 
-		
 		private void SetAmbienceSustainersVolume()
 		{
-			for (int i = this.ambienceSustainers.Count - 1; i >= 0; i--)
+			for (int num = ambienceSustainers.Count - 1; num >= 0; num--)
 			{
-				float num = this.VolumeOfAmbientSound(this.ambienceSustainers[i].def);
-				if (num > 0.0001f)
+				float num2 = VolumeOfAmbientSound(ambienceSustainers[num].def);
+				if (num2 > 0.0001f)
 				{
-					this.ambienceSustainers[i].externalParams["LerpFactor"] = num;
+					ambienceSustainers[num].externalParams["LerpFactor"] = num2;
 				}
 				else
 				{
-					this.ambienceSustainers[i].End();
-					this.ambienceSustainers.RemoveAt(i);
+					ambienceSustainers[num].End();
+					ambienceSustainers.RemoveAt(num);
 				}
 			}
 		}
 
-		
 		private float VolumeOfAmbientSound(SoundDef soundDef)
 		{
-			if (this.map != Find.CurrentMap)
+			if (map != Find.CurrentMap)
 			{
 				return 0f;
 			}
@@ -268,53 +205,28 @@ namespace RimWorld
 				}
 			}
 			float num = 0f;
-			for (int j = 0; j < this.lastWeather.ambientSounds.Count; j++)
+			for (int j = 0; j < lastWeather.ambientSounds.Count; j++)
 			{
-				if (this.lastWeather.ambientSounds[j] == soundDef)
+				if (lastWeather.ambientSounds[j] == soundDef)
 				{
-					num += 1f - this.TransitionLerpFactor;
+					num += 1f - TransitionLerpFactor;
 				}
 			}
-			for (int k = 0; k < this.curWeather.ambientSounds.Count; k++)
+			for (int k = 0; k < curWeather.ambientSounds.Count; k++)
 			{
-				if (this.curWeather.ambientSounds[k] == soundDef)
+				if (curWeather.ambientSounds[k] == soundDef)
 				{
-					num += this.TransitionLerpFactor;
+					num += TransitionLerpFactor;
 				}
 			}
 			return num;
 		}
 
-		
 		public void DrawAllWeather()
 		{
-			this.eventHandler.WeatherEventsDraw();
-			this.lastWeather.Worker.DrawWeather(this.map);
-			this.curWeather.Worker.DrawWeather(this.map);
+			eventHandler.WeatherEventsDraw();
+			lastWeather.Worker.DrawWeather(map);
+			curWeather.Worker.DrawWeather(map);
 		}
-
-		
-		public Map map;
-
-		
-		public WeatherEventHandler eventHandler = new WeatherEventHandler();
-
-		
-		public WeatherDef curWeather = WeatherDefOf.Clear;
-
-		
-		public WeatherDef lastWeather = WeatherDefOf.Clear;
-
-		
-		public int curWeatherAge;
-
-		
-		private List<Sustainer> ambienceSustainers = new List<Sustainer>();
-
-		
-		public TemperatureMemory growthSeasonMemory;
-
-		
-		public const float TransitionTicks = 4000f;
 	}
 }

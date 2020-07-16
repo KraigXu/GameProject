@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PawnRelationWorker_CousinOnceRemoved : PawnRelationWorker
 	{
-		
 		public override bool InRelation(Pawn me, Pawn other)
 		{
 			if (me == other)
@@ -19,7 +16,11 @@ namespace RimWorld
 				return true;
 			}
 			PawnRelationWorker worker2 = PawnRelationDefOf.GranduncleOrGrandaunt.Worker;
-			return (other.GetMother() != null && worker2.InRelation(me, other.GetMother())) || (other.GetFather() != null && worker2.InRelation(me, other.GetFather()));
+			if ((other.GetMother() != null && worker2.InRelation(me, other.GetMother())) || (other.GetFather() != null && worker2.InRelation(me, other.GetFather())))
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

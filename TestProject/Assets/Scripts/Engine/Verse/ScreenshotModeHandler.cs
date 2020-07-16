@@ -1,43 +1,41 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ScreenshotModeHandler
 	{
-		
-		
-		public bool Active
-		{
-			get
-			{
-				return this.active;
-			}
-		}
+		private bool active;
 
-		
-		
+		public bool Active => active;
+
 		public bool FiltersCurrentEvent
 		{
 			get
 			{
-				return this.active && (Event.current.type == EventType.Repaint || Event.current.type == EventType.Layout || (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseUp || Event.current.type == EventType.MouseDrag));
+				if (!active)
+				{
+					return false;
+				}
+				if (Event.current.type == EventType.Repaint || Event.current.type == EventType.Layout)
+				{
+					return true;
+				}
+				if (Event.current.type == EventType.MouseDown || Event.current.type == EventType.MouseUp || Event.current.type == EventType.MouseDrag)
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public void ScreenshotModesOnGUI()
 		{
 			if (KeyBindingDefOf.ToggleScreenshotMode.KeyDownEvent)
 			{
-				this.active = !this.active;
+				active = !active;
 				Event.current.Use();
 			}
 		}
-
-		
-		private bool active;
 	}
 }

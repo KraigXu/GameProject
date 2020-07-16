@@ -1,66 +1,51 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class GenStep_Ambush : GenStep
 	{
-		
+		public FloatRange defaultPointsRange = new FloatRange(180f, 340f);
+
 		public override void Generate(Map map, GenStepParams parms)
 		{
-			CellRect rectToDefend;
-			IntVec3 root;
-			if (!SiteGenStepUtility.TryFindRootToSpawnAroundRectOfInterest(out rectToDefend, out root, map))
+			if (SiteGenStepUtility.TryFindRootToSpawnAroundRectOfInterest(out CellRect rectToDefend, out IntVec3 singleCellToSpawnNear, map))
 			{
-				return;
+				SpawnTrigger(rectToDefend, singleCellToSpawnNear, map, parms);
 			}
-			this.SpawnTrigger(rectToDefend, root, map, parms);
 		}
 
-		
 		private void SpawnTrigger(CellRect rectToDefend, IntVec3 root, Map map, GenStepParams parms)
 		{
 			int nextSignalTagID = Find.UniqueIDsManager.GetNextSignalTagID();
 			string signalTag = "ambushActivated-" + nextSignalTagID;
-			CellRect rect;
-			if (root.IsValid)
-			{
-				rect = CellRect.CenteredOn(root, 17);
-			}
-			else
-			{
-				rect = rectToDefend.ExpandedBy(12);
-			}
-			SignalAction_Ambush signalAction_Ambush = this.MakeAmbushSignalAction(rectToDefend, root, parms);
+			CellRect rect = (!root.IsValid) ? rectToDefend.ExpandedBy(12) : CellRect.CenteredOn(root, 17);
+			SignalAction_Ambush signalAction_Ambush = MakeAmbushSignalAction(rectToDefend, root, parms);
 			signalAction_Ambush.signalTag = signalTag;
-			GenSpawn.Spawn(signalAction_Ambush, rect.CenterCell, map, WipeMode.Vanish);
-			RectTrigger rectTrigger = this.MakeRectTrigger();
+			GenSpawn.Spawn(signalAction_Ambush, rect.CenterCell, map);
+			RectTrigger rectTrigger = MakeRectTrigger();
 			rectTrigger.signalTag = signalTag;
 			rectTrigger.Rect = rect;
-			GenSpawn.Spawn(rectTrigger, rect.CenterCell, map, WipeMode.Vanish);
-			TriggerUnfogged triggerUnfogged = (TriggerUnfogged)ThingMaker.MakeThing(ThingDefOf.TriggerUnfogged, null);
-			triggerUnfogged.signalTag = signalTag;
-			GenSpawn.Spawn(triggerUnfogged, rect.CenterCell, map, WipeMode.Vanish);
+			GenSpawn.Spawn(rectTrigger, rect.CenterCell, map);
+			TriggerUnfogged obj = (TriggerUnfogged)ThingMaker.MakeThing(ThingDefOf.TriggerUnfogged);
+			obj.signalTag = signalTag;
+			GenSpawn.Spawn(obj, rect.CenterCell, map);
 		}
 
-		
 		protected virtual RectTrigger MakeRectTrigger()
 		{
-			return (RectTrigger)ThingMaker.MakeThing(ThingDefOf.RectTrigger, null);
+			return (RectTrigger)ThingMaker.MakeThing(ThingDefOf.RectTrigger);
 		}
 
-		
 		protected virtual SignalAction_Ambush MakeAmbushSignalAction(CellRect rectToDefend, IntVec3 root, GenStepParams parms)
 		{
-			SignalAction_Ambush signalAction_Ambush = (SignalAction_Ambush)ThingMaker.MakeThing(ThingDefOf.SignalAction_Ambush, null);
+			SignalAction_Ambush signalAction_Ambush = (SignalAction_Ambush)ThingMaker.MakeThing(ThingDefOf.SignalAction_Ambush);
 			if (parms.sitePart != null)
 			{
 				signalAction_Ambush.points = parms.sitePart.parms.threatPoints;
 			}
 			else
 			{
-				signalAction_Ambush.points = this.defaultPointsRange.RandomInRange;
+				signalAction_Ambush.points = defaultPointsRange.RandomInRange;
 			}
 			int num = Rand.RangeInclusive(0, 2);
 			if (num == 0)
@@ -77,8 +62,5 @@ namespace RimWorld
 			}
 			return signalAction_Ambush;
 		}
-
-		
-		public FloatRange defaultPointsRange = new FloatRange(180f, 340f);
 	}
 }

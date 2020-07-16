@@ -1,36 +1,31 @@
-﻿using System;
 using System.Xml;
 
 namespace Verse
 {
-	
 	public class PatchOperationAddModExtension : PatchOperationPathed
 	{
-		
+		private XmlContainer value;
+
 		protected override bool ApplyWorker(XmlDocument xml)
 		{
-			XmlNode node = this.value.node;
+			XmlNode node = value.node;
 			bool result = false;
-			foreach (object obj in xml.SelectNodes(this.xpath))
+			foreach (object item in xml.SelectNodes(xpath))
 			{
-				XmlNode xmlNode = obj as XmlNode;
+				XmlNode xmlNode = item as XmlNode;
 				XmlNode xmlNode2 = xmlNode["modExtensions"];
 				if (xmlNode2 == null)
 				{
 					xmlNode2 = xmlNode.OwnerDocument.CreateElement("modExtensions");
 					xmlNode.AppendChild(xmlNode2);
 				}
-				foreach (object obj2 in node.ChildNodes)
+				foreach (XmlNode childNode in node.ChildNodes)
 				{
-					XmlNode node2 = (XmlNode)obj2;
-					xmlNode2.AppendChild(xmlNode.OwnerDocument.ImportNode(node2, true));
+					xmlNode2.AppendChild(xmlNode.OwnerDocument.ImportNode(childNode, deep: true));
 				}
 				result = true;
 			}
 			return result;
 		}
-
-		
-		private XmlContainer value;
 	}
 }

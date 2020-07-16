@@ -1,22 +1,11 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class GenStep_Ambush_Hidden : GenStep_Ambush
 	{
-		
-		
-		public override int SeedPart
-		{
-			get
-			{
-				return 921085483;
-			}
-		}
+		public override int SeedPart => 921085483;
 
-		
 		protected override RectTrigger MakeRectTrigger()
 		{
 			RectTrigger rectTrigger = base.MakeRectTrigger();
@@ -24,7 +13,6 @@ namespace RimWorld
 			return rectTrigger;
 		}
 
-		
 		protected override SignalAction_Ambush MakeAmbushSignalAction(CellRect rectToDefend, IntVec3 root, GenStepParams parms)
 		{
 			SignalAction_Ambush signalAction_Ambush = base.MakeAmbushSignalAction(rectToDefend, root, parms);

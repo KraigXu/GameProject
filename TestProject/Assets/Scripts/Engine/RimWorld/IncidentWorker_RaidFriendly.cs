@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,40 +5,34 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_RaidFriendly : IncidentWorker_Raid
 	{
-		
 		protected override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
 		{
 			IEnumerable<Faction> source = (from x in map.attackTargetsCache.TargetsHostileToColony
-			where GenHostility.IsActiveThreatToPlayer(x)
-			select x into p
-			select ((Thing)p).Faction).Distinct<Faction>();
-			return base.FactionCanBeGroupSource(f, map, desperate) && !f.def.hidden && f.PlayerRelationKind == FactionRelationKind.Ally && (!source.Any<Faction>() || source.Any((Faction hf) => hf.HostileTo(f)));
+				where GenHostility.IsActiveThreatToPlayer(x)
+				select x into p
+				select ((Thing)p).Faction).Distinct();
+			if (base.FactionCanBeGroupSource(f, map, desperate) && !f.def.hidden && f.PlayerRelationKind == FactionRelationKind.Ally)
+			{
+				if (source.Any())
+				{
+					return source.Any((Faction hf) => hf.HostileTo(f));
+				}
+				return true;
+			}
+			return false;
 		}
 
-		
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
 			{
 				return false;
 			}
-			return (from p in ((Map)parms.target).attackTargetsCache.TargetsHostileToColony
-			where GenHostility.IsActiveThreatToPlayer(p)
-			select p).Sum(delegate(IAttackTarget p)
-			{
-				Pawn pawn = p as Pawn;
-				if (pawn != null)
-				{
-					return pawn.kindDef.combatPower;
-				}
-				return 0f;
-			}) > 120f;
+			return ((Map)parms.target).attackTargetsCache.TargetsHostileToColony.Where((IAttackTarget p) => GenHostility.IsActiveThreatToPlayer(p)).Sum((IAttackTarget p) => (p as Pawn)?.kindDef.combatPower ?? 0f) > 120f;
 		}
 
-		
 		protected override bool TryResolveRaidFaction(IncidentParms parms)
 		{
 			Map map = (Map)parms.target;
@@ -47,25 +40,22 @@ namespace RimWorld
 			{
 				return true;
 			}
-			if (!base.CandidateFactions(map, false).Any<Faction>())
+			if (!CandidateFactions(map).Any())
 			{
 				return false;
 			}
-			parms.faction = base.CandidateFactions(map, false).RandomElementByWeight((Faction fac) => (float)fac.PlayerGoodwill + 120.000008f);
+			parms.faction = CandidateFactions(map).RandomElementByWeight((Faction fac) => (float)fac.PlayerGoodwill + 120.000008f);
 			return true;
 		}
 
-		
 		public override void ResolveRaidStrategy(IncidentParms parms, PawnGroupKindDef groupKind)
 		{
-			if (parms.raidStrategy != null)
+			if (parms.raidStrategy == null)
 			{
-				return;
+				parms.raidStrategy = RaidStrategyDefOf.ImmediateAttackFriendly;
 			}
-			parms.raidStrategy = RaidStrategyDefOf.ImmediateAttackFriendly;
 		}
 
-		
 		protected override void ResolveRaidPoints(IncidentParms parms)
 		{
 			if (parms.points <= 0f)
@@ -74,34 +64,30 @@ namespace RimWorld
 			}
 		}
 
-		
 		protected override string GetLetterLabel(IncidentParms parms)
 		{
 			return parms.raidStrategy.letterLabelFriendly + ": " + parms.faction.Name;
 		}
 
-		
 		protected override string GetLetterText(IncidentParms parms, List<Pawn> pawns)
 		{
-			string text = string.Format(parms.raidArrivalMode.textFriendly, parms.faction.def.pawnsPlural, parms.faction.Name.ApplyTag(parms.faction));
-			text += "\n\n";
-			text += parms.raidStrategy.arrivalTextFriendly;
+			string str = string.Format(parms.raidArrivalMode.textFriendly, parms.faction.def.pawnsPlural, parms.faction.Name.ApplyTag(parms.faction));
+			str += "\n\n";
+			str += parms.raidStrategy.arrivalTextFriendly;
 			Pawn pawn = pawns.Find((Pawn x) => x.Faction.leader == x);
 			if (pawn != null)
 			{
-				text += "\n\n";
-				text += "FriendlyRaidLeaderPresent".Translate(pawn.Faction.def.pawnsPlural, pawn.LabelShort, pawn.Named("LEADER"));
+				str += "\n\n";
+				str += "FriendlyRaidLeaderPresent".Translate(pawn.Faction.def.pawnsPlural, pawn.LabelShort, pawn.Named("LEADER"));
 			}
-			return text;
+			return str;
 		}
 
-		
 		protected override LetterDef GetLetterDef()
 		{
 			return LetterDefOf.PositiveEvent;
 		}
 
-		
 		protected override string GetRelatedPawnsInfoLetterText(IncidentParms parms)
 		{
 			return "LetterRelatedPawnsRaidFriendly".Translate(Faction.OfPlayer.def.pawnsPlural, parms.faction.def.pawnsPlural);

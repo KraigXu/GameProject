@@ -1,36 +1,31 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class Hediff_Alcohol : Hediff_High
 	{
-		
+		private const int HangoverCheckInterval = 300;
+
 		public override void Tick()
 		{
 			base.Tick();
-			if (this.CurStageIndex >= 3 && this.pawn.IsHashIntervalTick(300) && this.HangoverSusceptible(this.pawn))
+			if (CurStageIndex >= 3 && pawn.IsHashIntervalTick(300) && HangoverSusceptible(pawn))
 			{
-				Hediff hediff = this.pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hangover, false);
-				if (hediff != null)
+				Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.Hangover);
+				if (firstHediffOfDef != null)
 				{
-					hediff.Severity = 1f;
+					firstHediffOfDef.Severity = 1f;
 					return;
 				}
-				hediff = HediffMaker.MakeHediff(HediffDefOf.Hangover, this.pawn, null);
-				hediff.Severity = 1f;
-				this.pawn.health.AddHediff(hediff, null, null, null);
+				firstHediffOfDef = HediffMaker.MakeHediff(HediffDefOf.Hangover, pawn);
+				firstHediffOfDef.Severity = 1f;
+				pawn.health.AddHediff(firstHediffOfDef);
 			}
 		}
 
-		
 		private bool HangoverSusceptible(Pawn pawn)
 		{
 			return true;
 		}
-
-		
-		private const int HangoverCheckInterval = 300;
 	}
 }

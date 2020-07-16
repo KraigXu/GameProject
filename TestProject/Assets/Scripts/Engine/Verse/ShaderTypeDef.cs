@@ -1,31 +1,25 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ShaderTypeDef : Def
 	{
-		
-		
+		[NoTranslate]
+		public string shaderPath;
+
+		[Unsaved(false)]
+		private Shader shaderInt;
+
 		public Shader Shader
 		{
 			get
 			{
-				if (this.shaderInt == null)
+				if (shaderInt == null)
 				{
-					this.shaderInt = ShaderDatabase.LoadShader(this.shaderPath);
+					shaderInt = ShaderDatabase.LoadShader(shaderPath);
 				}
-				return this.shaderInt;
+				return shaderInt;
 			}
 		}
-
-		
-		[NoTranslate]
-		public string shaderPath;
-
-		
-		[Unsaved(false)]
-		private Shader shaderInt;
 	}
 }

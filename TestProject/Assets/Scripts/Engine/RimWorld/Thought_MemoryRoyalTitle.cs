@@ -1,39 +1,19 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Thought_MemoryRoyalTitle : Thought_Memory
 	{
-		
-		
-		public override string LabelCap
-		{
-			get
-			{
-				return base.CurStage.label.Formatted(this.titleDef.GetLabelCapFor(this.pawn).Named("TITLE"));
-			}
-		}
+		public RoyalTitleDef titleDef;
 
-		
-		
-		public override string Description
-		{
-			get
-			{
-				return base.CurStage.description.Formatted(this.titleDef.GetLabelCapFor(this.pawn).Named("TITLE"), this.pawn.Named("PAWN"));
-			}
-		}
+		public override string LabelCap => base.CurStage.label.Formatted(titleDef.GetLabelCapFor(pawn).Named("TITLE"));
 
-		
+		public override string Description => base.CurStage.description.Formatted(titleDef.GetLabelCapFor(pawn).Named("TITLE"), pawn.Named("PAWN"));
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<RoyalTitleDef>(ref this.titleDef, "titleDef");
+			Scribe_Defs.Look(ref titleDef, "titleDef");
 		}
-
-		
-		public RoyalTitleDef titleDef;
 	}
 }

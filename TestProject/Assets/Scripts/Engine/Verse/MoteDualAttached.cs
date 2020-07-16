@@ -1,63 +1,57 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class MoteDualAttached : Mote
 	{
-		
+		protected MoteAttachLink link2 = MoteAttachLink.Invalid;
+
 		public void Attach(TargetInfo a, TargetInfo b)
 		{
-			this.link1 = new MoteAttachLink(a);
-			this.link2 = new MoteAttachLink(b);
+			link1 = new MoteAttachLink(a);
+			link2 = new MoteAttachLink(b);
 		}
 
-		
 		public override void Draw()
 		{
-			this.UpdatePositionAndRotation();
+			UpdatePositionAndRotation();
 			base.Draw();
 		}
 
-		
 		protected void UpdatePositionAndRotation()
 		{
-			if (this.link1.Linked)
+			if (link1.Linked)
 			{
-				if (this.link2.Linked)
+				if (link2.Linked)
 				{
-					if (!this.link1.Target.ThingDestroyed)
+					if (!link1.Target.ThingDestroyed)
 					{
-						this.link1.UpdateDrawPos();
+						link1.UpdateDrawPos();
 					}
-					if (!this.link2.Target.ThingDestroyed)
+					if (!link2.Target.ThingDestroyed)
 					{
-						this.link2.UpdateDrawPos();
+						link2.UpdateDrawPos();
 					}
-					this.exactPosition = (this.link1.LastDrawPos + this.link2.LastDrawPos) * 0.5f;
-					if (this.def.mote.rotateTowardsTarget)
+					exactPosition = (link1.LastDrawPos + link2.LastDrawPos) * 0.5f;
+					if (def.mote.rotateTowardsTarget)
 					{
-						this.exactRotation = this.link1.LastDrawPos.AngleToFlat(this.link2.LastDrawPos) + 90f;
+						exactRotation = link1.LastDrawPos.AngleToFlat(link2.LastDrawPos) + 90f;
 					}
-					if (this.def.mote.scaleToConnectTargets)
+					if (def.mote.scaleToConnectTargets)
 					{
-						this.exactScale = new Vector3(this.def.graphicData.drawSize.y, 1f, (this.link2.LastDrawPos - this.link1.LastDrawPos).MagnitudeHorizontal());
+						exactScale = new Vector3(def.graphicData.drawSize.y, 1f, (link2.LastDrawPos - link1.LastDrawPos).MagnitudeHorizontal());
 					}
 				}
 				else
 				{
-					if (!this.link1.Target.ThingDestroyed)
+					if (!link1.Target.ThingDestroyed)
 					{
-						this.link1.UpdateDrawPos();
+						link1.UpdateDrawPos();
 					}
-					this.exactPosition = this.link1.LastDrawPos + this.def.mote.attachedDrawOffset;
+					exactPosition = link1.LastDrawPos + def.mote.attachedDrawOffset;
 				}
 			}
-			this.exactPosition.y = this.def.altitudeLayer.AltitudeFor();
+			exactPosition.y = def.altitudeLayer.AltitudeFor();
 		}
-
-		
-		protected MoteAttachLink link2 = MoteAttachLink.Invalid;
 	}
 }

@@ -1,123 +1,85 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Designation : IExposable
 	{
-		
-		
-		private Map Map
-		{
-			get
-			{
-				return this.designationManager.map;
-			}
-		}
+		public DesignationManager designationManager;
 
-		
-		
-		public float DesignationDrawAltitude
-		{
-			get
-			{
-				return AltitudeLayer.MetaOverlays.AltitudeFor();
-			}
-		}
+		public DesignationDef def;
 
-		
+		public LocalTargetInfo target;
+
+		public const float ClaimedDesignationDrawAltitude = 15f;
+
+		private Map Map => designationManager.map;
+
+		public float DesignationDrawAltitude => AltitudeLayer.MetaOverlays.AltitudeFor();
+
 		public Designation()
 		{
 		}
 
-		
 		public Designation(LocalTargetInfo target, DesignationDef def)
 		{
 			this.target = target;
 			this.def = def;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<DesignationDef>(ref this.def, "def");
-			Scribe_TargetInfo.Look(ref this.target, "target");
-			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs && this.def == DesignationDefOf.Haul && !this.target.HasThing)
+			Scribe_Defs.Look(ref def, "def");
+			Scribe_TargetInfo.Look(ref target, "target");
+			if (Scribe.mode == LoadSaveMode.ResolvingCrossRefs && def == DesignationDefOf.Haul && !target.HasThing)
 			{
-				Log.Error("Haul designation has no target! Deleting.", false);
-				this.Delete();
+				Log.Error("Haul designation has no target! Deleting.");
+				Delete();
 			}
 		}
 
-		
 		public void Notify_Added()
 		{
-			if (this.def == DesignationDefOf.Haul)
+			if (def == DesignationDefOf.Haul)
 			{
-				this.Map.listerHaulables.HaulDesignationAdded(this.target.Thing);
+				Map.listerHaulables.HaulDesignationAdded(target.Thing);
 			}
 		}
 
-		
 		internal void Notify_Removing()
 		{
-			if (this.def == DesignationDefOf.Haul && this.target.HasThing)
+			if (def == DesignationDefOf.Haul && target.HasThing)
 			{
-				this.Map.listerHaulables.HaulDesignationRemoved(this.target.Thing);
+				Map.listerHaulables.HaulDesignationRemoved(target.Thing);
 			}
 		}
 
-		
 		public virtual void DesignationDraw()
 		{
-			if (this.target.HasThing && !this.target.Thing.Spawned)
+			if (!target.HasThing || target.Thing.Spawned)
 			{
-				return;
+				Vector3 position = default(Vector3);
+				if (target.HasThing)
+				{
+					position = target.Thing.DrawPos;
+					position.y = DesignationDrawAltitude;
+				}
+				else
+				{
+					position = target.Cell.ToVector3ShiftedWithAltitude(DesignationDrawAltitude);
+				}
+				Graphics.DrawMesh(MeshPool.plane10, position, Quaternion.identity, def.iconMat, 0);
 			}
-			Vector3 position = default(Vector3);
-			if (this.target.HasThing)
-			{
-				position = this.target.Thing.DrawPos;
-				position.y = this.DesignationDrawAltitude;
-			}
-			else
-			{
-				position = this.target.Cell.ToVector3ShiftedWithAltitude(this.DesignationDrawAltitude);
-			}
-			Graphics.DrawMesh(MeshPool.plane10, position, Quaternion.identity, this.def.iconMat, 0);
 		}
 
-		
 		public void Delete()
 		{
-			this.Map.designationManager.RemoveDesignation(this);
+			Map.designationManager.RemoveDesignation(this);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Format(string.Concat(new object[]
-			{
-				"(",
-				this.def.defName,
-				" target=",
-				this.target,
-				")"
-			}), Array.Empty<object>());
+			return string.Format("(" + def.defName + " target=" + target + ")");
 		}
-
-		
-		public DesignationManager designationManager;
-
-		
-		public DesignationDef def;
-
-		
-		public LocalTargetInfo target;
-
-		
-		public const float ClaimedDesignationDrawAltitude = 15f;
 	}
 }

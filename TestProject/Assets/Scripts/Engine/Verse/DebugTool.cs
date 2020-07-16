@@ -1,12 +1,16 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class DebugTool
 	{
-		
+		private string label;
+
+		private Action clickAction;
+
+		private Action onGUIAction;
+
 		public DebugTool(string label, Action clickAction, Action onGUIAction = null)
 		{
 			this.label = label;
@@ -14,50 +18,48 @@ namespace Verse
 			this.onGUIAction = onGUIAction;
 		}
 
-		
 		public DebugTool(string label, Action clickAction, IntVec3 firstRectCorner)
 		{
 			this.label = label;
 			this.clickAction = clickAction;
-			this.onGUIAction = delegate
+			onGUIAction = delegate
 			{
 				IntVec3 intVec = UI.MouseCell();
-				Vector3 vector = firstRectCorner.ToVector3Shifted();
-				Vector3 vector2 = intVec.ToVector3Shifted();
-				if (vector.x < vector2.x)
+				Vector3 v = firstRectCorner.ToVector3Shifted();
+				Vector3 v2 = intVec.ToVector3Shifted();
+				if (v.x < v2.x)
 				{
-					vector.x -= 0.5f;
-					vector2.x += 0.5f;
+					v.x -= 0.5f;
+					v2.x += 0.5f;
 				}
 				else
 				{
-					vector.x += 0.5f;
-					vector2.x -= 0.5f;
+					v.x += 0.5f;
+					v2.x -= 0.5f;
 				}
-				if (vector.z < vector2.z)
+				if (v.z < v2.z)
 				{
-					vector.z -= 0.5f;
-					vector2.z += 0.5f;
+					v.z -= 0.5f;
+					v2.z += 0.5f;
 				}
 				else
 				{
-					vector.z += 0.5f;
-					vector2.z -= 0.5f;
+					v.z += 0.5f;
+					v2.z -= 0.5f;
 				}
-				Vector2 vector3 = vector.MapToUIPosition();
-				Vector2 vector4 = vector2.MapToUIPosition();
-				Widgets.DrawBox(new Rect(vector3.x, vector3.y, vector4.x - vector3.x, vector4.y - vector3.y), 3);
+				Vector2 vector = v.MapToUIPosition();
+				Vector2 vector2 = v2.MapToUIPosition();
+				Widgets.DrawBox(new Rect(vector.x, vector.y, vector2.x - vector.x, vector2.y - vector.y), 3);
 			};
 		}
 
-		
 		public void DebugToolOnGUI()
 		{
 			if (Event.current.type == EventType.MouseDown)
 			{
 				if (Event.current.button == 0)
 				{
-					this.clickAction();
+					clickAction();
 				}
 				if (Event.current.button == 1)
 				{
@@ -68,20 +70,11 @@ namespace Verse
 			Vector2 vector = Event.current.mousePosition + new Vector2(15f, 15f);
 			Rect rect = new Rect(vector.x, vector.y, 999f, 999f);
 			Text.Font = GameFont.Small;
-			Widgets.Label(rect, this.label);
-			if (this.onGUIAction != null)
+			Widgets.Label(rect, label);
+			if (onGUIAction != null)
 			{
-				this.onGUIAction();
+				onGUIAction();
 			}
 		}
-
-		
-		private string label;
-
-		
-		private Action clickAction;
-
-		
-		private Action onGUIAction;
 	}
 }

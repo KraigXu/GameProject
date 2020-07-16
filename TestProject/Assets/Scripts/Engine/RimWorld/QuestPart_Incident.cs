@@ -1,113 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Incident : QuestPart
 	{
-		
-		
+		public string inSignal;
+
+		public IncidentDef incident;
+
+		private IncidentParms incidentParms;
+
+		private MapParent mapParent;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-		
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.mapParent != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.mapParent;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (mapParent != null)
+				{
+					yield return mapParent;
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal && this.incidentParms != null)
+			if (!(signal.tag == inSignal) || incidentParms == null)
 			{
-				if (!this.incidentParms.forced)
-				{
-					Log.Error("QuestPart incident should always be forced but it's not. incident=" + this.incident, false);
-					this.incidentParms.forced = true;
-				}
-				this.incidentParms.quest = this.quest;
-				if (this.mapParent != null)
-				{
-					if (this.mapParent.HasMap)
-					{
-						this.incidentParms.target = this.mapParent.Map;
-						if (this.incident.Worker.CanFireNow(this.incidentParms, true))
-						{
-							this.incident.Worker.TryExecute(this.incidentParms);
-						}
-						this.incidentParms.target = null;
-					}
-				}
-				else if (this.incidentParms.target != null && this.incident.Worker.CanFireNow(this.incidentParms, true))
-				{
-					this.incident.Worker.TryExecute(this.incidentParms);
-				}
-				this.incidentParms = null;
-			}
-		}
-
-		
-		public void SetIncidentParmsAndRemoveTarget(IncidentParms value)
-		{
-			this.incidentParms = value;
-			Map map = this.incidentParms.target as Map;
-			if (map != null)
-			{
-				this.mapParent = map.Parent;
-				this.incidentParms.target = null;
 				return;
 			}
-			this.mapParent = null;
+			if (!incidentParms.forced)
+			{
+				Log.Error("QuestPart incident should always be forced but it's not. incident=" + incident);
+				incidentParms.forced = true;
+			}
+			incidentParms.quest = quest;
+			if (mapParent != null)
+			{
+				if (mapParent.HasMap)
+				{
+					incidentParms.target = mapParent.Map;
+					if (incident.Worker.CanFireNow(incidentParms, forced: true))
+					{
+						incident.Worker.TryExecute(incidentParms);
+					}
+					incidentParms.target = null;
+				}
+			}
+			else if (incidentParms.target != null && incident.Worker.CanFireNow(incidentParms, forced: true))
+			{
+				incident.Worker.TryExecute(incidentParms);
+			}
+			incidentParms = null;
 		}
 
-		
+		public void SetIncidentParmsAndRemoveTarget(IncidentParms value)
+		{
+			incidentParms = value;
+			Map map = incidentParms.target as Map;
+			if (map != null)
+			{
+				mapParent = map.Parent;
+				incidentParms.target = null;
+			}
+			else
+			{
+				mapParent = null;
+			}
+		}
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Defs.Look<IncidentDef>(ref this.incident, "incident");
-			Scribe_Deep.Look<IncidentParms>(ref this.incidentParms, "incidentParms", Array.Empty<object>());
-			Scribe_References.Look<MapParent>(ref this.mapParent, "mapParent", false);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Defs.Look(ref incident, "incident");
+			Scribe_Deep.Look(ref incidentParms, "incidentParms");
+			Scribe_References.Look(ref mapParent, "mapParent");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
+			inSignal = "DebugSignal" + Rand.Int;
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				this.incident = IncidentDefOf.RaidEnemy;
-				this.SetIncidentParmsAndRemoveTarget(new IncidentParms
-				{
-					target = Find.RandomPlayerHomeMap,
-					points = 500f
-				});
+				incident = IncidentDefOf.RaidEnemy;
+				IncidentParms incidentParms = new IncidentParms();
+				incidentParms.target = Find.RandomPlayerHomeMap;
+				incidentParms.points = 500f;
+				SetIncidentParmsAndRemoveTarget(incidentParms);
 			}
 		}
-
-		
-		public string inSignal;
-
-		
-		public IncidentDef incident;
-
-		
-		private IncidentParms incidentParms;
-
-		
-		private MapParent mapParent;
 	}
 }

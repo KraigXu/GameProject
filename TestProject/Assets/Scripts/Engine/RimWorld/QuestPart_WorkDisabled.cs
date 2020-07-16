@@ -1,82 +1,69 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_WorkDisabled : QuestPartActivable
 	{
-		
-		
+		public List<Pawn> pawns = new List<Pawn>();
+
+		public WorkTags disabledWorkTags;
+
 		public IEnumerable<WorkTypeDef> DisabledWorkTypes
 		{
 			get
 			{
-				if (base.State == QuestPartState.Enabled)
+				if (base.State != QuestPartState.Enabled)
 				{
-					List<WorkTypeDef> list = DefDatabase<WorkTypeDef>.AllDefsListForReading;
-					int num;
-					for (int i = 0; i < list.Count; i = num + 1)
-					{
-						if ((this.disabledWorkTags & list[i].workTags) != WorkTags.None)
-						{
-							yield return list[i];
-						}
-						num = i;
-					}
-					list = null;
+					yield break;
 				}
-				yield break;
+				List<WorkTypeDef> list = DefDatabase<WorkTypeDef>.AllDefsListForReading;
+				for (int i = 0; i < list.Count; i++)
+				{
+					if ((disabledWorkTags & list[i].workTags) != 0)
+					{
+						yield return list[i];
+					}
+				}
 			}
 		}
 
-		
 		protected override void Enable(SignalArgs receivedArgs)
 		{
 			base.Enable(receivedArgs);
-			this.ClearPawnWorkTypesAndSkillsCache();
+			ClearPawnWorkTypesAndSkillsCache();
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			this.ClearPawnWorkTypesAndSkillsCache();
+			ClearPawnWorkTypesAndSkillsCache();
 		}
 
-		
 		private void ClearPawnWorkTypesAndSkillsCache()
 		{
-			for (int i = 0; i < this.pawns.Count; i++)
+			for (int i = 0; i < pawns.Count; i++)
 			{
-				if (this.pawns[i] != null)
+				if (pawns[i] != null)
 				{
-					this.pawns[i].Notify_DisabledWorkTypesChanged();
-					if (this.pawns[i].skills != null)
+					pawns[i].Notify_DisabledWorkTypesChanged();
+					if (pawns[i].skills != null)
 					{
-						this.pawns[i].skills.Notify_SkillDisablesChanged();
+						pawns[i].skills.Notify_SkillDisablesChanged();
 					}
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<WorkTags>(ref this.disabledWorkTags, "disabledWorkTags", WorkTags.None, false);
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Values.Look(ref disabledWorkTags, "disabledWorkTags", WorkTags.None);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
-
-		
-		public List<Pawn> pawns = new List<Pawn>();
-
-		
-		public WorkTags disabledWorkTags;
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,21 +5,30 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class WeatherDecider : IExposable
 	{
-		
-		
+		private Map map;
+
+		private int curWeatherDuration = 10000;
+
+		private int ticksWhenRainAllowedAgain;
+
+		private const int FirstWeatherDuration = 10000;
+
+		private const float ChanceFactorRainOnFire = 15f;
+
+		private static List<GameCondition> allConditionsTmp = new List<GameCondition>();
+
 		public WeatherDef ForcedWeather
 		{
 			get
 			{
-				WeatherDecider.allConditionsTmp.Clear();
-				this.map.gameConditionManager.GetAllGameConditionsAffectingMap(this.map, WeatherDecider.allConditionsTmp);
+				allConditionsTmp.Clear();
+				map.gameConditionManager.GetAllGameConditionsAffectingMap(map, allConditionsTmp);
 				WeatherDef result = null;
-				foreach (GameCondition gameCondition in WeatherDecider.allConditionsTmp)
+				foreach (GameCondition item in allConditionsTmp)
 				{
-					WeatherDef weatherDef = gameCondition.ForcedWeather();
+					WeatherDef weatherDef = item.ForcedWeather();
 					if (weatherDef != null)
 					{
 						result = weatherDef;
@@ -30,132 +38,120 @@ namespace RimWorld
 			}
 		}
 
-		
 		public WeatherDecider(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.curWeatherDuration, "curWeatherDuration", 0, true);
-			Scribe_Values.Look<int>(ref this.ticksWhenRainAllowedAgain, "ticksWhenRainAllowedAgain", 0, false);
+			Scribe_Values.Look(ref curWeatherDuration, "curWeatherDuration", 0, forceSave: true);
+			Scribe_Values.Look(ref ticksWhenRainAllowedAgain, "ticksWhenRainAllowedAgain", 0);
 		}
 
-		
 		public void WeatherDeciderTick()
 		{
-			WeatherDef forcedWeather = this.ForcedWeather;
-			int num = this.curWeatherDuration;
-			if (this.map.fireWatcher.LargeFireDangerPresent || !this.map.weatherManager.curWeather.temperatureRange.Includes(this.map.mapTemperature.OutdoorTemp))
+			WeatherDef forcedWeather = ForcedWeather;
+			int num = curWeatherDuration;
+			if (map.fireWatcher.LargeFireDangerPresent || !map.weatherManager.curWeather.temperatureRange.Includes(map.mapTemperature.OutdoorTemp))
 			{
 				num = (int)((float)num * 0.25f);
 			}
-			if (forcedWeather != null && this.map.weatherManager.curWeather != forcedWeather)
+			if (forcedWeather != null && map.weatherManager.curWeather != forcedWeather)
 			{
 				num = 4000;
 			}
-			if (this.map.weatherManager.curWeatherAge > num)
+			if (map.weatherManager.curWeatherAge > num)
 			{
-				this.StartNextWeather();
+				StartNextWeather();
 			}
 		}
 
-		
 		public void StartNextWeather()
 		{
-			WeatherDef weatherDef = this.ChooseNextWeather();
-			this.map.weatherManager.TransitionTo(weatherDef);
-			this.curWeatherDuration = weatherDef.durationRange.RandomInRange;
+			WeatherDef weatherDef = ChooseNextWeather();
+			map.weatherManager.TransitionTo(weatherDef);
+			curWeatherDuration = weatherDef.durationRange.RandomInRange;
 		}
 
-		
 		public void StartInitialWeather()
 		{
 			if (Find.GameInitData != null)
 			{
-				this.map.weatherManager.curWeather = WeatherDefOf.Clear;
-				this.curWeatherDuration = 10000;
-				this.map.weatherManager.curWeatherAge = 0;
+				map.weatherManager.curWeather = WeatherDefOf.Clear;
+				curWeatherDuration = 10000;
+				map.weatherManager.curWeatherAge = 0;
 				return;
 			}
-			this.map.weatherManager.curWeather = null;
-			WeatherDef weatherDef = this.ChooseNextWeather();
-			WeatherDef lastWeather = this.ChooseNextWeather();
-			this.map.weatherManager.curWeather = weatherDef;
-			this.map.weatherManager.lastWeather = lastWeather;
-			this.curWeatherDuration = weatherDef.durationRange.RandomInRange;
-			this.map.weatherManager.curWeatherAge = Rand.Range(0, this.curWeatherDuration);
+			map.weatherManager.curWeather = null;
+			WeatherDef weatherDef = ChooseNextWeather();
+			WeatherDef lastWeather = ChooseNextWeather();
+			map.weatherManager.curWeather = weatherDef;
+			map.weatherManager.lastWeather = lastWeather;
+			curWeatherDuration = weatherDef.durationRange.RandomInRange;
+			map.weatherManager.curWeatherAge = Rand.Range(0, curWeatherDuration);
 		}
 
-		
 		private WeatherDef ChooseNextWeather()
 		{
 			if (TutorSystem.TutorialMode)
 			{
 				return WeatherDefOf.Clear;
 			}
-			WeatherDef forcedWeather = this.ForcedWeather;
+			WeatherDef forcedWeather = ForcedWeather;
 			if (forcedWeather != null)
 			{
 				return forcedWeather;
 			}
-			WeatherDef result;
-			if (!DefDatabase<WeatherDef>.AllDefs.TryRandomElementByWeight((WeatherDef w) => this.CurrentWeatherCommonality(w), out result))
+			if (!DefDatabase<WeatherDef>.AllDefs.TryRandomElementByWeight((WeatherDef w) => CurrentWeatherCommonality(w), out WeatherDef result))
 			{
-				Log.Warning("All weather commonalities were zero. Defaulting to " + WeatherDefOf.Clear.defName + ".", false);
+				Log.Warning("All weather commonalities were zero. Defaulting to " + WeatherDefOf.Clear.defName + ".");
 				return WeatherDefOf.Clear;
 			}
 			return result;
 		}
 
-		
 		public void DisableRainFor(int ticks)
 		{
-			this.ticksWhenRainAllowedAgain = Find.TickManager.TicksGame + ticks;
+			ticksWhenRainAllowedAgain = Find.TickManager.TicksGame + ticks;
 		}
 
-		
 		private float CurrentWeatherCommonality(WeatherDef weather)
 		{
-			if (this.map.weatherManager.curWeather != null && !this.map.weatherManager.curWeather.repeatable && weather == this.map.weatherManager.curWeather)
+			if (map.weatherManager.curWeather != null && !map.weatherManager.curWeather.repeatable && weather == map.weatherManager.curWeather)
 			{
 				return 0f;
 			}
-			if (!weather.temperatureRange.Includes(this.map.mapTemperature.OutdoorTemp))
+			if (!weather.temperatureRange.Includes(map.mapTemperature.OutdoorTemp))
 			{
 				return 0f;
 			}
-			if (weather.favorability < Favorability.Neutral && GenDate.DaysPassed < 8)
+			if ((int)weather.favorability < 2 && GenDate.DaysPassed < 8)
 			{
 				return 0f;
 			}
-			if (weather.rainRate > 0.1f && Find.TickManager.TicksGame < this.ticksWhenRainAllowedAgain)
+			if (weather.rainRate > 0.1f && Find.TickManager.TicksGame < ticksWhenRainAllowedAgain)
 			{
 				return 0f;
 			}
-			if (weather.rainRate > 0.1f)
+			if (weather.rainRate > 0.1f && map.gameConditionManager.ActiveConditions.Any((GameCondition x) => x.def.preventRain))
 			{
-				if (this.map.gameConditionManager.ActiveConditions.Any((GameCondition x) => x.def.preventRain))
-				{
-					return 0f;
-				}
+				return 0f;
 			}
-			BiomeDef biome = this.map.Biome;
+			BiomeDef biome = map.Biome;
 			for (int i = 0; i < biome.baseWeatherCommonalities.Count; i++)
 			{
 				WeatherCommonalityRecord weatherCommonalityRecord = biome.baseWeatherCommonalities[i];
 				if (weatherCommonalityRecord.weather == weather)
 				{
 					float num = weatherCommonalityRecord.commonality;
-					if (this.map.fireWatcher.LargeFireDangerPresent && weather.rainRate > 0.1f)
+					if (map.fireWatcher.LargeFireDangerPresent && weather.rainRate > 0.1f)
 					{
 						num *= 15f;
 					}
 					if (weatherCommonalityRecord.weather.commonalityRainfallFactor != null)
 					{
-						num *= weatherCommonalityRecord.weather.commonalityRainfallFactor.Evaluate(this.map.TileInfo.rainfall);
+						num *= weatherCommonalityRecord.weather.commonalityRainfallFactor.Evaluate(map.TileInfo.rainfall);
 					}
 					return num;
 				}
@@ -163,35 +159,14 @@ namespace RimWorld
 			return 0f;
 		}
 
-		
 		public void LogWeatherChances()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (WeatherDef weatherDef in from w in DefDatabase<WeatherDef>.AllDefs
-			orderby this.CurrentWeatherCommonality(w) descending
-			select w)
+			foreach (WeatherDef item in DefDatabase<WeatherDef>.AllDefs.OrderByDescending((WeatherDef w) => CurrentWeatherCommonality(w)))
 			{
-				stringBuilder.AppendLine(weatherDef.label + " - " + this.CurrentWeatherCommonality(weatherDef).ToString());
+				stringBuilder.AppendLine(item.label + " - " + CurrentWeatherCommonality(item).ToString());
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
-
-		
-		private Map map;
-
-		
-		private int curWeatherDuration = 10000;
-
-		
-		private int ticksWhenRainAllowedAgain;
-
-		
-		private const int FirstWeatherDuration = 10000;
-
-		
-		private const float ChanceFactorRainOnFire = 15f;
-
-		
-		private static List<GameCondition> allConditionsTmp = new List<GameCondition>();
 	}
 }

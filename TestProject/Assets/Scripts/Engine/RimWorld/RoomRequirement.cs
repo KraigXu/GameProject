@@ -1,47 +1,38 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class RoomRequirement
 	{
-		
+		[NoTranslate]
+		public string labelKey;
+
 		public abstract bool Met(Room r, Pawn p = null);
 
-		
 		public virtual string Label(Room r = null)
 		{
-			return this.labelKey.Translate();
+			return labelKey.Translate();
 		}
 
-		
 		public string LabelCap(Room r = null)
 		{
-			return this.Label(r).CapitalizeFirst();
+			return Label(r).CapitalizeFirst();
 		}
 
-		
 		public virtual IEnumerable<string> ConfigErrors()
 		{
 			yield break;
 		}
 
-		
 		public virtual bool SameOrSubsetOf(RoomRequirement other)
 		{
-			return base.GetType() == other.GetType();
+			return GetType() == other.GetType();
 		}
 
-		
 		public virtual bool PlayerHasResearched()
 		{
 			return true;
 		}
-
-		
-		[NoTranslate]
-		public string labelKey;
 	}
 }

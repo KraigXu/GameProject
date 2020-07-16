@@ -1,12 +1,9 @@
-﻿using System;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class ReachabilityImmediate
 	{
-		
 		public static bool CanReachImmediate(IntVec3 start, LocalTargetInfo target, Map map, PathEndMode peMode, Pawn pawn)
 		{
 			if (!target.IsValid)
@@ -56,26 +53,39 @@ namespace Verse
 			{
 				return true;
 			}
-			return peMode == PathEndMode.Touch && TouchPathEndModeUtility.IsAdjacentOrInsideAndAllowedToTouch(start, target, map);
+			if (peMode == PathEndMode.Touch && TouchPathEndModeUtility.IsAdjacentOrInsideAndAllowedToTouch(start, target, map))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public static bool CanReachImmediate(this Pawn pawn, LocalTargetInfo target, PathEndMode peMode)
 		{
-			return pawn.Spawned && ReachabilityImmediate.CanReachImmediate(pawn.Position, target, pawn.Map, peMode, pawn);
+			if (!pawn.Spawned)
+			{
+				return false;
+			}
+			return CanReachImmediate(pawn.Position, target, pawn.Map, peMode, pawn);
 		}
 
-		
 		public static bool CanReachImmediateNonLocal(this Pawn pawn, TargetInfo target, PathEndMode peMode)
 		{
-			return pawn.Spawned && (target.Map == null || target.Map == pawn.Map) && pawn.CanReachImmediate((LocalTargetInfo)target, peMode);
+			if (!pawn.Spawned)
+			{
+				return false;
+			}
+			if (target.Map != null && target.Map != pawn.Map)
+			{
+				return false;
+			}
+			return pawn.CanReachImmediate((LocalTargetInfo)target, peMode);
 		}
 
-		
 		public static bool CanReachImmediate(IntVec3 start, CellRect rect, Map map, PathEndMode peMode, Pawn pawn)
 		{
 			IntVec3 c = rect.ClosestCellTo(start);
-			return ReachabilityImmediate.CanReachImmediate(start, c, map, peMode, pawn);
+			return CanReachImmediate(start, c, map, peMode, pawn);
 		}
 	}
 }

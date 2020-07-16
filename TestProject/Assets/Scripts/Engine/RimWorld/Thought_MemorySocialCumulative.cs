@@ -1,83 +1,70 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace RimWorld
 {
-	
 	public class Thought_MemorySocialCumulative : Thought_MemorySocial
 	{
-		
-		
-		public override bool ShouldDiscard
-		{
-			get
-			{
-				return this.opinionOffset == 0f;
-			}
-		}
+		private const float OpinionOffsetChangePerDay = 1f;
 
-		
+		public override bool ShouldDiscard => opinionOffset == 0f;
+
 		public override float OpinionOffset()
 		{
-			if (ThoughtUtility.ThoughtNullified(this.pawn, this.def))
+			if (ThoughtUtility.ThoughtNullified(pawn, def))
 			{
 				return 0f;
 			}
-			if (this.ShouldDiscard)
+			if (ShouldDiscard)
 			{
 				return 0f;
 			}
-			return Mathf.Min(this.opinionOffset, this.def.maxCumulatedOpinionOffset);
+			return Mathf.Min(opinionOffset, def.maxCumulatedOpinionOffset);
 		}
 
-		
 		public override void ThoughtInterval()
 		{
 			base.ThoughtInterval();
-			if (this.age >= 60000)
+			if (age < 60000)
 			{
-				if (this.opinionOffset < 0f)
-				{
-					this.opinionOffset += 1f;
-					if (this.opinionOffset > 0f)
-					{
-						this.opinionOffset = 0f;
-					}
-				}
-				else if (this.opinionOffset > 0f)
-				{
-					this.opinionOffset -= 1f;
-					if (this.opinionOffset < 0f)
-					{
-						this.opinionOffset = 0f;
-					}
-				}
-				this.age = 0;
+				return;
 			}
+			if (opinionOffset < 0f)
+			{
+				opinionOffset += 1f;
+				if (opinionOffset > 0f)
+				{
+					opinionOffset = 0f;
+				}
+			}
+			else if (opinionOffset > 0f)
+			{
+				opinionOffset -= 1f;
+				if (opinionOffset < 0f)
+				{
+					opinionOffset = 0f;
+				}
+			}
+			age = 0;
 		}
 
-		
 		public override bool TryMergeWithExistingMemory(out bool showBubble)
 		{
 			showBubble = false;
-			List<Thought_Memory> memories = this.pawn.needs.mood.thoughts.memories.Memories;
+			List<Thought_Memory> memories = pawn.needs.mood.thoughts.memories.Memories;
 			for (int i = 0; i < memories.Count; i++)
 			{
-				if (memories[i].def == this.def)
+				if (memories[i].def == def)
 				{
 					Thought_MemorySocialCumulative thought_MemorySocialCumulative = (Thought_MemorySocialCumulative)memories[i];
-					if (thought_MemorySocialCumulative.OtherPawn() == this.otherPawn)
+					if (thought_MemorySocialCumulative.OtherPawn() == otherPawn)
 					{
-						thought_MemorySocialCumulative.opinionOffset += this.opinionOffset;
+						thought_MemorySocialCumulative.opinionOffset += opinionOffset;
 						return true;
 					}
 				}
 			}
 			return false;
 		}
-
-		
-		private const float OpinionOffsetChangePerDay = 1f;
 	}
 }

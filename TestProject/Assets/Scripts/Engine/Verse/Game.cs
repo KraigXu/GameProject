@@ -1,62 +1,109 @@
-﻿using System;
+using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld;
-using RimWorld.Planet;
 using Verse.Profile;
 
 namespace Verse
 {
-	
 	public class Game : IExposable
 	{
-		
-		
-		
+		private GameInitData initData;
+
+		public sbyte currentMapIndex = -1;
+
+		private GameInfo info = new GameInfo();
+
+		public List<GameComponent> components = new List<GameComponent>();
+
+		private GameRules rules = new GameRules();
+
+		private Scenario scenarioInt;
+
+		private World worldInt;
+
+		private List<Map> maps = new List<Map>();
+
+		public PlaySettings playSettings = new PlaySettings();
+
+		public StoryWatcher storyWatcher = new StoryWatcher();
+
+		public LetterStack letterStack = new LetterStack();
+
+		public ResearchManager researchManager = new ResearchManager();
+
+		public GameEnder gameEnder = new GameEnder();
+
+		public Storyteller storyteller = new Storyteller();
+
+		public History history = new History();
+
+		public TaleManager taleManager = new TaleManager();
+
+		public PlayLog playLog = new PlayLog();
+
+		public BattleLog battleLog = new BattleLog();
+
+		public OutfitDatabase outfitDatabase = new OutfitDatabase();
+
+		public DrugPolicyDatabase drugPolicyDatabase = new DrugPolicyDatabase();
+
+		public FoodRestrictionDatabase foodRestrictionDatabase = new FoodRestrictionDatabase();
+
+		public TickManager tickManager = new TickManager();
+
+		public Tutor tutor = new Tutor();
+
+		public Autosaver autosaver = new Autosaver();
+
+		public DateNotifier dateNotifier = new DateNotifier();
+
+		public SignalManager signalManager = new SignalManager();
+
+		public UniqueIDsManager uniqueIDsManager = new UniqueIDsManager();
+
+		public QuestManager questManager = new QuestManager();
+
+		private static List<Map> tmpPlayerHomeMaps = new List<Map>();
+
 		public Scenario Scenario
 		{
 			get
 			{
-				return this.scenarioInt;
+				return scenarioInt;
 			}
 			set
 			{
-				this.scenarioInt = value;
+				scenarioInt = value;
 			}
 		}
 
-		
-		
-		
 		public World World
 		{
 			get
 			{
-				return this.worldInt;
+				return worldInt;
 			}
 			set
 			{
-				if (this.worldInt == value)
+				if (worldInt != value)
 				{
-					return;
+					worldInt = value;
 				}
-				this.worldInt = value;
 			}
 		}
 
-		
-		
-		
 		public Map CurrentMap
 		{
 			get
 			{
-				if (this.currentMapIndex < 0)
+				if (currentMapIndex < 0)
 				{
 					return null;
 				}
-				return this.maps[(int)this.currentMapIndex];
+				return maps[currentMapIndex];
 			}
 			set
 			{
@@ -67,24 +114,22 @@ namespace Verse
 				}
 				else
 				{
-					num = this.maps.IndexOf(value);
+					num = maps.IndexOf(value);
 					if (num < 0)
 					{
-						Log.Error("Could not set current map because it does not exist.", false);
+						Log.Error("Could not set current map because it does not exist.");
 						return;
 					}
 				}
-				if ((int)this.currentMapIndex != num)
+				if (currentMapIndex != num)
 				{
-					this.currentMapIndex = (sbyte)num;
+					currentMapIndex = (sbyte)num;
 					Find.MapUI.Notify_SwitchedMap();
 					AmbientSoundManager.Notify_SwitchedMap();
 				}
 			}
 		}
 
-		
-		
 		public Map AnyPlayerHomeMap
 		{
 			get
@@ -93,9 +138,9 @@ namespace Verse
 				{
 					return null;
 				}
-				for (int i = 0; i < this.maps.Count; i++)
+				for (int i = 0; i < maps.Count; i++)
 				{
-					Map map = this.maps[i];
+					Map map = maps[i];
 					if (map.IsPlayerHome)
 					{
 						return map;
@@ -105,8 +150,6 @@ namespace Verse
 			}
 		}
 
-		
-		
 		public Map RandomPlayerHomeMap
 		{
 			get
@@ -115,223 +158,175 @@ namespace Verse
 				{
 					return null;
 				}
-				Game.tmpPlayerHomeMaps.Clear();
-				for (int i = 0; i < this.maps.Count; i++)
+				tmpPlayerHomeMaps.Clear();
+				for (int i = 0; i < maps.Count; i++)
 				{
-					Map map = this.maps[i];
+					Map map = maps[i];
 					if (map.IsPlayerHome)
 					{
-						Game.tmpPlayerHomeMaps.Add(map);
+						tmpPlayerHomeMaps.Add(map);
 					}
 				}
-				if (Game.tmpPlayerHomeMaps.Any<Map>())
+				if (tmpPlayerHomeMaps.Any())
 				{
-					Map result = Game.tmpPlayerHomeMaps.RandomElement<Map>();
-					Game.tmpPlayerHomeMaps.Clear();
+					Map result = tmpPlayerHomeMaps.RandomElement();
+					tmpPlayerHomeMaps.Clear();
 					return result;
 				}
 				return null;
 			}
 		}
 
-		
-		
-		public List<Map> Maps
-		{
-			get
-			{
-				return this.maps;
-			}
-		}
+		public List<Map> Maps => maps;
 
-		
-		
-		
 		public GameInitData InitData
 		{
 			get
 			{
-				return this.initData;
+				return initData;
 			}
 			set
 			{
-				this.initData = value;
+				initData = value;
 			}
 		}
 
-		
-		
-		public GameInfo Info
-		{
-			get
-			{
-				return this.info;
-			}
-		}
+		public GameInfo Info => info;
 
-		
-		
-		public GameRules Rules
-		{
-			get
-			{
-				return this.rules;
-			}
-		}
+		public GameRules Rules => rules;
 
-		
 		public Game()
 		{
-			this.FillComponents();
+			FillComponents();
 		}
 
-		
 		public void AddMap(Map map)
 		{
 			if (map == null)
 			{
-				Log.Error("Tried to add null map.", false);
+				Log.Error("Tried to add null map.");
 				return;
 			}
-			if (this.maps.Contains(map))
+			if (maps.Contains(map))
 			{
-				Log.Error("Tried to add map but it's already here.", false);
+				Log.Error("Tried to add map but it's already here.");
 				return;
 			}
-			if (this.maps.Count > 127)
+			if (maps.Count > 127)
 			{
-				Log.Error("Can't add map. Reached maps count limit (" + sbyte.MaxValue + ").", false);
+				Log.Error("Can't add map. Reached maps count limit (" + sbyte.MaxValue + ").");
 				return;
 			}
-			this.maps.Add(map);
+			maps.Add(map);
 			Find.ColonistBar.MarkColonistsDirty();
 		}
 
-		
 		public Map FindMap(MapParent mapParent)
 		{
-			for (int i = 0; i < this.maps.Count; i++)
+			for (int i = 0; i < maps.Count; i++)
 			{
-				if (this.maps[i].info.parent == mapParent)
+				if (maps[i].info.parent == mapParent)
 				{
-					return this.maps[i];
+					return maps[i];
 				}
 			}
 			return null;
 		}
 
-		
 		public Map FindMap(int tile)
 		{
-			for (int i = 0; i < this.maps.Count; i++)
+			for (int i = 0; i < maps.Count; i++)
 			{
-				if (this.maps[i].Tile == tile)
+				if (maps[i].Tile == tile)
 				{
-					return this.maps[i];
+					return maps[i];
 				}
 			}
 			return null;
 		}
 
-		
 		public void ExposeData()
 		{
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				Log.Error("You must use special LoadData method to load Game.", false);
+				Log.Error("You must use special LoadData method to load Game.");
 				return;
 			}
-			Scribe_Values.Look<sbyte>(ref this.currentMapIndex, "currentMapIndex", -1, false);
-			this.ExposeSmallComponents();
-			Scribe_Deep.Look<World>(ref this.worldInt, "world", Array.Empty<object>());
-			Scribe_Collections.Look<Map>(ref this.maps, "maps", LookMode.Deep, Array.Empty<object>());
+			Scribe_Values.Look<sbyte>(ref currentMapIndex, "currentMapIndex", -1);
+			ExposeSmallComponents();
+			Scribe_Deep.Look(ref worldInt, "world");
+			Scribe_Collections.Look(ref maps, "maps", LookMode.Deep);
 			Find.CameraDriver.Expose();
 		}
 
-		
 		private void ExposeSmallComponents()
 		{
-			Scribe_Deep.Look<GameInfo>(ref this.info, "info", Array.Empty<object>());
-			Scribe_Deep.Look<GameRules>(ref this.rules, "rules", Array.Empty<object>());
-			Scribe_Deep.Look<Scenario>(ref this.scenarioInt, "scenario", Array.Empty<object>());
-			Scribe_Deep.Look<TickManager>(ref this.tickManager, "tickManager", Array.Empty<object>());
-			Scribe_Deep.Look<PlaySettings>(ref this.playSettings, "playSettings", Array.Empty<object>());
-			Scribe_Deep.Look<StoryWatcher>(ref this.storyWatcher, "storyWatcher", Array.Empty<object>());
-			Scribe_Deep.Look<GameEnder>(ref this.gameEnder, "gameEnder", Array.Empty<object>());
-			Scribe_Deep.Look<LetterStack>(ref this.letterStack, "letterStack", Array.Empty<object>());
-			Scribe_Deep.Look<ResearchManager>(ref this.researchManager, "researchManager", Array.Empty<object>());
-			Scribe_Deep.Look<Storyteller>(ref this.storyteller, "storyteller", Array.Empty<object>());
-			Scribe_Deep.Look<History>(ref this.history, "history", Array.Empty<object>());
-			Scribe_Deep.Look<TaleManager>(ref this.taleManager, "taleManager", Array.Empty<object>());
-			Scribe_Deep.Look<PlayLog>(ref this.playLog, "playLog", Array.Empty<object>());
-			Scribe_Deep.Look<BattleLog>(ref this.battleLog, "battleLog", Array.Empty<object>());
-			Scribe_Deep.Look<OutfitDatabase>(ref this.outfitDatabase, "outfitDatabase", Array.Empty<object>());
-			Scribe_Deep.Look<DrugPolicyDatabase>(ref this.drugPolicyDatabase, "drugPolicyDatabase", Array.Empty<object>());
-			Scribe_Deep.Look<FoodRestrictionDatabase>(ref this.foodRestrictionDatabase, "foodRestrictionDatabase", Array.Empty<object>());
-			Scribe_Deep.Look<Tutor>(ref this.tutor, "tutor", Array.Empty<object>());
-			Scribe_Deep.Look<DateNotifier>(ref this.dateNotifier, "dateNotifier", Array.Empty<object>());
-			Scribe_Deep.Look<UniqueIDsManager>(ref this.uniqueIDsManager, "uniqueIDsManager", Array.Empty<object>());
-			Scribe_Deep.Look<QuestManager>(ref this.questManager, "questManager", Array.Empty<object>());
-			Scribe_Collections.Look<GameComponent>(ref this.components, "components", LookMode.Deep, new object[]
-			{
-				this
-			});
+			Scribe_Deep.Look(ref info, "info");
+			Scribe_Deep.Look(ref rules, "rules");
+			Scribe_Deep.Look(ref scenarioInt, "scenario");
+			Scribe_Deep.Look(ref tickManager, "tickManager");
+			Scribe_Deep.Look(ref playSettings, "playSettings");
+			Scribe_Deep.Look(ref storyWatcher, "storyWatcher");
+			Scribe_Deep.Look(ref gameEnder, "gameEnder");
+			Scribe_Deep.Look(ref letterStack, "letterStack");
+			Scribe_Deep.Look(ref researchManager, "researchManager");
+			Scribe_Deep.Look(ref storyteller, "storyteller");
+			Scribe_Deep.Look(ref history, "history");
+			Scribe_Deep.Look(ref taleManager, "taleManager");
+			Scribe_Deep.Look(ref playLog, "playLog");
+			Scribe_Deep.Look(ref battleLog, "battleLog");
+			Scribe_Deep.Look(ref outfitDatabase, "outfitDatabase");
+			Scribe_Deep.Look(ref drugPolicyDatabase, "drugPolicyDatabase");
+			Scribe_Deep.Look(ref foodRestrictionDatabase, "foodRestrictionDatabase");
+			Scribe_Deep.Look(ref tutor, "tutor");
+			Scribe_Deep.Look(ref dateNotifier, "dateNotifier");
+			Scribe_Deep.Look(ref uniqueIDsManager, "uniqueIDsManager");
+			Scribe_Deep.Look(ref questManager, "questManager");
+			Scribe_Collections.Look(ref components, "components", LookMode.Deep, this);
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				this.FillComponents();
-				if (this.rules == null)
+				FillComponents();
+				if (rules == null)
 				{
-					Log.Warning("Save game was missing rules. Replacing with a blank GameRules.", false);
-					this.rules = new GameRules();
+					Log.Warning("Save game was missing rules. Replacing with a blank GameRules.");
+					rules = new GameRules();
 				}
 			}
 			BackCompatibility.PostExposeData(this);
 		}
 
-		
 		private void FillComponents()
 		{
-			this.components.RemoveAll((GameComponent component) => component == null);
-			foreach (Type type in typeof(GameComponent).AllSubclassesNonAbstract())
+			components.RemoveAll((GameComponent component) => component == null);
+			foreach (Type item2 in typeof(GameComponent).AllSubclassesNonAbstract())
 			{
-				if (this.GetComponent(type) == null)
+				if (GetComponent(item2) == null)
 				{
 					try
 					{
-						GameComponent item = (GameComponent)Activator.CreateInstance(type, new object[]
-						{
-							this
-						});
-						this.components.Add(item);
+						GameComponent item = (GameComponent)Activator.CreateInstance(item2, this);
+						components.Add(item);
 					}
 					catch (Exception ex)
 					{
-						Log.Error(string.Concat(new object[]
-						{
-							"Could not instantiate a GameComponent of type ",
-							type,
-							": ",
-							ex
-						}), false);
+						Log.Error("Could not instantiate a GameComponent of type " + item2 + ": " + ex);
 					}
 				}
 			}
 		}
 
-		
 		public void InitNewGame()
 		{
-			string str = (from mod in LoadedModManager.RunningMods
-			select mod.PackageIdPlayerFacing).ToLineList("  - ", false);
-			Log.Message("Initializing new game with mods:\n" + str, false);
-			if (this.maps.Any<Map>())
+			string str = LoadedModManager.RunningMods.Select((ModContentPack mod) => mod.PackageIdPlayerFacing).ToLineList("  - ");
+			Log.Message("Initializing new game with mods:\n" + str);
+			if (maps.Any())
 			{
-				Log.Error("Called InitNewGame() but there already is a map. There should be 0 maps...", false);
+				Log.Error("Called InitNewGame() but there already is a map. There should be 0 maps...");
 				return;
 			}
-			if (this.initData == null)
+			if (initData == null)
 			{
-				Log.Error("Called InitNewGame() but init data is null. Create it first.", false);
+				Log.Error("Called InitNewGame() but init data is null. Create it first.");
 				return;
 			}
 			MemoryUtility.UnloadUnusedUnityAssets();
@@ -339,7 +334,7 @@ namespace Verse
 			try
 			{
 				Current.ProgramState = ProgramState.MapInitializing;
-				IntVec3 intVec = new IntVec3(this.initData.mapSize, 1, this.initData.mapSize);
+				IntVec3 intVec = new IntVec3(initData.mapSize, 1, initData.mapSize);
 				Settlement settlement = null;
 				List<Settlement> settlements = Find.WorldObjects.Settlements;
 				for (int i = 0; i < settlements.Count; i++)
@@ -352,62 +347,62 @@ namespace Verse
 				}
 				if (settlement == null)
 				{
-					Log.Error("Could not generate starting map because there is no any player faction base.", false);
+					Log.Error("Could not generate starting map because there is no any player faction base.");
 				}
-				this.tickManager.gameStartAbsTick = GenTicks.ConfiguredTicksAbsAtGameStart;
-				Map currentMap = MapGenerator.GenerateMap(intVec, settlement, settlement.MapGeneratorDef, settlement.ExtraGenStepDefs, null);
-				this.worldInt.info.initialMapSize = intVec;
-				if (this.initData.permadeath)
+				tickManager.gameStartAbsTick = GenTicks.ConfiguredTicksAbsAtGameStart;
+				Map currentMap = MapGenerator.GenerateMap(intVec, settlement, settlement.MapGeneratorDef, settlement.ExtraGenStepDefs);
+				worldInt.info.initialMapSize = intVec;
+				if (initData.permadeath)
 				{
-					this.info.permadeathMode = true;
-					this.info.permadeathModeUniqueName = PermadeathModeUtility.GeneratePermadeathSaveName();
+					info.permadeathMode = true;
+					info.permadeathModeUniqueName = PermadeathModeUtility.GeneratePermadeathSaveName();
 				}
 				PawnUtility.GiveAllStartingPlayerPawnsThought(ThoughtDefOf.NewColonyOptimism);
-				this.FinalizeInit();
+				FinalizeInit();
 				Current.Game.CurrentMap = currentMap;
 				Find.CameraDriver.JumpToCurrentMapLoc(MapGenerator.PlayerStartSpot);
 				Find.CameraDriver.ResetSize();
-				if (Prefs.PauseOnLoad && this.initData.startedFromEntry)
+				if (Prefs.PauseOnLoad && initData.startedFromEntry)
 				{
 					LongEventHandler.ExecuteWhenFinished(delegate
 					{
-						this.tickManager.DoSingleTick();
-						this.tickManager.CurTimeSpeed = TimeSpeed.Paused;
+						tickManager.DoSingleTick();
+						tickManager.CurTimeSpeed = TimeSpeed.Paused;
 					});
 				}
 				Find.Scenario.PostGameStart();
 				if (Faction.OfPlayer.def.startingResearchTags != null)
 				{
-					foreach (ResearchProjectTagDef tag in Faction.OfPlayer.def.startingResearchTags)
+					foreach (ResearchProjectTagDef startingResearchTag in Faction.OfPlayer.def.startingResearchTags)
 					{
-						foreach (ResearchProjectDef researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefs)
+						foreach (ResearchProjectDef allDef in DefDatabase<ResearchProjectDef>.AllDefs)
 						{
-							if (researchProjectDef.HasTag(tag))
+							if (allDef.HasTag(startingResearchTag))
 							{
-								this.researchManager.FinishProject(researchProjectDef, false, null);
+								researchManager.FinishProject(allDef);
 							}
 						}
 					}
 				}
 				if (Faction.OfPlayer.def.startingTechprintsResearchTags != null)
 				{
-					foreach (ResearchProjectTagDef tag2 in Faction.OfPlayer.def.startingTechprintsResearchTags)
+					foreach (ResearchProjectTagDef startingTechprintsResearchTag in Faction.OfPlayer.def.startingTechprintsResearchTags)
 					{
-						foreach (ResearchProjectDef researchProjectDef2 in DefDatabase<ResearchProjectDef>.AllDefs)
+						foreach (ResearchProjectDef allDef2 in DefDatabase<ResearchProjectDef>.AllDefs)
 						{
-							if (researchProjectDef2.HasTag(tag2))
+							if (allDef2.HasTag(startingTechprintsResearchTag))
 							{
-								int techprints = this.researchManager.GetTechprints(researchProjectDef2);
-								if (techprints < researchProjectDef2.techprintCount)
+								int techprints = researchManager.GetTechprints(allDef2);
+								if (techprints < allDef2.techprintCount)
 								{
-									this.researchManager.AddTechprints(researchProjectDef2, researchProjectDef2.techprintCount - techprints);
+									researchManager.AddTechprints(allDef2, allDef2.techprintCount - techprints);
 								}
 							}
 						}
 					}
 				}
 				GameComponentUtility.StartedNewGame();
-				this.initData = null;
+				initData = null;
 			}
 			finally
 			{
@@ -415,87 +410,76 @@ namespace Verse
 			}
 		}
 
-		
 		public void LoadGame()
 		{
-			if (this.maps.Any<Map>())
+			if (maps.Any())
 			{
-				Log.Error("Called LoadGame() but there already is a map. There should be 0 maps...", false);
+				Log.Error("Called LoadGame() but there already is a map. There should be 0 maps...");
 				return;
 			}
 			MemoryUtility.UnloadUnusedUnityAssets();
 			BackCompatibility.PreLoadSavegame(ScribeMetaHeaderUtility.loadedGameVersion);
 			Current.ProgramState = ProgramState.MapInitializing;
-			this.ExposeSmallComponents();
+			ExposeSmallComponents();
 			LongEventHandler.SetCurrentEventText("LoadingWorld".Translate());
 			if (Scribe.EnterNode("world"))
 			{
 				try
 				{
-					this.World = new World();
-					this.World.ExposeData();
-					goto IL_7E;
+					World = new World();
+					World.ExposeData();
 				}
 				finally
 				{
 					Scribe.ExitNode();
 				}
-				goto IL_72;
-				IL_7E:
-				this.World.FinalizeInit();
+				World.FinalizeInit();
 				LongEventHandler.SetCurrentEventText("LoadingMap".Translate());
-				Scribe_Collections.Look<Map>(ref this.maps, "maps", LookMode.Deep, Array.Empty<object>());
-				if (this.maps.RemoveAll((Map x) => x == null) != 0)
+				Scribe_Collections.Look(ref maps, "maps", LookMode.Deep);
+				if (maps.RemoveAll((Map x) => x == null) != 0)
 				{
-					Log.Warning("Some maps were null after loading.", false);
+					Log.Warning("Some maps were null after loading.");
 				}
-				int num = -1;
-				Scribe_Values.Look<int>(ref num, "currentMapIndex", -1, false);
-				if (num < 0 && this.maps.Any<Map>())
+				int value = -1;
+				Scribe_Values.Look(ref value, "currentMapIndex", -1);
+				if (value < 0 && maps.Any())
 				{
-					Log.Error("Current map is null after loading but there are maps available. Setting current map to [0].", false);
-					num = 0;
+					Log.Error("Current map is null after loading but there are maps available. Setting current map to [0].");
+					value = 0;
 				}
-				if (num >= this.maps.Count)
+				if (value >= maps.Count)
 				{
-					Log.Error("Current map index out of bounds after loading.", false);
-					if (this.maps.Any<Map>())
-					{
-						num = 0;
-					}
-					else
-					{
-						num = -1;
-					}
+					Log.Error("Current map index out of bounds after loading.");
+					value = ((!maps.Any()) ? (-1) : 0);
 				}
-				this.currentMapIndex = sbyte.MinValue;
-				this.CurrentMap = ((num >= 0) ? this.maps[num] : null);
+				currentMapIndex = sbyte.MinValue;
+				CurrentMap = ((value >= 0) ? maps[value] : null);
 				LongEventHandler.SetCurrentEventText("InitializingGame".Translate());
 				Find.CameraDriver.Expose();
 				DeepProfiler.Start("FinalizeLoading");
 				Scribe.loader.FinalizeLoading();
 				DeepProfiler.End();
 				LongEventHandler.SetCurrentEventText("SpawningAllThings".Translate());
-				for (int i = 0; i < this.maps.Count; i++)
+				for (int i = 0; i < maps.Count; i++)
 				{
 					try
 					{
-						this.maps[i].FinalizeLoading();
+						maps[i].FinalizeLoading();
 					}
 					catch (Exception arg)
 					{
-						Log.Error("Error in Map.FinalizeLoading(): " + arg, false);
+						Log.Error("Error in Map.FinalizeLoading(): " + arg);
 					}
 					try
 					{
-						this.maps[i].Parent.FinalizeLoading();
+						maps[i].Parent.FinalizeLoading();
 					}
 					catch (Exception arg2)
 					{
-						Log.Error("Error in MapParent.FinalizeLoading(): " + arg2, false);
+						Log.Error("Error in MapParent.FinalizeLoading(): " + arg2);
 					}
 				}
-				this.FinalizeInit();
+				FinalizeInit();
 				if (Prefs.PauseOnLoad)
 				{
 					LongEventHandler.ExecuteWhenFinished(delegate
@@ -506,109 +490,104 @@ namespace Verse
 				}
 				GameComponentUtility.LoadedGame();
 				BackCompatibility.PostLoadSavegame(ScribeMetaHeaderUtility.loadedGameVersion);
-				return;
 			}
-			IL_72:
-			Log.Error("Could not find world XML node.", false);
+			else
+			{
+				Log.Error("Could not find world XML node.");
+			}
 		}
 
-		
 		public void UpdateEntry()
 		{
 			GameComponentUtility.GameComponentUpdate();
 		}
 
-		
 		public void UpdatePlay()
 		{
-			this.tickManager.TickManagerUpdate();
-			this.letterStack.LetterStackUpdate();
-			this.World.WorldUpdate();
-			for (int i = 0; i < this.maps.Count; i++)
+			tickManager.TickManagerUpdate();
+			letterStack.LetterStackUpdate();
+			World.WorldUpdate();
+			for (int i = 0; i < maps.Count; i++)
 			{
-				this.maps[i].MapUpdate();
+				maps[i].MapUpdate();
 			}
-			this.Info.GameInfoUpdate();
+			Info.GameInfoUpdate();
 			GameComponentUtility.GameComponentUpdate();
-			this.signalManager.SignalManagerUpdate();
+			signalManager.SignalManagerUpdate();
 		}
 
-		
 		public T GetComponent<T>() where T : GameComponent
 		{
-			for (int i = 0; i < this.components.Count; i++)
+			for (int i = 0; i < components.Count; i++)
 			{
-				T t = this.components[i] as T;
-				if (t != null)
+				T val = components[i] as T;
+				if (val != null)
 				{
-					return t;
-				}
-			}
-			return default(T);
-		}
-
-		
-		public GameComponent GetComponent(Type type)
-		{
-			for (int i = 0; i < this.components.Count; i++)
-			{
-				if (type.IsAssignableFrom(this.components[i].GetType()))
-				{
-					return this.components[i];
+					return val;
 				}
 			}
 			return null;
 		}
 
-		
+		public GameComponent GetComponent(Type type)
+		{
+			for (int i = 0; i < components.Count; i++)
+			{
+				if (type.IsAssignableFrom(components[i].GetType()))
+				{
+					return components[i];
+				}
+			}
+			return null;
+		}
+
 		public void FinalizeInit()
 		{
 			LogSimple.FlushToFileAndOpen();
-			this.researchManager.ReapplyAllMods();
+			researchManager.ReapplyAllMods();
 			MessagesRepeatAvoider.Reset();
 			GameComponentUtility.FinalizeInit();
-			this.history.FinalizeInit();
+			history.FinalizeInit();
 			Current.ProgramState = ProgramState.Playing;
 		}
 
-		
 		public void DeinitAndRemoveMap(Map map)
 		{
 			if (map == null)
 			{
-				Log.Error("Tried to remove null map.", false);
+				Log.Error("Tried to remove null map.");
 				return;
 			}
-			if (!this.maps.Contains(map))
+			if (!maps.Contains(map))
 			{
-				Log.Error("Tried to remove map " + map + " but it's not here.", false);
+				Log.Error("Tried to remove map " + map + " but it's not here.");
 				return;
 			}
 			if (map.Parent != null)
 			{
 				map.Parent.Notify_MyMapAboutToBeRemoved();
 			}
-			Map currentMap = this.CurrentMap;
+			Map currentMap = CurrentMap;
 			MapDeiniter.Deinit(map);
-			this.maps.Remove(map);
+			maps.Remove(map);
 			if (currentMap != null)
 			{
-				sbyte b = (sbyte)this.maps.IndexOf(currentMap);
+				sbyte b = (sbyte)maps.IndexOf(currentMap);
 				if (b < 0)
 				{
-					if (this.maps.Any<Map>())
+					if (maps.Any())
 					{
-						this.CurrentMap = this.maps[0];
+						CurrentMap = maps[0];
 					}
 					else
 					{
-						this.CurrentMap = null;
+						CurrentMap = null;
 					}
 					Find.World.renderer.wantedMode = WorldRenderMode.Planet;
 				}
 				else
 				{
-					this.currentMapIndex = b;
+					currentMapIndex = b;
 				}
 			}
 			if (Current.ProgramState == ProgramState.Playing)
@@ -622,132 +601,44 @@ namespace Verse
 			}
 		}
 
-		
 		public string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("Game debug data:");
 			stringBuilder.AppendLine("initData:");
-			if (this.initData == null)
+			if (initData == null)
 			{
 				stringBuilder.AppendLine("   null");
 			}
 			else
 			{
-				stringBuilder.AppendLine(this.initData.ToString());
+				stringBuilder.AppendLine(initData.ToString());
 			}
 			stringBuilder.AppendLine("Scenario:");
-			if (this.scenarioInt == null)
+			if (scenarioInt == null)
 			{
 				stringBuilder.AppendLine("   null");
 			}
 			else
 			{
-				stringBuilder.AppendLine("   " + this.scenarioInt.ToString());
+				stringBuilder.AppendLine("   " + scenarioInt.ToString());
 			}
 			stringBuilder.AppendLine("World:");
-			if (this.worldInt == null)
+			if (worldInt == null)
 			{
 				stringBuilder.AppendLine("   null");
 			}
 			else
 			{
-				stringBuilder.AppendLine("   name: " + this.worldInt.info.name);
+				stringBuilder.AppendLine("   name: " + worldInt.info.name);
 			}
-			stringBuilder.AppendLine("Maps count: " + this.maps.Count);
-			for (int i = 0; i < this.maps.Count; i++)
+			stringBuilder.AppendLine("Maps count: " + maps.Count);
+			for (int i = 0; i < maps.Count; i++)
 			{
-				stringBuilder.AppendLine("   Map " + this.maps[i].Index + ":");
-				stringBuilder.AppendLine("      tile: " + this.maps[i].TileInfo);
+				stringBuilder.AppendLine("   Map " + maps[i].Index + ":");
+				stringBuilder.AppendLine("      tile: " + maps[i].TileInfo);
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		private GameInitData initData;
-
-		
-		public sbyte currentMapIndex = -1;
-
-		
-		private GameInfo info = new GameInfo();
-
-		
-		public List<GameComponent> components = new List<GameComponent>();
-
-		
-		private GameRules rules = new GameRules();
-
-		
-		private Scenario scenarioInt;
-
-		
-		private World worldInt;
-
-		
-		private List<Map> maps = new List<Map>();
-
-		
-		public PlaySettings playSettings = new PlaySettings();
-
-		
-		public StoryWatcher storyWatcher = new StoryWatcher();
-
-		
-		public LetterStack letterStack = new LetterStack();
-
-		
-		public ResearchManager researchManager = new ResearchManager();
-
-		
-		public GameEnder gameEnder = new GameEnder();
-
-		
-		public Storyteller storyteller = new Storyteller();
-
-		
-		public History history = new History();
-
-		
-		public TaleManager taleManager = new TaleManager();
-
-		
-		public PlayLog playLog = new PlayLog();
-
-		
-		public BattleLog battleLog = new BattleLog();
-
-		
-		public OutfitDatabase outfitDatabase = new OutfitDatabase();
-
-		
-		public DrugPolicyDatabase drugPolicyDatabase = new DrugPolicyDatabase();
-
-		
-		public FoodRestrictionDatabase foodRestrictionDatabase = new FoodRestrictionDatabase();
-
-		
-		public TickManager tickManager = new TickManager();
-
-		
-		public Tutor tutor = new Tutor();
-
-		
-		public Autosaver autosaver = new Autosaver();
-
-		
-		public DateNotifier dateNotifier = new DateNotifier();
-
-		
-		public SignalManager signalManager = new SignalManager();
-
-		
-		public UniqueIDsManager uniqueIDsManager = new UniqueIDsManager();
-
-		
-		public QuestManager questManager = new QuestManager();
-
-		
-		private static List<Map> tmpPlayerHomeMaps = new List<Map>();
 	}
 }

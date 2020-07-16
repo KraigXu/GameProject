@@ -1,14 +1,14 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class ScattererValidator_Buildable : ScattererValidator
 	{
-		
+		public int radius = 1;
+
+		public TerrainAffordanceDef affordance;
+
 		public override bool Allows(IntVec3 c, Map map)
 		{
-			CellRect cellRect = CellRect.CenteredOn(c, this.radius);
+			CellRect cellRect = CellRect.CenteredOn(c, radius);
 			for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
 			{
 				for (int j = cellRect.minX; j <= cellRect.maxX; j++)
@@ -22,7 +22,7 @@ namespace Verse
 					{
 						return false;
 					}
-					if (this.affordance != null && !c2.GetTerrain(map).affordances.Contains(this.affordance))
+					if (affordance != null && !c2.GetTerrain(map).affordances.Contains(affordance))
 					{
 						return false;
 					}
@@ -30,11 +30,5 @@ namespace Verse
 			}
 			return true;
 		}
-
-		
-		public int radius = 1;
-
-		
-		public TerrainAffordanceDef affordance;
 	}
 }

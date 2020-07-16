@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,10 +5,8 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class PlaceWorker_Cooler : PlaceWorker
 	{
-		
 		public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
 		{
 			Map currentMap = Find.CurrentMap;
@@ -25,25 +22,25 @@ namespace RimWorld
 			}, GenTemperature.ColorSpotHot);
 			RoomGroup roomGroup = intVec2.GetRoomGroup(currentMap);
 			RoomGroup roomGroup2 = intVec.GetRoomGroup(currentMap);
-			if (roomGroup != null && roomGroup2 != null)
+			if (roomGroup == null || roomGroup2 == null)
 			{
-				if (roomGroup == roomGroup2 && !roomGroup.UsesOutdoorTemperature)
-				{
-					GenDraw.DrawFieldEdges(roomGroup.Cells.ToList<IntVec3>(), new Color(1f, 0.7f, 0f, 0.5f));
-					return;
-				}
-				if (!roomGroup.UsesOutdoorTemperature)
-				{
-					GenDraw.DrawFieldEdges(roomGroup.Cells.ToList<IntVec3>(), GenTemperature.ColorRoomHot);
-				}
-				if (!roomGroup2.UsesOutdoorTemperature)
-				{
-					GenDraw.DrawFieldEdges(roomGroup2.Cells.ToList<IntVec3>(), GenTemperature.ColorRoomCold);
-				}
+				return;
+			}
+			if (roomGroup == roomGroup2 && !roomGroup.UsesOutdoorTemperature)
+			{
+				GenDraw.DrawFieldEdges(roomGroup.Cells.ToList(), new Color(1f, 0.7f, 0f, 0.5f));
+				return;
+			}
+			if (!roomGroup.UsesOutdoorTemperature)
+			{
+				GenDraw.DrawFieldEdges(roomGroup.Cells.ToList(), GenTemperature.ColorRoomHot);
+			}
+			if (!roomGroup2.UsesOutdoorTemperature)
+			{
+				GenDraw.DrawFieldEdges(roomGroup2.Cells.ToList(), GenTemperature.ColorRoomCold);
 			}
 		}
 
-		
 		public override AcceptanceReport AllowsPlacing(BuildableDef def, IntVec3 center, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
 		{
 			IntVec3 c = center + IntVec3.South.RotatedBy(rot);

@@ -1,39 +1,36 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PawnRelationWorker
 	{
-		
+		public PawnRelationDef def;
+
 		public virtual bool InRelation(Pawn me, Pawn other)
 		{
-			if (this.def.implied)
+			if (def.implied)
 			{
-				throw new NotImplementedException(this.def + " lacks InRelation implementation.");
+				throw new NotImplementedException(def + " lacks InRelation implementation.");
 			}
-			return me.relations.DirectRelationExists(this.def, other);
+			return me.relations.DirectRelationExists(def, other);
 		}
 
-		
 		public virtual float GenerationChance(Pawn generated, Pawn other, PawnGenerationRequest request)
 		{
 			return 0f;
 		}
 
-		
 		public virtual void CreateRelation(Pawn generated, Pawn other, ref PawnGenerationRequest request)
 		{
-			if (!this.def.implied)
+			if (!def.implied)
 			{
-				generated.relations.AddDirectRelation(this.def, other);
+				generated.relations.AddDirectRelation(def, other);
 				return;
 			}
-			throw new NotImplementedException(this.def + " lacks CreateRelation implementation.");
+			throw new NotImplementedException(def + " lacks CreateRelation implementation.");
 		}
 
-		
 		public float BaseGenerationChanceFactor(Pawn generated, Pawn other, PawnGenerationRequest request)
 		{
 			float num = 1f;
@@ -59,7 +56,7 @@ namespace RimWorld
 			}
 			TechLevel techLevel = (generated.Faction != null) ? generated.Faction.def.techLevel : TechLevel.Undefined;
 			TechLevel techLevel2 = (other.Faction != null) ? other.Faction.def.techLevel : TechLevel.Undefined;
-			if (techLevel != TechLevel.Undefined && techLevel2 != TechLevel.Undefined && techLevel != techLevel2)
+			if (techLevel != 0 && techLevel2 != 0 && techLevel != techLevel2)
 			{
 				num *= 0.85f;
 			}
@@ -70,12 +67,8 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public virtual void OnRelationCreated(Pawn firstPawn, Pawn secondPawn)
 		{
 		}
-
-		
-		public PawnRelationDef def;
 	}
 }

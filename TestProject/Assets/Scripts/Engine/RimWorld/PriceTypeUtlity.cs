@@ -1,12 +1,10 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace RimWorld
 {
-	
 	public static class PriceTypeUtlity
 	{
-		
 		public static float PriceMultiplier(this PriceType pType)
 		{
 			switch (pType)
@@ -26,19 +24,17 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static PriceType ClosestPriceType(float priceFactor)
 		{
 			float num = 99999f;
 			PriceType priceType = PriceType.Undefined;
-			foreach (object obj in Enum.GetValues(typeof(PriceType)))
+			foreach (PriceType value in Enum.GetValues(typeof(PriceType)))
 			{
-				PriceType priceType2 = (PriceType)obj;
-				float num2 = Mathf.Abs(priceFactor - priceType2.PriceMultiplier());
+				float num2 = Mathf.Abs(priceFactor - value.PriceMultiplier());
 				if (num2 < num)
 				{
 					num = num2;
-					priceType = priceType2;
+					priceType = value;
 				}
 			}
 			if (priceType == PriceType.Undefined)

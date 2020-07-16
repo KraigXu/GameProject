@@ -1,18 +1,13 @@
-﻿using System;
+using System;
 
 namespace RimWorld
 {
-	
 	[Flags]
 	public enum AllowedThreatsGeneratorThreats
 	{
-		
-		None = 0,
-		
-		Raids = 1,
-		
-		MechClusters = 2,
-		
-		All = 3
+		None = 0x0,
+		Raids = 0x1,
+		MechClusters = 0x2,
+		All = 0x3
 	}
 }

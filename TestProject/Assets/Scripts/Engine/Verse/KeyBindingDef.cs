@@ -1,122 +1,147 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class KeyBindingDef : Def
 	{
-		
-		
+		public KeyBindingCategoryDef category;
+
+		public KeyCode defaultKeyCodeA;
+
+		public KeyCode defaultKeyCodeB;
+
+		public bool devModeOnly;
+
+		[NoTranslate]
+		public List<string> extraConflictTags;
+
 		public KeyCode MainKey
 		{
 			get
 			{
-				KeyBindingData keyBindingData;
-				if (KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out keyBindingData))
+				if (KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out KeyBindingData value))
 				{
-					if (keyBindingData.keyBindingA != KeyCode.None)
+					if (value.keyBindingA != 0)
 					{
-						return keyBindingData.keyBindingA;
+						return value.keyBindingA;
 					}
-					if (keyBindingData.keyBindingB != KeyCode.None)
+					if (value.keyBindingB != 0)
 					{
-						return keyBindingData.keyBindingB;
+						return value.keyBindingB;
 					}
 				}
 				return KeyCode.None;
 			}
 		}
 
-		
-		
-		public string MainKeyLabel
-		{
-			get
-			{
-				return this.MainKey.ToStringReadable();
-			}
-		}
+		public string MainKeyLabel => MainKey.ToStringReadable();
 
-		
-		
 		public bool KeyDownEvent
 		{
 			get
 			{
-				KeyBindingData keyBindingData;
-				return Event.current.type == EventType.KeyDown && Event.current.keyCode != KeyCode.None && KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out keyBindingData) && (keyBindingData.keyBindingA == KeyCode.LeftCommand || keyBindingData.keyBindingA == KeyCode.RightCommand || keyBindingData.keyBindingB == KeyCode.LeftCommand || keyBindingData.keyBindingB == KeyCode.RightCommand || !Event.current.command) && (Event.current.keyCode == keyBindingData.keyBindingA || Event.current.keyCode == keyBindingData.keyBindingB);
+				if (Event.current.type == EventType.KeyDown && Event.current.keyCode != 0 && KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out KeyBindingData value))
+				{
+					if (value.keyBindingA != KeyCode.LeftCommand && value.keyBindingA != KeyCode.RightCommand && value.keyBindingB != KeyCode.LeftCommand && value.keyBindingB != KeyCode.RightCommand && Event.current.command)
+					{
+						return false;
+					}
+					if (Event.current.keyCode != value.keyBindingA)
+					{
+						return Event.current.keyCode == value.keyBindingB;
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public bool IsDownEvent
 		{
 			get
 			{
-				KeyBindingData keyBindingData;
-				return Event.current != null && KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out keyBindingData) && (this.KeyDownEvent || (Event.current.shift && (keyBindingData.keyBindingA == KeyCode.LeftShift || keyBindingData.keyBindingA == KeyCode.RightShift || keyBindingData.keyBindingB == KeyCode.LeftShift || keyBindingData.keyBindingB == KeyCode.RightShift)) || (Event.current.control && (keyBindingData.keyBindingA == KeyCode.LeftControl || keyBindingData.keyBindingA == KeyCode.RightControl || keyBindingData.keyBindingB == KeyCode.LeftControl || keyBindingData.keyBindingB == KeyCode.RightControl)) || (Event.current.alt && (keyBindingData.keyBindingA == KeyCode.LeftAlt || keyBindingData.keyBindingA == KeyCode.RightAlt || keyBindingData.keyBindingB == KeyCode.LeftAlt || keyBindingData.keyBindingB == KeyCode.RightAlt)) || (Event.current.command && (keyBindingData.keyBindingA == KeyCode.LeftCommand || keyBindingData.keyBindingA == KeyCode.RightCommand || keyBindingData.keyBindingB == KeyCode.LeftCommand || keyBindingData.keyBindingB == KeyCode.RightCommand)) || this.IsDown);
+				if (Event.current == null)
+				{
+					return false;
+				}
+				if (!KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out KeyBindingData value))
+				{
+					return false;
+				}
+				if (KeyDownEvent)
+				{
+					return true;
+				}
+				if (Event.current.shift && (value.keyBindingA == KeyCode.LeftShift || value.keyBindingA == KeyCode.RightShift || value.keyBindingB == KeyCode.LeftShift || value.keyBindingB == KeyCode.RightShift))
+				{
+					return true;
+				}
+				if (Event.current.control && (value.keyBindingA == KeyCode.LeftControl || value.keyBindingA == KeyCode.RightControl || value.keyBindingB == KeyCode.LeftControl || value.keyBindingB == KeyCode.RightControl))
+				{
+					return true;
+				}
+				if (Event.current.alt && (value.keyBindingA == KeyCode.LeftAlt || value.keyBindingA == KeyCode.RightAlt || value.keyBindingB == KeyCode.LeftAlt || value.keyBindingB == KeyCode.RightAlt))
+				{
+					return true;
+				}
+				if (Event.current.command && (value.keyBindingA == KeyCode.LeftCommand || value.keyBindingA == KeyCode.RightCommand || value.keyBindingB == KeyCode.LeftCommand || value.keyBindingB == KeyCode.RightCommand))
+				{
+					return true;
+				}
+				return IsDown;
 			}
 		}
 
-		
-		
 		public bool JustPressed
 		{
 			get
 			{
-				KeyBindingData keyBindingData;
-				return KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out keyBindingData) && (Input.GetKeyDown(keyBindingData.keyBindingA) || Input.GetKeyDown(keyBindingData.keyBindingB));
+				if (KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out KeyBindingData value))
+				{
+					if (!Input.GetKeyDown(value.keyBindingA))
+					{
+						return Input.GetKeyDown(value.keyBindingB);
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public bool IsDown
 		{
 			get
 			{
-				KeyBindingData keyBindingData;
-				return KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out keyBindingData) && (Input.GetKey(keyBindingData.keyBindingA) || Input.GetKey(keyBindingData.keyBindingB));
+				if (KeyPrefs.KeyPrefsData.keyPrefs.TryGetValue(this, out KeyBindingData value))
+				{
+					if (!Input.GetKey(value.keyBindingA))
+					{
+						return Input.GetKey(value.keyBindingB);
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public KeyCode GetDefaultKeyCode(KeyPrefs.BindingSlot slot)
 		{
-			if (slot == KeyPrefs.BindingSlot.A)
+			switch (slot)
 			{
-				return this.defaultKeyCodeA;
+			case KeyPrefs.BindingSlot.A:
+				return defaultKeyCodeA;
+			case KeyPrefs.BindingSlot.B:
+				return defaultKeyCodeB;
+			default:
+				throw new InvalidOperationException();
 			}
-			if (slot == KeyPrefs.BindingSlot.B)
-			{
-				return this.defaultKeyCodeB;
-			}
-			throw new InvalidOperationException();
 		}
 
-		
 		public static KeyBindingDef Named(string name)
 		{
 			return DefDatabase<KeyBindingDef>.GetNamedSilentFail(name);
 		}
-
-		
-		public KeyBindingCategoryDef category;
-
-		
-		public KeyCode defaultKeyCodeA;
-
-		
-		public KeyCode defaultKeyCodeB;
-
-		
-		public bool devModeOnly;
-
-		
-		[NoTranslate]
-		public List<string> extraConflictTags;
 	}
 }

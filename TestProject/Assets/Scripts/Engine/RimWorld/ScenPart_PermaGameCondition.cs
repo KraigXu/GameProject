@@ -1,94 +1,79 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenPart_PermaGameCondition : ScenPart
 	{
-		
-		
-		public override string Label
-		{
-			get
-			{
-				return "Permanent".Translate().CapitalizeFirst() + ": " + this.gameCondition.label.CapitalizeFirst();
-			}
-		}
+		private GameConditionDef gameCondition;
 
-		
+		public const string PermaGameConditionTag = "PermaGameCondition";
+
+		public override string Label => "Permanent".Translate().CapitalizeFirst() + ": " + gameCondition.label.CapitalizeFirst();
+
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
-			if (Widgets.ButtonText(listing.GetScenPartRect(this, ScenPart.RowHeight), this.gameCondition.LabelCap, true, true, true))
+			if (Widgets.ButtonText(listing.GetScenPartRect(this, ScenPart.RowHeight), gameCondition.LabelCap))
 			{
-				FloatMenuUtility.MakeMenu<GameConditionDef>(this.AllowedGameConditions(), (GameConditionDef d) => d.LabelCap, (GameConditionDef d) => delegate
+				FloatMenuUtility.MakeMenu(AllowedGameConditions(), (GameConditionDef d) => d.LabelCap, delegate(GameConditionDef d)
 				{
-					this.gameCondition = d;
+					ScenPart_PermaGameCondition scenPart_PermaGameCondition = this;
+					return delegate
+					{
+						scenPart_PermaGameCondition.gameCondition = d;
+					};
 				});
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<GameConditionDef>(ref this.gameCondition, "gameCondition");
+			Scribe_Defs.Look(ref gameCondition, "gameCondition");
 		}
 
-		
 		public override void Randomize()
 		{
-			this.gameCondition = this.AllowedGameConditions().RandomElement<GameConditionDef>();
+			gameCondition = AllowedGameConditions().RandomElement();
 		}
 
-		
 		private IEnumerable<GameConditionDef> AllowedGameConditions()
 		{
-			return from d in DefDatabase<GameConditionDef>.AllDefs
-			where d.canBePermanent
-			select d;
+			return DefDatabase<GameConditionDef>.AllDefs.Where((GameConditionDef d) => d.canBePermanent);
 		}
 
-		
 		public override string Summary(Scenario scen)
 		{
 			return ScenSummaryList.SummaryWithList(scen, "PermaGameCondition", "ScenPart_PermaGameCondition".Translate());
 		}
 
-		
 		public override IEnumerable<string> GetSummaryListEntries(string tag)
 		{
 			if (tag == "PermaGameCondition")
 			{
-				yield return this.gameCondition.LabelCap + ": " + this.gameCondition.description.CapitalizeFirst();
+				yield return gameCondition.LabelCap + ": " + gameCondition.description.CapitalizeFirst();
 			}
-			yield break;
 		}
 
-		
 		public override void GenerateIntoMap(Map map)
 		{
-			GameCondition cond = GameConditionMaker.MakeConditionPermanent(this.gameCondition);
+			GameCondition cond = GameConditionMaker.MakeConditionPermanent(gameCondition);
 			map.gameConditionManager.RegisterCondition(cond);
 		}
 
-		
 		public override bool CanCoexistWith(ScenPart other)
 		{
-			if (this.gameCondition == null)
+			if (gameCondition == null)
 			{
 				return true;
 			}
 			ScenPart_PermaGameCondition scenPart_PermaGameCondition = other as ScenPart_PermaGameCondition;
-			return scenPart_PermaGameCondition == null || this.gameCondition.CanCoexistWith(scenPart_PermaGameCondition.gameCondition);
+			if (scenPart_PermaGameCondition != null && !gameCondition.CanCoexistWith(scenPart_PermaGameCondition.gameCondition))
+			{
+				return false;
+			}
+			return true;
 		}
-
-		
-		private GameConditionDef gameCondition;
-
-		
-		public const string PermaGameConditionTag = "PermaGameCondition";
 	}
 }

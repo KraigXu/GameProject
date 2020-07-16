@@ -1,133 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_Alert : QuestPartActivable
 	{
-		
-		
+		public string label;
+
+		public string explanation;
+
+		public LookTargets lookTargets;
+
+		public bool critical;
+
+		public bool getLookTargetsFromSignal;
+
+		private string resolvedLabel;
+
+		private string resolvedExplanation;
+
+		private LookTargets resolvedLookTargets;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-			
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				GlobalTargetInfo globalTargetInfo2 = this.lookTargets.TryGetPrimaryTarget();
-				if (globalTargetInfo2.IsValid)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return globalTargetInfo2;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				GlobalTargetInfo globalTargetInfo = lookTargets.TryGetPrimaryTarget();
+				if (globalTargetInfo.IsValid)
+				{
+					yield return globalTargetInfo;
+				}
 			}
 		}
 
-		
-		
-		public override string AlertLabel
-		{
-			get
-			{
-				return this.resolvedLabel;
-			}
-		}
+		public override string AlertLabel => resolvedLabel;
 
-		
-		
-		public override string AlertExplanation
-		{
-			get
-			{
-				return this.resolvedExplanation;
-			}
-		}
+		public override string AlertExplanation => resolvedExplanation;
 
-		
-		
-		public override bool AlertCritical
-		{
-			get
-			{
-				return this.critical;
-			}
-		}
+		public override bool AlertCritical => critical;
 
-		
-		
 		public override AlertReport AlertReport
 		{
 			get
 			{
-				if (this.resolvedLookTargets.IsValid())
+				if (resolvedLookTargets.IsValid())
 				{
-					return AlertReport.CulpritsAre(this.resolvedLookTargets.targets);
+					return AlertReport.CulpritsAre(resolvedLookTargets.targets);
 				}
 				return AlertReport.Active;
 			}
 		}
 
-		
 		protected override void Enable(SignalArgs receivedArgs)
 		{
 			base.Enable(receivedArgs);
-			this.resolvedLabel = receivedArgs.GetFormattedText(this.label);
-			this.resolvedExplanation = receivedArgs.GetFormattedText(this.explanation);
-			this.resolvedLookTargets = this.lookTargets;
-			if (this.getLookTargetsFromSignal && !this.resolvedLookTargets.IsValid())
+			resolvedLabel = receivedArgs.GetFormattedText(label);
+			resolvedExplanation = receivedArgs.GetFormattedText(explanation);
+			resolvedLookTargets = lookTargets;
+			if (getLookTargetsFromSignal && !resolvedLookTargets.IsValid())
 			{
-				SignalArgsUtility.TryGetLookTargets(receivedArgs, "SUBJECT", out this.resolvedLookTargets);
+				SignalArgsUtility.TryGetLookTargets(receivedArgs, "SUBJECT", out resolvedLookTargets);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<string>(ref this.label, "label", null, false);
-			Scribe_Values.Look<string>(ref this.explanation, "explanation", null, false);
-			Scribe_Deep.Look<LookTargets>(ref this.lookTargets, "lookTargets", Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.critical, "critical", false, false);
-			Scribe_Values.Look<bool>(ref this.getLookTargetsFromSignal, "getLookTargetsFromSignal", false, false);
-			Scribe_Values.Look<string>(ref this.resolvedLabel, "resolvedLabel", null, false);
-			Scribe_Values.Look<string>(ref this.resolvedExplanation, "resolvedExplanation", null, false);
-			Scribe_Deep.Look<LookTargets>(ref this.resolvedLookTargets, "resolvedLookTargets", Array.Empty<object>());
+			Scribe_Values.Look(ref label, "label");
+			Scribe_Values.Look(ref explanation, "explanation");
+			Scribe_Deep.Look(ref lookTargets, "lookTargets");
+			Scribe_Values.Look(ref critical, "critical", defaultValue: false);
+			Scribe_Values.Look(ref getLookTargetsFromSignal, "getLookTargetsFromSignal", defaultValue: false);
+			Scribe_Values.Look(ref resolvedLabel, "resolvedLabel");
+			Scribe_Values.Look(ref resolvedExplanation, "resolvedExplanation");
+			Scribe_Deep.Look(ref resolvedLookTargets, "resolvedLookTargets");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.label = "Dev: Test";
-			this.explanation = "Test text";
+			label = "Dev: Test";
+			explanation = "Test text";
 		}
-
-		
-		public string label;
-
-		
-		public string explanation;
-
-		
-		public LookTargets lookTargets;
-
-		
-		public bool critical;
-
-		
-		public bool getLookTargetsFromSignal;
-
-		
-		private string resolvedLabel;
-
-		
-		private string resolvedExplanation;
-
-		
-		private LookTargets resolvedLookTargets;
 	}
 }

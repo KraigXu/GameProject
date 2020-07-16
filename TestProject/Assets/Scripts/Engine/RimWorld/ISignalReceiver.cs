@@ -1,11 +1,7 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public interface ISignalReceiver
 	{
-		
-	  	void Notify_SignalReceived(Signal signal);
+		void Notify_SignalReceived(Signal signal);
 	}
 }

@@ -1,11 +1,11 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public static class RoofCollapseUtility
 	{
-		
+		public const float RoofMaxSupportDistance = 6.9f;
+
+		public static readonly int RoofSupportRadialCellsCount = GenRadial.NumCellsInRadius(6.9f);
+
 		public static bool WithinRangeOfRoofHolder(IntVec3 c, Map map, bool assumeNonNoRoofCellsAreRoofed = false)
 		{
 			bool connected = false;
@@ -25,37 +25,36 @@ namespace Verse
 					}
 				}
 				return false;
-			}, int.MaxValue, false, null);
+			});
 			return connected;
 		}
 
-		
 		public static bool ConnectedToRoofHolder(IntVec3 c, Map map, bool assumeRoofAtRoot)
 		{
 			bool connected = false;
-			map.floodFiller.FloodFill(c, (IntVec3 x) => (x.Roofed(map) || (x == c & assumeRoofAtRoot)) && !connected, delegate(IntVec3 x)
+			map.floodFiller.FloodFill(c, (IntVec3 x) => (x.Roofed(map) || ((x == c) & assumeRoofAtRoot)) && !connected, delegate(IntVec3 x)
 			{
-				for (int i = 0; i < 5; i++)
+				int num = 0;
+				while (true)
 				{
-					IntVec3 c2 = x + GenAdj.CardinalDirectionsAndInside[i];
+					if (num >= 5)
+					{
+						return;
+					}
+					IntVec3 c2 = x + GenAdj.CardinalDirectionsAndInside[num];
 					if (c2.InBounds(map))
 					{
 						Building edifice = c2.GetEdifice(map);
 						if (edifice != null && edifice.def.holdsRoof)
 						{
-							connected = true;
-							return;
+							break;
 						}
 					}
+					num++;
 				}
-			}, int.MaxValue, false, null);
+				connected = true;
+			});
 			return connected;
 		}
-
-		
-		public const float RoofMaxSupportDistance = 6.9f;
-
-		
-		public static readonly int RoofSupportRadialCellsCount = GenRadial.NumCellsInRadius(6.9f);
 	}
 }

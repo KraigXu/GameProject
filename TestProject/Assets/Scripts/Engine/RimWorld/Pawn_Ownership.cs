@@ -1,62 +1,62 @@
-﻿using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_Ownership : IExposable
 	{
-		
-		
-		
+		private Pawn pawn;
+
+		private Building_Bed intOwnedBed;
+
 		public Building_Bed OwnedBed
 		{
 			get
 			{
-				return this.intOwnedBed;
+				return intOwnedBed;
 			}
 			private set
 			{
-				if (this.intOwnedBed != value)
+				if (intOwnedBed != value)
 				{
-					this.intOwnedBed = value;
-					ThoughtUtility.RemovePositiveBedroomThoughts(this.pawn);
+					intOwnedBed = value;
+					ThoughtUtility.RemovePositiveBedroomThoughts(pawn);
 				}
 			}
 		}
 
-		
-		
-		
-		public Building_Grave AssignedGrave { get; private set; }
+		public Building_Grave AssignedGrave
+		{
+			get;
+			private set;
+		}
 
-		
-		
-		
-		public Building_Throne AssignedThrone { get; private set; }
+		public Building_Throne AssignedThrone
+		{
+			get;
+			private set;
+		}
 
-		
-		
-		
-		public Building AssignedMeditationSpot { get; private set; }
+		public Building AssignedMeditationSpot
+		{
+			get;
+			private set;
+		}
 
-		
-		
 		public Room OwnedRoom
 		{
 			get
 			{
-				if (this.OwnedBed == null)
+				if (OwnedBed == null)
 				{
 					return null;
 				}
-				Room room = this.OwnedBed.GetRoom(RegionType.Set_Passable);
+				Room room = OwnedBed.GetRoom();
 				if (room == null)
 				{
 					return null;
 				}
-				if (room.Owners.Contains(this.pawn))
+				if (room.Owners.Contains(pawn))
 				{
 					return room;
 				}
@@ -64,204 +64,187 @@ namespace RimWorld
 			}
 		}
 
-		
 		public Pawn_Ownership(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Building_Grave assignedGrave = this.AssignedGrave;
-			Building_Throne assignedThrone = this.AssignedThrone;
-			Building assignedMeditationSpot = this.AssignedMeditationSpot;
-			Scribe_References.Look<Building_Bed>(ref this.intOwnedBed, "ownedBed", false);
-			Scribe_References.Look<Building>(ref assignedMeditationSpot, "assignedMeditationSpot", false);
-			Scribe_References.Look<Building_Grave>(ref assignedGrave, "assignedGrave", false);
-			Scribe_References.Look<Building_Throne>(ref assignedThrone, "assignedThrone", false);
-			this.AssignedGrave = assignedGrave;
-			this.AssignedThrone = assignedThrone;
-			this.AssignedMeditationSpot = assignedMeditationSpot;
-			if (Scribe.mode == LoadSaveMode.PostLoadInit)
+			Building_Grave refee = AssignedGrave;
+			Building_Throne refee2 = AssignedThrone;
+			Building refee3 = AssignedMeditationSpot;
+			Scribe_References.Look(ref intOwnedBed, "ownedBed");
+			Scribe_References.Look(ref refee3, "assignedMeditationSpot");
+			Scribe_References.Look(ref refee, "assignedGrave");
+			Scribe_References.Look(ref refee2, "assignedThrone");
+			AssignedGrave = refee;
+			AssignedThrone = refee2;
+			AssignedMeditationSpot = refee3;
+			if (Scribe.mode != LoadSaveMode.PostLoadInit)
 			{
-				if (this.intOwnedBed != null)
+				return;
+			}
+			if (intOwnedBed != null)
+			{
+				CompAssignableToPawn compAssignableToPawn = intOwnedBed.TryGetComp<CompAssignableToPawn>();
+				if (compAssignableToPawn != null && !compAssignableToPawn.AssignedPawns.Contains(pawn))
 				{
-					CompAssignableToPawn compAssignableToPawn = this.intOwnedBed.TryGetComp<CompAssignableToPawn>();
-					if (compAssignableToPawn != null && !compAssignableToPawn.AssignedPawns.Contains(this.pawn))
-					{
-						Building_Bed newBed = this.intOwnedBed;
-						this.UnclaimBed();
-						this.ClaimBedIfNonMedical(newBed);
-					}
+					Building_Bed newBed = intOwnedBed;
+					UnclaimBed();
+					ClaimBedIfNonMedical(newBed);
 				}
-				if (this.AssignedGrave != null)
+			}
+			if (AssignedGrave != null)
+			{
+				CompAssignableToPawn compAssignableToPawn2 = AssignedGrave.TryGetComp<CompAssignableToPawn>();
+				if (compAssignableToPawn2 != null && !compAssignableToPawn2.AssignedPawns.Contains(pawn))
 				{
-					CompAssignableToPawn compAssignableToPawn2 = this.AssignedGrave.TryGetComp<CompAssignableToPawn>();
-					if (compAssignableToPawn2 != null && !compAssignableToPawn2.AssignedPawns.Contains(this.pawn))
-					{
-						Building_Grave assignedGrave2 = this.AssignedGrave;
-						this.UnclaimGrave();
-						this.ClaimGrave(assignedGrave2);
-					}
+					Building_Grave assignedGrave = AssignedGrave;
+					UnclaimGrave();
+					ClaimGrave(assignedGrave);
 				}
-				if (this.AssignedThrone != null)
+			}
+			if (AssignedThrone != null)
+			{
+				CompAssignableToPawn compAssignableToPawn3 = AssignedThrone.TryGetComp<CompAssignableToPawn>();
+				if (compAssignableToPawn3 != null && !compAssignableToPawn3.AssignedPawns.Contains(pawn))
 				{
-					CompAssignableToPawn compAssignableToPawn3 = this.AssignedThrone.TryGetComp<CompAssignableToPawn>();
-					if (compAssignableToPawn3 != null && !compAssignableToPawn3.AssignedPawns.Contains(this.pawn))
-					{
-						Building_Throne assignedThrone2 = this.AssignedThrone;
-						this.UnclaimThrone();
-						this.ClaimThrone(assignedThrone2);
-					}
+					Building_Throne assignedThrone = AssignedThrone;
+					UnclaimThrone();
+					ClaimThrone(assignedThrone);
 				}
 			}
 		}
 
-		
 		public bool ClaimBedIfNonMedical(Building_Bed newBed)
 		{
-			if (newBed.OwnersForReading.Contains(this.pawn) || newBed.Medical)
+			if (newBed.OwnersForReading.Contains(pawn) || newBed.Medical)
 			{
 				return false;
 			}
-			this.UnclaimBed();
+			UnclaimBed();
 			if (newBed.OwnersForReading.Count == newBed.SleepingSlotsCount)
 			{
 				newBed.OwnersForReading[newBed.OwnersForReading.Count - 1].ownership.UnclaimBed();
 			}
-			newBed.CompAssignableToPawn.ForceAddPawn(this.pawn);
-			this.OwnedBed = newBed;
+			newBed.CompAssignableToPawn.ForceAddPawn(pawn);
+			OwnedBed = newBed;
 			if (newBed.Medical)
 			{
-				Log.Warning(this.pawn.LabelCap + " claimed medical bed.", false);
-				this.UnclaimBed();
+				Log.Warning(pawn.LabelCap + " claimed medical bed.");
+				UnclaimBed();
 			}
 			return true;
 		}
 
-		
 		public bool UnclaimBed()
 		{
-			if (this.OwnedBed == null)
+			if (OwnedBed == null)
 			{
 				return false;
 			}
-			this.OwnedBed.CompAssignableToPawn.ForceRemovePawn(this.pawn);
-			this.OwnedBed = null;
+			OwnedBed.CompAssignableToPawn.ForceRemovePawn(pawn);
+			OwnedBed = null;
 			return true;
 		}
 
-		
 		public bool ClaimGrave(Building_Grave newGrave)
 		{
-			if (newGrave.AssignedPawn == this.pawn)
+			if (newGrave.AssignedPawn == pawn)
 			{
 				return false;
 			}
-			this.UnclaimGrave();
+			UnclaimGrave();
 			if (newGrave.AssignedPawn != null)
 			{
 				newGrave.AssignedPawn.ownership.UnclaimGrave();
 			}
-			newGrave.CompAssignableToPawn.ForceAddPawn(this.pawn);
+			newGrave.CompAssignableToPawn.ForceAddPawn(pawn);
 			newGrave.GetStoreSettings().Priority = StoragePriority.Critical;
-			this.AssignedGrave = newGrave;
+			AssignedGrave = newGrave;
 			return true;
 		}
 
-		
 		public bool UnclaimGrave()
 		{
-			if (this.AssignedGrave == null)
+			if (AssignedGrave == null)
 			{
 				return false;
 			}
-			this.AssignedGrave.CompAssignableToPawn.ForceRemovePawn(this.pawn);
-			this.AssignedGrave.GetStoreSettings().Priority = StoragePriority.Important;
-			this.AssignedGrave = null;
+			AssignedGrave.CompAssignableToPawn.ForceRemovePawn(pawn);
+			AssignedGrave.GetStoreSettings().Priority = StoragePriority.Important;
+			AssignedGrave = null;
 			return true;
 		}
 
-		
 		public bool ClaimThrone(Building_Throne newThrone)
 		{
-			if (newThrone.AssignedPawn == this.pawn)
+			if (newThrone.AssignedPawn == pawn)
 			{
 				return false;
 			}
-			this.UnclaimThrone();
+			UnclaimThrone();
 			if (newThrone.AssignedPawn != null)
 			{
 				newThrone.AssignedPawn.ownership.UnclaimThrone();
 			}
-			newThrone.CompAssignableToPawn.ForceAddPawn(this.pawn);
-			this.AssignedThrone = newThrone;
+			newThrone.CompAssignableToPawn.ForceAddPawn(pawn);
+			AssignedThrone = newThrone;
 			return true;
 		}
 
-		
 		public bool UnclaimThrone()
 		{
-			if (this.AssignedThrone == null)
+			if (AssignedThrone == null)
 			{
 				return false;
 			}
-			this.AssignedThrone.CompAssignableToPawn.ForceRemovePawn(this.pawn);
-			this.AssignedThrone = null;
+			AssignedThrone.CompAssignableToPawn.ForceRemovePawn(pawn);
+			AssignedThrone = null;
 			return true;
 		}
 
-		
 		public bool ClaimMeditationSpot(Building newSpot)
 		{
-			if (newSpot.GetAssignedPawn() == this.pawn)
+			if (newSpot.GetAssignedPawn() == pawn)
 			{
 				return false;
 			}
-			this.UnclaimMeditationSpot();
+			UnclaimMeditationSpot();
 			if (newSpot.GetAssignedPawn() != null)
 			{
 				newSpot.GetAssignedPawn().ownership.UnclaimMeditationSpot();
 			}
-			newSpot.TryGetComp<CompAssignableToPawn>().ForceAddPawn(this.pawn);
-			this.AssignedMeditationSpot = newSpot;
+			newSpot.TryGetComp<CompAssignableToPawn>().ForceAddPawn(pawn);
+			AssignedMeditationSpot = newSpot;
 			return true;
 		}
 
-		
 		public bool UnclaimMeditationSpot()
 		{
-			if (this.AssignedMeditationSpot == null)
+			if (AssignedMeditationSpot == null)
 			{
 				return false;
 			}
-			this.AssignedMeditationSpot.TryGetComp<CompAssignableToPawn>().ForceRemovePawn(this.pawn);
-			this.AssignedMeditationSpot = null;
+			AssignedMeditationSpot.TryGetComp<CompAssignableToPawn>().ForceRemovePawn(pawn);
+			AssignedMeditationSpot = null;
 			return true;
 		}
 
-		
 		public void UnclaimAll()
 		{
-			this.UnclaimBed();
-			this.UnclaimGrave();
-			this.UnclaimThrone();
+			UnclaimBed();
+			UnclaimGrave();
+			UnclaimThrone();
 		}
 
-		
 		public void Notify_ChangedGuestStatus()
 		{
-			if (this.OwnedBed != null && ((this.OwnedBed.ForPrisoners && !this.pawn.IsPrisoner) || (!this.OwnedBed.ForPrisoners && this.pawn.IsPrisoner)))
+			if (OwnedBed != null && ((OwnedBed.ForPrisoners && !pawn.IsPrisoner) || (!OwnedBed.ForPrisoners && pawn.IsPrisoner)))
 			{
-				this.UnclaimBed();
+				UnclaimBed();
 			}
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private Building_Bed intOwnedBed;
 	}
 }

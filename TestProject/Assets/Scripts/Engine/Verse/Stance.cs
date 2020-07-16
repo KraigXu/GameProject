@@ -1,46 +1,23 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public abstract class Stance : IExposable
 	{
-		
-		
-		public virtual bool StanceBusy
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public Pawn_StanceTracker stanceTracker;
 
-		
-		
-		protected Pawn Pawn
-		{
-			get
-			{
-				return this.stanceTracker.pawn;
-			}
-		}
+		public virtual bool StanceBusy => false;
 
-		
+		protected Pawn Pawn => stanceTracker.pawn;
+
 		public virtual void StanceTick()
 		{
 		}
 
-		
 		public virtual void StanceDraw()
 		{
 		}
 
-		
 		public virtual void ExposeData()
 		{
 		}
-
-		
-		public Pawn_StanceTracker stanceTracker;
 	}
 }

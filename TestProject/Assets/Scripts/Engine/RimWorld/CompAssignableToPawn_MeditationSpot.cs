@@ -1,30 +1,23 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompAssignableToPawn_MeditationSpot : CompAssignableToPawn
 	{
-		
-		
 		public override IEnumerable<Pawn> AssigningCandidates
 		{
 			get
 			{
-				if (!this.parent.Spawned)
+				if (!parent.Spawned)
 				{
 					return Enumerable.Empty<Pawn>();
 				}
-				return from p in this.parent.Map.mapPawns.FreeColonists
-				orderby this.CanAssignTo(p).Accepted descending
-				select p;
+				return parent.Map.mapPawns.FreeColonists.OrderByDescending((Pawn p) => CanAssignTo(p).Accepted);
 			}
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			if (base.AssignedPawnsForReading.Count == 0)
@@ -38,31 +31,27 @@ namespace RimWorld
 			return "";
 		}
 
-		
 		public override bool AssignedAnything(Pawn pawn)
 		{
 			return pawn.ownership.AssignedMeditationSpot != null;
 		}
 
-		
 		public override void TryAssignPawn(Pawn pawn)
 		{
-			pawn.ownership.ClaimMeditationSpot((Building)this.parent);
+			pawn.ownership.ClaimMeditationSpot((Building)parent);
 		}
 
-		
 		public override void TryUnassignPawn(Pawn pawn, bool sort = true)
 		{
 			pawn.ownership.UnclaimMeditationSpot();
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.assignedPawns.RemoveAll((Pawn x) => x.ownership.AssignedMeditationSpot != this.parent) > 0)
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && assignedPawns.RemoveAll((Pawn x) => x.ownership.AssignedMeditationSpot != parent) > 0)
 			{
-				Log.Warning(this.parent.ToStringSafe<ThingWithComps>() + " had pawns assigned that don't have it as an assigned meditation spot. Removing.", false);
+				Log.Warning(parent.ToStringSafe() + " had pawns assigned that don't have it as an assigned meditation spot. Removing.");
 			}
 		}
 	}

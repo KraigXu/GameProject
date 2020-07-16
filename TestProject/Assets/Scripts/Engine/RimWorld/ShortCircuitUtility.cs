@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,71 +5,58 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ShortCircuitUtility
 	{
-		
+		private static Dictionary<PowerNet, bool> tmpPowerNetHasActivePowerSource = new Dictionary<PowerNet, bool>();
+
+		private static List<IntVec3> tmpCells = new List<IntVec3>();
+
 		public static IEnumerable<Building> GetShortCircuitablePowerConduits(Map map)
 		{
-			ShortCircuitUtility.tmpPowerNetHasActivePowerSource.Clear();
+			tmpPowerNetHasActivePowerSource.Clear();
 			try
 			{
 				List<Thing> conduits = map.listerThings.ThingsOfDef(ThingDefOf.PowerConduit);
-				int num;
-				for (int i = 0; i < conduits.Count; i = num + 1)
+				for (int i = 0; i < conduits.Count; i++)
 				{
 					Building building = (Building)conduits[i];
 					CompPower powerComp = building.PowerComp;
 					if (powerComp != null)
 					{
-						bool hasActivePowerSource;
-						if (!ShortCircuitUtility.tmpPowerNetHasActivePowerSource.TryGetValue(powerComp.PowerNet, out hasActivePowerSource))
+						if (!tmpPowerNetHasActivePowerSource.TryGetValue(powerComp.PowerNet, out bool value))
 						{
-							hasActivePowerSource = powerComp.PowerNet.HasActivePowerSource;
-							ShortCircuitUtility.tmpPowerNetHasActivePowerSource.Add(powerComp.PowerNet, hasActivePowerSource);
+							value = powerComp.PowerNet.HasActivePowerSource;
+							tmpPowerNetHasActivePowerSource.Add(powerComp.PowerNet, value);
 						}
-						if (hasActivePowerSource)
+						if (value)
 						{
 							yield return building;
 						}
 					}
-					num = i;
 				}
-				conduits = null;
 			}
 			finally
 			{
-				ShortCircuitUtility.tmpPowerNetHasActivePowerSource.Clear();
+				tmpPowerNetHasActivePowerSource.Clear();
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public static void DoShortCircuit(Building culprit)
 		{
 			PowerNet powerNet = culprit.PowerComp.PowerNet;
 			Map map = culprit.Map;
-			float num = 0f;
-			float num2 = 0f;
+			float totalEnergy = 0f;
+			float explosionRadius = 0f;
 			bool flag = false;
 			if (powerNet.batteryComps.Any((CompPowerBattery x) => x.StoredEnergy > 20f))
 			{
-				ShortCircuitUtility.DrainBatteriesAndCauseExplosion(powerNet, culprit, out num, out num2);
+				DrainBatteriesAndCauseExplosion(powerNet, culprit, out totalEnergy, out explosionRadius);
 			}
 			else
 			{
-				flag = ShortCircuitUtility.TryStartFireNear(culprit);
+				flag = TryStartFireNear(culprit);
 			}
-			string value;
-			if (culprit.def == ThingDefOf.PowerConduit)
-			{
-				value = "AnElectricalConduit".Translate();
-			}
-			else
-			{
-				value = Find.ActiveLanguageWorker.WithIndefiniteArticlePostProcessed(culprit.Label, false, false);
-			}
+			string value = (culprit.def != ThingDefOf.PowerConduit) ? Find.ActiveLanguageWorker.WithIndefiniteArticlePostProcessed(culprit.Label) : ((string)"AnElectricalConduit".Translate());
 			StringBuilder stringBuilder = new StringBuilder();
 			if (flag)
 			{
@@ -80,50 +66,48 @@ namespace RimWorld
 			{
 				stringBuilder.Append("ShortCircuit".Translate(value));
 			}
-			if (num > 0f)
+			if (totalEnergy > 0f)
 			{
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine();
-				stringBuilder.Append("ShortCircuitDischargedEnergy".Translate(num.ToString("F0")));
+				stringBuilder.Append("ShortCircuitDischargedEnergy".Translate(totalEnergy.ToString("F0")));
 			}
-			if (num2 > 5f)
+			if (explosionRadius > 5f)
 			{
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine();
 				stringBuilder.Append("ShortCircuitWasLarge".Translate());
 			}
-			if (num2 > 8f)
+			if (explosionRadius > 8f)
 			{
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine();
 				stringBuilder.Append("ShortCircuitWasHuge".Translate());
 			}
-			Find.LetterStack.ReceiveLetter("LetterLabelShortCircuit".Translate(), stringBuilder.ToString(), LetterDefOf.NegativeEvent, new TargetInfo(culprit.Position, map, false), null, null, null, null);
+			Find.LetterStack.ReceiveLetter("LetterLabelShortCircuit".Translate(), stringBuilder.ToString(), LetterDefOf.NegativeEvent, new TargetInfo(culprit.Position, map));
 		}
 
-		
 		public static bool TryShortCircuitInRain(Thing thing)
 		{
 			CompPowerTrader compPowerTrader = thing.TryGetComp<CompPowerTrader>();
 			if ((compPowerTrader != null && compPowerTrader.PowerOn && compPowerTrader.Props.shortCircuitInRain) || (thing.TryGetComp<CompPowerBattery>() != null && thing.TryGetComp<CompPowerBattery>().StoredEnergy > 100f))
 			{
 				TaggedString taggedString = "ShortCircuitRain".Translate(thing.Label, thing);
-				TargetInfo target = new TargetInfo(thing.Position, thing.Map, false);
+				TargetInfo target = new TargetInfo(thing.Position, thing.Map);
 				if (thing.Faction == Faction.OfPlayer)
 				{
-					Find.LetterStack.ReceiveLetter("LetterLabelShortCircuit".Translate(), taggedString, LetterDefOf.NegativeEvent, target, null, null, null, null);
+					Find.LetterStack.ReceiveLetter("LetterLabelShortCircuit".Translate(), taggedString, LetterDefOf.NegativeEvent, target);
 				}
 				else
 				{
-					Messages.Message(taggedString, target, MessageTypeDefOf.NeutralEvent, true);
+					Messages.Message(taggedString, target, MessageTypeDefOf.NeutralEvent);
 				}
-				GenExplosion.DoExplosion(thing.OccupiedRect().RandomCell, thing.Map, 1.9f, DamageDefOf.Flame, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
+				GenExplosion.DoExplosion(thing.OccupiedRect().RandomCell, thing.Map, 1.9f, DamageDefOf.Flame, null);
 				return true;
 			}
 			return false;
 		}
 
-		
 		private static void DrainBatteriesAndCauseExplosion(PowerNet net, Building culprit, out float totalEnergy, out float explosionRadius)
 		{
 			totalEnergy = 0f;
@@ -135,34 +119,31 @@ namespace RimWorld
 			}
 			explosionRadius = Mathf.Sqrt(totalEnergy) * 0.05f;
 			explosionRadius = Mathf.Clamp(explosionRadius, 1.5f, 14.9f);
-			GenExplosion.DoExplosion(culprit.Position, net.Map, explosionRadius, DamageDefOf.Flame, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
+			GenExplosion.DoExplosion(culprit.Position, net.Map, explosionRadius, DamageDefOf.Flame, null);
 			if (explosionRadius > 3.5f)
 			{
-				GenExplosion.DoExplosion(culprit.Position, net.Map, explosionRadius * 0.3f, DamageDefOf.Bomb, null, -1, -1f, null, null, null, null, null, 0f, 1, false, null, 0f, 1, 0f, false, null, null);
+				GenExplosion.DoExplosion(culprit.Position, net.Map, explosionRadius * 0.3f, DamageDefOf.Bomb, null);
 			}
 		}
 
-		
 		private static bool TryStartFireNear(Building b)
 		{
-			ShortCircuitUtility.tmpCells.Clear();
+			tmpCells.Clear();
 			int num = GenRadial.NumCellsInRadius(3f);
 			CellRect startRect = b.OccupiedRect();
 			for (int i = 0; i < num; i++)
 			{
 				IntVec3 intVec = b.Position + GenRadial.RadialPattern[i];
-				if (GenSight.LineOfSight(b.Position, intVec, b.Map, startRect, CellRect.SingleCell(intVec), null) && FireUtility.ChanceToStartFireIn(intVec, b.Map) > 0f)
+				if (GenSight.LineOfSight(b.Position, intVec, b.Map, startRect, CellRect.SingleCell(intVec)) && FireUtility.ChanceToStartFireIn(intVec, b.Map) > 0f)
 				{
-					ShortCircuitUtility.tmpCells.Add(intVec);
+					tmpCells.Add(intVec);
 				}
 			}
-			return ShortCircuitUtility.tmpCells.Any<IntVec3>() && FireUtility.TryStartFireIn(ShortCircuitUtility.tmpCells.RandomElement<IntVec3>(), b.Map, Rand.Range(0.1f, 1.75f));
+			if (tmpCells.Any())
+			{
+				return FireUtility.TryStartFireIn(tmpCells.RandomElement(), b.Map, Rand.Range(0.1f, 1.75f));
+			}
+			return false;
 		}
-
-		
-		private static Dictionary<PowerNet, bool> tmpPowerNetHasActivePowerSource = new Dictionary<PowerNet, bool>();
-
-		
-		private static List<IntVec3> tmpCells = new List<IntVec3>();
 	}
 }

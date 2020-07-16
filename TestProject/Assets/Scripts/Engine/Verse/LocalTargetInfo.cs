@@ -1,259 +1,213 @@
-﻿using System;
 using RimWorld.Planet;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct LocalTargetInfo : IEquatable<LocalTargetInfo>
 	{
-		
-		
+		private Thing thingInt;
+
+		private IntVec3 cellInt;
+
 		public bool IsValid
 		{
 			get
 			{
-				return this.thingInt != null || this.cellInt.IsValid;
+				if (thingInt == null)
+				{
+					return cellInt.IsValid;
+				}
+				return true;
 			}
 		}
 
-		
-		
-		public bool HasThing
-		{
-			get
-			{
-				return this.Thing != null;
-			}
-		}
+		public bool HasThing => Thing != null;
 
-		
-		
-		public Thing Thing
-		{
-			get
-			{
-				return this.thingInt;
-			}
-		}
+		public Thing Thing => thingInt;
 
-		
-		
-		public Pawn Pawn
-		{
-			get
-			{
-				return this.Thing as Pawn;
-			}
-		}
+		public Pawn Pawn => Thing as Pawn;
 
-		
-		
 		public bool ThingDestroyed
 		{
 			get
 			{
-				return this.Thing != null && this.Thing.Destroyed;
+				if (Thing != null)
+				{
+					return Thing.Destroyed;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public static LocalTargetInfo Invalid
-		{
-			get
-			{
-				return new LocalTargetInfo(IntVec3.Invalid);
-			}
-		}
+		public static LocalTargetInfo Invalid => new LocalTargetInfo(IntVec3.Invalid);
 
-		
-		
 		public string Label
 		{
 			get
 			{
-				if (this.thingInt != null)
+				if (thingInt != null)
 				{
-					return this.thingInt.LabelShort;
+					return thingInt.LabelShort;
 				}
 				return "Location".Translate();
 			}
 		}
 
-		
-		
 		public IntVec3 Cell
 		{
 			get
 			{
-				if (this.thingInt != null)
+				if (thingInt != null)
 				{
-					return this.thingInt.PositionHeld;
+					return thingInt.PositionHeld;
 				}
-				return this.cellInt;
+				return cellInt;
 			}
 		}
 
-		
-		
 		public Vector3 CenterVector3
 		{
 			get
 			{
-				if (this.thingInt != null)
+				if (thingInt != null)
 				{
-					if (this.thingInt.Spawned)
+					if (thingInt.Spawned)
 					{
-						return this.thingInt.DrawPos;
+						return thingInt.DrawPos;
 					}
-					if (this.thingInt.SpawnedOrAnyParentSpawned)
+					if (thingInt.SpawnedOrAnyParentSpawned)
 					{
-						return this.thingInt.PositionHeld.ToVector3Shifted();
+						return thingInt.PositionHeld.ToVector3Shifted();
 					}
-					return this.thingInt.Position.ToVector3Shifted();
+					return thingInt.Position.ToVector3Shifted();
 				}
-				else
+				if (cellInt.IsValid)
 				{
-					if (this.cellInt.IsValid)
-					{
-						return this.cellInt.ToVector3Shifted();
-					}
-					return default(Vector3);
+					return cellInt.ToVector3Shifted();
 				}
+				return default(Vector3);
 			}
 		}
 
-		
 		public LocalTargetInfo(Thing thing)
 		{
-			this.thingInt = thing;
-			this.cellInt = IntVec3.Invalid;
+			thingInt = thing;
+			cellInt = IntVec3.Invalid;
 		}
 
-		
 		public LocalTargetInfo(IntVec3 cell)
 		{
-			this.thingInt = null;
-			this.cellInt = cell;
+			thingInt = null;
+			cellInt = cell;
 		}
 
-		
 		public static implicit operator LocalTargetInfo(Thing t)
 		{
 			return new LocalTargetInfo(t);
 		}
 
-		
 		public static implicit operator LocalTargetInfo(IntVec3 c)
 		{
 			return new LocalTargetInfo(c);
 		}
 
-		
 		public static explicit operator IntVec3(LocalTargetInfo targ)
 		{
 			if (targ.thingInt != null)
 			{
-				Log.ErrorOnce("Casted LocalTargetInfo to IntVec3 but it had Thing " + targ.thingInt, 6324165, false);
+				Log.ErrorOnce("Casted LocalTargetInfo to IntVec3 but it had Thing " + targ.thingInt, 6324165);
 			}
 			return targ.Cell;
 		}
 
-		
 		public static explicit operator Thing(LocalTargetInfo targ)
 		{
 			if (targ.cellInt.IsValid)
 			{
-				Log.ErrorOnce("Casted LocalTargetInfo to Thing but it had cell " + targ.cellInt, 631672, false);
+				Log.ErrorOnce("Casted LocalTargetInfo to Thing but it had cell " + targ.cellInt, 631672);
 			}
 			return targ.thingInt;
 		}
 
-		
 		public TargetInfo ToTargetInfo(Map map)
 		{
-			if (!this.IsValid)
+			if (!IsValid)
 			{
 				return TargetInfo.Invalid;
 			}
-			if (this.Thing != null)
+			if (Thing != null)
 			{
-				return new TargetInfo(this.Thing);
+				return new TargetInfo(Thing);
 			}
-			return new TargetInfo(this.Cell, map, false);
+			return new TargetInfo(Cell, map);
 		}
 
-		
 		public GlobalTargetInfo ToGlobalTargetInfo(Map map)
 		{
-			if (!this.IsValid)
+			if (!IsValid)
 			{
 				return GlobalTargetInfo.Invalid;
 			}
-			if (this.Thing != null)
+			if (Thing != null)
 			{
-				return new GlobalTargetInfo(this.Thing);
+				return new GlobalTargetInfo(Thing);
 			}
-			return new GlobalTargetInfo(this.Cell, map, false);
+			return new GlobalTargetInfo(Cell, map);
 		}
 
-		
 		public static bool operator ==(LocalTargetInfo a, LocalTargetInfo b)
 		{
 			if (a.Thing != null || b.Thing != null)
 			{
 				return a.Thing == b.Thing;
 			}
-			return (!a.cellInt.IsValid && !b.cellInt.IsValid) || a.cellInt == b.cellInt;
+			if (a.cellInt.IsValid || b.cellInt.IsValid)
+			{
+				return a.cellInt == b.cellInt;
+			}
+			return true;
 		}
 
-		
 		public static bool operator !=(LocalTargetInfo a, LocalTargetInfo b)
 		{
 			return !(a == b);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is LocalTargetInfo && this.Equals((LocalTargetInfo)obj);
+			if (!(obj is LocalTargetInfo))
+			{
+				return false;
+			}
+			return Equals((LocalTargetInfo)obj);
 		}
 
-		
 		public bool Equals(LocalTargetInfo other)
 		{
 			return this == other;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			if (this.thingInt != null)
+			if (thingInt != null)
 			{
-				return this.thingInt.GetHashCode();
+				return thingInt.GetHashCode();
 			}
-			return this.cellInt.GetHashCode();
+			return cellInt.GetHashCode();
 		}
 
-		
 		public override string ToString()
 		{
-			if (this.Thing != null)
+			if (Thing != null)
 			{
-				return this.Thing.GetUniqueLoadID();
+				return Thing.GetUniqueLoadID();
 			}
-			if (this.Cell.IsValid)
+			if (Cell.IsValid)
 			{
-				return this.Cell.ToString();
+				return Cell.ToString();
 			}
 			return "null";
 		}
-
-		
-		private Thing thingInt;
-
-		
-		private IntVec3 cellInt;
 	}
 }

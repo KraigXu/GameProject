@@ -1,42 +1,26 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_Slaughter : WorkGiver_Scanner
 	{
-		
+		public override PathEndMode PathEndMode => PathEndMode.OnCell;
+
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
-			foreach (Designation designation in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.Slaughter))
+			foreach (Designation item in pawn.Map.designationManager.SpawnedDesignationsOfDef(DesignationDefOf.Slaughter))
 			{
-				yield return designation.target.Thing;
-			}
-			IEnumerator<Designation> enumerator = null;
-			yield break;
-			yield break;
-		}
-
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.OnCell;
+				yield return item.target.Thing;
 			}
 		}
 
-		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			return !pawn.Map.designationManager.AnySpawnedDesignationOfDef(DesignationDefOf.Slaughter);
 		}
 
-		
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;
@@ -62,13 +46,12 @@ namespace RimWorld
 			}
 			if (pawn.WorkTagIsDisabled(WorkTags.Violent))
 			{
-				JobFailReason.Is("IsIncapableOfViolenceShort".Translate(pawn), null);
+				JobFailReason.Is("IsIncapableOfViolenceShort".Translate(pawn));
 				return false;
 			}
 			return true;
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			return JobMaker.MakeJob(JobDefOf.Slaughter, t);

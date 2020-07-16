@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomStatWorker_Cleanliness : RoomStatWorker
 	{
-		
 		public override float GetScore(Room room)
 		{
 			float num = 0f;
@@ -17,12 +14,12 @@ namespace RimWorld
 				Thing thing = containedAndAdjacentThings[i];
 				if (thing.def.category == ThingCategory.Building || thing.def.category == ThingCategory.Item || thing.def.category == ThingCategory.Filth || thing.def.category == ThingCategory.Plant)
 				{
-					num += (float)thing.stackCount * thing.GetStatValue(StatDefOf.Cleanliness, true);
+					num += (float)thing.stackCount * thing.GetStatValue(StatDefOf.Cleanliness);
 				}
 			}
-			foreach (IntVec3 c in room.Cells)
+			foreach (IntVec3 cell in room.Cells)
 			{
-				num += c.GetTerrain(room.Map).GetStatValueAbstract(StatDefOf.Cleanliness, null);
+				num += cell.GetTerrain(room.Map).GetStatValueAbstract(StatDefOf.Cleanliness);
 			}
 			return num / (float)room.CellCount;
 		}

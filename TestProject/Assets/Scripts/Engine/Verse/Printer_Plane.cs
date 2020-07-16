@@ -1,29 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class Printer_Plane
 	{
-		
+		private static Color32[] defaultColors = new Color32[4]
+		{
+			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
+			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
+			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
+			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue)
+		};
+
+		private static Vector2[] defaultUvs = new Vector2[4]
+		{
+			new Vector2(0f, 0f),
+			new Vector2(0f, 1f),
+			new Vector2(1f, 1f),
+			new Vector2(1f, 0f)
+		};
+
+		private static Vector2[] defaultUvsFlipped = new Vector2[4]
+		{
+			new Vector2(1f, 0f),
+			new Vector2(1f, 1f),
+			new Vector2(0f, 1f),
+			new Vector2(0f, 0f)
+		};
+
 		public static void PrintPlane(SectionLayer layer, Vector3 center, Vector2 size, Material mat, float rot = 0f, bool flipUv = false, Vector2[] uvs = null, Color32[] colors = null, float topVerticesAltitudeBias = 0.01f, float uvzPayload = 0f)
 		{
 			if (colors == null)
 			{
-				colors = Printer_Plane.defaultColors;
+				colors = defaultColors;
 			}
 			if (uvs == null)
 			{
-				if (!flipUv)
-				{
-					uvs = Printer_Plane.defaultUvs;
-				}
-				else
-				{
-					uvs = Printer_Plane.defaultUvsFlipped;
-				}
+				uvs = (flipUv ? defaultUvsFlipped : defaultUvs);
 			}
 			LayerSubMesh subMesh = layer.GetSubMesh(mat);
 			int count = subMesh.verts.Count;
@@ -33,7 +47,7 @@ namespace Verse
 			subMesh.verts.Add(new Vector3(0.5f * size.x, 0f, -0.5f * size.y));
 			if (rot != 0f)
 			{
-				float num = rot * 0.0174532924f;
+				float num = rot * ((float)Math.PI / 180f);
 				num *= -1f;
 				for (int i = 0; i < 4; i++)
 				{
@@ -48,9 +62,7 @@ namespace Verse
 			}
 			for (int j = 0; j < 4; j++)
 			{
-				List<Vector3> verts = subMesh.verts;
-				int index = count + j;
-				verts[index] += center;
+				subMesh.verts[count + j] += center;
 				subMesh.uvs.Add(new Vector3(uvs[j].x, uvs[j].y, uvzPayload));
 				subMesh.colors.Add(colors[j]);
 			}
@@ -61,32 +73,5 @@ namespace Verse
 			subMesh.tris.Add(count + 2);
 			subMesh.tris.Add(count + 3);
 		}
-
-		
-		private static Color32[] defaultColors = new Color32[]
-		{
-			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
-			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
-			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue),
-			new Color32(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue)
-		};
-
-		
-		private static Vector2[] defaultUvs = new Vector2[]
-		{
-			new Vector2(0f, 0f),
-			new Vector2(0f, 1f),
-			new Vector2(1f, 1f),
-			new Vector2(1f, 0f)
-		};
-
-		
-		private static Vector2[] defaultUvsFlipped = new Vector2[]
-		{
-			new Vector2(1f, 0f),
-			new Vector2(1f, 1f),
-			new Vector2(0f, 1f),
-			new Vector2(0f, 0f)
-		};
 	}
 }

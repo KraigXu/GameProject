@@ -1,14 +1,18 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ChoiceLetter_RansomDemand : ChoiceLetter
 	{
-		
-		
+		public Map map;
+
+		public Faction faction;
+
+		public Pawn kidnapped;
+
+		public int fee;
+
 		public override IEnumerable<DiaOption> Choices
 		{
 			get
@@ -21,69 +25,61 @@ namespace RimWorld
 				DiaOption diaOption = new DiaOption("RansomDemand_Accept".Translate());
 				diaOption.action = delegate
 				{
-					this.faction.kidnapped.RemoveKidnappedPawn(this.kidnapped);
-					Find.WorldPawns.RemovePawn(this.kidnapped);
-					IntVec3 intVec;
-					if (this.faction.def.techLevel < TechLevel.Industrial)
+					faction.kidnapped.RemoveKidnappedPawn(kidnapped);
+					Find.WorldPawns.RemovePawn(kidnapped);
+					IntVec3 result;
+					if ((int)faction.def.techLevel < 4)
 					{
-						if (!CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => c.Standable(this.map) && this.map.reachability.CanReachColony(c), this.map, CellFinder.EdgeRoadChance_Friendly, out intVec) && !CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => c.Standable(this.map), this.map, CellFinder.EdgeRoadChance_Friendly, out intVec))
+						if (!CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => c.Standable(map) && map.reachability.CanReachColony(c), map, CellFinder.EdgeRoadChance_Friendly, out result) && !CellFinder.TryFindRandomEdgeCellWith((IntVec3 c) => c.Standable(map), map, CellFinder.EdgeRoadChance_Friendly, out result))
 						{
-							Log.Warning("Could not find any edge cell.", false);
-							intVec = DropCellFinder.TradeDropSpot(this.map);
+							Log.Warning("Could not find any edge cell.");
+							result = DropCellFinder.TradeDropSpot(map);
 						}
-						GenSpawn.Spawn(this.kidnapped, intVec, this.map, WipeMode.Vanish);
+						GenSpawn.Spawn(kidnapped, result, map);
 					}
 					else
 					{
-						intVec = DropCellFinder.TradeDropSpot(this.map);
-						TradeUtility.SpawnDropPod(intVec, this.map, this.kidnapped);
+						result = DropCellFinder.TradeDropSpot(map);
+						TradeUtility.SpawnDropPod(result, map, kidnapped);
 					}
-					CameraJumper.TryJump(intVec, this.map);
-					TradeUtility.LaunchSilver(this.map, this.fee);
+					CameraJumper.TryJump(result, map);
+					TradeUtility.LaunchSilver(map, fee);
 					Find.LetterStack.RemoveLetter(this);
 				};
 				diaOption.resolveTree = true;
-				if (!TradeUtility.ColonyHasEnoughSilver(this.map, this.fee))
+				if (!TradeUtility.ColonyHasEnoughSilver(map, fee))
 				{
-					diaOption.Disable("NeedSilverLaunchable".Translate(this.fee.ToString()));
+					diaOption.Disable("NeedSilverLaunchable".Translate(fee.ToString()));
 				}
 				yield return diaOption;
 				yield return base.Option_Reject;
 				yield return base.Option_Postpone;
-				yield break;
 			}
 		}
 
-		
-		
 		public override bool CanShowInLetterStack
 		{
 			get
 			{
-				return base.CanShowInLetterStack && Find.Maps.Contains(this.map) && this.faction.kidnapped.KidnappedPawnsListForReading.Contains(this.kidnapped);
+				if (!base.CanShowInLetterStack)
+				{
+					return false;
+				}
+				if (!Find.Maps.Contains(map))
+				{
+					return false;
+				}
+				return faction.kidnapped.KidnappedPawnsListForReading.Contains(kidnapped);
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Map>(ref this.map, "map", false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
-			Scribe_References.Look<Pawn>(ref this.kidnapped, "kidnapped", false);
-			Scribe_Values.Look<int>(ref this.fee, "fee", 0, false);
+			Scribe_References.Look(ref map, "map");
+			Scribe_References.Look(ref faction, "faction");
+			Scribe_References.Look(ref kidnapped, "kidnapped");
+			Scribe_Values.Look(ref fee, "fee", 0);
 		}
-
-		
-		public Map map;
-
-		
-		public Faction faction;
-
-		
-		public Pawn kidnapped;
-
-		
-		public int fee;
 	}
 }

@@ -1,33 +1,25 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Need_Chemical : Need
 	{
-		
-		
-		public override int GUIChangeArrow
-		{
-			get
-			{
-				return -1;
-			}
-		}
+		private const float ThreshDesire = 0.01f;
 
-		
-		
+		private const float ThreshSatisfied = 0.1f;
+
+		public override int GUIChangeArrow => -1;
+
 		public DrugDesireCategory CurCategory
 		{
 			get
 			{
-				if (this.CurLevel > 0.1f)
+				if (CurLevel > 0.1f)
 				{
 					return DrugDesireCategory.Satisfied;
 				}
-				if (this.CurLevel > 0.01f)
+				if (CurLevel > 0.01f)
 				{
 					return DrugDesireCategory.Desire;
 				}
@@ -35,9 +27,6 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		
 		public override float CurLevel
 		{
 			get
@@ -46,26 +35,24 @@ namespace RimWorld
 			}
 			set
 			{
-				DrugDesireCategory curCategory = this.CurCategory;
+				DrugDesireCategory curCategory = CurCategory;
 				base.CurLevel = value;
-				if (this.CurCategory != curCategory)
+				if (CurCategory != curCategory)
 				{
-					this.CategoryChanged();
+					CategoryChanged();
 				}
 			}
 		}
 
-		
-		
 		public Hediff_Addiction AddictionHediff
 		{
 			get
 			{
-				List<Hediff> hediffs = this.pawn.health.hediffSet.hediffs;
+				List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
 				for (int i = 0; i < hediffs.Count; i++)
 				{
 					Hediff_Addiction hediff_Addiction = hediffs[i] as Hediff_Addiction;
-					if (hediff_Addiction != null && hediff_Addiction.def.causesNeed == this.def)
+					if (hediff_Addiction != null && hediff_Addiction.def.causesNeed == def)
 					{
 						return hediff_Addiction;
 					}
@@ -74,52 +61,31 @@ namespace RimWorld
 			}
 		}
 
-		
-		
-		private float ChemicalFallPerTick
+		private float ChemicalFallPerTick => def.fallPerDay / 60000f;
+
+		public Need_Chemical(Pawn pawn)
+			: base(pawn)
 		{
-			get
-			{
-				return this.def.fallPerDay / 60000f;
-			}
+			threshPercents = new List<float>();
+			threshPercents.Add(0.1f);
 		}
 
-		
-		public Need_Chemical(Pawn pawn) : base(pawn)
-		{
-			this.threshPercents = new List<float>();
-			this.threshPercents.Add(0.1f);
-		}
-
-		
 		public override void SetInitialLevel()
 		{
 			base.CurLevelPercentage = Rand.Range(0.8f, 1f);
 		}
 
-		
 		public override void NeedInterval()
 		{
-			if (!this.IsFrozen)
+			if (!IsFrozen)
 			{
-				this.CurLevel -= this.ChemicalFallPerTick * 150f;
+				CurLevel -= ChemicalFallPerTick * 150f;
 			}
 		}
 
-		
 		private void CategoryChanged()
 		{
-			Hediff_Addiction addictionHediff = this.AddictionHediff;
-			if (addictionHediff != null)
-			{
-				addictionHediff.Notify_NeedCategoryChanged();
-			}
+			AddictionHediff?.Notify_NeedCategoryChanged();
 		}
-
-		
-		private const float ThreshDesire = 0.01f;
-
-		
-		private const float ThreshSatisfied = 0.1f;
 	}
 }

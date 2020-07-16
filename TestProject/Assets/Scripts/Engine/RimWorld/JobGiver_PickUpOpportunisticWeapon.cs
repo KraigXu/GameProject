@@ -1,15 +1,13 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_PickUpOpportunisticWeapon : ThinkNode_JobGiver
 	{
-		
-		
+		private bool preferBuildingDestroyers;
+
 		private float MinMeleeWeaponDPSThreshold
 		{
 			get
@@ -28,22 +26,20 @@ namespace RimWorld
 			}
 		}
 
-		
 		public override ThinkNode DeepCopy(bool resolve = true)
 		{
-			JobGiver_PickUpOpportunisticWeapon jobGiver_PickUpOpportunisticWeapon = (JobGiver_PickUpOpportunisticWeapon)base.DeepCopy(resolve);
-			jobGiver_PickUpOpportunisticWeapon.preferBuildingDestroyers = this.preferBuildingDestroyers;
-			return jobGiver_PickUpOpportunisticWeapon;
+			JobGiver_PickUpOpportunisticWeapon obj = (JobGiver_PickUpOpportunisticWeapon)base.DeepCopy(resolve);
+			obj.preferBuildingDestroyers = preferBuildingDestroyers;
+			return obj;
 		}
 
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			if (pawn.equipment == null)
 			{
 				return null;
 			}
-			if (this.AlreadySatisfiedWithCurrentWeapon(pawn))
+			if (AlreadySatisfiedWithCurrentWeapon(pawn))
 			{
 				return null;
 			}
@@ -55,11 +51,11 @@ namespace RimWorld
 			{
 				return null;
 			}
-			if (pawn.GetRegion(RegionType.Set_Passable) == null)
+			if (pawn.GetRegion() == null)
 			{
 				return null;
 			}
-			Thing thing = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Weapon), PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), 8f, (Thing x) => pawn.CanReserve(x, 1, -1, null, false) && !x.IsBurning() && this.ShouldEquip(x, pawn), null, 0, 15, false, RegionType.Set_Passable, false);
+			Thing thing = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForGroup(ThingRequestGroup.Weapon), PathEndMode.OnCell, TraverseParms.For(pawn), 8f, (Thing x) => pawn.CanReserve(x) && !x.IsBurning() && ShouldEquip(x, pawn), null, 0, 15);
 			if (thing != null)
 			{
 				return JobMaker.MakeJob(JobDefOf.Equip, thing);
@@ -67,7 +63,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		private bool AlreadySatisfiedWithCurrentWeapon(Pawn pawn)
 		{
 			ThingWithComps primary = pawn.equipment.Primary;
@@ -75,7 +70,7 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (this.preferBuildingDestroyers)
+			if (preferBuildingDestroyers)
 			{
 				if (!pawn.equipment.PrimaryEq.PrimaryVerb.verbProps.ai_IsBuildingDestroyer)
 				{
@@ -89,24 +84,26 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		private bool ShouldEquip(Thing newWep, Pawn pawn)
 		{
-			return EquipmentUtility.CanEquip(newWep, pawn) && this.GetWeaponScore(newWep) > this.GetWeaponScore(pawn.equipment.Primary);
+			if (EquipmentUtility.CanEquip(newWep, pawn))
+			{
+				return GetWeaponScore(newWep) > GetWeaponScore(pawn.equipment.Primary);
+			}
+			return false;
 		}
 
-		
 		private int GetWeaponScore(Thing wep)
 		{
 			if (wep == null)
 			{
 				return 0;
 			}
-			if (wep.def.IsMeleeWeapon && wep.GetStatValue(StatDefOf.MeleeWeapon_AverageDPS, true) < this.MinMeleeWeaponDPSThreshold)
+			if (wep.def.IsMeleeWeapon && wep.GetStatValue(StatDefOf.MeleeWeapon_AverageDPS) < MinMeleeWeaponDPSThreshold)
 			{
 				return 0;
 			}
-			if (this.preferBuildingDestroyers && wep.TryGetComp<CompEquippable>().PrimaryVerb.verbProps.ai_IsBuildingDestroyer)
+			if (preferBuildingDestroyers && wep.TryGetComp<CompEquippable>().PrimaryVerb.verbProps.ai_IsBuildingDestroyer)
 			{
 				return 3;
 			}
@@ -116,8 +113,5 @@ namespace RimWorld
 			}
 			return 1;
 		}
-
-		
-		private bool preferBuildingDestroyers;
 	}
 }

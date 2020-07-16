@@ -1,17 +1,12 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public class CompProperties_AbilityTransferEntropy : CompProperties_AbilityEffect
 	{
-		
+		public bool targetReceivesEntropy = true;
+
 		public CompProperties_AbilityTransferEntropy()
 		{
-			this.compClass = typeof(CompAbilityEffect_TransferEntropy);
+			compClass = typeof(CompAbilityEffect_TransferEntropy);
 		}
-
-		
-		public bool targetReceivesEntropy = true;
 	}
 }

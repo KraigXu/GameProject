@@ -1,112 +1,95 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public sealed class History : IExposable
 	{
-		
+		public Archive archive = new Archive();
+
+		private List<HistoryAutoRecorderGroup> autoRecorderGroups;
+
+		public SimpleCurveDrawerStyle curveDrawerStyle;
+
+		public int lastPsylinkAvailable = -999999;
+
 		public History()
 		{
-			this.autoRecorderGroups = new List<HistoryAutoRecorderGroup>();
-			this.AddOrRemoveHistoryRecorderGroups();
-			this.curveDrawerStyle = new SimpleCurveDrawerStyle();
-			this.curveDrawerStyle.DrawMeasures = true;
-			this.curveDrawerStyle.DrawPoints = false;
-			this.curveDrawerStyle.DrawBackground = true;
-			this.curveDrawerStyle.DrawBackgroundLines = false;
-			this.curveDrawerStyle.DrawLegend = true;
-			this.curveDrawerStyle.DrawCurveMousePoint = true;
-			this.curveDrawerStyle.OnlyPositiveValues = true;
-			this.curveDrawerStyle.UseFixedSection = true;
-			this.curveDrawerStyle.UseAntiAliasedLines = true;
-			this.curveDrawerStyle.PointsRemoveOptimization = true;
-			this.curveDrawerStyle.MeasureLabelsXCount = 10;
-			this.curveDrawerStyle.MeasureLabelsYCount = 5;
-			this.curveDrawerStyle.XIntegersOnly = true;
-			this.curveDrawerStyle.LabelX = "Day".Translate();
+			autoRecorderGroups = new List<HistoryAutoRecorderGroup>();
+			AddOrRemoveHistoryRecorderGroups();
+			curveDrawerStyle = new SimpleCurveDrawerStyle();
+			curveDrawerStyle.DrawMeasures = true;
+			curveDrawerStyle.DrawPoints = false;
+			curveDrawerStyle.DrawBackground = true;
+			curveDrawerStyle.DrawBackgroundLines = false;
+			curveDrawerStyle.DrawLegend = true;
+			curveDrawerStyle.DrawCurveMousePoint = true;
+			curveDrawerStyle.OnlyPositiveValues = true;
+			curveDrawerStyle.UseFixedSection = true;
+			curveDrawerStyle.UseAntiAliasedLines = true;
+			curveDrawerStyle.PointsRemoveOptimization = true;
+			curveDrawerStyle.MeasureLabelsXCount = 10;
+			curveDrawerStyle.MeasureLabelsYCount = 5;
+			curveDrawerStyle.XIntegersOnly = true;
+			curveDrawerStyle.LabelX = "Day".Translate();
 		}
 
-		
 		public void HistoryTick()
 		{
-			for (int i = 0; i < this.autoRecorderGroups.Count; i++)
+			for (int i = 0; i < autoRecorderGroups.Count; i++)
 			{
-				this.autoRecorderGroups[i].Tick();
+				autoRecorderGroups[i].Tick();
 			}
 		}
 
-		
 		public List<HistoryAutoRecorderGroup> Groups()
 		{
-			return this.autoRecorderGroups;
+			return autoRecorderGroups;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<Archive>(ref this.archive, "archive", Array.Empty<object>());
-			Scribe_Collections.Look<HistoryAutoRecorderGroup>(ref this.autoRecorderGroups, "autoRecorderGroups", LookMode.Deep, Array.Empty<object>());
-			Scribe_Values.Look<int>(ref this.lastPsylinkAvailable, "lastPsylinkAvailable", -999999, false);
+			Scribe_Deep.Look(ref archive, "archive");
+			Scribe_Collections.Look(ref autoRecorderGroups, "autoRecorderGroups", LookMode.Deep);
+			Scribe_Values.Look(ref lastPsylinkAvailable, "lastPsylinkAvailable", -999999);
 			BackCompatibility.PostExposeData(this);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.AddOrRemoveHistoryRecorderGroups();
-				if (this.lastPsylinkAvailable == -999999)
+				AddOrRemoveHistoryRecorderGroups();
+				if (lastPsylinkAvailable == -999999)
 				{
-					this.lastPsylinkAvailable = Find.TickManager.TicksGame;
+					lastPsylinkAvailable = Find.TickManager.TicksGame;
 				}
 			}
 		}
 
-		
 		public void Notify_PsylinkAvailable()
 		{
-			this.lastPsylinkAvailable = Find.TickManager.TicksGame;
+			lastPsylinkAvailable = Find.TickManager.TicksGame;
 		}
 
-		
 		public void FinalizeInit()
 		{
-			this.lastPsylinkAvailable = Find.TickManager.TicksGame;
+			lastPsylinkAvailable = Find.TickManager.TicksGame;
 		}
 
-		
 		private void AddOrRemoveHistoryRecorderGroups()
 		{
-			if (this.autoRecorderGroups.RemoveAll((HistoryAutoRecorderGroup x) => x == null) != 0)
+			if (autoRecorderGroups.RemoveAll((HistoryAutoRecorderGroup x) => x == null) != 0)
 			{
-				Log.Warning("Some history auto recorder groups were null.", false);
+				Log.Warning("Some history auto recorder groups were null.");
 			}
-			IEnumerator<HistoryAutoRecorderGroupDef> enumerator = DefDatabase<HistoryAutoRecorderGroupDef>.AllDefs.GetEnumerator();
+			foreach (HistoryAutoRecorderGroupDef def in DefDatabase<HistoryAutoRecorderGroupDef>.AllDefs)
 			{
-				while (enumerator.MoveNext())
+				if (!autoRecorderGroups.Any((HistoryAutoRecorderGroup x) => x.def == def))
 				{
-					HistoryAutoRecorderGroupDef def = enumerator.Current;
-					if (!this.autoRecorderGroups.Any((HistoryAutoRecorderGroup x) => x.def == def))
-					{
-						HistoryAutoRecorderGroup historyAutoRecorderGroup = new HistoryAutoRecorderGroup();
-						historyAutoRecorderGroup.def = def;
-						historyAutoRecorderGroup.AddOrRemoveHistoryRecorders();
-						this.autoRecorderGroups.Add(historyAutoRecorderGroup);
-					}
+					HistoryAutoRecorderGroup historyAutoRecorderGroup = new HistoryAutoRecorderGroup();
+					historyAutoRecorderGroup.def = def;
+					historyAutoRecorderGroup.AddOrRemoveHistoryRecorders();
+					autoRecorderGroups.Add(historyAutoRecorderGroup);
 				}
 			}
-			this.autoRecorderGroups.RemoveAll((HistoryAutoRecorderGroup x) => x.def == null);
+			autoRecorderGroups.RemoveAll((HistoryAutoRecorderGroup x) => x.def == null);
 		}
-
-		
-		public Archive archive = new Archive();
-
-		
-		private List<HistoryAutoRecorderGroup> autoRecorderGroups;
-
-		
-		public SimpleCurveDrawerStyle curveDrawerStyle;
-
-		
-		public int lastPsylinkAvailable = -999999;
 	}
 }

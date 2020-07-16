@@ -1,21 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_FireInHomeArea : Alert_Critical
 	{
-		
-		public Alert_FireInHomeArea()
-		{
-			this.defaultLabel = "FireInHomeArea".Translate();
-			this.defaultExplanation = "FireInHomeAreaDesc".Translate();
-		}
-
-		
-		
 		private Fire FireInHomeArea
 		{
 			get
@@ -37,10 +26,15 @@ namespace RimWorld
 			}
 		}
 
-		
+		public Alert_FireInHomeArea()
+		{
+			defaultLabel = "FireInHomeArea".Translate();
+			defaultExplanation = "FireInHomeAreaDesc".Translate();
+		}
+
 		public override AlertReport GetReport()
 		{
-			return this.FireInHomeArea;
+			return FireInHomeArea;
 		}
 	}
 }

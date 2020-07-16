@@ -1,195 +1,132 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Pawn_NativeVerbs : IVerbOwner, IExposable
 	{
-		
-		
+		private Pawn pawn;
+
+		public VerbTracker verbTracker;
+
+		private Verb_BeatFire cachedBeatFireVerb;
+
+		private Verb_Ignite cachedIgniteVerb;
+
+		private List<VerbProperties> cachedVerbProperties;
+
 		public Verb_BeatFire BeatFireVerb
 		{
 			get
 			{
-				if (this.cachedBeatFireVerb == null)
+				if (cachedBeatFireVerb == null)
 				{
-					this.cachedBeatFireVerb = (Verb_BeatFire)this.verbTracker.GetVerb(VerbCategory.BeatFire);
+					cachedBeatFireVerb = (Verb_BeatFire)verbTracker.GetVerb(VerbCategory.BeatFire);
 				}
-				return this.cachedBeatFireVerb;
+				return cachedBeatFireVerb;
 			}
 		}
 
-		
-		
 		public Verb_Ignite IgniteVerb
 		{
 			get
 			{
-				if (this.cachedIgniteVerb == null)
+				if (cachedIgniteVerb == null)
 				{
-					this.cachedIgniteVerb = (Verb_Ignite)this.verbTracker.GetVerb(VerbCategory.Ignite);
+					cachedIgniteVerb = (Verb_Ignite)verbTracker.GetVerb(VerbCategory.Ignite);
 				}
-				return this.cachedIgniteVerb;
+				return cachedIgniteVerb;
 			}
 		}
 
-		
-		
-		VerbTracker IVerbOwner.VerbTracker
-		{
-			get
-			{
-				return this.verbTracker;
-			}
-		}
+		VerbTracker IVerbOwner.VerbTracker => verbTracker;
 
-		
-		
 		List<VerbProperties> IVerbOwner.VerbProperties
 		{
 			get
 			{
-				this.CheckCreateVerbProperties();
-				return this.cachedVerbProperties;
+				CheckCreateVerbProperties();
+				return cachedVerbProperties;
 			}
 		}
 
-		
-		
-		List<Tool> IVerbOwner.Tools
+		List<Tool> IVerbOwner.Tools => null;
+
+		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef => ImplementOwnerTypeDefOf.NativeVerb;
+
+		Thing IVerbOwner.ConstantCaster => pawn;
+
+		private Thing ConstantCaster
 		{
-			get
-			{
-				return null;
-			}
+			get;
 		}
 
-		
-		
-		ImplementOwnerTypeDef IVerbOwner.ImplementOwnerTypeDef
-		{
-			get
-			{
-				return ImplementOwnerTypeDefOf.NativeVerb;
-			}
-		}
-
-		
 		string IVerbOwner.UniqueVerbOwnerID()
 		{
-			return "NativeVerbs_" + this.pawn.ThingID;
+			return "NativeVerbs_" + pawn.ThingID;
 		}
 
-		
 		bool IVerbOwner.VerbsStillUsableBy(Pawn p)
 		{
-			return p == this.pawn;
+			return p == pawn;
 		}
 
-		
-		
-		Thing IVerbOwner.ConstantCaster
-		{
-			get
-			{
-				return this.pawn;
-			}
-		}
-
-		
-		
-		private Thing ConstantCaster { get; }
-
-		
 		public Pawn_NativeVerbs(Pawn pawn)
 		{
 			this.pawn = pawn;
-			this.verbTracker = new VerbTracker(this);
+			verbTracker = new VerbTracker(this);
 		}
 
-		
 		public void NativeVerbsTick()
 		{
-			this.verbTracker.VerbsTick();
+			verbTracker.VerbsTick();
 		}
 
-		
 		public bool TryStartIgnite(Thing target)
 		{
-			if (this.IgniteVerb == null)
+			if (IgniteVerb == null)
 			{
-				Log.ErrorOnce(string.Concat(new object[]
-				{
-					this.pawn,
-					" tried to ignite ",
-					target,
-					" but has no ignite verb."
-				}), 76453432, false);
+				Log.ErrorOnce(pawn + " tried to ignite " + target + " but has no ignite verb.", 76453432);
 				return false;
 			}
-			return !this.pawn.stances.FullBodyBusy && this.IgniteVerb.TryStartCastOn(target, false, true);
+			if (pawn.stances.FullBodyBusy)
+			{
+				return false;
+			}
+			return IgniteVerb.TryStartCastOn(target);
 		}
 
-		
 		public bool TryBeatFire(Fire targetFire)
 		{
-			if (this.BeatFireVerb == null)
+			if (BeatFireVerb == null)
 			{
-				Log.ErrorOnce(string.Concat(new object[]
-				{
-					this.pawn,
-					" tried to beat fire ",
-					targetFire,
-					" but has no beat fire verb."
-				}), 935137531, false);
+				Log.ErrorOnce(pawn + " tried to beat fire " + targetFire + " but has no beat fire verb.", 935137531);
 				return false;
 			}
-			return !this.pawn.stances.FullBodyBusy && this.BeatFireVerb.TryStartCastOn(targetFire, false, true);
+			if (pawn.stances.FullBodyBusy)
+			{
+				return false;
+			}
+			return BeatFireVerb.TryStartCastOn(targetFire);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Deep.Look<VerbTracker>(ref this.verbTracker, "verbTracker", new object[]
-			{
-				this
-			});
+			Scribe_Deep.Look(ref verbTracker, "verbTracker", this);
 			BackCompatibility.PostExposeData(this);
 		}
 
-		
 		private void CheckCreateVerbProperties()
 		{
-			if (this.cachedVerbProperties != null)
+			if (cachedVerbProperties == null && (int)pawn.RaceProps.intelligence >= 1)
 			{
-				return;
-			}
-			if (this.pawn.RaceProps.intelligence >= Intelligence.ToolUser)
-			{
-				this.cachedVerbProperties = new List<VerbProperties>();
-				this.cachedVerbProperties.Add(NativeVerbPropertiesDatabase.VerbWithCategory(VerbCategory.BeatFire));
-				if (!this.pawn.RaceProps.IsMechanoid)
+				cachedVerbProperties = new List<VerbProperties>();
+				cachedVerbProperties.Add(NativeVerbPropertiesDatabase.VerbWithCategory(VerbCategory.BeatFire));
+				if (!pawn.RaceProps.IsMechanoid)
 				{
-					this.cachedVerbProperties.Add(NativeVerbPropertiesDatabase.VerbWithCategory(VerbCategory.Ignite));
+					cachedVerbProperties.Add(NativeVerbPropertiesDatabase.VerbWithCategory(VerbCategory.Ignite));
 				}
 			}
 		}
-
-		
-		private Pawn pawn;
-
-		
-		public VerbTracker verbTracker;
-
-		
-		private Verb_BeatFire cachedBeatFireVerb;
-
-		
-		private Verb_Ignite cachedIgniteVerb;
-
-		
-		private List<VerbProperties> cachedVerbProperties;
 	}
 }

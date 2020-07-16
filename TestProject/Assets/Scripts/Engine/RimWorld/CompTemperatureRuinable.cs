@@ -1,136 +1,106 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompTemperatureRuinable : ThingComp
 	{
-		
-		
-		public CompProperties_TemperatureRuinable Props
-		{
-			get
-			{
-				return (CompProperties_TemperatureRuinable)this.props;
-			}
-		}
+		protected float ruinedPercent;
 
-		
-		
-		public bool Ruined
-		{
-			get
-			{
-				return this.ruinedPercent >= 1f;
-			}
-		}
+		public const string RuinedSignal = "RuinedByTemperature";
 
-		
+		public CompProperties_TemperatureRuinable Props => (CompProperties_TemperatureRuinable)props;
+
+		public bool Ruined => ruinedPercent >= 1f;
+
 		public override void PostExposeData()
 		{
-			Scribe_Values.Look<float>(ref this.ruinedPercent, "ruinedPercent", 0f, false);
+			Scribe_Values.Look(ref ruinedPercent, "ruinedPercent", 0f);
 		}
 
-		
 		public void Reset()
 		{
-			this.ruinedPercent = 0f;
+			ruinedPercent = 0f;
 		}
 
-		
 		public override void CompTick()
 		{
-			this.DoTicks(1);
+			DoTicks(1);
 		}
 
-		
 		public override void CompTickRare()
 		{
-			this.DoTicks(250);
+			DoTicks(250);
 		}
 
-		
 		private void DoTicks(int ticks)
 		{
-			if (!this.Ruined)
+			if (!Ruined)
 			{
-				float ambientTemperature = this.parent.AmbientTemperature;
-				if (ambientTemperature > this.Props.maxSafeTemperature)
+				float ambientTemperature = parent.AmbientTemperature;
+				if (ambientTemperature > Props.maxSafeTemperature)
 				{
-					this.ruinedPercent += (ambientTemperature - this.Props.maxSafeTemperature) * this.Props.progressPerDegreePerTick * (float)ticks;
+					ruinedPercent += (ambientTemperature - Props.maxSafeTemperature) * Props.progressPerDegreePerTick * (float)ticks;
 				}
-				else if (ambientTemperature < this.Props.minSafeTemperature)
+				else if (ambientTemperature < Props.minSafeTemperature)
 				{
-					this.ruinedPercent -= (ambientTemperature - this.Props.minSafeTemperature) * this.Props.progressPerDegreePerTick * (float)ticks;
+					ruinedPercent -= (ambientTemperature - Props.minSafeTemperature) * Props.progressPerDegreePerTick * (float)ticks;
 				}
-				if (this.ruinedPercent >= 1f)
+				if (ruinedPercent >= 1f)
 				{
-					this.ruinedPercent = 1f;
-					this.parent.BroadcastCompSignal("RuinedByTemperature");
-					return;
+					ruinedPercent = 1f;
+					parent.BroadcastCompSignal("RuinedByTemperature");
 				}
-				if (this.ruinedPercent < 0f)
+				else if (ruinedPercent < 0f)
 				{
-					this.ruinedPercent = 0f;
+					ruinedPercent = 0f;
 				}
 			}
 		}
 
-		
 		public override void PreAbsorbStack(Thing otherStack, int count)
 		{
-			float t = (float)count / (float)(this.parent.stackCount + count);
+			float t = (float)count / (float)(parent.stackCount + count);
 			CompTemperatureRuinable comp = ((ThingWithComps)otherStack).GetComp<CompTemperatureRuinable>();
-			this.ruinedPercent = Mathf.Lerp(this.ruinedPercent, comp.ruinedPercent, t);
+			ruinedPercent = Mathf.Lerp(ruinedPercent, comp.ruinedPercent, t);
 		}
 
-		
 		public override bool AllowStackWith(Thing other)
 		{
 			CompTemperatureRuinable comp = ((ThingWithComps)other).GetComp<CompTemperatureRuinable>();
-			return this.Ruined == comp.Ruined;
+			return Ruined == comp.Ruined;
 		}
 
-		
 		public override void PostSplitOff(Thing piece)
 		{
-			((ThingWithComps)piece).GetComp<CompTemperatureRuinable>().ruinedPercent = this.ruinedPercent;
+			((ThingWithComps)piece).GetComp<CompTemperatureRuinable>().ruinedPercent = ruinedPercent;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (this.Ruined)
+			if (Ruined)
 			{
 				return "RuinedByTemperature".Translate();
 			}
-			if (this.ruinedPercent > 0f)
+			if (ruinedPercent > 0f)
 			{
-				float ambientTemperature = this.parent.AmbientTemperature;
+				float ambientTemperature = parent.AmbientTemperature;
 				string str;
-				if (ambientTemperature > this.Props.maxSafeTemperature)
+				if (ambientTemperature > Props.maxSafeTemperature)
 				{
 					str = "Overheating".Translate();
 				}
 				else
 				{
-					if (ambientTemperature >= this.Props.minSafeTemperature)
+					if (!(ambientTemperature < Props.minSafeTemperature))
 					{
 						return null;
 					}
 					str = "Freezing".Translate();
 				}
-				return str + ": " + this.ruinedPercent.ToStringPercent();
+				return str + ": " + ruinedPercent.ToStringPercent();
 			}
 			return null;
 		}
-
-		
-		protected float ruinedPercent;
-
-		
-		public const string RuinedSignal = "RuinedByTemperature";
 	}
 }

@@ -1,76 +1,61 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnTechHediffsGenerator
 	{
-		
+		private static List<Thing> emptyIngredientsList = new List<Thing>();
+
+		private static List<ThingDef> tmpGeneratedTechHediffsList = new List<ThingDef>();
+
 		public static void GenerateTechHediffsFor(Pawn pawn)
 		{
 			float partsMoney = pawn.kindDef.techHediffsMoney.RandomInRange;
 			int num = pawn.kindDef.techHediffsMaxAmount;
 			if (pawn.kindDef.techHediffsRequired != null)
 			{
-				foreach (ThingDef thingDef in pawn.kindDef.techHediffsRequired)
+				foreach (ThingDef item in pawn.kindDef.techHediffsRequired)
 				{
-					partsMoney -= thingDef.BaseMarketValue;
+					partsMoney -= item.BaseMarketValue;
 					num--;
-					PawnTechHediffsGenerator.InstallPart(pawn, thingDef);
+					InstallPart(pawn, item);
 				}
 			}
 			if (pawn.kindDef.techHediffsTags == null || pawn.kindDef.techHediffsChance <= 0f)
 			{
 				return;
 			}
-			PawnTechHediffsGenerator.tmpGeneratedTechHediffsList.Clear();
-			
+			tmpGeneratedTechHediffsList.Clear();
 			for (int i = 0; i < num; i++)
 			{
 				if (Rand.Value > pawn.kindDef.techHediffsChance)
 				{
-					return;
+					break;
 				}
-				IEnumerable<ThingDef> allDefs = DefDatabase<ThingDef>.AllDefs;
-				Func<ThingDef, bool> predicate;
-				if ((predicate=default ) == null)
+				IEnumerable<ThingDef> source = DefDatabase<ThingDef>.AllDefs.Where((ThingDef x) => x.isTechHediff && !tmpGeneratedTechHediffsList.Contains(x) && x.BaseMarketValue <= partsMoney && x.techHediffsTags != null && pawn.kindDef.techHediffsTags.Any((string tag) => x.techHediffsTags.Contains(tag)) && (pawn.kindDef.techHediffsDisallowTags == null || !pawn.kindDef.techHediffsDisallowTags.Any((string tag) => x.techHediffsTags.Contains(tag))));
+				if (source.Any())
 				{
-					predicate = ( ((ThingDef x) => x.isTechHediff && !PawnTechHediffsGenerator.tmpGeneratedTechHediffsList.Contains(x) && x.BaseMarketValue <= partsMoney && x.techHediffsTags != null && pawn.kindDef.techHediffsTags.Any((string tag) => x.techHediffsTags.Contains(tag)) && (pawn.kindDef.techHediffsDisallowTags == null || !pawn.kindDef.techHediffsDisallowTags.Any((string tag) => x.techHediffsTags.Contains(tag)))));
-				}
-				IEnumerable<ThingDef> source = allDefs.Where(predicate);
-				if (source.Any<ThingDef>())
-				{
-					ThingDef thingDef2 = source.RandomElementByWeight((ThingDef w) => w.BaseMarketValue);
-					partsMoney -= thingDef2.BaseMarketValue;
-					PawnTechHediffsGenerator.InstallPart(pawn, thingDef2);
-					PawnTechHediffsGenerator.tmpGeneratedTechHediffsList.Add(thingDef2);
+					ThingDef thingDef = source.RandomElementByWeight((ThingDef w) => w.BaseMarketValue);
+					partsMoney -= thingDef.BaseMarketValue;
+					InstallPart(pawn, thingDef);
+					tmpGeneratedTechHediffsList.Add(thingDef);
 				}
 			}
 		}
 
-		
 		private static void InstallPart(Pawn pawn, ThingDef partDef)
 		{
-			IEnumerable<RecipeDef> source = from x in DefDatabase<RecipeDef>.AllDefs
-			where x.IsIngredient(partDef) && pawn.def.AllRecipes.Contains(x)
-			select x;
-			if (source.Any<RecipeDef>())
+			IEnumerable<RecipeDef> source = DefDatabase<RecipeDef>.AllDefs.Where((RecipeDef x) => x.IsIngredient(partDef) && pawn.def.AllRecipes.Contains(x));
+			if (source.Any())
 			{
-				RecipeDef recipeDef = source.RandomElement<RecipeDef>();
-				if (recipeDef.Worker.GetPartsToApplyOn(pawn, recipeDef).Any<BodyPartRecord>())
+				RecipeDef recipeDef = source.RandomElement();
+				if (recipeDef.Worker.GetPartsToApplyOn(pawn, recipeDef).Any())
 				{
-					recipeDef.Worker.ApplyOnPawn(pawn, recipeDef.Worker.GetPartsToApplyOn(pawn, recipeDef).RandomElement<BodyPartRecord>(), null, PawnTechHediffsGenerator.emptyIngredientsList, null);
+					recipeDef.Worker.ApplyOnPawn(pawn, recipeDef.Worker.GetPartsToApplyOn(pawn, recipeDef).RandomElement(), null, emptyIngredientsList, null);
 				}
 			}
 		}
-
-		
-		private static List<Thing> emptyIngredientsList = new List<Thing>();
-
-		
-		private static List<ThingDef> tmpGeneratedTechHediffsList = new List<ThingDef>();
 	}
 }

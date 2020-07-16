@@ -1,46 +1,38 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public static class GiveToPackAnimalUtility
 	{
-		
 		public static IEnumerable<Pawn> CarrierCandidatesFor(Pawn pawn)
 		{
-			IEnumerable<Pawn> enumerable = pawn.IsFormingCaravan() ? pawn.GetLord().ownedPawns : pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction);
-			enumerable = from x in enumerable
-			where x.RaceProps.packAnimal && !x.inventory.UnloadEverything
-			select x;
+			IEnumerable<Pawn> source = pawn.IsFormingCaravan() ? pawn.GetLord().ownedPawns : pawn.Map.mapPawns.SpawnedPawnsInFaction(pawn.Faction);
+			source = source.Where((Pawn x) => x.RaceProps.packAnimal && !x.inventory.UnloadEverything);
 			if (pawn.Map.IsPlayerHome)
 			{
-				enumerable = from x in enumerable
-				where x.IsFormingCaravan()
-				select x;
+				source = source.Where((Pawn x) => x.IsFormingCaravan());
 			}
-			return enumerable;
+			return source;
 		}
 
-		
 		public static Pawn UsablePackAnimalWithTheMostFreeSpace(Pawn pawn)
 		{
-			IEnumerable<Pawn> enumerable = GiveToPackAnimalUtility.CarrierCandidatesFor(pawn);
+			IEnumerable<Pawn> enumerable = CarrierCandidatesFor(pawn);
 			Pawn pawn2 = null;
 			float num = 0f;
-			foreach (Pawn pawn3 in enumerable)
+			foreach (Pawn item in enumerable)
 			{
-				if (pawn3.RaceProps.packAnimal && pawn3 != pawn && pawn.CanReach(pawn3, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+				if (item.RaceProps.packAnimal && item != pawn && pawn.CanReach(item, PathEndMode.Touch, Danger.Deadly))
 				{
-					float num2 = MassUtility.FreeSpace(pawn3);
+					float num2 = MassUtility.FreeSpace(item);
 					if (pawn2 == null || num2 > num)
 					{
-						pawn2 = pawn3;
+						pawn2 = item;
 						num = num2;
 					}
 				}

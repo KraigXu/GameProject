@@ -1,14 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PlaceWorker_NeedsFuelingPort : PlaceWorker
 	{
-		
 		public override AcceptanceReport AllowsPlacing(BuildableDef def, IntVec3 center, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
 		{
 			if (FuelingPortUtility.FuelingPortGiverAtFuelingPortCell(center, map) == null)
@@ -18,7 +15,6 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
 		{
 			Map currentMap = Find.CurrentMap;

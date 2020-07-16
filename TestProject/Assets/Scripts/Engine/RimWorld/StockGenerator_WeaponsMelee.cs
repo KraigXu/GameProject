@@ -1,45 +1,39 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StockGenerator_WeaponsMelee : StockGenerator_MiscItems
 	{
-		
-		public override bool HandlesThingDef(ThingDef td)
-		{
-			return base.HandlesThingDef(td) && td.IsMeleeWeapon && (this.weaponTag == null || (td.weaponTags != null && td.weaponTags.Contains(this.weaponTag)));
-		}
-
-		
-		protected override float SelectionWeight(ThingDef thingDef)
-		{
-			return StockGenerator_WeaponsMelee.SelectionWeightMarketValueCurve.Evaluate(thingDef.BaseMarketValue);
-		}
-
-		
 		private static readonly SimpleCurve SelectionWeightMarketValueCurve = new SimpleCurve
 		{
-			{
-				new CurvePoint(0f, 1f),
-				true
-			},
-			{
-				new CurvePoint(500f, 1f),
-				true
-			},
-			{
-				new CurvePoint(1500f, 0.2f),
-				true
-			},
-			{
-				new CurvePoint(5000f, 0.1f),
-				true
-			}
+			new CurvePoint(0f, 1f),
+			new CurvePoint(500f, 1f),
+			new CurvePoint(1500f, 0.2f),
+			new CurvePoint(5000f, 0.1f)
 		};
 
-		
 		public string weaponTag;
+
+		public override bool HandlesThingDef(ThingDef td)
+		{
+			if (base.HandlesThingDef(td) && td.IsMeleeWeapon)
+			{
+				if (weaponTag != null)
+				{
+					if (td.weaponTags != null)
+					{
+						return td.weaponTags.Contains(weaponTag);
+					}
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
+
+		protected override float SelectionWeight(ThingDef thingDef)
+		{
+			return SelectionWeightMarketValueCurve.Evaluate(thingDef.BaseMarketValue);
+		}
 	}
 }

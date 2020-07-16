@@ -1,40 +1,20 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_TakeToBedToOperate : WorkGiver_TakeToBed
 	{
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForGroup(ThingRequestGroup.Pawn);
-			}
-		}
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForGroup(ThingRequestGroup.Pawn);
 
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.OnCell;
-			}
-		}
+		public override PathEndMode PathEndMode => PathEndMode.OnCell;
 
-		
 		public override Danger MaxPathDanger(Pawn pawn)
 		{
 			return Danger.Deadly;
 		}
 
-		
 		public override bool ShouldSkip(Pawn pawn, bool forced = false)
 		{
 			List<Pawn> allPawnsSpawned = pawn.Map.mapPawns.AllPawnsSpawned;
@@ -48,13 +28,11 @@ namespace RimWorld
 			return true;
 		}
 
-		
 		public override IEnumerable<Thing> PotentialWorkThingsGlobal(Pawn pawn)
 		{
 			return pawn.Map.mapPawns.SpawnedPawnsWhoShouldHaveSurgeryDoneNow;
 		}
 
-		
 		public override bool HasJobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;
@@ -77,15 +55,18 @@ namespace RimWorld
 					return false;
 				}
 			}
-			Building_Bed building_Bed = base.FindBed(pawn, pawn2);
-			return building_Bed != null && pawn2.CanReserve(building_Bed, building_Bed.SleepingSlotsCount, -1, null, false);
+			Building_Bed building_Bed = FindBed(pawn, pawn2);
+			if (building_Bed != null && pawn2.CanReserve(building_Bed, building_Bed.SleepingSlotsCount))
+			{
+				return true;
+			}
+			return false;
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
 		{
 			Pawn pawn2 = t as Pawn;
-			Building_Bed t2 = base.FindBed(pawn, pawn2);
+			Building_Bed t2 = FindBed(pawn, pawn2);
 			Job job = JobMaker.MakeJob(JobDefOf.TakeToBedToOperate, pawn2, t2);
 			job.count = 1;
 			return job;

@@ -1,51 +1,54 @@
-﻿using Steamworks;
+using Steamworks;
 using UnityEngine;
 using Verse.Steam;
 
-public static class SteamUtility
+namespace Verse
 {
-	private static string cachedPersonaName;
-
-	public static string SteamPersonaName
+	public static class SteamUtility
 	{
-		get
+		private static string cachedPersonaName;
+
+		public static string SteamPersonaName
 		{
-			if (SteamManager.Initialized && cachedPersonaName == null)
+			get
 			{
-				cachedPersonaName = SteamFriends.GetPersonaName();
+				if (SteamManager.Initialized && cachedPersonaName == null)
+				{
+					cachedPersonaName = SteamFriends.GetPersonaName();
+				}
+				if (cachedPersonaName == null)
+				{
+					return "???";
+				}
+				return cachedPersonaName;
 			}
-			if (cachedPersonaName == null)
+		}
+
+		public static void OpenUrl(string url)
+		{
+			if (SteamManager.Initialized && SteamUtils.IsOverlayEnabled())
 			{
-				return "???";
+				SteamFriends.ActivateGameOverlayToWebPage(url);
 			}
-			return cachedPersonaName;
+			else
+			{
+				Application.OpenURL(url);
+			}
 		}
-	}
 
-	public static void OpenUrl(string url)
-	{
-		if (SteamManager.Initialized && SteamUtils.IsOverlayEnabled())
+		public static void OpenWorkshopPage(PublishedFileId_t pfid)
 		{
-			SteamFriends.ActivateGameOverlayToWebPage(url);
+			OpenUrl(SteamWorkshopPageUrl(pfid));
 		}
-		else
+
+		public static void OpenSteamWorkshopPage()
 		{
-			Application.OpenURL(url);
+			OpenUrl("http://steamcommunity.com/workshop/browse/?appid=" + SteamUtils.GetAppID());
 		}
-	}
 
-	public static void OpenWorkshopPage(PublishedFileId_t pfid)
-	{
-		OpenUrl(SteamWorkshopPageUrl(pfid));
-	}
-
-	public static void OpenSteamWorkshopPage()
-	{
-		OpenUrl("http://steamcommunity.com/workshop/browse/?appid=" + SteamUtils.GetAppID());
-	}
-
-	public static string SteamWorkshopPageUrl(PublishedFileId_t pfid)
-	{
-		return "steam://url/CommunityFilePage/" + pfid;
+		public static string SteamWorkshopPageUrl(PublishedFileId_t pfid)
+		{
+			return "steam://url/CommunityFilePage/" + pfid;
+		}
 	}
 }

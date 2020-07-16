@@ -1,55 +1,44 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_Insult : JobDriver
 	{
-		
-		
-		private Pawn Target
-		{
-			get
-			{
-				return (Pawn)((Thing)this.pawn.CurJob.GetTarget(TargetIndex.A));
-			}
-		}
+		private const TargetIndex TargetInd = TargetIndex.A;
 
-		
+		private Pawn Target => (Pawn)(Thing)pawn.CurJob.GetTarget(TargetIndex.A);
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.A);
 			yield return Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
-			yield return this.InsultingSpreeDelayToil();
-			yield return Toils_Interpersonal.WaitToBeAbleToInteract(this.pawn);
+			yield return InsultingSpreeDelayToil();
+			yield return Toils_Interpersonal.WaitToBeAbleToInteract(pawn);
 			Toil toil = Toils_Interpersonal.GotoInteractablePosition(TargetIndex.A);
 			toil.socialMode = RandomSocialMode.Off;
 			yield return toil;
-			yield return this.InteractToil();
-			yield break;
+			yield return InteractToil();
 		}
 
-		
 		private Toil InteractToil()
 		{
 			return Toils_General.Do(delegate
 			{
-				if (this.pawn.interactions.TryInteractWith(this.Target, InteractionDefOf.Insult))
+				if (pawn.interactions.TryInteractWith(Target, InteractionDefOf.Insult))
 				{
-					MentalState_InsultingSpree mentalState_InsultingSpree = this.pawn.MentalState as MentalState_InsultingSpree;
+					MentalState_InsultingSpree mentalState_InsultingSpree = pawn.MentalState as MentalState_InsultingSpree;
 					if (mentalState_InsultingSpree != null)
 					{
 						mentalState_InsultingSpree.lastInsultTicks = Find.TickManager.TicksGame;
-						if (mentalState_InsultingSpree.target == this.Target)
+						if (mentalState_InsultingSpree.target == Target)
 						{
 							mentalState_InsultingSpree.insultedTargetAtLeastOnce = true;
 						}
@@ -58,15 +47,14 @@ namespace RimWorld
 			});
 		}
 
-		
 		private Toil InsultingSpreeDelayToil()
 		{
 			Action action = delegate
 			{
-				MentalState_InsultingSpree mentalState_InsultingSpree = this.pawn.MentalState as MentalState_InsultingSpree;
+				MentalState_InsultingSpree mentalState_InsultingSpree = pawn.MentalState as MentalState_InsultingSpree;
 				if (mentalState_InsultingSpree == null || Find.TickManager.TicksGame - mentalState_InsultingSpree.lastInsultTicks >= 1200)
 				{
-					this.pawn.jobs.curDriver.ReadyForNextToil();
+					pawn.jobs.curDriver.ReadyForNextToil();
 				}
 			};
 			return new Toil
@@ -77,8 +65,5 @@ namespace RimWorld
 				defaultCompleteMode = ToilCompleteMode.Never
 			};
 		}
-
-		
-		private const TargetIndex TargetInd = TargetIndex.A;
 	}
 }

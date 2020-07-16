@@ -1,53 +1,33 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_EnterTransporter : JobDriver
 	{
-		
-		
-		public CompTransporter Transporter
-		{
-			get
-			{
-				Thing thing = this.job.GetTarget(this.TransporterInd).Thing;
-				if (thing == null)
-				{
-					return null;
-				}
-				return thing.TryGetComp<CompTransporter>();
-			}
-		}
+		private TargetIndex TransporterInd = TargetIndex.A;
 
-		
+		public CompTransporter Transporter => job.GetTarget(TransporterInd).Thing?.TryGetComp<CompTransporter>();
+
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
 			return true;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			this.FailOnDespawnedOrNull(this.TransporterInd);
-			this.FailOn(() => !this.Transporter.LoadingInProgressOrReadyToLaunch);
-			yield return Toils_Goto.GotoThing(this.TransporterInd, PathEndMode.Touch);
-			yield return new Toil
+			this.FailOnDespawnedOrNull(TransporterInd);
+			this.FailOn(() => !Transporter.LoadingInProgressOrReadyToLaunch);
+			yield return Toils_Goto.GotoThing(TransporterInd, PathEndMode.Touch);
+			Toil toil = new Toil();
+			toil.initAction = delegate
 			{
-				initAction = delegate
-				{
-					CompTransporter transporter = this.Transporter;
-					this.pawn.DeSpawn(DestroyMode.Vanish);
-					transporter.GetDirectlyHeldThings().TryAdd(this.pawn, true);
-				}
+				CompTransporter transporter = Transporter;
+				pawn.DeSpawn();
+				transporter.GetDirectlyHeldThings().TryAdd(pawn);
 			};
-			yield break;
+			yield return toil;
 		}
-
-		
-		private TargetIndex TransporterInd = TargetIndex.A;
 	}
 }

@@ -1,26 +1,15 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class GenStep_Snow : GenStep
 	{
-		
-		
-		public override int SeedPart
-		{
-			get
-			{
-				return 306693816;
-			}
-		}
+		public override int SeedPart => 306693816;
 
-		
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			int num = 0;
-			for (int i = (int)(GenLocalDate.Twelfth(map) - Twelfth.Third); i <= (int)GenLocalDate.Twelfth(map); i++)
+			for (int i = (int)(GenLocalDate.Twelfth(map) - 2); i <= (int)GenLocalDate.Twelfth(map); i++)
 			{
 				int num2 = i;
 				if (num2 < 0)
@@ -52,15 +41,14 @@ namespace RimWorld
 			{
 				num3 *= 0.4f;
 			}
-			if ((double)num3 < 0.3)
+			if (!((double)num3 < 0.3))
 			{
-				return;
-			}
-			foreach (IntVec3 c in map.AllCells)
-			{
-				if (!c.Roofed(map))
+				foreach (IntVec3 allCell in map.AllCells)
 				{
-					map.steadyEnvironmentEffects.AddFallenSnowAt(c, num3);
+					if (!allCell.Roofed(map))
+					{
+						map.steadyEnvironmentEffects.AddFallenSnowAt(allCell, num3);
+					}
 				}
 			}
 		}

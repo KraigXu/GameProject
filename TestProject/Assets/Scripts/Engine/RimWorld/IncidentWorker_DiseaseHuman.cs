@@ -1,16 +1,13 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_DiseaseHuman : IncidentWorker_Disease
 	{
-		
 		protected override IEnumerable<Pawn> PotentialVictimCandidates(IIncidentTarget target)
 		{
 			Map map = target as Map;
@@ -18,19 +15,15 @@ namespace RimWorld
 			{
 				return map.mapPawns.FreeColonistsAndPrisoners;
 			}
-			return from x in ((Caravan)target).PawnsListForReading
-			where x.IsFreeColonist || x.IsPrisonerOfColony
-			select x;
+			return ((Caravan)target).PawnsListForReading.Where((Pawn x) => x.IsFreeColonist || x.IsPrisonerOfColony);
 		}
 
-		
 		protected override IEnumerable<Pawn> ActualVictims(IncidentParms parms)
 		{
-			int num = this.PotentialVictimCandidates(parms.target).Count<Pawn>();
-			IntRange intRange = new IntRange(Mathf.RoundToInt((float)num * this.def.diseaseVictimFractionRange.min), Mathf.RoundToInt((float)num * this.def.diseaseVictimFractionRange.max));
-			int num2 = intRange.RandomInRange;
-			num2 = Mathf.Clamp(num2, 1, this.def.diseaseMaxVictims);
-			return base.PotentialVictims(parms.target).InRandomOrder(null).Take(num2);
+			int num = PotentialVictimCandidates(parms.target).Count();
+			int randomInRange = new IntRange(Mathf.RoundToInt((float)num * def.diseaseVictimFractionRange.min), Mathf.RoundToInt((float)num * def.diseaseVictimFractionRange.max)).RandomInRange;
+			randomInRange = Mathf.Clamp(randomInRange, 1, def.diseaseMaxVictims);
+			return PotentialVictims(parms.target).InRandomOrder().Take(randomInRange);
 		}
 	}
 }

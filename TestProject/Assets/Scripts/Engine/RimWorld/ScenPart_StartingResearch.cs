@@ -1,64 +1,52 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ScenPart_StartingResearch : ScenPart
 	{
-		
+		private ResearchProjectDef project;
+
 		public override void DoEditInterface(Listing_ScenEdit listing)
 		{
-			if (Widgets.ButtonText(listing.GetScenPartRect(this, ScenPart.RowHeight), this.project.LabelCap, true, true, true))
+			if (Widgets.ButtonText(listing.GetScenPartRect(this, ScenPart.RowHeight), project.LabelCap))
 			{
-				FloatMenuUtility.MakeMenu<ResearchProjectDef>(this.NonRedundantResearchProjects(), (ResearchProjectDef d) => d.LabelCap, (ResearchProjectDef d) => delegate
+				FloatMenuUtility.MakeMenu(NonRedundantResearchProjects(), (ResearchProjectDef d) => d.LabelCap, delegate(ResearchProjectDef d)
 				{
-					this.project = d;
+					ScenPart_StartingResearch scenPart_StartingResearch = this;
+					return delegate
+					{
+						scenPart_StartingResearch.project = d;
+					};
 				});
 			}
 		}
 
-		
 		public override void Randomize()
 		{
-			this.project = this.NonRedundantResearchProjects().RandomElement<ResearchProjectDef>();
+			project = NonRedundantResearchProjects().RandomElement();
 		}
 
-		
 		private IEnumerable<ResearchProjectDef> NonRedundantResearchProjects()
 		{
-			return DefDatabase<ResearchProjectDef>.AllDefs.Where(delegate(ResearchProjectDef d)
-			{
-				if (d.tags == null || Find.Scenario.playerFaction.factionDef.startingResearchTags == null)
-				{
-					return true;
-				}
-				return !d.tags.Any((ResearchProjectTagDef tag) => Find.Scenario.playerFaction.factionDef.startingResearchTags.Contains(tag));
-			});
+			return DefDatabase<ResearchProjectDef>.AllDefs.Where((ResearchProjectDef d) => d.tags == null || Find.Scenario.playerFaction.factionDef.startingResearchTags == null || !d.tags.Any((ResearchProjectTagDef tag) => Find.Scenario.playerFaction.factionDef.startingResearchTags.Contains(tag)));
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Defs.Look<ResearchProjectDef>(ref this.project, "project");
+			Scribe_Defs.Look(ref project, "project");
 		}
 
-		
 		public override string Summary(Scenario scen)
 		{
-			return "ScenPart_StartingResearchFinished".Translate(this.project.LabelCap);
+			return "ScenPart_StartingResearchFinished".Translate(project.LabelCap);
 		}
 
-		
 		public override void PostGameStart()
 		{
-			Find.ResearchManager.FinishProject(this.project, false, null);
+			Find.ResearchManager.FinishProject(project);
 		}
-
-		
-		private ResearchProjectDef project;
 	}
 }

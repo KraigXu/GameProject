@@ -1,83 +1,58 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class OutfitForcedHandler : IExposable
 	{
-		
-		
-		public bool SomethingIsForced
-		{
-			get
-			{
-				return this.forcedAps.Count > 0;
-			}
-		}
+		private List<Apparel> forcedAps = new List<Apparel>();
 
-		
-		
-		public List<Apparel> ForcedApparel
-		{
-			get
-			{
-				return this.forcedAps;
-			}
-		}
+		public bool SomethingIsForced => forcedAps.Count > 0;
 
-		
+		public List<Apparel> ForcedApparel => forcedAps;
+
 		public void Reset()
 		{
-			this.forcedAps.Clear();
+			forcedAps.Clear();
 		}
 
-		
 		public bool AllowedToAutomaticallyDrop(Apparel ap)
 		{
-			return !this.forcedAps.Contains(ap);
+			return !forcedAps.Contains(ap);
 		}
 
-		
 		public void SetForced(Apparel ap, bool forced)
 		{
 			if (forced)
 			{
-				if (!this.forcedAps.Contains(ap))
+				if (!forcedAps.Contains(ap))
 				{
-					this.forcedAps.Add(ap);
-					return;
+					forcedAps.Add(ap);
 				}
 			}
-			else if (this.forcedAps.Contains(ap))
+			else if (forcedAps.Contains(ap))
 			{
-				this.forcedAps.Remove(ap);
+				forcedAps.Remove(ap);
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Apparel>(ref this.forcedAps, "forcedAps", LookMode.Reference, Array.Empty<object>());
+			Scribe_Collections.Look(ref forcedAps, "forcedAps", LookMode.Reference);
 		}
 
-		
 		public bool IsForced(Apparel ap)
 		{
 			if (ap.Destroyed)
 			{
-				Log.Error("Apparel was forced while Destroyed: " + ap, false);
-				if (this.forcedAps.Contains(ap))
+				Log.Error("Apparel was forced while Destroyed: " + ap);
+				if (forcedAps.Contains(ap))
 				{
-					this.forcedAps.Remove(ap);
+					forcedAps.Remove(ap);
 				}
 				return false;
 			}
-			return this.forcedAps.Contains(ap);
+			return forcedAps.Contains(ap);
 		}
-
-		
-		private List<Apparel> forcedAps = new List<Apparel>();
 	}
 }

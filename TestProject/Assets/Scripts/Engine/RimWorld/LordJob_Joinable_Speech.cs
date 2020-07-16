@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,155 +6,10 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class LordJob_Joinable_Speech : LordJob_Joinable_Gathering
 	{
-		
-		
-		public override bool AllowStartNewGatherings
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-		
-		
-		public override bool OrganizerIsStartingPawn
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-		
-		public LordJob_Joinable_Speech()
-		{
-		}
-
-		
-		public LordJob_Joinable_Speech(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef) : base(spot, organizer, gatheringDef)
-		{
-		}
-
-		
-		protected override LordToil CreateGatheringToil(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
-		{
-			return new LordToil_Speech(spot, gatheringDef, organizer);
-		}
-
-		
-		public override StateGraph CreateGraph()
-		{
-			StateGraph stateGraph = new StateGraph();
-			LordToil lordToil = this.CreateGatheringToil(this.spot, this.organizer, this.gatheringDef);
-			stateGraph.AddToil(lordToil);
-			LordToil_End lordToil_End = new LordToil_End();
-			stateGraph.AddToil(lordToil_End);
-			float speechDuration = 12500f;
-			Transition transition = new Transition(lordToil, lordToil_End, false, true);
-			transition.AddTrigger(new Trigger_TickCondition(new Func<bool>(this.ShouldBeCalledOff), 1));
-			transition.AddTrigger(new Trigger_PawnKilled());
-			transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.LeftVoluntarily, this.organizer));
-			transition.AddPreAction(new TransitionAction_Custom(CallApplyOutcome1));
-			stateGraph.AddTransition(transition, false);
-			this.timeoutTrigger = new Trigger_TicksPassedAfterConditionMet((int)speechDuration, () => GatheringsUtility.InGatheringArea(this.organizer.Position, this.spot, this.organizer.Map), 60);
-			Transition transition2 = new Transition(lordToil, lordToil_End, false, true);
-			transition2.AddTrigger(this.timeoutTrigger);
-			transition2.AddPreAction(new TransitionAction_Custom(CallApplyOutcome2));
-			stateGraph.AddTransition(transition2, false);
-
-			void CallApplyOutcome1()
-            {
-				this.ApplyOutcome((float)this.lord.ticksInToil / speechDuration);
-			}
-
-			void CallApplyOutcome2()
-            {
-				this.ApplyOutcome(1f);
-			}
-
-			return stateGraph;
-		}
-
-		
-		public override string GetReport(Pawn pawn)
-		{
-			if (pawn != this.organizer)
-			{
-				return "LordReportListeningSpeech".Translate(this.organizer.Named("ORGANIZER"));
-			}
-			return "LordReportGivingSpeech".Translate();
-		}
-
-		
-		protected virtual void ApplyOutcome(float progress)
-		{
-			if (progress < 0.5f)
-			{
-				Find.LetterStack.ReceiveLetter("LetterLabelSpeechCancelled".Translate(), "LetterSpeechCancelled".Translate(this.organizer.Named("ORGANIZER")).CapitalizeFirst(), LetterDefOf.NegativeEvent, this.organizer, null, null, null, null);
-				return;
-			}
-			ThoughtDef key = LordJob_Joinable_Speech.OutcomeThoughtChances.RandomElementByWeight(delegate(KeyValuePair<ThoughtDef, float> t)
-			{
-				if (!LordJob_Joinable_Speech.PositiveOutcome(t.Key))
-				{
-					return LordJob_Joinable_Speech.OutcomeThoughtChances[t.Key];
-				}
-				return LordJob_Joinable_Speech.OutcomeThoughtChances[t.Key] * this.organizer.GetStatValue(StatDefOf.SocialImpact, true) * progress;
-			}).Key;
-			foreach (Pawn pawn in this.lord.ownedPawns)
-			{
-				if (pawn != this.organizer && this.organizer.Position.InHorDistOf(pawn.Position, 18f))
-				{
-					pawn.needs.mood.thoughts.memories.TryGainMemory(key, this.organizer);
-				}
-			}
-			TaggedString taggedString = "LetterFinishedSpeech".Translate(this.organizer.Named("ORGANIZER")).CapitalizeFirst() + " " + ("Letter" + key.defName).Translate();
-			if (progress < 1f)
-			{
-				taggedString += "\n\n" + "LetterSpeechInterrupted".Translate(progress.ToStringPercent(), this.organizer.Named("ORGANIZER"));
-			}
-			Find.LetterStack.ReceiveLetter(key.stages[0].LabelCap, taggedString, LordJob_Joinable_Speech.PositiveOutcome(key) ? LetterDefOf.PositiveEvent : LetterDefOf.NegativeEvent, this.organizer, null, null, null, null);
-			Ability ability = this.organizer.abilities.GetAbility(AbilityDefOf.Speech);
-			RoyalTitle mostSeniorTitle = this.organizer.royalty.MostSeniorTitle;
-			if (ability != null && mostSeniorTitle != null)
-			{
-				ability.StartCooldown(mostSeniorTitle.def.speechCooldown.RandomInRange);
-			}
-		}
-
-		
-		private static bool PositiveOutcome(ThoughtDef outcome)
-		{
-			return outcome == ThoughtDefOf.EncouragingSpeech || outcome == ThoughtDefOf.InspirationalSpeech;
-		}
-
-		
-		public static IEnumerable<Tuple<ThoughtDef, float>> OutcomeChancesForPawn(Pawn p)
-		{
-			LordJob_Joinable_Speech.outcomeChancesTemp.Clear();
-			float num = 1f / LordJob_Joinable_Speech.OutcomeThoughtChances.Sum(delegate(KeyValuePair<ThoughtDef, float> c)
-			{
-				if (!LordJob_Joinable_Speech.PositiveOutcome(c.Key))
-				{
-					return c.Value;
-				}
-				return c.Value * p.GetStatValue(StatDefOf.SocialImpact, true);
-			});
-			foreach (KeyValuePair<ThoughtDef, float> keyValuePair in LordJob_Joinable_Speech.OutcomeThoughtChances)
-			{
-				LordJob_Joinable_Speech.outcomeChancesTemp.Add(new Tuple<ThoughtDef, float>(keyValuePair.Key, (LordJob_Joinable_Speech.PositiveOutcome(keyValuePair.Key) ? (keyValuePair.Value * p.GetStatValue(StatDefOf.SocialImpact, true)) : keyValuePair.Value) * num));
-			}
-			return LordJob_Joinable_Speech.outcomeChancesTemp;
-		}
-
-		
 		public const float DurationHours = 5f;
 
-		
 		public static readonly Dictionary<ThoughtDef, float> OutcomeThoughtChances = new Dictionary<ThoughtDef, float>
 		{
 			{
@@ -175,7 +30,110 @@ namespace RimWorld
 			}
 		};
 
-		
 		private static List<Tuple<ThoughtDef, float>> outcomeChancesTemp = new List<Tuple<ThoughtDef, float>>();
+
+		public override bool AllowStartNewGatherings => false;
+
+		public override bool OrganizerIsStartingPawn => true;
+
+		public LordJob_Joinable_Speech()
+		{
+		}
+
+		public LordJob_Joinable_Speech(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
+			: base(spot, organizer, gatheringDef)
+		{
+		}
+
+		protected override LordToil CreateGatheringToil(IntVec3 spot, Pawn organizer, GatheringDef gatheringDef)
+		{
+			return new LordToil_Speech(spot, gatheringDef, organizer);
+		}
+
+		public override StateGraph CreateGraph()
+		{
+			StateGraph stateGraph = new StateGraph();
+			LordToil lordToil = CreateGatheringToil(spot, organizer, gatheringDef);
+			stateGraph.AddToil(lordToil);
+			LordToil_End lordToil_End = new LordToil_End();
+			stateGraph.AddToil(lordToil_End);
+			float speechDuration = 12500f;
+			Transition transition = new Transition(lordToil, lordToil_End);
+			transition.AddTrigger(new Trigger_TickCondition(ShouldBeCalledOff));
+			transition.AddTrigger(new Trigger_PawnKilled());
+			transition.AddTrigger(new Trigger_PawnLost(PawnLostCondition.LeftVoluntarily, organizer));
+			transition.AddPreAction(new TransitionAction_Custom((Action)delegate
+			{
+				ApplyOutcome((float)lord.ticksInToil / speechDuration);
+			}));
+			stateGraph.AddTransition(transition);
+			timeoutTrigger = new Trigger_TicksPassedAfterConditionMet((int)speechDuration, () => GatheringsUtility.InGatheringArea(organizer.Position, spot, organizer.Map), 60);
+			Transition transition2 = new Transition(lordToil, lordToil_End);
+			transition2.AddTrigger(timeoutTrigger);
+			transition2.AddPreAction(new TransitionAction_Custom((Action)delegate
+			{
+				ApplyOutcome(1f);
+			}));
+			stateGraph.AddTransition(transition2);
+			return stateGraph;
+		}
+
+		public override string GetReport(Pawn pawn)
+		{
+			if (pawn != organizer)
+			{
+				return "LordReportListeningSpeech".Translate(organizer.Named("ORGANIZER"));
+			}
+			return "LordReportGivingSpeech".Translate();
+		}
+
+		protected virtual void ApplyOutcome(float progress)
+		{
+			if (progress < 0.5f)
+			{
+				Find.LetterStack.ReceiveLetter("LetterLabelSpeechCancelled".Translate(), "LetterSpeechCancelled".Translate(organizer.Named("ORGANIZER")).CapitalizeFirst(), LetterDefOf.NegativeEvent, organizer);
+				return;
+			}
+			ThoughtDef key = OutcomeThoughtChances.RandomElementByWeight((KeyValuePair<ThoughtDef, float> t) => (!PositiveOutcome(t.Key)) ? OutcomeThoughtChances[t.Key] : (OutcomeThoughtChances[t.Key] * organizer.GetStatValue(StatDefOf.SocialImpact) * progress)).Key;
+			foreach (Pawn ownedPawn in lord.ownedPawns)
+			{
+				if (ownedPawn != organizer && organizer.Position.InHorDistOf(ownedPawn.Position, 18f))
+				{
+					ownedPawn.needs.mood.thoughts.memories.TryGainMemory(key, organizer);
+				}
+			}
+			TaggedString text = "LetterFinishedSpeech".Translate(organizer.Named("ORGANIZER")).CapitalizeFirst() + " " + ("Letter" + key.defName).Translate();
+			if (progress < 1f)
+			{
+				text += "\n\n" + "LetterSpeechInterrupted".Translate(progress.ToStringPercent(), organizer.Named("ORGANIZER"));
+			}
+			Find.LetterStack.ReceiveLetter(key.stages[0].LabelCap, text, PositiveOutcome(key) ? LetterDefOf.PositiveEvent : LetterDefOf.NegativeEvent, organizer);
+			Ability ability = organizer.abilities.GetAbility(AbilityDefOf.Speech);
+			RoyalTitle mostSeniorTitle = organizer.royalty.MostSeniorTitle;
+			if (ability != null && mostSeniorTitle != null)
+			{
+				ability.StartCooldown(mostSeniorTitle.def.speechCooldown.RandomInRange);
+			}
+		}
+
+		private static bool PositiveOutcome(ThoughtDef outcome)
+		{
+			if (outcome != ThoughtDefOf.EncouragingSpeech)
+			{
+				return outcome == ThoughtDefOf.InspirationalSpeech;
+			}
+			return true;
+		}
+
+		public static IEnumerable<Tuple<ThoughtDef, float>> OutcomeChancesForPawn(Pawn p)
+		{
+			outcomeChancesTemp.Clear();
+			float num = 1f / OutcomeThoughtChances.Sum((KeyValuePair<ThoughtDef, float> c) => (!PositiveOutcome(c.Key)) ? c.Value : (c.Value * p.GetStatValue(StatDefOf.SocialImpact)));
+			foreach (KeyValuePair<ThoughtDef, float> outcomeThoughtChance in OutcomeThoughtChances)
+			{
+				outcomeChancesTemp.Add(new Tuple<ThoughtDef, float>(outcomeThoughtChance.Key, (PositiveOutcome(outcomeThoughtChance.Key) ? (outcomeThoughtChance.Value * p.GetStatValue(StatDefOf.SocialImpact)) : outcomeThoughtChance.Value) * num));
+			}
+			return outcomeChancesTemp;
+		}
 	}
 }

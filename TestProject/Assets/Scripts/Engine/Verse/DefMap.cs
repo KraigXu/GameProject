@@ -1,112 +1,87 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Verse
 {
-	
-	public class DefMap<D, V> : IExposable, IEnumerable<KeyValuePair<D, V>>, IEnumerable where D : Def, new() where V : new()
+	public class DefMap<D, V> : IExposable, IEnumerable<KeyValuePair<D, V>>, IEnumerable where D : Def, new()where V : new()
 	{
-		
-		
-		public int Count
-		{
-			get
-			{
-				return this.values.Count;
-			}
-		}
+		private List<V> values;
 
-		
+		public int Count => values.Count;
+
 		public V this[D def]
 		{
 			get
 			{
-				return this.values[(int)def.index];
+				return values[def.index];
 			}
 			set
 			{
-				this.values[(int)def.index] = value;
+				values[def.index] = value;
 			}
 		}
 
-		
 		public V this[int index]
 		{
 			get
 			{
-				return this.values[index];
+				return values[index];
 			}
 			set
 			{
-				this.values[index] = value;
+				values[index] = value;
 			}
 		}
 
-		
 		public DefMap()
 		{
 			int defCount = DefDatabase<D>.DefCount;
 			if (defCount == 0)
 			{
-				throw new Exception(string.Concat(new object[]
-				{
-					"Constructed DefMap<",
-					typeof(D),
-					", ",
-					typeof(V),
-					"> without defs being initialized. Try constructing it in ResolveReferences instead of the constructor."
-				}));
+				throw new Exception("Constructed DefMap<" + typeof(D) + ", " + typeof(V) + "> without defs being initialized. Try constructing it in ResolveReferences instead of the constructor.");
 			}
-			this.values = new List<V>(defCount);
+			values = new List<V>(defCount);
 			for (int i = 0; i < defCount; i++)
 			{
-				this.values.Add(Activator.CreateInstance<V>());
+				values.Add(new V());
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<V>(ref this.values, "vals", LookMode.Undefined, Array.Empty<object>());
+			Scribe_Collections.Look(ref values, "vals", LookMode.Undefined);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
 				int defCount = DefDatabase<D>.DefCount;
-				for (int i = this.values.Count; i < defCount; i++)
+				for (int i = values.Count; i < defCount; i++)
 				{
-					this.values.Add(Activator.CreateInstance<V>());
+					values.Add(new V());
 				}
-				while (this.values.Count > defCount)
+				while (values.Count > defCount)
 				{
-					this.values.RemoveLast<V>();
+					values.RemoveLast();
 				}
 			}
 		}
 
-		
 		public void SetAll(V val)
 		{
-			for (int i = 0; i < this.values.Count; i++)
+			for (int i = 0; i < values.Count; i++)
 			{
-				this.values[i] = val;
+				values[i] = val;
 			}
 		}
 
-		
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.GetEnumerator();
+			return GetEnumerator();
 		}
 
-		
 		public IEnumerator<KeyValuePair<D, V>> GetEnumerator()
 		{
-			return (from d in DefDatabase<D>.AllDefsListForReading
-			select new KeyValuePair<D, V>(d, this[d])).GetEnumerator();
+			return DefDatabase<D>.AllDefsListForReading.Select((D d) => new KeyValuePair<D, V>(d, this[d])).GetEnumerator();
 		}
-
-		
-		private List<V> values;
 	}
 }

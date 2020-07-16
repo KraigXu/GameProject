@@ -1,52 +1,47 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public static class Scribe
 	{
-		
+		public static ScribeSaver saver = new ScribeSaver();
+
+		public static ScribeLoader loader = new ScribeLoader();
+
+		public static LoadSaveMode mode = LoadSaveMode.Inactive;
+
 		public static void ForceStop()
 		{
-			Scribe.mode = LoadSaveMode.Inactive;
-			Scribe.saver.ForceStop();
-			Scribe.loader.ForceStop();
+			mode = LoadSaveMode.Inactive;
+			saver.ForceStop();
+			loader.ForceStop();
 		}
 
-		
 		public static bool EnterNode(string nodeName)
 		{
-			if (Scribe.mode == LoadSaveMode.Inactive)
+			if (mode == LoadSaveMode.Inactive)
 			{
 				return false;
 			}
-			if (Scribe.mode == LoadSaveMode.Saving)
+			if (mode == LoadSaveMode.Saving)
 			{
-				return Scribe.saver.EnterNode(nodeName);
+				return saver.EnterNode(nodeName);
 			}
-			return (Scribe.mode != LoadSaveMode.LoadingVars && Scribe.mode != LoadSaveMode.ResolvingCrossRefs && Scribe.mode != LoadSaveMode.PostLoadInit) || Scribe.loader.EnterNode(nodeName);
+			if (mode == LoadSaveMode.LoadingVars || mode == LoadSaveMode.ResolvingCrossRefs || mode == LoadSaveMode.PostLoadInit)
+			{
+				return loader.EnterNode(nodeName);
+			}
+			return true;
 		}
 
-		
 		public static void ExitNode()
 		{
-			if (Scribe.mode == LoadSaveMode.Saving)
+			if (mode == LoadSaveMode.Saving)
 			{
-				Scribe.saver.ExitNode();
+				saver.ExitNode();
 			}
-			if (Scribe.mode == LoadSaveMode.LoadingVars || Scribe.mode == LoadSaveMode.ResolvingCrossRefs || Scribe.mode == LoadSaveMode.PostLoadInit)
+			if (mode == LoadSaveMode.LoadingVars || mode == LoadSaveMode.ResolvingCrossRefs || mode == LoadSaveMode.PostLoadInit)
 			{
-				Scribe.loader.ExitNode();
+				loader.ExitNode();
 			}
 		}
-
-		
-		public static ScribeSaver saver = new ScribeSaver();
-
-		
-		public static ScribeLoader loader = new ScribeLoader();
-
-		
-		public static LoadSaveMode mode = LoadSaveMode.Inactive;
 	}
 }

@@ -1,106 +1,106 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class MedicalRecipesUtility
 	{
-		
 		public static bool IsCleanAndDroppable(Pawn pawn, BodyPartRecord part)
 		{
-			return !pawn.Dead && !pawn.RaceProps.Animal && part.def.spawnThingOnRemoved != null && MedicalRecipesUtility.IsClean(pawn, part);
+			if (pawn.Dead)
+			{
+				return false;
+			}
+			if (pawn.RaceProps.Animal)
+			{
+				return false;
+			}
+			if (part.def.spawnThingOnRemoved != null)
+			{
+				return IsClean(pawn, part);
+			}
+			return false;
 		}
 
-		
 		public static bool IsClean(Pawn pawn, BodyPartRecord part)
 		{
-			return !pawn.Dead && !(from x in pawn.health.hediffSet.hediffs
-			where x.Part == part
-			select x).Any<Hediff>();
+			if (pawn.Dead)
+			{
+				return false;
+			}
+			return !pawn.health.hediffSet.hediffs.Where((Hediff x) => x.Part == part).Any();
 		}
 
-		
 		public static void RestorePartAndSpawnAllPreviousParts(Pawn pawn, BodyPartRecord part, IntVec3 pos, Map map)
 		{
-			MedicalRecipesUtility.SpawnNaturalPartIfClean(pawn, part, pos, map);
-			MedicalRecipesUtility.SpawnThingsFromHediffs(pawn, part, pos, map);
-			pawn.health.RestorePart(part, null, true);
+			SpawnNaturalPartIfClean(pawn, part, pos, map);
+			SpawnThingsFromHediffs(pawn, part, pos, map);
+			pawn.health.RestorePart(part);
 		}
 
-		
 		public static Thing SpawnNaturalPartIfClean(Pawn pawn, BodyPartRecord part, IntVec3 pos, Map map)
 		{
-			if (MedicalRecipesUtility.IsCleanAndDroppable(pawn, part))
+			if (IsCleanAndDroppable(pawn, part))
 			{
-				return GenSpawn.Spawn(part.def.spawnThingOnRemoved, pos, map, WipeMode.Vanish);
+				return GenSpawn.Spawn(part.def.spawnThingOnRemoved, pos, map);
 			}
 			return null;
 		}
 
-		
 		public static void SpawnThingsFromHediffs(Pawn pawn, BodyPartRecord part, IntVec3 pos, Map map)
 		{
-			if (!pawn.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined, null, null).Contains(part))
+			if (pawn.health.hediffSet.GetNotMissingParts().Contains(part))
 			{
-				return;
-			}
-			foreach (Hediff hediff in from x in pawn.health.hediffSet.hediffs
-			where x.Part == part
-			select x)
-			{
-				if (hediff.def.spawnThingOnRemoved != null)
+				foreach (Hediff item in pawn.health.hediffSet.hediffs.Where((Hediff x) => x.Part == part))
 				{
-					GenSpawn.Spawn(hediff.def.spawnThingOnRemoved, pos, map, WipeMode.Vanish);
+					if (item.def.spawnThingOnRemoved != null)
+					{
+						GenSpawn.Spawn(item.def.spawnThingOnRemoved, pos, map);
+					}
 				}
-			}
-			for (int i = 0; i < part.parts.Count; i++)
-			{
-				MedicalRecipesUtility.SpawnThingsFromHediffs(pawn, part.parts[i], pos, map);
+				for (int i = 0; i < part.parts.Count; i++)
+				{
+					SpawnThingsFromHediffs(pawn, part.parts[i], pos, map);
+				}
 			}
 		}
 
-		
 		public static IEnumerable<BodyPartRecord> GetFixedPartsToApplyOn(RecipeDef recipe, Pawn pawn, Func<BodyPartRecord, bool> validator = null)
 		{
-			int num;
-			for (int i = 0; i < recipe.appliedOnFixedBodyParts.Count; i = num)
+			int l = 0;
+			while (l < recipe.appliedOnFixedBodyParts.Count)
 			{
-				BodyPartDef part = recipe.appliedOnFixedBodyParts[i];
+				BodyPartDef part = recipe.appliedOnFixedBodyParts[l];
 				List<BodyPartRecord> bpList = pawn.RaceProps.body.AllParts;
-				for (int j = 0; j < bpList.Count; j = num + 1)
+				for (int i = 0; i < bpList.Count; i++)
 				{
-					BodyPartRecord bodyPartRecord = bpList[j];
+					BodyPartRecord bodyPartRecord = bpList[i];
 					if (bodyPartRecord.def == part && (validator == null || validator(bodyPartRecord)))
 					{
 						yield return bodyPartRecord;
 					}
-					num = j;
 				}
-				part = null;
-				bpList = null;
-				num = i + 1;
+				int num = l + 1;
+				l = num;
 			}
-			for (int i = 0; i < recipe.appliedOnFixedBodyPartGroups.Count; i = num)
+			l = 0;
+			while (l < recipe.appliedOnFixedBodyPartGroups.Count)
 			{
-				BodyPartGroupDef group = recipe.appliedOnFixedBodyPartGroups[i];
+				BodyPartGroupDef group = recipe.appliedOnFixedBodyPartGroups[l];
 				List<BodyPartRecord> bpList = pawn.RaceProps.body.AllParts;
-				for (int j = 0; j < bpList.Count; j = num + 1)
+				for (int i = 0; i < bpList.Count; i++)
 				{
-					BodyPartRecord bodyPartRecord2 = bpList[j];
+					BodyPartRecord bodyPartRecord2 = bpList[i];
 					if (bodyPartRecord2.groups != null && bodyPartRecord2.groups.Contains(group) && (validator == null || validator(bodyPartRecord2)))
 					{
 						yield return bodyPartRecord2;
 					}
-					num = j;
 				}
-				group = null;
-				bpList = null;
-				num = i + 1;
+				int num = l + 1;
+				l = num;
 			}
-			yield break;
 		}
 	}
 }

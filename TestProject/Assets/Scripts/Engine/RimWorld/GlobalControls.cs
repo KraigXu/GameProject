@@ -1,61 +1,70 @@
-﻿using System;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class GlobalControls
 	{
-		
+		public const float Width = 200f;
+
+		private WidgetRow rowVisibility = new WidgetRow();
+
+		private static string indoorsUnroofedStringCached;
+
+		private static int indoorsUnroofedStringCachedRoofCount = -1;
+
+		private static string cachedTemperatureString;
+
+		private static string cachedTemperatureStringForLabel;
+
+		private static float cachedTemperatureStringForTemperature;
+
 		public void GlobalControlsOnGUI()
 		{
-			if (Event.current.type == EventType.Layout)
+			if (Event.current.type != EventType.Layout)
 			{
-				return;
-			}
-			float num = (float)UI.screenWidth - 200f;
-			float num2 = (float)UI.screenHeight;
-			num2 -= 35f;
-			GenUI.DrawTextWinterShadow(new Rect((float)(UI.screenWidth - 270), (float)(UI.screenHeight - 450), 270f, 450f));
-			num2 -= 4f;
-			GlobalControlsUtility.DoPlaySettings(this.rowVisibility, false, ref num2);
-			num2 -= 4f;
-			GlobalControlsUtility.DoTimespeedControls(num, 200f, ref num2);
-			num2 -= 4f;
-			GlobalControlsUtility.DoDate(num, 200f, ref num2);
-			Rect rect = new Rect(num - 22f, num2 - 26f, 230f, 26f);
-			Find.CurrentMap.weatherManager.DoWeatherGUI(rect);
-			num2 -= rect.height;
-			Rect rect2 = new Rect(num - 100f, num2 - 26f, 293f, 26f);
-			Text.Anchor = TextAnchor.MiddleRight;
-			Widgets.Label(rect2, GlobalControls.TemperatureString());
-			Text.Anchor = TextAnchor.UpperLeft;
-			num2 -= 26f;
-			float num3 = 154f;
-			float num4 = Find.CurrentMap.gameConditionManager.TotalHeightAt(num3);
-			Rect rect3 = new Rect((float)UI.screenWidth - num3, num2 - num4, num3, num4);
-			Find.CurrentMap.gameConditionManager.DoConditionsUI(rect3);
-			num2 -= rect3.height;
-			if (Prefs.ShowRealtimeClock)
-			{
-				GlobalControlsUtility.DoRealtimeClock(num, 200f, ref num2);
-			}
-			TimedForcedExit component = Find.CurrentMap.Parent.GetComponent<TimedForcedExit>();
-			if (component != null && component.ForceExitAndRemoveMapCountdownActive)
-			{
-				Rect rect4 = new Rect(num, num2 - 26f, 193f, 26f);
+				float num = (float)UI.screenWidth - 200f;
+				float num2 = UI.screenHeight;
+				num2 -= 35f;
+				GenUI.DrawTextWinterShadow(new Rect(UI.screenWidth - 270, UI.screenHeight - 450, 270f, 450f));
+				num2 -= 4f;
+				GlobalControlsUtility.DoPlaySettings(rowVisibility, worldView: false, ref num2);
+				num2 -= 4f;
+				GlobalControlsUtility.DoTimespeedControls(num, 200f, ref num2);
+				num2 -= 4f;
+				GlobalControlsUtility.DoDate(num, 200f, ref num2);
+				Rect rect = new Rect(num - 22f, num2 - 26f, 230f, 26f);
+				Find.CurrentMap.weatherManager.DoWeatherGUI(rect);
+				num2 -= rect.height;
+				Rect rect2 = new Rect(num - 100f, num2 - 26f, 293f, 26f);
 				Text.Anchor = TextAnchor.MiddleRight;
-				GlobalControls.DoCountdownTimer(rect4, component);
+				Widgets.Label(rect2, TemperatureString());
 				Text.Anchor = TextAnchor.UpperLeft;
 				num2 -= 26f;
+				float num3 = 154f;
+				float num4 = Find.CurrentMap.gameConditionManager.TotalHeightAt(num3);
+				Rect rect3 = new Rect((float)UI.screenWidth - num3, num2 - num4, num3, num4);
+				Find.CurrentMap.gameConditionManager.DoConditionsUI(rect3);
+				num2 -= rect3.height;
+				if (Prefs.ShowRealtimeClock)
+				{
+					GlobalControlsUtility.DoRealtimeClock(num, 200f, ref num2);
+				}
+				TimedForcedExit component = Find.CurrentMap.Parent.GetComponent<TimedForcedExit>();
+				if (component != null && component.ForceExitAndRemoveMapCountdownActive)
+				{
+					Rect rect4 = new Rect(num, num2 - 26f, 193f, 26f);
+					Text.Anchor = TextAnchor.MiddleRight;
+					DoCountdownTimer(rect4, component);
+					Text.Anchor = TextAnchor.UpperLeft;
+					num2 -= 26f;
+				}
+				num2 -= 10f;
+				Find.LetterStack.LettersOnGUI(num2);
 			}
-			num2 -= 10f;
-			Find.LetterStack.LettersOnGUI(num2);
 		}
 
-		
 		private static string TemperatureString()
 		{
 			IntVec3 intVec = UI.MouseCell();
@@ -82,12 +91,12 @@ namespace RimWorld
 				Building edifice = intVec.GetEdifice(Find.CurrentMap);
 				if (edifice != null)
 				{
-					foreach (IntVec3 intVec3 in edifice.OccupiedRect().ExpandedBy(1).ClipInsideMap(Find.CurrentMap))
+					foreach (IntVec3 item in edifice.OccupiedRect().ExpandedBy(1).ClipInsideMap(Find.CurrentMap))
 					{
-						room = intVec3.GetRoom(Find.CurrentMap, RegionType.Set_All);
+						room = item.GetRoom(Find.CurrentMap, RegionType.Set_All);
 						if (room != null && !room.PsychologicallyOutdoors)
 						{
-							c = intVec3;
+							c = item;
 							break;
 						}
 					}
@@ -102,12 +111,12 @@ namespace RimWorld
 				}
 				else
 				{
-					if (GlobalControls.indoorsUnroofedStringCachedRoofCount != room.OpenRoofCount)
+					if (indoorsUnroofedStringCachedRoofCount != room.OpenRoofCount)
 					{
-						GlobalControls.indoorsUnroofedStringCached = "IndoorsUnroofed".Translate() + " (" + room.OpenRoofCount.ToStringCached() + ")";
-						GlobalControls.indoorsUnroofedStringCachedRoofCount = room.OpenRoofCount;
+						indoorsUnroofedStringCached = "IndoorsUnroofed".Translate() + " (" + room.OpenRoofCount.ToStringCached() + ")";
+						indoorsUnroofedStringCachedRoofCount = room.OpenRoofCount;
 					}
-					text = GlobalControls.indoorsUnroofedStringCached;
+					text = indoorsUnroofedStringCached;
 				}
 			}
 			else
@@ -115,18 +124,17 @@ namespace RimWorld
 				text = "Outdoors".Translate();
 			}
 			float num = (room == null || c.Fogged(Find.CurrentMap)) ? Find.CurrentMap.mapTemperature.OutdoorTemp : room.Temperature;
-			int num2 = Mathf.RoundToInt(GenTemperature.CelsiusTo(GlobalControls.cachedTemperatureStringForTemperature, Prefs.TemperatureMode));
+			int num2 = Mathf.RoundToInt(GenTemperature.CelsiusTo(cachedTemperatureStringForTemperature, Prefs.TemperatureMode));
 			int num3 = Mathf.RoundToInt(GenTemperature.CelsiusTo(num, Prefs.TemperatureMode));
-			if (GlobalControls.cachedTemperatureStringForLabel != text || num2 != num3)
+			if (cachedTemperatureStringForLabel != text || num2 != num3)
 			{
-				GlobalControls.cachedTemperatureStringForLabel = text;
-				GlobalControls.cachedTemperatureStringForTemperature = num;
-				GlobalControls.cachedTemperatureString = text + " " + num.ToStringTemperature("F0");
+				cachedTemperatureStringForLabel = text;
+				cachedTemperatureStringForTemperature = num;
+				cachedTemperatureString = text + " " + num.ToStringTemperature("F0");
 			}
-			return GlobalControls.cachedTemperatureString;
+			return cachedTemperatureString;
 		}
 
-		
 		private static void DoCountdownTimer(Rect rect, TimedForcedExit timedForcedExit)
 		{
 			string forceExitAndRemoveMapCountdownTimeLeftString = timedForcedExit.ForceExitAndRemoveMapCountdownTimeLeftString;
@@ -140,26 +148,5 @@ namespace RimWorld
 			TooltipHandler.TipRegionByKey(rect2, "ForceExitAndRemoveMapCountdownTip", forceExitAndRemoveMapCountdownTimeLeftString);
 			Widgets.Label(rect2, text);
 		}
-
-		
-		public const float Width = 200f;
-
-		
-		private WidgetRow rowVisibility = new WidgetRow();
-
-		
-		private static string indoorsUnroofedStringCached;
-
-		
-		private static int indoorsUnroofedStringCachedRoofCount = -1;
-
-		
-		private static string cachedTemperatureString;
-
-		
-		private static string cachedTemperatureStringForLabel;
-
-		
-		private static float cachedTemperatureStringForTemperature;
 	}
 }

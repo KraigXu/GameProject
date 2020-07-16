@@ -311,7 +311,7 @@ namespace GameSystem.Ui
                         if (cg == null)
                             cg = _RectTransform.gameObject.AddComponent<CanvasGroup>();
                         cg.alpha = 0;
-                        _CurentPlayAnimation = cg.DOFade(1, windowData.animationDuration).SetAutoKill(false);
+                       // _CurentPlayAnimation = cg.DOFade(1, windowData.animationDuration).SetAutoKill(false);
                         _CurentPlayAnimation.OnComplete(() =>
                         {
                             if (onComplete != null)

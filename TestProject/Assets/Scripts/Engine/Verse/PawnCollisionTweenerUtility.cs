@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class PawnCollisionTweenerUtility
 	{
-		
+		private const float Radius = 0.32f;
+
 		public static Vector3 PawnCollisionPosOffsetFor(Pawn pawn)
 		{
-			if (pawn.GetPosture() != PawnPosture.Standing)
+			if (pawn.GetPosture() != 0)
 			{
 				return Vector3.zero;
 			}
@@ -22,82 +21,60 @@ namespace Verse
 				{
 					return Vector3.zero;
 				}
-				IntVec3 at;
-				if (flag)
-				{
-					at = pawn.pather.nextCell;
-				}
-				else
-				{
-					at = pawn.Position;
-				}
-				int polygonVertices;
-				int vertexIndex;
-				bool flag2;
-				PawnCollisionTweenerUtility.GetPawnsStandingAtOrAboutToStandAt(at, pawn.Map, out polygonVertices, out vertexIndex, out flag2, pawn);
-				if (!flag2)
+				IntVec3 at = (!flag) ? pawn.Position : pawn.pather.nextCell;
+				GetPawnsStandingAtOrAboutToStandAt(at, pawn.Map, out int pawnsCount, out int pawnsWithLowerIdCount, out bool forPawnFound, pawn);
+				if (!forPawnFound)
 				{
 					return Vector3.zero;
 				}
-				return GenGeo.RegularPolygonVertexPositionVec3(polygonVertices, vertexIndex) * 0.32f;
+				return GenGeo.RegularPolygonVertexPositionVec3(pawnsCount, pawnsWithLowerIdCount) * 0.32f;
 			}
-			else
+			IntVec3 nextCell = pawn.pather.nextCell;
+			if (CanGoDirectlyToNextCell(pawn))
 			{
-				IntVec3 nextCell = pawn.pather.nextCell;
-				if (PawnCollisionTweenerUtility.CanGoDirectlyToNextCell(pawn))
-				{
-					return Vector3.zero;
-				}
-				int num = pawn.thingIDNumber % 2;
-				if (nextCell.x != pawn.Position.x)
-				{
-					if (num == 0)
-					{
-						return new Vector3(0f, 0f, 0.32f);
-					}
-					return new Vector3(0f, 0f, -0.32f);
-				}
-				else
-				{
-					if (num == 0)
-					{
-						return new Vector3(0.32f, 0f, 0f);
-					}
-					return new Vector3(-0.32f, 0f, 0f);
-				}
+				return Vector3.zero;
 			}
+			int num = pawn.thingIDNumber % 2;
+			if (nextCell.x != pawn.Position.x)
+			{
+				if (num == 0)
+				{
+					return new Vector3(0f, 0f, 0.32f);
+				}
+				return new Vector3(0f, 0f, -0.32f);
+			}
+			if (num == 0)
+			{
+				return new Vector3(0.32f, 0f, 0f);
+			}
+			return new Vector3(-0.32f, 0f, 0f);
 		}
 
-		
 		private static void GetPawnsStandingAtOrAboutToStandAt(IntVec3 at, Map map, out int pawnsCount, out int pawnsWithLowerIdCount, out bool forPawnFound, Pawn forPawn)
 		{
 			pawnsCount = 0;
 			pawnsWithLowerIdCount = 0;
 			forPawnFound = false;
-			foreach (IntVec3 intVec in CellRect.SingleCell(at).ExpandedBy(1))
+			foreach (IntVec3 item in CellRect.SingleCell(at).ExpandedBy(1))
 			{
-				if (intVec.InBounds(map))
+				if (item.InBounds(map))
 				{
-					List<Thing> thingList = intVec.GetThingList(map);
+					List<Thing> thingList = item.GetThingList(map);
 					for (int i = 0; i < thingList.Count; i++)
 					{
 						Pawn pawn = thingList[i] as Pawn;
 						if (pawn != null && pawn.GetPosture() == PawnPosture.Standing)
 						{
-							if (intVec != at)
+							if (item != at)
 							{
-								if (!pawn.pather.MovingNow || pawn.pather.nextCell != pawn.pather.Destination.Cell)
+								if (!pawn.pather.MovingNow || pawn.pather.nextCell != pawn.pather.Destination.Cell || pawn.pather.Destination.Cell != at)
 								{
-									goto IL_101;
-								}
-								if (pawn.pather.Destination.Cell != at)
-								{
-									goto IL_101;
+									continue;
 								}
 							}
 							else if (pawn.pather.MovingNow)
 							{
-								goto IL_101;
+								continue;
 							}
 							if (pawn == forPawn)
 							{
@@ -109,21 +86,19 @@ namespace Verse
 								pawnsWithLowerIdCount++;
 							}
 						}
-						IL_101:;
 					}
 				}
 			}
 		}
 
-		
 		private static bool CanGoDirectlyToNextCell(Pawn pawn)
 		{
 			IntVec3 nextCell = pawn.pather.nextCell;
-			foreach (IntVec3 c in CellRect.FromLimits(nextCell, pawn.Position).ExpandedBy(1))
+			foreach (IntVec3 item in CellRect.FromLimits(nextCell, pawn.Position).ExpandedBy(1))
 			{
-				if (c.InBounds(pawn.Map))
+				if (item.InBounds(pawn.Map))
 				{
-					List<Thing> thingList = c.GetThingList(pawn.Map);
+					List<Thing> thingList = item.GetThingList(pawn.Map);
 					for (int i = 0; i < thingList.Count; i++)
 					{
 						Pawn pawn2 = thingList[i] as Pawn;
@@ -131,7 +106,7 @@ namespace Verse
 						{
 							if (pawn2.pather.MovingNow)
 							{
-								if (((pawn2.Position == nextCell && PawnCollisionTweenerUtility.WillBeFasterOnNextCell(pawn, pawn2)) || pawn2.pather.nextCell == nextCell || pawn2.Position == pawn.Position || (pawn2.pather.nextCell == pawn.Position && PawnCollisionTweenerUtility.WillBeFasterOnNextCell(pawn2, pawn))) && pawn2.thingIDNumber < pawn.thingIDNumber)
+								if (((pawn2.Position == nextCell && WillBeFasterOnNextCell(pawn, pawn2)) || pawn2.pather.nextCell == nextCell || pawn2.Position == pawn.Position || (pawn2.pather.nextCell == pawn.Position && WillBeFasterOnNextCell(pawn2, pawn))) && pawn2.thingIDNumber < pawn.thingIDNumber)
 								{
 									return false;
 								}
@@ -147,7 +122,6 @@ namespace Verse
 			return true;
 		}
 
-		
 		private static bool WillBeFasterOnNextCell(Pawn p1, Pawn p2)
 		{
 			if (p1.pather.nextCellCostLeft == p2.pather.nextCellCostLeft)
@@ -156,8 +130,5 @@ namespace Verse
 			}
 			return p1.pather.nextCellCostLeft < p2.pather.nextCellCostLeft;
 		}
-
-		
-		private const float Radius = 0.32f;
 	}
 }

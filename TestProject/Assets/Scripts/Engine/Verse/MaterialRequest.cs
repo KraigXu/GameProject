@@ -1,128 +1,102 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public struct MaterialRequest : IEquatable<MaterialRequest>
 	{
-		
-		
+		public Shader shader;
+
+		public Texture2D mainTex;
+
+		public Color color;
+
+		public Color colorTwo;
+
+		public Texture2D maskTex;
+
+		public int renderQueue;
+
+		public List<ShaderParameter> shaderParameters;
+
 		public string BaseTexPath
 		{
 			set
 			{
-				this.mainTex = ContentFinder<Texture2D>.Get(value, true);
+				mainTex = ContentFinder<Texture2D>.Get(value);
 			}
 		}
 
-		
 		public MaterialRequest(Texture2D tex)
 		{
-			this.shader = ShaderDatabase.Cutout;
-			this.mainTex = tex;
-			this.color = Color.white;
-			this.colorTwo = Color.white;
-			this.maskTex = null;
-			this.renderQueue = 0;
-			this.shaderParameters = null;
+			shader = ShaderDatabase.Cutout;
+			mainTex = tex;
+			color = Color.white;
+			colorTwo = Color.white;
+			maskTex = null;
+			renderQueue = 0;
+			shaderParameters = null;
 		}
 
-		
 		public MaterialRequest(Texture2D tex, Shader shader)
 		{
 			this.shader = shader;
-			this.mainTex = tex;
-			this.color = Color.white;
-			this.colorTwo = Color.white;
-			this.maskTex = null;
-			this.renderQueue = 0;
-			this.shaderParameters = null;
+			mainTex = tex;
+			color = Color.white;
+			colorTwo = Color.white;
+			maskTex = null;
+			renderQueue = 0;
+			shaderParameters = null;
 		}
 
-		
 		public MaterialRequest(Texture2D tex, Shader shader, Color color)
 		{
 			this.shader = shader;
-			this.mainTex = tex;
+			mainTex = tex;
 			this.color = color;
-			this.colorTwo = Color.white;
-			this.maskTex = null;
-			this.renderQueue = 0;
-			this.shaderParameters = null;
+			colorTwo = Color.white;
+			maskTex = null;
+			renderQueue = 0;
+			shaderParameters = null;
 		}
 
-		
 		public override int GetHashCode()
 		{
-			return Gen.HashCombine<List<ShaderParameter>>(Gen.HashCombineInt(Gen.HashCombine<Texture2D>(Gen.HashCombine<Texture2D>(Gen.HashCombineStruct<Color>(Gen.HashCombineStruct<Color>(Gen.HashCombine<Shader>(0, this.shader), this.color), this.colorTwo), this.mainTex), this.maskTex), this.renderQueue), this.shaderParameters);
+			return Gen.HashCombine(Gen.HashCombineInt(Gen.HashCombine(Gen.HashCombine(Gen.HashCombineStruct(Gen.HashCombineStruct(Gen.HashCombine(0, shader), color), colorTwo), mainTex), maskTex), renderQueue), shaderParameters);
 		}
 
-		
 		public override bool Equals(object obj)
 		{
-			return obj is MaterialRequest && this.Equals((MaterialRequest)obj);
+			if (!(obj is MaterialRequest))
+			{
+				return false;
+			}
+			return Equals((MaterialRequest)obj);
 		}
 
-		
 		public bool Equals(MaterialRequest other)
 		{
-			return other.shader == this.shader && other.mainTex == this.mainTex && other.color == this.color && other.colorTwo == this.colorTwo && other.maskTex == this.maskTex && other.renderQueue == this.renderQueue && other.shaderParameters == this.shaderParameters;
+			if (other.shader == shader && other.mainTex == mainTex && other.color == color && other.colorTwo == colorTwo && other.maskTex == maskTex && other.renderQueue == renderQueue)
+			{
+				return other.shaderParameters == shaderParameters;
+			}
+			return false;
 		}
 
-		
 		public static bool operator ==(MaterialRequest lhs, MaterialRequest rhs)
 		{
 			return lhs.Equals(rhs);
 		}
 
-		
 		public static bool operator !=(MaterialRequest lhs, MaterialRequest rhs)
 		{
 			return !(lhs == rhs);
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new string[]
-			{
-				"MaterialRequest(",
-				this.shader.name,
-				", ",
-				this.mainTex.name,
-				", ",
-				this.color.ToString(),
-				", ",
-				this.colorTwo.ToString(),
-				", ",
-				this.maskTex.ToString(),
-				", ",
-				this.renderQueue.ToString(),
-				")"
-			});
+			return "MaterialRequest(" + shader.name + ", " + mainTex.name + ", " + color.ToString() + ", " + colorTwo.ToString() + ", " + maskTex.ToString() + ", " + renderQueue.ToString() + ")";
 		}
-
-		
-		public Shader shader;
-
-		
-		public Texture2D mainTex;
-
-		
-		public Color color;
-
-		
-		public Color colorTwo;
-
-		
-		public Texture2D maskTex;
-
-		
-		public int renderQueue;
-
-		
-		public List<ShaderParameter> shaderParameters;
 	}
 }

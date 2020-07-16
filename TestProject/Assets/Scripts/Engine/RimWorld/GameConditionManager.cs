@@ -1,32 +1,26 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public sealed class GameConditionManager : IExposable
 	{
-		
-		
-		public List<GameCondition> ActiveConditions
-		{
-			get
-			{
-				return this.activeConditions;
-			}
-		}
+		public Map ownerMap;
 
-		
-		
+		private List<GameCondition> activeConditions = new List<GameCondition>();
+
+		private const float TextPadding = 6f;
+
+		public List<GameCondition> ActiveConditions => activeConditions;
+
 		public GameConditionManager Parent
 		{
 			get
 			{
-				if (this.ownerMap != null)
+				if (ownerMap != null)
 				{
 					return Find.World.gameConditionManager;
 				}
@@ -34,65 +28,59 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		public bool ElectricityDisabled
 		{
 			get
 			{
-				List<GameCondition>.Enumerator enumerator = this.activeConditions.GetEnumerator();
+				foreach (GameCondition activeCondition in activeConditions)
 				{
-					while (enumerator.MoveNext())
+					if (activeCondition.ElectricityDisabled)
 					{
-						if (enumerator.Current.ElectricityDisabled)
-						{
-							return true;
-						}
+						return true;
 					}
 				}
-				return this.Parent != null && this.Parent.ElectricityDisabled;
+				if (Parent != null)
+				{
+					return Parent.ElectricityDisabled;
+				}
+				return false;
 			}
 		}
 
-		
 		public GameConditionManager(Map map)
 		{
-			this.ownerMap = map;
+			ownerMap = map;
 		}
 
-		
 		public GameConditionManager(World world)
 		{
 		}
 
-		
 		public void RegisterCondition(GameCondition cond)
 		{
-			this.activeConditions.Add(cond);
+			activeConditions.Add(cond);
 			cond.startTick = Mathf.Max(cond.startTick, Find.TickManager.TicksGame);
 			cond.gameConditionManager = this;
 			cond.Init();
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<GameCondition>(ref this.activeConditions, "activeConditions", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref activeConditions, "activeConditions", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				for (int i = 0; i < this.activeConditions.Count; i++)
+				for (int i = 0; i < activeConditions.Count; i++)
 				{
-					this.activeConditions[i].gameConditionManager = this;
+					activeConditions[i].gameConditionManager = this;
 				}
 			}
 		}
 
-		
 		public void GameConditionManagerTick()
 		{
-			for (int i = this.activeConditions.Count - 1; i >= 0; i--)
+			for (int num = activeConditions.Count - 1; num >= 0; num--)
 			{
-				GameCondition gameCondition = this.activeConditions[i];
+				GameCondition gameCondition = activeConditions[num];
 				if (gameCondition.Expired)
 				{
 					gameCondition.End();
@@ -104,81 +92,75 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void GameConditionManagerDraw(Map map)
 		{
-			for (int i = this.activeConditions.Count - 1; i >= 0; i--)
+			for (int num = activeConditions.Count - 1; num >= 0; num--)
 			{
-				this.activeConditions[i].GameConditionDraw(map);
+				activeConditions[num].GameConditionDraw(map);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				this.Parent.GameConditionManagerDraw(map);
+				Parent.GameConditionManagerDraw(map);
 			}
 		}
 
-		
 		public void DoSteadyEffects(IntVec3 c, Map map)
 		{
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				this.activeConditions[i].DoCellSteadyEffects(c, map);
+				activeConditions[i].DoCellSteadyEffects(c, map);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				this.Parent.DoSteadyEffects(c, map);
+				Parent.DoSteadyEffects(c, map);
 			}
 		}
 
-		
 		public bool ConditionIsActive(GameConditionDef def)
 		{
-			return this.GetActiveCondition(def) != null;
+			return GetActiveCondition(def) != null;
 		}
 
-		
 		public GameCondition GetActiveCondition(GameConditionDef def)
 		{
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				if (def == this.activeConditions[i].def)
+				if (def == activeConditions[i].def)
 				{
-					return this.activeConditions[i];
+					return activeConditions[i];
 				}
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				return this.Parent.GetActiveCondition(def);
+				return Parent.GetActiveCondition(def);
 			}
 			return null;
 		}
 
-		
 		public T GetActiveCondition<T>() where T : GameCondition
 		{
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				T t = this.activeConditions[i] as T;
-				if (t != null)
+				T val = activeConditions[i] as T;
+				if (val != null)
 				{
-					return t;
+					return val;
 				}
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				return this.Parent.GetActiveCondition<T>();
+				return Parent.GetActiveCondition<T>();
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		public PsychicDroneLevel GetHighestPsychicDroneLevelFor(Gender gender)
 		{
 			PsychicDroneLevel psychicDroneLevel = PsychicDroneLevel.None;
-			for (int i = 0; i < this.ActiveConditions.Count; i++)
+			for (int i = 0; i < ActiveConditions.Count; i++)
 			{
-				GameCondition_PsychicEmanation gameCondition_PsychicEmanation = this.activeConditions[i] as GameCondition_PsychicEmanation;
-				if (gameCondition_PsychicEmanation != null && gameCondition_PsychicEmanation.gender == gender && gameCondition_PsychicEmanation.level > psychicDroneLevel)
+				GameCondition_PsychicEmanation gameCondition_PsychicEmanation = activeConditions[i] as GameCondition_PsychicEmanation;
+				if (gameCondition_PsychicEmanation != null && gameCondition_PsychicEmanation.gender == gender && (int)gameCondition_PsychicEmanation.level > (int)psychicDroneLevel)
 				{
 					psychicDroneLevel = gameCondition_PsychicEmanation.level;
 				}
@@ -186,7 +168,6 @@ namespace RimWorld
 			return psychicDroneLevel;
 		}
 
-		
 		public void GetChildren(List<GameConditionManager> outChildren)
 		{
 			if (this == Find.World.gameConditionManager)
@@ -199,29 +180,27 @@ namespace RimWorld
 			}
 		}
 
-		
 		public float TotalHeightAt(float width)
 		{
 			float num = 0f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				num += Text.CalcHeight(this.activeConditions[i].LabelCap, width - 6f);
+				num += Text.CalcHeight(activeConditions[i].LabelCap, width - 6f);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				num += this.Parent.TotalHeightAt(width);
+				num += Parent.TotalHeightAt(width);
 			}
 			return num;
 		}
 
-		
 		public void DoConditionsUI(Rect rect)
 		{
 			GUI.BeginGroup(rect);
 			float num = 0f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				string labelCap = this.activeConditions[i].LabelCap;
+				string labelCap = activeConditions[i].LabelCap;
 				Rect rect2 = new Rect(0f, num, rect.width, Text.CalcHeight(labelCap, rect.width - 6f));
 				Text.Font = GameFont.Small;
 				Text.Anchor = TextAnchor.MiddleRight;
@@ -231,18 +210,18 @@ namespace RimWorld
 				Widgets.Label(rect3, labelCap);
 				if (Mouse.IsOver(rect2))
 				{
-					TooltipHandler.TipRegion(rect2, new TipSignal(this.activeConditions[i].TooltipString, 976090154 ^ i));
+					TooltipHandler.TipRegion(rect2, new TipSignal(activeConditions[i].TooltipString, 0x3A2DF42A ^ i));
 				}
-				if (Widgets.ButtonInvisible(rect2, true))
+				if (Widgets.ButtonInvisible(rect2))
 				{
-					if (this.activeConditions[i].conditionCauser != null && CameraJumper.CanJump(this.activeConditions[i].conditionCauser))
+					if (activeConditions[i].conditionCauser != null && CameraJumper.CanJump(activeConditions[i].conditionCauser))
 					{
-						CameraJumper.TryJumpAndSelect(this.activeConditions[i].conditionCauser);
+						CameraJumper.TryJumpAndSelect(activeConditions[i].conditionCauser);
 					}
-					else if (this.activeConditions[i].quest != null)
+					else if (activeConditions[i].quest != null)
 					{
-						Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Quests, true);
-						((MainTabWindow_Quests)MainButtonDefOf.Quests.TabWindow).Select(this.activeConditions[i].quest);
+						Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Quests);
+						((MainTabWindow_Quests)MainButtonDefOf.Quests.TabWindow).Select(activeConditions[i].quest);
 					}
 				}
 				num += rect2.height;
@@ -250,113 +229,105 @@ namespace RimWorld
 			rect.yMin += num;
 			GUI.EndGroup();
 			Text.Anchor = TextAnchor.UpperLeft;
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				this.Parent.DoConditionsUI(rect);
+				Parent.DoConditionsUI(rect);
 			}
 		}
 
-		
 		public void GetAllGameConditionsAffectingMap(Map map, List<GameCondition> listToFill)
 		{
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				listToFill.Add(this.activeConditions[i]);
+				listToFill.Add(activeConditions[i]);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				this.Parent.GetAllGameConditionsAffectingMap(map, listToFill);
+				Parent.GetAllGameConditionsAffectingMap(map, listToFill);
 			}
 		}
 
-		
 		internal float AggregateTemperatureOffset()
 		{
 			float num = 0f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				num += this.activeConditions[i].TemperatureOffset();
+				num += activeConditions[i].TemperatureOffset();
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				num += this.Parent.AggregateTemperatureOffset();
+				num += Parent.AggregateTemperatureOffset();
 			}
 			return num;
 		}
 
-		
 		internal float AggregateAnimalDensityFactor(Map map)
 		{
 			float num = 1f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				num *= this.activeConditions[i].AnimalDensityFactor(map);
+				num *= activeConditions[i].AnimalDensityFactor(map);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				num *= this.Parent.AggregateAnimalDensityFactor(map);
+				num *= Parent.AggregateAnimalDensityFactor(map);
 			}
 			return num;
 		}
 
-		
 		internal float AggregatePlantDensityFactor(Map map)
 		{
 			float num = 1f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				num *= this.activeConditions[i].PlantDensityFactor(map);
+				num *= activeConditions[i].PlantDensityFactor(map);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				num *= this.Parent.AggregatePlantDensityFactor(map);
+				num *= Parent.AggregatePlantDensityFactor(map);
 			}
 			return num;
 		}
 
-		
 		internal float AggregateSkyGazeJoyGainFactor(Map map)
 		{
 			float num = 1f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				num *= this.activeConditions[i].SkyGazeJoyGainFactor(map);
+				num *= activeConditions[i].SkyGazeJoyGainFactor(map);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				num *= this.Parent.AggregateSkyGazeJoyGainFactor(map);
+				num *= Parent.AggregateSkyGazeJoyGainFactor(map);
 			}
 			return num;
 		}
 
-		
 		internal float AggregateSkyGazeChanceFactor(Map map)
 		{
 			float num = 1f;
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				num *= this.activeConditions[i].SkyGazeChanceFactor(map);
+				num *= activeConditions[i].SkyGazeChanceFactor(map);
 			}
-			if (this.Parent != null)
+			if (Parent != null)
 			{
-				num *= this.Parent.AggregateSkyGazeChanceFactor(map);
+				num *= Parent.AggregateSkyGazeChanceFactor(map);
 			}
 			return num;
 		}
 
-		
 		internal bool AllowEnjoyableOutsideNow(Map map)
 		{
-			GameConditionDef gameConditionDef;
-			return this.AllowEnjoyableOutsideNow(map, out gameConditionDef);
+			GameConditionDef reason;
+			return AllowEnjoyableOutsideNow(map, out reason);
 		}
 
-		
 		internal bool AllowEnjoyableOutsideNow(Map map, out GameConditionDef reason)
 		{
-			for (int i = 0; i < this.activeConditions.Count; i++)
+			for (int i = 0; i < activeConditions.Count; i++)
 			{
-				GameCondition gameCondition = this.activeConditions[i];
+				GameCondition gameCondition = activeConditions[i];
 				if (!gameCondition.AllowEnjoyableOutsideNow(map))
 				{
 					reason = gameCondition.def;
@@ -364,27 +335,21 @@ namespace RimWorld
 				}
 			}
 			reason = null;
-			return this.Parent == null || this.Parent.AllowEnjoyableOutsideNow(map, out reason);
+			if (Parent != null)
+			{
+				return Parent.AllowEnjoyableOutsideNow(map, out reason);
+			}
+			return true;
 		}
 
-		
 		public string DebugString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (GameCondition saveable in this.activeConditions)
+			foreach (GameCondition activeCondition in activeConditions)
 			{
-				stringBuilder.AppendLine(Scribe.saver.DebugOutputFor(saveable));
+				stringBuilder.AppendLine(Scribe.saver.DebugOutputFor(activeCondition));
 			}
 			return stringBuilder.ToString();
 		}
-
-		
-		public Map ownerMap;
-
-		
-		private List<GameCondition> activeConditions = new List<GameCondition>();
-
-		
-		private const float TextPadding = 6f;
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -6,306 +5,288 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class Pawn_PlayerSettings : IExposable
 	{
-		
-		
-		
+		private Pawn pawn;
+
+		private Area areaAllowedInt;
+
+		public int joinTick = -1;
+
+		private Pawn master;
+
+		public bool followDrafted;
+
+		public bool followFieldwork;
+
+		public bool animalsReleased;
+
+		public MedicalCareCategory medCare = MedicalCareCategory.NoMeds;
+
+		public HostilityResponseMode hostilityResponse = HostilityResponseMode.Flee;
+
+		public bool selfTend;
+
+		public int displayOrder;
+
 		public Pawn Master
 		{
 			get
 			{
-				return this.master;
+				return master;
 			}
 			set
 			{
-				if (this.master == value)
+				if (master == value)
 				{
 					return;
 				}
-				if (value != null && !this.pawn.training.HasLearned(TrainableDefOf.Obedience))
+				if (value != null && !pawn.training.HasLearned(TrainableDefOf.Obedience))
 				{
-					Log.ErrorOnce("Attempted to set master for non-obedient pawn", 73908573, false);
+					Log.ErrorOnce("Attempted to set master for non-obedient pawn", 73908573);
 					return;
 				}
-				bool flag = ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(this.pawn);
-				this.master = value;
-				if (this.pawn.Spawned && (flag || ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(this.pawn)))
+				bool flag = ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(pawn);
+				master = value;
+				if (pawn.Spawned && (flag || ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(pawn)))
 				{
-					this.pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+					pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
 				}
 			}
 		}
 
-		
-		
 		public Area EffectiveAreaRestrictionInPawnCurrentMap
 		{
 			get
 			{
-				if (this.areaAllowedInt != null && this.areaAllowedInt.Map != this.pawn.MapHeld)
+				if (areaAllowedInt != null && areaAllowedInt.Map != pawn.MapHeld)
 				{
 					return null;
 				}
-				return this.EffectiveAreaRestriction;
+				return EffectiveAreaRestriction;
 			}
 		}
 
-		
-		
 		public Area EffectiveAreaRestriction
 		{
 			get
 			{
-				if (!this.RespectsAllowedArea)
+				if (!RespectsAllowedArea)
 				{
 					return null;
 				}
-				return this.areaAllowedInt;
+				return areaAllowedInt;
 			}
 		}
 
-		
-		
-		
 		public Area AreaRestriction
 		{
 			get
 			{
-				return this.areaAllowedInt;
+				return areaAllowedInt;
 			}
 			set
 			{
-				if (this.areaAllowedInt == value)
+				if (areaAllowedInt != value)
 				{
-					return;
-				}
-				this.areaAllowedInt = value;
-				if (this.pawn.Spawned && !this.pawn.Drafted && value != null && value == this.EffectiveAreaRestrictionInPawnCurrentMap && value.TrueCount > 0 && this.pawn.jobs != null && this.pawn.jobs.curJob != null && this.pawn.jobs.curJob.AnyTargetOutsideArea(value))
-				{
-					this.pawn.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
+					areaAllowedInt = value;
+					if (pawn.Spawned && !pawn.Drafted && value != null && value == EffectiveAreaRestrictionInPawnCurrentMap && value.TrueCount > 0 && pawn.jobs != null && pawn.jobs.curJob != null && pawn.jobs.curJob.AnyTargetOutsideArea(value))
+					{
+						pawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
+					}
 				}
 			}
 		}
 
-		
-		
 		public bool RespectsAllowedArea
 		{
 			get
 			{
-				return this.pawn.GetLord() == null && this.pawn.Faction == Faction.OfPlayer && this.pawn.HostFaction == null;
+				if (pawn.GetLord() != null)
+				{
+					return false;
+				}
+				if (pawn.Faction == Faction.OfPlayer)
+				{
+					return pawn.HostFaction == null;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public bool RespectsMaster
 		{
 			get
 			{
-				return this.Master != null && this.pawn.Faction == Faction.OfPlayer && this.Master.Faction == this.pawn.Faction;
+				if (Master == null)
+				{
+					return false;
+				}
+				if (pawn.Faction == Faction.OfPlayer)
+				{
+					return Master.Faction == pawn.Faction;
+				}
+				return false;
 			}
 		}
 
-		
-		
 		public Pawn RespectedMaster
 		{
 			get
 			{
-				if (!this.RespectsMaster)
+				if (!RespectsMaster)
 				{
 					return null;
 				}
-				return this.Master;
+				return Master;
 			}
 		}
 
-		
-		
 		public bool UsesConfigurableHostilityResponse
 		{
 			get
 			{
-				return this.pawn.IsColonist && this.pawn.HostFaction == null;
+				if (pawn.IsColonist)
+				{
+					return pawn.HostFaction == null;
+				}
+				return false;
 			}
 		}
 
-		
 		public Pawn_PlayerSettings(Pawn pawn)
 		{
 			this.pawn = pawn;
 			if (Current.ProgramState == ProgramState.Playing)
 			{
-				this.joinTick = Find.TickManager.TicksGame;
+				joinTick = Find.TickManager.TicksGame;
 			}
 			else
 			{
-				this.joinTick = 0;
+				joinTick = 0;
 			}
-			this.Notify_FactionChanged();
+			Notify_FactionChanged();
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<int>(ref this.joinTick, "joinTick", 0, false);
-			Scribe_Values.Look<bool>(ref this.animalsReleased, "animalsReleased", false, false);
-			Scribe_Values.Look<MedicalCareCategory>(ref this.medCare, "medCare", MedicalCareCategory.NoCare, false);
-			Scribe_References.Look<Area>(ref this.areaAllowedInt, "areaAllowed", false);
-			Scribe_References.Look<Pawn>(ref this.master, "master", false);
-			Scribe_Values.Look<bool>(ref this.followDrafted, "followDrafted", false, false);
-			Scribe_Values.Look<bool>(ref this.followFieldwork, "followFieldwork", false, false);
-			Scribe_Values.Look<HostilityResponseMode>(ref this.hostilityResponse, "hostilityResponse", HostilityResponseMode.Flee, false);
-			Scribe_Values.Look<bool>(ref this.selfTend, "selfTend", false, false);
-			Scribe_Values.Look<int>(ref this.displayOrder, "displayOrder", 0, false);
+			Scribe_Values.Look(ref joinTick, "joinTick", 0);
+			Scribe_Values.Look(ref animalsReleased, "animalsReleased", defaultValue: false);
+			Scribe_Values.Look(ref medCare, "medCare", MedicalCareCategory.NoCare);
+			Scribe_References.Look(ref areaAllowedInt, "areaAllowed");
+			Scribe_References.Look(ref master, "master");
+			Scribe_Values.Look(ref followDrafted, "followDrafted", defaultValue: false);
+			Scribe_Values.Look(ref followFieldwork, "followFieldwork", defaultValue: false);
+			Scribe_Values.Look(ref hostilityResponse, "hostilityResponse", HostilityResponseMode.Flee);
+			Scribe_Values.Look(ref selfTend, "selfTend", defaultValue: false);
+			Scribe_Values.Look(ref displayOrder, "displayOrder", 0);
 		}
 
-		
 		public IEnumerable<Gizmo> GetGizmos()
 		{
-			if (this.pawn.Drafted)
+			if (!pawn.Drafted)
 			{
-				int num = 0;
-				bool flag = false;
-				foreach (Pawn pawn in PawnUtility.SpawnedMasteredPawns(this.pawn))
+				yield break;
+			}
+			int num = 0;
+			bool flag = false;
+			foreach (Pawn item in PawnUtility.SpawnedMasteredPawns(pawn))
+			{
+				if (item.training.HasLearned(TrainableDefOf.Release))
 				{
-					if (pawn.training.HasLearned(TrainableDefOf.Release))
+					flag = true;
+					if (ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(item))
 					{
-						flag = true;
-						if (ThinkNode_ConditionalShouldFollowMaster.ShouldFollowMaster(pawn))
-						{
-							num++;
-						}
+						num++;
 					}
-				}
-				if (flag)
-				{
-					Command_Toggle command_Toggle = new Command_Toggle();
-					command_Toggle.defaultLabel = "CommandReleaseAnimalsLabel".Translate() + ((num != 0) ? (" (" + num + ")") : "");
-					command_Toggle.defaultDesc = "CommandReleaseAnimalsDesc".Translate();
-					command_Toggle.icon = TexCommand.ReleaseAnimals;
-					command_Toggle.hotKey = KeyBindingDefOf.Misc7;
-					command_Toggle.isActive = (() => this.animalsReleased);
-					command_Toggle.toggleAction = delegate
-					{
-						this.animalsReleased = !this.animalsReleased;
-						if (this.animalsReleased)
-						{
-							foreach (Pawn pawn2 in PawnUtility.SpawnedMasteredPawns(this.pawn))
-							{
-								if (pawn2.caller != null)
-								{
-									pawn2.caller.Notify_Released();
-								}
-								pawn2.jobs.EndCurrentJob(JobCondition.InterruptForced, true, true);
-							}
-						}
-					};
-					if (num == 0)
-					{
-						command_Toggle.Disable("CommandReleaseAnimalsFail_NoAnimals".Translate());
-					}
-					yield return command_Toggle;
 				}
 			}
-			yield break;
+			if (flag)
+			{
+				Command_Toggle command_Toggle = new Command_Toggle();
+				command_Toggle.defaultLabel = "CommandReleaseAnimalsLabel".Translate() + ((num != 0) ? (" (" + num + ")") : "");
+				command_Toggle.defaultDesc = "CommandReleaseAnimalsDesc".Translate();
+				command_Toggle.icon = TexCommand.ReleaseAnimals;
+				command_Toggle.hotKey = KeyBindingDefOf.Misc7;
+				command_Toggle.isActive = (() => animalsReleased);
+				command_Toggle.toggleAction = delegate
+				{
+					animalsReleased = !animalsReleased;
+					if (animalsReleased)
+					{
+						foreach (Pawn item2 in PawnUtility.SpawnedMasteredPawns(pawn))
+						{
+							if (item2.caller != null)
+							{
+								item2.caller.Notify_Released();
+							}
+							item2.jobs.EndCurrentJob(JobCondition.InterruptForced);
+						}
+					}
+				};
+				if (num == 0)
+				{
+					command_Toggle.Disable("CommandReleaseAnimalsFail_NoAnimals".Translate());
+				}
+				yield return command_Toggle;
+			}
 		}
 
-		
 		public void Notify_FactionChanged()
 		{
-			this.ResetMedicalCare();
-			this.areaAllowedInt = null;
+			ResetMedicalCare();
+			areaAllowedInt = null;
 		}
 
-		
 		public void Notify_MadePrisoner()
 		{
-			this.ResetMedicalCare();
+			ResetMedicalCare();
 		}
 
-		
 		public void ResetMedicalCare()
 		{
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
 				return;
 			}
-			if (this.pawn.Faction == Faction.OfPlayer)
+			if (pawn.Faction == Faction.OfPlayer)
 			{
-				if (this.pawn.RaceProps.Animal)
+				if (!pawn.RaceProps.Animal)
 				{
-					this.medCare = Find.PlaySettings.defaultCareForColonyAnimal;
-					return;
+					if (!pawn.IsPrisoner)
+					{
+						medCare = Find.PlaySettings.defaultCareForColonyHumanlike;
+					}
+					else
+					{
+						medCare = Find.PlaySettings.defaultCareForColonyPrisoner;
+					}
 				}
-				if (!this.pawn.IsPrisoner)
+				else
 				{
-					this.medCare = Find.PlaySettings.defaultCareForColonyHumanlike;
-					return;
+					medCare = Find.PlaySettings.defaultCareForColonyAnimal;
 				}
-				this.medCare = Find.PlaySettings.defaultCareForColonyPrisoner;
-				return;
+			}
+			else if (pawn.Faction == null && pawn.RaceProps.Animal)
+			{
+				medCare = Find.PlaySettings.defaultCareForNeutralAnimal;
+			}
+			else if (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer))
+			{
+				medCare = Find.PlaySettings.defaultCareForNeutralFaction;
 			}
 			else
 			{
-				if (this.pawn.Faction == null && this.pawn.RaceProps.Animal)
-				{
-					this.medCare = Find.PlaySettings.defaultCareForNeutralAnimal;
-					return;
-				}
-				if (this.pawn.Faction == null || !this.pawn.Faction.HostileTo(Faction.OfPlayer))
-				{
-					this.medCare = Find.PlaySettings.defaultCareForNeutralFaction;
-					return;
-				}
-				this.medCare = Find.PlaySettings.defaultCareForHostileFaction;
-				return;
+				medCare = Find.PlaySettings.defaultCareForHostileFaction;
 			}
 		}
 
-		
 		public void Notify_AreaRemoved(Area area)
 		{
-			if (this.areaAllowedInt == area)
+			if (areaAllowedInt == area)
 			{
-				this.areaAllowedInt = null;
+				areaAllowedInt = null;
 			}
 		}
-
-		
-		private Pawn pawn;
-
-		
-		private Area areaAllowedInt;
-
-		
-		public int joinTick = -1;
-
-		
-		private Pawn master;
-
-		
-		public bool followDrafted;
-
-		
-		public bool followFieldwork;
-
-		
-		public bool animalsReleased;
-
-		
-		public MedicalCareCategory medCare = MedicalCareCategory.NoMeds;
-
-		
-		public HostilityResponseMode hostilityResponse = HostilityResponseMode.Flee;
-
-		
-		public bool selfTend;
-
-		
-		public int displayOrder;
 	}
 }

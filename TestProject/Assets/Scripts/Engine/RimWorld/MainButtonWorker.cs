@@ -1,103 +1,89 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class MainButtonWorker
 	{
-		
-		
-		public virtual float ButtonBarPercent
-		{
-			get
-			{
-				return 0f;
-			}
-		}
+		public MainButtonDef def;
 
-		
-		
+		private const float CompactModeMargin = 2f;
+
+		private const float IconSize = 32f;
+
+		public virtual float ButtonBarPercent => 0f;
+
 		public virtual bool Disabled
 		{
 			get
 			{
-				return (Find.CurrentMap == null && (!this.def.validWithoutMap || this.def == MainButtonDefOf.World)) || (Find.WorldRoutePlanner.Active && Find.WorldRoutePlanner.FormingCaravan && (!this.def.validWithoutMap || this.def == MainButtonDefOf.World));
+				if (Find.CurrentMap == null && (!def.validWithoutMap || def == MainButtonDefOf.World))
+				{
+					return true;
+				}
+				if (Find.WorldRoutePlanner.Active && Find.WorldRoutePlanner.FormingCaravan && (!def.validWithoutMap || def == MainButtonDefOf.World))
+				{
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public abstract void Activate();
 
-		
 		public virtual void InterfaceTryActivate()
 		{
-			if (TutorSystem.TutorialMode && this.def.canBeTutorDenied && Find.MainTabsRoot.OpenTab != this.def && !TutorSystem.AllowAction("MainTab-" + this.def.defName + "-Open"))
+			if (!TutorSystem.TutorialMode || !def.canBeTutorDenied || Find.MainTabsRoot.OpenTab == def || TutorSystem.AllowAction("MainTab-" + def.defName + "-Open"))
 			{
-				return;
+				Activate();
 			}
-			this.Activate();
 		}
 
-		
 		public virtual void DoButton(Rect rect)
 		{
 			Text.Font = GameFont.Small;
-			string text = this.def.LabelCap;
-			float num = this.def.LabelCapWidth;
+			string text = def.LabelCap;
+			float num = def.LabelCapWidth;
 			if (num > rect.width - 2f)
 			{
-				text = this.def.ShortenedLabelCap;
-				num = this.def.ShortenedLabelCapWidth;
+				text = def.ShortenedLabelCap;
+				num = def.ShortenedLabelCapWidth;
 			}
-			if (this.Disabled)
+			if (Disabled)
 			{
 				Widgets.DrawAtlas(rect, Widgets.ButtonSubtleAtlas);
 				if (Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
 				{
 					Event.current.Use();
-					return;
 				}
+				return;
 			}
-			else
+			bool flag = num > 0.85f * rect.width - 1f;
+			Rect rect2 = rect;
+			string label = (def.Icon == null) ? text : "";
+			float textLeftMargin = flag ? 2f : (-1f);
+			if (Widgets.ButtonTextSubtle(rect2, label, ButtonBarPercent, textLeftMargin, SoundDefOf.Mouseover_Category))
 			{
-				bool flag = num > 0.85f * rect.width - 1f;
-				Rect rect2 = rect;
-				string label = (this.def.Icon == null) ? text : "";
-				float textLeftMargin = flag ? 2f : -1f;
-				if (Widgets.ButtonTextSubtle(rect2, label, this.ButtonBarPercent, textLeftMargin, SoundDefOf.Mouseover_Category, default(Vector2)))
+				InterfaceTryActivate();
+			}
+			if (def.Icon != null)
+			{
+				Vector2 center = rect.center;
+				float num2 = 16f;
+				if (Mouse.IsOver(rect))
 				{
-					this.InterfaceTryActivate();
+					center += new Vector2(2f, -2f);
 				}
-				if (this.def.Icon != null)
-				{
-					Vector2 vector = rect.center;
-					float num2 = 16f;
-					if (Mouse.IsOver(rect))
-					{
-						vector += new Vector2(2f, -2f);
-					}
-					GUI.DrawTexture(new Rect(vector.x - num2, vector.y - num2, 32f, 32f), this.def.Icon);
-				}
-				if (Find.MainTabsRoot.OpenTab != this.def && !Find.WindowStack.NonImmediateDialogWindowOpen)
-				{
-					UIHighlighter.HighlightOpportunity(rect, this.def.cachedHighlightTagClosed);
-				}
-				if (Mouse.IsOver(rect) && !this.def.description.NullOrEmpty())
-				{
-					TooltipHandler.TipRegion(rect, this.def.LabelCap + "\n\n" + this.def.description);
-				}
+				GUI.DrawTexture(new Rect(center.x - num2, center.y - num2, 32f, 32f), def.Icon);
+			}
+			if (Find.MainTabsRoot.OpenTab != def && !Find.WindowStack.NonImmediateDialogWindowOpen)
+			{
+				UIHighlighter.HighlightOpportunity(rect, def.cachedHighlightTagClosed);
+			}
+			if (Mouse.IsOver(rect) && !def.description.NullOrEmpty())
+			{
+				TooltipHandler.TipRegion(rect, def.LabelCap + "\n\n" + def.description);
 			}
 		}
-
-		
-		public MainButtonDef def;
-
-		
-		private const float CompactModeMargin = 2f;
-
-		
-		private const float IconSize = 32f;
 	}
 }

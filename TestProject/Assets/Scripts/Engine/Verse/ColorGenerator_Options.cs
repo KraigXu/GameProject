@@ -1,24 +1,22 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class ColorGenerator_Options : ColorGenerator
 	{
-		
-		
+		public List<ColorOption> options = new List<ColorOption>();
+
 		public override Color ExemplaryColor
 		{
 			get
 			{
 				ColorOption colorOption = null;
-				for (int i = 0; i < this.options.Count; i++)
+				for (int i = 0; i < options.Count; i++)
 				{
-					if (colorOption == null || this.options[i].weight > colorOption.weight)
+					if (colorOption == null || options[i].weight > colorOption.weight)
 					{
-						colorOption = this.options[i];
+						colorOption = options[i];
 					}
 				}
 				if (colorOption == null)
@@ -33,13 +31,9 @@ namespace Verse
 			}
 		}
 
-		
 		public override Color NewRandomizedColor()
 		{
-			return this.options.RandomElementByWeight((ColorOption pi) => pi.weight).RandomizedColor();
+			return options.RandomElementByWeight((ColorOption pi) => pi.weight).RandomizedColor();
 		}
-
-		
-		public List<ColorOption> options = new List<ColorOption>();
 	}
 }

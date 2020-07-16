@@ -1,71 +1,47 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ShipLandingArea
 	{
-		
-		
-		public IntVec3 CenterCell
-		{
-			get
-			{
-				return this.rect.CenterCell;
-			}
-		}
+		private CellRect rect;
 
-		
-		
-		public CellRect MyRect
-		{
-			get
-			{
-				return this.rect;
-			}
-		}
+		private Map map;
 
-		
-		
+		private Thing firstBlockingThing;
+
+		private bool blockedByRoof;
+
+		public List<CompShipLandingBeacon> beacons = new List<CompShipLandingBeacon>();
+
+		public IntVec3 CenterCell => rect.CenterCell;
+
+		public CellRect MyRect => rect;
+
 		public bool Clear
 		{
 			get
 			{
-				return this.firstBlockingThing == null && !this.blockedByRoof;
+				if (firstBlockingThing == null)
+				{
+					return !blockedByRoof;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public bool BlockedByRoof
-		{
-			get
-			{
-				return this.blockedByRoof;
-			}
-		}
+		public bool BlockedByRoof => blockedByRoof;
 
-		
-		
-		public Thing FirstBlockingThing
-		{
-			get
-			{
-				return this.firstBlockingThing;
-			}
-		}
+		public Thing FirstBlockingThing => firstBlockingThing;
 
-		
-		
 		public bool Active
 		{
 			get
 			{
-				for (int i = 0; i < this.beacons.Count; i++)
+				for (int i = 0; i < beacons.Count; i++)
 				{
-					if (!this.beacons[i].Active)
+					if (!beacons[i].Active)
 					{
 						return false;
 					}
@@ -74,50 +50,33 @@ namespace RimWorld
 			}
 		}
 
-		
 		public ShipLandingArea(CellRect rect, Map map)
 		{
 			this.rect = rect;
 			this.map = map;
 		}
 
-		
 		public void RecalculateBlockingThing()
 		{
-			this.blockedByRoof = false;
-			foreach (IntVec3 c in this.rect)
+			blockedByRoof = false;
+			foreach (IntVec3 item in rect)
 			{
-				if (c.Roofed(this.map))
+				if (item.Roofed(map))
 				{
-					this.blockedByRoof = true;
+					blockedByRoof = true;
 					break;
 				}
-				List<Thing> thingList = c.GetThingList(this.map);
+				List<Thing> thingList = item.GetThingList(map);
 				for (int i = 0; i < thingList.Count; i++)
 				{
-					if (!(thingList[i] is Pawn) && (thingList[i].def.Fillage != FillCategory.None || thingList[i].def.IsEdifice() || thingList[i] is Skyfaller))
+					if (!(thingList[i] is Pawn) && (thingList[i].def.Fillage != 0 || thingList[i].def.IsEdifice() || thingList[i] is Skyfaller))
 					{
-						this.firstBlockingThing = thingList[i];
+						firstBlockingThing = thingList[i];
 						return;
 					}
 				}
 			}
-			this.firstBlockingThing = null;
+			firstBlockingThing = null;
 		}
-
-		
-		private CellRect rect;
-
-		
-		private Map map;
-
-		
-		private Thing firstBlockingThing;
-
-		
-		private bool blockedByRoof;
-
-		
-		public List<CompShipLandingBeacon> beacons = new List<CompShipLandingBeacon>();
 	}
 }

@@ -1,169 +1,153 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class CompEggLayer : ThingComp
 	{
-		
-		
+		private float eggProgress;
+
+		private int fertilizationCount;
+
+		private Pawn fertilizedBy;
+
 		private bool Active
 		{
 			get
 			{
-				Pawn pawn = this.parent as Pawn;
-				return (!this.Props.eggLayFemaleOnly || pawn == null || pawn.gender == Gender.Female) && (pawn == null || pawn.ageTracker.CurLifeStage.milkable);
+				Pawn pawn = parent as Pawn;
+				if (Props.eggLayFemaleOnly && pawn != null && pawn.gender != Gender.Female)
+				{
+					return false;
+				}
+				if (pawn != null && !pawn.ageTracker.CurLifeStage.milkable)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public bool CanLayNow
 		{
 			get
 			{
-				return this.Active && this.eggProgress >= 1f;
+				if (!Active)
+				{
+					return false;
+				}
+				return eggProgress >= 1f;
 			}
 		}
 
-		
-		
-		public bool FullyFertilized
-		{
-			get
-			{
-				return this.fertilizationCount >= this.Props.eggFertilizationCountMax;
-			}
-		}
+		public bool FullyFertilized => fertilizationCount >= Props.eggFertilizationCountMax;
 
-		
-		
 		private bool ProgressStoppedBecauseUnfertilized
 		{
 			get
 			{
-				return this.Props.eggProgressUnfertilizedMax < 1f && this.fertilizationCount == 0 && this.eggProgress >= this.Props.eggProgressUnfertilizedMax;
+				if (Props.eggProgressUnfertilizedMax < 1f && fertilizationCount == 0)
+				{
+					return eggProgress >= Props.eggProgressUnfertilizedMax;
+				}
+				return false;
 			}
 		}
 
-		
-		
-		public CompProperties_EggLayer Props
-		{
-			get
-			{
-				return (CompProperties_EggLayer)this.props;
-			}
-		}
+		public CompProperties_EggLayer Props => (CompProperties_EggLayer)props;
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<float>(ref this.eggProgress, "eggProgress", 0f, false);
-			Scribe_Values.Look<int>(ref this.fertilizationCount, "fertilizationCount", 0, false);
-			Scribe_References.Look<Pawn>(ref this.fertilizedBy, "fertilizedBy", false);
+			Scribe_Values.Look(ref eggProgress, "eggProgress", 0f);
+			Scribe_Values.Look(ref fertilizationCount, "fertilizationCount", 0);
+			Scribe_References.Look(ref fertilizedBy, "fertilizedBy");
 		}
 
-		
 		public override void CompTick()
 		{
-			if (this.Active)
+			if (Active)
 			{
-				float num = 1f / (this.Props.eggLayIntervalDays * 60000f);
-				Pawn pawn = this.parent as Pawn;
+				float num = 1f / (Props.eggLayIntervalDays * 60000f);
+				Pawn pawn = parent as Pawn;
 				if (pawn != null)
 				{
 					num *= PawnUtility.BodyResourceGrowthSpeed(pawn);
 				}
-				this.eggProgress += num;
-				if (this.eggProgress > 1f)
+				eggProgress += num;
+				if (eggProgress > 1f)
 				{
-					this.eggProgress = 1f;
+					eggProgress = 1f;
 				}
-				if (this.ProgressStoppedBecauseUnfertilized)
+				if (ProgressStoppedBecauseUnfertilized)
 				{
-					this.eggProgress = this.Props.eggProgressUnfertilizedMax;
+					eggProgress = Props.eggProgressUnfertilizedMax;
 				}
 			}
 		}
 
-		
 		public void Fertilize(Pawn male)
 		{
-			this.fertilizationCount = this.Props.eggFertilizationCountMax;
-			this.fertilizedBy = male;
+			fertilizationCount = Props.eggFertilizationCountMax;
+			fertilizedBy = male;
 		}
 
-		
 		public virtual Thing ProduceEgg()
 		{
-			if (!this.Active)
+			if (!Active)
 			{
-				Log.Error("LayEgg while not Active: " + this.parent, false);
+				Log.Error("LayEgg while not Active: " + parent);
 			}
-			this.eggProgress = 0f;
-			int randomInRange = this.Props.eggCountRange.RandomInRange;
+			eggProgress = 0f;
+			int randomInRange = Props.eggCountRange.RandomInRange;
 			if (randomInRange == 0)
 			{
 				return null;
 			}
 			Thing thing;
-			if (this.fertilizationCount > 0)
+			if (fertilizationCount > 0)
 			{
-				thing = ThingMaker.MakeThing(this.Props.eggFertilizedDef, null);
-				this.fertilizationCount = Mathf.Max(0, this.fertilizationCount - randomInRange);
+				thing = ThingMaker.MakeThing(Props.eggFertilizedDef);
+				fertilizationCount = Mathf.Max(0, fertilizationCount - randomInRange);
 			}
 			else
 			{
-				thing = ThingMaker.MakeThing(this.Props.eggUnfertilizedDef, null);
+				thing = ThingMaker.MakeThing(Props.eggUnfertilizedDef);
 			}
 			thing.stackCount = randomInRange;
 			CompHatcher compHatcher = thing.TryGetComp<CompHatcher>();
 			if (compHatcher != null)
 			{
-				compHatcher.hatcheeFaction = this.parent.Faction;
-				Pawn pawn = this.parent as Pawn;
+				compHatcher.hatcheeFaction = parent.Faction;
+				Pawn pawn = parent as Pawn;
 				if (pawn != null)
 				{
 					compHatcher.hatcheeParent = pawn;
 				}
-				if (this.fertilizedBy != null)
+				if (fertilizedBy != null)
 				{
-					compHatcher.otherParent = this.fertilizedBy;
+					compHatcher.otherParent = fertilizedBy;
 				}
 			}
 			return thing;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
-			if (!this.Active)
+			if (!Active)
 			{
 				return null;
 			}
-			string text = "EggProgress".Translate() + ": " + this.eggProgress.ToStringPercent();
-			if (this.fertilizationCount > 0)
+			string text = "EggProgress".Translate() + ": " + eggProgress.ToStringPercent();
+			if (fertilizationCount > 0)
 			{
 				text += "\n" + "Fertilized".Translate();
 			}
-			else if (this.ProgressStoppedBecauseUnfertilized)
+			else if (ProgressStoppedBecauseUnfertilized)
 			{
 				text += "\n" + "ProgressStoppedUntilFertilized".Translate();
 			}
 			return text;
 		}
-
-		
-		private float eggProgress;
-
-		
-		private int fertilizationCount;
-
-		
-		private Pawn fertilizedBy;
 	}
 }

@@ -1,110 +1,93 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_FoodDeliver : JobDriver
 	{
-		
-		
-		private Pawn Deliveree
-		{
-			get
-			{
-				return (Pawn)this.job.targetB.Thing;
-			}
-		}
+		private bool usingNutrientPasteDispenser;
 
-		
+		private bool eatingFromInventory;
+
+		private const TargetIndex FoodSourceInd = TargetIndex.A;
+
+		private const TargetIndex DelivereeInd = TargetIndex.B;
+
+		private Pawn Deliveree => (Pawn)job.targetB.Thing;
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<bool>(ref this.usingNutrientPasteDispenser, "usingNutrientPasteDispenser", false, false);
-			Scribe_Values.Look<bool>(ref this.eatingFromInventory, "eatingFromInventory", false, false);
+			Scribe_Values.Look(ref usingNutrientPasteDispenser, "usingNutrientPasteDispenser", defaultValue: false);
+			Scribe_Values.Look(ref eatingFromInventory, "eatingFromInventory", defaultValue: false);
 		}
 
-		
 		public override string GetReport()
 		{
-			if (this.job.GetTarget(TargetIndex.A).Thing is Building_NutrientPasteDispenser && this.Deliveree != null)
+			if (job.GetTarget(TargetIndex.A).Thing is Building_NutrientPasteDispenser && Deliveree != null)
 			{
-				return JobUtility.GetResolvedJobReportRaw(this.job.def.reportString, ThingDefOf.MealNutrientPaste.label, ThingDefOf.MealNutrientPaste, this.Deliveree.LabelShort, this.Deliveree, "", "");
+				return JobUtility.GetResolvedJobReportRaw(job.def.reportString, ThingDefOf.MealNutrientPaste.label, ThingDefOf.MealNutrientPaste, Deliveree.LabelShort, Deliveree, "", "");
 			}
 			return base.GetReport();
 		}
 
-		
 		public override void Notify_Starting()
 		{
 			base.Notify_Starting();
-			this.usingNutrientPasteDispenser = (base.TargetThingA is Building_NutrientPasteDispenser);
-			this.eatingFromInventory = (this.pawn.inventory != null && this.pawn.inventory.Contains(base.TargetThingA));
+			usingNutrientPasteDispenser = (base.TargetThingA is Building_NutrientPasteDispenser);
+			eatingFromInventory = (pawn.inventory != null && pawn.inventory.Contains(base.TargetThingA));
 		}
 
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.Deliveree, this.job, 1, -1, null, errorOnFailed);
+			return pawn.Reserve(Deliveree, job, 1, -1, null, errorOnFailed);
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
 			this.FailOnDespawnedOrNull(TargetIndex.B);
-			if (this.eatingFromInventory)
+			if (eatingFromInventory)
 			{
-				yield return Toils_Misc.TakeItemFromInventoryToCarrier(this.pawn, TargetIndex.A);
+				yield return Toils_Misc.TakeItemFromInventoryToCarrier(pawn, TargetIndex.A);
 			}
-			else if (this.usingNutrientPasteDispenser)
+			else if (usingNutrientPasteDispenser)
 			{
 				yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnForbidden(TargetIndex.A);
-				yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, this.pawn);
+				yield return Toils_Ingest.TakeMealFromDispenser(TargetIndex.A, pawn);
 			}
 			else
 			{
-				yield return Toils_Ingest.ReserveFoodFromStackForIngesting(TargetIndex.A, this.Deliveree);
+				yield return Toils_Ingest.ReserveFoodFromStackForIngesting(TargetIndex.A, Deliveree);
 				yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnForbidden(TargetIndex.A);
-				yield return Toils_Ingest.PickupIngestible(TargetIndex.A, this.Deliveree);
+				yield return Toils_Ingest.PickupIngestible(TargetIndex.A, Deliveree);
 			}
-			Toil toil2 = new Toil();
-			toil2.initAction = delegate
-			{
-				Pawn actor = toil2.actor;
-				Job curJob = actor.jobs.curJob;
-				actor.pather.StartPath(curJob.targetC, PathEndMode.OnCell);
-			};
-			toil2.defaultCompleteMode = ToilCompleteMode.PatherArrival;
-			toil2.FailOnDestroyedNullOrForbidden(TargetIndex.B);
-			toil2.AddFailCondition(delegate
-			{
-				Pawn pawn = (Pawn)toil2.actor.jobs.curJob.targetB.Thing;
-				return !pawn.IsPrisonerOfColony || !pawn.guest.CanBeBroughtFood;
-			});
-			yield return toil2;
 			Toil toil = new Toil();
 			toil.initAction = delegate
 			{
-				Thing thing;
-				this.pawn.carryTracker.TryDropCarriedThing(toil.actor.jobs.curJob.targetC.Cell, ThingPlaceMode.Direct, out thing, null);
+				Pawn actor = toil.actor;
+				Job curJob = actor.jobs.curJob;
+				actor.pather.StartPath(curJob.targetC, PathEndMode.OnCell);
 			};
-			toil.defaultCompleteMode = ToilCompleteMode.Instant;
+			toil.defaultCompleteMode = ToilCompleteMode.PatherArrival;
+			toil.FailOnDestroyedNullOrForbidden(TargetIndex.B);
+			toil.AddFailCondition(delegate
+			{
+				Pawn pawn = (Pawn)toil.actor.jobs.curJob.targetB.Thing;
+				if (!pawn.IsPrisonerOfColony)
+				{
+					return true;
+				}
+				return (!pawn.guest.CanBeBroughtFood) ? true : false;
+			});
 			yield return toil;
-			yield break;
+			Toil toil2 = new Toil();
+			toil2.initAction = delegate
+			{
+				pawn.carryTracker.TryDropCarriedThing(toil2.actor.jobs.curJob.targetC.Cell, ThingPlaceMode.Direct, out Thing _);
+			};
+			toil2.defaultCompleteMode = ToilCompleteMode.Instant;
+			yield return toil2;
 		}
-
-		
-		private bool usingNutrientPasteDispenser;
-
-		
-		private bool eatingFromInventory;
-
-		
-		private const TargetIndex FoodSourceInd = TargetIndex.A;
-
-		
-		private const TargetIndex DelivereeInd = TargetIndex.B;
 	}
 }

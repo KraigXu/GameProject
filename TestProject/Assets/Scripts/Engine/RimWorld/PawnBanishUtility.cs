@@ -1,32 +1,33 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Text;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class PawnBanishUtility
 	{
-		
+		private const float DeathChanceForCaravanPawnBanishedToDie = 0.8f;
+
+		private static List<Hediff> tmpHediffs = new List<Hediff>();
+
 		public static void Banish(Pawn pawn, int tile = -1)
 		{
 			if (pawn.Faction != Faction.OfPlayer && pawn.HostFaction != Faction.OfPlayer)
 			{
-				Log.Warning("Tried to banish " + pawn + " but he's neither a colonist, tame animal, nor prisoner.", false);
+				Log.Warning("Tried to banish " + pawn + " but he's neither a colonist, tame animal, nor prisoner.");
 				return;
 			}
 			if (tile == -1)
 			{
 				tile = pawn.Tile;
 			}
-			bool flag = PawnBanishUtility.WouldBeLeftToDie(pawn, tile);
-			PawnDiedOrDownedThoughtsUtility.TryGiveThoughts(pawn, null, flag ? PawnDiedOrDownedThoughtsKind.BanishedToDie : PawnDiedOrDownedThoughtsKind.Banished);
+			bool flag = WouldBeLeftToDie(pawn, tile);
+			PawnDiedOrDownedThoughtsUtility.TryGiveThoughts(pawn, null, (!flag) ? PawnDiedOrDownedThoughtsKind.Banished : PawnDiedOrDownedThoughtsKind.BanishedToDie);
 			Caravan caravan = pawn.GetCaravan();
 			if (caravan != null)
 			{
-				CaravanInventoryUtility.MoveAllInventoryToSomeoneElse(pawn, caravan.PawnsListForReading, null);
+				CaravanInventoryUtility.MoveAllInventoryToSomeoneElse(pawn, caravan.PawnsListForReading);
 				caravan.RemovePawn(pawn);
 				if (flag)
 				{
@@ -36,33 +37,31 @@ namespace RimWorld
 					}
 					else
 					{
-						PawnBanishUtility.HealIfPossible(pawn);
+						HealIfPossible(pawn);
 					}
 				}
 			}
 			if (pawn.guest != null)
 			{
-				pawn.guest.SetGuestStatus(null, false);
+				pawn.guest.SetGuestStatus(null);
 			}
-			if (pawn.Faction == Faction.OfPlayer)
+			if (pawn.Faction != Faction.OfPlayer)
 			{
-				Faction faction;
-				if (!pawn.Spawned && Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out faction, pawn.Faction != null && pawn.Faction.def.techLevel >= TechLevel.Medieval, false, TechLevel.Undefined))
+				return;
+			}
+			if (!pawn.Spawned && Find.FactionManager.TryGetRandomNonColonyHumanlikeFaction(out Faction faction, pawn.Faction != null && (int)pawn.Faction.def.techLevel >= 3))
+			{
+				if (pawn.Faction != faction)
 				{
-					if (pawn.Faction != faction)
-					{
-						pawn.SetFaction(faction, null);
-						return;
-					}
+					pawn.SetFaction(faction);
 				}
-				else if (pawn.Faction != null)
-				{
-					pawn.SetFaction(null, null);
-				}
+			}
+			else if (pawn.Faction != null)
+			{
+				pawn.SetFaction(null);
 			}
 		}
 
-		
 		public static bool WouldBeLeftToDie(Pawn p, int tile)
 		{
 			if (p.Downed)
@@ -93,11 +92,10 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static string GetBanishPawnDialogText(Pawn banishedPawn)
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			bool flag = PawnBanishUtility.WouldBeLeftToDie(banishedPawn, banishedPawn.Tile);
+			bool flag = WouldBeLeftToDie(banishedPawn, banishedPawn.Tile);
 			stringBuilder.Append("ConfirmBanishPawnDialog".Translate(banishedPawn.Label, banishedPawn).Resolve());
 			if (flag)
 			{
@@ -107,12 +105,13 @@ namespace RimWorld
 			}
 			List<ThingWithComps> list = (banishedPawn.equipment != null) ? banishedPawn.equipment.AllEquipmentListForReading : null;
 			List<Apparel> list2 = (banishedPawn.apparel != null) ? banishedPawn.apparel.WornApparel : null;
-			ThingOwner<Thing> thingOwner = (banishedPawn.inventory != null && PawnBanishUtility.WillTakeInventoryIfBanished(banishedPawn)) ? banishedPawn.inventory.innerContainer : null;
-			if (!list.NullOrEmpty<ThingWithComps>() || !list2.NullOrEmpty<Apparel>() || !thingOwner.NullOrEmpty<Thing>())
+			ThingOwner<Thing> thingOwner = (banishedPawn.inventory != null && WillTakeInventoryIfBanished(banishedPawn)) ? banishedPawn.inventory.innerContainer : null;
+			if (!list.NullOrEmpty() || !list2.NullOrEmpty() || !thingOwner.NullOrEmpty())
 			{
 				stringBuilder.AppendLine();
 				stringBuilder.AppendLine();
-				stringBuilder.Append("ConfirmBanishPawnDialog_Items".Translate(banishedPawn.LabelShort, banishedPawn).Resolve().CapitalizeFirst().AdjustedFor(banishedPawn, "PAWN", true));
+				stringBuilder.Append("ConfirmBanishPawnDialog_Items".Translate(banishedPawn.LabelShort, banishedPawn).Resolve().CapitalizeFirst()
+					.AdjustedFor(banishedPawn));
 				stringBuilder.AppendLine();
 				if (list != null)
 				{
@@ -139,63 +138,51 @@ namespace RimWorld
 					}
 				}
 			}
-			PawnDiedOrDownedThoughtsUtility.BuildMoodThoughtsListString(banishedPawn, null, flag ? PawnDiedOrDownedThoughtsKind.BanishedToDie : PawnDiedOrDownedThoughtsKind.Banished, stringBuilder, "\n\n" + "ConfirmBanishPawnDialog_IndividualThoughts".Translate(banishedPawn.LabelShort, banishedPawn), "\n\n" + "ConfirmBanishPawnDialog_AllColonistsThoughts".Translate());
+			PawnDiedOrDownedThoughtsUtility.BuildMoodThoughtsListString(banishedPawn, null, (!flag) ? PawnDiedOrDownedThoughtsKind.Banished : PawnDiedOrDownedThoughtsKind.BanishedToDie, stringBuilder, "\n\n" + "ConfirmBanishPawnDialog_IndividualThoughts".Translate(banishedPawn.LabelShort, banishedPawn), "\n\n" + "ConfirmBanishPawnDialog_AllColonistsThoughts".Translate());
 			return stringBuilder.ToString();
 		}
 
-		
 		public static void ShowBanishPawnConfirmationDialog(Pawn pawn)
 		{
-			Dialog_MessageBox window = Dialog_MessageBox.CreateConfirmation(PawnBanishUtility.GetBanishPawnDialogText(pawn), delegate
+			Dialog_MessageBox window = Dialog_MessageBox.CreateConfirmation(GetBanishPawnDialogText(pawn), delegate
 			{
-				PawnBanishUtility.Banish(pawn, -1);
-			}, true, null);
+				Banish(pawn);
+			}, destructive: true);
 			Find.WindowStack.Add(window);
 		}
 
-		
 		public static string GetBanishButtonTip(Pawn pawn)
 		{
-			if (PawnBanishUtility.WouldBeLeftToDie(pawn, pawn.Tile))
+			if (WouldBeLeftToDie(pawn, pawn.Tile))
 			{
 				return "BanishTip".Translate() + "\n\n" + "BanishTipWillDie".Translate(pawn.LabelShort, pawn).CapitalizeFirst();
 			}
 			return "BanishTip".Translate();
 		}
 
-		
 		private static void HealIfPossible(Pawn p)
 		{
-			PawnBanishUtility.tmpHediffs.Clear();
-			PawnBanishUtility.tmpHediffs.AddRange(p.health.hediffSet.hediffs);
-			for (int i = 0; i < PawnBanishUtility.tmpHediffs.Count; i++)
+			tmpHediffs.Clear();
+			tmpHediffs.AddRange(p.health.hediffSet.hediffs);
+			for (int i = 0; i < tmpHediffs.Count; i++)
 			{
-				Hediff_Injury hediff_Injury = PawnBanishUtility.tmpHediffs[i] as Hediff_Injury;
+				Hediff_Injury hediff_Injury = tmpHediffs[i] as Hediff_Injury;
 				if (hediff_Injury != null && !hediff_Injury.IsPermanent())
 				{
 					p.health.RemoveHediff(hediff_Injury);
+					continue;
 				}
-				else
+				ImmunityRecord immunityRecord = p.health.immunity.GetImmunityRecord(tmpHediffs[i].def);
+				if (immunityRecord != null)
 				{
-					ImmunityRecord immunityRecord = p.health.immunity.GetImmunityRecord(PawnBanishUtility.tmpHediffs[i].def);
-					if (immunityRecord != null)
-					{
-						immunityRecord.immunity = 1f;
-					}
+					immunityRecord.immunity = 1f;
 				}
 			}
 		}
 
-		
 		private static bool WillTakeInventoryIfBanished(Pawn pawn)
 		{
 			return !pawn.IsCaravanMember();
 		}
-
-		
-		private const float DeathChanceForCaravanPawnBanishedToDie = 0.8f;
-
-		
-		private static List<Hediff> tmpHediffs = new List<Hediff>();
 	}
 }

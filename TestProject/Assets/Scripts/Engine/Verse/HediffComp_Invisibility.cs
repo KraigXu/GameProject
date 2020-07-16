@@ -1,29 +1,24 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class HediffComp_Invisibility : HediffComp
 	{
-		
 		public override void CompPostPostAdd(DamageInfo? dinfo)
 		{
 			base.CompPostPostAdd(dinfo);
-			this.UpdateTarget();
+			UpdateTarget();
 		}
 
-		
 		public override void CompPostPostRemoved()
 		{
 			base.CompPostPostRemoved();
-			this.UpdateTarget();
+			UpdateTarget();
 		}
 
-		
 		private void UpdateTarget()
 		{
-			Pawn pawn = this.parent.pawn;
+			Pawn pawn = parent.pawn;
 			if (pawn.Spawned)
 			{
 				pawn.Map.attackTargetsCache.UpdateTarget(pawn);

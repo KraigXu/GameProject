@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,21 +5,23 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Verb_MeleeAttackDamage : Verb_MeleeAttack
 	{
-		
+		private const float MeleeDamageRandomFactorMin = 0.8f;
+
+		private const float MeleeDamageRandomFactorMax = 1.2f;
+
 		private IEnumerable<DamageInfo> DamageInfosToApply(LocalTargetInfo target)
 		{
-			float num = this.verbProps.AdjustedMeleeDamageAmount(this, this.CasterPawn);
-			float armorPenetration = this.verbProps.AdjustedArmorPenetration(this, this.CasterPawn);
-			DamageDef def = this.verbProps.meleeDamageDef;
+			float num = verbProps.AdjustedMeleeDamageAmount(this, CasterPawn);
+			float armorPenetration = verbProps.AdjustedArmorPenetration(this, CasterPawn);
+			DamageDef def = verbProps.meleeDamageDef;
 			BodyPartGroupDef bodyPartGroupDef = null;
 			HediffDef hediffDef = null;
 			num = Rand.Range(num * 0.8f, num * 1.2f);
-			if (this.CasterIsPawn)
+			if (CasterIsPawn)
 			{
-				bodyPartGroupDef = this.verbProps.AdjustedLinkedBodyPartsGroup(this.tool);
+				bodyPartGroupDef = verbProps.AdjustedLinkedBodyPartsGroup(tool);
 				if (num >= 1f)
 				{
 					if (base.HediffCompSource != null)
@@ -34,31 +35,23 @@ namespace RimWorld
 					def = DamageDefOf.Blunt;
 				}
 			}
-			ThingDef source;
-			if (base.EquipmentSource != null)
-			{
-				source = base.EquipmentSource.def;
-			}
-			else
-			{
-				source = this.CasterPawn.def;
-			}
-			Vector3 direction = (target.Thing.Position - this.CasterPawn.Position).ToVector3();
-			DamageInfo damageInfo = new DamageInfo(def, num, armorPenetration, -1f, this.caster, null, source, DamageInfo.SourceCategory.ThingOrUnknown, null);
+			ThingDef source = (base.EquipmentSource == null) ? CasterPawn.def : base.EquipmentSource.def;
+			Vector3 direction = (target.Thing.Position - CasterPawn.Position).ToVector3();
+			DamageInfo damageInfo = new DamageInfo(def, num, armorPenetration, -1f, caster, null, source);
 			damageInfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Outside);
 			damageInfo.SetWeaponBodyPartGroup(bodyPartGroupDef);
 			damageInfo.SetWeaponHediff(hediffDef);
 			damageInfo.SetAngle(direction);
 			yield return damageInfo;
-			if (this.tool != null && this.tool.extraMeleeDamages != null)
+			if (tool != null && tool.extraMeleeDamages != null)
 			{
-				foreach (ExtraDamage extraDamage in this.tool.extraMeleeDamages)
+				foreach (ExtraDamage extraMeleeDamage in tool.extraMeleeDamages)
 				{
-					if (Rand.Chance(extraDamage.chance))
+					if (Rand.Chance(extraMeleeDamage.chance))
 					{
-						num = extraDamage.amount;
+						num = extraMeleeDamage.amount;
 						num = Rand.Range(num * 0.8f, num * 1.2f);
-						damageInfo = new DamageInfo(extraDamage.def, num, extraDamage.AdjustedArmorPenetration(this, this.CasterPawn), -1f, this.caster, null, source, DamageInfo.SourceCategory.ThingOrUnknown, null);
+						damageInfo = new DamageInfo(extraMeleeDamage.def, num, extraMeleeDamage.AdjustedArmorPenetration(this, CasterPawn), -1f, caster, null, source);
 						damageInfo.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Outside);
 						damageInfo.SetWeaponBodyPartGroup(bodyPartGroupDef);
 						damageInfo.SetWeaponHediff(hediffDef);
@@ -66,55 +59,44 @@ namespace RimWorld
 						yield return damageInfo;
 					}
 				}
-				List<ExtraDamage>.Enumerator enumerator = default(List<ExtraDamage>.Enumerator);
 			}
-			if (this.surpriseAttack && ((this.verbProps.surpriseAttack != null && !this.verbProps.surpriseAttack.extraMeleeDamages.NullOrEmpty<ExtraDamage>()) || (this.tool != null && this.tool.surpriseAttack != null && !this.tool.surpriseAttack.extraMeleeDamages.NullOrEmpty<ExtraDamage>())))
+			if (surpriseAttack && ((verbProps.surpriseAttack != null && !verbProps.surpriseAttack.extraMeleeDamages.NullOrEmpty()) || (tool != null && tool.surpriseAttack != null && !tool.surpriseAttack.extraMeleeDamages.NullOrEmpty())))
 			{
 				IEnumerable<ExtraDamage> enumerable = Enumerable.Empty<ExtraDamage>();
-				if (this.verbProps.surpriseAttack != null && this.verbProps.surpriseAttack.extraMeleeDamages != null)
+				if (verbProps.surpriseAttack != null && verbProps.surpriseAttack.extraMeleeDamages != null)
 				{
-					enumerable = enumerable.Concat(this.verbProps.surpriseAttack.extraMeleeDamages);
+					enumerable = enumerable.Concat(verbProps.surpriseAttack.extraMeleeDamages);
 				}
-				if (this.tool != null && this.tool.surpriseAttack != null && !this.tool.surpriseAttack.extraMeleeDamages.NullOrEmpty<ExtraDamage>())
+				if (tool != null && tool.surpriseAttack != null && !tool.surpriseAttack.extraMeleeDamages.NullOrEmpty())
 				{
-					enumerable = enumerable.Concat(this.tool.surpriseAttack.extraMeleeDamages);
+					enumerable = enumerable.Concat(tool.surpriseAttack.extraMeleeDamages);
 				}
-				foreach (ExtraDamage extraDamage2 in enumerable)
+				foreach (ExtraDamage item in enumerable)
 				{
-					int num2 = GenMath.RoundRandom(extraDamage2.AdjustedDamageAmount(this, this.CasterPawn));
-					float armorPenetration2 = extraDamage2.AdjustedArmorPenetration(this, this.CasterPawn);
-					DamageInfo damageInfo2 = new DamageInfo(extraDamage2.def, (float)num2, armorPenetration2, -1f, this.caster, null, source, DamageInfo.SourceCategory.ThingOrUnknown, null);
+					int num2 = GenMath.RoundRandom(item.AdjustedDamageAmount(this, CasterPawn));
+					float armorPenetration2 = item.AdjustedArmorPenetration(this, CasterPawn);
+					DamageInfo damageInfo2 = new DamageInfo(item.def, num2, armorPenetration2, -1f, caster, null, source);
 					damageInfo2.SetBodyRegion(BodyPartHeight.Undefined, BodyPartDepth.Outside);
 					damageInfo2.SetWeaponBodyPartGroup(bodyPartGroupDef);
 					damageInfo2.SetWeaponHediff(hediffDef);
 					damageInfo2.SetAngle(direction);
 					yield return damageInfo2;
 				}
-				IEnumerator<ExtraDamage> enumerator2 = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		protected override DamageWorker.DamageResult ApplyMeleeDamageToTarget(LocalTargetInfo target)
 		{
 			DamageWorker.DamageResult result = new DamageWorker.DamageResult();
-			foreach (DamageInfo dinfo in this.DamageInfosToApply(target))
+			foreach (DamageInfo item in DamageInfosToApply(target))
 			{
 				if (target.ThingDestroyed)
 				{
-					break;
+					return result;
 				}
-				result = target.Thing.TakeDamage(dinfo);
+				result = target.Thing.TakeDamage(item);
 			}
 			return result;
 		}
-
-		
-		private const float MeleeDamageRandomFactorMin = 0.8f;
-
-		
-		private const float MeleeDamageRandomFactorMax = 1.2f;
 	}
 }

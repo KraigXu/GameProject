@@ -1,54 +1,39 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StorytellerComp_Triggered : StorytellerComp
 	{
-		
-		
-		private StorytellerCompProperties_Triggered Props
-		{
-			get
-			{
-				return (StorytellerCompProperties_Triggered)this.props;
-			}
-		}
+		private StorytellerCompProperties_Triggered Props => (StorytellerCompProperties_Triggered)props;
 
-		
 		public override void Notify_PawnEvent(Pawn p, AdaptationEvent ev, DamageInfo? dinfo = null)
 		{
-			if (!p.RaceProps.Humanlike || !p.IsColonist)
+			if (!p.RaceProps.Humanlike || !p.IsColonist || (ev != AdaptationEvent.Died && ev != AdaptationEvent.Kidnapped && ev != AdaptationEvent.LostBecauseMapClosed && ev != 0))
 			{
 				return;
 			}
-			if (ev == AdaptationEvent.Died || ev == AdaptationEvent.Kidnapped || ev == AdaptationEvent.LostBecauseMapClosed || ev == AdaptationEvent.Downed)
+			foreach (Pawn item in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction)
 			{
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_OfPlayerFaction)
+				if (item.RaceProps.Humanlike && !item.Downed)
 				{
-					if (pawn.RaceProps.Humanlike && !pawn.Downed)
-					{
-						return;
-					}
+					return;
 				}
-				Map anyPlayerHomeMap = Find.AnyPlayerHomeMap;
-				if (anyPlayerHomeMap != null)
+			}
+			Map anyPlayerHomeMap = Find.AnyPlayerHomeMap;
+			if (anyPlayerHomeMap != null)
+			{
+				IncidentParms parms = StorytellerUtility.DefaultParmsNow(Props.incident.category, anyPlayerHomeMap);
+				if (Props.incident.Worker.CanFireNow(parms))
 				{
-					IncidentParms parms = StorytellerUtility.DefaultParmsNow(this.Props.incident.category, anyPlayerHomeMap);
-					if (this.Props.incident.Worker.CanFireNow(parms, false))
-					{
-						QueuedIncident qi = new QueuedIncident(new FiringIncident(this.Props.incident, this, parms), Find.TickManager.TicksGame + this.Props.delayTicks, 0);
-						Find.Storyteller.incidentQueue.Add(qi);
-					}
+					QueuedIncident qi = new QueuedIncident(new FiringIncident(Props.incident, this, parms), Find.TickManager.TicksGame + Props.delayTicks);
+					Find.Storyteller.incidentQueue.Add(qi);
 				}
 			}
 		}
 
-		
 		public override string ToString()
 		{
-			return base.ToString() + " " + this.Props.incident;
+			return base.ToString() + " " + Props.incident;
 		}
 	}
 }

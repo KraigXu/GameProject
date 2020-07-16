@@ -1,14 +1,10 @@
-﻿using System;
 using RimWorld;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Verb_LaunchProjectile : Verb
 	{
-		
-		
 		public virtual ThingDef Projectile
 		{
 			get
@@ -21,176 +17,161 @@ namespace Verse
 						return comp.Projectile;
 					}
 				}
-				return this.verbProps.defaultProjectile;
+				return verbProps.defaultProjectile;
 			}
 		}
 
-		
 		public override void WarmupComplete()
 		{
 			base.WarmupComplete();
-			Find.BattleLog.Add(new BattleLogEntry_RangedFire(this.caster, this.currentTarget.HasThing ? this.currentTarget.Thing : null, (base.EquipmentSource != null) ? base.EquipmentSource.def : null, this.Projectile, this.ShotsPerBurst > 1));
+			Find.BattleLog.Add(new BattleLogEntry_RangedFire(caster, currentTarget.HasThing ? currentTarget.Thing : null, (base.EquipmentSource != null) ? base.EquipmentSource.def : null, Projectile, ShotsPerBurst > 1));
 		}
 
-		
 		protected override bool TryCastShot()
 		{
-			if (this.currentTarget.HasThing && this.currentTarget.Thing.Map != this.caster.Map)
+			if (currentTarget.HasThing && currentTarget.Thing.Map != caster.Map)
 			{
 				return false;
 			}
-			ThingDef projectile = this.Projectile;
+			ThingDef projectile = Projectile;
 			if (projectile == null)
 			{
 				return false;
 			}
-			ShootLine shootLine;
-			bool flag = base.TryFindShootLineFromTo(this.caster.Position, this.currentTarget, out shootLine);
-			if (this.verbProps.stopBurstWithoutLos && !flag)
+			ShootLine resultingLine;
+			bool flag = TryFindShootLineFromTo(caster.Position, currentTarget, out resultingLine);
+			if (verbProps.stopBurstWithoutLos && !flag)
 			{
 				return false;
 			}
 			if (base.EquipmentSource != null)
 			{
-				CompChangeableProjectile comp = base.EquipmentSource.GetComp<CompChangeableProjectile>();
-				if (comp != null)
-				{
-					comp.Notify_ProjectileLaunched();
-				}
+				base.EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
 			}
-			Thing launcher = this.caster;
+			Thing launcher = caster;
 			Thing equipment = base.EquipmentSource;
-			CompMannable compMannable = this.caster.TryGetComp<CompMannable>();
+			CompMannable compMannable = caster.TryGetComp<CompMannable>();
 			if (compMannable != null && compMannable.ManningPawn != null)
 			{
 				launcher = compMannable.ManningPawn;
-				equipment = this.caster;
+				equipment = caster;
 			}
-			Vector3 drawPos = this.caster.DrawPos;
-			Projectile projectile2 = (Projectile)GenSpawn.Spawn(projectile, shootLine.Source, this.caster.Map, WipeMode.Vanish);
-			if (this.verbProps.forcedMissRadius > 0.5f)
+			Vector3 drawPos = caster.DrawPos;
+			Projectile projectile2 = (Projectile)GenSpawn.Spawn(projectile, resultingLine.Source, caster.Map);
+			if (verbProps.forcedMissRadius > 0.5f)
 			{
-				float num = VerbUtility.CalculateAdjustedForcedMiss(this.verbProps.forcedMissRadius, this.currentTarget.Cell - this.caster.Position);
+				float num = VerbUtility.CalculateAdjustedForcedMiss(verbProps.forcedMissRadius, currentTarget.Cell - caster.Position);
 				if (num > 0.5f)
 				{
 					int max = GenRadial.NumCellsInRadius(num);
 					int num2 = Rand.Range(0, max);
 					if (num2 > 0)
 					{
-						IntVec3 c = this.currentTarget.Cell + GenRadial.RadialPattern[num2];
-						this.ThrowDebugText("ToRadius");
-						this.ThrowDebugText("Rad\nDest", c);
+						IntVec3 c = currentTarget.Cell + GenRadial.RadialPattern[num2];
+						ThrowDebugText("ToRadius");
+						ThrowDebugText("Rad\nDest", c);
 						ProjectileHitFlags projectileHitFlags = ProjectileHitFlags.NonTargetWorld;
 						if (Rand.Chance(0.5f))
 						{
 							projectileHitFlags = ProjectileHitFlags.All;
 						}
-						if (!this.canHitNonTargetPawnsNow)
+						if (!canHitNonTargetPawnsNow)
 						{
 							projectileHitFlags &= ~ProjectileHitFlags.NonTargetPawns;
 						}
-						projectile2.Launch(launcher, drawPos, c, this.currentTarget, projectileHitFlags, equipment, null);
+						projectile2.Launch(launcher, drawPos, c, currentTarget, projectileHitFlags, equipment);
 						return true;
 					}
 				}
 			}
-			ShotReport shotReport = ShotReport.HitReportFor(this.caster, this, this.currentTarget);
+			ShotReport shotReport = ShotReport.HitReportFor(caster, this, currentTarget);
 			Thing randomCoverToMissInto = shotReport.GetRandomCoverToMissInto();
-			ThingDef targetCoverDef = (randomCoverToMissInto != null) ? randomCoverToMissInto.def : null;
+			ThingDef targetCoverDef = randomCoverToMissInto?.def;
 			if (!Rand.Chance(shotReport.AimOnTargetChance_IgnoringPosture))
 			{
-				shootLine.ChangeDestToMissWild(shotReport.AimOnTargetChance_StandardTarget);
-				this.ThrowDebugText("ToWild" + (this.canHitNonTargetPawnsNow ? "\nchntp" : ""));
-				this.ThrowDebugText("Wild\nDest", shootLine.Dest);
+				resultingLine.ChangeDestToMissWild(shotReport.AimOnTargetChance_StandardTarget);
+				ThrowDebugText("ToWild" + (canHitNonTargetPawnsNow ? "\nchntp" : ""));
+				ThrowDebugText("Wild\nDest", resultingLine.Dest);
 				ProjectileHitFlags projectileHitFlags2 = ProjectileHitFlags.NonTargetWorld;
-				if (Rand.Chance(0.5f) && this.canHitNonTargetPawnsNow)
+				if (Rand.Chance(0.5f) && canHitNonTargetPawnsNow)
 				{
 					projectileHitFlags2 |= ProjectileHitFlags.NonTargetPawns;
 				}
-				projectile2.Launch(launcher, drawPos, shootLine.Dest, this.currentTarget, projectileHitFlags2, equipment, targetCoverDef);
+				projectile2.Launch(launcher, drawPos, resultingLine.Dest, currentTarget, projectileHitFlags2, equipment, targetCoverDef);
 				return true;
 			}
-			if (this.currentTarget.Thing != null && this.currentTarget.Thing.def.category == ThingCategory.Pawn && !Rand.Chance(shotReport.PassCoverChance))
+			if (currentTarget.Thing != null && currentTarget.Thing.def.category == ThingCategory.Pawn && !Rand.Chance(shotReport.PassCoverChance))
 			{
-				this.ThrowDebugText("ToCover" + (this.canHitNonTargetPawnsNow ? "\nchntp" : ""));
-				this.ThrowDebugText("Cover\nDest", randomCoverToMissInto.Position);
+				ThrowDebugText("ToCover" + (canHitNonTargetPawnsNow ? "\nchntp" : ""));
+				ThrowDebugText("Cover\nDest", randomCoverToMissInto.Position);
 				ProjectileHitFlags projectileHitFlags3 = ProjectileHitFlags.NonTargetWorld;
-				if (this.canHitNonTargetPawnsNow)
+				if (canHitNonTargetPawnsNow)
 				{
 					projectileHitFlags3 |= ProjectileHitFlags.NonTargetPawns;
 				}
-				projectile2.Launch(launcher, drawPos, randomCoverToMissInto, this.currentTarget, projectileHitFlags3, equipment, targetCoverDef);
+				projectile2.Launch(launcher, drawPos, randomCoverToMissInto, currentTarget, projectileHitFlags3, equipment, targetCoverDef);
 				return true;
 			}
 			ProjectileHitFlags projectileHitFlags4 = ProjectileHitFlags.IntendedTarget;
-			if (this.canHitNonTargetPawnsNow)
+			if (canHitNonTargetPawnsNow)
 			{
 				projectileHitFlags4 |= ProjectileHitFlags.NonTargetPawns;
 			}
-			if (!this.currentTarget.HasThing || this.currentTarget.Thing.def.Fillage == FillCategory.Full)
+			if (!currentTarget.HasThing || currentTarget.Thing.def.Fillage == FillCategory.Full)
 			{
 				projectileHitFlags4 |= ProjectileHitFlags.NonTargetWorld;
 			}
-			this.ThrowDebugText("ToHit" + (this.canHitNonTargetPawnsNow ? "\nchntp" : ""));
-			if (this.currentTarget.Thing != null)
+			ThrowDebugText("ToHit" + (canHitNonTargetPawnsNow ? "\nchntp" : ""));
+			if (currentTarget.Thing != null)
 			{
-				projectile2.Launch(launcher, drawPos, this.currentTarget, this.currentTarget, projectileHitFlags4, equipment, targetCoverDef);
-				this.ThrowDebugText("Hit\nDest", this.currentTarget.Cell);
+				projectile2.Launch(launcher, drawPos, currentTarget, currentTarget, projectileHitFlags4, equipment, targetCoverDef);
+				ThrowDebugText("Hit\nDest", currentTarget.Cell);
 			}
 			else
 			{
-				projectile2.Launch(launcher, drawPos, shootLine.Dest, this.currentTarget, projectileHitFlags4, equipment, targetCoverDef);
-				this.ThrowDebugText("Hit\nDest", shootLine.Dest);
+				projectile2.Launch(launcher, drawPos, resultingLine.Dest, currentTarget, projectileHitFlags4, equipment, targetCoverDef);
+				ThrowDebugText("Hit\nDest", resultingLine.Dest);
 			}
 			return true;
 		}
 
-		
 		private void ThrowDebugText(string text)
 		{
 			if (DebugViewSettings.drawShooting)
 			{
-				MoteMaker.ThrowText(this.caster.DrawPos, this.caster.Map, text, -1f);
+				MoteMaker.ThrowText(caster.DrawPos, caster.Map, text);
 			}
 		}
 
-		
 		private void ThrowDebugText(string text, IntVec3 c)
 		{
 			if (DebugViewSettings.drawShooting)
 			{
-				MoteMaker.ThrowText(c.ToVector3Shifted(), this.caster.Map, text, -1f);
+				MoteMaker.ThrowText(c.ToVector3Shifted(), caster.Map, text);
 			}
 		}
 
-		
 		public override float HighlightFieldRadiusAroundTarget(out bool needLOSToCenter)
 		{
 			needLOSToCenter = true;
-			ThingDef projectile = this.Projectile;
-			if (projectile == null)
-			{
-				return 0f;
-			}
-			return projectile.projectile.explosionRadius;
+			return Projectile?.projectile.explosionRadius ?? 0f;
 		}
 
-		
 		public override bool Available()
 		{
 			if (!base.Available())
 			{
 				return false;
 			}
-			if (this.CasterIsPawn)
+			if (CasterIsPawn)
 			{
-				Pawn casterPawn = this.CasterPawn;
+				Pawn casterPawn = CasterPawn;
 				if (casterPawn.Faction != Faction.OfPlayer && casterPawn.mindState.MeleeThreatStillThreat && casterPawn.mindState.meleeThreat.Position.AdjacentTo8WayOrInside(casterPawn.Position))
 				{
 					return false;
 				}
 			}
-			return this.Projectile != null;
+			return Projectile != null;
 		}
 	}
 }

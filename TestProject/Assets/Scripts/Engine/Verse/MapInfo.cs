@@ -1,57 +1,33 @@
-﻿using System;
 using RimWorld.Planet;
 
 namespace Verse
 {
-	
 	public sealed class MapInfo : IExposable
 	{
-		
-		
-		public int Tile
-		{
-			get
-			{
-				return this.parent.Tile;
-			}
-		}
+		private IntVec3 sizeInt;
 
-		
-		
-		public int NumCells
-		{
-			get
-			{
-				return this.Size.x * this.Size.y * this.Size.z;
-			}
-		}
+		public MapParent parent;
 
-		
-		
-		
+		public int Tile => parent.Tile;
+
+		public int NumCells => Size.x * Size.y * Size.z;
+
 		public IntVec3 Size
 		{
 			get
 			{
-				return this.sizeInt;
+				return sizeInt;
 			}
 			set
 			{
-				this.sizeInt = value;
+				sizeInt = value;
 			}
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Values.Look<IntVec3>(ref this.sizeInt, "size", default(IntVec3), false);
-			Scribe_References.Look<MapParent>(ref this.parent, "parent", false);
+			Scribe_Values.Look(ref sizeInt, "size");
+			Scribe_References.Look(ref parent, "parent");
 		}
-
-		
-		private IntVec3 sizeInt;
-
-		
-		public MapParent parent;
 	}
 }

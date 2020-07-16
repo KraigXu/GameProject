@@ -1,45 +1,139 @@
-﻿using System;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public class TransferableOneWayWidget
 	{
-		
-		
+		private struct Section
+		{
+			public string title;
+
+			public IEnumerable<TransferableOneWay> transferables;
+
+			public List<TransferableOneWay> cachedTransferables;
+		}
+
+		private List<Section> sections = new List<Section>();
+
+		private string sourceLabel;
+
+		private string destinationLabel;
+
+		private string sourceCountDesc;
+
+		private bool drawMass;
+
+		private IgnorePawnsInventoryMode ignorePawnInventoryMass = IgnorePawnsInventoryMode.DontIgnore;
+
+		private bool includePawnsMassInMassUsage;
+
+		private Func<float> availableMassGetter;
+
+		private float extraHeaderSpace;
+
+		private bool ignoreSpawnedCorpseGearAndInventoryMass;
+
+		private int tile;
+
+		private bool drawMarketValue;
+
+		private bool drawEquippedWeapon;
+
+		private bool drawNutritionEatenPerDay;
+
+		private bool drawItemNutrition;
+
+		private bool drawForagedFoodPerDay;
+
+		private bool drawDaysUntilRot;
+
+		private bool playerPawnsReadOnly;
+
+		private bool transferablesCached;
+
+		private Vector2 scrollPosition;
+
+		private TransferableSorterDef sorter1;
+
+		private TransferableSorterDef sorter2;
+
+		private Dictionary<TransferableOneWay, int> cachedTicksUntilRot = new Dictionary<TransferableOneWay, int>();
+
+		private static List<TransferableCountToTransferStoppingPoint> stoppingPoints = new List<TransferableCountToTransferStoppingPoint>();
+
+		private const float TopAreaHeight = 37f;
+
+		protected readonly Vector2 AcceptButtonSize = new Vector2(160f, 40f);
+
+		protected readonly Vector2 OtherBottomButtonSize = new Vector2(160f, 40f);
+
+		private const float ColumnWidth = 120f;
+
+		private const float FirstTransferableY = 6f;
+
+		private const float RowInterval = 30f;
+
+		public const float CountColumnWidth = 75f;
+
+		public const float AdjustColumnWidth = 240f;
+
+		public const float MassColumnWidth = 100f;
+
+		public static readonly Color ItemMassColor = new Color(0.7f, 0.7f, 0.7f);
+
+		private const float MarketValueColumnWidth = 100f;
+
+		private const float ExtraSpaceAfterSectionTitle = 5f;
+
+		private const float DaysUntilRotColumnWidth = 75f;
+
+		private const float NutritionEatenPerDayColumnWidth = 75f;
+
+		private const float ItemNutritionColumnWidth = 75f;
+
+		private const float ForagedFoodPerDayColumnWidth = 75f;
+
+		private const float GrazeabilityInnerColumnWidth = 40f;
+
+		private const float EquippedWeaponIconSize = 30f;
+
+		public const float TopAreaWidth = 515f;
+
+		private static readonly Texture2D CanGrazeIcon = ContentFinder<Texture2D>.Get("UI/Icons/CanGraze");
+
 		public float TotalNumbersColumnsWidths
 		{
 			get
 			{
 				float num = 315f;
-				if (this.drawMass)
+				if (drawMass)
 				{
 					num += 100f;
 				}
-				if (this.drawMarketValue)
+				if (drawMarketValue)
 				{
 					num += 100f;
 				}
-				if (this.drawDaysUntilRot)
+				if (drawDaysUntilRot)
 				{
 					num += 75f;
 				}
-				if (this.drawItemNutrition)
+				if (drawItemNutrition)
 				{
 					num += 75f;
 				}
-				if (this.drawNutritionEatenPerDay)
+				if (drawNutritionEatenPerDay)
 				{
 					num += 75f;
 				}
-				if (this.drawForagedFoodPerDay)
+				if (drawForagedFoodPerDay)
 				{
 					num += 75f;
 				}
@@ -47,19 +141,17 @@ namespace RimWorld
 			}
 		}
 
-		
-		
 		private bool AnyTransferable
 		{
 			get
 			{
-				if (!this.transferablesCached)
+				if (!transferablesCached)
 				{
-					this.CacheTransferables();
+					CacheTransferables();
 				}
-				for (int i = 0; i < this.sections.Count; i++)
+				for (int i = 0; i < sections.Count; i++)
 				{
-					if (this.sections[i].cachedTransferables.Any<TransferableOneWay>())
+					if (sections[i].cachedTransferables.Any())
 					{
 						return true;
 					}
@@ -68,12 +160,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public TransferableOneWayWidget(IEnumerable<TransferableOneWay> transferables, string sourceLabel, string destinationLabel, string sourceCountDesc, bool drawMass = false, IgnorePawnsInventoryMode ignorePawnInventoryMass = IgnorePawnsInventoryMode.DontIgnore, bool includePawnsMassInMassUsage = false, Func<float> availableMassGetter = null, float extraHeaderSpace = 0f, bool ignoreSpawnedCorpseGearAndInventoryMass = false, int tile = -1, bool drawMarketValue = false, bool drawEquippedWeapon = false, bool drawNutritionEatenPerDay = false, bool drawItemNutrition = false, bool drawForagedFoodPerDay = false, bool drawDaysUntilRot = false, bool playerPawnsReadOnly = false)
 		{
 			if (transferables != null)
 			{
-				this.AddSection(null, transferables);
+				AddSection(null, transferables);
 			}
 			this.sourceLabel = sourceLabel;
 			this.destinationLabel = destinationLabel;
@@ -92,141 +183,138 @@ namespace RimWorld
 			this.drawForagedFoodPerDay = drawForagedFoodPerDay;
 			this.drawDaysUntilRot = drawDaysUntilRot;
 			this.playerPawnsReadOnly = playerPawnsReadOnly;
-			this.sorter1 = TransferableSorterDefOf.Category;
-			this.sorter2 = TransferableSorterDefOf.MarketValue;
+			sorter1 = TransferableSorterDefOf.Category;
+			sorter2 = TransferableSorterDefOf.MarketValue;
 		}
 
-		
 		public void AddSection(string title, IEnumerable<TransferableOneWay> transferables)
 		{
-			TransferableOneWayWidget.Section item = default(TransferableOneWayWidget.Section);
+			Section item = default(Section);
 			item.title = title;
 			item.transferables = transferables;
 			item.cachedTransferables = new List<TransferableOneWay>();
-			this.sections.Add(item);
-			this.transferablesCached = false;
+			sections.Add(item);
+			transferablesCached = false;
 		}
 
-		
 		private void CacheTransferables()
 		{
-			this.transferablesCached = true;
-			for (int i = 0; i < this.sections.Count; i++)
+			transferablesCached = true;
+			for (int i = 0; i < sections.Count; i++)
 			{
-				List<TransferableOneWay> cachedTransferables = this.sections[i].cachedTransferables;
+				List<TransferableOneWay> cachedTransferables = sections[i].cachedTransferables;
 				cachedTransferables.Clear();
-				cachedTransferables.AddRange(this.sections[i].transferables.OrderBy((TransferableOneWay tr) => tr, this.sorter1.Comparer).ThenBy((TransferableOneWay tr) => tr, this.sorter2.Comparer).ThenBy((TransferableOneWay tr) => TransferableUIUtility.DefaultListOrderPriority(tr)).ToList<TransferableOneWay>());
+				cachedTransferables.AddRange(sections[i].transferables.OrderBy((TransferableOneWay tr) => tr, sorter1.Comparer).ThenBy((TransferableOneWay tr) => tr, sorter2.Comparer).ThenBy((TransferableOneWay tr) => TransferableUIUtility.DefaultListOrderPriority(tr))
+					.ToList());
 			}
 		}
 
-		
 		public void OnGUI(Rect inRect)
 		{
-			bool flag;
-			this.OnGUI(inRect, out flag);
+			OnGUI(inRect, out bool _);
 		}
 
-		
 		public void OnGUI(Rect inRect, out bool anythingChanged)
 		{
-			if (!this.transferablesCached)
+			if (!transferablesCached)
 			{
-				this.CacheTransferables();
+				CacheTransferables();
 			}
-			TransferableUIUtility.DoTransferableSorters(this.sorter1, this.sorter2, delegate(TransferableSorterDef x)
+			TransferableUIUtility.DoTransferableSorters(sorter1, sorter2, delegate(TransferableSorterDef x)
 			{
-				this.sorter1 = x;
-				this.CacheTransferables();
+				sorter1 = x;
+				CacheTransferables();
 			}, delegate(TransferableSorterDef x)
 			{
-				this.sorter2 = x;
-				this.CacheTransferables();
+				sorter2 = x;
+				CacheTransferables();
 			});
-			if (!this.sourceLabel.NullOrEmpty() || !this.destinationLabel.NullOrEmpty())
+			if (!sourceLabel.NullOrEmpty() || !destinationLabel.NullOrEmpty())
 			{
 				float num = inRect.width - 515f;
 				Rect position = new Rect(inRect.x + num, inRect.y, inRect.width - num, 37f);
 				GUI.BeginGroup(position);
 				Text.Font = GameFont.Medium;
-				if (!this.sourceLabel.NullOrEmpty())
+				if (!sourceLabel.NullOrEmpty())
 				{
 					Rect rect = new Rect(0f, 0f, position.width / 2f, position.height);
 					Text.Anchor = TextAnchor.UpperLeft;
-					Widgets.Label(rect, this.sourceLabel);
+					Widgets.Label(rect, sourceLabel);
 				}
-				if (!this.destinationLabel.NullOrEmpty())
+				if (!destinationLabel.NullOrEmpty())
 				{
 					Rect rect2 = new Rect(position.width / 2f, 0f, position.width / 2f, position.height);
 					Text.Anchor = TextAnchor.UpperRight;
-					Widgets.Label(rect2, this.destinationLabel);
+					Widgets.Label(rect2, destinationLabel);
 				}
 				Text.Font = GameFont.Small;
 				Text.Anchor = TextAnchor.UpperLeft;
 				GUI.EndGroup();
 			}
-			Rect mainRect = new Rect(inRect.x, inRect.y + 37f + this.extraHeaderSpace, inRect.width, inRect.height - 37f - this.extraHeaderSpace);
-			this.FillMainRect(mainRect, out anythingChanged);
+			Rect mainRect = new Rect(inRect.x, inRect.y + 37f + extraHeaderSpace, inRect.width, inRect.height - 37f - extraHeaderSpace);
+			FillMainRect(mainRect, out anythingChanged);
 		}
 
-		
 		private void FillMainRect(Rect mainRect, out bool anythingChanged)
 		{
 			anythingChanged = false;
 			Text.Font = GameFont.Small;
-			if (this.AnyTransferable)
+			if (AnyTransferable)
 			{
 				float num = 6f;
-				for (int i = 0; i < this.sections.Count; i++)
+				for (int i = 0; i < sections.Count; i++)
 				{
-					num += (float)this.sections[i].cachedTransferables.Count * 30f;
-					if (this.sections[i].title != null)
+					num += (float)sections[i].cachedTransferables.Count * 30f;
+					if (sections[i].title != null)
 					{
 						num += 30f;
 					}
 				}
-				float num2 = 6f;
-				float availableMass = (this.availableMassGetter != null) ? this.availableMassGetter() : float.MaxValue;
+				float curY = 6f;
+				float availableMass = (availableMassGetter != null) ? availableMassGetter() : float.MaxValue;
 				Rect viewRect = new Rect(0f, 0f, mainRect.width - 16f, num);
-				Widgets.BeginScrollView(mainRect, ref this.scrollPosition, viewRect, true);
-				float num3 = this.scrollPosition.y - 30f;
-				float num4 = this.scrollPosition.y + mainRect.height;
-				for (int j = 0; j < this.sections.Count; j++)
+				Widgets.BeginScrollView(mainRect, ref scrollPosition, viewRect);
+				float num2 = scrollPosition.y - 30f;
+				float num3 = scrollPosition.y + mainRect.height;
+				for (int j = 0; j < sections.Count; j++)
 				{
-					List<TransferableOneWay> cachedTransferables = this.sections[j].cachedTransferables;
-					if (cachedTransferables.Any<TransferableOneWay>())
+					List<TransferableOneWay> cachedTransferables = sections[j].cachedTransferables;
+					if (!cachedTransferables.Any())
 					{
-						if (this.sections[j].title != null)
+						continue;
+					}
+					if (sections[j].title != null)
+					{
+						Widgets.ListSeparator(ref curY, viewRect.width, sections[j].title);
+						curY += 5f;
+					}
+					for (int k = 0; k < cachedTransferables.Count; k++)
+					{
+						if (curY > num2 && curY < num3)
 						{
-							Widgets.ListSeparator(ref num2, viewRect.width, this.sections[j].title);
-							num2 += 5f;
-						}
-						for (int k = 0; k < cachedTransferables.Count; k++)
-						{
-							if (num2 > num3 && num2 < num4)
+							Rect rect = new Rect(0f, curY, viewRect.width, 30f);
+							int countToTransfer = cachedTransferables[k].CountToTransfer;
+							DoRow(rect, cachedTransferables[k], k, availableMass);
+							if (countToTransfer != cachedTransferables[k].CountToTransfer)
 							{
-								Rect rect = new Rect(0f, num2, viewRect.width, 30f);
-								int countToTransfer = cachedTransferables[k].CountToTransfer;
-								this.DoRow(rect, cachedTransferables[k], k, availableMass);
-								if (countToTransfer != cachedTransferables[k].CountToTransfer)
-								{
-									anythingChanged = true;
-								}
+								anythingChanged = true;
 							}
-							num2 += 30f;
 						}
+						curY += 30f;
 					}
 				}
 				Widgets.EndScrollView();
-				return;
 			}
-			GUI.color = Color.gray;
-			Text.Anchor = TextAnchor.UpperCenter;
-			Widgets.Label(mainRect, "NoneBrackets".Translate());
-			Text.Anchor = TextAnchor.UpperLeft;
-			GUI.color = Color.white;
+			else
+			{
+				GUI.color = Color.gray;
+				Text.Anchor = TextAnchor.UpperCenter;
+				Widgets.Label(mainRect, "NoneBrackets".Translate());
+				Text.Anchor = TextAnchor.UpperLeft;
+				GUI.color = Color.white;
+			}
 		}
 
-		
 		private void DoRow(Rect rect, TransferableOneWay trad, int index, float availableMass)
 		{
 			if (index % 2 == 1)
@@ -235,92 +323,91 @@ namespace RimWorld
 			}
 			Text.Font = GameFont.Small;
 			GUI.BeginGroup(rect);
-			float num = rect.width;
+			float width = rect.width;
 			int maxCount = trad.MaxCount;
-			Rect rect2 = new Rect(num - 240f, 0f, 240f, rect.height);
-			TransferableOneWayWidget.stoppingPoints.Clear();
-			if (this.availableMassGetter != null && (!(trad.AnyThing is Pawn) || this.includePawnsMassInMassUsage))
+			Rect rect2 = new Rect(width - 240f, 0f, 240f, rect.height);
+			stoppingPoints.Clear();
+			if (availableMassGetter != null && (!(trad.AnyThing is Pawn) || includePawnsMassInMassUsage))
 			{
-				float num2 = availableMass + this.GetMass(trad.AnyThing) * (float)trad.CountToTransfer;
-				int threshold = (num2 <= 0f) ? 0 : Mathf.FloorToInt(num2 / this.GetMass(trad.AnyThing));
-				TransferableOneWayWidget.stoppingPoints.Add(new TransferableCountToTransferStoppingPoint(threshold, "M<", ">M"));
+				float num = availableMass + GetMass(trad.AnyThing) * (float)trad.CountToTransfer;
+				int threshold = (!(num <= 0f)) ? Mathf.FloorToInt(num / GetMass(trad.AnyThing)) : 0;
+				stoppingPoints.Add(new TransferableCountToTransferStoppingPoint(threshold, "M<", ">M"));
 			}
 			Pawn pawn = trad.AnyThing as Pawn;
 			bool flag = pawn != null && (pawn.IsColonist || pawn.IsPrisonerOfColony);
-			TransferableUIUtility.DoCountAdjustInterface(rect2, trad, index, 0, maxCount, false, TransferableOneWayWidget.stoppingPoints, this.playerPawnsReadOnly && flag);
-			num -= 240f;
-			if (this.drawMarketValue)
+			TransferableUIUtility.DoCountAdjustInterface(rect2, trad, index, 0, maxCount, flash: false, stoppingPoints, playerPawnsReadOnly && flag);
+			width -= 240f;
+			if (drawMarketValue)
 			{
-				Rect rect3 = new Rect(num - 100f, 0f, 100f, rect.height);
+				Rect rect3 = new Rect(width - 100f, 0f, 100f, rect.height);
 				Text.Anchor = TextAnchor.MiddleLeft;
-				this.DrawMarketValue(rect3, trad);
-				num -= 100f;
+				DrawMarketValue(rect3, trad);
+				width -= 100f;
 			}
-			if (this.drawMass)
+			if (drawMass)
 			{
-				Rect rect4 = new Rect(num - 100f, 0f, 100f, rect.height);
+				Rect rect4 = new Rect(width - 100f, 0f, 100f, rect.height);
 				Text.Anchor = TextAnchor.MiddleLeft;
-				this.DrawMass(rect4, trad, availableMass);
-				num -= 100f;
+				DrawMass(rect4, trad, availableMass);
+				width -= 100f;
 			}
-			if (this.drawDaysUntilRot)
+			if (drawDaysUntilRot)
 			{
-				Rect rect5 = new Rect(num - 75f, 0f, 75f, rect.height);
+				Rect rect5 = new Rect(width - 75f, 0f, 75f, rect.height);
 				Text.Anchor = TextAnchor.MiddleLeft;
-				this.DrawDaysUntilRot(rect5, trad);
-				num -= 75f;
+				DrawDaysUntilRot(rect5, trad);
+				width -= 75f;
 			}
-			if (this.drawItemNutrition)
+			if (drawItemNutrition)
 			{
-				Rect rect6 = new Rect(num - 75f, 0f, 75f, rect.height);
+				Rect rect6 = new Rect(width - 75f, 0f, 75f, rect.height);
 				Text.Anchor = TextAnchor.MiddleLeft;
-				this.DrawItemNutrition(rect6, trad);
-				num -= 75f;
+				DrawItemNutrition(rect6, trad);
+				width -= 75f;
 			}
-			if (this.drawForagedFoodPerDay)
+			if (drawForagedFoodPerDay)
 			{
-				Rect rect7 = new Rect(num - 75f, 0f, 75f, rect.height);
+				Rect rect7 = new Rect(width - 75f, 0f, 75f, rect.height);
 				Text.Anchor = TextAnchor.MiddleLeft;
-				if (!this.DrawGrazeability(rect7, trad))
+				if (!DrawGrazeability(rect7, trad))
 				{
-					this.DrawForagedFoodPerDay(rect7, trad);
+					DrawForagedFoodPerDay(rect7, trad);
 				}
-				num -= 75f;
+				width -= 75f;
 			}
-			if (this.drawNutritionEatenPerDay)
+			if (drawNutritionEatenPerDay)
 			{
-				Rect rect8 = new Rect(num - 75f, 0f, 75f, rect.height);
+				Rect rect8 = new Rect(width - 75f, 0f, 75f, rect.height);
 				Text.Anchor = TextAnchor.MiddleLeft;
-				this.DrawNutritionEatenPerDay(rect8, trad);
-				num -= 75f;
+				DrawNutritionEatenPerDay(rect8, trad);
+				width -= 75f;
 			}
-			if (this.ShouldShowCount(trad))
+			if (ShouldShowCount(trad))
 			{
-				Rect rect9 = new Rect(num - 75f, 0f, 75f, rect.height);
+				Rect rect9 = new Rect(width - 75f, 0f, 75f, rect.height);
 				Widgets.DrawHighlightIfMouseover(rect9);
 				Text.Anchor = TextAnchor.MiddleLeft;
 				Rect rect10 = rect9;
 				rect10.xMin += 5f;
 				rect10.xMax -= 5f;
 				Widgets.Label(rect10, maxCount.ToStringCached());
-				TooltipHandler.TipRegion(rect9, this.sourceCountDesc);
+				TooltipHandler.TipRegion(rect9, sourceCountDesc);
 			}
-			num -= 75f;
-			if (this.drawEquippedWeapon)
+			width -= 75f;
+			if (drawEquippedWeapon)
 			{
-				Rect rect11 = new Rect(num - 30f, 0f, 30f, rect.height);
-				Rect iconRect = new Rect(num - 30f, (rect.height - 30f) / 2f, 30f, 30f);
-				this.DrawEquippedWeapon(rect11, iconRect, trad);
-				num -= 30f;
+				Rect rect11 = new Rect(width - 30f, 0f, 30f, rect.height);
+				Rect iconRect = new Rect(width - 30f, (rect.height - 30f) / 2f, 30f, 30f);
+				DrawEquippedWeapon(rect11, iconRect, trad);
+				width -= 30f;
 			}
-			TransferableUIUtility.DoExtraAnimalIcons(trad, rect, ref num);
-			Rect idRect = new Rect(0f, 0f, num, rect.height);
+			TransferableUIUtility.DoExtraAnimalIcons(trad, rect, ref width);
+			Rect idRect = new Rect(0f, 0f, width, rect.height);
 			TransferableUIUtility.DrawTransferableInfo(trad, idRect, Color.white);
 			GenUI.ResetLabelAlign();
 			GUI.EndGroup();
 		}
 
-		
 		private bool ShouldShowCount(TransferableOneWay trad)
 		{
 			if (!trad.HasAnyThing)
@@ -328,68 +415,58 @@ namespace RimWorld
 				return true;
 			}
 			Pawn pawn = trad.AnyThing as Pawn;
-			return pawn == null || !pawn.RaceProps.Humanlike || trad.MaxCount != 1;
+			if (pawn != null && pawn.RaceProps.Humanlike)
+			{
+				return trad.MaxCount != 1;
+			}
+			return true;
 		}
 
-		
 		private void DrawDaysUntilRot(Rect rect, TransferableOneWay trad)
 		{
-			if (!trad.HasAnyThing)
+			if (!trad.HasAnyThing || !trad.ThingDef.IsNutritionGivingIngestible)
 			{
 				return;
 			}
-			if (!trad.ThingDef.IsNutritionGivingIngestible)
+			if (!cachedTicksUntilRot.TryGetValue(trad, out int value))
 			{
-				return;
-			}
-			int num;
-			if (!this.cachedTicksUntilRot.TryGetValue(trad, out num))
-			{
-				num = int.MaxValue;
+				value = int.MaxValue;
 				for (int i = 0; i < trad.things.Count; i++)
 				{
 					CompRottable compRottable = trad.things[i].TryGetComp<CompRottable>();
 					if (compRottable != null)
 					{
-						num = Mathf.Min(num, DaysUntilRotCalculator.ApproxTicksUntilRot_AssumeTimePassesBy(compRottable, this.tile, null));
+						value = Mathf.Min(value, DaysUntilRotCalculator.ApproxTicksUntilRot_AssumeTimePassesBy(compRottable, tile));
 					}
 				}
-				this.cachedTicksUntilRot.Add(trad, num);
+				cachedTicksUntilRot.Add(trad, value);
 			}
-			if (num >= 36000000 || (float)num >= 3.6E+07f)
+			if (value < 36000000 && !((float)value >= 3.6E+07f))
 			{
-				return;
+				Widgets.DrawHighlightIfMouseover(rect);
+				float num = (float)value / 60000f;
+				GUI.color = Color.yellow;
+				Widgets.Label(rect, num.ToString("0.#"));
+				GUI.color = Color.white;
+				TooltipHandler.TipRegionByKey(rect, "DaysUntilRotTip");
 			}
-			Widgets.DrawHighlightIfMouseover(rect);
-			float num2 = (float)num / 60000f;
-			GUI.color = Color.yellow;
-			Widgets.Label(rect, num2.ToString("0.#"));
-			GUI.color = Color.white;
-			TooltipHandler.TipRegionByKey(rect, "DaysUntilRotTip");
 		}
 
-		
 		private void DrawItemNutrition(Rect rect, TransferableOneWay trad)
 		{
-			if (!trad.HasAnyThing)
+			if (trad.HasAnyThing && trad.ThingDef.IsNutritionGivingIngestible)
 			{
-				return;
-			}
-			if (!trad.ThingDef.IsNutritionGivingIngestible)
-			{
-				return;
-			}
-			Widgets.DrawHighlightIfMouseover(rect);
-			GUI.color = Color.green;
-			Widgets.Label(rect, trad.ThingDef.GetStatValueAbstract(StatDefOf.Nutrition, null).ToString("0.##"));
-			GUI.color = Color.white;
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.TipRegion(rect, "ItemNutritionTip".Translate((1.6f * ThingDefOf.Human.race.baseHungerRate).ToString("0.##")));
+				Widgets.DrawHighlightIfMouseover(rect);
+				GUI.color = Color.green;
+				Widgets.Label(rect, trad.ThingDef.GetStatValueAbstract(StatDefOf.Nutrition).ToString("0.##"));
+				GUI.color = Color.white;
+				if (Mouse.IsOver(rect))
+				{
+					TooltipHandler.TipRegion(rect, "ItemNutritionTip".Translate((1.6f * ThingDefOf.Human.race.baseHungerRate).ToString("0.##")));
+				}
 			}
 		}
 
-		
 		private bool DrawGrazeability(Rect rect, TransferableOneWay trad)
 		{
 			if (!trad.HasAnyThing)
@@ -402,25 +479,24 @@ namespace RimWorld
 				return false;
 			}
 			rect.width = 40f;
-			Rect position = new Rect(rect.x + (float)((int)((rect.width - 28f) / 2f)), rect.y + (float)((int)((rect.height - 28f) / 2f)), 28f, 28f);
+			Rect position = new Rect(rect.x + (float)(int)((rect.width - 28f) / 2f), rect.y + (float)(int)((rect.height - 28f) / 2f), 28f, 28f);
 			Widgets.DrawHighlightIfMouseover(rect);
-			GUI.DrawTexture(position, TransferableOneWayWidget.CanGrazeIcon);
+			GUI.DrawTexture(position, CanGrazeIcon);
 			if (Mouse.IsOver(rect))
 			{
 				TooltipHandler.TipRegion(rect, delegate
 				{
 					TaggedString taggedString = "AnimalCanGrazeTip".Translate();
-					if (this.tile != -1)
+					if (tile != -1)
 					{
-						taggedString += "\n\n" + VirtualPlantsUtility.GetVirtualPlantsStatusExplanationAt(this.tile, Find.TickManager.TicksAbs);
+						taggedString += "\n\n" + VirtualPlantsUtility.GetVirtualPlantsStatusExplanationAt(tile, Find.TickManager.TicksAbs);
 					}
 					return taggedString;
-				}, trad.GetHashCode() ^ 1948571634);
+				}, trad.GetHashCode() ^ 0x7424D7F2);
 			}
 			return true;
 		}
 
-		
 		private void DrawForagedFoodPerDay(Rect rect, TransferableOneWay trad)
 		{
 			if (!trad.HasAnyThing)
@@ -432,23 +508,21 @@ namespace RimWorld
 			{
 				return;
 			}
-			bool flag;
-			float foragedNutritionPerDay = ForagedFoodPerDayCalculator.GetBaseForagedNutritionPerDay(p, out flag);
-			if (flag)
+			bool skip;
+			float foragedNutritionPerDay = ForagedFoodPerDayCalculator.GetBaseForagedNutritionPerDay(p, out skip);
+			if (!skip)
 			{
-				return;
-			}
-			Widgets.DrawHighlightIfMouseover(rect);
-			GUI.color = ((foragedNutritionPerDay == 0f) ? Color.gray : Color.green);
-			Widgets.Label(rect, "+" + foragedNutritionPerDay.ToString("0.##"));
-			GUI.color = Color.white;
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.TipRegion(rect, () => "NutritionForagedPerDayTip".Translate(StatDefOf.ForagedNutritionPerDay.Worker.GetExplanationFull(StatRequest.For(p), StatDefOf.ForagedNutritionPerDay.toStringNumberSense, foragedNutritionPerDay)), trad.GetHashCode() ^ 1958671422);
+				Widgets.DrawHighlightIfMouseover(rect);
+				GUI.color = ((foragedNutritionPerDay == 0f) ? Color.gray : Color.green);
+				Widgets.Label(rect, "+" + foragedNutritionPerDay.ToString("0.##"));
+				GUI.color = Color.white;
+				if (Mouse.IsOver(rect))
+				{
+					TooltipHandler.TipRegion(rect, () => "NutritionForagedPerDayTip".Translate(StatDefOf.ForagedNutritionPerDay.Worker.GetExplanationFull(StatRequest.For(p), StatDefOf.ForagedNutritionPerDay.toStringNumberSense, foragedNutritionPerDay)), trad.GetHashCode() ^ 0x74BEF43E);
+				}
 			}
 		}
 
-		
 		private void DrawNutritionEatenPerDay(Rect rect, TransferableOneWay trad)
 		{
 			if (!trad.HasAnyThing)
@@ -456,39 +530,35 @@ namespace RimWorld
 				return;
 			}
 			Pawn p = trad.AnyThing as Pawn;
-			if (p == null || !p.RaceProps.EatsFood || p.Dead || p.needs.food == null)
+			if (p != null && p.RaceProps.EatsFood && !p.Dead && p.needs.food != null)
 			{
-				return;
-			}
-			Widgets.DrawHighlightIfMouseover(rect);
-			string text = (p.needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed, true) * 60000f).ToString("0.##");
-			DietCategory resolvedDietCategory = p.RaceProps.ResolvedDietCategory;
-			if (resolvedDietCategory != DietCategory.Omnivorous)
-			{
-				text = text + " (" + resolvedDietCategory.ToStringHumanShort() + ")";
-			}
-			GUI.color = new Color(1f, 0.5f, 0f);
-			Widgets.Label(rect, text);
-			GUI.color = Color.white;
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.TipRegion(rect, () => RaceProperties.NutritionEatenPerDayExplanation_NewTemp(p, true, true, false), trad.GetHashCode() ^ 385968958);
+				Widgets.DrawHighlightIfMouseover(rect);
+				string text = (p.needs.food.FoodFallPerTickAssumingCategory(HungerCategory.Fed, ignoreMalnutrition: true) * 60000f).ToString("0.##");
+				DietCategory resolvedDietCategory = p.RaceProps.ResolvedDietCategory;
+				if (resolvedDietCategory != DietCategory.Omnivorous)
+				{
+					text = text + " (" + resolvedDietCategory.ToStringHumanShort() + ")";
+				}
+				GUI.color = new Color(1f, 0.5f, 0f);
+				Widgets.Label(rect, text);
+				GUI.color = Color.white;
+				if (Mouse.IsOver(rect))
+				{
+					TooltipHandler.TipRegion(rect, () => RaceProperties.NutritionEatenPerDayExplanation_NewTemp(p, showDiet: true, showLegend: true, showCalculations: false), trad.GetHashCode() ^ 0x17016B3E);
+				}
 			}
 		}
 
-		
 		private void DrawMarketValue(Rect rect, TransferableOneWay trad)
 		{
-			if (!trad.HasAnyThing)
+			if (trad.HasAnyThing)
 			{
-				return;
+				Widgets.DrawHighlightIfMouseover(rect);
+				Widgets.Label(rect, trad.AnyThing.MarketValue.ToStringMoney());
+				TooltipHandler.TipRegionByKey(rect, "MarketValueTip");
 			}
-			Widgets.DrawHighlightIfMouseover(rect);
-			Widgets.Label(rect, trad.AnyThing.MarketValue.ToStringMoney(null));
-			TooltipHandler.TipRegionByKey(rect, "MarketValueTip");
 		}
 
-		
 		private void DrawMass(Rect rect, TransferableOneWay trad, float availableMass)
 		{
 			if (!trad.HasAnyThing)
@@ -497,26 +567,26 @@ namespace RimWorld
 			}
 			Thing anyThing = trad.AnyThing;
 			Pawn pawn = anyThing as Pawn;
-			if (pawn != null && !this.includePawnsMassInMassUsage && !MassUtility.CanEverCarryAnything(pawn))
+			if (pawn != null && !includePawnsMassInMassUsage && !MassUtility.CanEverCarryAnything(pawn))
 			{
 				return;
 			}
 			Widgets.DrawHighlightIfMouseover(rect);
-			if (pawn == null || this.includePawnsMassInMassUsage)
+			if (pawn == null || includePawnsMassInMassUsage)
 			{
-				float mass = this.GetMass(anyThing);
+				float mass = GetMass(anyThing);
 				if (Mouse.IsOver(rect))
 				{
 					if (pawn != null)
 					{
-						float gearMass = 0f;
-						float invMass = 0f;
-						gearMass = MassUtility.GearMass(pawn);
-						if (!InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawn, this.ignorePawnInventoryMass))
+						float gearMass2 = 0f;
+						float invMass2 = 0f;
+						gearMass2 = MassUtility.GearMass(pawn);
+						if (!InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawn, ignorePawnInventoryMass))
 						{
-							invMass = MassUtility.InventoryMass(pawn);
+							invMass2 = MassUtility.InventoryMass(pawn);
 						}
-						TooltipHandler.TipRegion(rect, () => this.GetPawnMassTip(trad, 0f, mass - gearMass - invMass, gearMass, invMass), trad.GetHashCode() * 59);
+						TooltipHandler.TipRegion(rect, () => GetPawnMassTip(trad, 0f, mass - gearMass2 - invMass2, gearMass2, invMass2), trad.GetHashCode() * 59);
 					}
 					else
 					{
@@ -529,15 +599,15 @@ namespace RimWorld
 				}
 				else
 				{
-					GUI.color = TransferableOneWayWidget.ItemMassColor;
+					GUI.color = ItemMassColor;
 				}
 				Widgets.Label(rect, mass.ToStringMass());
 			}
 			else
 			{
-				float cap = MassUtility.Capacity(pawn, null);
+				float cap = MassUtility.Capacity(pawn);
 				float gearMass = MassUtility.GearMass(pawn);
-				float invMass = InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawn, this.ignorePawnInventoryMass) ? 0f : MassUtility.InventoryMass(pawn);
+				float invMass = InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawn, ignorePawnInventoryMass) ? 0f : MassUtility.InventoryMass(pawn);
 				float num = cap - gearMass - invMass;
 				if (num > 0f)
 				{
@@ -554,13 +624,12 @@ namespace RimWorld
 				Widgets.Label(rect, num.ToStringMassOffset());
 				if (Mouse.IsOver(rect))
 				{
-					TooltipHandler.TipRegion(rect, () => this.GetPawnMassTip(trad, cap, 0f, gearMass, invMass), trad.GetHashCode() * 59);
+					TooltipHandler.TipRegion(rect, () => GetPawnMassTip(trad, cap, 0f, gearMass, invMass), trad.GetHashCode() * 59);
 				}
 			}
 			GUI.color = Color.white;
 		}
 
-		
 		private void DrawEquippedWeapon(Rect rect, Rect iconRect, TransferableOneWay trad)
 		{
 			if (!trad.HasAnyThing)
@@ -568,20 +637,18 @@ namespace RimWorld
 				return;
 			}
 			Pawn pawn = trad.AnyThing as Pawn;
-			if (pawn == null || pawn.equipment == null || pawn.equipment.Primary == null)
+			if (pawn != null && pawn.equipment != null && pawn.equipment.Primary != null)
 			{
-				return;
-			}
-			ThingWithComps primary = pawn.equipment.Primary;
-			Widgets.DrawHighlightIfMouseover(rect);
-			Widgets.ThingIcon(iconRect, primary, 1f);
-			if (Mouse.IsOver(rect))
-			{
-				TooltipHandler.TipRegion(rect, primary.LabelCap);
+				ThingWithComps primary = pawn.equipment.Primary;
+				Widgets.DrawHighlightIfMouseover(rect);
+				Widgets.ThingIcon(iconRect, primary);
+				if (Mouse.IsOver(rect))
+				{
+					TooltipHandler.TipRegion(rect, primary.LabelCap);
+				}
 			}
 		}
 
-		
 		private string GetPawnMassTip(TransferableOneWay trad, float capacity, float pawnMass, float gearMass, float invMass)
 		{
 			if (!trad.HasAnyThing)
@@ -610,23 +677,22 @@ namespace RimWorld
 			return stringBuilder.ToString();
 		}
 
-		
 		private float GetMass(Thing thing)
 		{
 			if (thing == null)
 			{
 				return 0f;
 			}
-			float num = thing.GetStatValue(StatDefOf.Mass, true);
+			float num = thing.GetStatValue(StatDefOf.Mass);
 			Pawn pawn = thing as Pawn;
 			if (pawn != null)
 			{
-				if (InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawn, this.ignorePawnInventoryMass))
+				if (InventoryCalculatorsUtility.ShouldIgnoreInventoryOf(pawn, ignorePawnInventoryMass))
 				{
 					num -= MassUtility.InventoryMass(pawn);
 				}
 			}
-			else if (this.ignoreSpawnedCorpseGearAndInventoryMass)
+			else if (ignoreSpawnedCorpseGearAndInventoryMass)
 			{
 				Corpse corpse = thing as Corpse;
 				if (corpse != null && corpse.Spawned)
@@ -635,151 +701,6 @@ namespace RimWorld
 				}
 			}
 			return num;
-		}
-
-		
-		private List<TransferableOneWayWidget.Section> sections = new List<TransferableOneWayWidget.Section>();
-
-		
-		private string sourceLabel;
-
-		
-		private string destinationLabel;
-
-		
-		private string sourceCountDesc;
-
-		
-		private bool drawMass;
-
-		
-		private IgnorePawnsInventoryMode ignorePawnInventoryMass = IgnorePawnsInventoryMode.DontIgnore;
-
-		
-		private bool includePawnsMassInMassUsage;
-
-		
-		private Func<float> availableMassGetter;
-
-		
-		private float extraHeaderSpace;
-
-		
-		private bool ignoreSpawnedCorpseGearAndInventoryMass;
-
-		
-		private int tile;
-
-		
-		private bool drawMarketValue;
-
-		
-		private bool drawEquippedWeapon;
-
-		
-		private bool drawNutritionEatenPerDay;
-
-		
-		private bool drawItemNutrition;
-
-		
-		private bool drawForagedFoodPerDay;
-
-		
-		private bool drawDaysUntilRot;
-
-		
-		private bool playerPawnsReadOnly;
-
-		
-		private bool transferablesCached;
-
-		
-		private Vector2 scrollPosition;
-
-		
-		private TransferableSorterDef sorter1;
-
-		
-		private TransferableSorterDef sorter2;
-
-		
-		private Dictionary<TransferableOneWay, int> cachedTicksUntilRot = new Dictionary<TransferableOneWay, int>();
-
-		
-		private static List<TransferableCountToTransferStoppingPoint> stoppingPoints = new List<TransferableCountToTransferStoppingPoint>();
-
-		
-		private const float TopAreaHeight = 37f;
-
-		
-		protected readonly Vector2 AcceptButtonSize = new Vector2(160f, 40f);
-
-		
-		protected readonly Vector2 OtherBottomButtonSize = new Vector2(160f, 40f);
-
-		
-		private const float ColumnWidth = 120f;
-
-		
-		private const float FirstTransferableY = 6f;
-
-		
-		private const float RowInterval = 30f;
-
-		
-		public const float CountColumnWidth = 75f;
-
-		
-		public const float AdjustColumnWidth = 240f;
-
-		
-		public const float MassColumnWidth = 100f;
-
-		
-		public static readonly Color ItemMassColor = new Color(0.7f, 0.7f, 0.7f);
-
-		
-		private const float MarketValueColumnWidth = 100f;
-
-		
-		private const float ExtraSpaceAfterSectionTitle = 5f;
-
-		
-		private const float DaysUntilRotColumnWidth = 75f;
-
-		
-		private const float NutritionEatenPerDayColumnWidth = 75f;
-
-		
-		private const float ItemNutritionColumnWidth = 75f;
-
-		
-		private const float ForagedFoodPerDayColumnWidth = 75f;
-
-		
-		private const float GrazeabilityInnerColumnWidth = 40f;
-
-		
-		private const float EquippedWeaponIconSize = 30f;
-
-		
-		public const float TopAreaWidth = 515f;
-
-		
-		private static readonly Texture2D CanGrazeIcon = ContentFinder<Texture2D>.Get("UI/Icons/CanGraze", true);
-
-		
-		private struct Section
-		{
-			
-			public string title;
-
-			
-			public IEnumerable<TransferableOneWay> transferables;
-
-			
-			public List<TransferableOneWay> cachedTransferables;
 		}
 	}
 }

@@ -1,101 +1,85 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class FacilitiesUtility
 	{
-		
+		private const float MaxDistToLinkToFacilityEver = 10f;
+
+		private static int RegionsToSearch = (1 + 2 * Mathf.CeilToInt(5f / 6f)) * (1 + 2 * Mathf.CeilToInt(5f / 6f));
+
+		private static HashSet<Region> visited = new HashSet<Region>();
+
+		private static HashSet<Thing> processed = new HashSet<Thing>();
+
+		private static bool working;
+
 		public static void NotifyFacilitiesAboutChangedLOSBlockers(List<Region> affectedRegions)
 		{
-			if (!affectedRegions.Any<Region>())
+			if (affectedRegions.Any())
 			{
-				return;
-			}
-			if (FacilitiesUtility.working)
-			{
-				Log.Warning("Tried to update facilities while already updating.", false);
-				return;
-			}
-			FacilitiesUtility.working = true;
-			try
-			{
-				FacilitiesUtility.visited.Clear();
-				FacilitiesUtility.processed.Clear();
-				int facilitiesToProcess = affectedRegions[0].Map.listerThings.ThingsInGroup(ThingRequestGroup.Facility).Count;
-				int affectedByFacilitiesToProcess = affectedRegions[0].Map.listerThings.ThingsInGroup(ThingRequestGroup.AffectedByFacilities).Count;
-				int facilitiesProcessed = 0;
-				int affectedByFacilitiesProcessed = 0;
-				if (facilitiesToProcess > 0 && affectedByFacilitiesToProcess > 0)
+				if (working)
 				{
-					
-					for (int i = 0; i < affectedRegions.Count; i++)
+					Log.Warning("Tried to update facilities while already updating.");
+					return;
+				}
+				working = true;
+				try
+				{
+					visited.Clear();
+					processed.Clear();
+					int facilitiesToProcess = affectedRegions[0].Map.listerThings.ThingsInGroup(ThingRequestGroup.Facility).Count;
+					int affectedByFacilitiesToProcess = affectedRegions[0].Map.listerThings.ThingsInGroup(ThingRequestGroup.AffectedByFacilities).Count;
+					int facilitiesProcessed = 0;
+					int affectedByFacilitiesProcessed = 0;
+					if (facilitiesToProcess > 0 && affectedByFacilitiesToProcess > 0)
 					{
-						if (!FacilitiesUtility.visited.Contains(affectedRegions[i]))
+						for (int i = 0; i < affectedRegions.Count; i++)
 						{
-							Region root = affectedRegions[i];
-							RegionEntryPredicate entryCondition = (Region from, Region r) => !FacilitiesUtility.visited.Contains(r);
-							RegionProcessor regionProcessor= delegate (Region x)
+							if (!visited.Contains(affectedRegions[i]))
 							{
-								FacilitiesUtility.visited.Add(x);
-								List<Thing> list = x.ListerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial);
-								for (int j = 0; j < list.Count; j++)
+								RegionTraverser.BreadthFirstTraverse(affectedRegions[i], (Region from, Region r) => !visited.Contains(r), delegate(Region x)
 								{
-									if (!FacilitiesUtility.processed.Contains(list[j]))
+									visited.Add(x);
+									List<Thing> list = x.ListerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial);
+									for (int j = 0; j < list.Count; j++)
 									{
-										FacilitiesUtility.processed.Add(list[j]);
-										CompFacility compFacility = list[j].TryGetComp<CompFacility>();
-										CompAffectedByFacilities compAffectedByFacilities = list[j].TryGetComp<CompAffectedByFacilities>();
-										if (compFacility != null)
+										if (!processed.Contains(list[j]))
 										{
-											compFacility.Notify_LOSBlockerSpawnedOrDespawned();
-											int num = facilitiesProcessed;
-											facilitiesProcessed = num + 1;
-										}
-										if (compAffectedByFacilities != null)
-										{
-											compAffectedByFacilities.Notify_LOSBlockerSpawnedOrDespawned();
-											int num = affectedByFacilitiesProcessed;
-											affectedByFacilitiesProcessed = num + 1;
+											processed.Add(list[j]);
+											CompFacility compFacility = list[j].TryGetComp<CompFacility>();
+											CompAffectedByFacilities compAffectedByFacilities = list[j].TryGetComp<CompAffectedByFacilities>();
+											if (compFacility != null)
+											{
+												compFacility.Notify_LOSBlockerSpawnedOrDespawned();
+												facilitiesProcessed++;
+											}
+											if (compAffectedByFacilities != null)
+											{
+												compAffectedByFacilities.Notify_LOSBlockerSpawnedOrDespawned();
+												affectedByFacilitiesProcessed++;
+											}
 										}
 									}
+									return facilitiesProcessed >= facilitiesToProcess && affectedByFacilitiesProcessed >= affectedByFacilitiesToProcess;
+								}, RegionsToSearch);
+								if (facilitiesProcessed >= facilitiesToProcess && affectedByFacilitiesProcessed >= affectedByFacilitiesToProcess)
+								{
+									break;
 								}
-								return facilitiesProcessed >= facilitiesToProcess && affectedByFacilitiesProcessed >= affectedByFacilitiesToProcess;
-							};
-
-							RegionTraverser.BreadthFirstTraverse(root, entryCondition, regionProcessor, FacilitiesUtility.RegionsToSearch, RegionType.Set_Passable);
-							if (facilitiesProcessed >= facilitiesToProcess && affectedByFacilitiesProcessed >= affectedByFacilitiesToProcess)
-							{
-								break;
 							}
 						}
 					}
 				}
-			}
-			finally
-			{
-				FacilitiesUtility.working = false;
-				FacilitiesUtility.visited.Clear();
-				FacilitiesUtility.processed.Clear();
+				finally
+				{
+					working = false;
+					visited.Clear();
+					processed.Clear();
+				}
 			}
 		}
-
-		
-		private const float MaxDistToLinkToFacilityEver = 10f;
-
-		
-		private static int RegionsToSearch = (1 + 2 * Mathf.CeilToInt(0.8333333f)) * (1 + 2 * Mathf.CeilToInt(0.8333333f));
-
-		
-		private static HashSet<Region> visited = new HashSet<Region>();
-
-		
-		private static HashSet<Thing> processed = new HashSet<Thing>();
-
-		
-		private static bool working;
 	}
 }

@@ -1,13 +1,10 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PlaceWorker_ShowPlantHarmRadius : PlaceWorker
 	{
-		
 		public override void DrawGhost(ThingDef def, IntVec3 center, Rot4 rot, Color ghostCol, Thing thing = null)
 		{
 			if (thing == null)
@@ -15,14 +12,13 @@ namespace RimWorld
 				return;
 			}
 			CompPlantHarmRadius compPlantHarmRadius = thing.TryGetComp<CompPlantHarmRadius>();
-			if (compPlantHarmRadius == null)
+			if (compPlantHarmRadius != null)
 			{
-				return;
-			}
-			float currentRadius = compPlantHarmRadius.CurrentRadius;
-			if (currentRadius < 50f)
-			{
-				GenDraw.DrawRadiusRing(center, currentRadius);
+				float currentRadius = compPlantHarmRadius.CurrentRadius;
+				if (currentRadius < 50f)
+				{
+					GenDraw.DrawRadiusRing(center, currentRadius);
+				}
 			}
 		}
 	}

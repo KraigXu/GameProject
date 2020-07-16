@@ -1,38 +1,18 @@
-﻿using System;
 using RimWorld;
 
 namespace Verse
 {
-	
 	public class ModIncompatibility : ModRequirement
 	{
-		
-		
-		public override string RequirementTypeLabel
-		{
-			get
-			{
-				return "ModIncompatibleWith".Translate("");
-			}
-		}
+		public override string RequirementTypeLabel => "ModIncompatibleWith".Translate("");
 
-		
-		
-		public override bool IsSatisfied
-		{
-			get
-			{
-				return ModLister.GetActiveModWithIdentifier(this.packageId) == null;
-			}
-		}
+		public override bool IsSatisfied => ModLister.GetActiveModWithIdentifier(packageId) == null;
 
-		
-		
 		public override string Tooltip
 		{
 			get
 			{
-				ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.packageId, true);
+				ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(packageId, ignorePostfix: true);
 				if (modWithIdentifier != null && modWithIdentifier.Active)
 				{
 					return base.Tooltip + "\n" + "ContentActive".Translate() + "\n\n" + "ModClickToSelect".Translate();
@@ -41,10 +21,9 @@ namespace Verse
 			}
 		}
 
-		
 		public override void OnClicked(Page_ModsConfig window)
 		{
-			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(this.packageId, true);
+			ModMetaData modWithIdentifier = ModLister.GetModWithIdentifier(packageId, ignorePostfix: true);
 			if (modWithIdentifier != null && modWithIdentifier.Active)
 			{
 				window.SelectMod(modWithIdentifier);

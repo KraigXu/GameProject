@@ -1,17 +1,13 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class CameraMapConfig_ContinuousPanAndZoom : CameraMapConfig_ContinuousPan
 	{
-		
 		public CameraMapConfig_ContinuousPanAndZoom()
 		{
-			this.zoomSpeed = 0.043f;
-			this.zoomPreserveFactor = 1f;
-			this.smoothZoom = true;
-			this.minSize = 8.2f;
+			zoomSpeed = 0.043f;
+			zoomPreserveFactor = 1f;
+			smoothZoom = true;
+			minSize = 8.2f;
 		}
 	}
 }

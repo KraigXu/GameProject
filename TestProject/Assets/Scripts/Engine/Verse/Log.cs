@@ -1,142 +1,106 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class Log
 	{
-
 		private static LogMessageQueue messageQueue = new LogMessageQueue();
-
 
 		private static HashSet<int> usedKeys = new HashSet<int>();
 
-
 		public static bool openOnMessage = false;
-
 
 		private static bool currentlyLoggingError;
 
-
 		private static int messageCount;
-
 
 		private const int StopLoggingAtMessageCount = 1000;
 
-		public static IEnumerable<LogMessage> Messages
-		{
-			get
-			{
-				return Log.messageQueue.Messages;
-			}
-		}
+		public static IEnumerable<LogMessage> Messages => messageQueue.Messages;
 
-		
-		
-		private static bool ReachedMaxMessagesLimit
-		{
-			get
-			{
-				return Log.messageCount >= 1000;
-			}
-		}
+		private static bool ReachedMaxMessagesLimit => messageCount >= 1000;
 
-		
 		public static void ResetMessageCount()
 		{
-			bool reachedMaxMessagesLimit = Log.ReachedMaxMessagesLimit;
-			Log.messageCount = 0;
+			bool reachedMaxMessagesLimit = ReachedMaxMessagesLimit;
+			messageCount = 0;
 			if (reachedMaxMessagesLimit)
 			{
-				Log.Message("Message logging is now once again on.", false);
+				Message("Message logging is now once again on.");
 			}
 		}
 
-		
 		public static void Message(string text, bool ignoreStopLoggingLimit = false)
 		{
-			if (!ignoreStopLoggingLimit && Log.ReachedMaxMessagesLimit)
+			if (ignoreStopLoggingLimit || !ReachedMaxMessagesLimit)
 			{
-				return;
+				Debug.Log(text);
+				messageQueue.Enqueue(new LogMessage(LogMessageType.Message, text, StackTraceUtility.ExtractStackTrace()));
+				PostMessage();
 			}
-			Debug.Log(text);
-			Log.messageQueue.Enqueue(new LogMessage(LogMessageType.Message, text, StackTraceUtility.ExtractStackTrace()));
-			Log.PostMessage();
 		}
 
-		
 		public static void Warning(string text, bool ignoreStopLoggingLimit = false)
 		{
-			if (!ignoreStopLoggingLimit && Log.ReachedMaxMessagesLimit)
+			if (ignoreStopLoggingLimit || !ReachedMaxMessagesLimit)
 			{
-				return;
+				Debug.LogWarning(text);
+				messageQueue.Enqueue(new LogMessage(LogMessageType.Warning, text, StackTraceUtility.ExtractStackTrace()));
+				PostMessage();
 			}
-			Debug.LogWarning(text);
-			Log.messageQueue.Enqueue(new LogMessage(LogMessageType.Warning, text, StackTraceUtility.ExtractStackTrace()));
-			Log.PostMessage();
 		}
 
-		
 		public static void Error(string text, bool ignoreStopLoggingLimit = false)
 		{
-            Debug.LogError(">>"+text);
-			if (!ignoreStopLoggingLimit && Log.ReachedMaxMessagesLimit)
+			if (ignoreStopLoggingLimit || !ReachedMaxMessagesLimit)
 			{
-				return;
-			}
-			if (!Log.currentlyLoggingError)
-			{
-				Log.currentlyLoggingError = true;
-				try
+				Debug.LogError(text);
+				if (!currentlyLoggingError)
 				{
-					if (Prefs.PauseOnError && Current.ProgramState == ProgramState.Playing)
+					currentlyLoggingError = true;
+					try
 					{
-						Find.TickManager.Pause();
+						if (Prefs.PauseOnError && Current.ProgramState == ProgramState.Playing)
+						{
+							Find.TickManager.Pause();
+						}
+						messageQueue.Enqueue(new LogMessage(LogMessageType.Error, text, StackTraceUtility.ExtractStackTrace()));
+						PostMessage();
+						if (!PlayDataLoader.Loaded || Prefs.DevMode)
+						{
+							TryOpenLogWindow();
+						}
 					}
-					Log.messageQueue.Enqueue(new LogMessage(LogMessageType.Error, text, StackTraceUtility.ExtractStackTrace()));
-					Log.PostMessage();
-					if (!PlayDataLoader.Loaded || Prefs.DevMode)
+					catch (Exception arg)
 					{
-						Log.TryOpenLogWindow();
+						Debug.LogError("An error occurred while logging an error: " + arg);
 					}
-				}
-				catch (Exception arg)
-				{
-					Debug.LogError("An error occurred while logging an error: " + arg);
-				}
-				finally
-				{
-					Log.currentlyLoggingError = false;
+					finally
+					{
+						currentlyLoggingError = false;
+					}
 				}
 			}
 		}
 
-		
 		public static void ErrorOnce(string text, int key, bool ignoreStopLoggingLimit = false)
 		{
-			if (!ignoreStopLoggingLimit && Log.ReachedMaxMessagesLimit)
+			if ((ignoreStopLoggingLimit || !ReachedMaxMessagesLimit) && !usedKeys.Contains(key))
 			{
-				return;
+				usedKeys.Add(key);
+				Error(text, ignoreStopLoggingLimit);
 			}
-			if (Log.usedKeys.Contains(key))
-			{
-				return;
-			}
-			Log.usedKeys.Add(key);
-			Log.Error(text, ignoreStopLoggingLimit);
 		}
 
-		
 		public static void Clear()
 		{
 			EditWindow_Log.ClearSelectedMessage();
-			Log.messageQueue.Clear();
-			Log.ResetMessageCount();
+			messageQueue.Clear();
+			ResetMessageCount();
 		}
 
-		
 		public static void TryOpenLogWindow()
 		{
 			if (StaticConstructorOnStartupUtility.coreStaticAssetsLoaded || UnityData.IsInMainThread)
@@ -145,21 +109,18 @@ namespace Verse
 			}
 		}
 
-		
 		private static void PostMessage()
 		{
-			if (Log.openOnMessage)
+			if (openOnMessage)
 			{
-				Log.TryOpenLogWindow();
-				EditWindow_Log.SelectLastMessage(true);
+				TryOpenLogWindow();
+				EditWindow_Log.SelectLastMessage(expandDetailsPane: true);
 			}
-			Log.messageCount++;
-			if (Log.messageCount == 1000 && Log.ReachedMaxMessagesLimit)
+			messageCount++;
+			if (messageCount == 1000 && ReachedMaxMessagesLimit)
 			{
-				Log.Warning("Reached max messages limit. Stopping logging to avoid spam.", true);
+				Warning("Reached max messages limit. Stopping logging to avoid spam.", ignoreStopLoggingLimit: true);
 			}
 		}
-
-
 	}
 }

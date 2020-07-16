@@ -1,15 +1,13 @@
-﻿using System;
-using System.IO;
 using RimWorld;
 using RimWorld.Planet;
+using System;
+using System.IO;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Root_Play : Root
 	{
-
 		public MusicManagerPlay musicManagerPlay;
 
 		public override void Start()
@@ -18,7 +16,7 @@ namespace Verse
 			base.Start();
 			try
 			{
-				this.musicManagerPlay = new MusicManagerPlay();
+				musicManagerPlay = new MusicManagerPlay();
 				FileInfo autostart = Root.checkedAutostartSaveFile ? null : SaveGameFilesUtility.GetAutostartSaveFile();
 				Root.checkedAutostartSaveFile = true;
 				if (autostart != null)
@@ -26,14 +24,14 @@ namespace Verse
 					LongEventHandler.QueueLongEvent(delegate
 					{
 						SavedGameLoaderNow.LoadGameFromSaveFileNow(Path.GetFileNameWithoutExtension(autostart.Name));
-					}, "LoadingLongEvent", true, new Action<Exception>(GameAndMapInitExceptionHandlers.ErrorWhileLoadingGame), true);
+					}, "LoadingLongEvent", doAsynchronously: true, GameAndMapInitExceptionHandlers.ErrorWhileLoadingGame);
 				}
 				else if (Find.GameInitData != null && !Find.GameInitData.gameToLoad.NullOrEmpty())
 				{
 					LongEventHandler.QueueLongEvent(delegate
 					{
 						SavedGameLoaderNow.LoadGameFromSaveFileNow(Find.GameInitData.gameToLoad);
-					}, "LoadingLongEvent", true, new Action<Exception>(GameAndMapInitExceptionHandlers.ErrorWhileLoadingGame), true);
+					}, "LoadingLongEvent", doAsynchronously: true, GameAndMapInitExceptionHandlers.ErrorWhileLoadingGame);
 				}
 				else
 				{
@@ -41,45 +39,42 @@ namespace Verse
 					{
 						if (Current.Game == null)
 						{
-							Root_Play.SetupForQuickTestPlay();
+							SetupForQuickTestPlay();
 						}
 						Current.Game.InitNewGame();
-					}, "GeneratingMap", true, new Action<Exception>(GameAndMapInitExceptionHandlers.ErrorWhileGeneratingMap), true);
+					}, "GeneratingMap", doAsynchronously: true, GameAndMapInitExceptionHandlers.ErrorWhileGeneratingMap);
 				}
 				LongEventHandler.QueueLongEvent(delegate
 				{
 					ScreenFader.SetColor(Color.black);
 					ScreenFader.StartFade(Color.clear, 0.5f);
-				}, null, false, null, true);
+				}, null, doAsynchronously: false, null);
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Critical error in root Start(): " + arg, false);
+				Log.Error("Critical error in root Start(): " + arg);
 			}
 		}
 
-		
 		public override void Update()
 		{
 			base.Update();
-			if (LongEventHandler.ShouldWaitForEvent || this.destroyed)
+			if (!LongEventHandler.ShouldWaitForEvent && !destroyed)
 			{
-				return;
-			}
-			try
-			{
-				ShipCountdown.ShipCountdownUpdate();
-				TargetHighlighter.TargetHighlighterUpdate();
-				Current.Game.UpdatePlay();
-				this.musicManagerPlay.MusicUpdate();
-			}
-			catch (Exception arg)
-			{
-				Log.Error("Root level exception in Update(): " + arg, false);
+				try
+				{
+					ShipCountdown.ShipCountdownUpdate();
+					TargetHighlighter.TargetHighlighterUpdate();
+					Current.Game.UpdatePlay();
+					musicManagerPlay.MusicUpdate();
+				}
+				catch (Exception arg)
+				{
+					Log.Error("Root level exception in Update(): " + arg);
+				}
 			}
 		}
 
-		
 		private static void SetupForQuickTestPlay()
 		{
 			Current.ProgramState = ProgramState.Entry;
@@ -94,6 +89,5 @@ namespace Verse
 			Find.GameInitData.PrepForMapGen();
 			Find.Scenario.PreMapGenerate();
 		}
-
 	}
 }

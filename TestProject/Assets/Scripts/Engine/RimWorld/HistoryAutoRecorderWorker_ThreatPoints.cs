@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class HistoryAutoRecorderWorker_ThreatPoints : HistoryAutoRecorderWorker
 	{
-		
 		public override float PullRecord()
 		{
 			if (Find.AnyPlayerHomeMap == null)

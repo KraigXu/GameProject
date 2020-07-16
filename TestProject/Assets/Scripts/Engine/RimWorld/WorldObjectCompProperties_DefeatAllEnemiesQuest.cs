@@ -1,32 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 
 namespace RimWorld
 {
-	
 	public class WorldObjectCompProperties_DefeatAllEnemiesQuest : WorldObjectCompProperties
 	{
-		
 		public WorldObjectCompProperties_DefeatAllEnemiesQuest()
 		{
-			this.compClass = typeof(DefeatAllEnemiesQuestComp);
+			compClass = typeof(DefeatAllEnemiesQuestComp);
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors(WorldObjectDef parentDef)
 		{
-			foreach (string text in this.ConfigErrors(parentDef))
+			foreach (string item in base.ConfigErrors(parentDef))
 			{
-				
+				yield return item;
 			}
-			IEnumerator<string> enumerator = null;
 			if (!typeof(MapParent).IsAssignableFrom(parentDef.worldObjectClass))
 			{
 				yield return parentDef.defName + " has WorldObjectCompProperties_DefeatAllEnemiesQuest but it's not MapParent.";
 			}
-			yield break;
-			yield break;
 		}
 	}
 }

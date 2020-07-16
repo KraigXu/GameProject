@@ -1,24 +1,20 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class StatPart_WorkTableUnpowered : StatPart
 	{
-		
 		public override void TransformValue(StatRequest req, ref float val)
 		{
-			if (req.HasThing && StatPart_WorkTableUnpowered.Applies(req.Thing))
+			if (req.HasThing && Applies(req.Thing))
 			{
 				val *= req.Thing.def.building.unpoweredWorkTableWorkSpeedFactor;
 			}
 		}
 
-		
 		public override string ExplanationPart(StatRequest req)
 		{
-			if (req.HasThing && StatPart_WorkTableUnpowered.Applies(req.Thing))
+			if (req.HasThing && Applies(req.Thing))
 			{
 				float unpoweredWorkTableWorkSpeedFactor = req.Thing.def.building.unpoweredWorkTableWorkSpeedFactor;
 				return "NoPower".Translate() + ": x" + unpoweredWorkTableWorkSpeedFactor.ToStringPercent();
@@ -26,7 +22,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static bool Applies(Thing th)
 		{
 			if (th.def.building.unpoweredWorkTableWorkSpeedFactor == 0f)
@@ -34,7 +29,11 @@ namespace RimWorld
 				return false;
 			}
 			CompPowerTrader compPowerTrader = th.TryGetComp<CompPowerTrader>();
-			return compPowerTrader != null && !compPowerTrader.PowerOn;
+			if (compPowerTrader != null && !compPowerTrader.PowerOn)
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }

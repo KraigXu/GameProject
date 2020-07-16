@@ -1,13 +1,21 @@
-﻿using System;
 using RimWorld;
+using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class Graphic_Shadow : Graphic
 	{
-		
+		private Mesh shadowMesh;
+
+		private ShadowData shadowInfo;
+
+		[TweakValue("Graphics_Shadow", -5f, 5f)]
+		private static float GlobalShadowPosOffsetX;
+
+		[TweakValue("Graphics_Shadow", -5f, 5f)]
+		private static float GlobalShadowPosOffsetZ;
+
 		public Graphic_Shadow(ShadowData shadowInfo)
 		{
 			this.shadowInfo = shadowInfo;
@@ -15,46 +23,29 @@ namespace Verse
 			{
 				throw new ArgumentNullException("shadowInfo");
 			}
-			this.shadowMesh = ShadowMeshPool.GetShadowMesh(shadowInfo);
+			shadowMesh = ShadowMeshPool.GetShadowMesh(shadowInfo);
 		}
 
-		
 		public override void DrawWorker(Vector3 loc, Rot4 rot, ThingDef thingDef, Thing thing, float extraRotation)
 		{
-			if (this.shadowMesh != null && thingDef != null && this.shadowInfo != null && (Find.CurrentMap == null || !loc.ToIntVec3().InBounds(Find.CurrentMap) || !Find.CurrentMap.roofGrid.Roofed(loc.ToIntVec3())) && DebugViewSettings.drawShadows)
+			if (shadowMesh != null && thingDef != null && shadowInfo != null && (Find.CurrentMap == null || !loc.ToIntVec3().InBounds(Find.CurrentMap) || !Find.CurrentMap.roofGrid.Roofed(loc.ToIntVec3())) && DebugViewSettings.drawShadows)
 			{
-				Vector3 position = loc + this.shadowInfo.offset;
+				Vector3 position = loc + shadowInfo.offset;
 				position.y = AltitudeLayer.Shadows.AltitudeFor();
-				Graphics.DrawMesh(this.shadowMesh, position, rot.AsQuat, MatBases.SunShadowFade, 0);
+				Graphics.DrawMesh(shadowMesh, position, rot.AsQuat, MatBases.SunShadowFade, 0);
 			}
 		}
 
-		
 		public override void Print(SectionLayer layer, Thing thing)
 		{
-			Vector3 center = thing.TrueCenter() + (this.shadowInfo.offset + new Vector3(Graphic_Shadow.GlobalShadowPosOffsetX, 0f, Graphic_Shadow.GlobalShadowPosOffsetZ)).RotatedBy(thing.Rotation);
+			Vector3 center = thing.TrueCenter() + (shadowInfo.offset + new Vector3(GlobalShadowPosOffsetX, 0f, GlobalShadowPosOffsetZ)).RotatedBy(thing.Rotation);
 			center.y = AltitudeLayer.Shadows.AltitudeFor();
-			Printer_Shadow.PrintShadow(layer, center, this.shadowInfo, thing.Rotation);
+			Printer_Shadow.PrintShadow(layer, center, shadowInfo, thing.Rotation);
 		}
 
-		
 		public override string ToString()
 		{
-			return "Graphic_Shadow(" + this.shadowInfo + ")";
+			return "Graphic_Shadow(" + shadowInfo + ")";
 		}
-
-		
-		private Mesh shadowMesh;
-
-		
-		private ShadowData shadowInfo;
-
-		
-		[TweakValue("Graphics_Shadow", -5f, 5f)]
-		private static float GlobalShadowPosOffsetX;
-
-		
-		[TweakValue("Graphics_Shadow", -5f, 5f)]
-		private static float GlobalShadowPosOffsetZ;
 	}
 }

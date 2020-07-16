@@ -1,86 +1,72 @@
-﻿using System;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public class ModLoadFolders
 	{
 		private Dictionary<string, List<LoadFolder>> foldersForVersion = new Dictionary<string, List<LoadFolder>>();
+
 		public const string defaultVersionName = "default";
-
-
 
 		public List<LoadFolder> FoldersForVersion(string version)
 		{
-			if (this.foldersForVersion.ContainsKey(version))
+			if (foldersForVersion.ContainsKey(version))
 			{
-				return this.foldersForVersion[version];
+				return foldersForVersion[version];
 			}
 			return null;
 		}
 
-		
 		public List<string> DefinedVersions()
 		{
-			return this.foldersForVersion.Keys.ToList<string>();
+			return foldersForVersion.Keys.ToList();
 		}
 
-		
 		public void LoadDataFromXmlCustom(XmlNode xmlRoot)
 		{
-			foreach (object obj in xmlRoot.ChildNodes)
+			foreach (XmlNode childNode in xmlRoot.ChildNodes)
 			{
-				XmlNode xmlNode = (XmlNode)obj;
-				if (!(xmlNode is XmlComment))
+				if (!(childNode is XmlComment))
 				{
-					string text = xmlNode.Name.ToLower();
+					string text = childNode.Name.ToLower();
 					if (text.StartsWith("v"))
 					{
 						text = text.Substring(1);
 					}
-					if (!this.foldersForVersion.ContainsKey(text))
+					if (!foldersForVersion.ContainsKey(text))
 					{
-						this.foldersForVersion.Add(text, new List<LoadFolder>());
+						foldersForVersion.Add(text, new List<LoadFolder>());
 					}
-					foreach (object obj2 in xmlNode.ChildNodes)
+					foreach (XmlNode childNode2 in childNode.ChildNodes)
 					{
-						XmlNode xmlNode2 = (XmlNode)obj2;
-						if (!(xmlNode2 is XmlComment))
+						if (!(childNode2 is XmlComment))
 						{
-							XmlAttributeCollection attributes = xmlNode2.Attributes;
-							XmlAttribute xmlAttribute = (attributes != null) ? attributes["IfModActive"] : null;
+							XmlAttribute xmlAttribute = childNode2.Attributes?["IfModActive"];
 							List<string> requiredPackageIds = null;
 							if (xmlAttribute != null)
 							{
-								requiredPackageIds = (from s in xmlAttribute.Value.Split(new char[]
-								{
-									','
-								})
-								select s.Trim()).ToList<string>();
+								requiredPackageIds = (from s in xmlAttribute.Value.Split(',')
+									select s.Trim()).ToList();
 							}
-							XmlAttributeCollection attributes2 = xmlNode2.Attributes;
-							XmlAttribute xmlAttribute2 = (attributes2 != null) ? attributes2["IfModNotActive"] : null;
+							XmlAttribute xmlAttribute2 = childNode2.Attributes?["IfModNotActive"];
 							List<string> disallowedPackageIds = null;
 							if (xmlAttribute2 != null)
 							{
-								disallowedPackageIds = (from s in xmlAttribute2.Value.Split(new char[]
-								{
-									','
-								})
-								select s.Trim()).ToList<string>();
+								disallowedPackageIds = (from s in xmlAttribute2.Value.Split(',')
+									select s.Trim()).ToList();
 							}
-							if (xmlNode2.InnerText == "/" || xmlNode2.InnerText == "\\")
+							if (childNode2.InnerText == "/" || childNode2.InnerText == "\\")
 							{
-								this.foldersForVersion[text].Add(new LoadFolder("", requiredPackageIds, disallowedPackageIds));
+								foldersForVersion[text].Add(new LoadFolder("", requiredPackageIds, disallowedPackageIds));
 							}
 							else
 							{
-								this.foldersForVersion[text].Add(new LoadFolder(xmlNode2.InnerText, requiredPackageIds, disallowedPackageIds));
+								foldersForVersion[text].Add(new LoadFolder(childNode2.InnerText, requiredPackageIds, disallowedPackageIds));
 							}
 						}
 					}
@@ -88,60 +74,56 @@ namespace Verse
 			}
 		}
 
-		
 		public List<string> GetIssueList(ModMetaData mod)
 		{
 			List<string> list = new List<string>();
-			if (this.foldersForVersion.Count > 0)
+			if (foldersForVersion.Count > 0)
 			{
 				string text = null;
-				foreach (string text2 in this.foldersForVersion.Keys)
 				{
-					if (this.foldersForVersion[text2].Count == 0)
+					foreach (string key in foldersForVersion.Keys)
 					{
-						list.Add("ModLoadFolderListEmpty".Translate(text2));
-					}
-					foreach (LoadFolder loadFolder in from f in this.foldersForVersion[text2]
-					group f by f into g
-					where g.Count<LoadFolder>() > 1
-					select g.Key)
-					{
-						list.Add("ModLoadFolderRepeatingFolder".Translate(text2, loadFolder.folderName));
-					}
-					if (!VersionControl.IsWellFormattedVersionString(text2) && !text2.Equals("default", StringComparison.InvariantCultureIgnoreCase))
-					{
-						list.Add("ModLoadFolderMalformedVersion".Translate(text2));
-					}
-					if (text2.Equals("default") && text != null)
-					{
-						list.Add("ModLoadFolderOutOfOrderDefault".Translate());
-					}
-					Version v;
-					Version v2;
-					if (text != null && VersionControl.TryParseVersionString(text2, out v) && VersionControl.TryParseVersionString(text, out v2) && v < v2)
-					{
-						list.Add("ModLoadFolderOutOfOrder".Translate(text2, text));
-					}
-					for (int i = 0; i < this.foldersForVersion[text2].Count; i++)
-					{
-						LoadFolder loadFolder2 = this.foldersForVersion[text2][i];
-						if (!Directory.Exists(Path.Combine(mod.RootDir.FullName, loadFolder2.folderName)))
+						if (foldersForVersion[key].Count == 0)
 						{
-							list.Add("ModLoadFolderDoesntExist".Translate(loadFolder2.folderName, text2));
+							list.Add("ModLoadFolderListEmpty".Translate(key));
 						}
+						foreach (LoadFolder item in from f in foldersForVersion[key]
+							group f by f into g
+							where g.Count() > 1
+							select g.Key)
+						{
+							list.Add("ModLoadFolderRepeatingFolder".Translate(key, item.folderName));
+						}
+						if (!VersionControl.IsWellFormattedVersionString(key) && !key.Equals("default", StringComparison.InvariantCultureIgnoreCase))
+						{
+							list.Add("ModLoadFolderMalformedVersion".Translate(key));
+						}
+						if (key.Equals("default") && text != null)
+						{
+							list.Add("ModLoadFolderOutOfOrderDefault".Translate());
+						}
+						if (text != null && VersionControl.TryParseVersionString(key, out Version version) && VersionControl.TryParseVersionString(text, out Version version2) && version < version2)
+						{
+							list.Add("ModLoadFolderOutOfOrder".Translate(key, text));
+						}
+						for (int i = 0; i < foldersForVersion[key].Count; i++)
+						{
+							LoadFolder loadFolder = foldersForVersion[key][i];
+							if (!Directory.Exists(Path.Combine(mod.RootDir.FullName, loadFolder.folderName)))
+							{
+								list.Add("ModLoadFolderDoesntExist".Translate(loadFolder.folderName, key));
+							}
+						}
+						if (VersionControl.TryParseVersionString(key, out Version version3) && !mod.SupportedVersionsReadOnly.Contains(version3))
+						{
+							list.Add("ModLoadFolderDefinesUnsupportedGameVersion".Translate(key));
+						}
+						text = key;
 					}
-					Version item;
-					if (VersionControl.TryParseVersionString(text2, out item) && !mod.SupportedVersionsReadOnly.Contains(item))
-					{
-						list.Add("ModLoadFolderDefinesUnsupportedGameVersion".Translate(text2));
-					}
-					text = text2;
+					return list;
 				}
 			}
 			return list;
 		}
-
-		
-
 	}
 }

@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,46 +5,46 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ThingSetMakerUtility
 	{
-		
+		public static List<ThingDef> allGeneratableItems = new List<ThingDef>();
+
 		public static void Reset()
 		{
-			ThingSetMakerUtility.allGeneratableItems.Clear();
-			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs)
+			allGeneratableItems.Clear();
+			foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
 			{
-				if (ThingSetMakerUtility.CanGenerate(thingDef))
+				if (CanGenerate(allDef))
 				{
-					ThingSetMakerUtility.allGeneratableItems.Add(thingDef);
+					allGeneratableItems.Add(allDef);
 				}
 			}
 			ThingSetMaker_Meteorite.Reset();
 		}
 
-		
 		public static bool CanGenerate(ThingDef thingDef)
 		{
-			return (thingDef.category == ThingCategory.Item || thingDef.Minifiable) && (thingDef.category != ThingCategory.Item || thingDef.EverHaulable) && !thingDef.isUnfinishedThing && !thingDef.IsCorpse && thingDef.PlayerAcquirable && thingDef.graphicData != null && !typeof(MinifiedThing).IsAssignableFrom(thingDef.thingClass);
+			if ((thingDef.category != ThingCategory.Item && !thingDef.Minifiable) || (thingDef.category == ThingCategory.Item && !thingDef.EverHaulable) || thingDef.isUnfinishedThing || thingDef.IsCorpse || !thingDef.PlayerAcquirable || thingDef.graphicData == null || typeof(MinifiedThing).IsAssignableFrom(thingDef.thingClass))
+			{
+				return false;
+			}
+			return true;
 		}
 
-		
 		public static IEnumerable<ThingDef> GetAllowedThingDefs(ThingSetMakerParams parms)
 		{
 			TechLevel techLevel = parms.techLevel ?? TechLevel.Undefined;
 			IEnumerable<ThingDef> source = parms.filter.AllowedThingDefs;
-			if (techLevel != TechLevel.Undefined)
+			if (techLevel != 0)
 			{
-				source = from x in source
-				where x.techLevel <= techLevel
-				select x;
+				source = source.Where((ThingDef x) => (int)x.techLevel <= (int)techLevel);
 			}
 			RoyalTitleDef highestTitle = null;
 			if (parms.makingFaction != null && parms.makingFaction.def.HasRoyalTitles)
 			{
-				foreach (Pawn pawn in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
+				foreach (Pawn allMapsCaravansAndTravelingTransportPods_Alive_Colonist in PawnsFinder.AllMapsCaravansAndTravelingTransportPods_Alive_Colonists)
 				{
-					RoyalTitleDef royalTitleDef = (pawn.royalty != null) ? pawn.royalty.GetCurrentTitle(parms.makingFaction) : null;
+					RoyalTitleDef royalTitleDef = (allMapsCaravansAndTravelingTransportPods_Alive_Colonist.royalty != null) ? allMapsCaravansAndTravelingTransportPods_Alive_Colonist.royalty.GetCurrentTitle(parms.makingFaction) : null;
 					if (royalTitleDef != null && (highestTitle == null || royalTitleDef.seniority > highestTitle.seniority))
 					{
 						highestTitle = royalTitleDef;
@@ -68,7 +67,7 @@ namespace RimWorld
 				}
 				if (parms.makingFaction != null && parms.makingFaction.def.HasRoyalTitles)
 				{
-					RoyalTitleDef minTitleToUse = ThingRequiringRoyalPermissionUtility.GetMinTitleToUse(x, parms.makingFaction, 0);
+					RoyalTitleDef minTitleToUse = ThingRequiringRoyalPermissionUtility.GetMinTitleToUse(x, parms.makingFaction);
 					if (minTitleToUse != null && (highestTitle == null || highestTitle.seniority < minTitleToUse.seniority))
 					{
 						return false;
@@ -76,26 +75,9 @@ namespace RimWorld
 				}
 				return true;
 			});
-			return source.Where(delegate(ThingDef x)
-			{
-				if (ThingSetMakerUtility.CanGenerate(x))
-				{
-					if (parms.maxThingMarketValue != null)
-					{
-						float baseMarketValue = x.BaseMarketValue;
-						float? maxThingMarketValue = parms.maxThingMarketValue;
-						if (!(baseMarketValue <= maxThingMarketValue.GetValueOrDefault() & maxThingMarketValue != null))
-						{
-							return false;
-						}
-					}
-					return parms.validator == null || parms.validator(x);
-				}
-				return false;
-			});
+			return source.Where((ThingDef x) => CanGenerate(x) && (!parms.maxThingMarketValue.HasValue || x.BaseMarketValue <= parms.maxThingMarketValue) && (parms.validator == null || parms.validator(x)));
 		}
 
-		
 		public static void AssignQuality(Thing thing, QualityGenerator? qualityGenerator)
 		{
 			CompQuality compQuality = thing.TryGetComp<CompQuality>();
@@ -106,29 +88,19 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static bool IsDerpAndDisallowed(ThingDef thing, ThingDef stuff, QualityGenerator? qualityGenerator)
 		{
-			QualityGenerator? qualityGenerator2 = qualityGenerator;
-			QualityGenerator qualityGenerator3 = QualityGenerator.Gift;
-			if (!(qualityGenerator2.GetValueOrDefault() == qualityGenerator3 & qualityGenerator2 != null))
+			if (qualityGenerator == QualityGenerator.Gift || qualityGenerator == QualityGenerator.Reward || qualityGenerator == QualityGenerator.Super)
 			{
-				qualityGenerator2 = qualityGenerator;
-				qualityGenerator3 = QualityGenerator.Reward;
-				if (!(qualityGenerator2.GetValueOrDefault() == qualityGenerator3 & qualityGenerator2 != null))
+				if (!PawnWeaponGenerator.IsDerpWeapon(thing, stuff))
 				{
-					qualityGenerator2 = qualityGenerator;
-					qualityGenerator3 = QualityGenerator.Super;
-					if (!(qualityGenerator2.GetValueOrDefault() == qualityGenerator3 & qualityGenerator2 != null))
-					{
-						return false;
-					}
+					return PawnApparelGenerator.IsDerpApparel(thing, stuff);
 				}
+				return true;
 			}
-			return PawnWeaponGenerator.IsDerpWeapon(thing, stuff) || PawnApparelGenerator.IsDerpApparel(thing, stuff);
+			return false;
 		}
 
-		
 		public static float AdjustedBigCategoriesSelectionWeight(ThingDef d, int numMeats, int numLeathers)
 		{
 			float num = 1f;
@@ -143,10 +115,9 @@ namespace RimWorld
 			return num;
 		}
 
-		
 		public static bool PossibleToWeighNoMoreThan(ThingDef t, float maxMass, IEnumerable<ThingDef> allowedStuff)
 		{
-			if (maxMass == 3.40282347E+38f || t.category == ThingCategory.Pawn)
+			if (maxMass == float.MaxValue || t.category == ThingCategory.Pawn)
 			{
 				return true;
 			}
@@ -156,35 +127,31 @@ namespace RimWorld
 			}
 			if (t.MadeFromStuff)
 			{
-				foreach (ThingDef stuff in allowedStuff)
+				foreach (ThingDef item in allowedStuff)
 				{
-					if (t.GetStatValueAbstract(StatDefOf.Mass, stuff) <= maxMass)
+					if (t.GetStatValueAbstract(StatDefOf.Mass, item) <= maxMass)
 					{
 						return true;
 					}
 				}
 				return false;
 			}
-			return t.GetStatValueAbstract(StatDefOf.Mass, null) <= maxMass;
+			return t.GetStatValueAbstract(StatDefOf.Mass) <= maxMass;
 		}
 
-		
 		public static bool TryGetRandomThingWhichCanWeighNoMoreThan(IEnumerable<ThingDef> candidates, TechLevel stuffTechLevel, float maxMass, QualityGenerator? qualityGenerator, out ThingStuffPair thingStuffPair)
 		{
-			ThingDef thingDef;
-			if (!(from x in candidates
-			where ThingSetMakerUtility.PossibleToWeighNoMoreThan(x, maxMass, GenStuff.AllowedStuffsFor(x, stuffTechLevel))
-			select x).TryRandomElement(out thingDef))
+			if (!candidates.Where((ThingDef x) => PossibleToWeighNoMoreThan(x, maxMass, GenStuff.AllowedStuffsFor(x, stuffTechLevel))).TryRandomElement(out ThingDef thingDef))
 			{
 				thingStuffPair = default(ThingStuffPair);
 				return false;
 			}
-			ThingDef stuff;
+			ThingDef result;
 			if (thingDef.MadeFromStuff)
 			{
 				if (!(from x in GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel)
-				where thingDef.GetStatValueAbstract(StatDefOf.Mass, x) <= maxMass && !ThingSetMakerUtility.IsDerpAndDisallowed(thingDef, x, qualityGenerator)
-				select x).TryRandomElementByWeight((ThingDef x) => x.stuffProps.commonality, out stuff))
+					where thingDef.GetStatValueAbstract(StatDefOf.Mass, x) <= maxMass && !IsDerpAndDisallowed(thingDef, x, qualityGenerator)
+					select x).TryRandomElementByWeight((ThingDef x) => x.stuffProps.commonality, out result))
 				{
 					thingStuffPair = default(ThingStuffPair);
 					return false;
@@ -192,16 +159,15 @@ namespace RimWorld
 			}
 			else
 			{
-				stuff = null;
+				result = null;
 			}
-			thingStuffPair = new ThingStuffPair(thingDef, stuff, 1f);
+			thingStuffPair = new ThingStuffPair(thingDef, result);
 			return true;
 		}
 
-		
 		public static bool PossibleToWeighNoMoreThan(IEnumerable<ThingDef> candidates, TechLevel stuffTechLevel, float maxMass, int count)
 		{
-			if (maxMass == 3.40282347E+38f || count <= 0)
+			if (maxMass == float.MaxValue || count <= 0)
 			{
 				return true;
 			}
@@ -210,60 +176,45 @@ namespace RimWorld
 				return false;
 			}
 			float num = float.MaxValue;
-			foreach (ThingDef thingDef in candidates)
+			foreach (ThingDef candidate in candidates)
 			{
-				num = Mathf.Min(num, ThingSetMakerUtility.GetMinMass(thingDef, stuffTechLevel));
+				num = Mathf.Min(num, GetMinMass(candidate, stuffTechLevel));
 			}
 			return num <= maxMass * (float)count;
 		}
 
-		
 		public static float GetMinMass(ThingDef thingDef, TechLevel stuffTechLevel)
 		{
 			float num = float.MaxValue;
 			if (thingDef.MadeFromStuff)
 			{
-				IEnumerator<ThingDef> enumerator = GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel).GetEnumerator();
+				foreach (ThingDef item in GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel))
 				{
-					while (enumerator.MoveNext())
+					if (item.stuffProps.commonality > 0f)
 					{
-						ThingDef thingDef2 = enumerator.Current;
-						if (thingDef2.stuffProps.commonality > 0f)
-						{
-							num = Mathf.Min(num, thingDef.GetStatValueAbstract(StatDefOf.Mass, thingDef2));
-						}
+						num = Mathf.Min(num, thingDef.GetStatValueAbstract(StatDefOf.Mass, item));
 					}
-					return num;
 				}
+				return num;
 			}
-			num = Mathf.Min(num, thingDef.GetStatValueAbstract(StatDefOf.Mass, null));
-			return num;
+			return Mathf.Min(num, thingDef.GetStatValueAbstract(StatDefOf.Mass));
 		}
 
-		
 		public static float GetMinMarketValue(ThingDef thingDef, TechLevel stuffTechLevel)
 		{
 			float num = float.MaxValue;
 			if (thingDef.MadeFromStuff)
 			{
-				IEnumerator<ThingDef> enumerator = GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel).GetEnumerator();
+				foreach (ThingDef item in GenStuff.AllowedStuffsFor(thingDef, stuffTechLevel))
 				{
-					while (enumerator.MoveNext())
+					if (item.stuffProps.commonality > 0f)
 					{
-						ThingDef thingDef2 = enumerator.Current;
-						if (thingDef2.stuffProps.commonality > 0f)
-						{
-							num = Mathf.Min(num, StatDefOf.MarketValue.Worker.GetValue(StatRequest.For(thingDef, thingDef2, QualityCategory.Awful), true));
-						}
+						num = Mathf.Min(num, StatDefOf.MarketValue.Worker.GetValue(StatRequest.For(thingDef, item, QualityCategory.Awful)));
 					}
-					return num;
 				}
+				return num;
 			}
-			num = Mathf.Min(num, StatDefOf.MarketValue.Worker.GetValue(StatRequest.For(thingDef, null, QualityCategory.Awful), true));
-			return num;
+			return Mathf.Min(num, StatDefOf.MarketValue.Worker.GetValue(StatRequest.For(thingDef, null, QualityCategory.Awful)));
 		}
-
-		
-		public static List<ThingDef> allGeneratableItems = new List<ThingDef>();
 	}
 }

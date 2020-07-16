@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class BlightUtility
 	{
-		
 		public static Plant GetFirstBlightableNowPlant(IntVec3 c, Map map)
 		{
 			Plant plant = c.GetPlant(map);
@@ -17,7 +14,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public static Plant GetFirstBlightableEverPlant(IntVec3 c, Map map)
 		{
 			Plant plant = c.GetPlant(map);

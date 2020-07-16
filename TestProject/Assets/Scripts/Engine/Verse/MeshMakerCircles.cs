@@ -1,25 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public static class MeshMakerCircles
 	{
-		
 		public static Mesh MakePieMesh(int DegreesWide)
 		{
 			List<Vector2> list = new List<Vector2>();
 			list.Add(new Vector2(0f, 0f));
 			for (int i = 0; i < DegreesWide; i++)
 			{
-				float num = (float)i / 180f * 3.14159274f;
-				list.Add(new Vector2(0f, 0f)
-				{
-					x = (float)(0.550000011920929 * Math.Cos((double)num)),
-					y = (float)(0.550000011920929 * Math.Sin((double)num))
-				});
+				float num = (float)i / 180f * (float)Math.PI;
+				Vector2 item = new Vector2(0f, 0f);
+				item.x = (float)(0.550000011920929 * Math.Cos(num));
+				item.y = (float)(0.550000011920929 * Math.Sin(num));
+				list.Add(item);
 			}
 			Vector3[] array = new Vector3[list.Count];
 			for (int j = 0; j < array.Length; j++)
@@ -37,14 +34,13 @@ namespace Verse
 			return mesh;
 		}
 
-		
 		public static Mesh MakeCircleMesh(float radius)
 		{
 			List<Vector2> list = new List<Vector2>();
 			list.Add(new Vector2(0f, 0f));
 			for (int i = 0; i <= 360; i += 4)
 			{
-				float f = (float)i / 180f * 3.14159274f;
+				float f = (float)i / 180f * (float)Math.PI;
 				list.Add(new Vector2(radius * Mathf.Cos(f), radius * Mathf.Sin(f)));
 			}
 			Vector3[] array = new Vector3[list.Count];

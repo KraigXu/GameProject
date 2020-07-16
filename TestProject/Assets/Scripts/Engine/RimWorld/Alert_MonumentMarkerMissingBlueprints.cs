@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_MonumentMarkerMissingBlueprints : Alert
 	{
-		
-		
+		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
+
 		private List<GlobalTargetInfo> Targets
 		{
 			get
 			{
-				this.targets.Clear();
+				targets.Clear();
 				List<Map> maps = Find.Maps;
 				for (int i = 0; i < maps.Count; i++)
 				{
@@ -27,33 +25,28 @@ namespace RimWorld
 							SketchEntity firstEntityWithMissingBlueprint = monumentMarker.FirstEntityWithMissingBlueprint;
 							if (firstEntityWithMissingBlueprint != null)
 							{
-								this.targets.Add(new GlobalTargetInfo(firstEntityWithMissingBlueprint.pos + monumentMarker.Position, maps[i], false));
+								targets.Add(new GlobalTargetInfo(firstEntityWithMissingBlueprint.pos + monumentMarker.Position, maps[i]));
 							}
 						}
 					}
 				}
-				return this.targets;
+				return targets;
 			}
 		}
 
-		
 		public Alert_MonumentMarkerMissingBlueprints()
 		{
-			this.defaultLabel = "MonumentMarkerMissingBlueprints".Translate();
-			this.defaultExplanation = "MonumentMarkerMissingBlueprintsDesc".Translate();
+			defaultLabel = "MonumentMarkerMissingBlueprints".Translate();
+			defaultExplanation = "MonumentMarkerMissingBlueprintsDesc".Translate();
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (!ModsConfig.RoyaltyActive)
 			{
 				return false;
 			}
-			return AlertReport.CulpritsAre(this.Targets);
+			return AlertReport.CulpritsAre(Targets);
 		}
-
-		
-		private List<GlobalTargetInfo> targets = new List<GlobalTargetInfo>();
 	}
 }

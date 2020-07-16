@@ -1,131 +1,109 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class TurretTop
 	{
-		
-		
-		
+		private Building_Turret parentTurret;
+
+		private float curRotationInt;
+
+		private int ticksUntilIdleTurn;
+
+		private int idleTurnTicksLeft;
+
+		private bool idleTurnClockwise;
+
+		private const float IdleTurnDegreesPerTick = 0.26f;
+
+		private const int IdleTurnDuration = 140;
+
+		private const int IdleTurnIntervalMin = 150;
+
+		private const int IdleTurnIntervalMax = 350;
+
+		public static readonly int ArtworkRotation = -90;
+
 		private float CurRotation
 		{
 			get
 			{
-				return this.curRotationInt;
+				return curRotationInt;
 			}
 			set
 			{
-				this.curRotationInt = value;
-				if (this.curRotationInt > 360f)
+				curRotationInt = value;
+				if (curRotationInt > 360f)
 				{
-					this.curRotationInt -= 360f;
+					curRotationInt -= 360f;
 				}
-				if (this.curRotationInt < 0f)
+				if (curRotationInt < 0f)
 				{
-					this.curRotationInt += 360f;
+					curRotationInt += 360f;
 				}
 			}
 		}
 
-		
 		public void SetRotationFromOrientation()
 		{
-			this.CurRotation = this.parentTurret.Rotation.AsAngle;
+			CurRotation = parentTurret.Rotation.AsAngle;
 		}
 
-		
 		public TurretTop(Building_Turret ParentTurret)
 		{
-			this.parentTurret = ParentTurret;
+			parentTurret = ParentTurret;
 		}
 
-		
 		public void TurretTopTick()
 		{
-			LocalTargetInfo currentTarget = this.parentTurret.CurrentTarget;
+			LocalTargetInfo currentTarget = parentTurret.CurrentTarget;
 			if (currentTarget.IsValid)
 			{
-				float curRotation = (currentTarget.Cell.ToVector3Shifted() - this.parentTurret.DrawPos).AngleFlat();
-				this.CurRotation = curRotation;
-				this.ticksUntilIdleTurn = Rand.RangeInclusive(150, 350);
-				return;
+				float num2 = CurRotation = (currentTarget.Cell.ToVector3Shifted() - parentTurret.DrawPos).AngleFlat();
+				ticksUntilIdleTurn = Rand.RangeInclusive(150, 350);
 			}
-			if (this.ticksUntilIdleTurn > 0)
+			else if (ticksUntilIdleTurn > 0)
 			{
-				this.ticksUntilIdleTurn--;
-				if (this.ticksUntilIdleTurn == 0)
+				ticksUntilIdleTurn--;
+				if (ticksUntilIdleTurn == 0)
 				{
 					if (Rand.Value < 0.5f)
 					{
-						this.idleTurnClockwise = true;
+						idleTurnClockwise = true;
 					}
 					else
 					{
-						this.idleTurnClockwise = false;
+						idleTurnClockwise = false;
 					}
-					this.idleTurnTicksLeft = 140;
-					return;
+					idleTurnTicksLeft = 140;
 				}
 			}
 			else
 			{
-				if (this.idleTurnClockwise)
+				if (idleTurnClockwise)
 				{
-					this.CurRotation += 0.26f;
+					CurRotation += 0.26f;
 				}
 				else
 				{
-					this.CurRotation -= 0.26f;
+					CurRotation -= 0.26f;
 				}
-				this.idleTurnTicksLeft--;
-				if (this.idleTurnTicksLeft <= 0)
+				idleTurnTicksLeft--;
+				if (idleTurnTicksLeft <= 0)
 				{
-					this.ticksUntilIdleTurn = Rand.RangeInclusive(150, 350);
+					ticksUntilIdleTurn = Rand.RangeInclusive(150, 350);
 				}
 			}
 		}
 
-		
 		public void DrawTurret()
 		{
-			Vector3 b = new Vector3(this.parentTurret.def.building.turretTopOffset.x, 0f, this.parentTurret.def.building.turretTopOffset.y).RotatedBy(this.CurRotation);
-			float turretTopDrawSize = this.parentTurret.def.building.turretTopDrawSize;
+			Vector3 b = new Vector3(parentTurret.def.building.turretTopOffset.x, 0f, parentTurret.def.building.turretTopOffset.y).RotatedBy(CurRotation);
+			float turretTopDrawSize = parentTurret.def.building.turretTopDrawSize;
 			Matrix4x4 matrix = default(Matrix4x4);
-			matrix.SetTRS(this.parentTurret.DrawPos + Altitudes.AltIncVect + b, (this.CurRotation + (float)TurretTop.ArtworkRotation).ToQuat(), new Vector3(turretTopDrawSize, 1f, turretTopDrawSize));
-			Graphics.DrawMesh(MeshPool.plane10, matrix, this.parentTurret.def.building.turretTopMat, 0);
+			matrix.SetTRS(parentTurret.DrawPos + Altitudes.AltIncVect + b, (CurRotation + (float)ArtworkRotation).ToQuat(), new Vector3(turretTopDrawSize, 1f, turretTopDrawSize));
+			Graphics.DrawMesh(MeshPool.plane10, matrix, parentTurret.def.building.turretTopMat, 0);
 		}
-
-		
-		private Building_Turret parentTurret;
-
-		
-		private float curRotationInt;
-
-		
-		private int ticksUntilIdleTurn;
-
-		
-		private int idleTurnTicksLeft;
-
-		
-		private bool idleTurnClockwise;
-
-		
-		private const float IdleTurnDegreesPerTick = 0.26f;
-
-		
-		private const int IdleTurnDuration = 140;
-
-		
-		private const int IdleTurnIntervalMin = 150;
-
-		
-		private const int IdleTurnIntervalMax = 350;
-
-		
-		public static readonly int ArtworkRotation = -90;
 	}
 }

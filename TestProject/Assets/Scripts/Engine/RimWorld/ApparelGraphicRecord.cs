@@ -1,11 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
 	public struct ApparelGraphicRecord
 	{
-
 		public Graphic graphic;
 
 		public Apparel sourceApparel;
@@ -15,7 +13,5 @@ namespace RimWorld
 			this.graphic = graphic;
 			this.sourceApparel = sourceApparel;
 		}
-
-
 	}
 }

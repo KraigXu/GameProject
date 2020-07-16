@@ -1,24 +1,24 @@
-﻿using System;
 using RimWorld;
+using System;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public static class ThingListGroupHelper
 	{
-		
+		public static readonly ThingRequestGroup[] AllGroups;
+
 		static ThingListGroupHelper()
 		{
+			AllGroups = new ThingRequestGroup[Enum.GetValues(typeof(ThingRequestGroup)).Length];
 			int num = 0;
-			foreach (object obj in Enum.GetValues(typeof(ThingRequestGroup)))
+			foreach (object value in Enum.GetValues(typeof(ThingRequestGroup)))
 			{
-				ThingListGroupHelper.AllGroups[num] = (ThingRequestGroup)obj;
+				AllGroups[num] = (ThingRequestGroup)value;
 				num++;
 			}
 		}
 
-		
 		public static bool Includes(this ThingRequestGroup group, ThingDef def)
 		{
 			switch (group)
@@ -33,14 +33,38 @@ namespace Verse
 				return def.EverHaulable;
 			case ThingRequestGroup.HaulableAlways:
 				return def.alwaysHaulable;
+			case ThingRequestGroup.Plant:
+				return def.category == ThingCategory.Plant;
+			case ThingRequestGroup.HarvestablePlant:
+				if (def.category == ThingCategory.Plant)
+				{
+					return def.plant.Harvestable;
+				}
+				return false;
 			case ThingRequestGroup.FoodSource:
-				return def.IsNutritionGivingIngestible || def.thingClass == typeof(Building_NutrientPasteDispenser);
+				if (!def.IsNutritionGivingIngestible)
+				{
+					return def.thingClass == typeof(Building_NutrientPasteDispenser);
+				}
+				return true;
 			case ThingRequestGroup.FoodSourceNotPlantOrTree:
-				return (def.IsNutritionGivingIngestible && (def.ingestible.foodType & ~FoodTypeFlags.Plant & ~FoodTypeFlags.Tree) != FoodTypeFlags.None) || def.thingClass == typeof(Building_NutrientPasteDispenser);
+				if (!def.IsNutritionGivingIngestible || (def.ingestible.foodType & ~FoodTypeFlags.Plant & ~FoodTypeFlags.Tree) == 0)
+				{
+					return def.thingClass == typeof(Building_NutrientPasteDispenser);
+				}
+				return true;
+			case ThingRequestGroup.HasGUIOverlay:
+				return def.drawGUIOverlay;
 			case ThingRequestGroup.Corpse:
 				return def.thingClass == typeof(Corpse);
 			case ThingRequestGroup.Blueprint:
 				return def.IsBlueprint;
+			case ThingRequestGroup.Construction:
+				if (!def.IsBlueprint)
+				{
+					return def.IsFrame;
+				}
+				return true;
 			case ThingRequestGroup.BuildingArtificial:
 				return def.IsBuildingArtificial;
 			case ThingRequestGroup.BuildingFrame:
@@ -48,9 +72,13 @@ namespace Verse
 			case ThingRequestGroup.Pawn:
 				return def.category == ThingCategory.Pawn;
 			case ThingRequestGroup.PotentialBillGiver:
-				return !def.AllRecipes.NullOrEmpty<RecipeDef>();
+				return !def.AllRecipes.NullOrEmpty();
 			case ThingRequestGroup.Medicine:
 				return def.IsMedicine;
+			case ThingRequestGroup.Apparel:
+				return def.IsApparel;
+			case ThingRequestGroup.MinifiedThing:
+				return typeof(MinifiedThing).IsAssignableFrom(def.thingClass);
 			case ThingRequestGroup.Filth:
 				return def.filth != null;
 			case ThingRequestGroup.AttackTarget:
@@ -60,27 +88,17 @@ namespace Verse
 			case ThingRequestGroup.Refuelable:
 				return def.HasComp(typeof(CompRefuelable));
 			case ThingRequestGroup.HaulableEverOrMinifiable:
-				return def.EverHaulable || def.Minifiable;
+				if (!def.EverHaulable)
+				{
+					return def.Minifiable;
+				}
+				return true;
 			case ThingRequestGroup.Drug:
 				return def.IsDrug;
 			case ThingRequestGroup.Shell:
 				return def.IsShell;
-			case ThingRequestGroup.HarvestablePlant:
-				return def.category == ThingCategory.Plant && def.plant.Harvestable;
-			case ThingRequestGroup.Fire:
-				return typeof(Fire).IsAssignableFrom(def.thingClass);
 			case ThingRequestGroup.Bed:
 				return def.IsBed;
-			case ThingRequestGroup.Plant:
-				return def.category == ThingCategory.Plant;
-			case ThingRequestGroup.Construction:
-				return def.IsBlueprint || def.IsFrame;
-			case ThingRequestGroup.HasGUIOverlay:
-				return def.drawGUIOverlay;
-			case ThingRequestGroup.Apparel:
-				return def.IsApparel;
-			case ThingRequestGroup.MinifiedThing:
-				return typeof(MinifiedThing).IsAssignableFrom(def.thingClass);
 			case ThingRequestGroup.Grave:
 				return typeof(Building_Grave).IsAssignableFrom(def.thingClass);
 			case ThingRequestGroup.Art:
@@ -99,6 +117,8 @@ namespace Verse
 				return def.HasComp(typeof(CompWindSource));
 			case ThingRequestGroup.AlwaysFlee:
 				return def.alwaysFlee;
+			case ThingRequestGroup.Fire:
+				return typeof(Fire).IsAssignableFrom(def.thingClass);
 			case ThingRequestGroup.ResearchBench:
 				return typeof(Building_ResearchBench).IsAssignableFrom(def.thingClass);
 			case ThingRequestGroup.Facility:
@@ -127,8 +147,5 @@ namespace Verse
 				throw new ArgumentException("group");
 			}
 		}
-
-		
-		public static readonly ThingRequestGroup[] AllGroups = new ThingRequestGroup[Enum.GetValues(typeof(ThingRequestGroup)).Length];
 	}
 }

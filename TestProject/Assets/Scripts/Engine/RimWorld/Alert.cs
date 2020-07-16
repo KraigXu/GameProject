@@ -1,177 +1,169 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	[StaticConstructorOnStartup]
 	public abstract class Alert
 	{
-		
-		
-		public virtual AlertPriority Priority
-		{
-			get
-			{
-				return this.defaultPriority;
-			}
-		}
+		protected AlertPriority defaultPriority;
 
-		
-		
-		protected virtual Color BGColor
-		{
-			get
-			{
-				return Color.clear;
-			}
-		}
+		protected string defaultLabel;
 
-		
-		
-		public bool Active
-		{
-			get
-			{
-				return this.cachedActive;
-			}
-		}
+		protected string defaultExplanation;
 
-		
-		
+		protected float lastBellTime = -1000f;
+
+		private int jumpToTargetCycleIndex;
+
+		private bool cachedActive;
+
+		private string cachedLabel;
+
+		private AlertBounce alertBounce;
+
+		public const float Width = 154f;
+
+		private const float TextWidth = 148f;
+
+		private const float ItemPeekWidth = 30f;
+
+		public const float InfoRectWidth = 330f;
+
+		private static readonly Texture2D AlertBGTex = SolidColorMaterials.NewSolidColorTexture(Color.white);
+
+		private static readonly Texture2D AlertBGTexHighlight = TexUI.HighlightTex;
+
+		private static List<GlobalTargetInfo> tmpTargets = new List<GlobalTargetInfo>();
+
+		public virtual AlertPriority Priority => defaultPriority;
+
+		protected virtual Color BGColor => Color.clear;
+
+		public bool Active => cachedActive;
+
 		public string Label
 		{
 			get
 			{
-				if (!this.Active)
+				if (!Active)
 				{
 					return "";
 				}
-				return this.cachedLabel;
+				return cachedLabel;
 			}
 		}
 
-		
-		
 		public float Height
 		{
 			get
 			{
 				Text.Font = GameFont.Small;
-				return Text.CalcHeight(this.Label, 148f);
+				return Text.CalcHeight(Label, 148f);
 			}
 		}
 
-		
 		public abstract AlertReport GetReport();
 
-		
 		public virtual TaggedString GetExplanation()
 		{
-			return this.defaultExplanation;
+			return defaultExplanation;
 		}
 
-		
 		public virtual string GetLabel()
 		{
-			return this.defaultLabel;
+			return defaultLabel;
 		}
 
-		
 		public void Notify_Started()
 		{
-			if (this.Priority >= AlertPriority.High)
+			if ((int)Priority >= 1)
 			{
-				if (this.alertBounce == null)
+				if (alertBounce == null)
 				{
-					this.alertBounce = new AlertBounce();
+					alertBounce = new AlertBounce();
 				}
-				this.alertBounce.DoAlertStartEffect();
-				if (Time.timeSinceLevelLoad > 1f && Time.realtimeSinceStartup > this.lastBellTime + 0.5f)
+				alertBounce.DoAlertStartEffect();
+				if (Time.timeSinceLevelLoad > 1f && Time.realtimeSinceStartup > lastBellTime + 0.5f)
 				{
-					SoundDefOf.TinyBell.PlayOneShotOnCamera(null);
-					this.lastBellTime = Time.realtimeSinceStartup;
+					SoundDefOf.TinyBell.PlayOneShotOnCamera();
+					lastBellTime = Time.realtimeSinceStartup;
 				}
 			}
 		}
 
-		
 		public void Recalculate()
 		{
-			AlertReport report = this.GetReport();
-			this.cachedActive = report.active;
+			AlertReport report = GetReport();
+			cachedActive = report.active;
 			if (report.active)
 			{
-				this.cachedLabel = this.GetLabel();
+				cachedLabel = GetLabel();
 			}
 		}
 
-		
 		public virtual void AlertActiveUpdate()
 		{
 		}
 
-		
 		public virtual Rect DrawAt(float topY, bool minimized)
 		{
-			Rect rect = new Rect((float)UI.screenWidth - 154f, topY, 154f, this.Height);
-			if (this.alertBounce != null)
+			Rect rect = new Rect((float)UI.screenWidth - 154f, topY, 154f, Height);
+			if (alertBounce != null)
 			{
-				rect.x -= this.alertBounce.CalculateHorizontalOffset();
+				rect.x -= alertBounce.CalculateHorizontalOffset();
 			}
-			GUI.color = this.BGColor;
-			GUI.DrawTexture(rect, Alert.AlertBGTex);
+			GUI.color = BGColor;
+			GUI.DrawTexture(rect, AlertBGTex);
 			GUI.color = Color.white;
 			GUI.BeginGroup(rect);
 			Text.Anchor = TextAnchor.MiddleRight;
-			Widgets.Label(new Rect(0f, 0f, 148f, this.Height), this.Label);
+			Widgets.Label(new Rect(0f, 0f, 148f, Height), Label);
 			GUI.EndGroup();
 			if (Mouse.IsOver(rect))
 			{
-				GUI.DrawTexture(rect, Alert.AlertBGTexHighlight);
+				GUI.DrawTexture(rect, AlertBGTexHighlight);
 			}
-			if (Widgets.ButtonInvisible(rect, true))
+			if (Widgets.ButtonInvisible(rect))
 			{
-				this.OnClick();
+				OnClick();
 			}
 			Text.Anchor = TextAnchor.UpperLeft;
 			return rect;
 		}
 
-		
 		protected virtual void OnClick()
 		{
-			IEnumerable<GlobalTargetInfo> allCulprits = this.GetReport().AllCulprits;
-			if (allCulprits != null)
+			IEnumerable<GlobalTargetInfo> allCulprits = GetReport().AllCulprits;
+			if (allCulprits == null)
 			{
-				Alert.tmpTargets.Clear();
-				foreach (GlobalTargetInfo item in allCulprits)
+				return;
+			}
+			tmpTargets.Clear();
+			foreach (GlobalTargetInfo item in allCulprits)
+			{
+				if (item.IsValid)
 				{
-					if (item.IsValid)
-					{
-						Alert.tmpTargets.Add(item);
-					}
-				}
-				if (Alert.tmpTargets.Any<GlobalTargetInfo>())
-				{
-					if (Event.current.button == 1)
-					{
-						this.jumpToTargetCycleIndex--;
-					}
-					else
-					{
-						this.jumpToTargetCycleIndex++;
-					}
-					CameraJumper.TryJumpAndSelect(Alert.tmpTargets[GenMath.PositiveMod(this.jumpToTargetCycleIndex, Alert.tmpTargets.Count)]);
-					Alert.tmpTargets.Clear();
+					tmpTargets.Add(item);
 				}
 			}
+			if (tmpTargets.Any())
+			{
+				if (Event.current.button == 1)
+				{
+					jumpToTargetCycleIndex--;
+				}
+				else
+				{
+					jumpToTargetCycleIndex++;
+				}
+				CameraJumper.TryJumpAndSelect(tmpTargets[GenMath.PositiveMod(jumpToTargetCycleIndex, tmpTargets.Count)]);
+				tmpTargets.Clear();
+			}
 		}
-
 
 		public void DrawInfoPane()
 		{
@@ -216,50 +208,5 @@ namespace RimWorld
 				}, doBackground: false);
 			}
 		}
-
-
-		protected AlertPriority defaultPriority;
-
-		
-		protected string defaultLabel;
-
-		
-		protected string defaultExplanation;
-
-		
-		protected float lastBellTime = -1000f;
-
-		
-		private int jumpToTargetCycleIndex;
-
-		
-		private bool cachedActive;
-
-		
-		private string cachedLabel;
-
-		
-		private AlertBounce alertBounce;
-
-		
-		public const float Width = 154f;
-
-		
-		private const float TextWidth = 148f;
-
-		
-		private const float ItemPeekWidth = 30f;
-
-		
-		public const float InfoRectWidth = 330f;
-
-		
-		private static readonly Texture2D AlertBGTex = SolidColorMaterials.NewSolidColorTexture(Color.white);
-
-		
-		private static readonly Texture2D AlertBGTexHighlight = TexUI.HighlightTex;
-
-		
-		private static List<GlobalTargetInfo> tmpTargets = new List<GlobalTargetInfo>();
 	}
 }

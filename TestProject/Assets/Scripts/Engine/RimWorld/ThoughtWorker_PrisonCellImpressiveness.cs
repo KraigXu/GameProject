@@ -1,12 +1,9 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class ThoughtWorker_PrisonCellImpressiveness : ThoughtWorker_RoomImpressiveness
 	{
-		
 		protected override ThoughtState CurrentStateInternal(Pawn p)
 		{
 			if (!p.IsPrisoner)
@@ -14,7 +11,7 @@ namespace RimWorld
 				return ThoughtState.Inactive;
 			}
 			ThoughtState result = base.CurrentStateInternal(p);
-			if (result.Active && p.GetRoom(RegionType.Set_Passable).Role == RoomRoleDefOf.PrisonCell)
+			if (result.Active && p.GetRoom().Role == RoomRoleDefOf.PrisonCell)
 			{
 				return result;
 			}

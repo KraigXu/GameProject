@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,70 +5,52 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class GenStep_AnimaTrees : GenStep
 	{
-		
-		
-		public override int SeedPart
-		{
-			get
-			{
-				return 647816171;
-			}
-		}
+		public static readonly float Density = 1.25E-05f;
 
-		
+		private const int MinDistanceToEdge = 25;
+
+		private static readonly FloatRange GrowthRange = new FloatRange(0.5f, 0.75f);
+
+		public override int SeedPart => 647816171;
+
 		public override void Generate(Map map, GenStepParams parms)
 		{
 			if (map.Biome.isExtremeBiome)
 			{
 				return;
 			}
-			int i = GenStep_AnimaTrees.DesiredTreeCountForMap(map);
-			int num = 0;
-
-			while (i > 0)
+			int num = DesiredTreeCountForMap(map);
+			int num2 = 0;
+			do
 			{
-				int minEdgeDistance = 25;
-				Predicate<IntVec3> validator = (((IntVec3 x) => GenStep_AnimaTrees.CanSpawnAt(x, map, 0, 50, 22, 10)));
-
-				IntVec3 cell;
-				if (!CellFinderLoose.TryFindRandomNotEdgeCellWith(minEdgeDistance, validator, map, out cell))
+				if (num > 0 && CellFinderLoose.TryFindRandomNotEdgeCellWith(25, (IntVec3 x) => CanSpawnAt(x, map, 0, 50), map, out IntVec3 result))
 				{
-					break;
+					if (TrySpawnAt(result, map, GrowthRange.RandomInRange, out Thing _))
+					{
+						num--;
+					}
+					num2++;
+					continue;
 				}
-				Thing thing;
-				if (GenStep_AnimaTrees.TrySpawnAt(cell, map, GenStep_AnimaTrees.GrowthRange.RandomInRange, out thing))
-				{
-					i--;
-				}
-				num++;
-				if (num > 1000)
-				{
-					Log.Error("Could not place anima tree; too many iterations.", false);
-					return;
-				}
+				return;
 			}
+			while (num2 <= 1000);
+			Log.Error("Could not place anima tree; too many iterations.");
 		}
 
-		
 		public static bool TrySpawnAt(IntVec3 cell, Map map, float growth, out Thing plant)
 		{
-			Plant plant2 = cell.GetPlant(map);
-			if (plant2 != null)
-			{
-				plant2.Destroy(DestroyMode.Vanish);
-			}
-			plant = GenSpawn.Spawn(ThingDefOf.Plant_TreeAnima, cell, map, WipeMode.Vanish);
+			cell.GetPlant(map)?.Destroy();
+			plant = GenSpawn.Spawn(ThingDefOf.Plant_TreeAnima, cell, map);
 			((Plant)plant).Growth = growth;
 			return plant != null;
 		}
 
-		
 		public static bool CanSpawnAt(IntVec3 c, Map map, int minProximityToArtificialStructures = 40, int minProximityToCenter = 0, int minFertileUnroofedCells = 22, int maxFertileUnroofedCellRadius = 10)
 		{
-			if (!c.Standable(map) || c.Fogged(map) || !c.GetRoom(map, RegionType.Set_Passable).PsychologicallyOutdoors)
+			if (!c.Standable(map) || c.Fogged(map) || !c.GetRoom(map).PsychologicallyOutdoors)
 			{
 				return false;
 			}
@@ -86,7 +67,7 @@ namespace RimWorld
 					return false;
 				}
 			}
-			if (minProximityToCenter > 0 && map.Center.InHorDistOf(c, (float)minProximityToCenter))
+			if (minProximityToCenter > 0 && map.Center.InHorDistOf(c, minProximityToCenter))
 			{
 				return false;
 			}
@@ -103,11 +84,11 @@ namespace RimWorld
 			{
 				return false;
 			}
-			if (minProximityToArtificialStructures != 0 && GenRadial.RadialDistinctThingsAround(c, map, (float)minProximityToArtificialStructures, false).Any(new Func<Thing, bool>(MeditationUtility.CountsAsArtificialBuilding)))
+			if (minProximityToArtificialStructures != 0 && GenRadial.RadialDistinctThingsAround(c, map, minProximityToArtificialStructures, useCenter: false).Any(MeditationUtility.CountsAsArtificialBuilding))
 			{
 				return false;
 			}
-			int num = GenRadial.NumCellsInRadius((float)maxFertileUnroofedCellRadius);
+			int num = GenRadial.NumCellsInRadius(maxFertileUnroofedCellRadius);
 			int num2 = 0;
 			for (int j = 0; j < num; j++)
 			{
@@ -124,19 +105,9 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		public static int DesiredTreeCountForMap(Map map)
 		{
-			return Mathf.Max(Mathf.RoundToInt(GenStep_AnimaTrees.Density * (float)map.Area), 1);
+			return Mathf.Max(Mathf.RoundToInt(Density * (float)map.Area), 1);
 		}
-
-		
-		public static readonly float Density = 1.25E-05f;
-
-		
-		private const int MinDistanceToEdge = 25;
-
-		
-		private static readonly FloatRange GrowthRange = new FloatRange(0.5f, 0.75f);
 	}
 }

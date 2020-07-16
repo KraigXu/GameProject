@@ -1,13 +1,10 @@
-﻿using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TaleRecorder
 	{
-		
 		public static Tale RecordTale(TaleDef def, params object[] args)
 		{
 			bool flag = Rand.Value < def.ignoreChance;
@@ -43,14 +40,7 @@ namespace RimWorld
 			}
 			if (DebugViewSettings.logTaleRecording)
 			{
-				string format = "Tale {0} from {1}, targets {2}:\n{3}";
-				object[] array = new object[4];
-				array[0] = (flag ? "ignored" : "recorded");
-				array[1] = def;
-				array[2] = (from arg in args
-				select arg.ToStringSafe<object>()).ToCommaList(false);
-				array[3] = TaleTextGenerator.GenerateTextFromTale(TextGenerationPurpose.ArtDescription, tale, Rand.Int, RulePackDefOf.ArtDescription_Sculpture);
-				Log.Message(string.Format(format, array), false);
+				Log.Message(string.Format("Tale {0} from {1}, targets {2}:\n{3}", flag ? "ignored" : "recorded", def, args.Select((object arg) => arg.ToStringSafe()).ToCommaList(), TaleTextGenerator.GenerateTextFromTale(TextGenerationPurpose.ArtDescription, tale, Rand.Int, RulePackDefOf.ArtDescription_Sculpture)));
 			}
 			if (flag)
 			{

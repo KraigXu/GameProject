@@ -1,207 +1,146 @@
-﻿using System;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld;
 
 namespace Verse
 {
-	
 	public class AreaManager : IExposable
 	{
-		
-		
-		public List<Area> AllAreas
-		{
-			get
-			{
-				return this.areas;
-			}
-		}
+		public Map map;
 
-		
-		
-		public Area_Home Home
-		{
-			get
-			{
-				return this.Get<Area_Home>();
-			}
-		}
+		private List<Area> areas = new List<Area>();
 
-		
-		
-		public Area_BuildRoof BuildRoof
-		{
-			get
-			{
-				return this.Get<Area_BuildRoof>();
-			}
-		}
+		public const int MaxAllowedAreas = 10;
 
-		
-		
-		public Area_NoRoof NoRoof
-		{
-			get
-			{
-				return this.Get<Area_NoRoof>();
-			}
-		}
+		public List<Area> AllAreas => areas;
 
-		
-		
-		public Area_SnowClear SnowClear
-		{
-			get
-			{
-				return this.Get<Area_SnowClear>();
-			}
-		}
+		public Area_Home Home => Get<Area_Home>();
 
-		
+		public Area_BuildRoof BuildRoof => Get<Area_BuildRoof>();
+
+		public Area_NoRoof NoRoof => Get<Area_NoRoof>();
+
+		public Area_SnowClear SnowClear => Get<Area_SnowClear>();
+
 		public AreaManager(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public void AddStartingAreas()
 		{
-			this.areas.Add(new Area_Home(this));
-			this.areas.Add(new Area_BuildRoof(this));
-			this.areas.Add(new Area_NoRoof(this));
-			this.areas.Add(new Area_SnowClear(this));
-			Area_Allowed area_Allowed;
-			this.TryMakeNewAllowed(out area_Allowed);
+			areas.Add(new Area_Home(this));
+			areas.Add(new Area_BuildRoof(this));
+			areas.Add(new Area_NoRoof(this));
+			areas.Add(new Area_SnowClear(this));
+			TryMakeNewAllowed(out Area_Allowed _);
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Collections.Look<Area>(ref this.areas, "areas", LookMode.Deep, Array.Empty<object>());
+			Scribe_Collections.Look(ref areas, "areas", LookMode.Deep);
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				this.UpdateAllAreasLinks();
+				UpdateAllAreasLinks();
 			}
 		}
 
-		
 		public void AreaManagerUpdate()
 		{
-			for (int i = 0; i < this.areas.Count; i++)
+			for (int i = 0; i < areas.Count; i++)
 			{
-				this.areas[i].AreaUpdate();
+				areas[i].AreaUpdate();
 			}
 		}
 
-		
 		internal void Remove(Area area)
 		{
 			if (!area.Mutable)
 			{
-				Log.Error("Tried to delete non-Deletable area " + area, false);
+				Log.Error("Tried to delete non-Deletable area " + area);
 				return;
 			}
-			this.areas.Remove(area);
-			this.NotifyEveryoneAreaRemoved(area);
+			areas.Remove(area);
+			NotifyEveryoneAreaRemoved(area);
 			if (Designator_AreaAllowed.SelectedArea == area)
 			{
 				Designator_AreaAllowed.ClearSelectedArea();
 			}
 		}
 
-		
 		public Area GetLabeled(string s)
 		{
-			for (int i = 0; i < this.areas.Count; i++)
+			for (int i = 0; i < areas.Count; i++)
 			{
-				if (this.areas[i].Label == s)
+				if (areas[i].Label == s)
 				{
-					return this.areas[i];
+					return areas[i];
 				}
 			}
 			return null;
 		}
 
-		
 		public T Get<T>() where T : Area
 		{
-			for (int i = 0; i < this.areas.Count; i++)
+			for (int i = 0; i < areas.Count; i++)
 			{
-				T t = this.areas[i] as T;
-				if (t != null)
+				T val = areas[i] as T;
+				if (val != null)
 				{
-					return t;
+					return val;
 				}
 			}
-			return default(T);
+			return null;
 		}
 
-		
 		private void SortAreas()
 		{
-			this.areas.InsertionSort((Area a, Area b) => b.ListPriority.CompareTo(a.ListPriority));
+			areas.InsertionSort((Area a, Area b) => b.ListPriority.CompareTo(a.ListPriority));
 		}
 
-		
 		private void UpdateAllAreasLinks()
 		{
-			for (int i = 0; i < this.areas.Count; i++)
+			for (int i = 0; i < areas.Count; i++)
 			{
-				this.areas[i].areaManager = this;
+				areas[i].areaManager = this;
 			}
 		}
 
-		
 		private void NotifyEveryoneAreaRemoved(Area area)
 		{
-			foreach (Pawn pawn in PawnsFinder.All_AliveOrDead)
+			foreach (Pawn item in PawnsFinder.All_AliveOrDead)
 			{
-				if (pawn.playerSettings != null)
+				if (item.playerSettings != null)
 				{
-					pawn.playerSettings.Notify_AreaRemoved(area);
+					item.playerSettings.Notify_AreaRemoved(area);
 				}
 			}
 		}
 
-		
 		public void Notify_MapRemoved()
 		{
-			for (int i = 0; i < this.areas.Count; i++)
+			for (int i = 0; i < areas.Count; i++)
 			{
-				this.NotifyEveryoneAreaRemoved(this.areas[i]);
+				NotifyEveryoneAreaRemoved(areas[i]);
 			}
 		}
 
-		
 		public bool CanMakeNewAllowed()
 		{
-			return (from a in this.areas
-			where a is Area_Allowed
-			select a).Count<Area>() < 10;
+			return areas.Where((Area a) => a is Area_Allowed).Count() < 10;
 		}
 
-		
 		public bool TryMakeNewAllowed(out Area_Allowed area)
 		{
-			if (!this.CanMakeNewAllowed())
+			if (!CanMakeNewAllowed())
 			{
 				area = null;
 				return false;
 			}
-			area = new Area_Allowed(this, null);
-			this.areas.Add(area);
-			this.SortAreas();
+			area = new Area_Allowed(this);
+			areas.Add(area);
+			SortAreas();
 			return true;
 		}
-
-		
-		public Map map;
-
-		
-		private List<Area> areas = new List<Area>();
-
-		
-		public const int MaxAllowedAreas = 10;
 	}
 }

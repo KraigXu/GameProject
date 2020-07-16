@@ -1,83 +1,98 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class BodyPartDef : Def
 	{
-		
-		
-		public bool IsSolidInDefinition_Debug
-		{
-			get
-			{
-				return this.solid;
-			}
-		}
+		[MustTranslate]
+		public string labelShort;
 
-		
-		
-		public bool IsSkinCoveredInDefinition_Debug
-		{
-			get
-			{
-				return this.skinCovered;
-			}
-		}
+		public List<BodyPartTagDef> tags = new List<BodyPartTagDef>();
 
-		
-		
+		public int hitPoints = 10;
+
+		public float permanentInjuryChanceFactor = 1f;
+
+		public float bleedRate = 1f;
+
+		public float frostbiteVulnerability;
+
+		private bool skinCovered;
+
+		private bool solid;
+
+		public bool alive = true;
+
+		public bool delicate;
+
+		public bool beautyRelated;
+
+		public bool conceptual;
+
+		public bool socketed;
+
+		public ThingDef spawnThingOnRemoved;
+
+		public bool pawnGeneratorCanAmputate;
+
+		public bool canSuggestAmputation = true;
+
+		public Dictionary<DamageDef, float> hitChanceFactors;
+
+		public bool destroyableByDamage = true;
+
+		[Unsaved(false)]
+		private string cachedLabelShortCap;
+
+		public bool IsSolidInDefinition_Debug => solid;
+
+		public bool IsSkinCoveredInDefinition_Debug => skinCovered;
+
 		public string LabelShort
 		{
 			get
 			{
-				if (!this.labelShort.NullOrEmpty())
+				if (!labelShort.NullOrEmpty())
 				{
-					return this.labelShort;
+					return labelShort;
 				}
-				return this.label;
+				return label;
 			}
 		}
 
-		
-		
 		public string LabelShortCap
 		{
 			get
 			{
-				if (this.labelShort.NullOrEmpty())
+				if (labelShort.NullOrEmpty())
 				{
 					return base.LabelCap;
 				}
-				if (this.cachedLabelShortCap == null)
+				if (cachedLabelShortCap == null)
 				{
-					this.cachedLabelShortCap = this.labelShort.CapitalizeFirst();
+					cachedLabelShortCap = labelShort.CapitalizeFirst();
 				}
-				return this.cachedLabelShortCap;
+				return cachedLabelShortCap;
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-
-
-			IEnumerator<string> enumerator = null;
-			if (this.frostbiteVulnerability > 10f)
+			foreach (string item in base.ConfigErrors())
 			{
-				yield return "frostbitePriority > max 10: " + this.frostbiteVulnerability;
+				yield return item;
 			}
-			if (this.solid && this.bleedRate > 0f)
+			if (frostbiteVulnerability > 10f)
+			{
+				yield return "frostbitePriority > max 10: " + frostbiteVulnerability;
+			}
+			if (solid && bleedRate > 0f)
 			{
 				yield return "solid but bleedRate is not zero";
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public bool IsSolid(BodyPartRecord part, List<Hediff> hediffs)
 		{
 			for (BodyPartRecord bodyPartRecord = part; bodyPartRecord != null; bodyPartRecord = bodyPartRecord.parent)
@@ -90,97 +105,38 @@ namespace Verse
 					}
 				}
 			}
-			return this.solid;
+			return solid;
 		}
 
-		
 		public bool IsSkinCovered(BodyPartRecord part, HediffSet body)
 		{
-			return !body.PartOrAnyAncestorHasDirectlyAddedParts(part) && this.skinCovered;
+			if (body.PartOrAnyAncestorHasDirectlyAddedParts(part))
+			{
+				return false;
+			}
+			return skinCovered;
 		}
 
-		
 		public float GetMaxHealth(Pawn pawn)
 		{
-			return (float)Mathf.CeilToInt((float)this.hitPoints * pawn.HealthScale);
+			return Mathf.CeilToInt((float)hitPoints * pawn.HealthScale);
 		}
 
-		
 		public float GetHitChanceFactorFor(DamageDef damage)
 		{
-			if (this.conceptual)
+			if (conceptual)
 			{
 				return 0f;
 			}
-			if (this.hitChanceFactors == null)
+			if (hitChanceFactors == null)
 			{
 				return 1f;
 			}
-			float result;
-			if (this.hitChanceFactors.TryGetValue(damage, out result))
+			if (hitChanceFactors.TryGetValue(damage, out float value))
 			{
-				return result;
+				return value;
 			}
 			return 1f;
 		}
-
-		
-		[MustTranslate]
-		public string labelShort;
-
-		
-		public List<BodyPartTagDef> tags = new List<BodyPartTagDef>();
-
-		
-		public int hitPoints = 10;
-
-		
-		public float permanentInjuryChanceFactor = 1f;
-
-		
-		public float bleedRate = 1f;
-
-		
-		public float frostbiteVulnerability;
-
-		
-		private bool skinCovered;
-
-		
-		private bool solid;
-
-		
-		public bool alive = true;
-
-		
-		public bool delicate;
-
-		
-		public bool beautyRelated;
-
-		
-		public bool conceptual;
-
-		
-		public bool socketed;
-
-		
-		public ThingDef spawnThingOnRemoved;
-
-		
-		public bool pawnGeneratorCanAmputate;
-
-		
-		public bool canSuggestAmputation = true;
-
-		
-		public Dictionary<DamageDef, float> hitChanceFactors;
-
-		
-		public bool destroyableByDamage = true;
-
-		
-		[Unsaved(false)]
-		private string cachedLabelShortCap;
 	}
 }

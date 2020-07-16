@@ -1,19 +1,16 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class SectionLayer_ThingsPowerGrid : SectionLayer_Things
 	{
-		
-		public SectionLayer_ThingsPowerGrid(Section section) : base(section)
+		public SectionLayer_ThingsPowerGrid(Section section)
+			: base(section)
 		{
-			this.requireAddToMapMesh = false;
-			this.relevantChangeTypes = MapMeshFlag.PowerGrid;
+			requireAddToMapMesh = false;
+			relevantChangeTypes = MapMeshFlag.PowerGrid;
 		}
 
-		
 		public override void DrawLayer()
 		{
 			if (OverlayDrawHandler.ShouldDrawPowerGrid)
@@ -22,17 +19,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		protected override void TakePrintFrom(Thing t)
 		{
-			if (t.Faction != null && t.Faction != Faction.OfPlayer)
+			if (t.Faction == null || t.Faction == Faction.OfPlayer)
 			{
-				return;
-			}
-			Building building = t as Building;
-			if (building != null)
-			{
-				building.PrintForPowerGrid(this);
+				(t as Building)?.PrintForPowerGrid(this);
 			}
 		}
 	}

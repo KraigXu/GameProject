@@ -1,21 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JoyGiver_TakeDrug : JoyGiver_Ingest
 	{
-		
+		private static List<ThingDef> takeableDrugs = new List<ThingDef>();
+
 		protected override Thing BestIngestItem(Pawn pawn, Predicate<Thing> extraValidator)
 		{
 			if (pawn.drugs == null)
 			{
 				return null;
 			}
-			Predicate<Thing> predicate = (Thing t) => this.CanIngestForJoy(pawn, t) && (extraValidator == null || extraValidator(t));
+			Predicate<Thing> predicate = delegate(Thing t)
+			{
+				if (!CanIngestForJoy(pawn, t))
+				{
+					return false;
+				}
+				return (extraValidator == null || extraValidator(t)) ? true : false;
+			};
 			ThingOwner<Thing> innerContainer = pawn.inventory.innerContainer;
 			for (int i = 0; i < innerContainer.Count; i++)
 			{
@@ -29,22 +36,22 @@ namespace RimWorld
 			{
 				flag = true;
 			}
-			JoyGiver_TakeDrug.takeableDrugs.Clear();
+			takeableDrugs.Clear();
 			DrugPolicy currentPolicy = pawn.drugs.CurrentPolicy;
 			for (int j = 0; j < currentPolicy.Count; j++)
 			{
 				if (flag || currentPolicy[j].allowedForJoy)
 				{
-					JoyGiver_TakeDrug.takeableDrugs.Add(currentPolicy[j].drug);
+					takeableDrugs.Add(currentPolicy[j].drug);
 				}
 			}
-			JoyGiver_TakeDrug.takeableDrugs.Shuffle<ThingDef>();
-			for (int k = 0; k < JoyGiver_TakeDrug.takeableDrugs.Count; k++)
+			takeableDrugs.Shuffle();
+			for (int k = 0; k < takeableDrugs.Count; k++)
 			{
-				List<Thing> list = pawn.Map.listerThings.ThingsOfDef(JoyGiver_TakeDrug.takeableDrugs[k]);
+				List<Thing> list = pawn.Map.listerThings.ThingsOfDef(takeableDrugs[k]);
 				if (list.Count > 0)
 				{
-					Thing thing = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, list, PathEndMode.OnCell, TraverseParms.For(pawn, Danger.Deadly, TraverseMode.ByPawn, false), 9999f, predicate, null);
+					Thing thing = GenClosest.ClosestThing_Global_Reachable(pawn.Position, pawn.Map, list, PathEndMode.OnCell, TraverseParms.For(pawn), 9999f, predicate);
 					if (thing != null)
 					{
 						return thing;
@@ -54,7 +61,6 @@ namespace RimWorld
 			return null;
 		}
 
-		
 		public override float GetChance(Pawn pawn)
 		{
 			int num = 0;
@@ -66,7 +72,7 @@ namespace RimWorld
 			{
 				return 0f;
 			}
-			float num2 = this.def.baseChance;
+			float num2 = def.baseChance;
 			if (num == 1)
 			{
 				num2 *= 2f;
@@ -78,13 +84,9 @@ namespace RimWorld
 			return num2;
 		}
 
-		
 		protected override Job CreateIngestJob(Thing ingestible, Pawn pawn)
 		{
-			return DrugAIUtility.IngestAndTakeToInventoryJob(ingestible, pawn, 9999);
+			return DrugAIUtility.IngestAndTakeToInventoryJob(ingestible, pawn);
 		}
-
-		
-		private static List<ThingDef> takeableDrugs = new List<ThingDef>();
 	}
 }

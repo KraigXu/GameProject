@@ -1,59 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld.Planet;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class ITab_ContentsBase : ITab
 	{
-		
-		
-		public abstract IList<Thing> container { get; }
+		private Vector2 scrollPosition;
 
-		
-		
-		public override bool IsVisible
+		private float lastDrawnHeight;
+
+		private List<Thing> thingsToSelect = new List<Thing>();
+
+		public bool canRemoveThings = true;
+
+		protected static List<Thing> tmpSingleThing = new List<Thing>();
+
+		protected const float TopPadding = 20f;
+
+		protected const float SpaceBetweenItemsLists = 10f;
+
+		protected const float ThingRowHeight = 28f;
+
+		protected const float ThingIconSize = 28f;
+
+		protected const float ThingLeftX = 36f;
+
+		protected static readonly Color ThingLabelColor = ITab_Pawn_Gear.ThingLabelColor;
+
+		protected static readonly Color ThingHighlightColor = ITab_Pawn_Gear.HighlightColor;
+
+		public string containedItemsKey;
+
+		public abstract IList<Thing> container
 		{
-			get
-			{
-				return base.SelThing.Faction == Faction.OfPlayer;
-			}
+			get;
 		}
 
-		
+		public override bool IsVisible => base.SelThing.Faction == Faction.OfPlayer;
+
 		public ITab_ContentsBase()
 		{
-			this.size = new Vector2(460f, 450f);
+			size = new Vector2(460f, 450f);
 		}
 
-		
 		protected override void FillTab()
 		{
-			this.thingsToSelect.Clear();
-			Rect outRect = new Rect(default(Vector2), this.size).ContractedBy(10f);
+			thingsToSelect.Clear();
+			Rect outRect = new Rect(default(Vector2), size).ContractedBy(10f);
 			outRect.yMin += 20f;
-			Rect rect = new Rect(0f, 0f, outRect.width - 16f, Mathf.Max(this.lastDrawnHeight, outRect.height));
+			Rect rect = new Rect(0f, 0f, outRect.width - 16f, Mathf.Max(lastDrawnHeight, outRect.height));
 			Text.Font = GameFont.Small;
-			Widgets.BeginScrollView(outRect, ref this.scrollPosition, rect, true);
-			float num = 0f;
-			this.DoItemsLists(rect, ref num);
-			this.lastDrawnHeight = num;
+			Widgets.BeginScrollView(outRect, ref scrollPosition, rect);
+			float curY = 0f;
+			DoItemsLists(rect, ref curY);
+			lastDrawnHeight = curY;
 			Widgets.EndScrollView();
-			if (this.thingsToSelect.Any<Thing>())
+			if (thingsToSelect.Any())
 			{
-				ITab_Pawn_FormingCaravan.SelectNow(this.thingsToSelect);
-				this.thingsToSelect.Clear();
+				ITab_Pawn_FormingCaravan.SelectNow(thingsToSelect);
+				thingsToSelect.Clear();
 			}
 		}
 
-		
 		protected virtual void DoItemsLists(Rect inRect, ref float curY)
 		{
 			GUI.BeginGroup(inRect);
-			Widgets.ListSeparator(ref curY, inRect.width, this.containedItemsKey.Translate());
+			Widgets.ListSeparator(ref curY, inRect.width, containedItemsKey.Translate());
 			IList<Thing> container = this.container;
 			bool flag = false;
 			for (int i = 0; i < container.Count; i++)
@@ -62,41 +77,38 @@ namespace RimWorld
 				if (t != null)
 				{
 					flag = true;
-					ITab_ContentsBase.tmpSingleThing.Clear();
-					ITab_ContentsBase.tmpSingleThing.Add(t);
-					this.DoThingRow(t.def, t.stackCount, ITab_ContentsBase.tmpSingleThing, inRect.width, ref curY, delegate(int x)
+					tmpSingleThing.Clear();
+					tmpSingleThing.Add(t);
+					DoThingRow(t.def, t.stackCount, tmpSingleThing, inRect.width, ref curY, delegate(int x)
 					{
-						this.OnDropThing(t, x);
+						OnDropThing(t, x);
 					});
-					ITab_ContentsBase.tmpSingleThing.Clear();
+					tmpSingleThing.Clear();
 				}
 			}
 			if (!flag)
 			{
-				Widgets.NoneLabel(ref curY, inRect.width, null);
+				Widgets.NoneLabel(ref curY, inRect.width);
 			}
 			GUI.EndGroup();
 		}
 
-		
 		protected virtual void OnDropThing(Thing t, int count)
 		{
-			Thing thing;
-			GenDrop.TryDropSpawn_NewTmp(t.SplitOff(count), base.SelThing.Position, base.SelThing.Map, ThingPlaceMode.Near, out thing, null, null, true);
+			GenDrop.TryDropSpawn_NewTmp(t.SplitOff(count), base.SelThing.Position, base.SelThing.Map, ThingPlaceMode.Near, out Thing _);
 		}
 
-		
 		protected void DoThingRow(ThingDef thingDef, int count, List<Thing> things, float width, ref float curY, Action<int> discardAction)
 		{
 			Rect rect = new Rect(0f, curY, width, 28f);
-			if (this.canRemoveThings)
+			if (canRemoveThings)
 			{
-				if (count != 1 && Widgets.ButtonImage(new Rect(rect.x + rect.width - 24f, rect.y + (rect.height - 24f) / 2f, 24f, 24f), CaravanThingsTabUtility.AbandonSpecificCountButtonTex, true))
+				if (count != 1 && Widgets.ButtonImage(new Rect(rect.x + rect.width - 24f, rect.y + (rect.height - 24f) / 2f, 24f, 24f), CaravanThingsTabUtility.AbandonSpecificCountButtonTex))
 				{
-					Find.WindowStack.Add(new Dialog_Slider("RemoveSliderText".Translate(thingDef.label), 1, count, discardAction, int.MinValue));
+					Find.WindowStack.Add(new Dialog_Slider("RemoveSliderText".Translate(thingDef.label), 1, count, discardAction));
 				}
 				rect.width -= 24f;
-				if (Widgets.ButtonImage(new Rect(rect.x + rect.width - 24f, rect.y + (rect.height - 24f) / 2f, 24f, 24f), CaravanThingsTabUtility.AbandonButtonTex, true))
+				if (Widgets.ButtonImage(new Rect(rect.x + rect.width - 24f, rect.y + (rect.height - 24f) / 2f, 24f, 24f), CaravanThingsTabUtility.AbandonButtonTex))
 				{
 					string value = thingDef.label;
 					if (things.Count == 1 && things[0] is Pawn)
@@ -106,7 +118,7 @@ namespace RimWorld
 					Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("ConfirmRemoveItemDialog".Translate(value), delegate
 					{
 						discardAction(count);
-					}, false, null));
+					}));
 				}
 				rect.width -= 24f;
 			}
@@ -121,7 +133,7 @@ namespace RimWorld
 			rect.width -= 24f;
 			if (Mouse.IsOver(rect))
 			{
-				GUI.color = ITab_ContentsBase.ThingHighlightColor;
+				GUI.color = ThingHighlightColor;
 				GUI.DrawTexture(rect, TexUI.HighlightTex);
 			}
 			if (thingDef.DrawMatSingle != null && thingDef.DrawMatSingle.mainTexture != null)
@@ -129,88 +141,40 @@ namespace RimWorld
 				Rect rect2 = new Rect(4f, curY, 28f, 28f);
 				if (things.Count == 1)
 				{
-					Widgets.ThingIcon(rect2, things[0], 1f);
+					Widgets.ThingIcon(rect2, things[0]);
 				}
 				else
 				{
-					Widgets.ThingIcon(rect2, thingDef, null, 1f);
+					Widgets.ThingIcon(rect2, thingDef);
 				}
 			}
 			Text.Anchor = TextAnchor.MiddleLeft;
-			GUI.color = ITab_ContentsBase.ThingLabelColor;
+			GUI.color = ThingLabelColor;
 			Rect rect3 = new Rect(36f, curY, rect.width - 36f, rect.height);
-			string str;
-			if (things.Count == 1 && count == things[0].stackCount)
-			{
-				str = things[0].LabelCap;
-			}
-			else
-			{
-				str = GenLabel.ThingLabel(thingDef, null, count).CapitalizeFirst();
-			}
+			string str = (things.Count != 1 || count != things[0].stackCount) ? GenLabel.ThingLabel(thingDef, null, count).CapitalizeFirst() : things[0].LabelCap;
 			Text.WordWrap = false;
-			Widgets.Label(rect3, str.Truncate(rect3.width, null));
+			Widgets.Label(rect3, str.Truncate(rect3.width));
 			Text.WordWrap = true;
 			Text.Anchor = TextAnchor.UpperLeft;
 			TooltipHandler.TipRegion(rect, str);
-			if (Widgets.ButtonInvisible(rect, true))
+			if (Widgets.ButtonInvisible(rect))
 			{
-				this.SelectLater(things);
+				SelectLater(things);
 			}
 			if (Mouse.IsOver(rect))
 			{
 				for (int i = 0; i < things.Count; i++)
 				{
-					TargetHighlighter.Highlight(things[i], true, true, false);
+					TargetHighlighter.Highlight(things[i]);
 				}
 			}
 			curY += 28f;
 		}
 
-		
 		private void SelectLater(List<Thing> things)
 		{
-			this.thingsToSelect.Clear();
-			this.thingsToSelect.AddRange(things);
+			thingsToSelect.Clear();
+			thingsToSelect.AddRange(things);
 		}
-
-		
-		private Vector2 scrollPosition;
-
-		
-		private float lastDrawnHeight;
-
-		
-		private List<Thing> thingsToSelect = new List<Thing>();
-
-		
-		public bool canRemoveThings = true;
-
-		
-		protected static List<Thing> tmpSingleThing = new List<Thing>();
-
-		
-		protected const float TopPadding = 20f;
-
-		
-		protected const float SpaceBetweenItemsLists = 10f;
-
-		
-		protected const float ThingRowHeight = 28f;
-
-		
-		protected const float ThingIconSize = 28f;
-
-		
-		protected const float ThingLeftX = 36f;
-
-		
-		protected static readonly Color ThingLabelColor = ITab_Pawn_Gear.ThingLabelColor;
-
-		
-		protected static readonly Color ThingHighlightColor = ITab_Pawn_Gear.HighlightColor;
-
-		
-		public string containedItemsKey;
 	}
 }

@@ -1,92 +1,81 @@
-﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class SimpleSurface : IEnumerable<SurfaceColumn>, IEnumerable
 	{
-		
+		private List<SurfaceColumn> columns = new List<SurfaceColumn>();
+
 		public float Evaluate(float x, float y)
 		{
-			if (this.columns.Count == 0)
+			if (columns.Count == 0)
 			{
-				Log.Error("Evaluating a SimpleCurve2D with no columns.", false);
+				Log.Error("Evaluating a SimpleCurve2D with no columns.");
 				return 0f;
 			}
-			if (x <= this.columns[0].x)
+			if (x <= columns[0].x)
 			{
-				return this.columns[0].y.Evaluate(y);
+				return columns[0].y.Evaluate(y);
 			}
-			if (x >= this.columns[this.columns.Count - 1].x)
+			if (x >= columns[columns.Count - 1].x)
 			{
-				return this.columns[this.columns.Count - 1].y.Evaluate(y);
+				return columns[columns.Count - 1].y.Evaluate(y);
 			}
-			SurfaceColumn surfaceColumn = this.columns[0];
-			SurfaceColumn surfaceColumn2 = this.columns[this.columns.Count - 1];
-			int i = 0;
-			while (i < this.columns.Count)
+			SurfaceColumn surfaceColumn = columns[0];
+			SurfaceColumn surfaceColumn2 = columns[columns.Count - 1];
+			for (int i = 0; i < columns.Count; i++)
 			{
-				if (x <= this.columns[i].x)
+				if (x <= columns[i].x)
 				{
-					surfaceColumn2 = this.columns[i];
+					surfaceColumn2 = columns[i];
 					if (i > 0)
 					{
-						surfaceColumn = this.columns[i - 1];
-						break;
+						surfaceColumn = columns[i - 1];
 					}
 					break;
-				}
-				else
-				{
-					i++;
 				}
 			}
 			float t = (x - surfaceColumn.x) / (surfaceColumn2.x - surfaceColumn.x);
 			return Mathf.Lerp(surfaceColumn.y.Evaluate(y), surfaceColumn2.y.Evaluate(y), t);
 		}
 
-		
 		public void Add(SurfaceColumn newColumn)
 		{
-			this.columns.Add(newColumn);
+			columns.Add(newColumn);
 		}
 
-		
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return this.GetEnumerator();
+			return GetEnumerator();
 		}
 
-		
 		public IEnumerator<SurfaceColumn> GetEnumerator()
 		{
-			foreach (SurfaceColumn surfaceColumn in this.columns)
+			foreach (SurfaceColumn column in columns)
 			{
-				yield return surfaceColumn;
+				yield return column;
 			}
-			List<SurfaceColumn>.Enumerator enumerator = default(List<SurfaceColumn>.Enumerator);
-			yield break;
-			yield break;
 		}
 
-		
 		public IEnumerable<string> ConfigErrors(string prefix)
 		{
-			for (int i = 0; i < this.columns.Count - 1; i++)
+			int num = 0;
+			while (true)
 			{
-				if (this.columns[i + 1].x < this.columns[i].x)
+				if (num < columns.Count - 1)
 				{
-					yield return prefix + ": columns are out of order";
-					break;
+					if (columns[num + 1].x < columns[num].x)
+					{
+						break;
+					}
+					num++;
+					continue;
 				}
+				yield break;
 			}
-			yield break;
+			yield return prefix + ": columns are out of order";
 		}
-
-		
-		private List<SurfaceColumn> columns = new List<SurfaceColumn>();
 	}
 }

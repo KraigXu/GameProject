@@ -1,106 +1,85 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public abstract class Stance_Busy : Stance
 	{
-		
-		
-		public override bool StanceBusy
-		{
-			get
-			{
-				return true;
-			}
-		}
+		public int ticksLeft;
 
-		
+		public Verb verb;
+
+		public LocalTargetInfo focusTarg;
+
+		public bool neverAimWeapon;
+
+		protected float pieSizeFactor = 1f;
+
+		public override bool StanceBusy => true;
+
 		public Stance_Busy()
 		{
-			this.SetPieSizeFactor();
+			SetPieSizeFactor();
 		}
 
-		
 		public Stance_Busy(int ticks, LocalTargetInfo focusTarg, Verb verb)
 		{
-			this.ticksLeft = ticks;
+			ticksLeft = ticks;
 			this.focusTarg = focusTarg;
 			this.verb = verb;
 		}
 
-		
-		public Stance_Busy(int ticks) : this(ticks, null, null)
+		public Stance_Busy(int ticks)
+			: this(ticks, null, null)
 		{
 		}
 
-		
 		private void SetPieSizeFactor()
 		{
-			if (this.ticksLeft < 300)
+			if (ticksLeft < 300)
 			{
-				this.pieSizeFactor = 1f;
-				return;
+				pieSizeFactor = 1f;
 			}
-			if (this.ticksLeft < 450)
+			else if (ticksLeft < 450)
 			{
-				this.pieSizeFactor = 0.75f;
-				return;
+				pieSizeFactor = 0.75f;
 			}
-			this.pieSizeFactor = 0.5f;
+			else
+			{
+				pieSizeFactor = 0.5f;
+			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.ticksLeft, "ticksLeft", 0, false);
-			Scribe_TargetInfo.Look(ref this.focusTarg, "focusTarg");
-			Scribe_Values.Look<bool>(ref this.neverAimWeapon, "neverAimWeapon", false, false);
-			Scribe_References.Look<Verb>(ref this.verb, "verb", false);
+			Scribe_Values.Look(ref ticksLeft, "ticksLeft", 0);
+			Scribe_TargetInfo.Look(ref focusTarg, "focusTarg");
+			Scribe_Values.Look(ref neverAimWeapon, "neverAimWeapon", defaultValue: false);
+			Scribe_References.Look(ref verb, "verb");
 			if (Scribe.mode == LoadSaveMode.LoadingVars)
 			{
-				this.SetPieSizeFactor();
+				SetPieSizeFactor();
 			}
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && this.verb != null && this.verb.BuggedAfterLoading)
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && verb != null && verb.BuggedAfterLoading)
 			{
-				this.verb = null;
-				Log.Warning(base.GetType() + " had a bugged verb after loading.", false);
+				verb = null;
+				Log.Warning(GetType() + " had a bugged verb after loading.");
 			}
 		}
 
-		
 		public override void StanceTick()
 		{
-			this.ticksLeft--;
-			if (this.ticksLeft <= 0)
+			ticksLeft--;
+			if (ticksLeft <= 0)
 			{
-				this.Expire();
+				Expire();
 			}
 		}
 
-		
 		protected virtual void Expire()
 		{
-			if (this.stanceTracker.curStance == this)
+			if (stanceTracker.curStance == this)
 			{
-				this.stanceTracker.SetStance(new Stance_Mobile());
+				stanceTracker.SetStance(new Stance_Mobile());
 			}
 		}
-
-		
-		public int ticksLeft;
-
-		
-		public Verb verb;
-
-		
-		public LocalTargetInfo focusTarg;
-
-		
-		public bool neverAimWeapon;
-
-		
-		protected float pieSizeFactor = 1f;
 	}
 }

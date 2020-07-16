@@ -1,114 +1,96 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_AddHediff : QuestPart
 	{
-		
-		
+		public List<Pawn> pawns = new List<Pawn>();
+
+		public List<BodyPartDef> partsToAffect;
+
+		public string inSignal;
+
+		public HediffDef hediffDef;
+
+		public bool checkDiseaseContractChance;
+
+		public bool addToHyperlinks;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				int num;
-				for (int i = 0; i < this.pawns.Count; i = num + 1)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.pawns[i];
-					num = i;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				for (int i = 0; i < pawns.Count; i++)
+				{
+					yield return pawns[i];
+				}
 			}
 		}
 
-		
-		
 		public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
 		{
 			get
 			{
-
-
-				IEnumerator<Dialog_InfoCard.Hyperlink> enumerator = null;
-				if (this.addToHyperlinks)
+				foreach (Dialog_InfoCard.Hyperlink hyperlink in base.Hyperlinks)
 				{
-					yield return new Dialog_InfoCard.Hyperlink(this.hediffDef, -1);
+					yield return hyperlink;
 				}
-				yield break;
-				yield break;
+				if (addToHyperlinks)
+				{
+					yield return new Dialog_InfoCard.Hyperlink(hediffDef);
+				}
 			}
 		}
 
-		
 		public override void Notify_QuestSignalReceived(Signal signal)
 		{
 			base.Notify_QuestSignalReceived(signal);
-			if (signal.tag == this.inSignal)
+			if (!(signal.tag == inSignal))
 			{
-				for (int i = 0; i < this.pawns.Count; i++)
+				return;
+			}
+			for (int i = 0; i < pawns.Count; i++)
+			{
+				if (!pawns[i].DestroyedOrNull() && (!checkDiseaseContractChance || Rand.Chance(pawns[i].health.immunity.DiseaseContractChanceFactor(hediffDef))))
 				{
-					if (!this.pawns[i].DestroyedOrNull() && (!this.checkDiseaseContractChance || Rand.Chance(this.pawns[i].health.immunity.DiseaseContractChanceFactor(this.hediffDef, null))))
-					{
-						HediffGiverUtility.TryApply(this.pawns[i], this.hediffDef, this.partsToAffect, false, 1, null);
-					}
+					HediffGiverUtility.TryApply(pawns[i], hediffDef, partsToAffect);
 				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look<Pawn>(ref this.pawns, "pawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Collections.Look<BodyPartDef>(ref this.partsToAffect, "partsToAffect", LookMode.Def, Array.Empty<object>());
-			Scribe_Values.Look<string>(ref this.inSignal, "inSignal", null, false);
-			Scribe_Defs.Look<HediffDef>(ref this.hediffDef, "hediffDef");
-			Scribe_Values.Look<bool>(ref this.checkDiseaseContractChance, "checkDiseaseContractChance", false, false);
-			Scribe_Values.Look<bool>(ref this.addToHyperlinks, "addToHyperlinks", false, false);
+			Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
+			Scribe_Collections.Look(ref partsToAffect, "partsToAffect", LookMode.Def);
+			Scribe_Values.Look(ref inSignal, "inSignal");
+			Scribe_Defs.Look(ref hediffDef, "hediffDef");
+			Scribe_Values.Look(ref checkDiseaseContractChance, "checkDiseaseContractChance", defaultValue: false);
+			Scribe_Values.Look(ref addToHyperlinks, "addToHyperlinks", defaultValue: false);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.pawns.RemoveAll((Pawn x) => x == null);
+				pawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
-			this.inSignal = "DebugSignal" + Rand.Int;
-			this.hediffDef = HediffDefOf.Anesthetic;
-			this.pawns.Add(PawnsFinder.AllMaps_FreeColonists.FirstOrDefault<Pawn>());
+			inSignal = "DebugSignal" + Rand.Int;
+			hediffDef = HediffDefOf.Anesthetic;
+			pawns.Add(PawnsFinder.AllMaps_FreeColonists.FirstOrDefault());
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.pawns.Replace(replace, with);
+			pawns.Replace(replace, with);
 		}
-
-		
-		public List<Pawn> pawns = new List<Pawn>();
-
-		
-		public List<BodyPartDef> partsToAffect;
-
-		
-		public string inSignal;
-
-		
-		public HediffDef hediffDef;
-
-		
-		public bool checkDiseaseContractChance;
-
-		
-		public bool addToHyperlinks;
 	}
 }

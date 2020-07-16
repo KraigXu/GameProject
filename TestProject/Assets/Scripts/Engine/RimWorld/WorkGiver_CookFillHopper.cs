@@ -1,47 +1,31 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class WorkGiver_CookFillHopper : WorkGiver_Scanner
 	{
-		
-		
-		public override ThingRequest PotentialWorkThingRequest
-		{
-			get
-			{
-				return ThingRequest.ForDef(ThingDefOf.Hopper);
-			}
-		}
+		private static string TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans;
 
-		
-		
-		public override PathEndMode PathEndMode
-		{
-			get
-			{
-				return PathEndMode.ClosestTouch;
-			}
-		}
+		private static string NoFoodToFillHopperTrans;
 
-		
+		public override ThingRequest PotentialWorkThingRequest => ThingRequest.ForDef(ThingDefOf.Hopper);
+
+		public override PathEndMode PathEndMode => PathEndMode.ClosestTouch;
+
 		public WorkGiver_CookFillHopper()
 		{
-			if (WorkGiver_CookFillHopper.TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans == null)
+			if (TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans == null)
 			{
-				WorkGiver_CookFillHopper.TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans = "TheOnlyAvailableFoodIsInStorageOfHigherPriority".Translate();
+				TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans = "TheOnlyAvailableFoodIsInStorageOfHigherPriority".Translate();
 			}
-			if (WorkGiver_CookFillHopper.NoFoodToFillHopperTrans == null)
+			if (NoFoodToFillHopperTrans == null)
 			{
-				WorkGiver_CookFillHopper.NoFoodToFillHopperTrans = "NoFoodToFillHopper".Translate();
+				NoFoodToFillHopperTrans = "NoFoodToFillHopper".Translate();
 			}
 		}
 
-		
 		public override Job JobOnThing(Pawn pawn, Thing thing, bool forced = false)
 		{
 			ISlotGroupParent slotGroupParent = thing as ISlotGroupParent;
@@ -49,7 +33,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			if (!pawn.CanReserve(thing.Position, 1, -1, null, false))
+			if (!pawn.CanReserve(thing.Position))
 			{
 				return null;
 			}
@@ -65,17 +49,16 @@ namespace RimWorld
 			}
 			if (num > 25)
 			{
-				JobFailReason.Is("AlreadyFilledLower".Translate(), null);
+				JobFailReason.Is("AlreadyFilledLower".Translate());
 				return null;
 			}
-			return WorkGiver_CookFillHopper.HopperFillFoodJob(pawn, slotGroupParent);
+			return HopperFillFoodJob(pawn, slotGroupParent);
 		}
 
-		
 		public static Job HopperFillFoodJob(Pawn pawn, ISlotGroupParent hopperSgp)
 		{
 			Building building = (Building)hopperSgp;
-			if (!pawn.CanReserveAndReach(building.Position, PathEndMode.Touch, pawn.NormalMaxDanger(), 1, -1, null, false))
+			if (!pawn.CanReserveAndReach(building.Position, PathEndMode.Touch, pawn.NormalMaxDanger()))
 			{
 				return null;
 			}
@@ -83,11 +66,7 @@ namespace RimWorld
 			Thing firstItem = building.Position.GetFirstItem(building.Map);
 			if (firstItem != null)
 			{
-				if (Building_NutrientPasteDispenser.IsAcceptableFeedstock(firstItem.def))
-				{
-					thingDef = firstItem.def;
-				}
-				else
+				if (!Building_NutrientPasteDispenser.IsAcceptableFeedstock(firstItem.def))
 				{
 					if (firstItem.IsForbidden(pawn))
 					{
@@ -95,48 +74,34 @@ namespace RimWorld
 					}
 					return HaulAIUtility.HaulAsideJobFor(pawn, firstItem);
 				}
+				thingDef = firstItem.def;
 			}
-			List<Thing> list;
-			if (thingDef == null)
-			{
-				list = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.FoodSourceNotPlantOrTree);
-			}
-			else
-			{
-				list = pawn.Map.listerThings.ThingsOfDef(thingDef);
-			}
+			List<Thing> list = (thingDef != null) ? pawn.Map.listerThings.ThingsOfDef(thingDef) : pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.FoodSourceNotPlantOrTree);
 			bool flag = false;
 			for (int i = 0; i < list.Count; i++)
 			{
 				Thing thing = list[i];
-				if (thing.def.IsNutritionGivingIngestible && (thing.def.ingestible.preferability == FoodPreferability.RawBad || thing.def.ingestible.preferability == FoodPreferability.RawTasty) && HaulAIUtility.PawnCanAutomaticallyHaul(pawn, thing, false) && pawn.Map.haulDestinationManager.SlotGroupAt(building.Position).Settings.AllowedToAccept(thing))
+				if (!thing.def.IsNutritionGivingIngestible || (thing.def.ingestible.preferability != FoodPreferability.RawBad && thing.def.ingestible.preferability != FoodPreferability.RawTasty) || !HaulAIUtility.PawnCanAutomaticallyHaul(pawn, thing, forced: false) || !pawn.Map.haulDestinationManager.SlotGroupAt(building.Position).Settings.AllowedToAccept(thing))
 				{
-					if (StoreUtility.CurrentStoragePriorityOf(thing) >= hopperSgp.GetSlotGroup().Settings.Priority)
-					{
-						flag = true;
-						JobFailReason.Is(WorkGiver_CookFillHopper.TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans, null);
-					}
-					else
-					{
-						Job job = HaulAIUtility.HaulToCellStorageJob(pawn, thing, building.Position, true);
-						if (job != null)
-						{
-							return job;
-						}
-					}
+					continue;
+				}
+				if ((int)StoreUtility.CurrentStoragePriorityOf(thing) >= (int)hopperSgp.GetSlotGroup().Settings.Priority)
+				{
+					flag = true;
+					JobFailReason.Is(TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans);
+					continue;
+				}
+				Job job = HaulAIUtility.HaulToCellStorageJob(pawn, thing, building.Position, fitInStoreCell: true);
+				if (job != null)
+				{
+					return job;
 				}
 			}
 			if (!flag)
 			{
-				JobFailReason.Is(WorkGiver_CookFillHopper.NoFoodToFillHopperTrans, null);
+				JobFailReason.Is(NoFoodToFillHopperTrans);
 			}
 			return null;
 		}
-
-		
-		private static string TheOnlyAvailableFoodIsInStorageOfHigherPriorityTrans;
-
-		
-		private static string NoFoodToFillHopperTrans;
 	}
 }

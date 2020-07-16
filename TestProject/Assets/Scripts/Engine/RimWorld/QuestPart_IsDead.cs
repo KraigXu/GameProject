@@ -1,69 +1,59 @@
-﻿using System;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
-using RimWorld.Planet;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_IsDead : QuestPartActivable
 	{
-		
-		
+		public Pawn pawn;
+
 		public override IEnumerable<GlobalTargetInfo> QuestLookTargets
 		{
 			get
 			{
-
-		
-				IEnumerator<GlobalTargetInfo> enumerator = null;
-				if (this.pawn != null)
+				foreach (GlobalTargetInfo questLookTarget in base.QuestLookTargets)
 				{
-					yield return this.pawn;
+					yield return questLookTarget;
 				}
-				yield break;
-				yield break;
+				if (pawn != null)
+				{
+					yield return pawn;
+				}
 			}
 		}
 
-		
 		public override void QuestPartTick()
 		{
 			base.QuestPartTick();
-			if (this.pawn != null && this.pawn.Destroyed)
+			if (pawn != null && pawn.Destroyed)
 			{
-				base.Complete(this.pawn.Named("SUBJECT"));
+				Complete(pawn.Named("SUBJECT"));
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_References.Look<Pawn>(ref this.pawn, "pawn", false);
+			Scribe_References.Look(ref pawn, "pawn");
 		}
 
-		
 		public override void AssignDebugData()
 		{
 			base.AssignDebugData();
 			if (Find.AnyPlayerHomeMap != null)
 			{
-				this.pawn = Find.RandomPlayerHomeMap.mapPawns.FreeColonists.FirstOrDefault<Pawn>();
+				pawn = Find.RandomPlayerHomeMap.mapPawns.FreeColonists.FirstOrDefault();
 			}
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			if (this.pawn == replace)
+			if (pawn == replace)
 			{
-				this.pawn = with;
+				pawn = with;
 			}
 		}
-
-		
-		public Pawn pawn;
 	}
 }

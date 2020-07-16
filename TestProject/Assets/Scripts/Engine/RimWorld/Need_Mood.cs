@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -6,52 +5,53 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public class Need_Mood : Need_Seeker
 	{
-		
-		
+		public ThoughtHandler thoughts;
+
+		public PawnObserver observer;
+
+		public PawnRecentMemory recentMemory;
+
 		public override float CurInstantLevel
 		{
 			get
 			{
-				float num = this.thoughts.TotalMoodOffset();
-				if (this.pawn.IsColonist || this.pawn.IsPrisonerOfColony)
+				float num = thoughts.TotalMoodOffset();
+				if (pawn.IsColonist || pawn.IsPrisonerOfColony)
 				{
 					num += Find.Storyteller.difficulty.colonistMoodOffset;
 				}
-				return Mathf.Clamp01(this.def.baseLevel + num / 100f);
+				return Mathf.Clamp01(def.baseLevel + num / 100f);
 			}
 		}
 
-		
-		
 		public string MoodString
 		{
 			get
 			{
-				if (this.pawn.MentalStateDef != null)
+				if (pawn.MentalStateDef != null)
 				{
 					return "Mood_MentalState".Translate();
 				}
-				float breakThresholdExtreme = this.pawn.mindState.mentalBreaker.BreakThresholdExtreme;
-				if (this.CurLevel < breakThresholdExtreme)
+				float breakThresholdExtreme = pawn.mindState.mentalBreaker.BreakThresholdExtreme;
+				if (CurLevel < breakThresholdExtreme)
 				{
 					return "Mood_AboutToBreak".Translate();
 				}
-				if (this.CurLevel < breakThresholdExtreme + 0.05f)
+				if (CurLevel < breakThresholdExtreme + 0.05f)
 				{
 					return "Mood_OnEdge".Translate();
 				}
-				if (this.CurLevel < this.pawn.mindState.mentalBreaker.BreakThresholdMinor)
+				if (CurLevel < pawn.mindState.mentalBreaker.BreakThresholdMinor)
 				{
 					return "Mood_Stressed".Translate();
 				}
-				if (this.CurLevel < 0.65f)
+				if (CurLevel < 0.65f)
 				{
 					return "Mood_Neutral".Translate();
 				}
-				if (this.CurLevel < 0.9f)
+				if (CurLevel < 0.9f)
 				{
 					return "Mood_Content".Translate();
 				}
@@ -59,70 +59,51 @@ namespace RimWorld
 			}
 		}
 
-		
-		public Need_Mood(Pawn pawn) : base(pawn)
+		public Need_Mood(Pawn pawn)
+			: base(pawn)
 		{
-			this.thoughts = new ThoughtHandler(pawn);
-			this.observer = new PawnObserver(pawn);
-			this.recentMemory = new PawnRecentMemory(pawn);
+			thoughts = new ThoughtHandler(pawn);
+			observer = new PawnObserver(pawn);
+			recentMemory = new PawnRecentMemory(pawn);
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Deep.Look<ThoughtHandler>(ref this.thoughts, "thoughts", new object[]
-			{
-				this.pawn
-			});
-			Scribe_Deep.Look<PawnRecentMemory>(ref this.recentMemory, "recentMemory", new object[]
-			{
-				this.pawn
-			});
+			Scribe_Deep.Look(ref thoughts, "thoughts", pawn);
+			Scribe_Deep.Look(ref recentMemory, "recentMemory", pawn);
 		}
 
-		
 		public override void NeedInterval()
 		{
 			base.NeedInterval();
-			this.recentMemory.RecentMemoryInterval();
-			this.thoughts.ThoughtInterval();
-			this.observer.ObserverInterval();
+			recentMemory.RecentMemoryInterval();
+			thoughts.ThoughtInterval();
+			observer.ObserverInterval();
 		}
 
-		
 		public override string GetTipString()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine(base.GetTipString());
 			stringBuilder.AppendLine();
-			stringBuilder.AppendLine("MentalBreakThresholdExtreme".Translate() + ": " + this.pawn.mindState.mentalBreaker.BreakThresholdExtreme.ToStringPercent());
-			stringBuilder.AppendLine("MentalBreakThresholdMajor".Translate() + ": " + this.pawn.mindState.mentalBreaker.BreakThresholdMajor.ToStringPercent());
-			stringBuilder.AppendLine("MentalBreakThresholdMinor".Translate() + ": " + this.pawn.mindState.mentalBreaker.BreakThresholdMinor.ToStringPercent());
+			stringBuilder.AppendLine("MentalBreakThresholdExtreme".Translate() + ": " + pawn.mindState.mentalBreaker.BreakThresholdExtreme.ToStringPercent());
+			stringBuilder.AppendLine("MentalBreakThresholdMajor".Translate() + ": " + pawn.mindState.mentalBreaker.BreakThresholdMajor.ToStringPercent());
+			stringBuilder.AppendLine("MentalBreakThresholdMinor".Translate() + ": " + pawn.mindState.mentalBreaker.BreakThresholdMinor.ToStringPercent());
 			return stringBuilder.ToString();
 		}
 
-		
-		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = 2147483647, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
+		public override void DrawOnGUI(Rect rect, int maxThresholdMarkers = int.MaxValue, float customMargin = -1f, bool drawArrows = true, bool doTooltip = true)
 		{
-			if (this.threshPercents == null)
+			if (threshPercents == null)
 			{
-				this.threshPercents = new List<float>();
+				threshPercents = new List<float>();
 			}
-			this.threshPercents.Clear();
-			this.threshPercents.Add(this.pawn.mindState.mentalBreaker.BreakThresholdExtreme);
-			this.threshPercents.Add(this.pawn.mindState.mentalBreaker.BreakThresholdMajor);
-			this.threshPercents.Add(this.pawn.mindState.mentalBreaker.BreakThresholdMinor);
+			threshPercents.Clear();
+			threshPercents.Add(pawn.mindState.mentalBreaker.BreakThresholdExtreme);
+			threshPercents.Add(pawn.mindState.mentalBreaker.BreakThresholdMajor);
+			threshPercents.Add(pawn.mindState.mentalBreaker.BreakThresholdMinor);
 			base.DrawOnGUI(rect, maxThresholdMarkers, customMargin, drawArrows, doTooltip);
 		}
-
-		
-		public ThoughtHandler thoughts;
-
-		
-		public PawnObserver observer;
-
-		
-		public PawnRecentMemory recentMemory;
 	}
 }

@@ -1,33 +1,33 @@
-﻿using System;
+using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using RimWorld;
-using RimWorld.Planet;
 
 namespace Verse
 {
-	
 	public static class MapDeiniter
 	{
-		
+		private static List<Thing> tmpThings = new List<Thing>();
+
 		public static void Deinit(Map map)
 		{
 			try
 			{
-				MapDeiniter.DoQueuedPowerTasks(map);
+				DoQueuedPowerTasks(map);
 			}
 			catch (Exception arg)
 			{
-				Log.Error("Error while deiniting map: could not execute power related tasks: " + arg, false);
+				Log.Error("Error while deiniting map: could not execute power related tasks: " + arg);
 			}
 			try
 			{
-				MapDeiniter.PassPawnsToWorld(map);
+				PassPawnsToWorld(map);
 			}
 			catch (Exception arg2)
 			{
-				Log.Error("Error while deiniting map: could not pass pawns to world: " + arg2, false);
+				Log.Error("Error while deiniting map: could not pass pawns to world: " + arg2);
 			}
 			try
 			{
@@ -35,7 +35,7 @@ namespace Verse
 			}
 			catch (Exception arg3)
 			{
-				Log.Error("Error while deiniting map: could not end all weather sustainers: " + arg3, false);
+				Log.Error("Error while deiniting map: could not end all weather sustainers: " + arg3);
 			}
 			try
 			{
@@ -43,7 +43,7 @@ namespace Verse
 			}
 			catch (Exception arg4)
 			{
-				Log.Error("Error while deiniting map: could not end all effect sustainers: " + arg4, false);
+				Log.Error("Error while deiniting map: could not end all effect sustainers: " + arg4);
 			}
 			try
 			{
@@ -51,7 +51,7 @@ namespace Verse
 			}
 			catch (Exception arg5)
 			{
-				Log.Error("Error while deiniting map: could not remove areas: " + arg5, false);
+				Log.Error("Error while deiniting map: could not remove areas: " + arg5);
 			}
 			try
 			{
@@ -59,15 +59,15 @@ namespace Verse
 			}
 			catch (Exception arg6)
 			{
-				Log.Error("Error while deiniting map: could not remove things from the tick manager: " + arg6, false);
+				Log.Error("Error while deiniting map: could not remove things from the tick manager: " + arg6);
 			}
 			try
 			{
-				MapDeiniter.NotifyEverythingWhichUsesMapReference(map);
+				NotifyEverythingWhichUsesMapReference(map);
 			}
 			catch (Exception arg7)
 			{
-				Log.Error("Error while deiniting map: could not notify things/regions/rooms/etc: " + arg7, false);
+				Log.Error("Error while deiniting map: could not notify things/regions/rooms/etc: " + arg7);
 			}
 			try
 			{
@@ -76,7 +76,7 @@ namespace Verse
 			}
 			catch (Exception arg8)
 			{
-				Log.Error("Error while deiniting map: could not remove things from thing listers: " + arg8, false);
+				Log.Error("Error while deiniting map: could not remove things from thing listers: " + arg8);
 			}
 			try
 			{
@@ -84,7 +84,7 @@ namespace Verse
 			}
 			catch (Exception arg9)
 			{
-				Log.Error("Error while deiniting map: could not remove look targets: " + arg9, false);
+				Log.Error("Error while deiniting map: could not remove look targets: " + arg9);
 			}
 			try
 			{
@@ -92,32 +92,30 @@ namespace Verse
 			}
 			catch (Exception arg10)
 			{
-				Log.Error("Error while deiniting map: could not remove queued incidents: " + arg10, false);
+				Log.Error("Error while deiniting map: could not remove queued incidents: " + arg10);
 			}
 		}
 
-		
 		private static void DoQueuedPowerTasks(Map map)
 		{
 			map.powerNetManager.UpdatePowerNetsAndConnections_First();
 		}
 
-		
 		private static void PassPawnsToWorld(Map map)
 		{
 			List<Pawn> list = new List<Pawn>();
 			List<Pawn> list2 = new List<Pawn>();
 			bool flag = map.ParentFaction != null && map.ParentFaction.HostileTo(Faction.OfPlayer);
-			List<Pawn> list3 = map.mapPawns.AllPawns.ToList<Pawn>();
+			List<Pawn> list3 = map.mapPawns.AllPawns.ToList();
 			for (int i = 0; i < list3.Count; i++)
 			{
-				Find.Storyteller.Notify_PawnEvent(list3[i], AdaptationEvent.LostBecauseMapClosed, null);
+				Find.Storyteller.Notify_PawnEvent(list3[i], AdaptationEvent.LostBecauseMapClosed);
 				try
 				{
 					Pawn pawn = list3[i];
 					if (pawn.Spawned)
 					{
-						pawn.DeSpawn(DestroyMode.Vanish);
+						pawn.DeSpawn();
 					}
 					if (pawn.IsColonist && flag)
 					{
@@ -131,18 +129,12 @@ namespace Verse
 							list2.Add(pawn);
 							PawnDiedOrDownedThoughtsUtility.TryGiveThoughts(pawn, null, PawnDiedOrDownedThoughtsKind.Lost);
 						}
-						MapDeiniter.CleanUpAndPassToWorld(pawn);
+						CleanUpAndPassToWorld(pawn);
 					}
 				}
 				catch (Exception ex)
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Could not despawn and pass to world ",
-						list3[i],
-						": ",
-						ex
-					}), false);
+					Log.Error("Could not despawn and pass to world " + list3[i] + ": " + ex);
 				}
 			}
 			for (int j = 0; j < list.Count; j++)
@@ -153,43 +145,43 @@ namespace Verse
 			{
 				QuestUtility.SendQuestTargetSignals(list2[k].questTags, "LeftMap", list2[k].Named("SUBJECT"));
 			}
-			if (list.Any<Pawn>() || list2.Any<Pawn>())
+			if (!list.Any() && !list2.Any())
 			{
-				StringBuilder stringBuilder = new StringBuilder();
-				if (list.Any<Pawn>())
-				{
-					list.SortByDescending((Pawn x) => x.RaceProps.Humanlike);
-					for (int l = 0; l < list.Count; l++)
-					{
-						stringBuilder.AppendLine("  - " + list[l].NameShortColored.Resolve() + ": " + "capturedBy".Translate(map.ParentFaction.NameColored.Resolve()).CapitalizeFirst());
-					}
-				}
-				if (list2.Any<Pawn>())
-				{
-					list2.SortByDescending((Pawn x) => x.RaceProps.Humanlike);
-					for (int m = 0; m < list2.Count; m++)
-					{
-						stringBuilder.AppendLine("  - " + list2[m].NameShortColored.Resolve());
-					}
-				}
-				string str;
-				string text;
-				if (map.IsPlayerHome)
-				{
-					str = "LetterLabelPawnsLostBecauseMapClosed_Home".Translate();
-					text = "LetterPawnsLostBecauseMapClosed_Home".Translate();
-				}
-				else
-				{
-					str = "LetterLabelPawnsLostBecauseMapClosed_Caravan".Translate();
-					text = "LetterPawnsLostBecauseMapClosed_Caravan".Translate();
-				}
-				text = text + ":\n\n" + stringBuilder.ToString().TrimEndNewlines();
-				Find.LetterStack.ReceiveLetter(str, text, LetterDefOf.NegativeEvent, new GlobalTargetInfo(map.Tile), null, null, null, null);
+				return;
 			}
+			StringBuilder stringBuilder = new StringBuilder();
+			if (list.Any())
+			{
+				list.SortByDescending((Pawn x) => x.RaceProps.Humanlike);
+				for (int l = 0; l < list.Count; l++)
+				{
+					stringBuilder.AppendLine("  - " + list[l].NameShortColored.Resolve() + ": " + "capturedBy".Translate(map.ParentFaction.NameColored.Resolve()).CapitalizeFirst());
+				}
+			}
+			if (list2.Any())
+			{
+				list2.SortByDescending((Pawn x) => x.RaceProps.Humanlike);
+				for (int m = 0; m < list2.Count; m++)
+				{
+					stringBuilder.AppendLine("  - " + list2[m].NameShortColored.Resolve());
+				}
+			}
+			string str;
+			string str2;
+			if (map.IsPlayerHome)
+			{
+				str = "LetterLabelPawnsLostBecauseMapClosed_Home".Translate();
+				str2 = "LetterPawnsLostBecauseMapClosed_Home".Translate();
+			}
+			else
+			{
+				str = "LetterLabelPawnsLostBecauseMapClosed_Caravan".Translate();
+				str2 = "LetterPawnsLostBecauseMapClosed_Caravan".Translate();
+			}
+			str2 = str2 + ":\n\n" + stringBuilder.ToString().TrimEndNewlines();
+			Find.LetterStack.ReceiveLetter(str, str2, LetterDefOf.NegativeEvent, new GlobalTargetInfo(map.Tile));
 		}
 
-		
 		private static void CleanUpAndPassToWorld(Pawn p)
 		{
 			if (p.ownership != null)
@@ -198,23 +190,22 @@ namespace Verse
 			}
 			if (p.guest != null)
 			{
-				p.guest.SetGuestStatus(null, false);
+				p.guest.SetGuestStatus(null);
 			}
 			p.inventory.UnloadEverything = false;
-			Find.WorldPawns.PassToWorld(p, PawnDiscardDecideMode.Decide);
+			Find.WorldPawns.PassToWorld(p);
 		}
 
-		
 		private static void NotifyEverythingWhichUsesMapReference(Map map)
 		{
 			List<Map> maps = Find.Maps;
 			int num = maps.IndexOf(map);
-			ThingOwnerUtility.GetAllThingsRecursively(map, MapDeiniter.tmpThings, true, null);
-			for (int i = 0; i < MapDeiniter.tmpThings.Count; i++)
+			ThingOwnerUtility.GetAllThingsRecursively(map, tmpThings);
+			for (int i = 0; i < tmpThings.Count; i++)
 			{
-				MapDeiniter.tmpThings[i].Notify_MyMapRemoved();
+				tmpThings[i].Notify_MyMapRemoved();
 			}
-			MapDeiniter.tmpThings.Clear();
+			tmpThings.Clear();
 			for (int j = num; j < maps.Count; j++)
 			{
 				ThingOwner spawnedThings = maps[j].spawnedThings;
@@ -237,21 +228,18 @@ namespace Verse
 						allRooms[l].DecrementMapIndex();
 					}
 				}
-				foreach (Region region in maps[j].regionGrid.AllRegions_NoRebuild_InvalidAllowed)
+				foreach (Region item in maps[j].regionGrid.AllRegions_NoRebuild_InvalidAllowed)
 				{
 					if (j == num)
 					{
-						region.Notify_MyMapRemoved();
+						item.Notify_MyMapRemoved();
 					}
 					else
 					{
-						region.DecrementMapIndex();
+						item.DecrementMapIndex();
 					}
 				}
 			}
 		}
-
-		
-		private static List<Thing> tmpThings = new List<Thing>();
 	}
 }

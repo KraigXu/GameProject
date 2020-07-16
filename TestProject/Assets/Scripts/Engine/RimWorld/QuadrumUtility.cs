@@ -1,23 +1,12 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class QuadrumUtility
 	{
-		
-		
-		public static Quadrum FirstQuadrum
-		{
-			get
-			{
-				return Quadrum.Aprimay;
-			}
-		}
+		public static Quadrum FirstQuadrum => Quadrum.Aprimay;
 
-		
 		public static Twelfth GetFirstTwelfth(this Quadrum quadrum)
 		{
 			switch (quadrum)
@@ -35,7 +24,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static Twelfth GetMiddleTwelfth(this Quadrum quadrum)
 		{
 			switch (quadrum)
@@ -53,13 +41,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static float GetMiddleYearPct(this Quadrum quadrum)
 		{
 			return quadrum.GetMiddleTwelfth().GetMiddleYearPct();
 		}
 
-		
 		public static string Label(this Quadrum quadrum)
 		{
 			switch (quadrum)
@@ -77,7 +63,6 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static string LabelShort(this Quadrum quadrum)
 		{
 			switch (quadrum)
@@ -95,13 +80,11 @@ namespace RimWorld
 			}
 		}
 
-		
 		public static Season GetSeason(this Quadrum q, float latitude)
 		{
 			return SeasonUtility.GetReportedSeason(q.GetMiddleYearPct(), latitude);
 		}
 
-		
 		public static string QuadrumsRangeLabel(List<Twelfth> twelfths)
 		{
 			if (twelfths.Count == 0)
@@ -122,13 +105,12 @@ namespace RimWorld
 					{
 						text += ", ";
 					}
-					text += QuadrumUtility.QuadrumsContinuousRangeLabel(twelfths, twelfth);
+					text += QuadrumsContinuousRangeLabel(twelfths, twelfth);
 				}
 			}
 			return text;
 		}
 
-		
 		private static string QuadrumsContinuousRangeLabel(List<Twelfth> twelfths, Twelfth rootTwelfth)
 		{
 			Twelfth leftMostTwelfth = TwelfthUtility.GetLeftMostTwelfth(twelfths, rootTwelfth);
@@ -137,16 +119,7 @@ namespace RimWorld
 			{
 				if (!twelfths.Contains(twelfth))
 				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Twelfths doesn't contain ",
-						twelfth,
-						" (",
-						leftMostTwelfth,
-						"..",
-						rightMostTwelfth,
-						")"
-					}), false);
+					Log.Error("Twelfths doesn't contain " + twelfth + " (" + leftMostTwelfth + ".." + rightMostTwelfth + ")");
 					break;
 				}
 				twelfths.Remove(twelfth);

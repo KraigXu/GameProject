@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -7,141 +6,123 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class Pawn_TraderTracker : IExposable
 	{
-		
-		
+		private Pawn pawn;
+
+		public TraderKindDef traderKind;
+
+		private List<Pawn> soldPrisoners = new List<Pawn>();
+
 		public IEnumerable<Thing> Goods
 		{
 			get
 			{
-				Lord lord = this.pawn.GetLord();
+				Lord lord = pawn.GetLord();
 				if (lord == null || !(lord.LordJob is LordJob_TradeWithColony))
 				{
-					int num;
-					for (int i = 0; i < this.pawn.inventory.innerContainer.Count; i = num + 1)
+					for (int k = 0; k < pawn.inventory.innerContainer.Count; k++)
 					{
-						Thing thing = this.pawn.inventory.innerContainer[i];
-						if (!this.pawn.inventory.NotForSale(thing))
+						Thing thing = pawn.inventory.innerContainer[k];
+						if (!pawn.inventory.NotForSale(thing))
 						{
 							yield return thing;
 						}
-						num = i;
 					}
 				}
-				if (lord != null)
+				if (lord == null)
 				{
-					int num;
-					for (int i = 0; i < lord.ownedPawns.Count; i = num + 1)
+					yield break;
+				}
+				for (int k = 0; k < lord.ownedPawns.Count; k++)
+				{
+					Pawn p = lord.ownedPawns[k];
+					switch (p.GetTraderCaravanRole())
 					{
-						Pawn p = lord.ownedPawns[i];
-						TraderCaravanRole traderCaravanRole = p.GetTraderCaravanRole();
-						if (traderCaravanRole == TraderCaravanRole.Carrier)
+					case TraderCaravanRole.Carrier:
+					{
+						for (int i = 0; i < p.inventory.innerContainer.Count; i++)
 						{
-							for (int j = 0; j < p.inventory.innerContainer.Count; j = num + 1)
-							{
-								yield return p.inventory.innerContainer[j];
-								num = j;
-							}
+							yield return p.inventory.innerContainer[i];
 						}
-						else if (traderCaravanRole == TraderCaravanRole.Chattel && !this.soldPrisoners.Contains(p))
+						break;
+					}
+					case TraderCaravanRole.Chattel:
+						if (!soldPrisoners.Contains(p))
 						{
 							yield return p;
 						}
-						p = null;
-						num = i;
+						break;
 					}
 				}
-				yield break;
 			}
 		}
 
-		
-		
-		public int RandomPriceFactorSeed
-		{
-			get
-			{
-				return Gen.HashCombineInt(this.pawn.thingIDNumber, 1149275593);
-			}
-		}
+		public int RandomPriceFactorSeed => Gen.HashCombineInt(pawn.thingIDNumber, 1149275593);
 
-		
-		
-		public string TraderName
-		{
-			get
-			{
-				return this.pawn.LabelShort;
-			}
-		}
+		public string TraderName => pawn.LabelShort;
 
-		
-		
 		public bool CanTradeNow
 		{
 			get
 			{
-				return !this.pawn.Dead && this.pawn.Spawned && this.pawn.mindState.wantsToTradeWithColony && this.pawn.CanCasuallyInteractNow(false) && !this.pawn.Downed && !this.pawn.IsPrisoner && this.pawn.Faction != Faction.OfPlayer && (this.pawn.Faction == null || !this.pawn.Faction.HostileTo(Faction.OfPlayer)) && (this.Goods.Any((Thing x) => this.traderKind.WillTrade(x.def)) || this.traderKind.tradeCurrency == TradeCurrency.Favor);
+				if (!pawn.Dead && pawn.Spawned && pawn.mindState.wantsToTradeWithColony && pawn.CanCasuallyInteractNow() && !pawn.Downed && !pawn.IsPrisoner && pawn.Faction != Faction.OfPlayer && (pawn.Faction == null || !pawn.Faction.HostileTo(Faction.OfPlayer)))
+				{
+					if (!Goods.Any((Thing x) => traderKind.WillTrade(x.def)))
+					{
+						return traderKind.tradeCurrency == TradeCurrency.Favor;
+					}
+					return true;
+				}
+				return false;
 			}
 		}
 
-		
 		public Pawn_TraderTracker(Pawn pawn)
 		{
 			this.pawn = pawn;
 		}
 
-		
 		public void ExposeData()
 		{
-			Scribe_Defs.Look<TraderKindDef>(ref this.traderKind, "traderKind");
-			Scribe_Collections.Look<Pawn>(ref this.soldPrisoners, "soldPrisoners", LookMode.Reference, Array.Empty<object>());
+			Scribe_Defs.Look(ref traderKind, "traderKind");
+			Scribe_Collections.Look(ref soldPrisoners, "soldPrisoners", LookMode.Reference);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.soldPrisoners.RemoveAll((Pawn x) => x == null);
+				soldPrisoners.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
 		{
-			IEnumerable<Thing> enumerable = from x in this.pawn.Map.listerThings.AllThings
-			where x.def.category == ThingCategory.Item && TradeUtility.PlayerSellableNow(x, this.pawn) && !x.Position.Fogged(x.Map) && (this.pawn.Map.areaManager.Home[x.Position] || x.IsInAnyStorage()) && this.ReachableForTrade(x)
-			select x;
-			foreach (Thing thing in enumerable)
+			IEnumerable<Thing> enumerable = pawn.Map.listerThings.AllThings.Where((Thing x) => x.def.category == ThingCategory.Item && TradeUtility.PlayerSellableNow(x, pawn) && !x.Position.Fogged(x.Map) && (pawn.Map.areaManager.Home[x.Position] || x.IsInAnyStorage()) && ReachableForTrade(x));
+			foreach (Thing item in enumerable)
 			{
-				yield return thing;
+				yield return item;
 			}
-			IEnumerator<Thing> enumerator = null;
-			if (this.pawn.GetLord() != null)
+			if (pawn.GetLord() != null)
 			{
-				foreach (Pawn pawn in from x in TradeUtility.AllSellableColonyPawns(this.pawn.Map)
-				where !x.Downed && this.ReachableForTrade(x)
-				select x)
+				foreach (Pawn item2 in from x in TradeUtility.AllSellableColonyPawns(pawn.Map)
+					where !x.Downed && ReachableForTrade(x)
+					select x)
 				{
-					yield return pawn;
+					yield return item2;
 				}
-				IEnumerator<Pawn> enumerator2 = null;
 			}
-			yield break;
-			yield break;
 		}
 
-		
 		public void GiveSoldThingToTrader(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
-			if (this.Goods.Contains(toGive))
+			if (Goods.Contains(toGive))
 			{
-				Log.Error("Tried to add " + toGive + " to stock (pawn's trader tracker), but it's already here.", false);
+				Log.Error("Tried to add " + toGive + " to stock (pawn's trader tracker), but it's already here.");
 				return;
 			}
 			Pawn pawn = toGive as Pawn;
 			if (pawn != null)
 			{
 				pawn.PreTraded(TradeAction.PlayerSells, playerNegotiator, this.pawn);
-				this.AddPawnToStock(pawn);
+				AddPawnToStock(pawn);
 				return;
 			}
 			Thing thing = toGive.SplitOff(countToGive);
@@ -149,141 +130,99 @@ namespace RimWorld
 			Thing thing2 = TradeUtility.ThingFromStockToMergeWith(this.pawn, thing);
 			if (thing2 != null)
 			{
-				if (!thing2.TryAbsorbStack(thing, false))
+				if (!thing2.TryAbsorbStack(thing, respectStackLimit: false))
 				{
-					thing.Destroy(DestroyMode.Vanish);
-					return;
+					thing.Destroy();
 				}
 			}
 			else
 			{
-				this.AddThingToRandomInventory(thing);
+				AddThingToRandomInventory(thing);
 			}
 		}
 
-		
 		public void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
 		{
 			Pawn pawn = toGive as Pawn;
 			if (pawn != null)
 			{
 				pawn.PreTraded(TradeAction.PlayerBuys, playerNegotiator, this.pawn);
-				Lord lord = pawn.GetLord();
-				if (lord != null)
+				pawn.GetLord()?.Notify_PawnLost(pawn, PawnLostCondition.Undefined);
+				if (soldPrisoners.Contains(pawn))
 				{
-					lord.Notify_PawnLost(pawn, PawnLostCondition.Undefined, null);
+					soldPrisoners.Remove(pawn);
 				}
-				if (this.soldPrisoners.Contains(pawn))
-				{
-					this.soldPrisoners.Remove(pawn);
-					return;
-				}
+				return;
 			}
-			else
+			IntVec3 positionHeld = toGive.PositionHeld;
+			Map mapHeld = toGive.MapHeld;
+			Thing thing = toGive.SplitOff(countToGive);
+			thing.PreTraded(TradeAction.PlayerBuys, playerNegotiator, this.pawn);
+			if (GenPlace.TryPlaceThing(thing, positionHeld, mapHeld, ThingPlaceMode.Near))
 			{
-				IntVec3 positionHeld = toGive.PositionHeld;
-				Map mapHeld = toGive.MapHeld;
-				Thing thing = toGive.SplitOff(countToGive);
-				thing.PreTraded(TradeAction.PlayerBuys, playerNegotiator, this.pawn);
-				if (GenPlace.TryPlaceThing(thing, positionHeld, mapHeld, ThingPlaceMode.Near, null, null, default(Rot4)))
-				{
-					Lord lord2 = this.pawn.GetLord();
-					if (lord2 != null)
-					{
-						lord2.extraForbiddenThings.Add(thing);
-						return;
-					}
-				}
-				else
-				{
-					Log.Error(string.Concat(new object[]
-					{
-						"Could not place bought thing ",
-						thing,
-						" at ",
-						positionHeld
-					}), false);
-					thing.Destroy(DestroyMode.Vanish);
-				}
+				this.pawn.GetLord()?.extraForbiddenThings.Add(thing);
+				return;
 			}
+			Log.Error("Could not place bought thing " + thing + " at " + positionHeld);
+			thing.Destroy();
 		}
 
-		
 		private void AddPawnToStock(Pawn newPawn)
 		{
 			if (!newPawn.Spawned)
 			{
-				GenSpawn.Spawn(newPawn, this.pawn.Position, this.pawn.Map, WipeMode.Vanish);
+				GenSpawn.Spawn(newPawn, pawn.Position, pawn.Map);
 			}
-			if (newPawn.Faction != this.pawn.Faction)
+			if (newPawn.Faction != pawn.Faction)
 			{
-				newPawn.SetFaction(this.pawn.Faction, null);
+				newPawn.SetFaction(pawn.Faction);
 			}
 			if (newPawn.RaceProps.Humanlike)
 			{
 				newPawn.kindDef = PawnKindDefOf.Slave;
 			}
-			Lord lord = this.pawn.GetLord();
+			Lord lord = pawn.GetLord();
 			if (lord == null)
 			{
-				newPawn.Destroy(DestroyMode.Vanish);
-				Log.Error(string.Concat(new object[]
-				{
-					"Tried to sell pawn ",
-					newPawn,
-					" to ",
-					this.pawn,
-					", but ",
-					this.pawn,
-					" has no lord. Traders without lord can't buy pawns."
-				}), false);
+				newPawn.Destroy();
+				Log.Error("Tried to sell pawn " + newPawn + " to " + pawn + ", but " + pawn + " has no lord. Traders without lord can't buy pawns.");
 				return;
 			}
 			if (newPawn.RaceProps.Humanlike)
 			{
-				this.soldPrisoners.Add(newPawn);
+				soldPrisoners.Add(newPawn);
 			}
 			lord.AddPawn(newPawn);
 		}
 
-		
 		private void AddThingToRandomInventory(Thing thing)
 		{
-			Lord lord = this.pawn.GetLord();
+			Lord lord = pawn.GetLord();
 			IEnumerable<Pawn> source = Enumerable.Empty<Pawn>();
 			if (lord != null)
 			{
-				source = from x in lord.ownedPawns
-				where x.GetTraderCaravanRole() == TraderCaravanRole.Carrier
-				select x;
+				source = lord.ownedPawns.Where((Pawn x) => x.GetTraderCaravanRole() == TraderCaravanRole.Carrier);
 			}
-			if (source.Any<Pawn>())
+			if (source.Any())
 			{
-				if (!source.RandomElement<Pawn>().inventory.innerContainer.TryAdd(thing, true))
+				if (!source.RandomElement().inventory.innerContainer.TryAdd(thing))
 				{
-					thing.Destroy(DestroyMode.Vanish);
-					return;
+					thing.Destroy();
 				}
 			}
-			else if (!this.pawn.inventory.innerContainer.TryAdd(thing, true))
+			else if (!pawn.inventory.innerContainer.TryAdd(thing))
 			{
-				thing.Destroy(DestroyMode.Vanish);
+				thing.Destroy();
 			}
 		}
 
-		
 		private bool ReachableForTrade(Thing thing)
 		{
-			return this.pawn.Map == thing.Map && this.pawn.Map.reachability.CanReach(this.pawn.Position, thing, PathEndMode.Touch, TraverseMode.PassDoors, Danger.Some);
+			if (pawn.Map != thing.Map)
+			{
+				return false;
+			}
+			return pawn.Map.reachability.CanReach(pawn.Position, thing, PathEndMode.Touch, TraverseMode.PassDoors, Danger.Some);
 		}
-
-		
-		private Pawn pawn;
-
-		
-		public TraderKindDef traderKind;
-
-		
-		private List<Pawn> soldPrisoners = new List<Pawn>();
 	}
 }

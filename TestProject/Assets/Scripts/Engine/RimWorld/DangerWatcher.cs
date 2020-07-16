@@ -1,4 +1,3 @@
-﻿using System;
 using System.Linq;
 using Verse;
 using Verse.AI;
@@ -6,30 +5,34 @@ using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class DangerWatcher
 	{
-		
-		
+		private Map map;
+
+		private StoryDanger dangerRatingInt;
+
+		private int lastUpdateTick = -10000;
+
+		private int lastColonistHarmedTick = -10000;
+
+		private const int UpdateInterval = 101;
+
 		public StoryDanger DangerRating
 		{
 			get
 			{
-				if (Find.TickManager.TicksGame > this.lastUpdateTick + 101)
+				if (Find.TickManager.TicksGame > lastUpdateTick + 101)
 				{
-					this.dangerRatingInt = this.CalculateDangerRating();
-					this.lastUpdateTick = Find.TickManager.TicksGame;
+					dangerRatingInt = CalculateDangerRating();
+					lastUpdateTick = Find.TickManager.TicksGame;
 				}
-				return this.dangerRatingInt;
+				return dangerRatingInt;
 			}
 		}
 
-		
 		private StoryDanger CalculateDangerRating()
 		{
-			float num = (from x in this.map.attackTargetsCache.TargetsHostileToColony
-			where this.AffectsStoryDanger(x)
-			select x).Sum(delegate(IAttackTarget t)
+			float num = map.attackTargetsCache.TargetsHostileToColony.Where((IAttackTarget x) => AffectsStoryDanger(x)).Sum(delegate(IAttackTarget t)
 			{
 				Pawn pawn;
 				if ((pawn = (t as Pawn)) != null)
@@ -37,19 +40,13 @@ namespace RimWorld
 					return pawn.kindDef.combatPower;
 				}
 				Building_TurretGun building_TurretGun;
-				if ((building_TurretGun = (t as Building_TurretGun)) != null && building_TurretGun.def.building.IsMortar && !building_TurretGun.IsMannable)
-				{
-					return building_TurretGun.def.building.combatPower;
-				}
-				return 0f;
+				return ((building_TurretGun = (t as Building_TurretGun)) != null && building_TurretGun.def.building.IsMortar && !building_TurretGun.IsMannable) ? building_TurretGun.def.building.combatPower : 0f;
 			});
 			if (num == 0f)
 			{
 				return StoryDanger.None;
 			}
-			int num2 = (from p in this.map.mapPawns.FreeColonistsSpawned
-			where !p.Downed
-			select p).Count<Pawn>();
+			int num2 = map.mapPawns.FreeColonistsSpawned.Where((Pawn p) => !p.Downed).Count();
 			if (num < 150f && num <= (float)num2 * 18f)
 			{
 				return StoryDanger.Low;
@@ -58,11 +55,11 @@ namespace RimWorld
 			{
 				return StoryDanger.High;
 			}
-			if (this.lastColonistHarmedTick > Find.TickManager.TicksGame - 900)
+			if (lastColonistHarmedTick > Find.TickManager.TicksGame - 900)
 			{
 				return StoryDanger.High;
 			}
-			foreach (Lord lord in this.map.lordManager.lords)
+			foreach (Lord lord in map.lordManager.lords)
 			{
 				if (lord.faction.HostileTo(Faction.OfPlayer) && lord.CurLordToil.ForceHighStoryDanger && lord.AnyActivePawn)
 				{
@@ -72,19 +69,16 @@ namespace RimWorld
 			return StoryDanger.Low;
 		}
 
-		
 		public DangerWatcher(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public void Notify_ColonistHarmedExternally()
 		{
-			this.lastColonistHarmedTick = Find.TickManager.TicksGame;
+			lastColonistHarmedTick = Find.TickManager.TicksGame;
 		}
 
-		
 		private bool AffectsStoryDanger(IAttackTarget t)
 		{
 			Pawn pawn = t.Thing as Pawn;
@@ -103,20 +97,5 @@ namespace RimWorld
 			}
 			return GenHostility.IsActiveThreatToPlayer(t);
 		}
-
-		
-		private Map map;
-
-		
-		private StoryDanger dangerRatingInt;
-
-		
-		private int lastUpdateTick = -10000;
-
-		
-		private int lastColonistHarmedTick = -10000;
-
-		
-		private const int UpdateInterval = 101;
 	}
 }

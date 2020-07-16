@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class RoomStatWorker_Wealth : RoomStatWorker
 	{
-		
 		public override float GetScore(Room room)
 		{
 			float num = 0f;
@@ -20,9 +17,9 @@ namespace RimWorld
 					num += (float)thing.stackCount * thing.MarketValue;
 				}
 			}
-			foreach (IntVec3 c in room.Cells)
+			foreach (IntVec3 cell in room.Cells)
 			{
-				num += c.GetTerrain(room.Map).GetStatValueAbstract(StatDefOf.MarketValue, null);
+				num += cell.GetTerrain(room.Map).GetStatValueAbstract(StatDefOf.MarketValue);
 			}
 			return num;
 		}

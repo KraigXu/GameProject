@@ -1,121 +1,115 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public static class ThingDefGenerator_Meat
 	{
-		
 		public static IEnumerable<ThingDef> ImpliedMeatDefs()
 		{
-			foreach (ThingDef thingDef in DefDatabase<ThingDef>.AllDefs.ToList<ThingDef>())
+			foreach (ThingDef item in DefDatabase<ThingDef>.AllDefs.ToList())
 			{
-				if (thingDef.category == ThingCategory.Pawn && thingDef.race.useMeatFrom == null)
+				if (item.category == ThingCategory.Pawn && item.race.useMeatFrom == null)
 				{
-					if (!thingDef.race.IsFlesh)
+					if (!item.race.IsFlesh)
 					{
-						DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingDef.race, "meatDef", "Steel", null, null);
+						DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(item.race, "meatDef", "Steel");
 					}
 					else
 					{
-						ThingDef thingDef2 = new ThingDef();
-						thingDef2.resourceReadoutPriority = ResourceCountPriority.Middle;
-						thingDef2.category = ThingCategory.Item;
-						thingDef2.thingClass = typeof(ThingWithComps);
-						thingDef2.graphicData = new GraphicData();
-						thingDef2.graphicData.graphicClass = typeof(Graphic_StackCount);
-						thingDef2.useHitPoints = true;
-						thingDef2.selectable = true;
-						thingDef2.SetStatBaseValue(StatDefOf.MaxHitPoints, 100f);
-						thingDef2.altitudeLayer = AltitudeLayer.Item;
-						thingDef2.stackLimit = 75;
-						thingDef2.comps.Add(new CompProperties_Forbiddable());
+						ThingDef thingDef = new ThingDef();
+						thingDef.resourceReadoutPriority = ResourceCountPriority.Middle;
+						thingDef.category = ThingCategory.Item;
+						thingDef.thingClass = typeof(ThingWithComps);
+						thingDef.graphicData = new GraphicData();
+						thingDef.graphicData.graphicClass = typeof(Graphic_StackCount);
+						thingDef.useHitPoints = true;
+						thingDef.selectable = true;
+						thingDef.SetStatBaseValue(StatDefOf.MaxHitPoints, 100f);
+						thingDef.altitudeLayer = AltitudeLayer.Item;
+						thingDef.stackLimit = 75;
+						thingDef.comps.Add(new CompProperties_Forbiddable());
 						CompProperties_Rottable compProperties_Rottable = new CompProperties_Rottable();
 						compProperties_Rottable.daysToRotStart = 2f;
 						compProperties_Rottable.rotDestroys = true;
-						thingDef2.comps.Add(compProperties_Rottable);
-						thingDef2.tickerType = TickerType.Rare;
-						thingDef2.SetStatBaseValue(StatDefOf.Beauty, -4f);
-						thingDef2.alwaysHaulable = true;
-						thingDef2.rotatable = false;
-						thingDef2.pathCost = 15;
-						thingDef2.drawGUIOverlay = true;
-						thingDef2.socialPropernessMatters = true;
-						thingDef2.modContentPack = thingDef.modContentPack;
-						thingDef2.category = ThingCategory.Item;
-						if (thingDef.race.Humanlike)
+						thingDef.comps.Add(compProperties_Rottable);
+						thingDef.tickerType = TickerType.Rare;
+						thingDef.SetStatBaseValue(StatDefOf.Beauty, -4f);
+						thingDef.alwaysHaulable = true;
+						thingDef.rotatable = false;
+						thingDef.pathCost = 15;
+						thingDef.drawGUIOverlay = true;
+						thingDef.socialPropernessMatters = true;
+						thingDef.modContentPack = item.modContentPack;
+						thingDef.category = ThingCategory.Item;
+						if (item.race.Humanlike)
 						{
-							thingDef2.description = "MeatHumanDesc".Translate(thingDef.label);
+							thingDef.description = "MeatHumanDesc".Translate(item.label);
 						}
-						else if (thingDef.race.FleshType == FleshTypeDefOf.Insectoid)
+						else if (item.race.FleshType == FleshTypeDefOf.Insectoid)
 						{
-							thingDef2.description = "MeatInsectDesc".Translate(thingDef.label);
-						}
-						else
-						{
-							thingDef2.description = "MeatDesc".Translate(thingDef.label);
-						}
-						thingDef2.useHitPoints = true;
-						thingDef2.healthAffectsPrice = false;
-						thingDef2.SetStatBaseValue(StatDefOf.MaxHitPoints, 60f);
-						thingDef2.SetStatBaseValue(StatDefOf.DeteriorationRate, 6f);
-						thingDef2.SetStatBaseValue(StatDefOf.Mass, 0.03f);
-						thingDef2.SetStatBaseValue(StatDefOf.Flammability, 0.5f);
-						thingDef2.SetStatBaseValue(StatDefOf.Nutrition, 0.05f);
-						thingDef2.SetStatBaseValue(StatDefOf.FoodPoisonChanceFixedHuman, 0.02f);
-						thingDef2.BaseMarketValue = thingDef.race.meatMarketValue;
-						if (thingDef2.thingCategories == null)
-						{
-							thingDef2.thingCategories = new List<ThingCategoryDef>();
-						}
-						DirectXmlCrossRefLoader.RegisterListWantsCrossRef<ThingCategoryDef>(thingDef2.thingCategories, "MeatRaw", thingDef2, null);
-						thingDef2.ingestible = new IngestibleProperties();
-						thingDef2.ingestible.parent = thingDef2;
-						thingDef2.ingestible.foodType = FoodTypeFlags.Meat;
-						thingDef2.ingestible.preferability = FoodPreferability.RawBad;
-						DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingDef2.ingestible, "tasteThought", ThoughtDefOf.AteRawFood.defName, null, null);
-						thingDef2.ingestible.ingestEffect = EffecterDefOf.EatMeat;
-						thingDef2.ingestible.ingestSound = SoundDefOf.RawMeat_Eat;
-						thingDef2.ingestible.specialThoughtDirect = thingDef.race.FleshType.ateDirect;
-						thingDef2.ingestible.specialThoughtAsIngredient = thingDef.race.FleshType.ateAsIngredient;
-						thingDef2.graphicData.color = thingDef.race.meatColor;
-						if (thingDef.race.Humanlike)
-						{
-							thingDef2.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Human";
-						}
-						else if (thingDef.race.FleshType == FleshTypeDefOf.Insectoid)
-						{
-							thingDef2.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Insect";
-						}
-						else if (thingDef.race.baseBodySize < 0.7f)
-						{
-							thingDef2.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Small";
+							thingDef.description = "MeatInsectDesc".Translate(item.label);
 						}
 						else
 						{
-							thingDef2.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Big";
+							thingDef.description = "MeatDesc".Translate(item.label);
 						}
-						thingDef2.defName = "Meat_" + thingDef.defName;
-						if (thingDef.race.meatLabel.NullOrEmpty())
+						thingDef.useHitPoints = true;
+						thingDef.healthAffectsPrice = false;
+						thingDef.SetStatBaseValue(StatDefOf.MaxHitPoints, 60f);
+						thingDef.SetStatBaseValue(StatDefOf.DeteriorationRate, 6f);
+						thingDef.SetStatBaseValue(StatDefOf.Mass, 0.03f);
+						thingDef.SetStatBaseValue(StatDefOf.Flammability, 0.5f);
+						thingDef.SetStatBaseValue(StatDefOf.Nutrition, 0.05f);
+						thingDef.SetStatBaseValue(StatDefOf.FoodPoisonChanceFixedHuman, 0.02f);
+						thingDef.BaseMarketValue = item.race.meatMarketValue;
+						if (thingDef.thingCategories == null)
 						{
-							thingDef2.label = "MeatLabel".Translate(thingDef.label);
+							thingDef.thingCategories = new List<ThingCategoryDef>();
+						}
+						DirectXmlCrossRefLoader.RegisterListWantsCrossRef(thingDef.thingCategories, "MeatRaw", thingDef);
+						thingDef.ingestible = new IngestibleProperties();
+						thingDef.ingestible.parent = thingDef;
+						thingDef.ingestible.foodType = FoodTypeFlags.Meat;
+						thingDef.ingestible.preferability = FoodPreferability.RawBad;
+						DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(thingDef.ingestible, "tasteThought", ThoughtDefOf.AteRawFood.defName);
+						thingDef.ingestible.ingestEffect = EffecterDefOf.EatMeat;
+						thingDef.ingestible.ingestSound = SoundDefOf.RawMeat_Eat;
+						thingDef.ingestible.specialThoughtDirect = item.race.FleshType.ateDirect;
+						thingDef.ingestible.specialThoughtAsIngredient = item.race.FleshType.ateAsIngredient;
+						thingDef.graphicData.color = item.race.meatColor;
+						if (item.race.Humanlike)
+						{
+							thingDef.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Human";
+						}
+						else if (item.race.FleshType == FleshTypeDefOf.Insectoid)
+						{
+							thingDef.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Insect";
+						}
+						else if (item.race.baseBodySize < 0.7f)
+						{
+							thingDef.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Small";
 						}
 						else
 						{
-							thingDef2.label = thingDef.race.meatLabel;
+							thingDef.graphicData.texPath = "Things/Item/Resource/MeatFoodRaw/Meat_Big";
 						}
-						thingDef2.ingestible.sourceDef = thingDef;
-						thingDef.race.meatDef = thingDef2;
-						yield return thingDef2;
+						thingDef.defName = "Meat_" + item.defName;
+						if (item.race.meatLabel.NullOrEmpty())
+						{
+							thingDef.label = "MeatLabel".Translate(item.label);
+						}
+						else
+						{
+							thingDef.label = item.race.meatLabel;
+						}
+						thingDef.ingestible.sourceDef = item;
+						item.race.meatDef = thingDef;
+						yield return thingDef;
 					}
 				}
 			}
-			List<ThingDef>.Enumerator enumerator = default(List<ThingDef>.Enumerator);
-			yield break;
-			yield break;
 		}
 	}
 }

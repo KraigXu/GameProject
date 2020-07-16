@@ -1,142 +1,139 @@
-﻿using System;
 using RimWorld.Planet;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public sealed class ExitMapGrid : ICellBoolGiver
 	{
-		
-		
+		private Map map;
+
+		private bool dirty = true;
+
+		private BoolGrid exitMapGrid;
+
+		private CellBoolDrawer drawerInt;
+
+		private const int MaxDistToEdge = 2;
+
 		public bool MapUsesExitGrid
 		{
 			get
 			{
-				if (this.map.IsPlayerHome)
+				if (map.IsPlayerHome)
 				{
 					return false;
 				}
-				CaravansBattlefield caravansBattlefield = this.map.Parent as CaravansBattlefield;
+				CaravansBattlefield caravansBattlefield = map.Parent as CaravansBattlefield;
 				if (caravansBattlefield != null && caravansBattlefield.def.blockExitGridUntilBattleIsWon && !caravansBattlefield.WonBattle)
 				{
 					return false;
 				}
-				FormCaravanComp component = this.map.Parent.GetComponent<FormCaravanComp>();
-				return component == null || !component.CanFormOrReformCaravanNow;
+				FormCaravanComp component = map.Parent.GetComponent<FormCaravanComp>();
+				if (component != null && component.CanFormOrReformCaravanNow)
+				{
+					return false;
+				}
+				return true;
 			}
 		}
 
-		
-		
 		public CellBoolDrawer Drawer
 		{
 			get
 			{
-				if (!this.MapUsesExitGrid)
+				if (!MapUsesExitGrid)
 				{
 					return null;
 				}
-				if (this.dirty)
+				if (dirty)
 				{
-					this.Rebuild();
+					Rebuild();
 				}
-				if (this.drawerInt == null)
+				if (drawerInt == null)
 				{
-					this.drawerInt = new CellBoolDrawer(this, this.map.Size.x, this.map.Size.z, 3690, 0.33f);
+					drawerInt = new CellBoolDrawer(this, map.Size.x, map.Size.z, 3690);
 				}
-				return this.drawerInt;
+				return drawerInt;
 			}
 		}
 
-		
-		
 		public BoolGrid Grid
 		{
 			get
 			{
-				if (!this.MapUsesExitGrid)
+				if (!MapUsesExitGrid)
 				{
 					return null;
 				}
-				if (this.dirty)
+				if (dirty)
 				{
-					this.Rebuild();
+					Rebuild();
 				}
-				return this.exitMapGrid;
+				return exitMapGrid;
 			}
 		}
 
-		
-		
-		public Color Color
-		{
-			get
-			{
-				return new Color(0.35f, 1f, 0.35f, 0.12f);
-			}
-		}
+		public Color Color => new Color(0.35f, 1f, 0.35f, 0.12f);
 
-		
 		public ExitMapGrid(Map map)
 		{
 			this.map = map;
 		}
 
-		
 		public bool GetCellBool(int index)
 		{
-			return this.Grid[index] && !this.map.fogGrid.IsFogged(index);
+			if (Grid[index])
+			{
+				return !map.fogGrid.IsFogged(index);
+			}
+			return false;
 		}
 
-		
 		public Color GetCellExtraColor(int index)
 		{
 			return Color.white;
 		}
 
-		
 		public bool IsExitCell(IntVec3 c)
 		{
-			return this.MapUsesExitGrid && this.Grid[c];
+			if (!MapUsesExitGrid)
+			{
+				return false;
+			}
+			return Grid[c];
 		}
 
-		
 		public void ExitMapGridUpdate()
 		{
-			if (!this.MapUsesExitGrid)
+			if (MapUsesExitGrid)
 			{
-				return;
+				Drawer.MarkForDraw();
+				Drawer.CellBoolDrawerUpdate();
 			}
-			this.Drawer.MarkForDraw();
-			this.Drawer.CellBoolDrawerUpdate();
 		}
 
-		
 		public void Notify_LOSBlockerSpawned()
 		{
-			this.dirty = true;
+			dirty = true;
 		}
 
-		
 		public void Notify_LOSBlockerDespawned()
 		{
-			this.dirty = true;
+			dirty = true;
 		}
 
-		
 		private void Rebuild()
 		{
-			this.dirty = false;
-			if (this.exitMapGrid == null)
+			dirty = false;
+			if (exitMapGrid == null)
 			{
-				this.exitMapGrid = new BoolGrid(this.map);
+				exitMapGrid = new BoolGrid(map);
 			}
 			else
 			{
-				this.exitMapGrid.Clear();
+				exitMapGrid.Clear();
 			}
-			CellRect cellRect = CellRect.WholeMap(this.map);
+			CellRect cellRect = CellRect.WholeMap(map);
 			for (int i = cellRect.minZ; i <= cellRect.maxZ; i++)
 			{
 				for (int j = cellRect.minX; j <= cellRect.maxX; j++)
@@ -146,22 +143,21 @@ namespace Verse
 						j = cellRect.maxX - 2 + 1;
 					}
 					IntVec3 intVec = new IntVec3(j, 0, i);
-					if (this.IsGoodExitCell(intVec))
+					if (IsGoodExitCell(intVec))
 					{
-						this.exitMapGrid[intVec] = true;
+						exitMapGrid[intVec] = true;
 					}
 				}
 			}
-			if (this.drawerInt != null)
+			if (drawerInt != null)
 			{
-				this.drawerInt.SetDirty();
+				drawerInt.SetDirty();
 			}
 		}
 
-		
 		private bool IsGoodExitCell(IntVec3 cell)
 		{
-			if (!cell.CanBeSeenOver(this.map))
+			if (!cell.CanBeSeenOver(map))
 			{
 				return false;
 			}
@@ -169,27 +165,12 @@ namespace Verse
 			for (int i = 0; i < num; i++)
 			{
 				IntVec3 intVec = cell + GenRadial.RadialPattern[i];
-				if (intVec.InBounds(this.map) && intVec.OnEdge(this.map) && intVec.CanBeSeenOverFast(this.map) && GenSight.LineOfSight(cell, intVec, this.map, false, null, 0, 0))
+				if (intVec.InBounds(map) && intVec.OnEdge(map) && intVec.CanBeSeenOverFast(map) && GenSight.LineOfSight(cell, intVec, map))
 				{
 					return true;
 				}
 			}
 			return false;
 		}
-
-		
-		private Map map;
-
-		
-		private bool dirty = true;
-
-		
-		private BoolGrid exitMapGrid;
-
-		
-		private CellBoolDrawer drawerInt;
-
-		
-		private const int MaxDistToEdge = 2;
 	}
 }

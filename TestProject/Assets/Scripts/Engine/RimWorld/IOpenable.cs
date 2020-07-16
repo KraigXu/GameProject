@@ -1,15 +1,12 @@
-﻿using System;
-
 namespace RimWorld
 {
-	
 	public interface IOpenable
 	{
-		
-		
-		bool CanOpen { get; }
+		bool CanOpen
+		{
+			get;
+		}
 
-		
 		void Open();
 	}
 }

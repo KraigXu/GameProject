@@ -1,24 +1,19 @@
-﻿using System;
 using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public static class RegionTypeUtility
 	{
-		
 		public static bool IsOneCellRegion(this RegionType regionType)
 		{
 			return regionType == RegionType.Portal;
 		}
 
-		
 		public static bool AllowsMultipleRegionsPerRoom(this RegionType regionType)
 		{
 			return regionType != RegionType.Portal;
 		}
 
-		
 		public static RegionType GetExpectedRegionType(this IntVec3 c, Map map)
 		{
 			if (!c.InBounds(map))
@@ -44,21 +39,14 @@ namespace Verse
 			return RegionType.ImpassableFreeAirExchange;
 		}
 
-		
 		public static RegionType GetRegionType(this IntVec3 c, Map map)
 		{
-			Region region = c.GetRegion(map, RegionType.Set_All);
-			if (region == null)
-			{
-				return RegionType.None;
-			}
-			return region.type;
+			return c.GetRegion(map, RegionType.Set_All)?.type ?? RegionType.None;
 		}
 
-		
 		public static bool Passable(this RegionType regionType)
 		{
-			return (regionType & RegionType.Set_Passable) > RegionType.None;
+			return (regionType & RegionType.Set_Passable) != 0;
 		}
 	}
 }

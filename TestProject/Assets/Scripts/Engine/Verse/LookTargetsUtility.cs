@@ -1,35 +1,22 @@
-﻿using System;
 using RimWorld.Planet;
 
 namespace Verse
 {
-	
 	public static class LookTargetsUtility
 	{
-		
 		public static bool IsValid(this LookTargets lookTargets)
 		{
-			return lookTargets != null && lookTargets.IsValid;
+			return lookTargets?.IsValid ?? false;
 		}
 
-		
 		public static GlobalTargetInfo TryGetPrimaryTarget(this LookTargets lookTargets)
 		{
-			if (lookTargets == null)
-			{
-				return GlobalTargetInfo.Invalid;
-			}
-			return lookTargets.PrimaryTarget;
+			return lookTargets?.PrimaryTarget ?? GlobalTargetInfo.Invalid;
 		}
 
-		
 		public static void TryHighlight(this LookTargets lookTargets, bool arrow = true, bool colonistBar = true, bool circleOverlay = false)
 		{
-			if (lookTargets == null)
-			{
-				return;
-			}
-			lookTargets.Highlight(arrow, colonistBar, circleOverlay);
+			lookTargets?.Highlight(arrow, colonistBar, circleOverlay);
 		}
 	}
 }

@@ -1,15 +1,12 @@
-﻿using System;
 using RimWorld.Planet;
 
 namespace RimWorld
 {
-	
 	public class WorldObjectCompProperties_ItemStashContents : WorldObjectCompProperties
 	{
-		
 		public WorldObjectCompProperties_ItemStashContents()
 		{
-			this.compClass = typeof(ItemStashContentsComp);
+			compClass = typeof(ItemStashContentsComp);
 		}
 	}
 }

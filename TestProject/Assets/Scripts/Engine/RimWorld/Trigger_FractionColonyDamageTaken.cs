@@ -1,59 +1,44 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 using Verse.AI.Group;
 
 namespace RimWorld
 {
-	
 	public class Trigger_FractionColonyDamageTaken : Trigger
 	{
-		
-		
-		private TriggerData_FractionColonyDamageTaken Data
-		{
-			get
-			{
-				return (TriggerData_FractionColonyDamageTaken)this.data;
-			}
-		}
+		private float desiredColonyDamageFraction;
 
-		
-		public Trigger_FractionColonyDamageTaken(float desiredColonyDamageFraction, float minDamage = 3.40282347E+38f)
+		private float minDamage;
+
+		private TriggerData_FractionColonyDamageTaken Data => (TriggerData_FractionColonyDamageTaken)data;
+
+		public Trigger_FractionColonyDamageTaken(float desiredColonyDamageFraction, float minDamage = float.MaxValue)
 		{
-			this.data = new TriggerData_FractionColonyDamageTaken();
+			data = new TriggerData_FractionColonyDamageTaken();
 			this.desiredColonyDamageFraction = desiredColonyDamageFraction;
 			this.minDamage = minDamage;
 		}
 
-		
 		public override void SourceToilBecameActive(Transition transition, LordToil previousToil)
 		{
 			if (!transition.sources.Contains(previousToil))
 			{
-				this.Data.startColonyDamage = transition.Map.damageWatcher.DamageTakenEver;
+				Data.startColonyDamage = transition.Map.damageWatcher.DamageTakenEver;
 			}
 		}
 
-		
 		public override bool ActivateOn(Lord lord, TriggerSignal signal)
 		{
 			if (signal.type == TriggerSignalType.Tick)
 			{
-				if (this.data == null || !(this.data is TriggerData_FractionColonyDamageTaken))
+				if (data == null || !(data is TriggerData_FractionColonyDamageTaken))
 				{
 					BackCompatibility.TriggerDataFractionColonyDamageTakenNull(this, lord.Map);
 				}
-				float num = Mathf.Max((float)lord.initialColonyHealthTotal * this.desiredColonyDamageFraction, this.minDamage);
-				return lord.Map.damageWatcher.DamageTakenEver > this.Data.startColonyDamage + num;
+				float num = Mathf.Max((float)lord.initialColonyHealthTotal * desiredColonyDamageFraction, minDamage);
+				return lord.Map.damageWatcher.DamageTakenEver > Data.startColonyDamage + num;
 			}
 			return false;
 		}
-
-		
-		private float desiredColonyDamageFraction;
-
-		
-		private float minDamage;
 	}
 }

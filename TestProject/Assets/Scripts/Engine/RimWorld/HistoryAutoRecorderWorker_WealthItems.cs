@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class HistoryAutoRecorderWorker_WealthItems : HistoryAutoRecorderWorker
 	{
-		
 		public override float PullRecord()
 		{
 			float num = 0f;

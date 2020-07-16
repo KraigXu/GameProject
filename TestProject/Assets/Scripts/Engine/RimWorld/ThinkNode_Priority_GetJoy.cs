@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class ThinkNode_Priority_GetJoy : ThinkNode_Priority
 	{
-		
+		private const int GameStartNoJoyTicks = 5000;
+
 		public override float GetPriority(Pawn pawn)
 		{
 			if (pawn.needs.joy == null)
@@ -36,7 +36,7 @@ namespace RimWorld
 				}
 				return 0f;
 			}
-			else if (timeAssignmentDef == TimeAssignmentDefOf.Joy)
+			if (timeAssignmentDef == TimeAssignmentDefOf.Joy)
 			{
 				if (curLevel < 0.95f)
 				{
@@ -44,7 +44,7 @@ namespace RimWorld
 				}
 				return 0f;
 			}
-			else if (timeAssignmentDef == TimeAssignmentDefOf.Sleep)
+			if (timeAssignmentDef == TimeAssignmentDefOf.Sleep)
 			{
 				if (curLevel < 0.95f)
 				{
@@ -52,17 +52,11 @@ namespace RimWorld
 				}
 				return 0f;
 			}
-			else
+			if (timeAssignmentDef == TimeAssignmentDefOf.Meditate)
 			{
-				if (timeAssignmentDef == TimeAssignmentDefOf.Meditate)
-				{
-					return 0f;
-				}
-				throw new NotImplementedException();
+				return 0f;
 			}
+			throw new NotImplementedException();
 		}
-
-		
-		private const int GameStartNoJoyTicks = 5000;
 	}
 }

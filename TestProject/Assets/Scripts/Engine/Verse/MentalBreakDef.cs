@@ -1,59 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System;
+using System.Collections.Generic;
 using Verse.AI;
 
 namespace Verse
 {
-	
 	public class MentalBreakDef : Def
 	{
-		
-		
+		public Type workerClass = typeof(MentalBreakWorker);
+
+		public MentalStateDef mentalState;
+
+		public float baseCommonality;
+
+		public SimpleCurve commonalityFactorPerPopulationCurve;
+
+		public MentalBreakIntensity intensity;
+
+		public TraitDef requiredTrait;
+
+		private MentalBreakWorker workerInt;
+
 		public MentalBreakWorker Worker
 		{
 			get
 			{
-				if (this.workerInt == null && this.workerClass != null)
+				if (workerInt == null && workerClass != null)
 				{
-					this.workerInt = (MentalBreakWorker)Activator.CreateInstance(this.workerClass);
-					this.workerInt.def = this;
+					workerInt = (MentalBreakWorker)Activator.CreateInstance(workerClass);
+					workerInt.def = this;
 				}
-				return this.workerInt;
+				return workerInt;
 			}
 		}
 
-		
 		public override IEnumerable<string> ConfigErrors()
 		{
-			IEnumerator<string> enumerator = null;
-			if (this.intensity == MentalBreakIntensity.None)
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (intensity == MentalBreakIntensity.None)
 			{
 				yield return "intensity not set";
 			}
-			yield break;
-			yield break;
 		}
-
-		
-		public Type workerClass = typeof(MentalBreakWorker);
-
-		
-		public MentalStateDef mentalState;
-
-		
-		public float baseCommonality;
-
-		
-		public SimpleCurve commonalityFactorPerPopulationCurve;
-
-		
-		public MentalBreakIntensity intensity;
-
-		
-		public TraitDef requiredTrait;
-
-		
-		private MentalBreakWorker workerInt;
 	}
 }

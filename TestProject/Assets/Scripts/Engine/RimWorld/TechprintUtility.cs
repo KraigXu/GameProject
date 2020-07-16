@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +5,9 @@ using Verse;
 
 namespace RimWorld
 {
-	
 	public static class TechprintUtility
 	{
-		
-		public static IEnumerable<ResearchProjectDef> GetResearchProjectsNeedingTechprintsNow(Faction faction, List<ThingDef> alreadyGeneratedTechprints = null, float maxMarketValue = 3.40282347E+38f)
+		public static IEnumerable<ResearchProjectDef> GetResearchProjectsNeedingTechprintsNow(Faction faction, List<ThingDef> alreadyGeneratedTechprints = null, float maxMarketValue = float.MaxValue)
 		{
 			return DefDatabase<ResearchProjectDef>.AllDefsListForReading.Where(delegate(ResearchProjectDef p)
 			{
@@ -26,7 +23,7 @@ namespace RimWorld
 				{
 					return false;
 				}
-				if (maxMarketValue != 3.40282347E+38f && p.Techprint.BaseMarketValue > maxMarketValue)
+				if (maxMarketValue != float.MaxValue && p.Techprint.BaseMarketValue > maxMarketValue)
 				{
 					return false;
 				}
@@ -54,73 +51,65 @@ namespace RimWorld
 			});
 		}
 
-		
 		public static float GetSelectionWeight(ResearchProjectDef project)
 		{
 			return project.techprintCommonality * (project.PrerequisitesCompleted ? 1f : 0.02f);
 		}
 
-		
-		public static bool TryGetTechprintDefToGenerate(Faction faction, out ThingDef result, List<ThingDef> alreadyGeneratedTechprints = null, float maxMarketValue = 3.40282347E+38f)
+		public static bool TryGetTechprintDefToGenerate(Faction faction, out ThingDef result, List<ThingDef> alreadyGeneratedTechprints = null, float maxMarketValue = float.MaxValue)
 		{
-			ResearchProjectDef researchProjectDef;
-			if (!TechprintUtility.GetResearchProjectsNeedingTechprintsNow(faction, alreadyGeneratedTechprints, maxMarketValue).TryRandomElementByWeight(new Func<ResearchProjectDef, float>(TechprintUtility.GetSelectionWeight), out researchProjectDef))
+			if (!GetResearchProjectsNeedingTechprintsNow(faction, alreadyGeneratedTechprints, maxMarketValue).TryRandomElementByWeight(GetSelectionWeight, out ResearchProjectDef result2))
 			{
 				result = null;
 				return false;
 			}
-			result = researchProjectDef.Techprint;
+			result = result2.Techprint;
 			return true;
 		}
 
-		
 		[DebugOutput]
 		public static void TechprintsFromFactions()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.AppendLine("Techprints generated from these factions:");
-			foreach (Faction faction in from fa in Find.FactionManager.AllFactions
-			where fa.def.humanlikeFaction && !fa.def.hidden
-			select fa)
+			foreach (Faction item in Find.FactionManager.AllFactions.Where((Faction fa) => fa.def.humanlikeFaction && !fa.def.hidden))
 			{
-				stringBuilder.AppendLine(faction.Name);
+				stringBuilder.AppendLine(item.Name);
 				for (int i = 0; i < 30; i++)
 				{
-					ThingDef thingDef;
-					if (!TechprintUtility.TryGetTechprintDefToGenerate(faction, out thingDef, null, 3.40282347E+38f))
+					if (!TryGetTechprintDefToGenerate(item, out ThingDef result))
 					{
 						stringBuilder.AppendLine("    none possible");
 						break;
 					}
-					stringBuilder.AppendLine("    " + thingDef.LabelCap);
+					stringBuilder.AppendLine("    " + result.LabelCap);
 				}
 			}
-			Log.Message(stringBuilder.ToString(), false);
+			Log.Message(stringBuilder.ToString());
 		}
 
-		
 		[DebugOutput]
 		public static void TechprintsFromFactionsChances()
 		{
 			List<FloatMenuOption> list = new List<FloatMenuOption>();
-			foreach (Faction localFac2 in from fa in Find.FactionManager.AllFactions
-			where fa.def.humanlikeFaction && !fa.def.hidden
-			select fa)
+			foreach (Faction item in Find.FactionManager.AllFactions.Where((Faction fa) => fa.def.humanlikeFaction && !fa.def.hidden))
 			{
-				Faction localFac = localFac2;
+				Faction localFac = item;
 				list.Add(new FloatMenuOption(localFac.Name + " (" + localFac.def.defName + ")", delegate
 				{
-					List<TableDataGetter<ResearchProjectDef>> list2 = new List<TableDataGetter<ResearchProjectDef>>();
-					list2.Add(new TableDataGetter<ResearchProjectDef>("defName", (ResearchProjectDef d) => d.defName));
-					IEnumerable<ResearchProjectDef> researchProjectsNeedingTechprintsNow = TechprintUtility.GetResearchProjectsNeedingTechprintsNow(localFac, null, float.MaxValue);
-					if (researchProjectsNeedingTechprintsNow.Any<ResearchProjectDef>())
+					List<TableDataGetter<ResearchProjectDef>> list2 = new List<TableDataGetter<ResearchProjectDef>>
 					{
-						float sum = researchProjectsNeedingTechprintsNow.Sum((ResearchProjectDef x) => TechprintUtility.GetSelectionWeight(x));
-						list2.Add(new TableDataGetter<ResearchProjectDef>("chance", (ResearchProjectDef x) => (TechprintUtility.GetSelectionWeight(x) / sum).ToStringPercent()));
-						list2.Add(new TableDataGetter<ResearchProjectDef>("weight", (ResearchProjectDef x) => TechprintUtility.GetSelectionWeight(x).ToString("0.###")));
+						new TableDataGetter<ResearchProjectDef>("defName", (ResearchProjectDef d) => d.defName)
+					};
+					IEnumerable<ResearchProjectDef> researchProjectsNeedingTechprintsNow = GetResearchProjectsNeedingTechprintsNow(localFac);
+					if (researchProjectsNeedingTechprintsNow.Any())
+					{
+						float sum = researchProjectsNeedingTechprintsNow.Sum((ResearchProjectDef x) => GetSelectionWeight(x));
+						list2.Add(new TableDataGetter<ResearchProjectDef>("chance", (ResearchProjectDef x) => (GetSelectionWeight(x) / sum).ToStringPercent()));
+						list2.Add(new TableDataGetter<ResearchProjectDef>("weight", (ResearchProjectDef x) => GetSelectionWeight(x).ToString("0.###")));
 					}
-					DebugTables.MakeTablesDialog<ResearchProjectDef>(researchProjectsNeedingTechprintsNow, list2.ToArray());
-				}, MenuOptionPriority.Default, null, null, 0f, null, null));
+					DebugTables.MakeTablesDialog(researchProjectsNeedingTechprintsNow, list2.ToArray());
+				}));
 			}
 			Find.WindowStack.Add(new FloatMenu(list));
 		}

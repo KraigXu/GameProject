@@ -1,121 +1,88 @@
-﻿using System;
 using UnityEngine;
 
 namespace Verse
 {
-	
 	public class MoteLeaf : Mote
 	{
-		
-		
-		protected override bool EndOfLife
-		{
-			get
-			{
-				return base.AgeSecs >= this.spawnDelay + this.FallTime + base.SolidTime + this.def.mote.fadeOutTime;
-			}
-		}
+		private Vector3 startSpatialPosition;
 
-		
-		
-		private float FallTime
-		{
-			get
-			{
-				return this.startSpatialPosition.y / MoteLeaf.FallSpeed;
-			}
-		}
+		private Vector3 currentSpatialPosition;
 
-		
-		
+		private float spawnDelay;
+
+		private bool front;
+
+		private float treeHeight;
+
+		[TweakValue("Graphics", 0f, 5f)]
+		private static float FallSpeed = 0.5f;
+
+		protected override bool EndOfLife => base.AgeSecs >= spawnDelay + FallTime + base.SolidTime + def.mote.fadeOutTime;
+
+		private float FallTime => startSpatialPosition.y / FallSpeed;
+
 		public override float Alpha
 		{
 			get
 			{
-				float num = base.AgeSecs;
-				if (num <= this.spawnDelay)
+				float ageSecs = base.AgeSecs;
+				if (ageSecs <= spawnDelay)
 				{
 					return 0f;
 				}
-				num -= this.spawnDelay;
-				if (num <= this.def.mote.fadeInTime)
+				ageSecs -= spawnDelay;
+				if (ageSecs <= def.mote.fadeInTime)
 				{
-					if (this.def.mote.fadeInTime > 0f)
+					if (def.mote.fadeInTime > 0f)
 					{
-						return num / this.def.mote.fadeInTime;
+						return ageSecs / def.mote.fadeInTime;
 					}
 					return 1f;
 				}
-				else
+				if (ageSecs <= FallTime + base.SolidTime)
 				{
-					if (num <= this.FallTime + base.SolidTime)
-					{
-						return 1f;
-					}
-					num -= this.FallTime + base.SolidTime;
-					if (num <= this.def.mote.fadeOutTime)
-					{
-						return 1f - Mathf.InverseLerp(0f, this.def.mote.fadeOutTime, num);
-					}
-					num -= this.def.mote.fadeOutTime;
-					return 0f;
+					return 1f;
 				}
+				ageSecs -= FallTime + base.SolidTime;
+				if (ageSecs <= def.mote.fadeOutTime)
+				{
+					return 1f - Mathf.InverseLerp(0f, def.mote.fadeOutTime, ageSecs);
+				}
+				ageSecs -= def.mote.fadeOutTime;
+				return 0f;
 			}
 		}
 
-		
 		public void Initialize(Vector3 position, float spawnDelay, bool front, float treeHeight)
 		{
-			this.startSpatialPosition = position;
+			startSpatialPosition = position;
 			this.spawnDelay = spawnDelay;
 			this.front = front;
 			this.treeHeight = treeHeight;
-			this.TimeInterval(0f);
+			TimeInterval(0f);
 		}
 
-		
 		protected override void TimeInterval(float deltaTime)
 		{
 			base.TimeInterval(deltaTime);
-			if (base.Destroyed)
+			if (!base.Destroyed)
 			{
-				return;
+				float ageSecs = base.AgeSecs;
+				exactPosition = startSpatialPosition;
+				if (ageSecs > spawnDelay)
+				{
+					exactPosition.y -= FallSpeed * (ageSecs - spawnDelay);
+				}
+				exactPosition.y = Mathf.Max(exactPosition.y, 0f);
+				currentSpatialPosition = exactPosition;
+				exactPosition.z += exactPosition.y;
+				exactPosition.y = 0f;
 			}
-			float ageSecs = base.AgeSecs;
-			this.exactPosition = this.startSpatialPosition;
-			if (ageSecs > this.spawnDelay)
-			{
-				this.exactPosition.y = this.exactPosition.y - MoteLeaf.FallSpeed * (ageSecs - this.spawnDelay);
-			}
-			this.exactPosition.y = Mathf.Max(this.exactPosition.y, 0f);
-			this.currentSpatialPosition = this.exactPosition;
-			this.exactPosition.z = this.exactPosition.z + this.exactPosition.y;
-			this.exactPosition.y = 0f;
 		}
 
-		
 		public override void Draw()
 		{
-			base.Draw(this.front ? (this.def.altitudeLayer.AltitudeFor() + 0.1f * GenMath.InverseLerp(0f, this.treeHeight, this.currentSpatialPosition.y) * 2f) : this.def.altitudeLayer.AltitudeFor());
+			Draw(front ? (def.altitudeLayer.AltitudeFor() + 0.1f * GenMath.InverseLerp(0f, treeHeight, currentSpatialPosition.y) * 2f) : def.altitudeLayer.AltitudeFor());
 		}
-
-		
-		private Vector3 startSpatialPosition;
-
-		
-		private Vector3 currentSpatialPosition;
-
-		
-		private float spawnDelay;
-
-		
-		private bool front;
-
-		
-		private float treeHeight;
-
-		
-		[TweakValue("Graphics", 0f, 5f)]
-		private static float FallSpeed = 0.5f;
 	}
 }

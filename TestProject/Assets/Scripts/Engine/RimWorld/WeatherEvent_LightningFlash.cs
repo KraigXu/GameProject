@@ -1,108 +1,62 @@
-﻿using System;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class WeatherEvent_LightningFlash : WeatherEvent
 	{
-		
-		
-		public override bool Expired
-		{
-			get
-			{
-				return this.age > this.duration;
-			}
-		}
+		private int duration;
 
-		
-		
-		public override SkyTarget SkyTarget
-		{
-			get
-			{
-				return new SkyTarget(1f, WeatherEvent_LightningFlash.LightningFlashColors, 1f, 1f);
-			}
-		}
+		private Vector2 shadowVector;
 
-		
-		
-		public override Vector2? OverrideShadowVector
-		{
-			get
-			{
-				return new Vector2?(this.shadowVector);
-			}
-		}
+		private int age;
 
-		
-		
-		public override float SkyTargetLerpFactor
-		{
-			get
-			{
-				return this.LightningBrightness;
-			}
-		}
+		private const int FlashFadeInTicks = 3;
 
-		
-		
+		private const int MinFlashDuration = 15;
+
+		private const int MaxFlashDuration = 60;
+
+		private const float FlashShadowDistance = 5f;
+
+		private static readonly SkyColorSet LightningFlashColors = new SkyColorSet(new Color(0.9f, 0.95f, 1f), new Color(40f / 51f, 0.8235294f, 72f / 85f), new Color(0.9f, 0.95f, 1f), 1.15f);
+
+		public override bool Expired => age > duration;
+
+		public override SkyTarget SkyTarget => new SkyTarget(1f, LightningFlashColors, 1f, 1f);
+
+		public override Vector2? OverrideShadowVector => shadowVector;
+
+		public override float SkyTargetLerpFactor => LightningBrightness;
+
 		protected float LightningBrightness
 		{
 			get
 			{
-				if (this.age <= 3)
+				if (age <= 3)
 				{
-					return (float)this.age / 3f;
+					return (float)age / 3f;
 				}
-				return 1f - (float)this.age / (float)this.duration;
+				return 1f - (float)age / (float)duration;
 			}
 		}
 
-		
-		public WeatherEvent_LightningFlash(Map map) : base(map)
+		public WeatherEvent_LightningFlash(Map map)
+			: base(map)
 		{
-			this.duration = Rand.Range(15, 60);
-			this.shadowVector = new Vector2(Rand.Range(-5f, 5f), Rand.Range(-5f, 0f));
+			duration = Rand.Range(15, 60);
+			shadowVector = new Vector2(Rand.Range(-5f, 5f), Rand.Range(-5f, 0f));
 		}
 
-		
 		public override void FireEvent()
 		{
-			SoundDefOf.Thunder_OffMap.PlayOneShotOnCamera(this.map);
+			SoundDefOf.Thunder_OffMap.PlayOneShotOnCamera(map);
 		}
 
-		
 		public override void WeatherEventTick()
 		{
-			this.age++;
+			age++;
 		}
-
-		
-		private int duration;
-
-		
-		private Vector2 shadowVector;
-
-		
-		private int age;
-
-		
-		private const int FlashFadeInTicks = 3;
-
-		
-		private const int MinFlashDuration = 15;
-
-		
-		private const int MaxFlashDuration = 60;
-
-		
-		private const float FlashShadowDistance = 5f;
-
-		
-		private static readonly SkyColorSet LightningFlashColors = new SkyColorSet(new Color(0.9f, 0.95f, 1f), new Color(0.784313738f, 0.8235294f, 0.847058833f), new Color(0.9f, 0.95f, 1f), 1.15f);
 	}
 }

@@ -1,51 +1,45 @@
-﻿using System;
+using System;
 using UnityEngine;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public abstract class Page : Window
 	{
-		
-		
-		public override Vector2 InitialSize
-		{
-			get
-			{
-				return Page.StandardSize;
-			}
-		}
+		public Page prev;
 
-		
-		
-		public virtual string PageTitle
-		{
-			get
-			{
-				return null;
-			}
-		}
+		public Page next;
 
-		
+		public Action nextAct;
+
+		public static readonly Vector2 StandardSize = new Vector2(1020f, 764f);
+
+		public const float TitleAreaHeight = 45f;
+
+		public const float BottomButHeight = 38f;
+
+		protected static readonly Vector2 BottomButSize = new Vector2(150f, 38f);
+
+		public override Vector2 InitialSize => StandardSize;
+
+		public virtual string PageTitle => null;
+
 		public Page()
 		{
-			this.forcePause = true;
-			this.absorbInputAroundWindow = true;
-			this.closeOnAccept = false;
-			this.closeOnCancel = false;
-			this.forceCatchAcceptAndCancelEventEvenIfUnfocused = true;
+			forcePause = true;
+			absorbInputAroundWindow = true;
+			closeOnAccept = false;
+			closeOnCancel = false;
+			forceCatchAcceptAndCancelEventEvenIfUnfocused = true;
 		}
 
-		
 		protected void DrawPageTitle(Rect rect)
 		{
 			Text.Font = GameFont.Medium;
-			Widgets.Label(new Rect(0f, 0f, rect.width, 45f), this.PageTitle);
+			Widgets.Label(new Rect(0f, 0f, rect.width, 45f), PageTitle);
 			Text.Font = GameFont.Small;
 		}
 
-		
 		protected Rect GetMainRect(Rect rect, float extraTopSpace = 0f, bool ignoreTitle = false)
 		{
 			float num = 0f;
@@ -56,15 +50,14 @@ namespace RimWorld
 			return new Rect(0f, num, rect.width, rect.height - 38f - num - 17f);
 		}
 
-		
 		protected void DoBottomButtons(Rect rect, string nextLabel = null, string midLabel = null, Action midAct = null, bool showNext = true, bool doNextOnKeypress = true)
 		{
 			float y = rect.y + rect.height - 38f;
 			Text.Font = GameFont.Small;
 			string label = "Back".Translate();
-			if ((Widgets.ButtonText(new Rect(rect.x, y, Page.BottomButSize.x, Page.BottomButSize.y), label, true, true, true) || KeyBindingDefOf.Cancel.KeyDownEvent) && this.CanDoBack())
+			if ((Widgets.ButtonText(new Rect(rect.x, y, BottomButSize.x, BottomButSize.y), label) || KeyBindingDefOf.Cancel.KeyDownEvent) && CanDoBack())
 			{
-				this.DoBack();
+				DoBack();
 			}
 			if (showNext)
 			{
@@ -72,119 +65,90 @@ namespace RimWorld
 				{
 					nextLabel = "Next".Translate();
 				}
-				Rect rect2 = new Rect(rect.x + rect.width - Page.BottomButSize.x, y, Page.BottomButSize.x, Page.BottomButSize.y);
-				if ((Widgets.ButtonText(rect2, nextLabel, true, true, true) || (doNextOnKeypress && KeyBindingDefOf.Accept.KeyDownEvent)) && this.CanDoNext())
+				Rect rect2 = new Rect(rect.x + rect.width - BottomButSize.x, y, BottomButSize.x, BottomButSize.y);
+				if ((Widgets.ButtonText(rect2, nextLabel) || (doNextOnKeypress && KeyBindingDefOf.Accept.KeyDownEvent)) && CanDoNext())
 				{
-					this.DoNext();
+					DoNext();
 				}
 				UIHighlighter.HighlightOpportunity(rect2, "NextPage");
 			}
-			if (midAct != null && Widgets.ButtonText(new Rect(rect.x + rect.width / 2f - Page.BottomButSize.x / 2f, y, Page.BottomButSize.x, Page.BottomButSize.y), midLabel, true, true, true))
+			if (midAct != null && Widgets.ButtonText(new Rect(rect.x + rect.width / 2f - BottomButSize.x / 2f, y, BottomButSize.x, BottomButSize.y), midLabel))
 			{
 				midAct();
 			}
 		}
 
-		
 		protected virtual bool CanDoBack()
 		{
-			return !TutorSystem.TutorialMode || TutorSystem.AllowAction("GotoPrevPage");
+			if (TutorSystem.TutorialMode)
+			{
+				return TutorSystem.AllowAction("GotoPrevPage");
+			}
+			return true;
 		}
 
-		
 		protected virtual bool CanDoNext()
 		{
-			return !TutorSystem.TutorialMode || TutorSystem.AllowAction("GotoNextPage");
+			if (TutorSystem.TutorialMode)
+			{
+				return TutorSystem.AllowAction("GotoNextPage");
+			}
+			return true;
 		}
 
-		
 		protected virtual void DoNext()
 		{
-			if (this.next != null)
+			if (next != null)
 			{
-				Find.WindowStack.Add(this.next);
+				Find.WindowStack.Add(next);
 			}
-			if (this.nextAct != null)
+			if (nextAct != null)
 			{
-				this.nextAct();
+				nextAct();
 			}
 			TutorSystem.Notify_Event("PageClosed");
 			TutorSystem.Notify_Event("GoToNextPage");
-			this.Close(true);
+			Close();
 		}
 
-		
 		protected virtual void DoBack()
 		{
 			TutorSystem.Notify_Event("PageClosed");
 			TutorSystem.Notify_Event("GoToPrevPage");
-			if (this.prev != null)
+			if (prev != null)
 			{
-				Find.WindowStack.Add(this.prev);
+				Find.WindowStack.Add(prev);
 			}
-			this.Close(true);
+			Close();
 		}
 
-		
 		public override void OnCancelKeyPressed()
 		{
-			if (!this.closeOnCancel)
+			if (closeOnCancel && (Find.World == null || !Find.WorldRoutePlanner.Active))
 			{
-				return;
+				if (CanDoBack())
+				{
+					DoBack();
+				}
+				else
+				{
+					Close();
+				}
+				Event.current.Use();
+				base.OnCancelKeyPressed();
 			}
-			if (Find.World != null && Find.WorldRoutePlanner.Active)
-			{
-				return;
-			}
-			if (this.CanDoBack())
-			{
-				this.DoBack();
-			}
-			else
-			{
-				this.Close(true);
-			}
-			Event.current.Use();
-			base.OnCancelKeyPressed();
 		}
 
-		
 		public override void OnAcceptKeyPressed()
 		{
-			if (!this.closeOnAccept)
+			if (closeOnAccept && (Find.World == null || !Find.WorldRoutePlanner.Active))
 			{
-				return;
+				if (CanDoNext())
+				{
+					DoNext();
+				}
+				Event.current.Use();
 			}
-			if (Find.World != null && Find.WorldRoutePlanner.Active)
-			{
-				return;
-			}
-			if (this.CanDoNext())
-			{
-				this.DoNext();
-			}
-			Event.current.Use();
 		}
-
-		
-		public Page prev;
-
-		
-		public Page next;
-
-		
-		public Action nextAct;
-
-		
-		public static readonly Vector2 StandardSize = new Vector2(1020f, 764f);
-
-		
-		public const float TitleAreaHeight = 45f;
-
-		
-		public const float BottomButHeight = 38f;
-
-		
-		protected static readonly Vector2 BottomButSize = new Vector2(150f, 38f);
 	}
 }

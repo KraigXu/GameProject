@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,70 +7,52 @@ using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class CompUsable : ThingComp
 	{
-		
-		
-		public CompProperties_Usable Props
-		{
-			get
-			{
-				return (CompProperties_Usable)this.props;
-			}
-		}
+		public CompProperties_Usable Props => (CompProperties_Usable)props;
 
-		
 		protected virtual string FloatMenuOptionLabel(Pawn pawn)
 		{
-			return this.Props.useLabel;
+			return Props.useLabel;
 		}
 
-		
 		public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn myPawn)
 		{
-			string text;
-			if (!this.CanBeUsedBy(myPawn, out text))
+			if (!CanBeUsedBy(myPawn, out string failReason))
 			{
-				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + ((text != null) ? (" (" + text + ")") : ""), null, MenuOptionPriority.Default, null, null, 0f, null, null);
+				yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + ((failReason != null) ? (" (" + failReason + ")") : ""), null);
 			}
-			else if (!myPawn.CanReach(this.parent, PathEndMode.Touch, Danger.Deadly, false, TraverseMode.ByPawn))
+			else if (!myPawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly))
 			{
-				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + " (" + "NoPath".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+				yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + " (" + "NoPath".Translate() + ")", null);
 			}
-			else if (!myPawn.CanReserve(this.parent, 1, -1, null, false))
+			else if (!myPawn.CanReserve(parent))
 			{
-				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + " (" + "Reserved".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+				yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + " (" + "Reserved".Translate() + ")", null);
 			}
 			else if (!myPawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
 			{
-				yield return new FloatMenuOption(this.FloatMenuOptionLabel(myPawn) + " (" + "Incapable".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null);
+				yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn) + " (" + "Incapable".Translate() + ")", null);
 			}
 			else
 			{
-				FloatMenuOption floatMenuOption = new FloatMenuOption(this.FloatMenuOptionLabel(myPawn), delegate
+				yield return new FloatMenuOption(FloatMenuOptionLabel(myPawn), delegate
 				{
-					if (myPawn.CanReserveAndReach(this.parent, PathEndMode.Touch, Danger.Deadly, 1, -1, null, false))
+					if (myPawn.CanReserveAndReach(parent, PathEndMode.Touch, Danger.Deadly))
 					{
-						IEnumerator<CompUseEffect> enumerator = this.parent.GetComps<CompUseEffect>().GetEnumerator();
+						foreach (CompUseEffect comp in parent.GetComps<CompUseEffect>())
 						{
-							while (enumerator.MoveNext())
+							if (comp.SelectedUseOption(myPawn))
 							{
-								if (enumerator.Current.SelectedUseOption(myPawn))
-								{
-									return;
-								}
+								return;
 							}
 						}
-						this.TryStartUseJob(myPawn, LocalTargetInfo.Invalid);
+						TryStartUseJob(myPawn, LocalTargetInfo.Invalid);
 					}
-				}, MenuOptionPriority.Default, null, null, 0f, null, null);
-				
+				});
 			}
-			yield break;
 		}
 
-		
 		public virtual void TryStartUseJob(Pawn pawn, LocalTargetInfo extraTarget)
 		{
 			if (pawn.CanReserveAndReach(parent, PathEndMode.Touch, Danger.Deadly) && CanBeUsedBy(pawn, out string _))
@@ -105,33 +87,29 @@ namespace RimWorld
 			}
 		}
 
-		
 		public void UsedBy(Pawn p)
 		{
-			string text;
-			if (!this.CanBeUsedBy(p, out text))
+			if (CanBeUsedBy(p, out string _))
 			{
-				return;
-			}
-			foreach (CompUseEffect compUseEffect in from x in this.parent.GetComps<CompUseEffect>()
-			orderby x.OrderPriority descending
-			select x)
-			{
-				try
+				foreach (CompUseEffect item in from x in parent.GetComps<CompUseEffect>()
+					orderby x.OrderPriority descending
+					select x)
 				{
-					compUseEffect.DoEffect(p);
-				}
-				catch (Exception arg)
-				{
-					Log.Error("Error in CompUseEffect: " + arg, false);
+					try
+					{
+						item.DoEffect(p);
+					}
+					catch (Exception arg)
+					{
+						Log.Error("Error in CompUseEffect: " + arg);
+					}
 				}
 			}
 		}
 
-		
 		private bool CanBeUsedBy(Pawn p, out string failReason)
 		{
-			List<ThingComp> allComps = this.parent.AllComps;
+			List<ThingComp> allComps = parent.AllComps;
 			for (int i = 0; i < allComps.Count; i++)
 			{
 				CompUseEffect compUseEffect = allComps[i] as CompUseEffect;

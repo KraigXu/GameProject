@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,335 +5,271 @@ using Verse.Sound;
 
 namespace RimWorld
 {
-	
 	public class CompExplosive : ThingComp
 	{
-		
-		
-		public CompProperties_Explosive Props
-		{
-			get
-			{
-				return (CompProperties_Explosive)this.props;
-			}
-		}
+		public bool wickStarted;
 
-		
-		
-		protected int StartWickThreshold
-		{
-			get
-			{
-				return Mathf.RoundToInt(this.Props.startWickHitPointsPercent * (float)this.parent.MaxHitPoints);
-			}
-		}
+		protected int wickTicksLeft;
 
-		
-		
+		private Thing instigator;
+
+		private int countdownTicksLeft = -1;
+
+		public bool destroyedThroughDetonation;
+
+		private List<Thing> thingsIgnoredByExplosion;
+
+		protected Sustainer wickSoundSustainer;
+
+		public CompProperties_Explosive Props => (CompProperties_Explosive)props;
+
+		protected int StartWickThreshold => Mathf.RoundToInt(Props.startWickHitPointsPercent * (float)parent.MaxHitPoints);
+
 		private bool CanEverExplodeFromDamage
 		{
 			get
 			{
-				if (this.Props.chanceNeverExplodeFromDamage < 1E-05f)
+				if (Props.chanceNeverExplodeFromDamage < 1E-05f)
 				{
 					return true;
 				}
 				Rand.PushState();
-				Rand.Seed = this.parent.thingIDNumber.GetHashCode();
-				bool result = Rand.Value < this.Props.chanceNeverExplodeFromDamage;
+				Rand.Seed = parent.thingIDNumber.GetHashCode();
+				bool result = Rand.Value < Props.chanceNeverExplodeFromDamage;
 				Rand.PopState();
 				return result;
 			}
 		}
 
-		
 		public void AddThingsIgnoredByExplosion(List<Thing> things)
 		{
-			if (this.thingsIgnoredByExplosion == null)
+			if (thingsIgnoredByExplosion == null)
 			{
-				this.thingsIgnoredByExplosion = new List<Thing>();
+				thingsIgnoredByExplosion = new List<Thing>();
 			}
-			this.thingsIgnoredByExplosion.AddRange(things);
+			thingsIgnoredByExplosion.AddRange(things);
 		}
 
-		
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_References.Look<Thing>(ref this.instigator, "instigator", false);
-			Scribe_Collections.Look<Thing>(ref this.thingsIgnoredByExplosion, "thingsIgnoredByExplosion", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.wickStarted, "wickStarted", false, false);
-			Scribe_Values.Look<int>(ref this.wickTicksLeft, "wickTicksLeft", 0, false);
-			Scribe_Values.Look<bool>(ref this.destroyedThroughDetonation, "destroyedThroughDetonation", false, false);
-			Scribe_Values.Look<int>(ref this.countdownTicksLeft, "countdownTicksLeft", 0, false);
+			Scribe_References.Look(ref instigator, "instigator");
+			Scribe_Collections.Look(ref thingsIgnoredByExplosion, "thingsIgnoredByExplosion", LookMode.Reference);
+			Scribe_Values.Look(ref wickStarted, "wickStarted", defaultValue: false);
+			Scribe_Values.Look(ref wickTicksLeft, "wickTicksLeft", 0);
+			Scribe_Values.Look(ref destroyedThroughDetonation, "destroyedThroughDetonation", defaultValue: false);
+			Scribe_Values.Look(ref countdownTicksLeft, "countdownTicksLeft", 0);
 		}
 
-		
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
-			if (this.Props.countdownTicks != null)
+			if (Props.countdownTicks.HasValue)
 			{
-				this.countdownTicksLeft = this.Props.countdownTicks.Value.RandomInRange;
+				countdownTicksLeft = Props.countdownTicks.Value.RandomInRange;
 			}
 		}
 
-		
 		public override void CompTick()
 		{
-			if (this.countdownTicksLeft > 0)
+			if (countdownTicksLeft > 0)
 			{
-				this.countdownTicksLeft--;
-				if (this.countdownTicksLeft == 0)
+				countdownTicksLeft--;
+				if (countdownTicksLeft == 0)
 				{
-					this.StartWick(null);
-					this.countdownTicksLeft = -1;
+					StartWick();
+					countdownTicksLeft = -1;
 				}
 			}
-			if (this.wickStarted)
+			if (wickStarted)
 			{
-				if (this.wickSoundSustainer == null)
+				if (wickSoundSustainer == null)
 				{
-					this.StartWickSustainer();
+					StartWickSustainer();
 				}
 				else
 				{
-					this.wickSoundSustainer.Maintain();
+					wickSoundSustainer.Maintain();
 				}
-				this.wickTicksLeft--;
-				if (this.wickTicksLeft <= 0)
+				wickTicksLeft--;
+				if (wickTicksLeft <= 0)
 				{
-					this.Detonate(this.parent.MapHeld, false);
+					Detonate(parent.MapHeld);
 				}
 			}
 		}
 
-		
 		private void StartWickSustainer()
 		{
-			SoundDefOf.MetalHitImportant.PlayOneShot(new TargetInfo(this.parent.Position, this.parent.Map, false));
-			SoundInfo info = SoundInfo.InMap(this.parent, MaintenanceType.PerTick);
-			this.wickSoundSustainer = SoundDefOf.HissSmall.TrySpawnSustainer(info);
+			SoundDefOf.MetalHitImportant.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
+			SoundInfo info = SoundInfo.InMap(parent, MaintenanceType.PerTick);
+			wickSoundSustainer = SoundDefOf.HissSmall.TrySpawnSustainer(info);
 		}
 
-		
 		private void EndWickSustainer()
 		{
-			if (this.wickSoundSustainer != null)
+			if (wickSoundSustainer != null)
 			{
-				this.wickSoundSustainer.End();
-				this.wickSoundSustainer = null;
+				wickSoundSustainer.End();
+				wickSoundSustainer = null;
 			}
 		}
 
-		
 		public override void PostDraw()
 		{
-			if (this.wickStarted)
+			if (wickStarted)
 			{
-				this.parent.Map.overlayDrawer.DrawOverlay(this.parent, OverlayTypes.BurningWick);
+				parent.Map.overlayDrawer.DrawOverlay(parent, OverlayTypes.BurningWick);
 			}
 		}
 
-		
 		public override void PostDestroy(DestroyMode mode, Map previousMap)
 		{
-			if (mode == DestroyMode.KillFinalize && this.Props.explodeOnKilled)
+			if (mode == DestroyMode.KillFinalize && Props.explodeOnKilled)
 			{
-				this.Detonate(previousMap, true);
+				Detonate(previousMap, ignoreUnspawned: true);
 			}
 		}
 
-		
 		public override void PostPreApplyDamage(DamageInfo dinfo, out bool absorbed)
 		{
 			absorbed = false;
-			if (this.CanEverExplodeFromDamage)
+			if (!CanEverExplodeFromDamage)
 			{
-				if (dinfo.Def.ExternalViolenceFor(this.parent) && dinfo.Amount >= (float)this.parent.HitPoints && this.CanExplodeFromDamageType(dinfo.Def))
+				return;
+			}
+			if (dinfo.Def.ExternalViolenceFor(parent) && dinfo.Amount >= (float)parent.HitPoints && CanExplodeFromDamageType(dinfo.Def))
+			{
+				if (parent.MapHeld != null)
 				{
-					if (this.parent.MapHeld != null)
+					Detonate(parent.MapHeld);
+					if (parent.Destroyed)
 					{
-						this.Detonate(this.parent.MapHeld, false);
-						if (this.parent.Destroyed)
-						{
-							absorbed = true;
-							return;
-						}
+						absorbed = true;
 					}
 				}
-				else if (!this.wickStarted && this.Props.startWickOnDamageTaken != null && this.Props.startWickOnDamageTaken.Contains(dinfo.Def))
-				{
-					this.StartWick(dinfo.Instigator);
-				}
+			}
+			else if (!wickStarted && Props.startWickOnDamageTaken != null && Props.startWickOnDamageTaken.Contains(dinfo.Def))
+			{
+				StartWick(dinfo.Instigator);
 			}
 		}
 
-		
 		public override void PostPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
 		{
-			if (!this.CanEverExplodeFromDamage)
+			if (CanEverExplodeFromDamage && CanExplodeFromDamageType(dinfo.Def) && !parent.Destroyed)
 			{
-				return;
-			}
-			if (!this.CanExplodeFromDamageType(dinfo.Def))
-			{
-				return;
-			}
-			if (!this.parent.Destroyed)
-			{
-				if (this.wickStarted && dinfo.Def == DamageDefOf.Stun)
+				if (wickStarted && dinfo.Def == DamageDefOf.Stun)
 				{
-					this.StopWick();
-					return;
+					StopWick();
 				}
-				if (!this.wickStarted && this.parent.HitPoints <= this.StartWickThreshold && dinfo.Def.ExternalViolenceFor(this.parent))
+				else if (!wickStarted && parent.HitPoints <= StartWickThreshold && dinfo.Def.ExternalViolenceFor(parent))
 				{
-					this.StartWick(dinfo.Instigator);
+					StartWick(dinfo.Instigator);
 				}
 			}
 		}
 
-		
 		public void StartWick(Thing instigator = null)
 		{
-			if (this.wickStarted)
+			if (!wickStarted && !(ExplosiveRadius() <= 0f))
 			{
-				return;
+				this.instigator = instigator;
+				wickStarted = true;
+				wickTicksLeft = Props.wickTicks.RandomInRange;
+				StartWickSustainer();
+				GenExplosion.NotifyNearbyPawnsOfDangerousExplosive(parent, Props.explosiveDamageType);
 			}
-			if (this.ExplosiveRadius() <= 0f)
-			{
-				return;
-			}
-			this.instigator = instigator;
-			this.wickStarted = true;
-			this.wickTicksLeft = this.Props.wickTicks.RandomInRange;
-			this.StartWickSustainer();
-			GenExplosion.NotifyNearbyPawnsOfDangerousExplosive(this.parent, this.Props.explosiveDamageType, null);
 		}
 
-		
 		public void StopWick()
 		{
-			this.wickStarted = false;
-			this.instigator = null;
+			wickStarted = false;
+			instigator = null;
 		}
 
-		
 		public float ExplosiveRadius()
 		{
-			CompProperties_Explosive props = this.Props;
+			CompProperties_Explosive props = Props;
 			float num = props.explosiveRadius;
-			if (this.parent.stackCount > 1 && props.explosiveExpandPerStackcount > 0f)
+			if (parent.stackCount > 1 && props.explosiveExpandPerStackcount > 0f)
 			{
-				num += Mathf.Sqrt((float)(this.parent.stackCount - 1) * props.explosiveExpandPerStackcount);
+				num += Mathf.Sqrt((float)(parent.stackCount - 1) * props.explosiveExpandPerStackcount);
 			}
-			if (props.explosiveExpandPerFuel > 0f && this.parent.GetComp<CompRefuelable>() != null)
+			if (props.explosiveExpandPerFuel > 0f && parent.GetComp<CompRefuelable>() != null)
 			{
-				num += Mathf.Sqrt(this.parent.GetComp<CompRefuelable>().Fuel * props.explosiveExpandPerFuel);
+				num += Mathf.Sqrt(parent.GetComp<CompRefuelable>().Fuel * props.explosiveExpandPerFuel);
 			}
 			return num;
 		}
 
-		
 		protected void Detonate(Map map, bool ignoreUnspawned = false)
 		{
-			if (!ignoreUnspawned && !this.parent.SpawnedOrAnyParentSpawned)
+			if (!ignoreUnspawned && !parent.SpawnedOrAnyParentSpawned)
 			{
 				return;
 			}
-			CompProperties_Explosive props = this.Props;
-			float num = this.ExplosiveRadius();
-			if (props.explosiveExpandPerFuel > 0f && this.parent.GetComp<CompRefuelable>() != null)
+			CompProperties_Explosive props = Props;
+			float num = ExplosiveRadius();
+			if (props.explosiveExpandPerFuel > 0f && parent.GetComp<CompRefuelable>() != null)
 			{
-				this.parent.GetComp<CompRefuelable>().ConsumeFuel(this.parent.GetComp<CompRefuelable>().Fuel);
+				parent.GetComp<CompRefuelable>().ConsumeFuel(parent.GetComp<CompRefuelable>().Fuel);
 			}
-			if (props.destroyThingOnExplosionSize <= num && !this.parent.Destroyed)
+			if (props.destroyThingOnExplosionSize <= num && !parent.Destroyed)
 			{
-				this.destroyedThroughDetonation = true;
-				this.parent.Kill(null, null);
+				destroyedThroughDetonation = true;
+				parent.Kill();
 			}
-			this.EndWickSustainer();
-			this.wickStarted = false;
+			EndWickSustainer();
+			wickStarted = false;
 			if (map == null)
 			{
-				Log.Warning("Tried to detonate CompExplosive in a null map.", false);
+				Log.Warning("Tried to detonate CompExplosive in a null map.");
 				return;
 			}
 			if (props.explosionEffect != null)
 			{
 				Effecter effecter = props.explosionEffect.Spawn();
-				effecter.Trigger(new TargetInfo(this.parent.PositionHeld, map, false), new TargetInfo(this.parent.PositionHeld, map, false));
+				effecter.Trigger(new TargetInfo(parent.PositionHeld, map), new TargetInfo(parent.PositionHeld, map));
 				effecter.Cleanup();
 			}
-			Thing parent;
-			if (this.instigator != null && !this.instigator.HostileTo(this.parent.Faction))
-			{
-				parent = this.instigator;
-			}
-			else
-			{
-				parent = this.parent;
-			}
-			GenExplosion.DoExplosion(this.parent.PositionHeld, map, num, props.explosiveDamageType, parent, props.damageAmountBase, props.armorPenetrationBase, props.explosionSound, null, null, null, props.postExplosionSpawnThingDef, props.postExplosionSpawnChance, props.postExplosionSpawnThingCount, props.applyDamageToExplosionCellsNeighbors, props.preExplosionSpawnThingDef, props.preExplosionSpawnChance, props.preExplosionSpawnThingCount, props.chanceToStartFire, props.damageFalloff, null, this.thingsIgnoredByExplosion);
+			GenExplosion.DoExplosion(instigator: (instigator == null || instigator.HostileTo(parent.Faction)) ? parent : instigator, center: parent.PositionHeld, map: map, radius: num, damType: props.explosiveDamageType, damAmount: props.damageAmountBase, armorPenetration: props.armorPenetrationBase, explosionSound: props.explosionSound, weapon: null, projectile: null, intendedTarget: null, postExplosionSpawnThingDef: props.postExplosionSpawnThingDef, postExplosionSpawnChance: props.postExplosionSpawnChance, postExplosionSpawnThingCount: props.postExplosionSpawnThingCount, applyDamageToExplosionCellsNeighbors: props.applyDamageToExplosionCellsNeighbors, preExplosionSpawnThingDef: props.preExplosionSpawnThingDef, preExplosionSpawnChance: props.preExplosionSpawnChance, preExplosionSpawnThingCount: props.preExplosionSpawnThingCount, chanceToStartFire: props.chanceToStartFire, damageFalloff: props.damageFalloff, direction: null, ignoredThings: thingsIgnoredByExplosion);
 		}
 
-		
 		private bool CanExplodeFromDamageType(DamageDef damage)
 		{
-			return this.Props.requiredDamageTypeToExplode == null || this.Props.requiredDamageTypeToExplode == damage;
+			if (Props.requiredDamageTypeToExplode != null)
+			{
+				return Props.requiredDamageTypeToExplode == damage;
+			}
+			return true;
 		}
 
-		
 		public override string CompInspectStringExtra()
 		{
 			string text = "";
-			if (this.countdownTicksLeft != -1)
+			if (countdownTicksLeft != -1)
 			{
-				text += "DetonationCountdown".Translate(this.countdownTicksLeft.TicksToDays().ToString("0.0"));
+				text += "DetonationCountdown".Translate(countdownTicksLeft.TicksToDays().ToString("0.0"));
 			}
-			if (this.Props.extraInspectStringKey != null)
+			if (Props.extraInspectStringKey != null)
 			{
-				text += ((text != "") ? "\n" : "") + this.Props.extraInspectStringKey.Translate();
+				text += ((text != "") ? "\n" : "") + Props.extraInspectStringKey.Translate();
 			}
 			return text;
 		}
 
-		
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
-			if (this.countdownTicksLeft > 0)
+			if (countdownTicksLeft > 0)
 			{
-				yield return new Command_Action
+				Command_Action command_Action = new Command_Action();
+				command_Action.defaultLabel = "DEV: Trigger countdown";
+				command_Action.action = delegate
 				{
-					defaultLabel = "DEV: Trigger countdown",
-					action = delegate
-					{
-						this.countdownTicksLeft = 1;
-					}
+					countdownTicksLeft = 1;
 				};
+				yield return command_Action;
 			}
-			yield break;
 		}
-
-		
-		public bool wickStarted;
-
-		
-		protected int wickTicksLeft;
-
-		
-		private Thing instigator;
-
-		
-		private int countdownTicksLeft = -1;
-
-		
-		public bool destroyedThroughDetonation;
-
-		
-		private List<Thing> thingsIgnoredByExplosion;
-
-		
-		protected Sustainer wickSoundSustainer;
 	}
 }

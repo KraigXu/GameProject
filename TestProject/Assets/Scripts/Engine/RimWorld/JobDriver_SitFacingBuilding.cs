@@ -1,56 +1,51 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobDriver_SitFacingBuilding : JobDriver
 	{
-		
 		public override bool TryMakePreToilReservations(bool errorOnFailed)
 		{
-			return this.pawn.Reserve(this.job.targetA, this.job, this.job.def.joyMaxParticipants, 0, null, errorOnFailed) && this.pawn.Reserve(this.job.targetB, this.job, 1, -1, null, errorOnFailed);
+			if (pawn.Reserve(job.targetA, job, job.def.joyMaxParticipants, 0, null, errorOnFailed))
+			{
+				return pawn.Reserve(job.targetB, job, 1, -1, null, errorOnFailed);
+			}
+			return false;
 		}
 
-		
 		protected override IEnumerable<Toil> MakeNewToils()
 		{
-			this.EndOnDespawnedOrNull(TargetIndex.A, JobCondition.Incompletable);
+			this.EndOnDespawnedOrNull(TargetIndex.A);
 			yield return Toils_Goto.Goto(TargetIndex.B, PathEndMode.OnCell);
 			Toil toil = new Toil();
 			toil.tickAction = delegate
 			{
-				this.pawn.rotationTracker.FaceTarget(base.TargetA);
-				this.pawn.GainComfortFromCellIfPossible(false);
-				Pawn pawn = this.pawn;
-				Building joySource = (Building)base.TargetThingA;
-				JoyUtility.JoyTickCheckEnd(pawn, this.job.doUntilGatheringEnded ? JoyTickFullJoyAction.None : JoyTickFullJoyAction.EndJob, 1f, joySource);
+				base.pawn.rotationTracker.FaceTarget(base.TargetA);
+				base.pawn.GainComfortFromCellIfPossible();
+				JoyUtility.JoyTickCheckEnd(base.pawn, joySource: (Building)base.TargetThingA, fullJoyAction: job.doUntilGatheringEnded ? JoyTickFullJoyAction.None : JoyTickFullJoyAction.EndJob);
 			};
 			toil.handlingFacing = true;
 			toil.defaultCompleteMode = ToilCompleteMode.Delay;
-			toil.defaultDuration = (this.job.doUntilGatheringEnded ? this.job.expiryInterval : this.job.def.joyDuration);
+			toil.defaultDuration = (job.doUntilGatheringEnded ? job.expiryInterval : job.def.joyDuration);
 			toil.AddFinishAction(delegate
 			{
-				JoyUtility.TryGainRecRoomThought(this.pawn);
+				JoyUtility.TryGainRecRoomThought(pawn);
 			});
-			this.ModifyPlayToil(toil);
+			ModifyPlayToil(toil);
 			yield return toil;
-			yield break;
 		}
 
-		
 		protected virtual void ModifyPlayToil(Toil toil)
 		{
 		}
 
-		
 		public override object[] TaleParameters()
 		{
-			return new object[]
+			return new object[2]
 			{
-				this.pawn,
+				pawn,
 				base.TargetA.Thing.def
 			};
 		}

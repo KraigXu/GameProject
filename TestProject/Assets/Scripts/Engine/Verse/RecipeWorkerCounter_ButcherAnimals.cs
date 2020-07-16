@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace Verse
 {
-	
 	public class RecipeWorkerCounter_ButcherAnimals : RecipeWorkerCounter
 	{
-		
 		public override bool CanCountProducts(Bill_Production bill)
 		{
 			return true;
 		}
 
-		
 		public override int CountProducts(Bill_Production bill)
 		{
 			int num = 0;
@@ -25,20 +21,18 @@ namespace Verse
 			return num;
 		}
 
-		
 		public override string ProductsDescription(Bill_Production bill)
 		{
 			return ThingCategoryDefOf.MeatRaw.label;
 		}
 
-		
 		public override bool CanPossiblyStoreInStockpile(Bill_Production bill, Zone_Stockpile stockpile)
 		{
-			foreach (ThingDef thingDef in bill.ingredientFilter.AllowedThingDefs)
+			foreach (ThingDef allowedThingDef in bill.ingredientFilter.AllowedThingDefs)
 			{
-				if (thingDef.ingestible != null && thingDef.ingestible.sourceDef != null)
+				if (allowedThingDef.ingestible != null && allowedThingDef.ingestible.sourceDef != null)
 				{
-					RaceProperties race = thingDef.ingestible.sourceDef.race;
+					RaceProperties race = allowedThingDef.ingestible.sourceDef.race;
 					if (race != null && race.meatDef != null && !stockpile.GetStoreSettings().AllowedToAccept(race.meatDef))
 					{
 						return false;

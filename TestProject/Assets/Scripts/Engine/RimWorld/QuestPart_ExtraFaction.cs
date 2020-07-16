@@ -1,85 +1,71 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class QuestPart_ExtraFaction : QuestPartActivable
 	{
-		
-		
+		public ExtraFaction extraFaction;
+
+		public List<Pawn> affectedPawns = new List<Pawn>();
+
+		public bool areHelpers;
+
+		private const int RelationsGainAvailableInTicks = 1800000;
+
 		public override IEnumerable<Faction> InvolvedFactions
 		{
 			get
 			{
-
-			
-				IEnumerator<Faction> enumerator = null;
-				if (this.extraFaction != null && this.extraFaction.faction != null)
+				foreach (Faction involvedFaction in base.InvolvedFactions)
 				{
-					yield return this.extraFaction.faction;
+					yield return involvedFaction;
 				}
-				yield break;
-				yield break;
+				if (extraFaction != null && extraFaction.faction != null)
+				{
+					yield return extraFaction.faction;
+				}
 			}
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Deep.Look<ExtraFaction>(ref this.extraFaction, "extraFaction", Array.Empty<object>());
-			Scribe_Collections.Look<Pawn>(ref this.affectedPawns, "affectedPawns", LookMode.Reference, Array.Empty<object>());
-			Scribe_Values.Look<bool>(ref this.areHelpers, "areHelpers", false, false);
+			Scribe_Deep.Look(ref extraFaction, "extraFaction");
+			Scribe_Collections.Look(ref affectedPawns, "affectedPawns", LookMode.Reference);
+			Scribe_Values.Look(ref areHelpers, "areHelpers", defaultValue: false);
 			if (Scribe.mode == LoadSaveMode.PostLoadInit)
 			{
-				this.affectedPawns.RemoveAll((Pawn x) => x == null);
+				affectedPawns.RemoveAll((Pawn x) => x == null);
 			}
 		}
 
-		
 		public override void ReplacePawnReferences(Pawn replace, Pawn with)
 		{
-			this.affectedPawns.Replace(replace, with);
+			affectedPawns.Replace(replace, with);
 		}
 
-		
 		public override void Cleanup()
 		{
 			base.Cleanup();
-			this.SetRelationsGainTickForPawns();
+			SetRelationsGainTickForPawns();
 		}
 
-		
 		protected override void Disable()
 		{
 			base.Disable();
-			this.SetRelationsGainTickForPawns();
+			SetRelationsGainTickForPawns();
 		}
 
-		
 		private void SetRelationsGainTickForPawns()
 		{
-			foreach (Pawn pawn in this.affectedPawns)
+			foreach (Pawn affectedPawn in affectedPawns)
 			{
-				if (pawn.mindState != null)
+				if (affectedPawn.mindState != null)
 				{
-					pawn.mindState.SetNoAidRelationsGainUntilTick(Find.TickManager.TicksGame + 1800000);
+					affectedPawn.mindState.SetNoAidRelationsGainUntilTick(Find.TickManager.TicksGame + 1800000);
 				}
 			}
 		}
-
-		
-		public ExtraFaction extraFaction;
-
-		
-		public List<Pawn> affectedPawns = new List<Pawn>();
-
-		
-		public bool areHelpers;
-
-		
-		private const int RelationsGainAvailableInTicks = 1800000;
 	}
 }

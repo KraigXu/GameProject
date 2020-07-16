@@ -1,13 +1,12 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class IncidentWorker_Aurora : IncidentWorker_MakeGameCondition
 	{
-		
+		private const int EnsureMinDurationTicks = 5000;
+
 		protected override bool CanFireNowSub(IncidentParms parms)
 		{
 			if (!base.CanFireNowSub(parms))
@@ -17,7 +16,7 @@ namespace RimWorld
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				if (maps[i].IsPlayerHome && !this.AuroraWillEndSoon(maps[i]))
+				if (maps[i].IsPlayerHome && !AuroraWillEndSoon(maps[i]))
 				{
 					return true;
 				}
@@ -25,13 +24,17 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private bool AuroraWillEndSoon(Map map)
 		{
-			return GenCelestial.CurCelestialSunGlow(map) > 0.5f || GenCelestial.CelestialSunGlow(map, Find.TickManager.TicksAbs + 5000) > 0.5f;
+			if (GenCelestial.CurCelestialSunGlow(map) > 0.5f)
+			{
+				return true;
+			}
+			if (GenCelestial.CelestialSunGlow(map, Find.TickManager.TicksAbs + 5000) > 0.5f)
+			{
+				return true;
+			}
+			return false;
 		}
-
-		
-		private const int EnsureMinDurationTicks = 5000;
 	}
 }

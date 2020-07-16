@@ -1,13 +1,10 @@
-﻿using System;
 using Verse;
 using Verse.AI;
 
 namespace RimWorld
 {
-	
 	public class JobGiver_GiveSpeech : ThinkNode_JobGiver
 	{
-		
 		protected override Job TryGiveJob(Pawn pawn)
 		{
 			PawnDuty duty = pawn.mindState.duty;
@@ -20,7 +17,7 @@ namespace RimWorld
 			{
 				return null;
 			}
-			if (!pawn.CanReach(building_Throne, PathEndMode.InteractionCell, Danger.None, false, TraverseMode.ByPawn))
+			if (!pawn.CanReach(building_Throne, PathEndMode.InteractionCell, Danger.None))
 			{
 				return null;
 			}

@@ -1,148 +1,112 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Verse
 {
-	
 	public class GameInitData
 	{
-		
-		
+		public int startingTile = -1;
+
+		public int mapSize = 250;
+
+		public List<Pawn> startingAndOptionalPawns = new List<Pawn>();
+
+		public int startingPawnCount = -1;
+
+		public Faction playerFaction;
+
+		public Season startingSeason;
+
+		public bool permadeathChosen;
+
+		public bool permadeath;
+
+		public bool startedFromEntry;
+
+		public string gameToLoad;
+
+		public const int DefaultMapSize = 250;
+
 		public bool QuickStarted
 		{
 			get
 			{
-				return this.gameToLoad.NullOrEmpty() && !this.startedFromEntry;
+				if (gameToLoad.NullOrEmpty())
+				{
+					return !startedFromEntry;
+				}
+				return false;
 			}
 		}
 
-		
 		public void ChooseRandomStartingTile()
 		{
-			this.startingTile = TileFinder.RandomStartingTile();
+			startingTile = TileFinder.RandomStartingTile();
 		}
 
-		
 		public void ResetWorldRelatedMapInitData()
 		{
 			Current.Game.World = null;
-			this.startingAndOptionalPawns.Clear();
-			this.playerFaction = null;
-			this.startingTile = -1;
+			startingAndOptionalPawns.Clear();
+			playerFaction = null;
+			startingTile = -1;
 		}
 
-		
 		public override string ToString()
 		{
-			return string.Concat(new object[]
-			{
-				"startedFromEntry: ",
-				this.startedFromEntry.ToString(),
-				"\nstartingAndOptionalPawns: ",
-				this.startingAndOptionalPawns.Count
-			});
+			return "startedFromEntry: " + startedFromEntry.ToString() + "\nstartingAndOptionalPawns: " + startingAndOptionalPawns.Count;
 		}
 
-		
 		public void PrepForMapGen()
 		{
-			while (this.startingAndOptionalPawns.Count > this.startingPawnCount)
+			while (startingAndOptionalPawns.Count > startingPawnCount)
 			{
-				PawnComponentsUtility.RemoveComponentsOnDespawned(this.startingAndOptionalPawns[this.startingPawnCount]);
-				Find.WorldPawns.PassToWorld(this.startingAndOptionalPawns[this.startingPawnCount], PawnDiscardDecideMode.KeepForever);
-				this.startingAndOptionalPawns.RemoveAt(this.startingPawnCount);
+				PawnComponentsUtility.RemoveComponentsOnDespawned(startingAndOptionalPawns[startingPawnCount]);
+				Find.WorldPawns.PassToWorld(startingAndOptionalPawns[startingPawnCount], PawnDiscardDecideMode.KeepForever);
+				startingAndOptionalPawns.RemoveAt(startingPawnCount);
 			}
-			List<Pawn> list = this.startingAndOptionalPawns;
-			foreach (Pawn pawn in list)
+			List<Pawn> list = startingAndOptionalPawns;
+			foreach (Pawn item in list)
 			{
-				pawn.SetFactionDirect(Faction.OfPlayer);
-				PawnComponentsUtility.AddAndRemoveDynamicComponents(pawn, false);
+				item.SetFactionDirect(Faction.OfPlayer);
+				PawnComponentsUtility.AddAndRemoveDynamicComponents(item);
 			}
-			foreach (Pawn pawn2 in list)
+			foreach (Pawn item2 in list)
 			{
-				pawn2.workSettings.DisableAll();
+				item2.workSettings.DisableAll();
 			}
-			IEnumerator<WorkTypeDef> enumerator2 = DefDatabase<WorkTypeDef>.AllDefs.GetEnumerator();
+			foreach (WorkTypeDef w in DefDatabase<WorkTypeDef>.AllDefs)
 			{
-				while (enumerator2.MoveNext())
+				if (w.alwaysStartActive)
 				{
-					WorkTypeDef w = enumerator2.Current;
-					if (w.alwaysStartActive)
+					foreach (Pawn item3 in list.Where((Pawn col) => !col.WorkTypeIsDisabled(w)))
 					{
-						IEnumerable<Pawn> source = list;
-						Func<Pawn, bool> predicate;
-						
-						if ((predicate=default ) == null)
-						{
-							predicate = ( ((Pawn col) => !col.WorkTypeIsDisabled(w)));
-						}
-						IEnumerator<Pawn> enumerator3 = source.Where(predicate).GetEnumerator();
-						{
-							while (enumerator3.MoveNext())
-							{
-								Pawn pawn3 = enumerator3.Current;
-								pawn3.workSettings.SetPriority(w, 3);
-							}
-							continue;
-						}
+						item3.workSettings.SetPriority(w, 3);
 					}
+				}
+				else
+				{
 					bool flag = false;
-					foreach (Pawn pawn4 in list)
+					foreach (Pawn item4 in list)
 					{
-						if (!pawn4.WorkTypeIsDisabled(w) && pawn4.skills.AverageOfRelevantSkillsFor(w) >= 6f)
+						if (!item4.WorkTypeIsDisabled(w) && item4.skills.AverageOfRelevantSkillsFor(w) >= 6f)
 						{
-							pawn4.workSettings.SetPriority(w, 3);
+							item4.workSettings.SetPriority(w, 3);
 							flag = true;
 						}
 					}
 					if (!flag)
 					{
-						IEnumerable<Pawn> source2 = from col in list
-						where !col.WorkTypeIsDisabled(w)
-						select col;
-						if (source2.Any<Pawn>())
+						IEnumerable<Pawn> source = list.Where((Pawn col) => !col.WorkTypeIsDisabled(w));
+						if (source.Any())
 						{
-							source2.InRandomOrder(null).MaxBy((Pawn c) => c.skills.AverageOfRelevantSkillsFor(w)).workSettings.SetPriority(w, 3);
+							source.InRandomOrder().MaxBy((Pawn c) => c.skills.AverageOfRelevantSkillsFor(w)).workSettings.SetPriority(w, 3);
 						}
 					}
 				}
 			}
 		}
-
-		
-		public int startingTile = -1;
-
-		
-		public int mapSize = 250;
-
-		
-		public List<Pawn> startingAndOptionalPawns = new List<Pawn>();
-
-		
-		public int startingPawnCount = -1;
-
-		
-		public Faction playerFaction;
-
-		
-		public Season startingSeason;
-
-		
-		public bool permadeathChosen;
-
-		
-		public bool permadeath;
-
-		
-		public bool startedFromEntry;
-
-		
-		public string gameToLoad;
-
-		
-		public const int DefaultMapSize = 250;
 	}
 }

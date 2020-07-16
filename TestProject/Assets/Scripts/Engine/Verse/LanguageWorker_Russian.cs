@@ -1,212 +1,18 @@
-﻿using System;
 using System.Text.RegularExpressions;
 
 namespace Verse
 {
-	
 	public class LanguageWorker_Russian : LanguageWorker
 	{
-		
-		public override string PostProcessedKeyedTranslation(string translation)
-		{
-			translation = base.PostProcessedKeyedTranslation(translation);
-			return LanguageWorker_Russian.PostProcess(translation);
-		}
-
-		
-		public override string PostProcessed(string str)
-		{
-			str = base.PostProcessed(str);
-			return LanguageWorker_Russian.PostProcess(str);
-		}
-
-		
-		private static string PostProcess(string translation)
-		{
-			return LanguageWorker_Russian._languageWorkerResolverRegex.Replace(translation, new MatchEvaluator(LanguageWorker_Russian.EvaluateResolver));
-		}
-
-		
-		private static string EvaluateResolver(Match match)
-		{
-			string value = match.Groups["resolverName"].Value;
-			Group group = match.Groups["argument"];
-			string[] array = new string[group.Captures.Count];
-			for (int i = 0; i < group.Captures.Count; i++)
-			{
-				array[i] = group.Captures[i].Value.Trim();
-			}
-			LanguageWorker_Russian.IResolver resolverByKeyword = LanguageWorker_Russian.GetResolverByKeyword(value);
-			if (resolverByKeyword == null)
-			{
-				return match.Value;
-			}
-			string text = resolverByKeyword.Resolve(array);
-			if (text == null)
-			{
-				Log.ErrorOnce(string.Format("Error happened while resolving LW instruction: \"{0}\"", match.Value), match.Value.GetHashCode() ^ 374656432, false);
-				return match.Value;
-			}
-			return text;
-		}
-
-		
-		private static LanguageWorker_Russian.IResolver GetResolverByKeyword(string keyword)
-		{
-			if (keyword == "Replace")
-			{
-				return LanguageWorker_Russian.replaceResolver;
-			}
-			if (!(keyword == "Number"))
-			{
-				return null;
-			}
-			return LanguageWorker_Russian.numberCaseResolver;
-		}
-
-		
-		public override string Pluralize(string str, Gender gender, int count = -1)
-		{
-			if (str.NullOrEmpty())
-			{
-				return str;
-			}
-			char c = str[str.Length - 1];
-			char c2 = (str.Length < 2) ? '\0' : str[str.Length - 2];
-			if (gender != Gender.Male)
-			{
-				if (gender != Gender.Female)
-				{
-					if (gender == Gender.None)
-					{
-						if (c == 'o')
-						{
-							return str.Substring(0, str.Length - 1) + "a";
-						}
-						if (c == 'O')
-						{
-							return str.Substring(0, str.Length - 1) + "A";
-						}
-						if (c == 'e' || c == 'E')
-						{
-							char value = char.ToUpper(c2);
-							if ("ГКХЖЧШЩЦ".IndexOf(value) >= 0)
-							{
-								if (c == 'e')
-								{
-									return str.Substring(0, str.Length - 1) + "a";
-								}
-								if (c == 'E')
-								{
-									return str.Substring(0, str.Length - 1) + "A";
-								}
-							}
-							else
-							{
-								if (c == 'e')
-								{
-									return str.Substring(0, str.Length - 1) + "я";
-								}
-								if (c == 'E')
-								{
-									return str.Substring(0, str.Length - 1) + "Я";
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					if (c == 'я')
-					{
-						return str.Substring(0, str.Length - 1) + "и";
-					}
-					if (c == 'ь')
-					{
-						return str.Substring(0, str.Length - 1) + "и";
-					}
-					if (c == 'Я')
-					{
-						return str.Substring(0, str.Length - 1) + "И";
-					}
-					if (c == 'Ь')
-					{
-						return str.Substring(0, str.Length - 1) + "И";
-					}
-					if (c == 'a' || c == 'A')
-					{
-						char value2 = char.ToUpper(c2);
-						if ("ГКХЖЧШЩ".IndexOf(value2) >= 0)
-						{
-							if (c == 'a')
-							{
-								return str.Substring(0, str.Length - 1) + "и";
-							}
-							return str.Substring(0, str.Length - 1) + "И";
-						}
-						else
-						{
-							if (c == 'a')
-							{
-								return str.Substring(0, str.Length - 1) + "ы";
-							}
-							return str.Substring(0, str.Length - 1) + "Ы";
-						}
-					}
-				}
-			}
-			else
-			{
-				if (LanguageWorker_Russian.IsConsonant(c))
-				{
-					return str + "ы";
-				}
-				if (c == 'й')
-				{
-					return str.Substring(0, str.Length - 1) + "и";
-				}
-				if (c == 'ь')
-				{
-					return str.Substring(0, str.Length - 1) + "и";
-				}
-				if (c == 'Й')
-				{
-					return str.Substring(0, str.Length - 1) + "И";
-				}
-				if (c == 'Ь')
-				{
-					return str.Substring(0, str.Length - 1) + "И";
-				}
-			}
-			return str;
-		}
-
-		
-		private static bool IsConsonant(char ch)
-		{
-			return "бвгджзклмнпрстфхцчшщБВГДЖЗКЛМНПРСТФХЦЧШЩ".IndexOf(ch) >= 0;
-		}
-
-		
-		private static readonly LanguageWorker_Russian.ReplaceResolver replaceResolver = new LanguageWorker_Russian.ReplaceResolver();
-
-		
-		private static readonly LanguageWorker_Russian.NumberCaseResolver numberCaseResolver = new LanguageWorker_Russian.NumberCaseResolver();
-
-		
-		private static readonly Regex _languageWorkerResolverRegex = new Regex("\\^(?<resolverName>\\w+)\\(\\s*(?<argument>[^|]+?)\\s*(\\|\\s*(?<argument>[^|]+?)\\s*)*\\)\\^", RegexOptions.Compiled);
-
-		
 		private interface IResolver
 		{
-			
 			string Resolve(string[] arguments);
 		}
 
-		
-		private class ReplaceResolver : LanguageWorker_Russian.IResolver
+		private class ReplaceResolver : IResolver
 		{
-			
+			private static readonly Regex _argumentRegex = new Regex("'(?<old>[^']*?)'-'(?<new>[^']*?)'", RegexOptions.Compiled);
+
 			public string Resolve(string[] arguments)
 			{
 				if (arguments.Length == 0)
@@ -221,7 +27,7 @@ namespace Verse
 				for (int i = 1; i < arguments.Length; i++)
 				{
 					string input = arguments[i];
-					Match match = LanguageWorker_Russian.ReplaceResolver._argumentRegex.Match(input);
+					Match match = _argumentRegex.Match(input);
 					if (!match.Success)
 					{
 						return null;
@@ -235,15 +41,12 @@ namespace Verse
 				}
 				return text;
 			}
-
-			
-			private static readonly Regex _argumentRegex = new Regex("'(?<old>[^']*?)'-'(?<new>[^']*?)'", RegexOptions.Compiled);
 		}
 
-		
-		private class NumberCaseResolver : LanguageWorker_Russian.IResolver
+		private class NumberCaseResolver : IResolver
 		{
-			
+			private static readonly Regex _numberRegex = new Regex("(?<floor>[0-9]+)(\\.(?<frac>[0-9]+))?", RegexOptions.Compiled);
+
 			public string Resolve(string[] arguments)
 			{
 				if (arguments.Length != 4)
@@ -251,33 +54,23 @@ namespace Verse
 					return null;
 				}
 				string text = arguments[0];
-				Match match = LanguageWorker_Russian.NumberCaseResolver._numberRegex.Match(text);
+				Match match = _numberRegex.Match(text);
 				if (!match.Success)
 				{
 					return null;
 				}
 				bool success = match.Groups["frac"].Success;
 				string value = match.Groups["floor"].Value;
-				string formOne = arguments[1].Trim(new char[]
-				{
-					'\''
-				});
-				string text2 = arguments[2].Trim(new char[]
-				{
-					'\''
-				});
-				string formMany = arguments[3].Trim(new char[]
-				{
-					'\''
-				});
+				string formOne = arguments[1].Trim('\'');
+				string text2 = arguments[2].Trim('\'');
+				string formMany = arguments[3].Trim('\'');
 				if (success)
 				{
 					return text2.Replace("#", text);
 				}
-				return LanguageWorker_Russian.NumberCaseResolver.GetFormForNumber(int.Parse(value), formOne, text2, formMany).Replace("#", text);
+				return GetFormForNumber(int.Parse(value), formOne, text2, formMany).Replace("#", text);
 			}
 
-			
 			private static string GetFormForNumber(int number, string formOne, string formSeveral, string formMany)
 			{
 				int num = number % 10;
@@ -285,19 +78,179 @@ namespace Verse
 				{
 					return formMany;
 				}
-				if (num == 1)
+				switch (num)
 				{
+				case 1:
 					return formOne;
-				}
-				if (num - 2 > 2)
-				{
+				case 2:
+				case 3:
+				case 4:
+					return formSeveral;
+				default:
 					return formMany;
 				}
-				return formSeveral;
 			}
+		}
 
-			
-			private static readonly Regex _numberRegex = new Regex("(?<floor>[0-9]+)(\\.(?<frac>[0-9]+))?", RegexOptions.Compiled);
+		private static readonly ReplaceResolver replaceResolver = new ReplaceResolver();
+
+		private static readonly NumberCaseResolver numberCaseResolver = new NumberCaseResolver();
+
+		private static readonly Regex _languageWorkerResolverRegex = new Regex("\\^(?<resolverName>\\w+)\\(\\s*(?<argument>[^|]+?)\\s*(\\|\\s*(?<argument>[^|]+?)\\s*)*\\)\\^", RegexOptions.Compiled);
+
+		public override string PostProcessedKeyedTranslation(string translation)
+		{
+			translation = base.PostProcessedKeyedTranslation(translation);
+			return PostProcess(translation);
+		}
+
+		public override string PostProcessed(string str)
+		{
+			str = base.PostProcessed(str);
+			return PostProcess(str);
+		}
+
+		private static string PostProcess(string translation)
+		{
+			return _languageWorkerResolverRegex.Replace(translation, EvaluateResolver);
+		}
+
+		private static string EvaluateResolver(Match match)
+		{
+			string value = match.Groups["resolverName"].Value;
+			Group group = match.Groups["argument"];
+			string[] array = new string[group.Captures.Count];
+			for (int i = 0; i < group.Captures.Count; i++)
+			{
+				array[i] = group.Captures[i].Value.Trim();
+			}
+			IResolver resolverByKeyword = GetResolverByKeyword(value);
+			if (resolverByKeyword == null)
+			{
+				return match.Value;
+			}
+			string text = resolverByKeyword.Resolve(array);
+			if (text == null)
+			{
+				Log.ErrorOnce($"Error happened while resolving LW instruction: \"{match.Value}\"", match.Value.GetHashCode() ^ 0x1654CDB0);
+				return match.Value;
+			}
+			return text;
+		}
+
+		private static IResolver GetResolverByKeyword(string keyword)
+		{
+			if (!(keyword == "Replace"))
+			{
+				if (keyword == "Number")
+				{
+					return numberCaseResolver;
+				}
+				return null;
+			}
+			return replaceResolver;
+		}
+
+		public override string Pluralize(string str, Gender gender, int count = -1)
+		{
+			if (str.NullOrEmpty())
+			{
+				return str;
+			}
+			char c = str[str.Length - 1];
+			char c2 = (str.Length >= 2) ? str[str.Length - 2] : '\0';
+			switch (gender)
+			{
+			case Gender.None:
+				switch (c)
+				{
+				case 'o':
+					return str.Substring(0, str.Length - 1) + "a";
+				case 'O':
+					return str.Substring(0, str.Length - 1) + "A";
+				case 'E':
+				case 'e':
+				{
+					char value2 = char.ToUpper(c2);
+					if ("ГКХЖЧШЩЦ".IndexOf(value2) >= 0)
+					{
+						switch (c)
+						{
+						case 'e':
+							return str.Substring(0, str.Length - 1) + "a";
+						case 'E':
+							return str.Substring(0, str.Length - 1) + "A";
+						}
+					}
+					else
+					{
+						switch (c)
+						{
+						case 'e':
+							return str.Substring(0, str.Length - 1) + "я";
+						case 'E':
+							return str.Substring(0, str.Length - 1) + "Я";
+						}
+					}
+					break;
+				}
+				}
+				break;
+			case Gender.Female:
+				switch (c)
+				{
+				case 'я':
+					return str.Substring(0, str.Length - 1) + "и";
+				case 'ь':
+					return str.Substring(0, str.Length - 1) + "и";
+				case 'Я':
+					return str.Substring(0, str.Length - 1) + "И";
+				case 'Ь':
+					return str.Substring(0, str.Length - 1) + "И";
+				case 'A':
+				case 'a':
+				{
+					char value = char.ToUpper(c2);
+					if ("ГКХЖЧШЩ".IndexOf(value) >= 0)
+					{
+						if (c == 'a')
+						{
+							return str.Substring(0, str.Length - 1) + "и";
+						}
+						return str.Substring(0, str.Length - 1) + "И";
+					}
+					if (c == 'a')
+					{
+						return str.Substring(0, str.Length - 1) + "ы";
+					}
+					return str.Substring(0, str.Length - 1) + "Ы";
+				}
+				}
+				break;
+			case Gender.Male:
+				if (IsConsonant(c))
+				{
+					return str + "ы";
+				}
+				switch (c)
+				{
+				case 'й':
+					return str.Substring(0, str.Length - 1) + "и";
+				case 'ь':
+					return str.Substring(0, str.Length - 1) + "и";
+				case 'Й':
+					return str.Substring(0, str.Length - 1) + "И";
+				case 'Ь':
+					return str.Substring(0, str.Length - 1) + "И";
+				}
+				break;
+			}
+			return str;
+		}
+
+		private static bool IsConsonant(char ch)
+		{
+			return "бвгджзклмнпрстфхцчшщБВГДЖЗКЛМНПРСТФХЦЧШЩ".IndexOf(ch) >= 0;
 		}
 	}
 }

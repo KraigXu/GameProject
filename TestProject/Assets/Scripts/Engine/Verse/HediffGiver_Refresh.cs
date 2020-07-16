@@ -1,22 +1,17 @@
-﻿using System;
-
 namespace Verse
 {
-	
 	public class HediffGiver_Refresh : HediffGiver
 	{
-		
 		public override void OnIntervalPassed(Pawn pawn, Hediff cause)
 		{
-			Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(this.hediff, false);
+			Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediff);
 			if (firstHediffOfDef != null)
 			{
 				firstHediffOfDef.ageTicks = 0;
-				return;
 			}
-			if (base.TryApply(pawn, null))
+			else if (TryApply(pawn))
 			{
-				base.SendLetter(pawn, cause);
+				SendLetter(pawn, cause);
 			}
 		}
 	}

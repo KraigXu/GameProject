@@ -1,145 +1,116 @@
-﻿using System;
+using System;
 using System.Linq;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class PassingShip : IExposable, ICommunicable, ILoadReferenceable
 	{
-		
-		
-		public virtual string FullTitle
-		{
-			get
-			{
-				return "ErrorFullTitle";
-			}
-		}
+		public PassingShipManager passingShipManager;
 
-		
-		
-		public bool Departed
-		{
-			get
-			{
-				return this.ticksUntilDeparture <= 0;
-			}
-		}
+		private Faction faction;
 
-		
-		
+		public string name = "Nameless";
+
+		protected int loadID = -1;
+
+		public int ticksUntilDeparture = 40000;
+
+		public virtual string FullTitle => "ErrorFullTitle";
+
+		public bool Departed => ticksUntilDeparture <= 0;
+
 		public Map Map
 		{
 			get
 			{
-				if (this.passingShipManager == null)
+				if (passingShipManager == null)
 				{
 					return null;
 				}
-				return this.passingShipManager.map;
+				return passingShipManager.map;
 			}
 		}
 
-		
-		
-		public Faction Faction
-		{
-			get
-			{
-				return this.faction;
-			}
-		}
+		public Faction Faction => faction;
 
-		
 		public PassingShip()
 		{
 		}
 
-		
 		public PassingShip(Faction faction)
 		{
 			this.faction = faction;
 		}
 
-		
 		public virtual void ExposeData()
 		{
-			Scribe_Values.Look<string>(ref this.name, "name", null, false);
-			Scribe_Values.Look<int>(ref this.loadID, "loadID", 0, false);
-			Scribe_Values.Look<int>(ref this.ticksUntilDeparture, "ticksUntilDeparture", 0, false);
-			Scribe_References.Look<Faction>(ref this.faction, "faction", false);
+			Scribe_Values.Look(ref name, "name");
+			Scribe_Values.Look(ref loadID, "loadID", 0);
+			Scribe_Values.Look(ref ticksUntilDeparture, "ticksUntilDeparture", 0);
+			Scribe_References.Look(ref faction, "faction");
 		}
 
-		
 		public virtual void PassingShipTick()
 		{
-			this.ticksUntilDeparture--;
-			if (this.Departed)
+			ticksUntilDeparture--;
+			if (Departed)
 			{
-				this.Depart();
+				Depart();
 			}
 		}
 
-		
 		public virtual void Depart()
 		{
-			if (this.Map.listerBuildings.ColonistsHaveBuilding((Thing b) => b.def.IsCommsConsole))
+			if (Map.listerBuildings.ColonistsHaveBuilding((Thing b) => b.def.IsCommsConsole))
 			{
-				Messages.Message("MessageShipHasLeftCommsRange".Translate(this.FullTitle), MessageTypeDefOf.SituationResolved, true);
+				Messages.Message("MessageShipHasLeftCommsRange".Translate(FullTitle), MessageTypeDefOf.SituationResolved);
 			}
-			this.passingShipManager.RemoveShip(this);
+			passingShipManager.RemoveShip(this);
 		}
 
-		
 		public virtual void TryOpenComms(Pawn negotiator)
 		{
 			throw new NotImplementedException();
 		}
 
-		
 		public virtual string GetCallLabel()
 		{
-			return this.name;
+			return name;
 		}
 
-		
 		public string GetInfoText()
 		{
-			return this.FullTitle;
+			return FullTitle;
 		}
 
-		
 		Faction ICommunicable.GetFaction()
 		{
 			return null;
 		}
 
-		
 		protected virtual AcceptanceReport CanCommunicateWith_NewTemp(Pawn negotiator)
 		{
 			return AcceptanceReport.WasAccepted;
 		}
 
-		
 		protected virtual bool CanCommunicateWith(Pawn negotiator)
 		{
-			return this.CanCommunicateWith_NewTemp(negotiator).Accepted;
+			return CanCommunicateWith_NewTemp(negotiator).Accepted;
 		}
 
-		
 		public FloatMenuOption CommFloatMenuOption(Building_CommsConsole console, Pawn negotiator)
 		{
-			string label = "CallOnRadio".Translate(this.GetCallLabel());
+			string label = "CallOnRadio".Translate(GetCallLabel());
 			Action action = null;
-			AcceptanceReport canCommunicate = this.CanCommunicateWith_NewTemp(negotiator);
+			AcceptanceReport canCommunicate = CanCommunicateWith_NewTemp(negotiator);
 			if (!canCommunicate.Accepted)
 			{
 				if (!canCommunicate.Reason.NullOrEmpty())
 				{
 					action = delegate
 					{
-						Messages.Message(canCommunicate.Reason, console, MessageTypeDefOf.RejectInput, false);
+						Messages.Message(canCommunicate.Reason, console, MessageTypeDefOf.RejectInput, historical: false);
 					};
 				}
 			}
@@ -147,36 +118,22 @@ namespace RimWorld
 			{
 				action = delegate
 				{
-					if (!Building_OrbitalTradeBeacon.AllPowered(this.Map).Any<Building_OrbitalTradeBeacon>())
+					if (!Building_OrbitalTradeBeacon.AllPowered(Map).Any())
 					{
-						Messages.Message("MessageNeedBeaconToTradeWithShip".Translate(), console, MessageTypeDefOf.RejectInput, false);
-						return;
+						Messages.Message("MessageNeedBeaconToTradeWithShip".Translate(), console, MessageTypeDefOf.RejectInput, historical: false);
 					}
-					console.GiveUseCommsJob(negotiator, this);
+					else
+					{
+						console.GiveUseCommsJob(negotiator, this);
+					}
 				};
 			}
-			return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(label, action, MenuOptionPriority.InitiateSocial, null, null, 0f, null, null), negotiator, console, "ReservedBy");
+			return FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption(label, action, MenuOptionPriority.InitiateSocial), negotiator, console);
 		}
 
-		
 		public string GetUniqueLoadID()
 		{
-			return "PassingShip_" + this.loadID;
+			return "PassingShip_" + loadID;
 		}
-
-		
-		public PassingShipManager passingShipManager;
-
-		
-		private Faction faction;
-
-		
-		public string name = "Nameless";
-
-		
-		protected int loadID = -1;
-
-		
-		public int ticksUntilDeparture = 40000;
 	}
 }

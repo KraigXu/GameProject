@@ -1,21 +1,17 @@
-﻿using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Alert_NeedColonistBeds : Alert
 	{
-		
 		public Alert_NeedColonistBeds()
 		{
-			this.defaultLabel = "NeedColonistBeds".Translate();
-			this.defaultExplanation = "NeedColonistBedsDesc".Translate();
-			this.defaultPriority = AlertPriority.High;
+			defaultLabel = "NeedColonistBeds".Translate();
+			defaultExplanation = "NeedColonistBedsDesc".Translate();
+			defaultPriority = AlertPriority.High;
 		}
 
-		
 		public override AlertReport GetReport()
 		{
 			if (GenDate.DaysPassed > 30)
@@ -25,7 +21,7 @@ namespace RimWorld
 			List<Map> maps = Find.Maps;
 			for (int i = 0; i < maps.Count; i++)
 			{
-				if (this.NeedColonistBeds(maps[i]))
+				if (NeedColonistBeds(maps[i]))
 				{
 					return true;
 				}
@@ -33,7 +29,6 @@ namespace RimWorld
 			return false;
 		}
 
-		
 		private bool NeedColonistBeds(Map map)
 		{
 			if (!map.IsPlayerHome)
@@ -60,10 +55,10 @@ namespace RimWorld
 			}
 			int num3 = 0;
 			int num4 = 0;
-			foreach (Pawn pawn in map.mapPawns.FreeColonistsSpawned)
+			foreach (Pawn item in map.mapPawns.FreeColonistsSpawned)
 			{
-				Pawn pawn2 = LovePartnerRelationUtility.ExistingMostLikedLovePartner(pawn, false);
-				if (pawn2 == null || !pawn2.Spawned || pawn2.Map != pawn.Map || pawn2.Faction != Faction.OfPlayer || pawn2.HostFaction != null)
+				Pawn pawn = LovePartnerRelationUtility.ExistingMostLikedLovePartner(item, allowDead: false);
+				if (pawn == null || !pawn.Spawned || pawn.Map != item.Map || pawn.Faction != Faction.OfPlayer || pawn.HostFaction != null)
 				{
 					num3++;
 				}
@@ -74,7 +69,7 @@ namespace RimWorld
 			}
 			if (num4 % 2 != 0)
 			{
-				Log.ErrorOnce("partneredCols % 2 != 0", 743211, false);
+				Log.ErrorOnce("partneredCols % 2 != 0", 743211);
 			}
 			for (int j = 0; j < num4 / 2; j++)
 			{
@@ -98,7 +93,11 @@ namespace RimWorld
 					num--;
 				}
 			}
-			return num < 0 || num2 < 0;
+			if (num >= 0)
+			{
+				return num2 < 0;
+			}
+			return true;
 		}
 	}
 }

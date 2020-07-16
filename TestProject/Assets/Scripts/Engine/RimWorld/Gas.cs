@@ -1,52 +1,44 @@
-﻿using System;
 using Verse;
 
 namespace RimWorld
 {
-	
 	public class Gas : Thing
 	{
-		
+		public int destroyTick;
+
+		public float graphicRotation;
+
+		public float graphicRotationSpeed;
+
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
-			for (;;)
+			while (true)
 			{
 				Thing gas = base.Position.GetGas(map);
 				if (gas == null)
 				{
 					break;
 				}
-				gas.Destroy(DestroyMode.Vanish);
+				gas.Destroy();
 			}
 			base.SpawnSetup(map, respawningAfterLoad);
-			this.destroyTick = Find.TickManager.TicksGame + this.def.gas.expireSeconds.RandomInRange.SecondsToTicks();
-			this.graphicRotationSpeed = Rand.Range(-this.def.gas.rotationSpeed, this.def.gas.rotationSpeed) / 60f;
+			destroyTick = Find.TickManager.TicksGame + def.gas.expireSeconds.RandomInRange.SecondsToTicks();
+			graphicRotationSpeed = Rand.Range(0f - def.gas.rotationSpeed, def.gas.rotationSpeed) / 60f;
 		}
 
-		
 		public override void Tick()
 		{
-			if (this.destroyTick <= Find.TickManager.TicksGame)
+			if (destroyTick <= Find.TickManager.TicksGame)
 			{
-				this.Destroy(DestroyMode.Vanish);
+				Destroy();
 			}
-			this.graphicRotation += this.graphicRotationSpeed;
+			graphicRotation += graphicRotationSpeed;
 		}
 
-		
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look<int>(ref this.destroyTick, "destroyTick", 0, false);
+			Scribe_Values.Look(ref destroyTick, "destroyTick", 0);
 		}
-
-		
-		public int destroyTick;
-
-		
-		public float graphicRotation;
-
-		
-		public float graphicRotationSpeed;
 	}
 }
