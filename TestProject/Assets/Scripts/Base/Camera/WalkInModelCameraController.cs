@@ -54,10 +54,7 @@ public class WalkInModelCameraController : MonoBehaviour
         transform.position = ClampHeight();
     }
 
-    private void FixedUpdate()
-    {
 
-    }
 
     private void HandleMouseEvents(float multiplier)
     {
