@@ -32,6 +32,7 @@ namespace Verse
 				{
 					text = stuffAppearance.pathPrefix + "/" + text.Split('/').Last();
 				}
+                Debug.Log(text);
 				Texture2D texture2D = (from x in ContentFinder<Texture2D>.GetAllInFolder(text)
 					where x.name.EndsWith(stuffAppearance.defName)
 					select x).FirstOrDefault();
