@@ -1,2 +1,12 @@
-AA//BB
-CC//DD
+//Misc
+Belle
+Sass
+Cella
+Prissy
+Tiffy
+Tomboy
+
+//Titles
+Lady
+Madam
+Missy

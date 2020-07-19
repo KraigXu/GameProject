@@ -56,6 +56,7 @@ namespace Verse
 		{
 			XmlInheritance.Clear();
 			List<LoadableXmlAsset> assets = new List<LoadableXmlAsset>();
+            Log.Message(">>"+folderPath);
 			object[] array = Resources.LoadAll<TextAsset>(folderPath);
 			array = array;
 			for (int j = 0; j < array.Length; j++)

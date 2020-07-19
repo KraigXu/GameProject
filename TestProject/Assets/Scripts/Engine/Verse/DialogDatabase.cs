@@ -20,7 +20,8 @@ namespace Verse
 		{
 			Nodes.Clear();
 			Object[] array = Resources.LoadAll("Dialog", typeof(TextAsset));
-			foreach (Object @object in array)
+            Log.Message(">>" + "Dialog");
+            foreach (Object @object in array)
 			{
 				TextAsset ass = @object as TextAsset;
 				if (@object.name == "BaseEncounters" || @object.name == "GeneratedDialogs")
