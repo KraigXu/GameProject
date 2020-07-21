@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace RimWorld.Planet
 {
+	/// <summary>
+	/// 20面体生成器
+	/// </summary>
 	public static class IcosahedronGenerator
 	{
 		private static readonly TriangleIndices[] IcosahedronTris = new TriangleIndices[20]

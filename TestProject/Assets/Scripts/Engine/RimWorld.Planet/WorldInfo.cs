@@ -6,6 +6,9 @@ namespace RimWorld.Planet
 	{
 		public string name = "DefaultWorldName";
 
+		/// <summary>
+		/// ÐÐÐÇ¸²¸ÇÂÊ
+		/// </summary>
 		public float planetCoverage;
 
 		public string seedString = "SeedError";

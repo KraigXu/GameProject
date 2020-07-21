@@ -6,6 +6,9 @@ using Verse;
 
 namespace RimWorld.Planet
 {
+	/// <summary>
+	/// 世界网格
+	/// </summary>
 	public class WorldGrid : IExposable
 	{
 		public List<Tile> tiles = new List<Tile>();
@@ -558,6 +561,9 @@ namespace RimWorld.Planet
 			averageTileSize = (float)(num / (double)num2);
 		}
 
+		/// <summary>
+		/// 角度准备
+		/// </summary>
 		private void CalculateViewCenterAndAngle()
 		{
 			viewAngle = Find.World.PlanetCoverage * 180f;

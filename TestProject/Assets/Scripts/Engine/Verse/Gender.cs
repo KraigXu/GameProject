@@ -4,6 +4,7 @@ namespace Verse
 	{
 		None,
 		Male,
-		Female
+		Female,
+		Neutrale
 	}
 }

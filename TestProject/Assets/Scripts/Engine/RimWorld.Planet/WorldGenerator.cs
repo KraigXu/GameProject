@@ -21,9 +21,19 @@ namespace RimWorld.Planet
 			orderby x.order, x.index
 			select x;
 
+		/// <summary>
+		/// 生成世界
+		/// </summary>
+		/// <param name="planetCoverage"></param>
+		/// <param name="seedString"></param>
+		/// <param name="overallRainfall"></param>
+		/// <param name="overallTemperature"></param>
+		/// <param name="population"></param>
+		/// <returns></returns>
 		public static World GenerateWorld(float planetCoverage, string seedString, OverallRainfall overallRainfall, OverallTemperature overallTemperature, OverallPopulation population)
 		{
 			DeepProfiler.Start("GenerateWorld");
+			Log.Message("生成世界");
 			Rand.PushState();
 			int seed = Rand.Seed = GetSeedFromSeedString(seedString);
 			try

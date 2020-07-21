@@ -4,6 +4,9 @@ using Verse;
 
 namespace RimWorld.Planet
 {
+	/// <summary>
+	/// ĞÇÇòĞÎ×´Éú³É
+	/// </summary>
 	public static class PlanetShapeGenerator
 	{
 		private static int subdivisionsCount;
