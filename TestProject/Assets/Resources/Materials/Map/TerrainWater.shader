@@ -1,4 +1,4 @@
-﻿Shader "Custom/Cutout"
+﻿Shader "Custom/TerrainWater"
 {
     Properties
     {

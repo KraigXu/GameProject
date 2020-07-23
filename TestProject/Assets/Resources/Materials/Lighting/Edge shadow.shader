@@ -1,4 +1,4 @@
-﻿Shader "Hidden/Custom_Light overlay_d3d11"
+﻿Shader "Custom/Edge shadow"
 {
     Properties
     {

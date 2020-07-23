@@ -92,8 +92,11 @@ namespace RimWorld.Planet
 		static WorldMaterials()
 		{
 			WorldTerrain = MatLoader.LoadMat("World/WorldTerrain", 3500);
+			RimWorld.Test.TsDefineDataShow.Instance.AddMaterial(WorldTerrain);
 			WorldIce = MatLoader.LoadMat("World/WorldIce", 3500);
+			RimWorld.Test.TsDefineDataShow.Instance.AddMaterial(WorldIce);
 			WorldOcean = MatLoader.LoadMat("World/WorldOcean", 3500);
+			RimWorld.Test.TsDefineDataShow.Instance.AddMaterial(WorldOcean);
 			UngeneratedPlanetParts = MatLoader.LoadMat("World/UngeneratedPlanetParts", 3500);
 			Rivers = MatLoader.LoadMat("World/Rivers", 3530);
 			RiversBorder = MatLoader.LoadMat("World/RiversBorder", 3520);
