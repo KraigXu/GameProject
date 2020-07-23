@@ -3,8 +3,8 @@
   <volumeGame>1</volumeGame>
   <volumeMusic>1</volumeMusic>
   <volumeAmbient>1</volumeAmbient>
-  <screenWidth>1920</screenWidth>
-  <screenHeight>1080</screenHeight>
+  <screenWidth>1024</screenWidth>
+  <screenHeight>768</screenHeight>
   <fullscreen>False</fullscreen>
   <uiScale>1</uiScale>
   <customCursorEnabled>True</customCursorEnabled>
