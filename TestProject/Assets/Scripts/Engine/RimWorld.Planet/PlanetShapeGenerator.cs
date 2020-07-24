@@ -57,6 +57,7 @@ namespace RimWorld.Planet
 
 		public static void Generate(int subdivisionsCount, out List<Vector3> outVerts, out List<int> outTileIDToVerts_offsets, out List<int> outTileIDToNeighbors_offsets, out List<int> outTileIDToNeighbors_values, float radius, Vector3 viewCenter, float viewAngle)
 		{
+	
 			PlanetShapeGenerator.subdivisionsCount = subdivisionsCount;
 			PlanetShapeGenerator.radius = radius;
 			PlanetShapeGenerator.viewCenter = viewCenter;

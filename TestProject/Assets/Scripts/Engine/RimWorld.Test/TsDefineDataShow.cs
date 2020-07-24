@@ -22,24 +22,26 @@ namespace RimWorld.Test
 
         private static TsDefineDataShow _instance;
 
-
         public List<Material> materials=new List<Material>();
 
         void Start()
         {
-
         }
 
         void Update()
         {
 
         }
-
         public void AddMaterial(Material m)
         {
             Log.Message("Test Materail Add >>>"+m);
             materials.Add(m);
+        }
 
+        public void AddMaterialNew(Material m)
+        {
+            Log.Message("Test Materail Add New >>>" + m);
+            materials.Add(m);
         }
         
     }

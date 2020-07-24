@@ -26,6 +26,9 @@ namespace Verse
 				stackTrace = (Prefs.DevMode ? Environment.StackTrace : "(unavailable)")
 			};
 			TryReport();
+
+			RimWorld.Test.TsDefineDataShow.Instance.AddMaterialNew(material2);
+
 			return material2;
 		}
 
@@ -37,6 +40,7 @@ namespace Verse
 				stackTrace = (Prefs.DevMode ? Environment.StackTrace : "(unavailable)")
 			};
 			TryReport();
+			RimWorld.Test.TsDefineDataShow.Instance.AddMaterialNew(material);
 			return material;
 		}
 

@@ -134,6 +134,13 @@ namespace Verse
 			do
 			{
 				HeadGraphicRecord headGraphicRecord = heads.RandomElement();
+
+                if (headGraphicRecord == null)
+                {
+					Log.Message("HeadGraphicRecord>>NUll");
+                }
+				
+
 				if (predicate(headGraphicRecord))
 				{
 					return headGraphicRecord.GetGraphic(skinColor);
