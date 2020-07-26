@@ -34,13 +34,13 @@ namespace RimWorld.Test
         }
         public void AddMaterial(Material m)
         {
-            Log.Message("Test Materail Add >>>"+m);
+          //  Log.Message("Test Materail Add >>>"+m);
             materials.Add(m);
         }
 
         public void AddMaterialNew(Material m)
         {
-            Log.Message("Test Materail Add New >>>" + m);
+          //  Log.Message("Test Materail Add New >>>" + m);
             materials.Add(m);
         }
         

@@ -23,13 +23,15 @@ public class FlodeMoveTo : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        string src = Application.streamingAssetsPath + "/Textures";
-        directoryInfo = new DirectoryInfo(src);
-        files = directoryInfo.GetFiles();
+       //Debug.LogError(Application.dataPath + ">>>");
+        //string src = Application.dataPath + "/TestD/Texture2D1";
+        //directoryInfo = new DirectoryInfo(src);
+        //files = directoryInfo.GetFiles();
     }
 
     void Start()
     {
+       
 
     }
 
@@ -89,7 +91,7 @@ public class FlodeMoveTo : MonoBehaviour
         for (int i = 0; i < urls.Count; i++)
         {
             childs = urls[i].Split('/');
-            url = Application.streamingAssetsPath + "/Move";
+            url = Application.dataPath + "/TestD/Move";
             for (int j = 0; j < childs.Length; j++)
             {
                 if (j != childs.Length - 1)
@@ -98,11 +100,6 @@ public class FlodeMoveTo : MonoBehaviour
 
                     if (!Directory.Exists(url))//如果不存在就创建 dir 文件夹  
                         Directory.CreateDirectory(url);
-
-                    //if (!File.Exists(url))
-                    //{
-                    //    File.Create(url);
-                    //}
                 }
                 else
                 {
@@ -110,10 +107,14 @@ public class FlodeMoveTo : MonoBehaviour
                     {
                         if(file.Name == childs[j] + ".png")
                         {
-                            Debug.Log(file.Name + file.Extension + ">>>" + childs[j] + ".png");
                             file.MoveTo(Path.Combine(url, file.Name));
+                           // return;
                         }
                     }
+                    //if(!Directory.Exists(Path.Combine(url, childs[j] + ".png")))
+                    //{
+                    //    Debug.Log("$$$$$$$"+ Path.Combine(url, childs[j] + ".png"));
+                    //}
                 }
             }
 

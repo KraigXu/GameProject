@@ -15,10 +15,11 @@ namespace Verse
 		public static string TextFromResourceFile(string filePath)
 		{
 			TextAsset textAsset = Resources.Load("Text/" + filePath) as TextAsset;
-            Log.Message(">>"+ "Text/" + filePath);
+           
 			if (textAsset == null)
 			{
-				Log.Message("Found no text asset in resources at " + filePath);
+                Log.Message(">>" + "Text/" + filePath);
+                Log.Message("Found no text asset in resources at " + filePath);
 				return null;
 			}
 			return GetTextWithoutBOM(textAsset);

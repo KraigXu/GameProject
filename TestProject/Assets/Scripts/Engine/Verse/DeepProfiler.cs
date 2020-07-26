@@ -28,7 +28,6 @@ namespace Verse
 
 		public static void Start(string label = null)
 		{
-			Log.Message(label);
 			if (enabled && Prefs.LogVerbose)
 			{
 				Get().Start(label);
