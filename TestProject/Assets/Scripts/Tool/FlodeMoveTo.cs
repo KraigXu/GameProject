@@ -23,7 +23,7 @@ public class FlodeMoveTo : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-       //Debug.LogError(Application.dataPath + ">>>");
+        //Debug.LogError(Application.dataPath + ">>>");
         //string src = Application.dataPath + "/TestD/Texture2D1";
         //directoryInfo = new DirectoryInfo(src);
         //files = directoryInfo.GetFiles();
@@ -31,8 +31,6 @@ public class FlodeMoveTo : MonoBehaviour
 
     void Start()
     {
-       
-
     }
 
     void Update()
@@ -47,7 +45,6 @@ public class FlodeMoveTo : MonoBehaviour
         //{
         //    MoveFiles();
         //}
-
     }
 
     public void InFile(string value)
@@ -105,10 +102,10 @@ public class FlodeMoveTo : MonoBehaviour
                 {
                     foreach (FileInfo file in files)
                     {
-                        if(file.Name == childs[j] + ".png")
+                        if (file.Name == childs[j] + ".png")
                         {
                             file.MoveTo(Path.Combine(url, file.Name));
-                           // return;
+                            // return;
                         }
                     }
                     //if(!Directory.Exists(Path.Combine(url, childs[j] + ".png")))

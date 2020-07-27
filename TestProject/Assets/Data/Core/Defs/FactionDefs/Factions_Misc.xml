@@ -144,8 +144,6 @@
     <naturalColonyGoodwill>-100~-80</naturalColonyGoodwill>
   </FactionDef>
 
-
-
   <FactionDef ParentName="HumanFactionBase" Name="TribeBase" Abstract="True">
     <pawnSingular>tribesman</pawnSingular>
     <pawnsPlural>tribespeople</pawnsPlural>
@@ -322,8 +320,6 @@
     <goodwillDailyGain>0</goodwillDailyGain><!-- Reset goodwill inherited from TribeBase->HumanFactionBase for permanent enemy -->
     <goodwillDailyFall>0</goodwillDailyFall>
   </FactionDef>
-
-
 
   <FactionDef>
     <defName>Pirate</defName>

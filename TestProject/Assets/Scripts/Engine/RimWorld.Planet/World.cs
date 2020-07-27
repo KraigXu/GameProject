@@ -6,6 +6,9 @@ using Verse.Noise;
 
 namespace RimWorld.Planet
 {
+	/// <summary>
+	///  ¿ΩÁ
+	/// </summary>
 	public sealed class World : IThingHolder, IExposable, IIncidentTarget, ILoadReferenceable
 	{
 		public WorldInfo info = new WorldInfo();

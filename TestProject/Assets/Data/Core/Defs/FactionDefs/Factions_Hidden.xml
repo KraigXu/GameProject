@@ -140,5 +140,13 @@
     <settlementTexturePath>World/WorldObjects/DefaultSettlement</settlementTexturePath>
     <allowedArrivalTemperatureRange>0~45</allowedArrivalTemperatureRange>
   </FactionDef>
+
+  <FactionDef>
+    <defName>SupportNo</defName>
+    <labe>
+    
+  </FactionDef>
+  
+  
   
 </Defs>

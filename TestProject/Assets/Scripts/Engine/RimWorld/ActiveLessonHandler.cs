@@ -9,7 +9,6 @@ namespace RimWorld
 		private Lesson activeLesson;
 
 		public Lesson Current => activeLesson;
-
 		public bool ActiveLessonVisible
 		{
 			get
