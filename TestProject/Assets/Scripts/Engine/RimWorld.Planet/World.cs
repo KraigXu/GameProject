@@ -154,7 +154,6 @@ namespace RimWorld.Planet
 			components.Clear();
 			FillComponents();
 		}
-
 		private void FillComponents()
 		{
 			components.RemoveAll((WorldComponent component) => component == null);

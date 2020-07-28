@@ -35,7 +35,6 @@ public class FlodeMoveTo : MonoBehaviour
 
     void Update()
     {
-
         //if (Input.GetKeyDown(KeyCode.Q))
         //{
         //    RdFile();
@@ -80,9 +79,7 @@ public class FlodeMoveTo : MonoBehaviour
     {
 
         Debug.Log(urls.Count);
-
         //Textures/UI/Overlays/ReservedForWork
-
         string url;
         string[] childs;
         for (int i = 0; i < urls.Count; i++)

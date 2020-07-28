@@ -120,6 +120,8 @@ namespace RimWorld.Planet
 			TargetSquareMatSingle = MaterialPool.MatFrom("UI/Overlays/TargetHighlight_Square", ShaderDatabase.Transparent, 3560);
 			NumMatsPerMode = 50;
 			OverlayModeMatOcean = SolidColorMaterials.NewSolidColorMaterial(new Color(0.09f, 0.18f, 0.2f), ShaderDatabase.Transparent);
+
+
 			FertilitySpectrum = new Color[2]
 			{
 				new Color(0f, 1f, 0f, 0f),

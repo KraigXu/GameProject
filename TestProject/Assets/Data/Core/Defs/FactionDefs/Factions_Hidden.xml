@@ -143,10 +143,112 @@
 
   <FactionDef>
     <defName>SupportNo</defName>
-    <labe>
-    
+    <label>supportno</label>
+    <pawnSingular>support</pawnSingular>
+    <pawnsPlural>supports</pawnsPlural>
+    <requiredCountAtGameStart>1</requiredCountAtGameStart>
+    <fixedName>Sorne Geneline</fixedName>
+    <factionIconPath>World/WorldObjects/Expanding/Sites/Manhunters</factionIconPath>
+    <raidCommonalityFromPointsCurve>
+      <points>
+        <li>(0, 0)</li>
+      </points>
+    </raidCommonalityFromPointsCurve>
+    <humanlikeFaction>false</humanlikeFaction>
+    <hidden>true</hidden>
+    <autoFlee>false</autoFlee>
+    <canUseAvoidGrid>false</canUseAvoidGrid>
+    <techLevel>Animal</techLevel>
+    <permanentEnemy>true</permanentEnemy>
+    <settlementTexturePath>World/WorldObjects/DefaultSettlement</settlementTexturePath>
+    <allowedArrivalTemperatureRange>0~45</allowedArrivalTemperatureRange>
   </FactionDef>
+
+
+  <FactionDef Abstract="True" Name="DynastyBase">
+    <pawnSingular>dynasty</pawnSingular>
+    <pawnsPlural>dynasty</pawnsPlural>
+    <categoryTag>Dynasty</categoryTag>
+    <requiredCountAtGameStart>1</requiredCountAtGameStart>
+    <fixedName>Dynastys</fixedName>
+    <factionIconPath>World/WorldObjects/Expanding/Sites/DownedRefugee</factionIconPath>
+    <techLevel>Spacer</techLevel>
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Offworld</li>
+        </categories>
+      </li>
+    </backstoryFilters>
+    <hidden>true</hidden>
+    <rescueesCanJoin>true</rescueesCanJoin>
+    <autoFlee>false</autoFlee>
+    <geneticVariance>1</geneticVariance>
+    <hairTags>
+      <li>Urban</li>
+    </hairTags>
+    <apparelStuffFilter>
+      <thingDefs>
+        <li>Synthread</li>
+        <li>Hyperweave</li>
+        <li>Plasteel</li>
+      </thingDefs>
+    </apparelStuffFilter>
+  </FactionDef>
+
+  <FactionDef ParentName="DynastyBase">
+    <defName>JinYiwei</defName>
+    <label>JinYiwei</label>
+  </FactionDef>
+
+  <FactionDef ParentName="DynastyBase">
+    <defName>Housekeeper</defName>
+    <label>Housekeeper</label>
+  </FactionDef>
+
   
-  
-  
+  <FactionDef>
+    <defName>Bandit</defName>
+    <label>bandit</label>
+    <pawnSingular>bandit</pawnSingular>
+    <pawnsPlural>insects</pawnsPlural>
+    <requiredCountAtGameStart>1</requiredCountAtGameStart>
+    <fixedName>Sorne Geneline</fixedName>
+    <factionIconPath>World/WorldObjects/Expanding/Sites/Manhunters</factionIconPath>
+    <raidCommonalityFromPointsCurve>
+      <points>
+        <li>(0, 0)</li>
+      </points>
+    </raidCommonalityFromPointsCurve>
+    <humanlikeFaction>false</humanlikeFaction>
+    <hidden>true</hidden>
+    <autoFlee>false</autoFlee>
+    <canUseAvoidGrid>false</canUseAvoidGrid>
+    <techLevel>Animal</techLevel>
+    <permanentEnemy>true</permanentEnemy>
+    <settlementTexturePath>World/WorldObjects/DefaultSettlement</settlementTexturePath>
+    <allowedArrivalTemperatureRange>0~45</allowedArrivalTemperatureRange>
+  </FactionDef>
+
+
+  <FactionDef>
+    <defName>XiaoYaoPai</defName>
+    <label>XiaoYaoPai</label>
+  </FactionDef>
+
+  <FactionDef>
+    <defName>YiHuaGong</defName>
+    <label>YiHuaGong</label>
+  </FactionDef>
+
+  <FactionDef>
+    <defName>WuDang</defName>
+    <label>WuDang</label>
+  </FactionDef>
+
+  <FactionDef>
+    <defName>Shaolin</defName>
+    <label>Shaolin</label>
+  </FactionDef>
+
 </Defs>

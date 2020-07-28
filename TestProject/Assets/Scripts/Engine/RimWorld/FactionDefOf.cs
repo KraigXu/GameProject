@@ -15,6 +15,8 @@ namespace RimWorld
 
 		public static FactionDef Insect;
 
+		public static FactionDef SupportNo;
+
 		[MayRequireRoyalty]
 		public static FactionDef Empire;
 

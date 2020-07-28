@@ -21,6 +21,8 @@ namespace RimWorld
 
 		private Faction empire;
 
+		private Faction ofSupportNo;
+
 		public List<Faction> AllFactionsListForReading => allFactions;
 
 		public IEnumerable<Faction> AllFactions => allFactions;
@@ -192,6 +194,8 @@ namespace RimWorld
 			ofAncients = FirstFactionOfDef(FactionDefOf.Ancients);
 			ofAncientsHostile = FirstFactionOfDef(FactionDefOf.AncientsHostile);
 			empire = FirstFactionOfDef(FactionDefOf.Empire);
+			ofSupportNo = FirstFactionOfDef(FactionDefOf.SupportNo);
+
 		}
 	}
 }

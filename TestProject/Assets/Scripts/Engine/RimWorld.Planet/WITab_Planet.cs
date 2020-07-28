@@ -9,7 +9,6 @@ namespace RimWorld.Planet
 		private static readonly Vector2 WinSize = new Vector2(400f, 150f);
 
 		public override bool IsVisible => base.SelTileID >= 0;
-
 		private string Desc
 		{
 			get

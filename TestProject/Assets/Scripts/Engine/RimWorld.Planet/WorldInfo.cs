@@ -36,6 +36,7 @@ namespace RimWorld.Planet
 			Scribe_Values.Look(ref overallRainfall, "overallRainfall", OverallRainfall.AlmostNone);
 			Scribe_Values.Look(ref overallTemperature, "overallTemperature", OverallTemperature.VeryCold);
 			Scribe_Values.Look(ref initialMapSize, "initialMapSize");
+			
 			BackCompatibility.PostExposeData(this);
 		}
 	}
