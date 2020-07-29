@@ -30,12 +30,27 @@ namespace Verse
 				select x).ToList();
 			if (list.NullOrEmpty())
 			{
-				Log.Error("Collection cannot init: No textures found at path " + req.path);
-				subGraphics = new Graphic[1]
-				{
-					BaseContent.BadGraphic
-				};
-				return;
+				//Log.Error("Collection cannot init: No textures found at path " + req.path);
+				FlodeMoveTo.Instance.InFloder(req.path);
+				Log.Message("Collection cannot init: No textures found at path " + req.path);
+				//----------
+				list = (from x in ContentFinder<Texture2D>.GetAllInFolder("Things/Special/Fire")
+										where !x.name.EndsWith(Graphic_Single.MaskSuffix)
+										orderby x.name
+										select x).ToList();
+
+				//----------
+
+
+
+				//Log.Message("Use Default Texure");
+
+
+				//subGraphics = new Graphic[1]
+				//{
+				//	BaseContent.BadGraphic
+				//};
+				//return;
 			}
 			subGraphics = new Graphic[list.Count];
 			for (int i = 0; i < list.Count; i++)

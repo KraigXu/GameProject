@@ -23,10 +23,10 @@ public class FlodeMoveTo : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        //Debug.LogError(Application.dataPath + ">>>");
-        //string src = Application.dataPath + "/TestD/Texture2D1";
-        //directoryInfo = new DirectoryInfo(src);
-        //files = directoryInfo.GetFiles();
+        Debug.Log(Application.dataPath + ">>>");
+        string src = Application.dataPath + "/TestD/Texture2D1";
+        directoryInfo = new DirectoryInfo(src);
+        files = directoryInfo.GetFiles();
     }
 
     void Start()
@@ -35,15 +35,16 @@ public class FlodeMoveTo : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    RdFile();
-        //}
+        return;
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            RdFile();
+        }
 
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    MoveFiles();
-        //}
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            MoveFiles2();
+        }
     }
 
     public void InFile(string value)
@@ -59,6 +60,21 @@ public class FlodeMoveTo : MonoBehaviour
             sw.Close();
         }
     }
+    
+    public void InFloder(string value)
+    {
+        return;
+        string txt = Application.streamingAssetsPath + "/Test.txt";
+        StreamWriter sw;
+
+        if (File.Exists(txt))
+        {
+            sw = File.AppendText(txt);
+            sw.WriteLine(value);
+            sw.Close();
+        }
+        return;
+    }
 
     public void RdFile()
     {
@@ -72,6 +88,38 @@ public class FlodeMoveTo : MonoBehaviour
                 urls.Add(line);
             }
         }
+    }
+
+    public void MoveFiles2()
+    {
+        string url;
+        string[] childs;
+        for (int i = 0; i < urls.Count; i++)
+        {
+            childs = urls[i].Split('/');
+            url = Application.dataPath + "/TestD/Move";
+            for (int j = 0; j < childs.Length; j++)
+            {
+
+                url += "/" + childs[j];
+
+                if (!Directory.Exists(url))//如果不存在就创建 dir 文件夹  
+                    Directory.CreateDirectory(url);
+
+                if (j == childs.Length - 1)
+                {
+                    foreach (FileInfo file in files)
+                    {
+                        if (file.Name.Contains(childs[j]))
+                        {
+                            file.MoveTo(Path.Combine(url, file.Name));
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
 
 

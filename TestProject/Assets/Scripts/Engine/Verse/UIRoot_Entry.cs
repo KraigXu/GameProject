@@ -33,6 +33,7 @@ namespace Verse
 			MainMenuDrawer.Init();
 			QuickStarter.CheckQuickStart();
 			VersionUpdateDialogMaker.CreateVersionUpdateDialogIfNecessary();
+
 			if (!SteamManager.Initialized)
 			{
 				Dialog_MessageBox window = new Dialog_MessageBox((string)"SteamClientMissing".Translate(), "Quit".Translate(), delegate
