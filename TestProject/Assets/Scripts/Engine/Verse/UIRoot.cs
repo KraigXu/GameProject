@@ -48,6 +48,7 @@ namespace Verse
 
 			GraphicRaycaster graphicRaycaster = gameObject.AddComponent<GraphicRaycaster>();
 
+
 			uiCenter = gameObject.AddComponent<UICenterMasterManager>();
 		}
 

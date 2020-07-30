@@ -29,20 +29,26 @@ namespace Verse
 		public override void Init()
 		{
 			base.Init();
+
 			UIMenuBackgroundManager.background = new UI_BackgroundMain();
+			//主菜单
 			MainMenuDrawer.Init();
+			
 			QuickStarter.CheckQuickStart();
+			//版本信息
 			VersionUpdateDialogMaker.CreateVersionUpdateDialogIfNecessary();
 
-			if (!SteamManager.Initialized)
-			{
-				Dialog_MessageBox window = new Dialog_MessageBox((string)"SteamClientMissing".Translate(), "Quit".Translate(), delegate
-				{
-					Application.Quit();
-				}, "Ignore".Translate());
-				Find.WindowStack.Add(window);
-			}
-		}
+            //Todo:注释Steam检测
+            if (!SteamManager.Initialized)
+            {
+                //Dialog_MessageBox window = new Dialog_MessageBox((string)"SteamClientMissing".Translate(), "Quit".Translate(), delegate
+                //{
+                //    Application.Quit();
+                //}, "Ignore".Translate());
+                //Find.WindowStack.Add(window);
+            }
+
+        }
 
 		public override void UIRootOnGUI()
 		{
@@ -57,6 +63,7 @@ namespace Verse
 				Find.Tutor.TutorOnGUI();
 			}
 			ReorderableWidget.ReorderableWidgetOnGUI_BeforeWindowStack();
+
 			windows.WindowStackOnGUI();
 			ReorderableWidget.ReorderableWidgetOnGUI_AfterWindowStack();
 			Widgets.WidgetsOnGUI();

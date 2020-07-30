@@ -140,6 +140,7 @@ namespace RimWorld
 				CloseMainTab();
 				Find.WindowStack.Add(new Dialog_Options());
 			}, "MenuButton-Options");
+
 			list.Add(item);
 			if (Current.ProgramState == ProgramState.Entry)
 			{
