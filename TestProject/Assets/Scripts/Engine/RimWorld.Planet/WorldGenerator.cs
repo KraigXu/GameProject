@@ -33,7 +33,7 @@ namespace RimWorld.Planet
 		public static World GenerateWorld(float planetCoverage, string seedString, OverallRainfall overallRainfall, OverallTemperature overallTemperature, OverallPopulation population)
 		{
 			DeepProfiler.Start("GenerateWorld");
-			Log.Message("生成世界");
+			Log.Message("生成世界 >>"+seedString);
 			Rand.PushState();
 			int seed = Rand.Seed = GetSeedFromSeedString(seedString);
 			try
@@ -45,6 +45,7 @@ namespace RimWorld.Planet
 				Current.CreatingWorld.info.overallTemperature = overallTemperature;
 				Current.CreatingWorld.info.overallPopulation = population;
 				Current.CreatingWorld.info.name = NameGenerator.GenerateName(RulePackDefOf.NamerWorld);
+				
 				tmpGenSteps.Clear();
 				tmpGenSteps.AddRange(GenStepsInOrder);
 				for (int i = 0; i < tmpGenSteps.Count; i++)

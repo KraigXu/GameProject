@@ -27,6 +27,8 @@ namespace RimWorld.Planet
 
 		public int Seed => GenText.StableStringHash(seedString);
 
+		public WorldType worldType;
+
 		public void ExposeData()
 		{
 			Scribe_Values.Look(ref name, "name");

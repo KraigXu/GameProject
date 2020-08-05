@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Verse
 {
+	/// <summary>
+	/// Çø
+	/// </summary>
 	public abstract class Area : IExposable, ILoadReferenceable, ICellBoolGiver
 	{
 		public AreaManager areaManager;

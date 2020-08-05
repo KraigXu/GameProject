@@ -112,7 +112,8 @@ namespace Verse.Sound
 		{
 			if (resolvedGrains.Count == 0)
 			{
-				Log.Error("Cannot play " + parentDef + " (subSound " + this + "_: No resolved grains.");
+				//Log.Error("Cannot play " + parentDef + " (subSound " + this + "_: No resolved grains.");
+				//Log.Message("Cannot play " + parentDef + " (subSound " + this + "_: No resolved grains.");
 			}
 			else
 			{

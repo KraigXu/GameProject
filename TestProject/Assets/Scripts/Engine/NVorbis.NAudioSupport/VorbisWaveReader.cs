@@ -65,7 +65,6 @@ namespace NVorbis.NAudioSupport
 		public int UpperBitrate => _reader.UpperBitrate;
 
 		public int NominalBitrate => _reader.NominalBitrate;
-
 		public int LowerBitrate => _reader.LowerBitrate;
 
 		public string Vendor => _reader.Vendor;

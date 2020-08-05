@@ -34,7 +34,6 @@ namespace RimWorld.Planet
 
 		private static readonly Texture2D ViewQuestCommandTex = ContentFinder<Texture2D>.Get("UI/Commands/ViewQuest");
 
-
 		public List<WorldObjectComp> AllComps => comps;
 
 		public virtual bool ShowRelatedQuests => true;

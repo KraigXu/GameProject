@@ -44,6 +44,7 @@ namespace Verse
 					{
 						Current.Game.UpdateEntry();
 					}
+					
 				}
 				catch (Exception arg)
 				{

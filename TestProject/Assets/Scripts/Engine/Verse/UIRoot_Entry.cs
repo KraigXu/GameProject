@@ -30,7 +30,7 @@ namespace Verse
 		{
 			base.Init();
 
-			UIMenuBackgroundManager.background = new UI_BackgroundMain();
+		//	UIMenuBackgroundManager.background = new UI_BackgroundMain();
 			//Ö÷²Ëµ¥
 			MainMenuDrawer.Init();
 			
@@ -39,14 +39,16 @@ namespace Verse
 			VersionUpdateDialogMaker.CreateVersionUpdateDialogIfNecessary();
 
             //Todo:×¢ÊÍSteam¼ì²â
-            if (!SteamManager.Initialized)
+           /* 
+            * if (!SteamManager.Initialized)
             {
-                //Dialog_MessageBox window = new Dialog_MessageBox((string)"SteamClientMissing".Translate(), "Quit".Translate(), delegate
-                //{
-                //    Application.Quit();
-                //}, "Ignore".Translate());
-                //Find.WindowStack.Add(window);
+                Dialog_MessageBox window = new Dialog_MessageBox((string)"SteamClientMissing".Translate(), "Quit".Translate(), delegate
+                {
+                    Application.Quit();
+                }, "Ignore".Translate());
+                Find.WindowStack.Add(window);
             }
+		   */
 
         }
 
@@ -72,6 +74,7 @@ namespace Verse
 				Find.World.UI.HandleLowPriorityInput();
 			}
 		}
+
 
 		public override void UIRootUpdate()
 		{

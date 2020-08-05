@@ -21,6 +21,9 @@ namespace RimWorld
 
 		private OverallPopulation population;
 
+		
+
+
 		private static readonly float[] PlanetCoverages = new float[3]
 		{
 			0.3f,
@@ -120,6 +123,10 @@ namespace RimWorld
 			Widgets.Label(new Rect(0f, num, 200f, 30f), "PlanetPopulation".Translate());
 			Rect rect6 = new Rect(200f, num, 200f, 30f);
 			population = (OverallPopulation)Mathf.RoundToInt(Widgets.HorizontalSlider(rect6, (float)population, 0f, OverallPopulationUtility.EnumValuesCount - 1, middleAlignment: true, "PlanetPopulation_Normal".Translate(), "PlanetPopulation_Low".Translate(), "PlanetPopulation_High".Translate(), 1f));
+			num += 40f;
+			Widgets.Label(new Rect(0f, num, 200f, 30f), "AAAA".Translate());
+			Rect rect7 = new Rect(200f, num, 200f, 30f);
+			
 			GUI.EndGroup();
 			DoBottomButtons(rect, "WorldGenerate".Translate(), "Reset".Translate(), Reset);
 		}
@@ -132,8 +139,15 @@ namespace RimWorld
 			}
 			LongEventHandler.QueueLongEvent(delegate
 			{
+
+				//ÏÂÒ»²½
 				Find.GameInitData.ResetWorldRelatedMapInitData();
+				
+				
 				Current.Game.World = WorldGenerator.GenerateWorld(planetCoverage, seedString, rainfall, temperature, population);
+
+
+
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{
 					if (next != null)

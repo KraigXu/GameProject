@@ -601,6 +601,9 @@ namespace RimWorld.Planet
 			}
 		}
 
+		/// <summary>
+		/// 标准化地图数据
+		/// </summary>
 		public void StandardizeTileData()
 		{
 			TilesToRawData();

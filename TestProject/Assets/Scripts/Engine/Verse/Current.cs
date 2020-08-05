@@ -26,6 +26,9 @@ namespace Verse
 
 		private static World creatingWorldInt;
 
+		
+
+
 		public static Root Root => rootInt;
 
 		public static Root_Entry Root_Entry => rootEntryInt;
@@ -78,6 +81,7 @@ namespace Verse
 
 		public static void Notify_LoadedSceneChanged()
 		{
+			
 			cameraInt = GameObject.Find("Camera").GetComponent<Camera>();
 			if (GenScene.InEntryScene)
 			{

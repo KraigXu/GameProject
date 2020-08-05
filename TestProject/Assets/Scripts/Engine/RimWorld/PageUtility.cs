@@ -27,6 +27,7 @@ namespace RimWorld
 			return list[0];
 		}
 
+
 		public static void InitGameStart()
 		{
 			LongEventHandler.QueueLongEvent(delegate
@@ -34,6 +35,7 @@ namespace RimWorld
 				Find.GameInitData.PrepForMapGen();
 				Find.GameInitData.startedFromEntry = true;
 				Find.Scenario.PreMapGenerate();
+
 			}, "Play", "GeneratingMap", doAsynchronously: true, null);
 		}
 	}

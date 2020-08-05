@@ -107,6 +107,7 @@ namespace RimWorld
 				}));
 				list.Add(new ListableOption("NewColony".Translate(), delegate
 				{
+					//pd 1
 					Find.WindowStack.Add(new Page_SelectScenario());
 				}));
 			}

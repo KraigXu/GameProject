@@ -22,17 +22,16 @@ public class FlodeMoveTo : MonoBehaviour
     public FileInfo[] files = null;
     private void Awake()
     {
+       
         _instance = this;
+        return;
         Debug.Log(Application.dataPath + ">>>");
         string src = Application.dataPath + "/TestD/Texture2D1";
         directoryInfo = new DirectoryInfo(src);
         files = directoryInfo.GetFiles();
     }
 
-    void Start()
-    {
-    }
-
+    
     void Update()
     {
         return;
