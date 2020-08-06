@@ -55,6 +55,7 @@ namespace RimWorld.Planet
 					{
 						Rand.Seed = Gen.HashCombineInt(seed, GetSeedPart(tmpGenSteps, i));
 						tmpGenSteps[i].worldGenStep.GenerateFresh(seedString);
+						
 					}
 					catch (Exception arg)
 					{
@@ -77,6 +78,7 @@ namespace RimWorld.Planet
 				DeepProfiler.End();
 				Current.CreatingWorld = null;
 			}
+
 		}
 
 		public static void GenerateWithoutWorldData(string seedString)

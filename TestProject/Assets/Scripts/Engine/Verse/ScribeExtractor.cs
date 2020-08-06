@@ -49,7 +49,9 @@ namespace Verse
 			{
 				if (text == subNode.InnerText)
 				{
+					
 					Log.Error("Could not load reference to " + typeof(T) + " named " + subNode.InnerText);
+
 				}
 				else
 				{

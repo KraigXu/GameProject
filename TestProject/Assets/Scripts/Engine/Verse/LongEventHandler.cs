@@ -212,6 +212,7 @@ namespace Verse
 					UIMenuBackgroundManager.background = new UI_BackgroundMain();
 				}
 				UIMenuBackgroundManager.background.BackgroundOnGUI();
+				
 				Widgets.DrawShadowAround(r);
 				Widgets.DrawWindowBackground(r);
 				DrawLongEventWindowContents(r);

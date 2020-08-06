@@ -55,6 +55,7 @@ namespace RimWorld
 		{
 			base.PostOpen();
 			TutorSystem.Notify_Event("PageStart-CreateWorldParams");
+		
 		}
 
 		public void Reset()
@@ -143,10 +144,7 @@ namespace RimWorld
 				//ÏÂÒ»²½
 				Find.GameInitData.ResetWorldRelatedMapInitData();
 				
-				
 				Current.Game.World = WorldGenerator.GenerateWorld(planetCoverage, seedString, rainfall, temperature, population);
-
-
 
 				LongEventHandler.ExecuteWhenFinished(delegate
 				{

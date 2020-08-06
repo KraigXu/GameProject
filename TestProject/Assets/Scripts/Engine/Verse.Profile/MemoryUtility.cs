@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Verse.Profile
 {
+	/// <summary>
+	/// 内存实用程序
+	/// </summary>
 	public static class MemoryUtility
 	{
 		public static void UnloadUnusedUnityAssets()

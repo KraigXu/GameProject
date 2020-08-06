@@ -6,7 +6,6 @@ using UnityEngine;
 public class FlodeMoveTo : MonoBehaviour
 {
 
-
     private static FlodeMoveTo _instance;
     public static FlodeMoveTo Instance
     {
@@ -14,21 +13,21 @@ public class FlodeMoveTo : MonoBehaviour
         {
             return _instance;
         }
-
     }
+
 
     public List<string> urls = new List<string>();
     public DirectoryInfo directoryInfo = null;
     public FileInfo[] files = null;
     private void Awake()
-    {
-       
+    {       
         _instance = this;
         return;
         Debug.Log(Application.dataPath + ">>>");
         string src = Application.dataPath + "/TestD/Texture2D1";
         directoryInfo = new DirectoryInfo(src);
         files = directoryInfo.GetFiles();
+        return;
     }
 
     

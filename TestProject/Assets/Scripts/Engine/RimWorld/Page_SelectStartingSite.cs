@@ -180,6 +180,7 @@ namespace RimWorld
 				Messages.Message(stringBuilder.ToString(), MessageTypeDefOf.RejectInput, historical: false);
 				return false;
 			}
+
 			Tile tile = Find.WorldGrid[selectedTile];
 			if (!TutorSystem.AllowAction("ChooseBiome-" + tile.biome.defName + "-" + tile.hilliness.ToString()))
 			{

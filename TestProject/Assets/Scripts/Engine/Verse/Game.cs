@@ -333,6 +333,7 @@ namespace Verse
 			DeepProfiler.Start("InitNewGame");
 			try
 			{
+				//InitMap
 				Current.ProgramState = ProgramState.MapInitializing;
 				IntVec3 intVec = new IntVec3(initData.mapSize, 1, initData.mapSize);
 				Settlement settlement = null;
@@ -350,6 +351,14 @@ namespace Verse
 					Log.Error("Could not generate starting map because there is no any player faction base.");
 				}
 				tickManager.gameStartAbsTick = GenTicks.ConfiguredTicksAbsAtGameStart;
+
+				//--------------
+				//Map currentMap=Map
+
+				//Map currentMap = MapGenerator.GenerateMap(intVec, settlement, settlement.MapGeneratorDef, settlement.ExtraGenStepDefs);
+
+				//Map currentMap=MapGenerator.GenerateMap(intVec,settlement,settlement.MapGeneratorDef,settlement.ExtraGenStepDefs)
+
 				Map currentMap = MapGenerator.GenerateMap(intVec, settlement, settlement.MapGeneratorDef, settlement.ExtraGenStepDefs);
 				worldInt.info.initialMapSize = intVec;
 				if (initData.permadeath)
@@ -370,6 +379,8 @@ namespace Verse
 						tickManager.CurTimeSpeed = TimeSpeed.Paused;
 					});
 				}
+
+				//--------------end
 				Find.Scenario.PostGameStart();
 				if (Faction.OfPlayer.def.startingResearchTags != null)
 				{
