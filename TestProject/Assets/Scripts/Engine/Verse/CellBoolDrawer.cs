@@ -146,6 +146,7 @@ namespace Verse
 					{
 						careAboutVertexColors = true;
 					}
+					
 					int count = verts.Count;
 					tris.Add(count - 4);
 					tris.Add(count - 3);
@@ -153,6 +154,7 @@ namespace Verse
 					tris.Add(count - 4);
 					tris.Add(count - 2);
 					tris.Add(count - 1);
+
 					num2++;
 					if (num2 >= 16383)
 					{

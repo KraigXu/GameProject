@@ -50,6 +50,7 @@ namespace Verse
 			set
 			{
 				playerStartSpotInt = value;
+
 			}
 		}
 
