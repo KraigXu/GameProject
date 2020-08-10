@@ -31,7 +31,7 @@ namespace Verse
 			if (list.NullOrEmpty())
 			{
 				//Log.Error("Collection cannot init: No textures found at path " + req.path);
-				FlodeMoveTo.Instance.InFloder(req.path);
+				//FlodeMoveTo.Instance.InFloder(req.path);
 				Log.Message("Collection cannot init: No textures found at path " + req.path);
 				//----------
 				list = (from x in ContentFinder<Texture2D>.GetAllInFolder("Things/Special/Fire")
