@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Spirit : MonoBehaviour
 {
-
     void Start()
     {
 
     }
-
     void Update()
     {
 

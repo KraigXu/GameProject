@@ -199,5 +199,7 @@ namespace Verse
 				material.renderQueue = renderQueue;
 			}
 		}
+
+		
 	}
 }
