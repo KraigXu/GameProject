@@ -63,7 +63,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Example\Demo1Test.cs" />
     <Compile Include="Assets\Scripts\Engine\Ionic.Crc\CRC32.cs" />
     <Compile Include="Assets\Scripts\Engine\Ionic.Crc\CrcCalculatorStream.cs" />
     <Compile Include="Assets\Scripts\Engine\Ionic.Zlib\Adler.cs" />
@@ -4878,6 +4877,7 @@
     <Compile Include="Assets\Scripts\Engine\Verse\ZoneManager.cs" />
     <Compile Include="Assets\Scripts\Spirit\Spirit.cs" />
     <Compile Include="Assets\Scripts\Tool\FlodeMoveTo.cs" />
+    <Compile Include="Assets\Test\Example\Demo1Test.cs" />
     <None Include="Assets\Data\Core\Defs\QuestScriptDefs\Script_EndGame_ShipEscape.xml" />
     <None Include="Assets\Data\Place official expansions here.txt" />
     <None Include="Assets\Data\Core\Defs\WeatherDefs\Weathers.xml" />
@@ -4894,7 +4894,6 @@
     <None Include="Assets\Data\Core\Defs\SoundDefs\Exotic_Oneshots.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Adjectives\Angsty.txt" />
     <None Include="Assets\Data\Royalty\Languages\English\Keyed\Dialog_Trees.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\Data\Core\Defs\HediffDefs\Hediffs_Local_Injuries.xml" />
     <None Include="Assets\Data\Core\Defs\Scenarios\Scenarios_Classic.xml" />
     <None Include="Assets\Data\Royalty\Defs\MentalStateDefs\MentalStates_Special.xml" />
@@ -4912,7 +4911,6 @@
     <None Include="Assets\Data\Core\Defs\MentalStateDefs\MentalStates_Mood.xml" />
     <None Include="Assets\Resources\Backstories\Shuffled\ImperialRoyal_Adult.xml" />
     <None Include="Assets\Data\Royalty\Defs\Sites\Parts\MechCluster.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Data\Royalty\Defs\RoyalTitles\RoyalPermits_Empire.xml" />
     <None Include="Assets\Data\Core\Defs\Misc\PawnsArrivalModeDefs\PawnsArrivalModes.xml" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Event.xml" />
@@ -4986,7 +4984,6 @@
     <None Include="Assets\Data\Royalty\Defs\SoundDefs\Interact_Oneshots_Melee.xml" />
     <None Include="Assets\Data\Core\Defs\PawnKindDefs_Humanlikes\PawnKinds_Special.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Buildings\Buildings_Joy.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Resources\Materials\Map\MoteGlowPulse.shader" />
     <None Include="Assets\Data\Core\Defs\Misc\SpecialThingFilterDefs\SpecialThingFilters.xml" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Namers_Quests.xml" />
@@ -5013,6 +5010,7 @@
     <None Include="Assets\Data\Core\Languages\English\Keyed\Incidents.xml" />
     <None Include="Assets\Data\Royalty\Patches\Things_Drugs.xml" />
     <None Include="Assets\Data\Core\Defs\RecipeDefs\Recipes_Production.xml" />
+    <None Include="Assets\Test\Test2.txt" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Items\Items_Artifacts.xml" />
     <None Include="Assets\Data\Core\Defs\Bodies\Bodies_Animal_Bird.xml" />
     <None Include="Assets\Data\Core\Defs\Misc\ResearchProjectTagDefs\ResearchProjectTagDefs.xml" />
@@ -5146,7 +5144,6 @@
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\Animals.txt" />
     <None Include="Assets\Data\Core\Defs\TerrainDefs\Terrain_Floors_Burned.xml" />
     <None Include="Assets\Data\Core\Defs\Stats\Stats_Abilities.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Data\Royalty\Defs\QuestScriptDefs\Script_ChangeRoyalHeir.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Buildings\Buildings_Power.xml" />
     <None Include="Assets\Data\Core\Defs\DamageDefs\Damages_Medical.xml" />
@@ -5255,7 +5252,6 @@
     <None Include="Assets\Data\Core\Languages\English\Strings\WordParts\Syllables_Galician.txt" />
     <None Include="Assets\Data\Royalty\Defs\TerrainDefs\Terrain_Floors_FineCarpet.xml" />
     <None Include="Assets\Resources\Materials\Map\MoteWater.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Resources\Materials\World\WorldOverlayAdditive.shader" />
     <None Include="Assets\Data\Core\Defs\ToolCapacityDefs\ToolCapacity.xml" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Battles.xml" />
@@ -5275,13 +5271,11 @@
     <None Include="Assets\Resources\Backstories\Shuffled\Offworld_Medieval_Child.xml" />
     <None Include="Assets\Data\Core\Defs\Misc\Designations\DesignationCategories.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Foreign\Tribal.txt" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Namers_Scenarios.xml" />
     <None Include="Assets\Data\Core\Defs\Sites\Parts\DownedRefugee.xml" />
     <None Include="Assets\Data\Royalty\Defs\ThoughtDefs\Thoughts_Memory_Eating.xml" />
     <None Include="Assets\Data\Core\Defs\ThoughtDefs\Thoughts_Situation_RoomStats.xml" />
     <None Include="Assets\Data\Core\Defs\InteractionDefs\Interactions_Social.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\Data\Core\Defs\Storyteller\Incidents_World_Quests.xml" />
     <None Include="Assets\Data\Royalty\Defs\SoundDefs\Interact_Psycasts.xml" />
     <None Include="Assets\Data\Core\Defs\ThoughtDefs\Thoughts_Memory_RoomStats.xml" />
@@ -5308,7 +5302,6 @@
     <None Include="Assets\Data\Royalty\Defs\ResearchProjectDefs\ResearchProjects_Apparel.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Races\Races_Animal_Bears.xml" />
     <None Include="Assets\Data\Core\Languages\English\Keyed\Credits.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\Data\Core\Defs\HediffDefs\BodyParts\Hediffs_BodyParts_Special.xml" />
     <None Include="Assets\Data\Core\Defs\PawnKindDefs_Humanlikes\PawnKinds_Player.xml" />
     <None Include="Assets\Data\Core\Defs\RoadDefs\RoadWorldLayerDefs.xml" />
@@ -5320,7 +5313,6 @@
     <None Include="Assets\Data\Core\Defs\Misc\LetterDefs\StandardLetters.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\PersonalCharacteristics.txt" />
     <None Include="Assets\Data\Core\Defs\ThoughtDefs\Thoughts_Memory_Social.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Data\Core\Defs\JobDefs\Jobs_Misc.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\GroupNames.txt" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Damage.xml" />
@@ -5357,12 +5349,12 @@
     <None Include="Assets\Data\Royalty\Defs\ThingDefs_Buildings\Buildings_Exotic.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Items\Items_Unfinished.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\PoliticalUnions_Tribal.txt" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Data\Core\Defs\TraderKindDefs\TraderKinds_Visitor_Outlander.xml" />
     <None Include="Assets\Data\Core\Defs\ResearchProjectDefs\ResearchProjects_4_MultiAnalyzer.xml" />
     <None Include="Assets\Data\Royalty\Defs\SoundDefs\Building_Exotic_Sustainers.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Items\Items_Resource_Stuff.xml" />
     <None Include="Assets\Data\Core\Defs\Drugs\Psychite_Flake.xml" />
+    <None Include="Assets\Scripts\Test.txt" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Misc\Ethereal_SignalActions.xml" />
     <None Include="Assets\Data\Core\Defs\HediffDefs\Hediffs_Global_Needs.xml" />
     <None Include="Assets\Data\Royalty\Defs\QuestScriptDefs\Utility\Scripts_Utility_Threats.xml" />
@@ -5385,6 +5377,7 @@
     <None Include="Assets\Data\Core\Defs\Storyteller\RaidStrategies.xml" />
     <None Include="Assets\Data\Core\Defs\Tutor\Concepts_TriggeredModal.xml" />
     <None Include="Assets\Data\Royalty\Defs\TraderKindDefs\TraderKinds_Base_Empire.xml" />
+    <None Include="Assets\Test\Test1.txt" />
     <None Include="Assets\Data\Core\Defs\WorldObjectDefs\WorldObjects_Debug.xml" />
     <None Include="Assets\Data\Royalty\Defs\ThingDefs_Buildings\Buildings_Mech_ShieldGenerators.xml" />
     <None Include="Assets\Data\Core\Defs\HediffDefs\Hediffs_Local_TerrainAttacks.xml" />
@@ -5404,7 +5397,6 @@
     <None Include="Assets\Data\Royalty\Defs\ThingDefs_Misc\Apparel_Royal.xml" />
     <None Include="Assets\Data\Core\Defs\RiverDefs\RiverDefs.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\BusinessTypes.txt" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Art_Descriptions.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Misc\Things_Special.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Adjectives\Friendly.txt" />
@@ -5493,7 +5485,6 @@
     <None Include="Assets\Data\Core\Defs\WorldObjectDefs\WorldObjects.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Names\Animal_Unisex.txt" />
     <None Include="Assets\Resources\Materials\World\WorldOverlayTransparent.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Data\Royalty\Defs\JobDefs\Jobs_Joy.xml" />
     <None Include="Assets\Data\Core\Defs\Drugs\Psychite_Tea.xml" />
     <None Include="Assets\Data\Royalty\Defs\ThingDefs_Buildings\Buildings_Furniture.xml" />
@@ -5540,7 +5531,6 @@
     <None Include="Assets\Data\Royalty\Defs\QuestScriptDefs\Hospitality\Script_Hospitality_Worker.xml" />
     <None Include="Assets\Data\Core\Defs\Effects\Effecter_Construction.xml" />
     <None Include="Assets\Data\Royalty\Defs\ThingDefs_Misc\Weapons\MeleeMedieval.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\Bodyparts.txt" />
     <None Include="Assets\Data\Core\Defs\Scenarios\ScenParts_Various.xml" />
     <None Include="Assets\Data\Core\Defs\RulePackDefs\RulePacks_Namer_World.xml" />
@@ -5549,7 +5539,6 @@
     <None Include="Assets\Data\Core\Defs\Misc\RecordDefs\Records_Misc.xml" />
     <None Include="Assets\Data\Core\Defs\ResearchProjectDefs\ResearchProjects_5_Ship.xml" />
     <None Include="Assets\Data\Core\Defs\Misc\ApparelLayerDefs\ApparelLayerDefs.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\Data\Core\Defs\SoundDefs\Interact_Oneshots_Misc.xml" />
     <None Include="Assets\Data\Core\Defs\TraitDefs\Traits_Singular.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\People_Badass.txt" />
@@ -5558,7 +5547,6 @@
     <None Include="Assets\Data\Core\Defs\QuestScriptDefs\Script_ItemStash.xml" />
     <None Include="Assets\Data\Royalty\Languages\English\Keyed\ITabs.xml" />
     <None Include="Assets\Resources\Text\Names\Nick_Female.txt" />
-    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\Enemies.txt" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\People_Allies.txt" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Races\Races_Animal_Birds.xml" />
@@ -5578,7 +5566,6 @@
     <None Include="Assets\Data\Core\Defs\Misc\KeyBindings\KeyBindings.xml" />
     <None Include="Assets\Data\Core\Defs\Misc\TrainabilityDefs\TrainabilityDefs.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Buildings\Buildings_Art.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Data\Core\Defs\RuleDefs\Rules_Ship.xml" />
     <None Include="Assets\Data\Core\Defs\Misc\IncidentTargetTypeDefs\IncidentTargetTagDefs.xml" />
     <None Include="Assets\Data\Core\Defs\ThingDefs_Buildings\Buildings_Ancient.xml" />
@@ -5605,7 +5592,6 @@
     <None Include="Assets\Data\Core\Defs\Misc\PawnColumnDefs\PawnColumns_Text.xml" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\AnimalGroups.txt" />
     <None Include="Assets\Data\Core\Defs\ThingSetMakerDefs\ThingSetMakers_Misc.xml" />
-    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
     <None Include="Assets\Data\Core\Defs\Misc\LifeStageDefs\LifeStages.xml" />
     <None Include="Assets\Mods\Place mods here.txt" />
     <None Include="Assets\Data\Core\Languages\English\Strings\Words\Nouns\Concepts_Angsty.txt" />

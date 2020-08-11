@@ -29,13 +29,17 @@ namespace Verse
                 {
                     text = stuffAppearance.pathPrefix + "/" + text.Split('/').Last();
                 }
-                Debug.Log(">>>>>>"+text+">>>>>>"+ stuffAppearance.defName);
+                
                 Texture2D texture2D = (from x in ContentFinder<Texture2D>.GetAllInFolder(text)
                                        where x.name.EndsWith(stuffAppearance.defName)
                                        select x).FirstOrDefault();
                 if (texture2D != null)
                 {
                     subGraphics[i] = GraphicDatabase.Get<Graphic_Single>(text + "/" + texture2D.name, req.shader, drawSize, color);
+                }
+                else
+                {
+                    Debug.Log(">>>>>>" + text + ">>>>>>" + stuffAppearance.defName);
                 }
             }
             for (int j = 0; j < subGraphics.Length; j++)

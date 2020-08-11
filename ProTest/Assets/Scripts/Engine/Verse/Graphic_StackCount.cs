@@ -24,6 +24,7 @@ namespace Verse
 		{
 			if (thing == null)
 			{
+			
 				return MatSingle;
 			}
 			return SubGraphicFor(thing).MatSingle;

@@ -17,23 +17,34 @@ public class FlodeMoveTo : MonoBehaviour
 
 
     public List<string> urls = new List<string>();
+    //控制重复路径文件
+    public List<string> urls2 = new List<string>();
+
+
     public DirectoryInfo directoryInfo = null;
     public FileInfo[] files = null;
-    private void Awake()
-    {       
+
+    private string txt1 = "";
+    private string txt2 = "";
+
+    void Awake()
+    {
         _instance = this;
-        return;
-        Debug.Log(Application.dataPath + ">>>");
-        string src = Application.dataPath + "/TestD/Texture2D1";
-        directoryInfo = new DirectoryInfo(src);
-        files = directoryInfo.GetFiles();
-        return;
+
+        txt1 = Application.dataPath + "/Test/Test1.txt";
+        txt2 = Application.dataPath + "/Test/Test2.txt";
     }
 
-    
+    void Start()
+    {
+        string src = Application.dataPath + "/Test/Textures";
+        directoryInfo = new DirectoryInfo(src);
+        files = directoryInfo.GetFiles();
+    }
+
+
     void Update()
     {
-        return;
         if (Input.GetKeyDown(KeyCode.Q))
         {
             RdFile();
@@ -45,45 +56,56 @@ public class FlodeMoveTo : MonoBehaviour
         }
     }
 
+
+
+    /// <summary>
+    /// 对应准确位置文件
+    /// </summary>
+    /// <param name="value"></param>
     public void InFile(string value)
     {
         return;
-        string txt = Application.streamingAssetsPath + "/Test.txt";
         StreamWriter sw;
 
-        if (File.Exists(txt))
+        if (File.Exists(txt1))
         {
-            sw = File.AppendText(txt);
+            sw = File.AppendText(txt1);
             sw.WriteLine(value);
             sw.Close();
         }
     }
-    
+
+
     public void InFloder(string value)
     {
         return;
-        string txt = Application.streamingAssetsPath + "/Test.txt";
         StreamWriter sw;
 
-        if (File.Exists(txt))
+        if (File.Exists(txt2))
         {
-            sw = File.AppendText(txt);
+            sw = File.AppendText(txt2);
             sw.WriteLine(value);
             sw.Close();
         }
-        return;
     }
 
     public void RdFile()
     {
-        string txt = Application.streamingAssetsPath + "/Test.txt";
-
-        using (StreamReader sr = new StreamReader(txt))
+        using (StreamReader sr = new StreamReader(txt1))
         {
             string line;
             while ((line = sr.ReadLine()) != null)
             {
                 urls.Add(line);
+            }
+        }
+
+        using (StreamReader sr = new StreamReader(txt2))
+        {
+            string line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                urls2.Add(line);
             }
         }
     }
@@ -95,43 +117,7 @@ public class FlodeMoveTo : MonoBehaviour
         for (int i = 0; i < urls.Count; i++)
         {
             childs = urls[i].Split('/');
-            url = Application.dataPath + "/TestD/Move";
-            for (int j = 0; j < childs.Length; j++)
-            {
-
-                url += "/" + childs[j];
-
-                if (!Directory.Exists(url))//如果不存在就创建 dir 文件夹  
-                    Directory.CreateDirectory(url);
-
-                if (j == childs.Length - 1)
-                {
-                    foreach (FileInfo file in files)
-                    {
-                        if (file.Name.Contains(childs[j]))
-                        {
-                            file.MoveTo(Path.Combine(url, file.Name));
-                        }
-                    }
-                }
-            }
-
-        }
-
-    }
-
-
-    public void MoveFiles()
-    {
-
-        Debug.Log(urls.Count);
-        //Textures/UI/Overlays/ReservedForWork
-        string url;
-        string[] childs;
-        for (int i = 0; i < urls.Count; i++)
-        {
-            childs = urls[i].Split('/');
-            url = Application.dataPath + "/TestD/Move";
+            url = Application.dataPath + "/Test/AbsFile";
             for (int j = 0; j < childs.Length; j++)
             {
                 if (j != childs.Length - 1)
@@ -148,19 +134,46 @@ public class FlodeMoveTo : MonoBehaviour
                         if (file.Name == childs[j] + ".png")
                         {
                             file.MoveTo(Path.Combine(url, file.Name));
-                            // return;
+                        }
+                        if(file.Name==childs[j]+ ".png.meta")
+                        {
+                            file.MoveTo(Path.Combine(url, file.Name));
                         }
                     }
-                    //if(!Directory.Exists(Path.Combine(url, childs[j] + ".png")))
-                    //{
-                    //    Debug.Log("$$$$$$$"+ Path.Combine(url, childs[j] + ".png"));
-                    //}
                 }
             }
-
         }
 
+        //for (int i = 0; i < urls2.Count; i++)
+        //{
+        //    childs = urls2[i].Split('/');
+        //    url = Application.dataPath + "/Test/AbsFloder";
+        //    for (int j = 0; j < childs.Length; j++)
+        //    {
+        //        url += "/" + childs[j];
+        //        if (!Directory.Exists(url))//如果不存在就创建 dir 文件夹  
+        //            Directory.CreateDirectory(url);
+
+        //        if (j == childs.Length - 1)
+        //        {
+
+        //            foreach (FileInfo file in files)
+        //            {
+        //                if (file.Name == childs[j] + ".png")
+        //                {
+        //                    file.MoveTo(Path.Combine(url, file.Name));
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
     }
+
+
+
+
+
+    
 }
