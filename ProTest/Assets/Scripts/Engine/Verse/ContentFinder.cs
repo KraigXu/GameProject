@@ -29,9 +29,9 @@ namespace Verse
 				val = (T)(object)Resources.Load<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + itemPath);
 				if (val == null)
 				{
-					//Debug.Log(">>>>"+GenFilePaths.ContentPath<Texture2D>() + itemPath);
-				    FlodeMoveTo.Instance.InFile(GenFilePaths.ContentPath<Texture2D>() + itemPath);
-					val = (T)(object)Resources.Load<Texture2D>(GenFilePaths.ContentPath<Texture2D>() + "defaultUi");
+					//Debug.LogError(">>>>"+GenFilePaths.ContentPath<Texture2D>() + itemPath);
+				    //FlodeMoveTo.Instance.InFile(GenFilePaths.ContentPath<Texture2D>() + itemPath);
+					val = (T)(object)Resources.Load<Texture2D>("Textures/World/MouseTile");
 				}
 			}
 			if (typeof(T) == typeof(AudioClip))

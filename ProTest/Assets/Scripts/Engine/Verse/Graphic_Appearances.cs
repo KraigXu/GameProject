@@ -39,7 +39,8 @@ namespace Verse
                 }
                 else
                 {
-                    Debug.Log(">>>>>>" + text + ">>>>>>" + stuffAppearance.defName);
+                    texture2D = Resources.Load<Texture2D>("Textures/World/MouseTile");
+                    // Debug.Log(">>>>>>" + text + ">>>>>>" + stuffAppearance.defName);
                 }
             }
             for (int j = 0; j < subGraphics.Length; j++)
@@ -49,7 +50,6 @@ namespace Verse
                     subGraphics[j] = subGraphics[StuffAppearanceDefOf.Smooth.index];
                 }
             }
-            Debug.Log(subGraphics.Length);
         }
 
         public override Graphic GetColoredVersion(Shader newShader, Color newColor, Color newColorTwo)

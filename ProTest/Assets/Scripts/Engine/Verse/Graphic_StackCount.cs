@@ -16,6 +16,7 @@ namespace Verse
 			if (thing == null)
 			{
 				return MatSingle;
+
 			}
 			return MatSingleFor(thing);
 		}

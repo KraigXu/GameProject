@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
+using Verse;
+using System.Linq;
 public class FlodeMoveTo : MonoBehaviour
 {
 
@@ -37,6 +38,9 @@ public class FlodeMoveTo : MonoBehaviour
 
     void Start()
     {
+        List<Texture2D> list = (from x in ContentFinder<Texture2D>.GetAllInFolder("World/Hills") orderby x.name select x).ToList();
+
+        Debug.Log("TestLength>>>"+list.Count);
         string src = Application.dataPath + "/Test/Textures";
         directoryInfo = new DirectoryInfo(src);
         files = directoryInfo.GetFiles();
@@ -64,7 +68,6 @@ public class FlodeMoveTo : MonoBehaviour
     /// <param name="value"></param>
     public void InFile(string value)
     {
-        return;
         StreamWriter sw;
 
         if (File.Exists(txt1))

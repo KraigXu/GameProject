@@ -23,11 +23,12 @@ namespace Verse
 		{
 			get
 			{
-				Material matSingle = MatSingle;
-				if (matSingle != null)
-				{
-					return matSingle.shader;
-				}
+				
+				//Material matSingle = MatSingle;
+				//if (matSingle != null)
+				//{
+				//	return matSingle.shader;
+				//}
 				return ShaderDatabase.Cutout;
 			}
 		}

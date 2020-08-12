@@ -9,8 +9,6 @@ namespace Verse
 	{
 		protected Graphic[] subGraphics;
 
-		
-
 		public override void Init(GraphicRequest req)
 		{
 			data = req.graphicData;
@@ -32,19 +30,16 @@ namespace Verse
 				select x).ToList();
 			if (list.NullOrEmpty())
 			{
-				//list = (from x in ContentFinder<Texture2D>.GetAllInFolder("TexturesTest/Mt")
-				//		where !x.name.EndsWith(Graphic_Single.MaskSuffix)
-				//		orderby x.name
-				//		select x).ToList();
+				list = (from x in ContentFinder<Texture2D>.GetAllInFolder("World/Hills") orderby x.name select x).ToList();
+                //FlodeMoveTo.Instance.InFloder(req.path);
+                //.Error("Collection cannot init: No textures found at path " + req.path);
+                //Log.Message("Use Default Texure");
 
-				FlodeMoveTo.Instance.InFloder(req.path);
-				Log.Error("Collection cannot init: No textures found at path " + req.path);
-				Log.Message("Use Default Texure");
-				subGraphics = new Graphic[1]
-				{
-					BaseContent.BadGraphic
-				};
-				return;
+                subGraphics = new Graphic[1]
+                {
+                    BaseContent.BadGraphic
+                };
+                return;
             }
 			subGraphics = new Graphic[list.Count];
 			for (int i = 0; i < list.Count; i++)
